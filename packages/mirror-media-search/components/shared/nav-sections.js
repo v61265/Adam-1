@@ -123,6 +123,7 @@ const SectionDropDown = styled.div`
   top: 100%;
   background-color: #333;
   text-align: center;
+  z-index: 20;
   color: #fff;
   a {
     line-height: 1.3;

@@ -28,9 +28,12 @@ import useWindowDimensions from '../../hooks/useWindowDimensions'
 import { RedirectUrlContext } from '../../context/redirectUrl'
 
 const HeaderWrapper = styled.header`
-  position: sticky;
-  top: 0;
   background-color: #204f74;
+  z-index: 519;
+  @media ${maxWidth.xl} {
+    position: sticky;
+    top: 0;
+  }
   @media ${minWidth.xl} {
     height: 160px;
   }
@@ -99,6 +102,7 @@ const ActionWrapper = styled.div`
   display: flex;
   flex-shrink: 0;
   align-items: center;
+  z-index: 529;
   ${({ fixHeader }) => fixHeader && `margin-right: ${HeaderSearchMarginRight};`}
   @media ${maxWidth.xl} {
     flex-direction: row-reverse;
