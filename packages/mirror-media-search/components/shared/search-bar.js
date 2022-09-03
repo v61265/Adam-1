@@ -69,7 +69,7 @@ const SearchFieldWrapper = styled.div`
   }
 `
 
-export default function SearchBar() {
+export default function SearchBar({ options }) {
   const [showSearchField, setShowSearchField] = useState(false)
   const mobileSearchWrapperRef = useRef(null)
   useClickOutside(mobileSearchWrapperRef, () => {
@@ -89,7 +89,7 @@ export default function SearchBar() {
         </SearchButton>
         {showSearchField && (
           <SearchFieldWrapper>
-            <SearchBarSelect />
+            <SearchBarSelect options={options} />
             <SearchBarInput />
           </SearchFieldWrapper>
         )}
@@ -99,7 +99,7 @@ export default function SearchBar() {
     return (
       <SearchBarWrapper>
         <SearchBarInput />
-        <SearchBarSelect />
+        <SearchBarSelect options={options} />
         <SearchButton />
       </SearchBarWrapper>
     )

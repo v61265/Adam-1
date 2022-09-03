@@ -1,4 +1,5 @@
 import axios from 'axios'
+import styled from 'styled-components'
 import Header from '../components/shared/mirror-media-header-old'
 import {
   URL_STATIC_COMBO_SECTIONS,
@@ -8,11 +9,17 @@ import {
   API_PORT,
 } from '../config'
 
-export default function Home() {
+const FakeElement = styled.div`
+  height: 100vh;
+  background-color: ${({ color }) => color};
+`
+export default function Home({ sectionsData, topicsData }) {
   return (
     <>
-      <Header />
+      <Header sectionsData={sectionsData} topicsData={topicsData} />
       <div>Hello Mirror Media Search</div>
+      <FakeElement color="lightblue" />
+      <FakeElement color="#00bbb3" />
     </>
   )
 }

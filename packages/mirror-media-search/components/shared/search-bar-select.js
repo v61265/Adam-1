@@ -72,19 +72,10 @@ const SearchSelectOption = styled.li`
     `}
 `
 
-export default function SearchBarSelect({
-  options = [
-    { title: '全部' },
-    { title: '假資料一' },
-    { title: '假資料二' },
-    { title: '假資料三' },
-    { title: '假資料四' },
-  ],
-}) {
+export default function SearchBarSelect({ options = [] }) {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [showSelectOptions, setShowSelectOptions] = useState(false)
   const selectWrapperRef = useRef(null)
-  console.log('rerender')
   useClickOutside(selectWrapperRef, () => {
     setShowSelectOptions(false)
   })

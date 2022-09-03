@@ -4,7 +4,7 @@ import useClickOutside from '../../hooks/useClickOutside'
 import moreIcon from '../../public/images/more-grey.png'
 import { maxWidth } from '../../styles/breakpoint'
 
-const MoreLinksWrapper = styled.div`
+const PromotionLinksWrapper = styled.div`
   margin-left: 5px;
   position: relative;
   @media ${maxWidth.xl} {
@@ -12,7 +12,7 @@ const MoreLinksWrapper = styled.div`
   }
 `
 
-const MoreLinksButton = styled.button`
+const PromotionLinksButton = styled.button`
   display: block;
   background-image: url(${moreIcon.src});
   background-position: center;
@@ -43,7 +43,7 @@ const Link = styled.a`
   padding: 8px 16px;
 `
 
-export default function MoreLinks({ links }) {
+export default function PromotionLinks({ links }) {
   const [showLinks, setShowLinks] = useState(false)
   const moreLinksWrapperRef = useRef(null)
   useClickOutside(moreLinksWrapperRef, () => {
@@ -51,8 +51,8 @@ export default function MoreLinks({ links }) {
   })
 
   return (
-    <MoreLinksWrapper ref={moreLinksWrapperRef}>
-      <MoreLinksButton
+    <PromotionLinksWrapper ref={moreLinksWrapperRef}>
+      <PromotionLinksButton
         onClick={() => {
           setShowLinks((val) => !val)
         }}
@@ -71,6 +71,6 @@ export default function MoreLinks({ links }) {
           ))}
         </LinkWrapper>
       )}
-    </MoreLinksWrapper>
+    </PromotionLinksWrapper>
   )
 }
