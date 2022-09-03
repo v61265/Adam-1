@@ -1,4 +1,6 @@
+import { useContext } from 'react'
 import styled from 'styled-components'
+import { RedirectUrlContext } from '../../context/redirectUrl'
 import { minWidth } from '../../styles/breakpoint'
 import { sectionColors } from '../../styles/sections-color'
 
@@ -139,11 +141,12 @@ function getCategoryHref(sectionName, categoryName) {
 }
 
 export default function NavSections({ sections }) {
+  const redirectUrl = useContext(RedirectUrlContext)
   return (
     <SectionsWrapper>
       <Sections>
         <Section className="home">
-          <a href="/">
+          <a href={`${redirectUrl}/`}>
             <h2>首頁</h2>
           </a>
         </Section>
@@ -153,14 +156,17 @@ export default function NavSections({ sections }) {
             color={sectionColors[section.name]}
             className={section.name}
           >
-            <a href={`/section/${section.name}`}>
+            <a href={`${redirectUrl}/section/${section.name}`}>
               <h2>{section.title}</h2>
             </a>
             <SectionDropDown className="dropdown">
               {section.categories.map((category) => (
                 <a
                   key={category._id}
-                  href={getCategoryHref(section.name, category.name)}
+                  href={`${redirectUrl}${getCategoryHref(
+                    section.name,
+                    category.name
+                  )}`}
                 >
                   <h3>{category.title}</h3>
                 </a>

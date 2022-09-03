@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useContext } from 'react'
 import styled from 'styled-components'
 
 import EventLogo from './event-logo'
@@ -25,6 +25,7 @@ import {
 import NavTopics from './nav-topics'
 import MobileSidebar from './mobile-sidebar'
 import useWindowDimensions from '../../hooks/useWindowDimensions'
+import { RedirectUrlContext } from '../../context/redirectUrl'
 
 const HeaderWrapper = styled.header`
   position: sticky;
@@ -120,6 +121,7 @@ export default function OldHeader({ sectionsData, topicsData }) {
   const [showSidebar, setShowSidebar] = useState(false)
   const [fixHeader, setFixHeader] = useState(false)
   const headerRef = useRef(null)
+  const redirectUrl = useContext(RedirectUrlContext)
   const { width } = useWindowDimensions()
 
   useEffect(() => {
@@ -163,7 +165,7 @@ export default function OldHeader({ sectionsData, topicsData }) {
           }}
         />
         <LogoWrapper>
-          <Logo href="/">
+          <Logo href={`${redirectUrl}/`}>
             <LogoIcon src="/images/mirror-media-logo.svg" />
           </Logo>
           <EventLogo />

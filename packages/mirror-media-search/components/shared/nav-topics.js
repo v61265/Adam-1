@@ -1,4 +1,6 @@
+import { useContext } from 'react'
 import styled from 'styled-components'
+import { RedirectUrlContext } from '../../context/redirectUrl'
 import { minWidth } from '../../styles/breakpoint'
 
 const TopicsWrapper = styled.section`
@@ -71,6 +73,7 @@ const SubBrandIcon = styled.img`
 `
 
 export default function NavTopics({ topics, subBrands }) {
+  const redirectUrl = useContext(RedirectUrlContext)
   return (
     <TopicsWrapper>
       <Wrapper>
@@ -78,14 +81,14 @@ export default function NavTopics({ topics, subBrands }) {
           {topics.map((topic) => (
             <Topic
               key={topic._id}
-              href={`/topic/${topic._id}`}
+              href={`${redirectUrl}/topic/${topic._id}`}
               className="normal"
             >
               <h2>{topic.name}</h2>
             </Topic>
           ))}
         </Topics>
-        <Topic href="/section/topic" className="more">
+        <Topic href={`${redirectUrl}/section/topic`} className="more">
           <h2>更多</h2>
         </Topic>
         <SubBrands>

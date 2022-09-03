@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { RedirectUrlContext } from '../../context/redirectUrl'
 import styled from 'styled-components'
 import { minWidth } from '../../styles/breakpoint'
 import closeButtonIcon from '../../public/images/close_white.png'
@@ -166,6 +168,8 @@ export default function MobileSidebar({
   socialMedias = [],
   closeSidebar = () => {},
 }) {
+  const redirectUrl = useContext(RedirectUrlContext)
+
   return (
     <SidebarWrapper>
       <CloseButton
@@ -174,19 +178,22 @@ export default function MobileSidebar({
         }}
       />
       <Topics>
-        {topics.map((topic) => (
-          <Topic key={topic._id} href={topic.href}>
-            <h2>{topic.name}</h2>
-          </Topic>
-        ))}
-        <Topic href="/section/topic">
+        {topics.map((topic) => {
+          console.log('topic', topic)
+          return (
+            <Topic key={topic._id} href={`${redirectUrl}/topic/${topic._id}`}>
+              <h2>{topic.name}</h2>
+            </Topic>
+          )
+        })}
+        <Topic href={`${redirectUrl}/section/topic`}>
           <h2>更多</h2>
         </Topic>
       </Topics>
       <Sections>
         {sections.map((section) => (
           <Section key={section._id} color={sectionColors[section.name]}>
-            <SectionTitle href={`/section/${section.name}`}>
+            <SectionTitle href={`${redirectUrl}/section/${section.name}`}>
               <h2>{section.title}</h2>
             </SectionTitle>
             {section.categories.length > 0 && (
@@ -194,7 +201,10 @@ export default function MobileSidebar({
                 {section.categories.map((category) => (
                   <a
                     key={category._id}
-                    href={getCategoryHref(section.name, category.name)}
+                    href={`${redirectUrl}${getCategoryHref(
+                      section.name,
+                      category.name
+                    )}`}
                   >
                     <h3>{category.title}</h3>
                   </a>

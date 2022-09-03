@@ -1,6 +1,7 @@
 const API_PORT = '8080'
 const API_PROTOCOL = 'http'
-
+const URL_MIRROR_MEDIA =
+  process.env.URL_MIRROR_MEDIA || 'https://www.mirrormedia.mg'
 const URL_STATIC_COMBO_SECTIONS =
   'https://storage.googleapis.com/statics.mirrormedia.mg/json/sections.json'
 
@@ -26,7 +27,6 @@ switch (ENV) {
     break
   default:
     API_HOST = process.env.API_HOST || 'api-host'
-
     API_TIMEOUT = 5000
 }
 
@@ -35,5 +35,6 @@ export {
   API_PORT,
   API_PROTOCOL,
   API_TIMEOUT,
+  URL_MIRROR_MEDIA,
   URL_STATIC_COMBO_SECTIONS,
 }
