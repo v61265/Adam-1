@@ -1,5 +1,4 @@
 import axios from 'axios'
-import styled from 'styled-components'
 import Header from '../components/shared/mirror-media-header-old'
 import { RedirectUrlContext } from '../context/redirectUrl'
 import {
@@ -9,20 +8,21 @@ import {
   API_PROTOCOL,
   API_HOST,
   API_PORT,
+  URL_HOST,
 } from '../config'
+import SearchResult from '../components/search-result'
 
-const FakeElement = styled.div`
-  height: 100vh;
-  background-color: ${({ color }) => color};
-`
-export default function Home({ sectionsData, topicsData, redirectUrl }) {
+export default function Home({
+  sectionsData,
+  topicsData,
+  searchResult,
+  redirectUrl,
+}) {
   return (
     <>
       <RedirectUrlContext.Provider value={redirectUrl}>
         <Header sectionsData={sectionsData} topicsData={topicsData} />
-        <div>Hello Mirror Media Search</div>
-        <FakeElement color="lightblue" />
-        <FakeElement color="#00bbb3" />
+        <SearchResult searchResult={searchResult} />
       </RedirectUrlContext.Provider>
     </>
   )
@@ -41,11 +41,22 @@ export async function getServerSideProps() {
         url: `${API_PROTOCOL}://${API_HOST}:${API_PORT}/combo?endpoint=topics`,
         timeout: API_TIMEOUT,
       }),
+      axios({
+        method: 'get',
+        url: `${URL_HOST}/api/search`,
+        params: {
+          query: 'hell',
+          start: 1,
+          take: 10,
+        },
+        timeout: API_TIMEOUT,
+      }),
     ])
 
     const props = {
       sectionsData: responses[0].value.data._items,
       topicsData: responses[1].value.data._endpoints.topics._items,
+      searchResult: responses[2].value.data,
       redirectUrl: URL_MIRROR_MEDIA,
     }
 
@@ -62,6 +73,7 @@ export async function getServerSideProps() {
       props: {
         sectionsData: [],
         topicsData: [],
+        searchResult: {},
         redirectUrl: URL_MIRROR_MEDIA,
       },
     }
