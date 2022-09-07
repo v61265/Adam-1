@@ -7,10 +7,11 @@ export default function useSearchArticles({ items: initialArticles, queries }) {
   const [startIndex, setStartIndex] = useState(1)
   const [hasMore, setHasMore] = useState(!!queries.nextPage)
   const [articles, setArticles] = useState(initialArticles)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     async function search(searchTerms, startIndex) {
-      console.log('searchTerms, startIndex', searchTerms, startIndex)
+      setIsLoading(true)
       try {
         const response = await axios({
           method: 'get',
@@ -21,31 +22,36 @@ export default function useSearchArticles({ items: initialArticles, queries }) {
           },
           timeout: API_TIMEOUT,
         })
-        console.log('searchResult', response)
         if (response.data) {
-          const hasMore = !!response.data.queries.nextPage
+          const hasMore = !!response.data.queries.nextPage && startIndex !== 91
           setHasMore(hasMore)
-          const newArticles = response.data.items
-          setArticles((oldArticles) => [...oldArticles, ...newArticles])
+
+          setArticles((oldArticles) => {
+            const newArticles = response.data.items.filter(
+              (article) =>
+                !oldArticles.find(
+                  (oldArticle) => oldArticle.title === article.title
+                )
+            )
+            return [...oldArticles, ...newArticles]
+          })
         }
       } catch (error) {
+        if (startIndex === 91) {
+          setHasMore(false)
+        }
         console.error(error)
       }
+      setIsLoading(false)
     }
-    console.log(`hasMore = ${hasMore}, startIndex = ${startIndex}`)
     if (hasMore && startIndex !== 1) {
       search(searchTerms, startIndex)
     }
   }, [hasMore, searchTerms, startIndex])
 
   const loadMore = useCallback(() => {
-    console.log('hasMore', hasMore)
-    if (hasMore) {
-      setStartIndex((startIndex) => startIndex + 10)
-    } else {
-      console.log('no more to load!')
-    }
+    if (hasMore) setStartIndex((startIndex) => startIndex + 10)
   }, [hasMore])
 
-  return { articles, loadMore, hasMore }
+  return { articles, loadMore, isLoading, hasMore }
 }
