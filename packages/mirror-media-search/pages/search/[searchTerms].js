@@ -1,6 +1,7 @@
 import axios from 'axios'
-import Header from '../components/shared/mirror-media-header-old'
-import { RedirectUrlContext } from '../context/redirectUrl'
+
+import Header from '../../components/shared/mirror-media-header-old'
+import { RedirectUrlContext } from '../../context/redirectUrl'
 import {
   URL_STATIC_COMBO_SECTIONS,
   URL_MIRROR_MEDIA,
@@ -9,8 +10,8 @@ import {
   API_HOST,
   API_PORT,
   URL_HOST,
-} from '../config'
-import SearchResult from '../components/search-result'
+} from '../../config'
+import SearchResult from '../../components/search-result'
 
 export default function Home({
   sectionsData,
@@ -28,7 +29,8 @@ export default function Home({
   )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ params }) {
+  const searchTerms = params.searchTerms
   try {
     const responses = await Promise.allSettled([
       axios({
@@ -45,7 +47,7 @@ export async function getServerSideProps() {
         method: 'get',
         url: `${URL_HOST}/api/search`,
         params: {
-          query: 'hell',
+          query: searchTerms,
           start: 1,
           take: 10,
         },
