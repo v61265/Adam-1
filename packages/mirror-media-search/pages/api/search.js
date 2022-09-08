@@ -1,7 +1,8 @@
+import axios from 'axios'
 import CORS from 'cors'
 import { number, object, string } from 'yup'
-import axios from 'axios'
-import { CORS_ORIGINS } from '../../config'
+import Redis from 'ioredis'
+import { CORS_ORIGINS, REDIS_HOST, REDIS_AUTH, REDIS_EX } from '../../config'
 import globalAPICall from '../../utils/api/globalAPICall'
 import { runMiddleware } from '../../utils/api/share'
 import {
@@ -15,6 +16,8 @@ const cors = CORS({
   methods: ['HEAD', 'GET'],
   origin: CORS_ORIGINS,
 })
+
+const redis = new Redis({ host: REDIS_HOST, password: REDIS_AUTH })
 
 export default async function handler(req, res) {
   await runMiddleware(req, res, cors)
@@ -52,15 +55,28 @@ async function getSearchResult(req) {
       num: params.take,
     }
 
-    console.log(`search ${URL_PROGRAMABLE_SEARCH}`, queryParams)
-    const response = await axios({
-      method: 'get',
-      url: `${URL_PROGRAMABLE_SEARCH}`,
-      params: queryParams,
-      timeout: API_TIMEOUT,
-    })
+    const prefix = 'PROGRAMABLE_SEARCH'
+    const redisKey = `${prefix}_${queryParams.q}_${queryParams.start}_${queryParams.num}`
+    const searchResultCache = await redis.get(redisKey)
 
-    return response
+    if (searchResultCache) {
+      console.log(
+        JSON.stringify({
+          severity: 'DEBUG',
+          message: `Get search result from redis cache with key ${redisKey}`,
+        })
+      )
+      return { data: JSON.parse(searchResultCache) }
+    } else {
+      const response = await axios({
+        method: 'get',
+        url: `${URL_PROGRAMABLE_SEARCH}`,
+        params: queryParams,
+        timeout: API_TIMEOUT,
+      })
+      redis.set(redisKey, JSON.stringify(response.data), 'EX', REDIS_EX)
+      return response
+    }
   } catch (error) {
     console.log(JSON.stringify({ severity: 'ERROR', message: error.stack }))
     return error.message
