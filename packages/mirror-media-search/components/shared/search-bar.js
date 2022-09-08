@@ -6,7 +6,6 @@ import { minWidth } from '../../styles/breakpoint'
 import searchButtonWeb from '../../public/images/search-button-web.png'
 import SearchButtonMobileSVG from '../../public/images/search-button-mobile.svg'
 import SearchBarInput from './search-bar-input'
-import SearchBarSelect from './search-bar-select'
 import { SearchIconWidth } from '../../styles/header-style-const'
 import useClickOutside from '../../hooks/useClickOutside'
 
@@ -69,7 +68,7 @@ const SearchFieldWrapper = styled.div`
   }
 `
 
-export default function SearchBar({ options }) {
+export default function SearchBar() {
   const [showSearchField, setShowSearchField] = useState(false)
   const mobileSearchWrapperRef = useRef(null)
   useClickOutside(mobileSearchWrapperRef, () => {
@@ -89,7 +88,6 @@ export default function SearchBar({ options }) {
         </SearchButton>
         {showSearchField && (
           <SearchFieldWrapper>
-            <SearchBarSelect options={options} />
             <SearchBarInput />
           </SearchFieldWrapper>
         )}
@@ -99,7 +97,6 @@ export default function SearchBar({ options }) {
     return (
       <SearchBarWrapper>
         <SearchBarInput />
-        <SearchBarSelect options={options} />
         <SearchButton />
       </SearchBarWrapper>
     )
