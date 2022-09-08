@@ -172,10 +172,13 @@ export default function SearchResult({ searchResult }) {
               <SearchArticle>
                 <SearchArticleCategory
                   color={
-                    sectionColors[article.pagemap?.metatags[0]['section-name']]
+                    sectionColors[
+                      article.pagemap?.metatags[0]['section-name'] ?? 'member'
+                    ]
                   }
                 >
-                  {article.pagemap?.metatags[0]['article:section']}
+                  {article.pagemap?.metatags[0]['article:section'] ??
+                    '會員專區'}
                 </SearchArticleCategory>
                 <SearchArticleTitle>{article.title}</SearchArticleTitle>
               </SearchArticle>
