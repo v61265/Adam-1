@@ -69,12 +69,22 @@ const SearchFieldWrapper = styled.div`
 `
 
 export default function SearchBar() {
+  const [searchTerms, setSearchTerms] = useState('')
   const [showSearchField, setShowSearchField] = useState(false)
   const mobileSearchWrapperRef = useRef(null)
   useClickOutside(mobileSearchWrapperRef, () => {
     setShowSearchField(false)
   })
   const { width } = useWindowDimensions()
+  const goSearch = () => {
+    const trimedSearchTerms = searchTerms
+      .trim()
+      .replace(/\s*,\s*/g, ',')
+      .replace(/\s+/g, ',')
+
+    if (trimedSearchTerms === '') return setSearchTerms('')
+    location.assign(`/search/${trimedSearchTerms}`)
+  }
 
   if (width < MEDIA_SIZE.xl) {
     return (
@@ -88,7 +98,15 @@ export default function SearchBar() {
         </SearchButton>
         {showSearchField && (
           <SearchFieldWrapper>
-            <SearchBarInput />
+            <SearchBarInput
+              value={searchTerms}
+              onChange={(event) => {
+                setSearchTerms(event.target.value)
+              }}
+              onKeyPress={() => {
+                goSearch()
+              }}
+            />
           </SearchFieldWrapper>
         )}
       </SearchBarWrapper>
@@ -96,8 +114,17 @@ export default function SearchBar() {
   } else {
     return (
       <SearchBarWrapper>
-        <SearchBarInput />
-        <SearchButton />
+        <SearchBarInput
+          value={searchTerms}
+          onChange={(event) => {
+            setSearchTerms(event.target.value)
+          }}
+        />
+        <SearchButton
+          onClick={() => {
+            goSearch()
+          }}
+        />
       </SearchBarWrapper>
     )
   }
