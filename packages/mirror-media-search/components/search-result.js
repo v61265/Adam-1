@@ -51,20 +51,20 @@ const SearchTitle = styled.h1`
 `
 
 const SearchArticles = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: space-between;
   margin-top: 20px;
+  display: grid;
   row-gap: 20px;
+  grid-template-columns: 1fr;
   @media ${minWidth.md} {
     flex-direction: row;
     margin-top: 41px;
-    gap: 40px 31px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 31px 40px;
   }
   @media ${minWidth.xxl} {
     margin-top: 32px;
-    gap: 48px 35px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px 48px;
   }
 `
 
