@@ -12,11 +12,11 @@ const SearchResultWrapper = styled.div`
   position: relative;
   margin: 30px 0;
   @media ${minWidth.md} {
-    margin: 28px auto 8px;
+    margin: 28px auto 39px;
     width: 656px;
   }
   @media ${minWidth.xxl} {
-    margin: 42px auto 4px;
+    margin: 42px auto 39px;
     width: 1020px;
   }
 `

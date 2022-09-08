@@ -12,6 +12,7 @@ import {
   URL_HOST,
 } from '../../config'
 import SearchResult from '../../components/search-result'
+import Footer from '../../components/shared/mirror-media-footer'
 
 export default function Home({
   sectionsData,
@@ -24,6 +25,7 @@ export default function Home({
       <RedirectUrlContext.Provider value={redirectUrl}>
         <Header sectionsData={sectionsData} topicsData={topicsData} />
         <SearchResult searchResult={searchResult} />
+        <Footer />
       </RedirectUrlContext.Provider>
     </>
   )
