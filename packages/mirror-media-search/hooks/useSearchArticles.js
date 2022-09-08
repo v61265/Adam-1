@@ -13,7 +13,7 @@ export default function useSearchArticles({ items: initialArticles, queries }) {
     async function search(searchTerms, startIndex) {
       setIsLoading(true)
       try {
-        const response = await axios({
+        const { data } = await axios({
           method: 'get',
           url: '/api/search',
           params: {
@@ -22,12 +22,16 @@ export default function useSearchArticles({ items: initialArticles, queries }) {
           },
           timeout: API_TIMEOUT,
         })
-        if (response.data) {
-          const hasMore = !!response.data.queries.nextPage && startIndex !== 91
+        if (data) {
+          const { queries, items } = data
+          const hasMore =
+            !!queries.nextPage &&
+            startIndex !== 91 &&
+            data.queries.request[0].count
           setHasMore(hasMore)
 
           setArticles((oldArticles) => {
-            const newArticles = response.data.items.filter(
+            const newArticles = items.filter(
               (article) =>
                 !oldArticles.find(
                   (oldArticle) => oldArticle.title === article.title
