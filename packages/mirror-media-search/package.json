@@ -3,17 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "cors": "^2.8.5",
+    "ioredis": "^5.2.3",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "5.3.5"
+    "styled-components": "5.3.5",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "eslint-config-next": "12.2.5"
