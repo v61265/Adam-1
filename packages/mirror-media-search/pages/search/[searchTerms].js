@@ -9,10 +9,10 @@ import {
   API_PROTOCOL,
   API_HOST,
   API_PORT,
-  URL_HOST,
 } from '../../config'
 import SearchResult from '../../components/search-result'
 import Footer from '../../components/shared/mirror-media-footer'
+import { getSearchResult } from '../../utils/api/programmable-search'
 
 export default function Home({
   sectionsData,
@@ -45,15 +45,9 @@ export async function getServerSideProps({ params }) {
         url: `${API_PROTOCOL}://${API_HOST}:${API_PORT}/combo?endpoint=topics`,
         timeout: API_TIMEOUT,
       }),
-      axios({
-        method: 'get',
-        url: `${URL_HOST}/api/search`,
-        params: {
-          query: searchTerms,
-          start: 1,
-          take: 10,
-        },
-        timeout: API_TIMEOUT,
+      getSearchResult({
+        query: searchTerms,
+        start: 1,
       }),
     ])
 
