@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   await runMiddleware(req, res, cors)
 
   async function GET() {
-    const result = await getSearchResult(query)
+    const result = await getSearchResult(req.query)
 
     if (typeof result === 'string') {
       res.status(400).json({ message: result })
