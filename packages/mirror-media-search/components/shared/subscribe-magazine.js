@@ -1,4 +1,6 @@
+import { useContext } from 'react'
 import styled from 'styled-components'
+import { RedirectUrlContext } from '../../context/redirectUrl'
 import { minWidth } from '../../styles/breakpoint'
 
 const SubscribeMagazineWrapper = styled.div`
@@ -29,8 +31,13 @@ const Break = styled.br`
 `
 
 export default function SubscribeMagazine() {
+  const redirectUrl = useContext(RedirectUrlContext)
   return (
-    <SubscribeMagazineWrapper>
+    <SubscribeMagazineWrapper
+      onClick={() => {
+        location.assign(`${redirectUrl}/papermag`)
+      }}
+    >
       訂閱
       <Break />
       紙本雜誌

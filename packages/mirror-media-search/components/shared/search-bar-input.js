@@ -27,10 +27,16 @@ const SearchInput = styled.input`
   }
 `
 
-export default function SearchBarInput() {
+export default function SearchBarInput({ value, onChange, onKeyPress }) {
   return (
     <SearchInputWrapper>
-      <SearchInput type="text" placeholder="請輸入關鍵字" />
+      <SearchInput
+        value={value}
+        onChange={onChange}
+        onKeyPress={onKeyPress}
+        type="text"
+        placeholder="請輸入關鍵字"
+      />
     </SearchInputWrapper>
   )
 }

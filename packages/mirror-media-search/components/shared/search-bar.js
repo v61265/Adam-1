@@ -6,7 +6,6 @@ import { minWidth } from '../../styles/breakpoint'
 import searchButtonWeb from '../../public/images/search-button-web.png'
 import SearchButtonMobileSVG from '../../public/images/search-button-mobile.svg'
 import SearchBarInput from './search-bar-input'
-import SearchBarSelect from './search-bar-select'
 import { SearchIconWidth } from '../../styles/header-style-const'
 import useClickOutside from '../../hooks/useClickOutside'
 
@@ -69,13 +68,23 @@ const SearchFieldWrapper = styled.div`
   }
 `
 
-export default function SearchBar({ options }) {
+export default function SearchBar() {
+  const [searchTerms, setSearchTerms] = useState('')
   const [showSearchField, setShowSearchField] = useState(false)
   const mobileSearchWrapperRef = useRef(null)
   useClickOutside(mobileSearchWrapperRef, () => {
     setShowSearchField(false)
   })
   const { width } = useWindowDimensions()
+  const goSearch = () => {
+    const trimedSearchTerms = searchTerms
+      .trim()
+      .replace(/\s*,\s*/g, ',')
+      .replace(/\s+/g, ',')
+
+    if (trimedSearchTerms === '') return setSearchTerms('')
+    location.assign(`/search/${trimedSearchTerms}`)
+  }
 
   if (width < MEDIA_SIZE.xl) {
     return (
@@ -89,8 +98,15 @@ export default function SearchBar({ options }) {
         </SearchButton>
         {showSearchField && (
           <SearchFieldWrapper>
-            <SearchBarSelect options={options} />
-            <SearchBarInput />
+            <SearchBarInput
+              value={searchTerms}
+              onChange={(event) => {
+                setSearchTerms(event.target.value)
+              }}
+              onKeyPress={() => {
+                goSearch()
+              }}
+            />
           </SearchFieldWrapper>
         )}
       </SearchBarWrapper>
@@ -98,9 +114,17 @@ export default function SearchBar({ options }) {
   } else {
     return (
       <SearchBarWrapper>
-        <SearchBarInput />
-        <SearchBarSelect options={options} />
-        <SearchButton />
+        <SearchBarInput
+          value={searchTerms}
+          onChange={(event) => {
+            setSearchTerms(event.target.value)
+          }}
+        />
+        <SearchButton
+          onClick={() => {
+            goSearch()
+          }}
+        />
       </SearchBarWrapper>
     )
   }

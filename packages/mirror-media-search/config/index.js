@@ -12,7 +12,7 @@ const URL_PROGRAMABLE_SEARCH =
 // The following variables are from environment variables
 const ENV = process.env.ENV || 'local'
 const CORS_ORIGINS = process.env.CORS_ORIGINS
-  ? env.CORS_ORIGINS.split(delimiter)
+  ? process.env.CORS_ORIGINS.split(delimiter)
   : ['http://localhost']
 const URL_HOST = process.env.URL_HOST || 'http://localhost:3000/'
 const REDIS_HOST = process.env.REDIS_HOST || 'get redis url'

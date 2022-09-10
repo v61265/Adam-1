@@ -152,11 +152,6 @@ export default function OldHeader({ sectionsData, topicsData }) {
     sectionsData
       .filter((section) => section.isFeatured)
       .map(filterOutIsMemberOnlyCategoriesInNormalSection) ?? []
-  const options = [{ title: '全部類別' }].concat(
-    sectionsData.filter(
-      (section) => section.name !== 'videohub' && section.name !== 'member'
-    )
-  )
   const topics =
     topicsData.filter((topic) => topic.isFeatured).slice(0, 7) ?? []
 
@@ -176,7 +171,7 @@ export default function OldHeader({ sectionsData, topicsData }) {
           <GpqAd />
         </LogoWrapper>
         <ActionWrapper fixHeader={fixHeader}>
-          <SearchBar options={options} />
+          <SearchBar />
           <SubscribeMagazine />
           <PromotionLinks links={PROMOTION_LINKS} />
         </ActionWrapper>

@@ -96,7 +96,6 @@ const Section = styled.div`
     color: ${color};
   `}
   &.member {
-    color: #e51731;
     &:hover {
       color: #db1730;
     }
@@ -112,6 +111,9 @@ const Section = styled.div`
         color: #fff;
       }
     }
+  }
+  &.home {
+    color: #fff;
   }
 `
 

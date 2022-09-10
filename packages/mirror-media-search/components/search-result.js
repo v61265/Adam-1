@@ -12,11 +12,11 @@ const SearchResultWrapper = styled.div`
   position: relative;
   margin: 30px 0;
   @media ${minWidth.md} {
-    margin: 28px auto 8px;
+    margin: 28px auto 39px;
     width: 656px;
   }
   @media ${minWidth.xxl} {
-    margin: 42px auto 4px;
+    margin: 42px auto 39px;
     width: 1020px;
   }
 `
@@ -172,10 +172,13 @@ export default function SearchResult({ searchResult }) {
               <SearchArticle>
                 <SearchArticleCategory
                   color={
-                    sectionColors[article.pagemap?.metatags[0]['section-name']]
+                    sectionColors[
+                      article.pagemap?.metatags[0]['section-name'] ?? 'member'
+                    ]
                   }
                 >
-                  {article.pagemap?.metatags[0]['article:section']}
+                  {article.pagemap?.metatags[0]['article:section'] ??
+                    '會員專區'}
                 </SearchArticleCategory>
                 <SearchArticleTitle>{article.title}</SearchArticleTitle>
               </SearchArticle>
