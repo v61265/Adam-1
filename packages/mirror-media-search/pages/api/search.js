@@ -1,6 +1,6 @@
 import CORS from 'cors'
 import { CORS_ORIGINS } from '../../config'
-import globalAPICall from '../../utils/api/globalAPICall'
+import globalAPICall from '../../utils/api/global-api-call'
 import { runMiddleware } from '../../utils/api/share'
 import { getSearchResult } from '../../utils/api/programmable-search'
 

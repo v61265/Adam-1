@@ -5,7 +5,7 @@
  * @param {{[key: string]: () => Promise<void>}} actions
  */
 
-import CustomError from './CustomError.js'
+import CustomError from './custom-error.js'
 
 export default async function globalAPICall(req, res, actions) {
   try {
