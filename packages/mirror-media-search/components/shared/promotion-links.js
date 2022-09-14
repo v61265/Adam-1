@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import styled from 'styled-components'
 import useClickOutside from '../../hooks/useClickOutside'
 import moreIcon from '../../public/images/more-grey.png'
-import { maxWidth } from '../../styles/breakpoint'
+import { maxWidth } from '../../styles/media'
 
 const PromotionLinksWrapper = styled.div`
   margin-left: 5px;

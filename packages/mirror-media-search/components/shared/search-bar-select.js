@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import styled from 'styled-components'
 import useClickOutside from '../../hooks/useClickOutside'
-import { minWidth } from '../../styles/breakpoint'
+import { minWidth } from '../../styles/media'
 
 const SearchSelectWrapper = styled.div`
   font-size: 16px;

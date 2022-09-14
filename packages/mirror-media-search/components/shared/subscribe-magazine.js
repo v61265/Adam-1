@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import styled from 'styled-components'
 import { RedirectUrlContext } from '../../context/redirectUrl'
-import { minWidth } from '../../styles/breakpoint'
+import { minWidth } from '../../styles/media'
 
 const SubscribeMagazineWrapper = styled.div`
   padding: 4px 9px;

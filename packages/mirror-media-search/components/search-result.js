@@ -1,10 +1,10 @@
 import { useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import useSearchArticles from '../hooks/useSearchArticles'
-import { maxWidth, minWidth } from '../styles/breakpoint'
+import { maxWidth, minWidth } from '../styles/media'
 import { sectionColors } from '../styles/sections-color'
 import useWindowDimensions from '../hooks/useWindowDimensions'
-import { MEDIA_SIZE } from '../constants'
+import { mediaSize } from '../styles/media'
 import LazyLoadImage from './shared/lazy-load-image.js'
 import Loader from './shared/loader'
 
@@ -136,9 +136,9 @@ export default function SearchResult({ searchResult }) {
   )
 
   let divider = 1
-  if (width >= MEDIA_SIZE.xxl) {
+  if (width >= mediaSize.xxl) {
     divider = 3
-  } else if (width >= MEDIA_SIZE.md) {
+  } else if (width >= mediaSize.md) {
     divider = 2
   }
 

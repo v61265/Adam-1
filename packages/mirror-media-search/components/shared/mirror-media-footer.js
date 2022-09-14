@@ -1,11 +1,8 @@
 import styled from 'styled-components'
-import {
-  MEDIA_SIZE,
-  PROMOTION_LINKS,
-  SOCIAL_MEDIA_LINKS,
-} from '../../constants'
+import { PROMOTION_LINKS, SOCIAL_MEDIA_LINKS } from '../../constants'
+import { mediaSize } from '../../styles/media'
 import useWindowDimensions from '../../hooks/useWindowDimensions'
-import { minWidth } from '../../styles/breakpoint'
+import { minWidth } from '../../styles/media'
 
 const FooterWrapper = styled.footer`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -71,7 +68,7 @@ const SocialMediaIcon = styled.img`
 export default function Footer() {
   const { width } = useWindowDimensions()
 
-  const showScocialMedia = width >= MEDIA_SIZE.xl
+  const showScocialMedia = width >= mediaSize.xl
 
   return (
     <FooterWrapper>

@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { RedirectUrlContext } from '../../context/redirectUrl'
 import styled from 'styled-components'
-import { minWidth } from '../../styles/breakpoint'
+import { minWidth } from '../../styles/media'
 import closeButtonIcon from '../../public/images/close_white.png'
 import { sectionColors } from '../../styles/sections-color'
 import transparentPng from '../../public/images/transparent.png'
@@ -179,7 +179,6 @@ export default function MobileSidebar({
       />
       <Topics>
         {topics.map((topic) => {
-          console.log('topic', topic)
           return (
             <Topic key={topic._id} href={`${redirectUrl}/topic/${topic._id}`}>
               <h2>{topic.name}</h2>
