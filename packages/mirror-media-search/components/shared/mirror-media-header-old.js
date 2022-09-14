@@ -20,7 +20,7 @@ import {
   SUB_BRAND_LINKS,
   PROMOTION_LINKS,
   SOCIAL_MEDIA_LINKS,
-} from '../../constants'
+} from '../../utils/mirror-media/const'
 import { mediaSize } from '../../styles/media'
 import NavTopics from './nav-topics'
 import MobileSidebar from './mobile-sidebar'

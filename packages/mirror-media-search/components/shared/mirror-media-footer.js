@@ -1,5 +1,8 @@
 import styled from 'styled-components'
-import { PROMOTION_LINKS, SOCIAL_MEDIA_LINKS } from '../../constants'
+import {
+  PROMOTION_LINKS,
+  SOCIAL_MEDIA_LINKS,
+} from '../../utils/mirror-media/const'
 import { mediaSize } from '../../styles/media'
 import useWindowDimensions from '../../hooks/useWindowDimensions'
 import { minWidth } from '../../styles/media'
