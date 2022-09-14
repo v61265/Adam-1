@@ -1,6 +1,10 @@
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
 import { API_TIMEOUT } from '../config'
+import {
+  PROGRAMABLE_SEARCH_LIMIT_START,
+  PROGRAMABLE_SEARCH_NUM,
+} from '../utils/programmable-search/const'
 
 export default function useSearchArticles({ items: initialArticles, queries }) {
   const [searchTerms] = useState(queries.request[0].searchTerms)
@@ -26,11 +30,12 @@ export default function useSearchArticles({ items: initialArticles, queries }) {
           const { queries, items } = data
           const hasMore =
             !!queries.nextPage &&
-            startIndex !== 91 &&
+            startIndex !== PROGRAMABLE_SEARCH_LIMIT_START &&
             data.queries.request[0].count
           setHasMore(hasMore)
 
           setArticles((oldArticles) => {
+            // since programmable search may return duplicate result in different page, filter it out.
             const newArticles = items.filter(
               (article) =>
                 !oldArticles.find(
@@ -41,7 +46,7 @@ export default function useSearchArticles({ items: initialArticles, queries }) {
           })
         }
       } catch (error) {
-        if (startIndex === 91) {
+        if (startIndex === PROGRAMABLE_SEARCH_LIMIT_START) {
           setHasMore(false)
         }
         console.error(error)
@@ -54,7 +59,8 @@ export default function useSearchArticles({ items: initialArticles, queries }) {
   }, [hasMore, searchTerms, startIndex])
 
   const loadMore = useCallback(() => {
-    if (hasMore) setStartIndex((startIndex) => startIndex + 10)
+    if (hasMore)
+      setStartIndex((startIndex) => startIndex + PROGRAMABLE_SEARCH_NUM)
   }, [hasMore])
 
   return { articles, loadMore, isLoading, hasMore }
