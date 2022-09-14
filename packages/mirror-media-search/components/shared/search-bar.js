@@ -76,6 +76,11 @@ export default function SearchBar() {
   })
   const { width } = useWindowDimensions()
   const goSearch = () => {
+    /*
+      1. remove whitespace from both sides of a string
+      2. remove whitespace from both sides of any comma
+      3. replace whitespace bwtween two letters with a comma
+     */
     const trimedSearchTerms = searchTerms
       .trim()
       .replace(/\s*,\s*/g, ',')

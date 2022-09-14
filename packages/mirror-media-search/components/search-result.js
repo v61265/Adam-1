@@ -1,10 +1,10 @@
 import { useCallback, useRef } from 'react'
 import styled from 'styled-components'
-import useSearchArticles from '../hooks/useSearchArticles'
-import { maxWidth, minWidth } from '../styles/media'
+
+import { mediaSize, maxWidth, minWidth } from '../styles/media'
 import { sectionColors } from '../styles/sections-color'
+import useSearchArticles from '../hooks/useSearchArticles'
 import useWindowDimensions from '../hooks/useWindowDimensions'
-import { mediaSize } from '../styles/media'
 import LazyLoadImage from './shared/lazy-load-image.js'
 import Loader from './shared/loader'
 
@@ -115,7 +115,9 @@ export default function SearchResult({ searchResult }) {
   const { articles, loadMore, isLoading, hasMore } =
     useSearchArticles(searchResult)
   const searchTerms = searchResult?.queries?.request[0].searchTerms ?? ''
+
   const observer = useRef()
+  // use callback ref to re-observe when last article is changed
   const lastArticleRef = useCallback(
     (node) => {
       if (observer.current) observer.current.disconnect()
@@ -135,13 +137,13 @@ export default function SearchResult({ searchResult }) {
     [hasMore, loadMore]
   )
 
-  let divider = 1
-  if (width >= mediaSize.xxl) {
-    divider = 3
-  } else if (width >= mediaSize.md) {
-    divider = 2
-  }
-
+  /*
+    show divisible articles in different width
+      >=1440 : 3 per line
+      >=768 && <1440: 2 per line
+      <768: 1 per line
+  */
+  const divider = width >= mediaSize.xxl ? 3 : width >= mediaSize.md ? 2 : 1
   const end =
     articles.length % divider === 0
       ? articles.length
@@ -163,7 +165,6 @@ export default function SearchResult({ searchResult }) {
               rel="noreferrer"
               imageSrc={article.pagemap.cse_image[0].src}
               ref={lastOne ? lastArticleRef : null}
-              className={'lastArticleRef'}
             >
               <SearchArticleImg
                 src={article.pagemap.cse_image[0].src}
