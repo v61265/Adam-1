@@ -4,14 +4,14 @@ import styled from 'styled-components'
 import EventLogo from './event-logo'
 import SearchBar from './search-bar'
 
-import { maxWidth, minWidth } from '../../styles/breakpoint'
+import { maxWidth, minWidth } from '../../styles/media'
 import {
-  HeaderSearchMarginRight,
-  HeaderTopLayerWidth,
-  LogoWrapperMarginX,
-  MenuIconWidth,
-  SearchIconWidth,
-} from '../../styles/header-style-const'
+  Header_Search_Margin_Right,
+  Header_Top_Layer_Width,
+  Logo_Wrapper_Margin_X,
+  Menu_Icon_Width,
+  Search_Icon_Width,
+} from '../../styles/header'
 import hamburgerWhite from '../../public/images/hamburger-white.png'
 import SubscribeMagazine from './subscribe-magazine'
 import PromotionLinks from './promotion-links'
@@ -20,8 +20,8 @@ import {
   SUB_BRAND_LINKS,
   PROMOTION_LINKS,
   SOCIAL_MEDIA_LINKS,
-  MEDIA_SIZE,
-} from '../../constants'
+} from '../../utils/mirror-media/const'
+import { mediaSize } from '../../styles/media'
 import NavTopics from './nav-topics'
 import MobileSidebar from './mobile-sidebar'
 import useWindowDimensions from '../../hooks/useWindowDimensions'
@@ -43,7 +43,7 @@ const HeaderTop = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: ${HeaderTopLayerWidth};
+  width: ${Header_Top_Layer_Width};
   max-width: 1024px;
   height: 71px;
   margin-left: auto;
@@ -61,7 +61,7 @@ const HeaderTop = styled.div`
 
 const MenuIcon = styled.button`
   flex-shrink: 0;
-  width: ${MenuIconWidth};
+  width: ${Menu_Icon_Width};
   height: 10px;
   background-image: url(${hamburgerWhite.src});
   background-position: center;
@@ -78,7 +78,8 @@ const LogoWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: calc(
-    100% - (${MenuIconWidth} + ${SearchIconWidth} + ${LogoWrapperMarginX} * 2)
+    100% -
+      (${Menu_Icon_Width} + ${Search_Icon_Width} + ${Logo_Wrapper_Margin_X} * 2)
   );
   @media ${minWidth.xl} {
     justify-content: flex-start;
@@ -103,7 +104,8 @@ const ActionWrapper = styled.div`
   flex-shrink: 0;
   align-items: center;
   z-index: 529;
-  ${({ fixHeader }) => fixHeader && `margin-right: ${HeaderSearchMarginRight};`}
+  ${({ fixHeader }) =>
+    fixHeader && `margin-right: ${Header_Search_Margin_Right};`}
   @media ${maxWidth.xl} {
     flex-direction: row-reverse;
   }
@@ -135,7 +137,7 @@ export default function OldHeader({ sectionsData, topicsData }) {
     }
 
     if (headerRef.current) {
-      if (width < MEDIA_SIZE.xl) {
+      if (width < mediaSize.xl) {
         window.addEventListener('scroll', handleFixHeader)
         handleFixHeader()
       } else {

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { minWidth } from '../../styles/breakpoint'
+import { minWidth } from '../../styles/media'
 
 const EventLogoWrapper = styled.a`
   cursor: pointer;

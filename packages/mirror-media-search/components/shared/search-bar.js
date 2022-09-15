@@ -1,12 +1,11 @@
 import { useState, useRef } from 'react'
 import styled from 'styled-components'
 import useWindowDimensions from '../../hooks/useWindowDimensions'
-import { MEDIA_SIZE } from '../../constants'
-import { minWidth } from '../../styles/breakpoint'
+import { mediaSize, minWidth } from '../../styles/media'
 import searchButtonWeb from '../../public/images/search-button-web.png'
 import SearchButtonMobileSVG from '../../public/images/search-button-mobile.svg'
 import SearchBarInput from './search-bar-input'
-import { SearchIconWidth } from '../../styles/header-style-const'
+import { SearchIconWidth as Search_Icon_Width } from '../../styles/header'
 import useClickOutside from '../../hooks/useClickOutside'
 
 const SearchBarWrapper = styled.section`
@@ -17,7 +16,7 @@ const SearchBarWrapper = styled.section`
 
 const SearchButton = styled.button`
   display: block;
-  width: ${SearchIconWidth};
+  width: ${Search_Icon_Width};
   height: 18px;
   cursor: pointer;
   user-select: none;
@@ -77,6 +76,11 @@ export default function SearchBar() {
   })
   const { width } = useWindowDimensions()
   const goSearch = () => {
+    /*
+      1. remove whitespace from both sides of a string
+      2. remove whitespace from both sides of any comma
+      3. replace whitespace bwtween two letters with a comma
+     */
     const trimedSearchTerms = searchTerms
       .trim()
       .replace(/\s*,\s*/g, ',')
@@ -86,7 +90,7 @@ export default function SearchBar() {
     location.assign(`/search/${trimedSearchTerms}`)
   }
 
-  if (width < MEDIA_SIZE.xl) {
+  if (width < mediaSize.xl) {
     return (
       <SearchBarWrapper ref={mobileSearchWrapperRef}>
         <SearchButton

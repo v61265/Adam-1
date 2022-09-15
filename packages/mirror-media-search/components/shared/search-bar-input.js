@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { maxWidth } from '../../styles/breakpoint'
+import { maxWidth } from '../../styles/media'
 
 const SearchInputWrapper = styled.div`
   font-size: 16px;

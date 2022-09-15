@@ -10,13 +10,26 @@ import {
   REDIS_HOST,
   REDIS_AUTH,
 } from '../../config'
+import {
+  PROGRAMABLE_SEARCH_LIMIT_START,
+  PROGRAMABLE_SEARCH_NUM,
+} from '../programmable-search/const'
 
 const redis = new Redis({ host: REDIS_HOST, password: REDIS_AUTH })
 
 const searchQuerySchema = object({
   query: string().required(),
-  start: number().optional().integer().positive().max(91),
-  take: number().optional().integer().default(10).max(10).min(1),
+  start: number()
+    .optional()
+    .integer()
+    .positive()
+    .max(PROGRAMABLE_SEARCH_LIMIT_START),
+  take: number()
+    .optional()
+    .integer()
+    .default(PROGRAMABLE_SEARCH_NUM)
+    .max(PROGRAMABLE_SEARCH_NUM)
+    .min(1),
 })
 
 export async function getSearchResult(query) {

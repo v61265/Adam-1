@@ -6,6 +6,7 @@ const Img = styled.img`
   object-fit: ${({ isLoading }) => (isLoading ? 'contain' : 'cover')};
 `
 
+// show loading gif when image isn't ready
 export default function StateuflImage({ className, altName = 'image', src }) {
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
