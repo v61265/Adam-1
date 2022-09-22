@@ -143,12 +143,15 @@ export default function SearchResult({ searchResult }) {
       >=768 && <1440: 2 per line
       <768: 1 per line
   */
-  const divider = width >= mediaSize.xxl ? 3 : width >= mediaSize.md ? 2 : 1
-  const end =
-    articles.length % divider === 0
-      ? articles.length
-      : -articles.length % divider
-  const displayingArticles = hasMore ? articles.slice(0, end) : articles
+  let displayingArticles = []
+  if (articles) {
+    const divider = width >= mediaSize.xxl ? 3 : width >= mediaSize.md ? 2 : 1
+    const end =
+      articles.length % divider === 0
+        ? articles.length
+        : -articles.length % divider
+    displayingArticles = hasMore ? articles.slice(0, end) : articles
+  }
 
   return (
     <SearchResultWrapper>
