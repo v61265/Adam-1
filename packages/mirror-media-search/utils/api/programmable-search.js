@@ -7,16 +7,17 @@ import {
   PROGRAMABLE_SEARCH_ENGINE_ID,
   API_TIMEOUT,
   REDIS_EX,
-  REDIS_HOST,
   REDIS_AUTH,
+  READ_REDIS_HOST,
+  WRITE_REDIS_HOST,
 } from '../../config'
 import {
   PROGRAMABLE_SEARCH_LIMIT_START,
   PROGRAMABLE_SEARCH_NUM,
 } from '../programmable-search/const'
 
-const readRedis = new Redis({ host: REDIS_HOST, password: REDIS_AUTH })
-const writeRedis = new Redis({ host: REDIS_HOST, password: REDIS_AUTH })
+const readRedis = new Redis({ host: READ_REDIS_HOST, password: REDIS_AUTH })
+const writeRedis = new Redis({ host: WRITE_REDIS_HOST, password: REDIS_AUTH })
 
 const searchQuerySchema = object({
   query: string().required(),
