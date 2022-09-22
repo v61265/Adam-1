@@ -11,6 +11,7 @@ import Loader from './shared/loader'
 const SearchResultWrapper = styled.div`
   position: relative;
   margin: 30px 0;
+  flex: 1;
   @media ${minWidth.md} {
     margin: 28px auto 39px;
     width: 656px;
