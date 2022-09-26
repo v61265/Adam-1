@@ -46,13 +46,14 @@ export async function getSearchResult(query) {
       q: params.query,
       start: params.start,
       num: params.take,
+      sort: 'date',
     }
 
     const prefix = 'PROGRAMABLE_SEARCH'
     const redisKey = `${prefix}_${queryParams.q}_${queryParams.start}_${queryParams.num}`
     const searchResultCache = await readRedis.get(redisKey)
 
-    if (searchResultCache) {
+    if (false) {
       console.log(
         JSON.stringify({
           severity: 'DEBUG',
