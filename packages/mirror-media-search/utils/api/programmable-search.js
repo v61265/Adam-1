@@ -53,7 +53,7 @@ export async function getSearchResult(query) {
     const redisKey = `${prefix}_${queryParams.q}_${queryParams.start}_${queryParams.num}`
     const searchResultCache = await readRedis.get(redisKey)
 
-    if (false) {
+    if (searchResultCache) {
       console.log(
         JSON.stringify({
           severity: 'DEBUG',
