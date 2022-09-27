@@ -46,7 +46,7 @@ export async function getSearchResult(query) {
       q: params.query,
       start: params.start,
       num: params.take,
-      sort: 'date:d:s',
+      sort: 'date',
     }
 
     const prefix = 'PROGRAMABLE_SEARCH'
