@@ -10,20 +10,6 @@ const nextConfig = {
 
     return config
   },
-  async redirects() {
-    return [
-      {
-        source: '/search',
-        destination: process.env.URL_MIRROR_MEDIA,
-        permanent: true,
-      },
-      {
-        source: '/((?!api|static|favicon.ico|_next|images|sw|search).*)',
-        destination: process.env.URL_MIRROR_MEDIA,
-        permanent: true,
-      },
-    ]
-  },
 }
 
 module.exports = nextConfig
