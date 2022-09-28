@@ -15,6 +15,6 @@ export function middleware(req) {
 export const config = {
   matcher: [
     '/search',
-    '/((?!api|static|favicon.ico|_next|images|sw|search).*)',
+    '/((?!api|static|favicon.ico|_next|images|sw|search/).*)',
   ],
 }
