@@ -46,5 +46,5 @@ app.get('/api/v2/membership/v0/getposts', (req, res) => {
 })
 
 app.listen(8080, () => {
-  console.log('mock server is starting at 8080 port')
+  console.log('\033[32m[mock server]\033[0m started mock server on 0.0.0.0:8080, url: http://localhost:8080')
 })
