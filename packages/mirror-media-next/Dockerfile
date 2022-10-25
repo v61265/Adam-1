@@ -17,9 +17,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-RUN ls /
-COPY --from=build /build/public ./public
-COPY --from=build /build/.next ./.next
+#COPY --from=build /build/public ./public
+#COPY --from=build /build/.next ./.next
 
 COPY ["package.json", "yarn.lock", "./"]
 
