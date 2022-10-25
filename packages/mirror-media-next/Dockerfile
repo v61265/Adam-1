@@ -17,6 +17,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+RUN ls /build/
 COPY --from=build /build/public ./public
 COPY --from=build /build/.next ./.next
 
