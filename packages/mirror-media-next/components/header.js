@@ -1,7 +1,13 @@
 //TODO: replace <a> with <Link> from Nextjs for Single Page Application
 
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import { SUB_BRAND_LINKS, PROMOTION_LINKS } from '../constants'
+import {
+  SUB_BRAND_LINKS,
+  PROMOTION_LINKS,
+  SOCIAL_MEDIA_LINKS,
+} from '../constants'
+
 import SubBrandList from './sub-brand-list'
 import SearchBarDesktop from './search-bar-desktop'
 import PromotionLinks from './promotion-links'
@@ -9,11 +15,10 @@ import NavSections from './nav-sections'
 import FlashNews from './flash-news'
 import NavTopics from './nav-topics'
 import SubscribeMagazine from './subscribe-magazine'
-import React, { useState, useRef, useEffect } from 'react'
 import GptAd from './gpt-ad.js'
 import MemberLoginButton from './member-login-button'
 import SearchBarInput from './search-bar-input'
-
+import MobileSidebar from './mobile-sidebar'
 import Logo from './logo'
 const MOCK_DATA_FLASH_NEWS = [
   {
@@ -156,34 +161,13 @@ const SearchInputWrapper = styled.div`
   }
 `
 
-const SideBarButton = styled.button`
-  user-select: none;
-  display: block;
-  margin-left: 16px;
-
-  &:focus {
-    border: none;
-    outline: none;
-  }
-  div {
-    width: 16px;
-    height: 2px;
-    background-color: black;
-    margin: 2px 0;
-    border-radius: 12px;
-  }
-  ${({ theme }) => theme.breakpoint.xl} {
-    display: none;
-  }
-`
-
 const NavBottom = styled.div`
   display: flex;
 `
 /**
  * Remove item from array `categories` if which is member only category.
- * @param {Section} section
- * @returns {Section}
+ * @param {import('../type').Section} section
+ * @returns {import('../type').Section}
  */
 function filterOutIsMemberOnlyCategoriesInNormalSection(section) {
   return {
@@ -196,35 +180,9 @@ function filterOutIsMemberOnlyCategoriesInNormalSection(section) {
 }
 
 /**
- * @typedef {Object} BasicInfo - info of certain category/section/topic
- * @property {string} _id - id
- * @property {string} title - chinese name of category/section/topic
- * @property {string} name - english name of category/section/topic
- */
-
-/**
- * @typedef {Object} CategoryType
- * @property {boolean} isMemberOnly - whether this category belongs to the members area
- *
- * @typedef {BasicInfo & CategoryType} Category
- */
-
-/**
- * @typedef {Object} SectionType
- * @property {boolean} isFeatured - if true, should be selected and render
- * @property {Category[]} categories - categories which belong to certain section
- *
- * @typedef {BasicInfo & SectionType} Section
- */
-
-/**
- * @typedef {BasicInfo & {isFeatured: boolean} } Topic
- */
-
-/**
  * @param {Object} props
- * @param {Section[]} props.sectionsData
- * @param {Topic[]} props.topicsData
+ * @param {import('../type').Section[]} props.sectionsData
+ * @param {import('../type').Topic[]} props.topicsData
  * @returns {React.ReactElement}
  */
 export default function Header({ sectionsData = [], topicsData = [] }) {
@@ -274,8 +232,9 @@ export default function Header({ sectionsData = [], topicsData = [] }) {
     sectionsData
       .filter((section) => section.isFeatured)
       .map(filterOutIsMemberOnlyCategoriesInNormalSection) ?? []
+
   const topics =
-    topicsData.filter((topic) => topic.isFeatured).slice(0, 7) ?? []
+    topicsData.filter((topic) => topic.isFeatured).slice(0, 9) ?? []
 
   return (
     <HeaderWrapper>
@@ -298,11 +257,13 @@ export default function Header({ sectionsData = [], topicsData = [] }) {
           </SearchButtonMobile>
           <MemberLoginButton />
           <PromotionLinks links={PROMOTION_LINKS} />
-          <SideBarButton>
-            <div></div>
-            <div></div>
-            <div></div>
-          </SideBarButton>
+          <MobileSidebar
+            topics={topics}
+            sections={sections}
+            subBrands={SUB_BRAND_LINKS}
+            promotions={PROMOTION_LINKS}
+            socialMedia={SOCIAL_MEDIA_LINKS}
+          />
         </ActionWrapper>
       </HeaderTop>
       <SearchInputWrapper
@@ -311,14 +272,20 @@ export default function Header({ sectionsData = [], topicsData = [] }) {
       >
         <SearchInputMobile
           value={searchTerms}
-          onChange={(event) => {
-            setSearchTerms(event.target.value)
-          }}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              goSearch()
+          onChange={
+            /** @param {React.ChangeEvent<HTMLInputElement>} event */
+            (event) => {
+              setSearchTerms(event.target.value)
             }
-          }}
+          }
+          onKeyPress={
+            /** @param {React.KeyboardEvent} e */
+            (e) => {
+              if (e.key === 'Enter') {
+                goSearch()
+              }
+            }
+          }
         />
       </SearchInputWrapper>
 
