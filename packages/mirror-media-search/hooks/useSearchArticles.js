@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { API_TIMEOUT } from '../config'
 import {
   PROGRAMABLE_SEARCH_LIMIT_START,
@@ -12,6 +13,7 @@ export default function useSearchArticles({ items: initialArticles, queries }) {
   const [hasMore, setHasMore] = useState(!!queries.nextPage)
   const [articles, setArticles] = useState(initialArticles)
   const [isLoading, setIsLoading] = useState(false)
+  const { sort } = useRouter().query
 
   useEffect(() => {
     async function search(searchTerms, startIndex) {
@@ -23,6 +25,7 @@ export default function useSearchArticles({ items: initialArticles, queries }) {
           params: {
             exactTerms: searchTerms,
             start: startIndex,
+            sort: sort,
           },
           timeout: API_TIMEOUT,
         })
@@ -56,7 +59,7 @@ export default function useSearchArticles({ items: initialArticles, queries }) {
     if (hasMore && startIndex !== 1) {
       search(searchTerms, startIndex)
     }
-  }, [hasMore, searchTerms, startIndex])
+  }, [hasMore, searchTerms, sort, startIndex])
 
   const loadMore = useCallback(() => {
     if (hasMore)
