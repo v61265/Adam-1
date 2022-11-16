@@ -7,12 +7,15 @@ import { sectionColors } from '../styles/sections-color'
 import Logo from './logo'
 const SectionsWrapper = styled.nav`
   font-size: 14px;
+  line-height: 1.5;
   // to hide scrollbar
   overflow: hidden;
   width: 100%;
   margin: 0 auto 8px;
+  display: flex;
+  gap: 10px;
   @media ${minWidth.xl} {
-    font-size: 20px;
+    font-size: 16px;
     height: auto;
     overflow: visible;
     margin-bottom: 10px;
@@ -25,7 +28,7 @@ const Sections = styled.ul`
   width: 100%;
   margin: 0 auto;
   text-align: center;
-  padding: 0 8px;
+  padding: 0;
   // to hide scrollbar
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
@@ -38,7 +41,6 @@ const Sections = styled.ul`
   @media ${minWidth.md} {
     width: 100%;
     justify-content: space-between;
-    padding: 0;
   }
   @media ${minWidth.xl} {
     height: auto;
@@ -58,6 +60,10 @@ const Section = styled.li`
     flex-shrink: 1;
     width: 100%;
     min-width: calc(100% / 11);
+    &.member {
+      color: #fff;
+      background-color: #000000;
+    }
   }
   &:hover {
     ${({ color }) => color && `color: ${color}`}
@@ -80,8 +86,10 @@ const LogoIcon = styled(Logo)`
     display: none;
   }
 `
-const SectionLogo = styled(Section)`
-  padding-top: 3px;
+const SectionLogo = styled.div`
+  background-color: #fff;
+
+  padding: 4px 0 4px 8px;
   @media ${minWidth.md} {
     display: none;
   }
@@ -105,8 +113,6 @@ const SectionDropDown = styled.div`
 `
 const CategoryLink = styled.a`
   display: block;
-  font-size: 16px;
-  line-height: 1.5;
   &:hover {
     ${({ color }) => color && `color: ${color};`}
   }
@@ -130,13 +136,13 @@ function getCategoryHref(sectionName, categoryName) {
 export default function NavSections({ sections }) {
   return (
     <SectionsWrapper>
+      <SectionLogo>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a href="/">
+          <LogoIcon />
+        </a>
+      </SectionLogo>
       <Sections>
-        <SectionLogo>
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a href="/">
-            <LogoIcon />
-          </a>
-        </SectionLogo>
         {sections.map((section) => (
           <Section
             key={section._id}
