@@ -38,10 +38,8 @@ export default function Home({
   )
 }
 
-export async function getServerSideProps({ params, query }) {
+export async function getServerSideProps({ params }) {
   const searchTerms = params.searchTerms
-  const sort = query.sort
-
   try {
     const responses = await Promise.allSettled([
       axios({
@@ -57,7 +55,6 @@ export async function getServerSideProps({ params, query }) {
       getSearchResult({
         exactTerms: searchTerms,
         start: 1,
-        sort: sort,
       }),
     ])
 
