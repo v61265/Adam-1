@@ -29,15 +29,15 @@ export default {}
 /**
  * @typedef {Object} Category
  * @property {String} _id - unique id
- * @property {String} title - chinese name of category
- * @property {String} name - english name of category
+ * @property {String} title - english name of category
+ * @property {String} name - chinese name of category
  * @property {Boolean} isCampaign - unknown usage
  */
 /**
  * @typedef {Object} Section
  * @property {String} _id - unique id
- * @property {String} title - chinese name of section
- * @property {String} name - english name of section
+ * @property {String} title - english name of section
+ * @property {String} name - chinese name of section
  * @property {String} description - introduction of this section
  * @property {Number} sortOrder - sorting order of section (currently no use)
  * @property {Boolean} isFeatured - whether this section is marked as  `置頂` in cms
@@ -71,7 +71,7 @@ export default {}
  * @typedef {Object} ResizedImageInfo
  * @property {Number} height image height, unit is `px`
  * @property {Number} width image width, unit is `px`
- * @property {Number} url whole url of image
+ * @property {String} url whole url of image
 
  */
 
@@ -85,20 +85,35 @@ export default {}
  */
 
 /**
- * @typedef {Object} EditorChoiceRawData - information of certain editor choices article
+ * @typedef {'article'| 'wide' | 'projects' | 'photography' | 'script' | 'campaign' | 'readr'} ArticleStyle
+ */
+
+/**
+ * @typedef {Object} EditorChoiceRawData - raw data property of editor choices article
  * @property {Object} brief - short content of article
  * @property {ApiData[]} brief.apiData - api Data of article
  * @property {Draft} brief.draft - unknown usage
  * @property {String} brief.html - short content of article which included html tag.
  * @property {Category[]} categories - which categories does this article belong to
  * @property {HeroImage} heroImage - information of hero image in article
- * @property {String} partner - unknown usage
+ * @property {Object | ""} partner - if is Object, then is made by external partner. if is empty string, then is not external partner.
  * @property {String} publishedDate - article publish date
- * @property {String} redirect - redirect url, if this property is not empty string, that means should redirect to other url when user enter
+ * @property {String} redirect - redirect url, if this property is not empty string, then redirect to other url when user enter
  * @property {Section[]} sections - which sections does this article belong to
- * @property {Object[]} slug - article slug
- * @property {'article'| 'wide' | 'projects' | 'photography' | 'script' | 'campaigns' | 'readr'} style - article type, script and readr is unknown usage
+ * @property {String} slug - article slug
+ * @property {ArticleStyle} style - article type, script and readr is unknown usage
  * @property {String} title - article title
  * @property {String} _id - article unique id
  *
+ */
+
+/**
+ * @typedef {Object} EditorChoice - information of editor choices article, which property is computed base on raw data of editor choice
+ * @property {string} title - article title
+ * @property {string} slug - article slug
+ * @property {string} href - article href, which will change base on different value of property `style` in EditorChoiceRawData
+ * @property {string} imgSrcTablet - tablet version of hero image url
+ * @property {string} imgSrcMobile - mobile version of hero image url
+ * @property {string} sectionTitle - title of first section in EditorChoiceRawData property `sections`, which is Chinese, e.g. '時事'
+ * @property {string} sectionName - name of first section in EditorChoiceRawData property `sections`, which is English, e.g. 'news'
  */

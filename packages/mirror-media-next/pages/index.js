@@ -1,6 +1,6 @@
 //TODO: will fetch topic data twice (once in header, once in index),
 //should fetch only once by using Redux.
-
+//TODO: add typedef of editor choice data
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
@@ -8,11 +8,13 @@ import {
   API_TIMEOUT,
   URL_STATIC_COMBO_TOPICS,
   URL_K3_FLASH_NEWS,
+  URL_STATIC_POST_EXTERNALS_01,
 } from '../config'
 
 import FlashNews from '../components/flash-news'
 import NavTopics from '../components/nav-topics'
 import SubscribeMagazine from '../components/subscribe-magazine'
+import EditorChoice from '../components/editor-choice'
 
 const IndexContainer = styled.main`
   background-color: rgba(255, 255, 255, 1);
@@ -20,6 +22,7 @@ const IndexContainer = styled.main`
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 1024px;
+    height: 500vh;
   }
   margin: 0 auto;
 `
@@ -27,20 +30,73 @@ const IndexContainer = styled.main`
 const IndexTop = styled.div`
   display: flex;
 `
+/**
+ * Get path of article base on different article style, and whether is external article.
+ * @param {String} slug
+ * @param {import('../type/editor-choice.typedef').ArticleStyle} style
+ * @param {Object |''} partner
+ * @returns {String}
+ */
+const getArticleHref = (slug, style, partner) => {
+  if (partner) {
+    return `/external/${slug}/`
+  }
+  if (style === 'campaign') {
+    return `/campaigns/${slug}`
+  } else if (style === 'projects') {
+    return `/projects/${slug}/`
+  }
+  /**
+   * TODO: condition `isPremiumMember` is whether user is log in and is premium member,
+   * We haven't migrate membership system yet, so remove this condition temporally.
+   */
+  // else if (isPremiumMember) {
+  //   return `pre/story/${slug}/`
+  // }
+
+  return `/story/${slug}/`
+}
 
 /**
  *
  * @param {Object} props
  * @param {import('../type').Topic[]} props.topicsData
  * @param {import('../type').FlashNews[]} props.flashNewsData
+ * @param {import('../type/editor-choice.typedef').EditorChoiceRawData[] } [props.editorChoicesData=[]]
  * @returns {React.ReactElement}
  */
-export default function Home({ topicsData = [], flashNewsData = [] }) {
+export default function Home({
+  topicsData = [],
+  flashNewsData = [],
+  editorChoicesData = [],
+}) {
   const flashNews = flashNewsData.map(({ slug, title }) => {
     return {
       title,
       slug,
       href: `/story/${slug}`,
+    }
+  })
+  const editorChoice = editorChoicesData.map((article) => {
+    const {
+      slug = '',
+      title = '',
+      heroImage,
+      sections,
+      partner,
+      style,
+    } = article
+    const [section] = sections
+    const { mobile, tablet } = heroImage?.image?.resizedTargets || {}
+
+    return {
+      title,
+      slug,
+      href: getArticleHref(slug, style, partner),
+      imgSrcTablet: tablet.url,
+      imgSrcMobile: mobile.url,
+      sectionTitle: section.title || '',
+      sectionName: section.name || '',
     }
   })
   const topics = useMemo(
@@ -55,6 +111,7 @@ export default function Home({ topicsData = [], flashNewsData = [] }) {
         <NavTopics topics={topics} />
         <SubscribeMagazine />
       </IndexTop>
+      <EditorChoice editorChoice={editorChoice}></EditorChoice>
     </IndexContainer>
   )
 }
@@ -73,7 +130,18 @@ export default function Home({ topicsData = [], flashNewsData = [] }) {
  * @property {Object} _meta
  */
 
+//TODO: rename typedef, make it more clear
+/**
+ * @typedef {Object} PostRes
+ * @property {string} timestamp
+ * @property {Array} choices
+ * @property {Array} latest
+ */
+
 /** @typedef {import('axios').AxiosResponse<DataRes>} AxiosResponse */
+
+//TODO: rename typedef, make it more clear
+/** @typedef {import('axios').AxiosResponse<PostRes>} AxiosPostResponse */
 
 export async function getServerSideProps() {
   try {
@@ -88,6 +156,11 @@ export async function getServerSideProps() {
         url: URL_K3_FLASH_NEWS,
         timeout: API_TIMEOUT,
       }),
+      axios({
+        method: 'get',
+        url: URL_STATIC_POST_EXTERNALS_01,
+        timeout: API_TIMEOUT,
+      }),
     ])
 
     /** @type {PromiseFulfilledResult<AxiosResponse>} */
@@ -95,6 +168,10 @@ export async function getServerSideProps() {
     /** @type {PromiseFulfilledResult<AxiosResponse>} */
     const flashNewsResponse =
       responses[1].status === 'fulfilled' && responses[1]
+
+    /** @type {PromiseFulfilledResult<AxiosPostResponse>} */
+    const postResponse = responses[2].status === 'fulfilled' && responses[2]
+    console.log(postResponse)
     const topicsData = Array.isArray(
       topicsResponse?.value?.data?._endpoints?.topics?._items
     )
@@ -102,6 +179,9 @@ export async function getServerSideProps() {
       : []
     const flashNewsData = Array.isArray(flashNewsResponse.value?.data?._items)
       ? flashNewsResponse.value?.data?._items
+      : []
+    const editorChoicesData = Array.isArray(postResponse.value?.data?.choices)
+      ? postResponse.value?.data?.choices
       : []
 
     console.log(
@@ -111,7 +191,7 @@ export async function getServerSideProps() {
       })
     )
     return {
-      props: { topicsData, flashNewsData },
+      props: { topicsData, flashNewsData, editorChoicesData },
     }
   } catch (error) {
     console.log(JSON.stringify({ severity: 'ERROR', message: error.stack }))
