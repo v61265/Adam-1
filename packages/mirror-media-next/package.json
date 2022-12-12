@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@svgr/webpack": "^6.3.1",
-    "axios": "^0.27.2",
+    "@twreporter/errors": "^1.1.2",
+    "axios": "^1.2.0",
     "cors": "^2.8.5",
     "next": "12.2.5",
     "react": "18.2.0",
