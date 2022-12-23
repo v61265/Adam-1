@@ -25,4 +25,4 @@ COPY --from=build /build/public ./public
 COPY --from=build /build/.next/standalone ./
 COPY --from=build /build/.next/static ./.next/static
 
-CMD ["node", "server"]
+CMD ["node", "server.js"]
