@@ -9,7 +9,12 @@ const nextConfig = {
     },
   },
   images: {
-    domains: ['www.mirrormedia.com.tw'],
+    // https://nextjs.org/docs/api-reference/next/image#remote-patterns
+    remotePatterns: [
+      {
+        hostname: '*', //Temporary setting, should assign to specif hostname when our domain is decided
+      },
+    ],
   },
   webpack(config) {
     config.module.rules.push({
