@@ -263,17 +263,6 @@ export async function getServerSideProps(context) {
 
     console.log(
       JSON.stringify({
-        severity: 'DEBUG',
-        message: 'header content',
-        debugPayload: {
-          headers,
-          test: { traceHeader: traceHeader },
-        },
-      })
-    )
-
-    console.log(
-      JSON.stringify({
         severity: 'ERROR',
         message: errors.helpers.printAll(
           annotatingError,
