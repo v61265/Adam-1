@@ -112,7 +112,7 @@ export default function Home({
  */
 export async function getServerSideProps(context) {
   const headers = context?.req?.headers
-  const traceHeader = headers?.['X-Cloud-Trace-Context']
+  const traceHeader = headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
     const [trace] = traceHeader.split('/')
