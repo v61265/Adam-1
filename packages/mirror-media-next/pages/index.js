@@ -111,8 +111,8 @@ export default function Home({
  * @type {import('next').GetServerSideProps}
  */
 export async function getServerSideProps(context) {
-  const traceHeader = context?.req?.headers?.['X-Cloud-Trace-Context']
-
+  const headers = context?.req?.headers
+  const traceHeader = headers?.['X-Cloud-Trace-Context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
     const [trace] = traceHeader.split('/')
@@ -259,6 +259,16 @@ export async function getServerSideProps(context) {
       err,
       'UnhandledError',
       'Error occurs while getting index page data'
+    )
+
+    console.log(
+      JSON.stringify({
+        severity: 'DEBUG',
+        message: 'header content',
+        debugPayload: {
+          headers,
+        },
+      })
     )
 
     console.log(
