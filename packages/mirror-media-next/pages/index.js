@@ -267,6 +267,7 @@ export async function getServerSideProps(context) {
         message: 'header content',
         debugPayload: {
           headers,
+          test: { traceHeader: traceHeader },
         },
       })
     )
