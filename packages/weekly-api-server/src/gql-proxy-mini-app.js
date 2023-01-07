@@ -83,12 +83,12 @@ export function createGraphQLProxy({
         const scope = res?.locals?.auth?.decodedAccessToken?.scope || ''
         proxyReq.setHeader('X-Access-Token-Scope', scope)
       },
-      onError: (err, req, res, target) => {
+      onError: (err, req, res, target) => { // eslint-disable-line
         const annotatingError = errors.helpers.wrap(
           err,
           'ProxyError',
           `Error occurs while proxying request to API origin server: ${proxyOrigin}` +
-          err.message
+            err.message
         )
 
         console.log(
@@ -106,8 +106,8 @@ export function createGraphQLProxy({
           status: 'error',
           error: annotatingError.message,
         })
-      }
-    }),
+      },
+    })
   )
 
   router.use(
@@ -115,7 +115,7 @@ export function createGraphQLProxy({
      * Mini app level error handler
      * @type {express.ErrorRequestHandler}
      */
-    (err, req, res, next) => {
+    (err, req, res) => {
       switch (err.name) {
         case 'AuthError': {
           console.log(

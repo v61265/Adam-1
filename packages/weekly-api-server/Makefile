@@ -17,6 +17,10 @@ start: build-lib
 
 build: clean build-lib
 
+lint:
+	@echo "$(p) Start linting"
+	yarn eslint src --fix
+
 clean:
 	@echo "$(P) Clean lib/ dist/"
 	rm -rf lib/ dist/

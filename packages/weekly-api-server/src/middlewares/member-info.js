@@ -33,13 +33,17 @@ export function queryMemberInfo(opts) {
 
     let apiRes
     try {
-      apiRes = await axios.post(opts.apiUrl, {
-        query,
-      }, {
-        headers: {
-          'X-Access-Token-Scope': `read:member-info:${firebaseId}`,
+      apiRes = await axios.post(
+        opts.apiUrl,
+        {
+          query,
         },
-      })
+        {
+          headers: {
+            'X-Access-Token-Scope': `read:member-info:${firebaseId}`,
+          },
+        }
+      )
     } catch (axiosErr) {
       const annotatingError = errors.helpers.wrap(
         errors.helpers.annotateAxiosError(axiosErr),

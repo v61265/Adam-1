@@ -4,7 +4,6 @@ import cors from 'cors'
 import errors from '@twreporter/errors'
 import express from 'express'
 import middlewareCreator from './middlewares'
-import envVars from './environment-variables'
 import { createGraphQLProxy } from './gql-proxy-mini-app'
 
 const statusCodes = consts.statusCodes
@@ -116,22 +115,26 @@ export function createApp({
   )
 
   // mini app: weekly GraphQL API
-  app.use(createGraphQLProxy({
-    gcpProjectId,
-    jwtSecret,
-    corsAllowOrigin,
-    proxyOrigin: weeklyProxyOrigin,
-    proxyPath: '/content/graphql',
-  }))
+  app.use(
+    createGraphQLProxy({
+      gcpProjectId,
+      jwtSecret,
+      corsAllowOrigin,
+      proxyOrigin: weeklyProxyOrigin,
+      proxyPath: '/content/graphql',
+    })
+  )
 
   // mini app: isafel GraphQL API
-  app.use(createGraphQLProxy({
-    gcpProjectId,
-    jwtSecret,
-    corsAllowOrigin,
-    proxyOrigin: israfelProxyOrigin,
-    proxyPath: '/member/graphql',
-  }))
+  app.use(
+    createGraphQLProxy({
+      gcpProjectId,
+      jwtSecret,
+      corsAllowOrigin,
+      proxyOrigin: israfelProxyOrigin,
+      proxyPath: '/member/graphql',
+    })
+  )
 
   app.use(
     /**

@@ -6,10 +6,12 @@ import {
   signAccessToken,
 } from './auth'
 
-export default {
+const mws = {
   createLoggerMw,
   queryMemberInfo,
   verifyAccessToken,
   verifyIdTokenByFirebaseAdmin,
   signAccessToken,
 }
+
+export default mws

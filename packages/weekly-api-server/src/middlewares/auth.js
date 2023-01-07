@@ -123,8 +123,11 @@ export function signAccessToken({ jwtSecret }) {
   return (req, res, next) => {
     const nowTs = Math.round(new Date().getTime() / 1000) // timestamp
     const expiresIn = nowTs + 3600 // one hour later
-    const { id: memberId, type: memberType, subscription: subscriptions } =
-      res.locals.memberInfo || {}
+    const {
+      id: memberId,
+      type: memberType,
+      subscription: subscriptions,
+    } = res.locals.memberInfo || {}
     const firebaseId =
       res.locals.memberInfo?.firebaseId || res.locals.auth?.decodedIdToken?.uid
     // @TODO: add roles claim in JWT if needed

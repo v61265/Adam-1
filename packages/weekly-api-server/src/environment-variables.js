@@ -7,7 +7,7 @@ const {
   CORS_ALLOW_ORIGINS,
 } = process.env
 
-export default {
+const envVar = {
   jwt: {
     secret: JWT_SECRET || 'jwt-secret',
   },
@@ -19,10 +19,12 @@ export default {
   },
   apis: {
     israfel: {
-      origin: ISRAFEL_GQL_ORIGIN || 'https://israfel-gql.mirrormedia.mg/api/graphql'
+      origin:
+        ISRAFEL_GQL_ORIGIN || 'https://israfel-gql.mirrormedia.mg/api/graphql',
     },
     weekly: {
-      origin: WEEKLY_GQL_ORIGIN || 'https://weekly-gql.mirrormedia.mg/api/graphql',
+      origin:
+        WEEKLY_GQL_ORIGIN || 'https://weekly-gql.mirrormedia.mg/api/graphql',
     },
   },
   cors: {
@@ -32,3 +34,5 @@ export default {
         : ['https://www.mirrormedia.mg', 'https://mirrormedia.mg'],
   },
 }
+
+export default envVar
