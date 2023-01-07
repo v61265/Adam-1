@@ -1,3 +1,4 @@
+import consts from './constants'
 import cors from 'cors'
 // @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
 import errors from '@twreporter/errors'
@@ -6,11 +7,7 @@ import middlewareCreator from './middlewares'
 import envVars from './environment-variables'
 import { createGraphQLProxy } from './gql-proxy-mini-app'
 
-const statusCodes = {
-  ok: 200,
-  unauthorized: 401,
-  internalServerError: 500,
-}
+const statusCodes = consts.statusCodes
 
 /**
  *  This function creates an express application.
