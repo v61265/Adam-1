@@ -22,7 +22,6 @@ const statusCodes = consts.statusCodes
  *  @param {Object} opts
  *  @param {string} opts.gcpProjectId
  *  @param {string} opts.firebaseProjectId
- *  @param {string} opts.memberApiUrl
  *  @param {string} opts.jwtSecret
  *  @param {string} opts.weeklyProxyOrigin
  *  @param {string} opts.israfelProxyOrigin
@@ -32,7 +31,6 @@ const statusCodes = consts.statusCodes
 export function createApp({
   gcpProjectId,
   firebaseProjectId,
-  memberApiUrl,
   jwtSecret,
   weeklyProxyOrigin,
   israfelProxyOrigin,
@@ -58,7 +56,7 @@ export function createApp({
     middlewareCreator.createLoggerMw(gcpProjectId), // log request
     cors(corsOpts), // handle cors request
     middlewareCreator.verifyIdTokenByFirebaseAdmin({ firebaseProjectId }), // check authentication
-    middlewareCreator.queryMemberInfo({ apiUrl: memberApiUrl }), // query member access permission
+    middlewareCreator.queryMemberInfo({ apiUrl: israfelProxyOrigin + '/api/graphql' }), // query member access permission
     middlewareCreator.signAccessToken({ jwtSecret: jwtSecret }), // sign access token according to member permission
     /** @type {express.RequestHandler} */
     (req, res) => {

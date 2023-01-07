@@ -10,7 +10,6 @@ async function start() {
     const app = createApp({
       gcpProjectId: envVar.gcp.projectId,
       firebaseProjectId: envVar.firebase.projectId,
-      memberApiUrl: envVar.apis.israfel.origin + '/api/graphql',
       jwtSecret: envVar.jwt.secret,
       israfelProxyOrigin: envVar.apis.israfel.origin,
       weeklyProxyOrigin: envVar.apis.weekly.origin,
