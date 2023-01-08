@@ -68,7 +68,8 @@ export function createGraphQLProxy({
       next()
     },
 
-    // proxy request to Member API GraphQL endpoint
+
+    // proxy request to API GraphQL endpoint
     createProxyMiddleware({
       target: proxyOrigin,
       changeOrigin: true,
@@ -78,6 +79,13 @@ export function createGraphQLProxy({
       // add `X-Access-Token-Scope` custom header.
       // The api servers use this custom header to implement access control mechanism.
       onProxyReq: (proxyReq, req, res) => {
+        console.log(
+          JSON.stringify({
+            severity: 'DEBUG',
+            message: 'proxy to backed API origin server: ' + proxyOrigin + proxyReq.path,
+            ...res?.locals?.globalLogFields,
+          })
+        )
         // @ts-ignore `res.locals` is not defined in 'http-proxy-middleware' pkg,
         // but it does exist in 'express' res object.
         const scope = res?.locals?.auth?.decodedAccessToken?.scope || ''
