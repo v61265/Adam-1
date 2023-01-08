@@ -20,11 +20,11 @@ const envVar = {
   apis: {
     israfel: {
       origin:
-        ISRAFEL_GQL_ORIGIN || 'https://israfel-gql.mirrormedia.mg/api/graphql',
+        ISRAFEL_GQL_ORIGIN || 'https://israfel-gql.mirrormedia.mg',
     },
     weekly: {
       origin:
-        WEEKLY_GQL_ORIGIN || 'https://weekly-gql.mirrormedia.mg/api/graphql',
+        WEEKLY_GQL_ORIGIN || 'https://weekly-gql.mirrormedia.mg',
     },
   },
   cors: {
