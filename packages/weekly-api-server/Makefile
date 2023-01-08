@@ -7,9 +7,12 @@ build-lib:
 	@echo "$(P) Transpile es6, jsx and (typescript) to es5"
 	NODE_ENV=production yarn babel src --out-dir lib --copy-files
 
-dev:
+dev-server:
 	@echo "$(P) Start dev server"
 	NODE_ENV=development yarn babel-node src/server
+
+dev:
+	yarn nodemon --exec make dev-server
 
 start: build-lib
 	@echo "$(P) Start production server"
