@@ -93,7 +93,7 @@ export function createGraphQLProxy({
 
         console.log(
           JSON.stringify({
-            severity: 'Error',
+            severity: 'ERROR',
             message: errors.helpers.printAll(annotatingError, {
               withStack: true,
               withPayload: true,
@@ -115,7 +115,7 @@ export function createGraphQLProxy({
      * Mini app level error handler
      * @type {express.ErrorRequestHandler}
      */
-    (err, req, res) => {
+    (err, req, res, next) => {
       switch (err.name) {
         case 'AuthError': {
           console.log(
@@ -134,11 +134,11 @@ export function createGraphQLProxy({
         default: {
           console.log(
             JSON.stringify({
-              severity: 'Error',
+              severity: 'ERORR',
               message: errors.helpers.printAll(err, {
                 withStack: true,
                 withPayload: true,
-              }),
+              }, 0, 0),
               ...res?.locals?.globalLogFields,
             })
           )

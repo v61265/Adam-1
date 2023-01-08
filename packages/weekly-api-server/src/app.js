@@ -90,7 +90,7 @@ export function createApp({
         case 'MemberInfoError': {
           console.log(
             JSON.stringify({
-              severity: 'Error',
+              severity: 'ERROR',
               message: errors.helpers.printAll(err, {
                 withStack: true,
                 withPayload: true,
@@ -156,7 +156,7 @@ export function createApp({
           message: errors.helpers.printAll(annotatingError, {
             withStack: true,
             withPayload: true,
-          }),
+          }, 0, 0),
         },
         res.locals.globalLogFields
       )
