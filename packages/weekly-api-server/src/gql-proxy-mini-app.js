@@ -140,20 +140,8 @@ export function createGraphQLProxy({
           return
         }
         default: {
-          console.log(
-            JSON.stringify({
-              severity: 'ERORR',
-              message: errors.helpers.printAll(err, {
-                withStack: true,
-                withPayload: true,
-              }, 0, 0),
-              ...res?.locals?.globalLogFields,
-            })
-          )
-          res.status(statusCodes.internalServerError).send({
-            status: 'error',
-            error: err.message,
-          })
+          // Let application level error handle to deal with the error
+          next(err)
           return
         }
       }
