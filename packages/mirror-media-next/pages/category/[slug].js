@@ -1,13 +1,38 @@
 import errors from '@twreporter/errors'
+import styled from 'styled-components'
 
 import client from '../../apollo/apollo-client'
 import { fetchPostsByCategory } from '../../apollo/query/posts'
 import { fetchCategorySections } from '../../apollo/query/categroies'
+import CategoryArticles from '../../components/category-articles'
+
+const CategoryContainer = styled.main`
+  ${({ theme }) => theme.breakpoint.md} {
+    padding: 0 48px;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin: 0 auto;
+    max-width: 1024px;
+    padding: 0;
+  }
+`
+
+const RENDER_PAGE_SIZE = 12
 
 export default function Category({ postsCount, posts, category }) {
   console.log(postsCount, posts, category)
 
-  return <div>{category?.name} </div>
+  return (
+    <CategoryContainer>
+      <h1>{category?.name}</h1>
+      <CategoryArticles
+        postsCount={postsCount}
+        posts={posts}
+        category={category?.name}
+        renderPageSize={RENDER_PAGE_SIZE}
+      />
+    </CategoryContainer>
+  )
 }
 
 export async function getServerSideProps({ query, req }) {
@@ -25,7 +50,7 @@ export async function getServerSideProps({ query, req }) {
     client.query({
       query: fetchPostsByCategory,
       variables: {
-        take: 12,
+        take: RENDER_PAGE_SIZE,
         skip: 0,
         orderBy: { publishedDate: 'desc' },
         filter: {
