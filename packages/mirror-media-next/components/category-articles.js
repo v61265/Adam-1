@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import client from '../apollo/apollo-client'
 
 import InfiniteScrollList from './InifiniteScrollList'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import LoadingPage from '../public/images/loading_page.gif'
 import ArticleListItems from './article-list-items'
 import { fetchPostsByCategory } from '../apollo/query/posts'
@@ -10,6 +10,8 @@ import { fetchPostsByCategory } from '../apollo/query/posts'
 const Loading = styled.div`
   margin: 20px auto 0;
   padding: 0 0 20px;
+  text-align: center;
+
   ${({ theme }) => theme.breakpoint.xl} {
     margin: 64px auto 0;
     padding: 0 0 64px;
@@ -27,8 +29,8 @@ export default function ArticleList({
       const response = await client.query({
         query: fetchPostsByCategory,
         variables: {
-          take: renderPageSize,
-          skip: page * renderPageSize,
+          take: renderPageSize * 2,
+          skip: page * renderPageSize * 2,
           orderBy: { publishedDate: 'desc' },
           filter: {
             state: { equals: 'published' },
@@ -36,7 +38,7 @@ export default function ArticleList({
           },
         },
       })
-      return response.value.data.posts
+      return response.data.posts
     } catch (error) {}
     return
   }
@@ -58,7 +60,12 @@ export default function ArticleList({
       pageCount={Math.ceil(postsCount / renderPageSize)}
       fetchListInPage={fetchPostsFromPage}
     >
-      {(renderList) => <ArticleListItems renderList={renderList} />}
+      {(renderList) => (
+        <ArticleListItems
+          renderList={renderList}
+          sections={category.sections}
+        />
+      )}
     </InfiniteScrollList>
   )
 }

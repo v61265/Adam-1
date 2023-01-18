@@ -7,28 +7,56 @@ import { fetchCategorySections } from '../../apollo/query/categroies'
 import CategoryArticles from '../../components/category-articles'
 
 const CategoryContainer = styled.main`
+  width: 320px;
+  margin: 0 auto;
+
   ${({ theme }) => theme.breakpoint.md} {
-    padding: 0 48px;
+    width: 672px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    margin: 0 auto;
-    max-width: 1024px;
+    width: 1024px;
     padding: 0;
+  }
+`
+const CategoryTitle = styled.h1`
+  margin: 20px 0 16px 16px;
+  font-size: 16px;
+  line-height: 1.15;
+  font-weight: 500;
+  color: ${
+    /**
+     * @param {Object} props
+     * @param {String } props.sectionName
+     * @param {Theme} [props.theme]
+     */
+    ({ sectionName, theme }) =>
+      sectionName && theme.color.sectionsColor[sectionName]
+        ? theme.color.sectionsColor[sectionName]
+        : theme.color.sectionsColor[sectionName]
+  };
+  ${({ theme }) => theme.breakpoint.md} {
+    margin: 20px 0 24px;
+    font-size: 20.8px;
+    font-weight: 600;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin: 24px 0 28px;
+    font-size: 28px;
   }
 `
 
 const RENDER_PAGE_SIZE = 12
 
 export default function Category({ postsCount, posts, category }) {
-  console.log(postsCount, posts, category)
-
   return (
     <CategoryContainer>
-      <h1>{category?.name}</h1>
+      <CategoryTitle sectionName={category?.sections?.slug}>
+        {category?.name}
+      </CategoryTitle>
       <CategoryArticles
         postsCount={postsCount}
         posts={posts}
-        category={category?.name}
+        category={category}
         renderPageSize={RENDER_PAGE_SIZE}
       />
     </CategoryContainer>
@@ -50,7 +78,7 @@ export async function getServerSideProps({ query, req }) {
     client.query({
       query: fetchPostsByCategory,
       variables: {
-        take: RENDER_PAGE_SIZE,
+        take: RENDER_PAGE_SIZE * 2,
         skip: 0,
         orderBy: { publishedDate: 'desc' },
         filter: {
