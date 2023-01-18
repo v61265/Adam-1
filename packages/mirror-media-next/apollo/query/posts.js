@@ -10,6 +10,7 @@ const fetchPostsByCategory = gql`
     postsCount(where: $filter)
     posts(take: $take, skip: $skip, orderBy: $orderBy, where: $filter) {
       id
+      slug
       title
       brief
       sections {

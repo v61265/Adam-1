@@ -89,7 +89,7 @@ const ItemBrief = styled.div`
 
 export default function ArticleListItem({ item, sections }) {
   return (
-    <ItemWrapper>
+    <ItemWrapper href={`/story/${item.slug}`} target="_blank">
       <ImageContainer>
         <CustomNextImage src={item.heroImage?.resized?.w800} />
         <ItemSection sectionName={sections?.slug}>{sections?.name}</ItemSection>
