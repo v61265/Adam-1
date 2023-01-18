@@ -133,7 +133,6 @@ const PostTitle = styled.p`
   }
 `
 const PostBrief = styled.p`
-  font-family: 'PingFang TC';
   font-weight: 400;
   font-size: 16px;
   line-height: 150%;
@@ -167,7 +166,6 @@ export default function Custom404() {
   const bullShitBrief =
     '我以為我了解早餐，但我真的了解早餐嗎？仔細想想，我對早餐的理解只是皮毛而已。由於，每個人的一生中，幾乎可說碰到早餐這件事，是必然會發生的。早餐的出現，必將帶領人類走向更高的巔峰。當你搞懂後就會明白了。世界上若沒有早餐，對於人類的改變可想而知。'
 
-  console.log(posts)
   return (
     <PageWrapper>
       <MsgContainer>
@@ -177,20 +175,30 @@ export default function Custom404() {
       <Title>熱門會員文章</Title>
       <JoinMemberBtn>加入會員</JoinMemberBtn>
       <PostsContainer>
-        {posts?.slice(0, 3).map((post, index) => (
-          <PostCard key={index} onClick={() => window.open(`${post?.slug}`)}>
-            <HeroImgWrapper>
-              <Image
-                src={post?.heroImage?.image?.resizedTargets?.desktop?.url}
-                alt={post?.heroImage?.description}
-                width={323}
-                height={159}
-              />
-            </HeroImgWrapper>
-            <PostTitle>{post?.title}</PostTitle>
-            <PostBrief>{bullShitBrief}</PostBrief>
-          </PostCard>
-        ))}
+        {posts?.slice(0, 3).map((post, index) => {
+          const imgUrl = post?.heroImage?.image?.resizedTargets?.desktop?.url
+          const defaultImg = '/images/default-og-img.png'
+          return (
+            <PostCard key={index}>
+              <a
+                href={`${post?.slug}`}
+                target="_blank"
+                rel="noreferrer noopenner"
+              >
+                <HeroImgWrapper>
+                  <Image
+                    src={imgUrl || defaultImg}
+                    alt={post?.heroImage?.description}
+                    width={323}
+                    height={159}
+                  />
+                </HeroImgWrapper>
+                <PostTitle>{post?.title}</PostTitle>
+                <PostBrief>{bullShitBrief}</PostBrief>
+              </a>
+            </PostCard>
+          )
+        })}
       </PostsContainer>
     </PageWrapper>
   )
