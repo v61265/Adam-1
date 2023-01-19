@@ -16,7 +16,7 @@ const MsgContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 240px;
+  width: 260px;
   margin-top: 140px;
 `
 
@@ -29,7 +29,7 @@ const H1 = styled.h1`
 `
 
 const Text = styled.p`
-  font-family: 'Noto Sans TC';
+  font-family: var(--notosansTC-font);
   font-weight: 500;
   font-size: 24px;
   color: #61b8c6;

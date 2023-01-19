@@ -15,7 +15,7 @@ const MsgContainer = styled.div`
   flex-direction: column;
   align-items: center;
   border-bottom: 1px solid #000000;
-  width: 240px;
+  width: 260px;
   padding: 58px 0;
 `
 
@@ -28,8 +28,7 @@ const H1 = styled.h1`
 `
 
 const Text = styled.p`
-  font-family: 'Noto Sans TC';
-  font-weight: 500;
+  font-family: var(--notosansTC-font);
   font-size: 24px;
   color: #000000;
 `
@@ -115,7 +114,6 @@ const HeroImgWrapper = styled.div`
   }
 `
 const PostTitle = styled.p`
-  font-family: 'PingFang TC';
   font-weight: 400;
   font-size: 20px;
   line-height: 150%;
