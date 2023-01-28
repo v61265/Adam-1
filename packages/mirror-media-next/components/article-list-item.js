@@ -91,15 +91,20 @@ const ItemBrief = styled.div`
 /**
  * @param {Object} props
  * @param {import('../type/shared/article').Article} props.item
- * @param {import('../type/category').CategorySection} props.section
+ * @param {import('../type/category').CategorySection} [props.section]
  * @returns {React.ReactElement}
  */
 export default function ArticleListItem({ item, section }) {
+  const itemSection =
+    section || item.sections.find((section) => section.slug !== 'member')
+
   return (
     <ItemWrapper href={`/story/${item.slug}`} target="_blank">
       <ImageContainer>
         <CustomNextImage src={item.heroImage?.resized?.w800} />
-        <ItemSection sectionName={section?.slug}>{section?.name}</ItemSection>
+        <ItemSection sectionName={itemSection?.slug}>
+          {itemSection?.name}
+        </ItemSection>
       </ImageContainer>
       <ItemDetail>
         <ItemTitle>{item.title}</ItemTitle>

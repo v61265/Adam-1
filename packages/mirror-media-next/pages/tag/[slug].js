@@ -3,10 +3,10 @@ import styled from 'styled-components'
 
 import client from '../../apollo/apollo-client'
 import { fetchPosts } from '../../apollo/query/posts'
-import { fetchCategorySections } from '../../apollo/query/categroies'
-import CategoryArticles from '../../components/category-articles'
+import { fetchTag } from '../../apollo/query/tags'
+import TagArticles from '../../components/tag-articles'
 
-const CategoryContainer = styled.main`
+const TagContainer = styled.main`
   width: 320px;
   margin: 0 auto;
 
@@ -18,30 +18,26 @@ const CategoryContainer = styled.main`
     padding: 0;
   }
 `
-const CategoryTitle = styled.h1`
-  margin: 20px 0 16px 16px;
+const TagTitle = styled.h1`
+  display: inline-block;
+  margin: 16px 0 16px 16px;
+  padding: 4px 16px;
   font-size: 16px;
   line-height: 1.15;
-  font-weight: 500;
-  color: ${
-    /**
-     * @param {Object} props
-     * @param {String } props.sectionName
-     * @param {Theme} [props.theme]
-     */
-    ({ sectionName, theme }) =>
-      sectionName && theme.color.sectionsColor[sectionName]
-        ? theme.color.sectionsColor[sectionName]
-        : theme.color.brandColor.lightBlue
-  };
+  font-weight: 600;
+  color: white;
+  background-color: black;
+  border-radius: 6px;
   ${({ theme }) => theme.breakpoint.md} {
     margin: 20px 0 24px;
-    font-size: 20.8px;
-    font-weight: 600;
+    padding: 4px 8px;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.4;
+    border-radius: 10px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
     margin: 24px 0 28px;
-    font-size: 28px;
   }
 `
 
@@ -50,23 +46,21 @@ const RENDER_PAGE_SIZE = 12
 /**
  * @param {Object} props
  * @param {import('../../type/shared/article').Article[]} props.posts
- * @param {import('../../type/category').Category} props.category
+ * @param {import('../../type/tag').Tag} props.tag
  * @param {Number} props.postsCount
  * @returns {React.ReactElement}
  */
-export default function Category({ postsCount, posts, category }) {
+export default function Tag({ postsCount, posts, tag }) {
   return (
-    <CategoryContainer>
-      <CategoryTitle sectionName={category?.sections?.slug}>
-        {category?.name}
-      </CategoryTitle>
-      <CategoryArticles
+    <TagContainer>
+      <TagTitle>{tag?.name}</TagTitle>
+      <TagArticles
         postsCount={postsCount}
         posts={posts}
-        category={category}
+        tag={tag}
         renderPageSize={RENDER_PAGE_SIZE}
       />
-    </CategoryContainer>
+    </TagContainer>
   )
 }
 
@@ -74,7 +68,7 @@ export default function Category({ postsCount, posts, category }) {
  * @type {import('next').GetServerSideProps}
  */
 export async function getServerSideProps({ query, req }) {
-  const categorySlug = query.slug
+  const tagSlug = query.slug
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -93,14 +87,14 @@ export async function getServerSideProps({ query, req }) {
         orderBy: { publishedDate: 'desc' },
         filter: {
           state: { equals: 'published' },
-          categories: { some: { slug: { equals: categorySlug } } },
+          tags: { some: { slug: { equals: tagSlug } } },
         },
       },
     }),
     client.query({
-      query: fetchCategorySections,
+      query: fetchTag,
       variables: {
-        categorySlug,
+        where: { slug: tagSlug },
       },
     }),
   ])
@@ -144,13 +138,13 @@ export async function getServerSideProps({ query, req }) {
   const postsCount = handledResponses[0]?.postsCount || 0
   /** @type {import('../../type/shared/article').Article[]} */
   const posts = handledResponses[0]?.posts || []
-  /** @type {import('../../type/category').Category} */
-  const category = handledResponses[1]?.category || {}
+  /** @type {import('../../type/tag').Tag} */
+  const tag = handledResponses[1]?.tag || {}
 
   const props = {
     postsCount,
     posts,
-    category,
+    tag,
   }
 
   return { props }

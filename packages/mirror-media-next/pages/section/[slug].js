@@ -32,7 +32,7 @@ const SectionTitle = styled.h1`
     ({ sectionName, theme }) =>
       sectionName && theme.color.sectionsColor[sectionName]
         ? theme.color.sectionsColor[sectionName]
-        : theme.color.sectionsColor[sectionName]
+        : theme.color.brandColor.lightBlue
   };
   ${({ theme }) => theme.breakpoint.md} {
     margin: 20px 0 24px;
