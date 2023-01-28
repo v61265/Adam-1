@@ -16,11 +16,17 @@ const ItemContainer = styled.div`
   }
 `
 
-export default function ArticleListItems({ renderList, sections }) {
+/**
+ * @param {Object} props
+ * @param {import('../type/shared/article').Article[]} props.renderList
+ * @param {import('../type/shared/category').CategorySection} props.section
+ * @returns {React.ReactElement}
+ */
+export default function ArticleListItems({ renderList, section }) {
   return (
     <ItemContainer>
       {renderList.map((item) => (
-        <ArticleListItem key={item.id} item={item} sections={sections} />
+        <ArticleListItem key={item.id} item={item} section={section} />
       ))}
     </ItemContainer>
   )

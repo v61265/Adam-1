@@ -87,12 +87,18 @@ const ItemBrief = styled.div`
   }
 `
 
-export default function ArticleListItem({ item, sections }) {
+/**
+ * @param {Object} props
+ * @param {import('../type/shared/article').Article} props.item
+ * @param {import('../type/shared/category').CategorySection} props.section
+ * @returns {React.ReactElement}
+ */
+export default function ArticleListItem({ item, section }) {
   return (
     <ItemWrapper href={`/story/${item.slug}`} target="_blank">
       <ImageContainer>
         <CustomNextImage src={item.heroImage?.resized?.w800} />
-        <ItemSection sectionName={sections?.slug}>{sections?.name}</ItemSection>
+        <ItemSection sectionName={section?.slug}>{section?.name}</ItemSection>
       </ImageContainer>
       <ItemDetail>
         <ItemTitle>{item.title}</ItemTitle>

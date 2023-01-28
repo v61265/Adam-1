@@ -47,6 +47,13 @@ const CategoryTitle = styled.h1`
 
 const RENDER_PAGE_SIZE = 12
 
+/**
+ * @param {Object} props
+ * @param {import('../../type/shared/article').Article[]} props.posts
+ * @param {import('../../type/shared/category').Category} props.category
+ * @param {Number} props.postsCount
+ * @returns {React.ReactElement}
+ */
 export default function Category({ postsCount, posts, category }) {
   return (
     <CategoryContainer>
@@ -63,6 +70,9 @@ export default function Category({ postsCount, posts, category }) {
   )
 }
 
+/**
+ * @type {import('next').GetServerSideProps}
+ */
 export async function getServerSideProps({ query, req }) {
   const categorySlug = query.slug
   const traceHeader = req.headers?.['x-cloud-trace-context']
@@ -130,10 +140,17 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
+  /** @type {Number} postsCount */
+  const postsCount = handledResponses[0]?.postsCount || 0
+  /** @type {import('../../type/shared/article').Article[]} */
+  const posts = handledResponses[0]?.posts || []
+  /** @type {import('../../type/shared/category').Category} */
+  const category = handledResponses[1]?.category || {}
+
   const props = {
-    postsCount: handledResponses[0]?.postsCount || 0,
-    posts: handledResponses[0]?.posts || [],
-    category: handledResponses[1]?.category || {},
+    postsCount,
+    posts,
+    category,
   }
 
   return { props }
