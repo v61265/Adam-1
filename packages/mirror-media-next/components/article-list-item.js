@@ -38,6 +38,7 @@ const ItemSection = styled.div`
   ${({ theme }) => theme.breakpoint.md} {
     font-size: 18px;
     font-weight: 600;
+    padding: 4px 20px;
   }
 `
 
