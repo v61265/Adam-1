@@ -2,7 +2,7 @@ import errors from '@twreporter/errors'
 import styled from 'styled-components'
 
 import client from '../../apollo/apollo-client'
-import { fetchPostsByCategory } from '../../apollo/query/posts'
+import { fetchPosts } from '../../apollo/query/posts'
 import { fetchCategorySections } from '../../apollo/query/categroies'
 import CategoryArticles from '../../components/category-articles'
 
@@ -86,7 +86,7 @@ export async function getServerSideProps({ query, req }) {
 
   const responses = await Promise.allSettled([
     client.query({
-      query: fetchPostsByCategory,
+      query: fetchPosts,
       variables: {
         take: RENDER_PAGE_SIZE * 2,
         skip: 0,

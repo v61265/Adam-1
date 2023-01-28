@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-const fetchPostsByCategory = gql`
+const fetchPosts = gql`
   query (
     $take: Int
     $skip: Int
@@ -41,4 +41,4 @@ const fetchPostsByCategory = gql`
   }
 `
 
-export { fetchPostsByCategory }
+export { fetchPosts }

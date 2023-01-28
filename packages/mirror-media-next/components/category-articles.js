@@ -5,7 +5,7 @@ import InfiniteScrollList from './InifiniteScrollList'
 import Image from 'next/legacy/image'
 import LoadingPage from '../public/images/loading_page.gif'
 import ArticleListItems from './article-list-items'
-import { fetchPostsByCategory } from '../apollo/query/posts'
+import { fetchPosts } from '../apollo/query/posts'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -27,7 +27,7 @@ const Loading = styled.div`
  * @param {Number} props.renderPageSize
  * @returns {React.ReactElement}
  */
-export default function ArticleList({
+export default function CategoryArticles({
   postsCount,
   posts,
   category,
@@ -36,7 +36,7 @@ export default function ArticleList({
   async function fetchPostsFromPage(page) {
     try {
       const response = await client.query({
-        query: fetchPostsByCategory,
+        query: fetchPosts,
         variables: {
           take: renderPageSize * 2,
           skip: page * renderPageSize * 2,
