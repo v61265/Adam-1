@@ -1,7 +1,7 @@
 export default {}
 
 /**
- * @typedef {import('../gql/section').Section & {
+ * @typedef {import('../shared/gql/section').Section & {
  *  id: String,
  *  name: String,
  *  slug: String,

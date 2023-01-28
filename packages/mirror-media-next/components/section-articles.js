@@ -23,7 +23,7 @@ const Loading = styled.div`
  * @param {Object} props
  * @param {Number} props.postsCount
  * @param {import('../type/shared/article').Article[]} props.posts
- * @param {import('../type/shared/section').Section} props.section
+ * @param {import('../type/section').Section} props.section
  * @param {Number} props.renderPageSize
  * @returns {React.ReactElement}
  */

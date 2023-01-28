@@ -91,7 +91,7 @@ const ItemBrief = styled.div`
 /**
  * @param {Object} props
  * @param {import('../type/shared/article').Article} props.item
- * @param {import('../type/shared/category').CategorySection} props.section
+ * @param {import('../type/category').CategorySection} props.section
  * @returns {React.ReactElement}
  */
 export default function ArticleListItem({ item, section }) {

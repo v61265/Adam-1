@@ -50,7 +50,7 @@ const RENDER_PAGE_SIZE = 12
 /**
  * @param {Object} props
  * @param {import('../../type/shared/article').Article[]} props.posts
- * @param {import('../../type/shared/section').Section} props.section
+ * @param {import('../../type/section').Section} props.section
  * @param {Number} props.postsCount
  * @returns {React.ReactElement}
  */
@@ -142,7 +142,7 @@ export async function getServerSideProps({ query, req }) {
   const postsCount = handledResponses[0]?.postsCount || 0
   /** @type {import('../../type/shared/article').Article[]} */
   const posts = handledResponses[0]?.posts || []
-  /** @type {import('../../type/shared/section').Section} */
+  /** @type {import('../../type/section').Section} */
   const section = handledResponses[1]?.section || {}
 
   const props = {
