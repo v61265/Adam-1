@@ -18,6 +18,22 @@ const TagContainer = styled.main`
     padding: 0;
   }
 `
+
+const TagTitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  ${({ theme }) => theme.breakpoint.md} {
+    &::after {
+      content: '';
+      margin: 0px 0px 0px 28px;
+      display: inline-block;
+      flex: 1 1 auto;
+      height: 2px;
+      background: linear-gradient(90deg, rgb(0, 0, 0) 30%, rgb(255, 255, 255));
+    }
+  }
+`
+
 const TagTitle = styled.h1`
   display: inline-block;
   margin: 16px 0 16px 16px;
@@ -53,7 +69,9 @@ const RENDER_PAGE_SIZE = 12
 export default function Tag({ postsCount, posts, tag }) {
   return (
     <TagContainer>
-      <TagTitle>{tag?.name}</TagTitle>
+      <TagTitleWrapper>
+        <TagTitle>{tag?.name}</TagTitle>
+      </TagTitleWrapper>
       <TagArticles
         postsCount={postsCount}
         posts={posts}
