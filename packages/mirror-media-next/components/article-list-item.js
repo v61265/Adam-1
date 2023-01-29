@@ -102,9 +102,11 @@ export default function ArticleListItem({ item, section }) {
     <ItemWrapper href={`/story/${item.slug}`} target="_blank">
       <ImageContainer>
         <CustomNextImage src={item.heroImage?.resized?.w800} />
-        <ItemSection sectionName={itemSection?.slug}>
-          {itemSection?.name}
-        </ItemSection>
+        {itemSection && (
+          <ItemSection sectionName={itemSection?.slug}>
+            {itemSection?.name}
+          </ItemSection>
+        )}
       </ImageContainer>
       <ItemDetail>
         <ItemTitle>{item.title}</ItemTitle>
