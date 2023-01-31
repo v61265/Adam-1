@@ -9,13 +9,6 @@ import {
   URL_STATIC_COMBO_TOPICS,
   API_TIMEOUT,
 } from '../config'
-import { Noto_Sans_TC } from '@next/font/google'
-
-const notosansTC = Noto_Sans_TC({
-  weight: ['500'], //variable font 不會有weight
-  style: ['normal'],
-  subsets: ['latin'], //default
-})
 
 /**
  *
@@ -30,15 +23,6 @@ const notosansTC = Noto_Sans_TC({
 function MyApp({ Component, pageProps, sectionsData = [], topicsData = [] }) {
   return (
     <>
-      <style jsx global>{`
-        //can use in single page
-        :root {
-          --notosansTC-font: ${notosansTC.style.fontFamily};
-        }
-        html {
-          font-family: PingFang TC, ${notosansTC.style.fontFamily};
-        }
-      `}</style>
       <GlobalStyles />
       <ThemeProvider theme={theme}>
         <Layout sectionsData={sectionsData} topicsData={topicsData} />
