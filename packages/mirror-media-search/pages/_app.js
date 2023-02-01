@@ -19,14 +19,6 @@ function MyApp({ Component, pageProps }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    // Listen for page changes after a navigation or when the query changes
-    router.events.on('routeChangeComplete', logPageView)
-    return () => {
-      router.events.off('routeChangeComplete', logPageView)
-    }
-  }, [router.events])
-
   return (
     <>
       <Head>
