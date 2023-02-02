@@ -21,6 +21,7 @@ import {
  * @param {Object[]} props.topicsData
  * @returns {React.ReactElement}
  */
+
 function MyApp({ Component, pageProps, sectionsData = [], topicsData = [] }) {
   return (
     <>
