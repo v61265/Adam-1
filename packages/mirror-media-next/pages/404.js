@@ -94,6 +94,11 @@ const PostCard = styled.div`
 
   :hover {
     cursor: pointer;
+
+    .post-title {
+      text-decoration: underline #4a4a4a 1.2px;
+      text-underline-offset: 5px;
+    }
   }
 
   ${({ theme }) => theme.breakpoint.xl} {
@@ -124,11 +129,6 @@ const PostTitle = styled.p`
   -webkit-line-clamp: 1;
   overflow: hidden;
   padding-top: 12px;
-
-  :hover {
-    text-decoration: underline #4a4a4a 1.2px;
-    text-underline-offset: 5px;
-  }
 `
 const PostBrief = styled.p`
   font-weight: 400;
@@ -141,6 +141,12 @@ const PostBrief = styled.p`
   -webkit-line-clamp: 3;
   overflow: hidden;
   padding-top: 8px;
+`
+
+const PostWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 export default function Custom404() {
@@ -183,16 +189,18 @@ export default function Custom404() {
                 target="_blank"
                 rel="noreferrer noopenner"
               >
-                <HeroImgWrapper>
-                  <Image
-                    src={imgUrl || defaultImg}
-                    alt={post?.heroImage?.description}
-                    width={323}
-                    height={159}
-                  />
-                </HeroImgWrapper>
-                <PostTitle>{post?.title}</PostTitle>
-                <PostBrief>{bullShitBrief}</PostBrief>
+                <PostWrapper>
+                  <HeroImgWrapper>
+                    <Image
+                      src={imgUrl || defaultImg}
+                      alt={post?.heroImage?.description}
+                      width={323}
+                      height={159}
+                    />
+                  </HeroImgWrapper>
+                  <PostTitle className="post-title">{post?.title}</PostTitle>
+                  <PostBrief>{bullShitBrief}</PostBrief>
+                </PostWrapper>
               </a>
             </PostCard>
           )
