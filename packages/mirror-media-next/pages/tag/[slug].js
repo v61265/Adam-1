@@ -5,6 +5,7 @@ import client from '../../apollo/apollo-client'
 import { fetchPosts } from '../../apollo/query/posts'
 import { fetchTag } from '../../apollo/query/tags'
 import TagArticles from '../../components/tag-articles'
+import { GCP_PROJECT_ID } from '../../config'
 
 const TagContainer = styled.main`
   width: 320px;

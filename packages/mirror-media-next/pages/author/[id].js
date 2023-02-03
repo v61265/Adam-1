@@ -5,6 +5,7 @@ import client from '../../apollo/apollo-client'
 import { fetchContact } from '../../apollo/query/contact'
 import { fetchPosts } from '../../apollo/query/posts'
 import AuthorArticles from '../../components/author-articles'
+import { GCP_PROJECT_ID } from '../../config'
 
 const AuthorContainer = styled.main`
   width: 320px;
