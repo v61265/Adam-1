@@ -5,6 +5,7 @@ const ItemContainer = styled.div`
   display: grid;
   grid-template-columns: 320px;
   justify-content: center;
+  row-gap: 20px;
 
   ${({ theme }) => theme.breakpoint.md} {
     grid-template-columns: repeat(2, 320px);

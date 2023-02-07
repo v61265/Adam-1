@@ -13,7 +13,10 @@ const ItemWrapper = styled.a`
 const ImageContainer = styled.div`
   position: relative;
   width: 100%;
-  aspect-ratio: 1.5;
+  height: 214px;
+  ${({ theme }) => theme.breakpoint.xl} {
+    height: 147px;
+  }
 `
 
 const ItemSection = styled.div`
@@ -45,23 +48,23 @@ const ItemSection = styled.div`
 const ItemDetail = styled.div`
   margin: 20px 20px 36px 20px;
   ${({ theme }) => theme.breakpoint.md} {
-    margin: 20px;
+    margin: 21px 20px 20px 20px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    margin: 8px 8px 24px 8px;
+    margin: 8px 8px 40px 8px;
   }
 `
 
 const ItemTitle = styled.div`
   color: #054f77;
-  line-height: 1.4;
+  line-height: 25px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 
   ${({ theme }) => theme.breakpoint.md} {
-    height: 4.2em;
+    height: 75px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
     font-size: 18px;
@@ -78,7 +81,7 @@ const ItemBrief = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
 
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${({ theme }) => theme.breakpoint.md} {
     margin-top: 16px;
   }
 

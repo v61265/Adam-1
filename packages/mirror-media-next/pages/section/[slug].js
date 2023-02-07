@@ -92,7 +92,7 @@ export async function getServerSideProps({ query, req }) {
         orderBy: { publishedDate: 'desc' },
         filter: {
           state: { equals: 'published' },
-          categories: { some: { slug: { equals: sectionSlug } } },
+          sections: { some: { slug: { equals: sectionSlug } } },
         },
       },
     }),
