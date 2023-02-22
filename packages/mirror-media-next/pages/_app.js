@@ -10,7 +10,7 @@ import {
   URL_STATIC_COMBO_SECTIONS,
   URL_STATIC_COMBO_TOPICS,
   API_TIMEOUT,
-} from '../config'
+} from '../config/index.mjs'
 
 /**
  *

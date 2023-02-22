@@ -5,7 +5,7 @@ import client from '../../apollo/apollo-client'
 import { fetchPosts } from '../../apollo/query/posts'
 import { fetchCategorySections } from '../../apollo/query/categroies'
 import CategoryArticles from '../../components/category-articles'
-import { GCP_PROJECT_ID } from '../../config'
+import { GCP_PROJECT_ID } from '../../config/index.mjs'
 
 const CategoryContainer = styled.main`
   width: 320px;

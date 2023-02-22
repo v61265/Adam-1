@@ -14,7 +14,7 @@ import {
   URL_K3_FLASH_NEWS,
   URL_STATIC_POST_EXTERNAL,
   GCP_PROJECT_ID,
-} from '../config'
+} from '../config/index.mjs'
 
 import { transformRawDataToArticleInfo } from '../utils'
 import FlashNews from '../components/flash-news'
