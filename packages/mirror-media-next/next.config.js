@@ -1,3 +1,19 @@
+const ENV = process.env.NEXT_PUBLIC_ENV || 'local'
+let DONATION_PAGE_URL = ''
+
+switch (ENV) {
+  case 'prod':
+  case 'staging':
+    DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
+    break
+  case 'dev':
+    DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
+
+    break
+  default:
+    DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -34,6 +50,16 @@ const nextConfig = {
     )
 
     return config
+  },
+  async redirects() {
+    return [
+      // currently, donation page will redirect user to external page
+      {
+        source: '/donate',
+        destination: DONATION_PAGE_URL,
+        permanent: true,
+      },
+    ]
   },
 
   output: 'standalone',
