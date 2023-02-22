@@ -273,7 +273,7 @@ export default function ArticleInfo({
           </Link>
           <ButtonCopyLink />
         </SocialMedia>
-        <DonateLink href="https://www.mirrormedia.mg/" target="_blank">
+        <DonateLink href="/donate" target="_blank">
           <Image
             src={'/images/donate.png'}
             width={13.33}
