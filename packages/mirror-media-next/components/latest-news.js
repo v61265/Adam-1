@@ -4,7 +4,7 @@ import InfiniteScrollList from './infinite-scroll-list'
 import LoadingPage from '../public/images/loading_page.gif'
 import LatestNewsItem from './latest-news-item'
 import { transformRawDataToArticleInfo } from '../utils'
-import { URL_STATIC_POST_EXTERNAL } from '../config'
+import { URL_STATIC_POST_EXTERNAL } from '../config/index.mjs'
 import Image from 'next/legacy/image'
 
 const Wrapper = styled.section`

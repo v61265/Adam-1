@@ -1,18 +1,4 @@
-const ENV = process.env.NEXT_PUBLIC_ENV || 'local'
-let DONATION_PAGE_URL = ''
-
-switch (ENV) {
-  case 'prod':
-  case 'staging':
-    DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
-    break
-  case 'dev':
-    DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
-
-    break
-  default:
-    DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
-}
+import { DONATION_PAGE_URL } from './config/index.mjs'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -65,4 +51,4 @@ const nextConfig = {
   output: 'standalone',
 }
 
-module.exports = nextConfig
+export default nextConfig
