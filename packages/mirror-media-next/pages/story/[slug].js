@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import client from '../../apollo/apollo-client'
 import errors from '@twreporter/errors'
 import styled, { css } from 'styled-components'
+import Link from 'next/link'
 import MockAdvertisement from '../../components/mock-advertisement'
 import Image from 'next/image'
 import ArticleInfo from '../../components/story/normal/article-info'
@@ -10,6 +11,7 @@ import AsideArticleList from '../../components/story/normal/aside-article-list'
 import FbPagePlugin from '../../components/story/normal/fb-page-plugin'
 import SocialNetworkService from '../../components/story/normal/social-network-service'
 import SubscribeInviteBanner from '../../components/story/normal/subscribe-invite-banner'
+import MagazineInviteBanner from '../../components/story/shared/magazine-invite-banner'
 
 import { transformTimeDataIntoTaipeiTime } from '../../utils'
 import GetPostBySlug from '../../apollo/query/get-post-by-slug.gql'
@@ -180,7 +182,36 @@ const SocialNetworkServiceInArticle = styled(SocialNetworkService)`
     display: flex;
   }
 `
+const StoryMoreInfo = styled.p`
+  font-size: 18px;
+  line-height: 1.5;
+  color: black;
+  margin: 0 auto;
+  text-align: center;
+  a {
+    color: ${({ theme }) => theme.color.brandColor.lightBlue};
+    border-bottom: 1px solid ${({ theme }) => theme.color.brandColor.lightBlue};
+  }
+  ${({ theme }) => theme.breakpoint.md} {
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+  }
+`
 
+const StoryEnd = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 60px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 24px;
+    gap: 16px;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    gap: 36px;
+    margin-top: 20px;
+  }
+`
 const Aside = styled.aside`
   display: none;
   ${({ theme }) => theme.breakpoint.xl} {
@@ -303,6 +334,24 @@ export default function Story({ postData }) {
           ></ArticleBrief>
           <SocialNetworkServiceInArticle />
           <SubscribeInviteBanner />
+          <StoryEnd>
+            <StoryMoreInfo>
+              更多內容，歡迎&nbsp;
+              <Link href="/papermag" target="_blank">
+                鏡週刊紙本雜誌
+              </Link>
+              、
+              <Link href="/subscribe" target="_blank">
+                鏡週刊數位訂閱
+              </Link>
+              、
+              <Link href="/story/webauthorize/" target="_blank">
+                了解內容授權資訊
+              </Link>
+              。
+            </StoryMoreInfo>
+            <MagazineInviteBanner />
+          </StoryEnd>
         </Article>
         <Aside>
           <PC_R1_Advertisement
