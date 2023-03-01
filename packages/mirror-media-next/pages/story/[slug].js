@@ -12,10 +12,10 @@ import FbPagePlugin from '../../components/story/normal/fb-page-plugin'
 import SocialNetworkService from '../../components/story/normal/social-network-service'
 import SubscribeInviteBanner from '../../components/story/normal/subscribe-invite-banner'
 import MagazineInviteBanner from '../../components/story/shared/magazine-invite-banner'
-
+import RelatedArticleList from '../../components/story/normal/related-article-list'
 import { transformTimeDataIntoTaipeiTime } from '../../utils'
-import GetPostBySlug from '../../apollo/query/get-post-by-slug.gql'
 import { fetchListingPosts } from '../../apollo/query/posts'
+import { fetchPostBySlug } from '../../apollo/query/post'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -23,6 +23,74 @@ import { fetchListingPosts } from '../../apollo/query/posts'
 
 /**
  * @typedef {import('../../components/story/normal/aside-article-list').ArticleData} AsideArticleData
+ */
+
+/**
+ * @typedef {import('../../components/story/normal/article-info').Contacts} Contacts
+ */
+
+/**
+ * @typedef {(import('../../apollo/query/post').Section &
+ * { id: string, slug: string, name: string })[]} Sections
+ */
+
+/**
+ * @typedef {import('../../apollo/query/post').HeroImage &
+ * {
+ *  id: string,
+ *  resized: {
+ *    original: string,
+ *    w480: string,
+ *    w800: string,
+ *    w1200: string,
+ *    w1600: string,
+ *    w2400: string
+ *  }
+ * } } HeroImage
+ */
+
+/**
+ * @typedef {import('../../apollo/query/post').HeroVideo & {
+ * id: string, name:string, urlOriginal: string}} HeroVideo
+ */
+
+/**
+ * @typedef {import('../../apollo/query/post').Draft} Draft
+ */
+
+/**
+ * @typedef {(import('../../apollo/query/post').Related & {
+ *  id: string, slug: string, title: string, heroImage: HeroImage})[]
+ * } Relateds
+ */
+
+/**
+ * @typedef {import('../../apollo/query/post').Post &
+ * {
+ * id: string,
+ * slug: string,
+ * title: string,
+ * titleColor: "dark" | "light",
+ * subtitle: string,
+ * publishedDate: string,
+ * updatedAt: string,
+ * state: "published" | "draft" | "scheduled" | "archived" | "invisible",
+ * sections: Sections | [],
+ * writers: Contacts | [],
+ * photographers: Contacts | [],
+ * camera_man: Contacts | [],
+ * designers: Contacts | [],
+ * engineers: Contacts | [],
+ * vocals: Contacts | [],
+ * extend_byline: string,
+ * tags: import('../../components/story/normal/article-info').Tags | [],
+ * heroVideo : HeroVideo | null,
+ * heroImage : HeroImage | null,
+ * heroCaption: string,
+ * brief: Draft,
+ * content: Draft,
+ * relateds: Relateds | []
+ * } } PostData
  */
 
 const sectionColor = css`
@@ -238,7 +306,7 @@ const AsideFbPagePlugin = styled(FbPagePlugin)`
 /**
  *
  * @param {Object} props
- * @param {import('../../type/post.typedef').Post} props.postData
+ * @param {PostData} props.postData
  * @returns {JSX.Element}
  */
 export default function Story({ postData }) {
@@ -257,6 +325,7 @@ export default function Story({ postData }) {
     extend_byline = '',
     tags = [],
     brief = [],
+    relateds = [],
   } = postData
   const [section] = sections
 
@@ -334,6 +403,7 @@ export default function Story({ postData }) {
           ></ArticleBrief>
           <SocialNetworkServiceInArticle />
           <SubscribeInviteBanner />
+          <RelatedArticleList relateds={relateds} />
           <StoryEnd>
             <StoryMoreInfo>
               更多內容，歡迎&nbsp;
@@ -384,10 +454,12 @@ export async function getServerSideProps({ params }) {
   const { slug } = params
   try {
     const result = await client.query({
-      query: GetPostBySlug,
-      variables: { Slug: slug },
+      query: fetchPostBySlug,
+      variables: { slug },
     })
-
+    /**
+     * @type {PostData}
+     */
     const postData = result?.data?.post
     if (!postData) {
       return { notFound: true }
