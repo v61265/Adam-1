@@ -1,12 +1,11 @@
 import styled from 'styled-components'
-import client from '../apollo/apollo-client'
+import client from '../../apollo/apollo-client'
 
-import InfiniteScrollList from './infinite-scroll-list'
+import InfiniteScrollList from '../infinite-scroll-list'
 import Image from 'next/legacy/image'
-import LoadingPage from '../public/images/loading_page.gif'
-import ArticleList from './article-list'
-import { fetchPosts } from '../apollo/query/posts'
-import PremiumArticleList from './premium-article-list'
+import LoadingPage from '../../public/images/loading_page.gif'
+import ArticleList from '../shared/article-list'
+import { fetchPosts } from '../../apollo/query/posts'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -24,17 +23,15 @@ const Loading = styled.div`
  * @param {Object} props
  * @param {Number} props.postsCount
  * @param {import('../type/shared/article').Article[]} props.posts
- * @param {import('../type/section').Section} props.section
- * @param {number} props.renderPageSize
- * @param {boolean} props.isPremium
+ * @param {import('../type/author').Author} props.author
+ * @param {Number} props.renderPageSize
  * @returns {React.ReactElement}
  */
-export default function SectionArticles({
+export default function AuthorArticles({
   postsCount,
   posts,
-  section,
+  author,
   renderPageSize,
-  isPremium,
 }) {
   async function fetchPostsFromPage(page) {
     try {
@@ -46,12 +43,18 @@ export default function SectionArticles({
           orderBy: { publishedDate: 'desc' },
           filter: {
             state: { equals: 'published' },
-            sections: { some: { slug: { equals: section.slug } } },
+            OR: [
+              { writers: { some: { id: { equals: author.id } } } },
+              { photographers: { some: { id: { equals: author.id } } } },
+            ],
           },
         },
       })
+      console.log(response, page, renderPageSize, author.id)
       return response.data.posts
-    } catch (error) {}
+    } catch (error) {
+      console.error(error)
+    }
     return
   }
 
@@ -69,13 +72,7 @@ export default function SectionArticles({
       fetchListInPage={fetchPostsFromPage}
       loader={loader}
     >
-      {(renderList) =>
-        isPremium ? (
-          <PremiumArticleList renderList={renderList} section={section} />
-        ) : (
-          <ArticleList renderList={renderList} section={section} />
-        )
-      }
+      {(renderList) => <ArticleList renderList={renderList} />}
     </InfiniteScrollList>
   )
 }

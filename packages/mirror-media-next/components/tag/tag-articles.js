@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import client from '../apollo/apollo-client'
+import client from '../../apollo/apollo-client'
 
-import InfiniteScrollList from './infinite-scroll-list'
+import InfiniteScrollList from '../infinite-scroll-list'
 import Image from 'next/legacy/image'
-import LoadingPage from '../public/images/loading_page.gif'
-import ArticleList from './article-list'
-import { fetchPosts } from '../apollo/query/posts'
+import LoadingPage from '../../public/images/loading_page.gif'
+import ArticleList from '../shared/article-list'
+import { fetchPosts } from '../../apollo/query/posts'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -23,14 +23,14 @@ const Loading = styled.div`
  * @param {Object} props
  * @param {Number} props.postsCount
  * @param {import('../type/shared/article').Article[]} props.posts
- * @param {import('../type/author').Author} props.author
+ * @param {import('../type/tag').Tag} props.tag
  * @param {Number} props.renderPageSize
  * @returns {React.ReactElement}
  */
-export default function AuthorArticles({
+export default function TagArticles({
   postsCount,
   posts,
-  author,
+  tag,
   renderPageSize,
 }) {
   async function fetchPostsFromPage(page) {
@@ -43,18 +43,12 @@ export default function AuthorArticles({
           orderBy: { publishedDate: 'desc' },
           filter: {
             state: { equals: 'published' },
-            OR: [
-              { writers: { some: { id: { equals: author.id } } } },
-              { photographers: { some: { id: { equals: author.id } } } },
-            ],
+            tags: { some: { slug: { equals: tag.slug } } },
           },
         },
       })
-      console.log(response, page, renderPageSize, author.id)
       return response.data.posts
-    } catch (error) {
-      console.error(error)
-    }
+    } catch (error) {}
     return
   }
 

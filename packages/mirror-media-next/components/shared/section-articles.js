@@ -1,11 +1,12 @@
 import styled from 'styled-components'
-import client from '../apollo/apollo-client'
+import client from '../../apollo/apollo-client'
 
-import InfiniteScrollList from './infinite-scroll-list'
+import InfiniteScrollList from '../infinite-scroll-list'
 import Image from 'next/legacy/image'
-import LoadingPage from '../public/images/loading_page.gif'
+import LoadingPage from '../../public/images/loading_page.gif'
 import ArticleList from './article-list'
-import { fetchPosts } from '../apollo/query/posts'
+import { fetchPosts } from '../../apollo/query/posts'
+import PremiumArticleList from './premium-article-list'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -23,15 +24,17 @@ const Loading = styled.div`
  * @param {Object} props
  * @param {Number} props.postsCount
  * @param {import('../type/shared/article').Article[]} props.posts
- * @param {import('../type/tag').Tag} props.tag
- * @param {Number} props.renderPageSize
+ * @param {import('../type/section').Section} props.section
+ * @param {number} props.renderPageSize
+ * @param {boolean} props.isPremium
  * @returns {React.ReactElement}
  */
-export default function TagArticles({
+export default function SectionArticles({
   postsCount,
   posts,
-  tag,
+  section,
   renderPageSize,
+  isPremium,
 }) {
   async function fetchPostsFromPage(page) {
     try {
@@ -43,7 +46,7 @@ export default function TagArticles({
           orderBy: { publishedDate: 'desc' },
           filter: {
             state: { equals: 'published' },
-            tags: { some: { slug: { equals: tag.slug } } },
+            sections: { some: { slug: { equals: section.slug } } },
           },
         },
       })
@@ -66,7 +69,13 @@ export default function TagArticles({
       fetchListInPage={fetchPostsFromPage}
       loader={loader}
     >
-      {(renderList) => <ArticleList renderList={renderList} />}
+      {(renderList) =>
+        isPremium ? (
+          <PremiumArticleList renderList={renderList} section={section} />
+        ) : (
+          <ArticleList renderList={renderList} section={section} />
+        )
+      }
     </InfiniteScrollList>
   )
 }

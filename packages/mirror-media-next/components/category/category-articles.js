@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import client from '../apollo/apollo-client'
+import client from '../../apollo/apollo-client'
 
-import InfiniteScrollList from './infinite-scroll-list'
+import InfiniteScrollList from '../infinite-scroll-list'
 import Image from 'next/legacy/image'
-import LoadingPage from '../public/images/loading_page.gif'
-import ArticleList from './article-list'
-import { fetchPosts } from '../apollo/query/posts'
-import PremiumArticleList from './premium-article-list'
+import LoadingPage from '../../public/images/loading_page.gif'
+import ArticleList from '../shared/article-list'
+import { fetchPosts } from '../../apollo/query/posts'
+import PremiumArticleList from '../shared/premium-article-list'
 const Loading = styled.div`
   margin: 20px auto 0;
   padding: 0 0 20px;
