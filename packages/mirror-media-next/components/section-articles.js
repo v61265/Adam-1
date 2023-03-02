@@ -6,6 +6,7 @@ import Image from 'next/legacy/image'
 import LoadingPage from '../public/images/loading_page.gif'
 import ArticleListItems from './article-list-items'
 import { fetchPosts } from '../apollo/query/posts'
+import PremiumArticleList from './premium-article-list'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -24,7 +25,8 @@ const Loading = styled.div`
  * @param {Number} props.postsCount
  * @param {import('../type/shared/article').Article[]} props.posts
  * @param {import('../type/section').Section} props.section
- * @param {Number} props.renderPageSize
+ * @param {number} props.renderPageSize
+ * @param {boolean} props.isMember
  * @returns {React.ReactElement}
  */
 export default function SectionArticles({
@@ -32,6 +34,7 @@ export default function SectionArticles({
   posts,
   section,
   renderPageSize,
+  isMember,
 }) {
   async function fetchPostsFromPage(page) {
     try {
@@ -66,9 +69,13 @@ export default function SectionArticles({
       fetchListInPage={fetchPostsFromPage}
       loader={loader}
     >
-      {(renderList) => (
-        <ArticleListItems renderList={renderList} section={section} />
-      )}
+      {(renderList) =>
+        isMember ? (
+          <PremiumArticleList renderList={renderList} section={section} />
+        ) : (
+          <ArticleListItems renderList={renderList} section={section} />
+        )
+      }
     </InfiniteScrollList>
   )
 }

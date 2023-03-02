@@ -5,7 +5,7 @@ export default {}
  * @property {String} [id]
  * @property {String} [slug]
  * @property {String} [title]
- * @property {String} [publishDate]
+ * @property {String} [publishedDate]
  * @property {import('../draft-js').Draft} [brief]
  * @property {import('./category').Category[]} [categories]
  * @property {import('./section').Section[]} [sections]

@@ -151,6 +151,7 @@ const transformRawDataToArticleInfo = (rawData) => {
 }
 
 /**
+ * Transform params `time` into `YYYY.MM.DD HH:MM 臺北時間` pattern
  * Transform params `time` into certain type
  * If `time` is not a valid date, this function will return undefined
  * @param {String} time
@@ -180,9 +181,40 @@ const transformTimeDataIntoTaipeiTime = (time) => {
   }
 }
 
+/**
+ * Transform params `time` into `YYYY/MM/DD HH:MM` pattern
+ * If `time` is not a valid date, this function will return undefined
+ * @param {String} time
+ * @returns {string | undefined}
+ */
+const transformTimeDataIntoSlashFormat = (time) => {
+  const timeData = new Date(time)
+  const timestamp = timeData.getTime()
+  if (isNaN(timestamp)) {
+    return undefined
+  } else {
+    const year = timeData.getFullYear()
+    const month = timeData.getMonth() + 1
+    const date = timeData.getDate()
+    const hour = timeData.getHours()
+    const minute = timeData.getMinutes()
+    const formattedUnit = (unit) => {
+      if (unit < 10) {
+        return `0${unit}`
+      } else {
+        return unit
+      }
+    }
+    return `${year}/${formattedUnit(month)}/${formattedUnit(
+      date
+    )} ${formattedUnit(hour)}:${formattedUnit(minute)}`
+  }
+}
+
 export {
   transformRawDataToArticleInfo,
   transformTimeDataIntoTaipeiTime,
+  transformTimeDataIntoSlashFormat,
   getSectionNameGql,
   getSectionTitleGql,
   getArticleHref,

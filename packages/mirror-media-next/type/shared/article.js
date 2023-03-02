@@ -50,7 +50,7 @@ export default {}
  *  id: String,
  *  slug: String,
  *  title: String,
- *  publishDate: String,
+ *  publishedDate: String,
  *  draft: Draft,
  *  categroies: ArticleCategory[],
  *  sections: ArticleSection[],
