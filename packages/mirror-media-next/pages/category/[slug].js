@@ -46,26 +46,77 @@ const CategoryTitle = styled.h1`
   }
 `
 
+const MemberCategoryTitle = styled.h1`
+  margin: 16px 17px;
+  font-size: 16px;
+  line-height: 1.15;
+  font-weight: 500;
+  color: ${
+    /**
+     * @param {Object} props
+     * @param {String } props.sectionName
+     * @param {Theme} [props.theme]
+     */
+    ({ sectionName, theme }) =>
+      sectionName && theme.color.sectionsColor[sectionName]
+        ? theme.color.sectionsColor[sectionName]
+        : theme.color.brandColor.lightBlue
+  };
+  ${({ theme }) => theme.breakpoint.md} {
+    margin: 20px 0 24px;
+    font-size: 28px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    &::before,
+    &::after {
+      content: '';
+      display: inline-block;
+      height: 2px;
+      background: black;
+      flex-grow: 1;
+    }
+    &::before {
+      margin-right: 30px;
+    }
+    &::after {
+      margin-left: 40px;
+    }
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin: 24px 0 28px;
+    font-size: 28px;
+  }
+`
+
 const RENDER_PAGE_SIZE = 12
 
 /**
  * @param {Object} props
  * @param {import('../../type/shared/article').Article[]} props.posts
  * @param {import('../../type/category').Category} props.category
- * @param {Number} props.postsCount
+ * @param {number} props.postsCount
+ * @param {boolean} props.isMember
  * @returns {React.ReactElement}
  */
-export default function Category({ postsCount, posts, category }) {
+export default function Category({ postsCount, posts, category, isMember }) {
   return (
     <CategoryContainer>
-      <CategoryTitle sectionName={category?.sections?.slug}>
-        {category?.name}
-      </CategoryTitle>
+      {isMember ? (
+        <MemberCategoryTitle sectionName={category?.sections?.slug}>
+          {category?.name}
+        </MemberCategoryTitle>
+      ) : (
+        <CategoryTitle sectionName={category?.sections?.slug}>
+          {category?.name}
+        </CategoryTitle>
+      )}
       <CategoryArticles
         postsCount={postsCount}
         posts={posts}
         category={category}
         renderPageSize={RENDER_PAGE_SIZE}
+        isMember={isMember}
       />
     </CategoryContainer>
   )
