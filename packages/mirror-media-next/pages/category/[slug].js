@@ -96,13 +96,13 @@ const RENDER_PAGE_SIZE = 12
  * @param {import('../../type/shared/article').Article[]} props.posts
  * @param {import('../../type/category').Category} props.category
  * @param {number} props.postsCount
- * @param {boolean} props.isMember
+ * @param {boolean} props.isPremium
  * @returns {React.ReactElement}
  */
-export default function Category({ postsCount, posts, category, isMember }) {
+export default function Category({ postsCount, posts, category, isPremium }) {
   return (
     <CategoryContainer>
-      {isMember ? (
+      {isPremium ? (
         <MemberCategoryTitle sectionName={category?.sections?.slug}>
           {category?.name}
         </MemberCategoryTitle>
@@ -116,7 +116,7 @@ export default function Category({ postsCount, posts, category, isMember }) {
         posts={posts}
         category={category}
         renderPageSize={RENDER_PAGE_SIZE}
-        isMember={isMember}
+        isPremium={isPremium}
       />
     </CategoryContainer>
   )
@@ -198,13 +198,13 @@ export async function getServerSideProps({ query, req }) {
   const posts = handledResponses[0]?.posts || []
   /** @type {import('../../type/category').Category} */
   const category = handledResponses[1]?.category || {}
-  const isMember = category.isMemberOnly
+  const isPremium = category.isMemberOnly
 
   const props = {
     postsCount,
     posts,
     category,
-    isMember,
+    isPremium,
   }
 
   return { props }

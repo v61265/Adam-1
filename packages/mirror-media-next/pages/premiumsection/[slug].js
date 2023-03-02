@@ -69,10 +69,10 @@ const RENDER_PAGE_SIZE = 12
  * @param {import('../../type/shared/article').Article[]} props.posts
  * @param {import('../../type/section').Section} props.section
  * @param {number} props.postsCount
- * @param {boolean} props.isMember
+ * @param {boolean} props.isPremium
  * @returns {React.ReactElement}
  */
-export default function Section({ postsCount, posts, section, isMember }) {
+export default function Section({ postsCount, posts, section, isPremium }) {
   return (
     <SectionContainer>
       <SectionTitle sectionName={section?.slug}>{section?.name}</SectionTitle>
@@ -81,7 +81,7 @@ export default function Section({ postsCount, posts, section, isMember }) {
         posts={posts}
         section={section}
         renderPageSize={RENDER_PAGE_SIZE}
-        isMember={isMember}
+        isPremium={isPremium}
       />
     </SectionContainer>
   )
@@ -171,7 +171,7 @@ export async function getServerSideProps({ query, req }) {
     postsCount,
     posts,
     section,
-    isMember: true,
+    isPremium: true,
   }
 
   return { props }

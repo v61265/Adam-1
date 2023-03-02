@@ -7,7 +7,7 @@ import Header from './header'
  * @param {import('../type').Topic[]} props.topicsData
  * @returns {React.ReactElement}
  */
-export default function MemberLayout({
+export default function PremiumLayout({
   sectionsData = [],
   topicsData = [],
   children,

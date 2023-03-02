@@ -6,7 +6,7 @@ import Layout from '../components/layout'
 import axios from 'axios'
 import { ApolloProvider } from '@apollo/client'
 import client from '../apollo/apollo-client'
-import MemberLayout from '../components/member-layout'
+import PremiumLayout from '../components/premium-layout'
 import {
   URL_STATIC_COMBO_SECTIONS,
   URL_STATIC_COMBO_TOPICS,
@@ -24,9 +24,9 @@ function defaultGetLayout(page, sectionsData, topicsData) {
         </Layout>
       )}
       {isMember && (
-        <MemberLayout sectionsData={sectionsData} topicsData={topicsData}>
+        <PremiumLayout sectionsData={sectionsData} topicsData={topicsData}>
           {page}
-        </MemberLayout>
+        </PremiumLayout>
       )}
     </>
   )

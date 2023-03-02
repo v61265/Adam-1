@@ -25,7 +25,7 @@ const Loading = styled.div`
  * @param {import('../type/shared/article').Article[]} props.posts
  * @param {import('../type/category').Category} props.category
  * @param {Number} props.renderPageSize
- * @param {boolean} props.isMember
+ * @param {boolean} props.isPremium
  * @returns {React.ReactElement}
  */
 export default function CategoryArticles({
@@ -33,7 +33,7 @@ export default function CategoryArticles({
   posts,
   category,
   renderPageSize,
-  isMember,
+  isPremium,
 }) {
   const fetchPageSize = renderPageSize * 2
   async function fetchPostsFromPage(page) {
@@ -71,7 +71,7 @@ export default function CategoryArticles({
         loader={loader}
       >
         {(renderList) =>
-          isMember ? (
+          isPremium ? (
             <PremiumArticleList
               renderList={renderList}
               section={category.sections}
