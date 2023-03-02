@@ -4,7 +4,7 @@ import client from '../apollo/apollo-client'
 import InfiniteScrollList from './infinite-scroll-list'
 import Image from 'next/legacy/image'
 import LoadingPage from '../public/images/loading_page.gif'
-import ArticleListItems from './article-list-items'
+import ArticleList from './article-list'
 import { fetchPosts } from '../apollo/query/posts'
 import PremiumArticleList from './premium-article-list'
 
@@ -73,7 +73,7 @@ export default function SectionArticles({
         isPremium ? (
           <PremiumArticleList renderList={renderList} section={section} />
         ) : (
-          <ArticleListItems renderList={renderList} section={section} />
+          <ArticleList renderList={renderList} section={section} />
         )
       }
     </InfiniteScrollList>

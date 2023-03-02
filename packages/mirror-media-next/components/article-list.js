@@ -23,7 +23,7 @@ const ItemContainer = styled.div`
  * @param {import('../type/category').CategorySection} [props.section]
  * @returns {React.ReactElement}
  */
-export default function ArticleListItems({ renderList, section }) {
+export default function ArticleList({ renderList, section }) {
   return (
     <ItemContainer>
       {renderList.map((item) => (

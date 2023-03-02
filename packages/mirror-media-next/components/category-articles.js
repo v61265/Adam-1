@@ -4,7 +4,7 @@ import client from '../apollo/apollo-client'
 import InfiniteScrollList from './infinite-scroll-list'
 import Image from 'next/legacy/image'
 import LoadingPage from '../public/images/loading_page.gif'
-import ArticleListItems from './article-list-items'
+import ArticleList from './article-list'
 import { fetchPosts } from '../apollo/query/posts'
 import PremiumArticleList from './premium-article-list'
 const Loading = styled.div`
@@ -77,10 +77,7 @@ export default function CategoryArticles({
               section={category.sections}
             />
           ) : (
-            <ArticleListItems
-              renderList={renderList}
-              section={category.sections}
-            />
+            <ArticleList renderList={renderList} section={category.sections} />
           )
         }
       </InfiniteScrollList>
