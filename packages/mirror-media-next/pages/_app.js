@@ -14,16 +14,16 @@ import {
 } from '../config/index.mjs'
 
 function defaultGetLayout(page, sectionsData, topicsData) {
-  const { isMember } = page.props
+  const { isPremium } = page.props
 
   return (
     <>
-      {!isMember && (
+      {!isPremium && (
         <Layout sectionsData={sectionsData} topicsData={topicsData}>
           {page}
         </Layout>
       )}
-      {isMember && (
+      {isPremium && (
         <PremiumLayout sectionsData={sectionsData} topicsData={topicsData}>
           {page}
         </PremiumLayout>
