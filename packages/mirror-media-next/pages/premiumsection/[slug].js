@@ -5,7 +5,7 @@ import client from '../../apollo/apollo-client'
 import { fetchPosts } from '../../apollo/query/posts'
 import { fetchSection } from '../../apollo/query/sections'
 import SectionArticles from '../../components/shared/section-articles'
-import { GCP_PROJECT_ID } from '../../config'
+import { GCP_PROJECT_ID } from '../../config/index.mjs'
 
 const SectionContainer = styled.main`
   width: 320px;
