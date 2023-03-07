@@ -133,7 +133,7 @@ export async function getServerSideProps({ query, req }) {
       const annotatingError = errors.helpers.wrap(
         response.reason,
         'UnhandledError',
-        'Error occurs while getting index page data'
+        'Error occurs while getting premiumsection page data'
       )
 
       console.log(
