@@ -64,6 +64,7 @@ const fetchPosts = gql`
           w2400
         }
       }
+      publishedDate
     }
   }
 `

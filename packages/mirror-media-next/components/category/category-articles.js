@@ -1,11 +1,12 @@
 import styled from 'styled-components'
-import client from '../apollo/apollo-client'
+import client from '../../apollo/apollo-client'
 
-import InfiniteScrollList from './infinite-scroll-list'
+import InfiniteScrollList from '../infinite-scroll-list'
 import Image from 'next/legacy/image'
-import LoadingPage from '../public/images/loading_page.gif'
-import ArticleListItems from './article-list-items'
-import { fetchPosts } from '../apollo/query/posts'
+import LoadingPage from '../../public/images/loading_page.gif'
+import ArticleList from '../shared/article-list'
+import { fetchPosts } from '../../apollo/query/posts'
+import PremiumArticleList from '../shared/premium-article-list'
 const Loading = styled.div`
   margin: 20px auto 0;
   padding: 0 0 20px;
@@ -24,6 +25,7 @@ const Loading = styled.div`
  * @param {import('../type/shared/article').Article[]} props.posts
  * @param {import('../type/category').Category} props.category
  * @param {Number} props.renderPageSize
+ * @param {boolean} props.isPremium
  * @returns {React.ReactElement}
  */
 export default function CategoryArticles({
@@ -31,6 +33,7 @@ export default function CategoryArticles({
   posts,
   category,
   renderPageSize,
+  isPremium,
 }) {
   const fetchPageSize = renderPageSize * 2
   async function fetchPostsFromPage(page) {
@@ -67,12 +70,16 @@ export default function CategoryArticles({
         fetchListInPage={fetchPostsFromPage}
         loader={loader}
       >
-        {(renderList) => (
-          <ArticleListItems
-            renderList={renderList}
-            section={category.sections}
-          />
-        )}
+        {(renderList) =>
+          isPremium ? (
+            <PremiumArticleList
+              renderList={renderList}
+              section={category.sections}
+            />
+          ) : (
+            <ArticleList renderList={renderList} section={category.sections} />
+          )
+        }
       </InfiniteScrollList>
     </>
   )

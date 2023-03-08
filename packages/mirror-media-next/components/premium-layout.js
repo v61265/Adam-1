@@ -1,5 +1,5 @@
-import Header from './header'
 import React from 'react'
+import Header from './header'
 
 /**
  *
@@ -9,7 +9,7 @@ import React from 'react'
  * @param {React.ReactNode} props.children
  * @returns {React.ReactElement}
  */
-export default function Layout({
+export default function PremiumLayout({
   sectionsData = [],
   topicsData = [],
   children,

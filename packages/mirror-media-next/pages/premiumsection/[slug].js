@@ -3,11 +3,11 @@ import styled from 'styled-components'
 
 import client from '../../apollo/apollo-client'
 import { fetchPosts } from '../../apollo/query/posts'
-import { fetchCategorySections } from '../../apollo/query/categroies'
-import CategoryArticles from '../../components/category/category-articles'
+import { fetchSection } from '../../apollo/query/sections'
+import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 
-const CategoryContainer = styled.main`
+const SectionContainer = styled.main`
   width: 320px;
   margin: 0 auto;
 
@@ -19,34 +19,7 @@ const CategoryContainer = styled.main`
     padding: 0;
   }
 `
-const CategoryTitle = styled.h1`
-  margin: 20px 0 16px 16px;
-  font-size: 16px;
-  line-height: 1.15;
-  font-weight: 500;
-  color: ${
-    /**
-     * @param {Object} props
-     * @param {String } props.sectionName
-     * @param {Theme} [props.theme]
-     */
-    ({ sectionName, theme }) =>
-      sectionName && theme.color.sectionsColor[sectionName]
-        ? theme.color.sectionsColor[sectionName]
-        : theme.color.brandColor.lightBlue
-  };
-  ${({ theme }) => theme.breakpoint.md} {
-    margin: 20px 0 24px;
-    font-size: 20.8px;
-    font-weight: 600;
-  }
-  ${({ theme }) => theme.breakpoint.xl} {
-    margin: 24px 0 28px;
-    font-size: 28px;
-  }
-`
-
-const MemberCategoryTitle = styled.h1`
+const SectionTitle = styled.h1`
   margin: 16px 17px;
   font-size: 16px;
   line-height: 1.15;
@@ -94,31 +67,23 @@ const RENDER_PAGE_SIZE = 12
 /**
  * @param {Object} props
  * @param {import('../../type/shared/article').Article[]} props.posts
- * @param {import('../../type/category').Category} props.category
+ * @param {import('../../type/section').Section} props.section
  * @param {number} props.postsCount
  * @param {boolean} props.isPremium
  * @returns {React.ReactElement}
  */
-export default function Category({ postsCount, posts, category, isPremium }) {
+export default function Section({ postsCount, posts, section, isPremium }) {
   return (
-    <CategoryContainer>
-      {isPremium ? (
-        <MemberCategoryTitle sectionName={category?.sections?.slug}>
-          {category?.name}
-        </MemberCategoryTitle>
-      ) : (
-        <CategoryTitle sectionName={category?.sections?.slug}>
-          {category?.name}
-        </CategoryTitle>
-      )}
-      <CategoryArticles
+    <SectionContainer>
+      <SectionTitle sectionName={section?.slug}>{section?.name}</SectionTitle>
+      <SectionArticles
         postsCount={postsCount}
         posts={posts}
-        category={category}
+        section={section}
         renderPageSize={RENDER_PAGE_SIZE}
         isPremium={isPremium}
       />
-    </CategoryContainer>
+    </SectionContainer>
   )
 }
 
@@ -126,7 +91,7 @@ export default function Category({ postsCount, posts, category, isPremium }) {
  * @type {import('next').GetServerSideProps}
  */
 export async function getServerSideProps({ query, req }) {
-  const categorySlug = query.slug
+  const sectionSlug = query.slug
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -145,14 +110,17 @@ export async function getServerSideProps({ query, req }) {
         orderBy: { publishedDate: 'desc' },
         filter: {
           state: { equals: 'published' },
-          categories: { some: { slug: { equals: categorySlug } } },
+          AND: [
+            { sections: { some: { slug: { equals: sectionSlug } } } },
+            { sections: { some: { slug: { equals: 'member' } } } },
+          ],
         },
       },
     }),
     client.query({
-      query: fetchCategorySections,
+      query: fetchSection,
       variables: {
-        categorySlug,
+        where: { slug: sectionSlug },
       },
     }),
   ])
@@ -165,7 +133,7 @@ export async function getServerSideProps({ query, req }) {
       const annotatingError = errors.helpers.wrap(
         response.reason,
         'UnhandledError',
-        'Error occurs while getting category page data'
+        'Error occurs while getting premiumsection page data'
       )
 
       console.log(
@@ -196,15 +164,14 @@ export async function getServerSideProps({ query, req }) {
   const postsCount = handledResponses[0]?.postsCount || 0
   /** @type {import('../../type/shared/article').Article[]} */
   const posts = handledResponses[0]?.posts || []
-  /** @type {import('../../type/category').Category} */
-  const category = handledResponses[1]?.category || {}
-  const isPremium = category.isMemberOnly
+  /** @type {import('../../type/section').Section} */
+  const section = handledResponses[1]?.section || {}
 
   const props = {
     postsCount,
     posts,
-    category,
-    isPremium,
+    section,
+    isPremium: true,
   }
 
   return { props }

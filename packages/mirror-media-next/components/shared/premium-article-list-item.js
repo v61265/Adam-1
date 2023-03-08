@@ -1,6 +1,7 @@
 import styled from 'styled-components'
+import { transformTimeDataIntoSlashFormat } from '../../utils'
 
-import CustomNextImage from './custom-next-image'
+import CustomNextImage from '../custom-next-image'
 
 const ItemWrapper = styled.a`
   display: block;
@@ -8,15 +9,16 @@ const ItemWrapper = styled.a`
   width: 100%;
   margin: 0 auto;
   font-size: 18px;
+  ${({ theme }) => theme.breakpoint.xl} {
+    border-radius: 6px;
+    overflow: hidden;
+  }
 `
 
 const ImageContainer = styled.div`
   position: relative;
   width: 100%;
   height: 214px;
-  ${({ theme }) => theme.breakpoint.xl} {
-    height: 147px;
-  }
 `
 
 const ItemSection = styled.div`
@@ -46,17 +48,17 @@ const ItemSection = styled.div`
 `
 
 const ItemDetail = styled.div`
-  margin: 20px 20px 36px 20px;
+  padding: 20px 20px 36px 20px;
+  background-color: #eee;
   ${({ theme }) => theme.breakpoint.md} {
-    margin: 21px 20px 20px 20px;
+    padding: 20px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    margin: 8px 8px 40px 8px;
+    padding: 16px 24px 20px;
   }
 `
 
 const ItemTitle = styled.div`
-  color: #054f77;
   line-height: 25px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -67,8 +69,9 @@ const ItemTitle = styled.div`
     height: 75px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    font-size: 18px;
-    font-weight: 600;
+    line-height: 30px;
+    font-size: 20px;
+    height: 90px;
   }
 `
 
@@ -86,9 +89,16 @@ const ItemBrief = styled.div`
   }
 
   ${({ theme }) => theme.breakpoint.xl} {
-    margin-top: 20px;
-    -webkit-line-clamp: 4;
+    margin-top: 8px;
+    -webkit-line-clamp: 3;
   }
+`
+
+const ItemDate = styled.div`
+  margin-top: 12px;
+  color: #9b9b9b;
+  font-size: 14px;
+  line-height: 1.4;
 `
 
 /**
@@ -97,7 +107,7 @@ const ItemBrief = styled.div`
  * @param {import('../type/category').CategorySection} [props.section]
  * @returns {React.ReactElement}
  */
-export default function ArticleListItem({ item, section }) {
+export default function PremiumArticleListItem({ item, section }) {
   const itemSection =
     section || item.sections.find((section) => section.slug !== 'member')
 
@@ -114,6 +124,9 @@ export default function ArticleListItem({ item, section }) {
       <ItemDetail>
         <ItemTitle>{item.title}</ItemTitle>
         <ItemBrief>{item.brief?.blocks[0]?.text}</ItemBrief>
+        <ItemDate>
+          {transformTimeDataIntoSlashFormat(item.publishedDate)}
+        </ItemDate>
       </ItemDetail>
     </ItemWrapper>
   )

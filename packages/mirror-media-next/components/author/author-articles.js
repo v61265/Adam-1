@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import client from '../apollo/apollo-client'
+import client from '../../apollo/apollo-client'
 
-import InfiniteScrollList from './infinite-scroll-list'
+import InfiniteScrollList from '../infinite-scroll-list'
 import Image from 'next/legacy/image'
-import LoadingPage from '../public/images/loading_page.gif'
-import ArticleListItems from './article-list-items'
-import { fetchPosts } from '../apollo/query/posts'
+import LoadingPage from '../../public/images/loading_page.gif'
+import ArticleList from '../shared/article-list'
+import { fetchPosts } from '../../apollo/query/posts'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -72,7 +72,7 @@ export default function AuthorArticles({
       fetchListInPage={fetchPostsFromPage}
       loader={loader}
     >
-      {(renderList) => <ArticleListItems renderList={renderList} />}
+      {(renderList) => <ArticleList renderList={renderList} />}
     </InfiniteScrollList>
   )
 }

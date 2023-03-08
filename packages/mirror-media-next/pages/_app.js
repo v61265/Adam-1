@@ -6,11 +6,31 @@ import Layout from '../components/layout'
 import axios from 'axios'
 import { ApolloProvider } from '@apollo/client'
 import client from '../apollo/apollo-client'
+import PremiumLayout from '../components/premium-layout'
 import {
   URL_STATIC_COMBO_SECTIONS,
   URL_STATIC_COMBO_TOPICS,
   API_TIMEOUT,
 } from '../config/index.mjs'
+
+function defaultGetLayout(page, sectionsData, topicsData) {
+  const { isPremium } = page.props
+
+  return (
+    <>
+      {!isPremium && (
+        <Layout sectionsData={sectionsData} topicsData={topicsData}>
+          {page}
+        </Layout>
+      )}
+      {isPremium && (
+        <PremiumLayout sectionsData={sectionsData} topicsData={topicsData}>
+          {page}
+        </PremiumLayout>
+      )}
+    </>
+  )
+}
 
 /**
  *
@@ -23,13 +43,13 @@ import {
  */
 
 function MyApp({ Component, pageProps, sectionsData = [], topicsData = [] }) {
+  const getLayout = Component.getLayout || defaultGetLayout
   return (
     <>
       <GlobalStyles />
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
-          <Layout sectionsData={sectionsData} topicsData={topicsData} />
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />, sectionsData, topicsData)}
         </ThemeProvider>
       </ApolloProvider>
     </>

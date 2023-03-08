@@ -151,12 +151,14 @@ const transformRawDataToArticleInfo = (rawData) => {
 }
 
 /**
- * Transform params `time` into certain type
+ * Transform params `time` into `YYYY.MM.DD HH:MM 臺北時間` || `YYYY/MM/DD HH:MM` pattern
+ * depend on the type 'dot' or 'slash'
  * If `time` is not a valid date, this function will return undefined
- * @param {String} time
+ * @param {string} time
+ * @param {'dot' | 'slash'} format
  * @returns {string | undefined}
  */
-const transformTimeDataIntoTaipeiTime = (time) => {
+const transformTimeData = (time, format) => {
   const timeData = new Date(time)
   const timestamp = timeData.getTime()
   if (isNaN(timestamp)) {
@@ -174,15 +176,47 @@ const transformTimeDataIntoTaipeiTime = (time) => {
         return unit
       }
     }
-    return `${year}.${formattedUnit(month)}.${formattedUnit(
-      date
-    )} ${formattedUnit(hour)}:${formattedUnit(minute)} 臺北時間`
+
+    switch (format) {
+      case 'dot':
+        return `${year}.${formattedUnit(month)}.${formattedUnit(
+          date
+        )} ${formattedUnit(hour)}:${formattedUnit(minute)} 臺北時間`
+      case 'slash':
+        return `${year}/${formattedUnit(month)}/${formattedUnit(
+          date
+        )} ${formattedUnit(hour)}:${formattedUnit(minute)}`
+      default:
+        return undefined
+    }
   }
+}
+
+/**
+ * Transform params `time` into `YYYY.MM.DD HH:MM 臺北時間` pattern
+ * Transform params `time` into certain type
+ * If `time` is not a valid date, this function will return undefined
+ * @param {String} time
+ * @returns {string | undefined}
+ */
+const transformTimeDataIntoTaipeiTime = (time) => {
+  return transformTimeData(time, 'dot')
+}
+
+/**
+ * Transform params `time` into `YYYY/MM/DD HH:MM` pattern
+ * If `time` is not a valid date, this function will return undefined
+ * @param {String} time
+ * @returns {string | undefined}
+ */
+const transformTimeDataIntoSlashFormat = (time) => {
+  return transformTimeData(time, 'slash')
 }
 
 export {
   transformRawDataToArticleInfo,
   transformTimeDataIntoTaipeiTime,
+  transformTimeDataIntoSlashFormat,
   getSectionNameGql,
   getSectionTitleGql,
   getArticleHref,

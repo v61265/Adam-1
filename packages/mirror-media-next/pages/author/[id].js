@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import client from '../../apollo/apollo-client'
 import { fetchContact } from '../../apollo/query/contact'
 import { fetchPosts } from '../../apollo/query/posts'
-import AuthorArticles from '../../components/author-articles'
+import AuthorArticles from '../../components/author/author-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 
 const AuthorContainer = styled.main`
@@ -107,7 +107,7 @@ export async function getServerSideProps({ query, req }) {
       const annotatingError = errors.helpers.wrap(
         response.reason,
         'UnhandledError',
-        'Error occurs while getting index page data'
+        'Error occurs while getting author page data'
       )
 
       console.log(

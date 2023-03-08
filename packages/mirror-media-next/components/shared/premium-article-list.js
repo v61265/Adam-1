@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import ArticleListItem from './article-list-item'
+import PremiumArticleListItem from './premium-article-list-item'
 
 const ItemContainer = styled.div`
   display: grid;
@@ -12,8 +12,8 @@ const ItemContainer = styled.div`
     gap: 20px 32px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    grid-template-columns: repeat(4, 220px);
-    gap: 36px 48px;
+    grid-template-columns: repeat(3, 320px);
+    gap: 32px 32px;
   }
 `
 
@@ -23,11 +23,11 @@ const ItemContainer = styled.div`
  * @param {import('../type/category').CategorySection} [props.section]
  * @returns {React.ReactElement}
  */
-export default function ArticleListItems({ renderList, section }) {
+export default function PremiumArticleList({ renderList, section }) {
   return (
     <ItemContainer>
       {renderList.map((item) => (
-        <ArticleListItem key={item.id} item={item} section={section} />
+        <PremiumArticleListItem key={item.id} item={item} section={section} />
       ))}
     </ItemContainer>
   )
