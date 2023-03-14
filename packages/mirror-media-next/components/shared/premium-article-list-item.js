@@ -109,7 +109,7 @@ const ItemDate = styled.div`
  */
 export default function PremiumArticleListItem({ item, section }) {
   const itemSection =
-    section || item.sections.find((section) => section.slug !== 'member')
+    section || item.sections.find((section) => section.slug === 'member')
 
   return (
     <ItemWrapper href={`/story/${item.slug}`} target="_blank">
