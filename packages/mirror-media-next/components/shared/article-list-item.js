@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-
-import CustomNextImage from '../custom-next-image'
+import Image from '@readr-media/react-image'
 
 const ItemWrapper = styled.a`
   display: block;
@@ -103,7 +102,13 @@ export default function ArticleListItem({ item, section }) {
   return (
     <ItemWrapper href={`/story/${item.slug}`} target="_blank">
       <ImageContainer>
-        <CustomNextImage src={item.heroImage?.resized?.w800} />
+        <Image
+          images={item.heroImage?.resized}
+          alt={item.title}
+          loadingImage="/images/loading.gif"
+          defaultImage="/images/default-og-img.png"
+          rwd={{ tablet: '320px', desktop: '220px' }}
+        />
         {itemSection && (
           <ItemSection sectionName={itemSection?.slug}>
             {itemSection?.name}
