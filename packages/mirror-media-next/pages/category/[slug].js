@@ -46,7 +46,7 @@ const CategoryTitle = styled.h1`
   }
 `
 
-const MemberCategoryTitle = styled.h1`
+const PremiumCategoryTitle = styled.h1`
   margin: 16px 17px;
   font-size: 16px;
   line-height: 1.15;
@@ -103,9 +103,9 @@ export default function Category({ postsCount, posts, category, isPremium }) {
   return (
     <CategoryContainer>
       {isPremium ? (
-        <MemberCategoryTitle sectionName={category?.sections?.slug}>
+        <PremiumCategoryTitle sectionName={category?.sections?.slug}>
           {category?.name}
-        </MemberCategoryTitle>
+        </PremiumCategoryTitle>
       ) : (
         <CategoryTitle sectionName={category?.sections?.slug}>
           {category?.name}
