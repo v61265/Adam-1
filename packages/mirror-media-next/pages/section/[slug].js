@@ -49,10 +49,15 @@ const SectionTitle = styled.h1`
 const RENDER_PAGE_SIZE = 12
 
 /**
+ * @typedef {import('../../components/shared/section-articles').Article} Article
+ * @typedef {import('../../components/shared/section-articles').Section} Section
+ */
+
+/**
  * @param {Object} props
- * @param {import('../../type/shared/article').Article[]} props.posts
- * @param {import('../../type/section').Section} props.section
- * @param {Number} props.postsCount
+ * @param {Article[]} props.posts
+ * @param {Section} props.section
+ * @param {number} props.postsCount
  * @returns {React.ReactElement}
  */
 export default function Section({ postsCount, posts, section }) {
@@ -139,11 +144,11 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
-  /** @type {Number} postsCount */
+  /** @type {number} postsCount */
   const postsCount = handledResponses[0]?.postsCount || 0
-  /** @type {import('../../type/shared/article').Article[]} */
+  /** @type {Article[]} */
   const posts = handledResponses[0]?.posts || []
-  /** @type {import('../../type/section').Section} */
+  /** @type {Section} */
   const section = handledResponses[1]?.section || {}
 
   const props = {

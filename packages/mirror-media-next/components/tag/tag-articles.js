@@ -19,12 +19,21 @@ const Loading = styled.div`
 `
 
 /**
+ * @typedef {import('../shared/article-list').Article} Article
+ * @typedef {import('../../apollo/fragments/tag').Tag & {
+ *  id: string,
+ *  name: string,
+ *  slug: string,
+ * }} Tag
+ */
+
+/**
  *
  * @param {Object} props
- * @param {Number} props.postsCount
- * @param {import('../type/shared/article').Article[]} props.posts
- * @param {import('../type/tag').Tag} props.tag
- * @param {Number} props.renderPageSize
+ * @param {number} props.postsCount
+ * @param {Article[]} props.posts
+ * @param {Tag} props.tag
+ * @param {number} props.renderPageSize
  * @returns {React.ReactElement}
  */
 export default function TagArticles({

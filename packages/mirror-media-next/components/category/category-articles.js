@@ -19,11 +19,23 @@ const Loading = styled.div`
 `
 
 /**
+ * @typedef {import('../shared/article-list').Article} Article
+ * @typedef {import('../shared/article-list').Section} Section
+ * @typedef {import('../../apollo/fragments/category').Category & {
+ *  id: string,
+ *  name: string,
+ *  slug: string,
+ *  isMemberOnly: boolean,
+ *  sections: Section[],
+ * }} Category
+ */
+
+/**
  *
  * @param {Object} props
  * @param {Number} props.postsCount
- * @param {import('../type/shared/article').Article[]} props.posts
- * @param {import('../type/category').Category} props.category
+ * @param {Article[]} props.posts
+ * @param {Category} props.category
  * @param {Number} props.renderPageSize
  * @param {boolean} props.isPremium
  * @returns {React.ReactElement}

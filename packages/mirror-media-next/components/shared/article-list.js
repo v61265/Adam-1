@@ -18,9 +18,14 @@ const ItemContainer = styled.div`
 `
 
 /**
+ * @typedef {import('./article-list-item').Article} Article
+ * @typedef {import('./article-list-item').Section} Section
+ */
+
+/**
  * @param {Object} props
- * @param {import('../type/shared/article').Article[]} props.renderList
- * @param {import('../type/category').CategorySection} [props.section]
+ * @param {Article[]} props.renderList
+ * @param {Section} [props.section]
  * @returns {React.ReactElement}
  */
 export default function ArticleList({ renderList, section }) {

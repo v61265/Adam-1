@@ -17,14 +17,21 @@ const Loading = styled.div`
     padding: 0 0 64px;
   }
 `
+/**
+ * @typedef {import('../shared/article-list').Article} Article
+ * @typedef {import('../../apollo/fragments/contact').Contact & {
+ *  id: string,
+ *  name: string
+ * }} Author
+ */
 
 /**
  *
  * @param {Object} props
- * @param {Number} props.postsCount
- * @param {import('../type/shared/article').Article[]} props.posts
- * @param {import('../type/author').Author} props.author
- * @param {Number} props.renderPageSize
+ * @param {number} props.postsCount
+ * @param {Article[]} props.posts
+ * @param {Author} props.author
+ * @param {number} props.renderPageSize
  * @returns {React.ReactElement}
  */
 export default function AuthorArticles({
@@ -50,7 +57,6 @@ export default function AuthorArticles({
           },
         },
       })
-      console.log(response, page, renderPageSize, author.id)
       return response.data.posts
     } catch (error) {
       console.error(error)

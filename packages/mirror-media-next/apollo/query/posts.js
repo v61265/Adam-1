@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client'
 import { listingPost } from '../fragments/listing-post'
+import { post } from '../fragments/post'
 
 //TODO: result of fetchListingPost is similar to fetchPosts, should refactor to on gql query if possible
 
@@ -28,6 +29,7 @@ const fetchListingPosts = gql`
 `
 
 const fetchPosts = gql`
+  ${post}
   query (
     $take: Int
     $skip: Int
@@ -36,35 +38,7 @@ const fetchPosts = gql`
   ) {
     postsCount(where: $filter)
     posts(take: $take, skip: $skip, orderBy: $orderBy, where: $filter) {
-      id
-      slug
-      title
-      brief
-      sections {
-        slug
-        name
-      }
-      publishedDate
-      state
-      categories {
-        slug
-        name
-      }
-      heroImage {
-        imageFile {
-          width
-          height
-        }
-        resized {
-          original
-          w480
-          w800
-          w1200
-          w1600
-          w2400
-        }
-      }
-      publishedDate
+      ...post
     }
   }
 `

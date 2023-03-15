@@ -41,10 +41,15 @@ const AuthorTitle = styled.h1`
 const RENDER_PAGE_SIZE = 12
 
 /**
+ * @typedef {import('../../components/author/author-articles').Article} Article
+ * @typedef {import('../../components/author/author-articles').Author} Author
+ */
+
+/**
  * @param {Object} props
- * @param {import('../../type/shared/article').Article[]} props.posts
- * @param {import('../../type/author').Author} props.author
- * @param {Number} props.postsCount
+ * @param {Article[]} props.posts
+ * @param {Author} props.author
+ * @param {number} props.postsCount
  * @returns {React.ReactElement}
  */
 export default function Author({ postsCount, posts, author }) {
@@ -134,11 +139,11 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
-  /** @type {Number} postsCount */
+  /** @type {number} postsCount */
   const postsCount = handledResponses[0]?.postsCount || 0
-  /** @type {import('../../type/shared/article').Article[]} */
+  /** @type {Article[]} */
   const posts = handledResponses[0]?.posts || []
-  /** @type {import('../../type/author').Author} */
+  /** @type {Author} */
   const author = handledResponses[1]?.contact || {}
 
   const props = {
