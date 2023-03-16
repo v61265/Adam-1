@@ -2,10 +2,10 @@ import React from 'react'
 import PremiumHeader from './premium-header'
 
 /**
+ * @typedef {import('./premium-header').PremiumHeaderData} PremiumHeaderData
  *
  * @param {Object} props
- * @param {import('../type').Section[]} props.sectionsData
- * @param {import('../type').Topic[]} props.topicsData
+ * @param {PremiumHeaderData} props.premiumHeaderData
  * @param {React.ReactNode} props.children
  * @returns {React.ReactElement}
  */

@@ -176,10 +176,7 @@ const SideBarTop = styled.div`
 /**
  *
  * @param {Object} props
- * @param {import('../type').Section[]} props.sections
- * @param {import('../type').SubBrand[]} props.subBrands
- * @param {import('../type').Promotion[]} props.promotions
- * @param {import('../type').SocialMedia[]} props.socialMedia
+ * @param {import('./premium-header').PremiumHeaderSection[]} props.sections
  * @returns {React.ReactElement}
  */
 export default function PremiumMobileSidebar({ sections }) {

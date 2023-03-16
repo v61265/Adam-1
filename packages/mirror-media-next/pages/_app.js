@@ -93,7 +93,13 @@ function MyApp({
  * @property {Object} _meta
  */
 
-/** @typedef {import('axios').AxiosResponse<DataRes>} AxiosResponse */
+/**
+ * @typedef {import('../components/premium-layout').PremiumHeaderData} PremiumHeaderData
+ */
+
+/**
+ *  @typedef {import('axios').AxiosResponse<DataRes>} AxiosResponse
+ */
 
 /**
  * @async
@@ -122,6 +128,7 @@ MyApp.getInitialProps = async () => {
     const sectionsResponse = responses[0].status === 'fulfilled' && responses[0]
     /** @type {PromiseFulfilledResult<AxiosResponse>} */
     const topicsResponse = responses[1].status === 'fulfilled' && responses[1]
+    /** @type {PromiseFulfilledResult<PremiumHeaderData>} */
     const premiumResponse = responses[2].status === 'fulfilled' && responses[2]
 
     const sectionsData = Array.isArray(sectionsResponse?.value?.data?._items)
@@ -134,7 +141,7 @@ MyApp.getInitialProps = async () => {
       ? topicsResponse?.value?.data?._endpoints?.topics?._items
       : []
 
-    const premiumHeaderData = premiumResponse?.value?.data
+    const premiumHeaderData = premiumResponse?.value?.data || {}
 
     console.log(
       JSON.stringify({

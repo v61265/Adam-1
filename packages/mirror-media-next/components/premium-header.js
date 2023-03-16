@@ -138,9 +138,25 @@ const MobilePremiumMemberLoginButton = styled(PremiumMemberLoginButton)`
 `
 
 /**
+ *
+ * @typedef PremiumHeaderCategory
+ * @property {string} id
+ * @property {string} name
+ * @property {string} slug
+ *
+ * @typedef PremiumHeaderSection
+ * @property {string} id
+ * @property {string} name
+ * @property {string} slug
+ * @property {PremiumHeaderCategory[]} categories
+ *
+ * @typedef PremiumHeaderData
+ * @property {PremiumHeaderSection[]} sections
+ */
+
+/**
  * @param {Object} props
- * @param {import('../type').Section[]} props.sectionsData
- * @param {import('../type').Topic[]} props.topicsData
+ * @param {PremiumHeaderData} props.premiumHeaderData
  * @returns {React.ReactElement}
  */
 export default function PremiumHeader({ premiumHeaderData }) {
@@ -187,7 +203,6 @@ export default function PremiumHeader({ premiumHeaderData }) {
   }
 
   const sections = premiumHeaderData.sections
-  console.log('[PremiumHeader] premiumHeaderData', premiumHeaderData)
 
   return (
     <HeaderWrapper>

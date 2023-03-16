@@ -104,7 +104,9 @@ const CategoryLink = styled.a`
   }
 `
 /**
- * @param {{sections: import('../type').Section[] | []  }} props
+ * @param {Object} props
+ * @param {import('./premium-header').PremiumHeaderSection[]} props.sections
+ * @param {import('react').ReactNode} props.children
  * @returns {React.ReactElement}
  */
 export default function PremiumNavSections({ sections, children }) {

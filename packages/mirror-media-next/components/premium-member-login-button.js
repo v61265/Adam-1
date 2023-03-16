@@ -68,6 +68,11 @@ const dropdownMenuItem = [
   { title: '訂閱紀錄', href: '/profile/purchase' },
 ]
 
+/**
+ * @param {Object} props
+ * @param {string} props.className
+ * @returns {React.ReactElement}
+ */
 export default function PremiumMemberLoginButton({ className }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [showSelectOptions, setShowSelectOptions] = useState(false)
