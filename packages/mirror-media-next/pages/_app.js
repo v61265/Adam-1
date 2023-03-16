@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useRouter } from 'next/router'
 import { GlobalStyles } from '../styles/global-styles'
 import { ThemeProvider } from 'styled-components'
 import { theme } from '../styles/theme'
@@ -14,10 +13,11 @@ import { ENV, GTM_ID } from '../config/index.mjs'
 import {
   URL_STATIC_COMBO_SECTIONS,
   URL_STATIC_COMBO_TOPICS,
+  URL_STATIC_PREMIUM_SECTIONS,
   API_TIMEOUT,
 } from '../config/index.mjs'
 
-function defaultGetLayout(page, sectionsData, topicsData) {
+function defaultGetLayout(page, sectionsData, topicsData, premiumHeaderData) {
   const { isPremium } = page.props
 
   return (
@@ -28,7 +28,7 @@ function defaultGetLayout(page, sectionsData, topicsData) {
         </Layout>
       )}
       {isPremium && (
-        <PremiumLayout sectionsData={sectionsData} topicsData={topicsData}>
+        <PremiumLayout premiumHeaderData={premiumHeaderData}>
           {page}
         </PremiumLayout>
       )}
@@ -46,8 +46,13 @@ function defaultGetLayout(page, sectionsData, topicsData) {
  * @returns {React.ReactElement}
  */
 
-function MyApp({ Component, pageProps, sectionsData = [], topicsData = [] }) {
-  const router = useRouter()
+function MyApp({
+  Component,
+  pageProps,
+  sectionsData = [],
+  topicsData = [],
+  premiumHeaderData = {},
+}) {
   //Temporarily enable google analytics and google tag manager only in dev and local environment.
   useEffect(() => {
     if (ENV === 'dev' || ENV === 'local') {
@@ -61,7 +66,12 @@ function MyApp({ Component, pageProps, sectionsData = [], topicsData = [] }) {
       <GlobalStyles />
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
-          {getLayout(<Component {...pageProps} />, sectionsData, topicsData)}
+          {getLayout(
+            <Component {...pageProps} />,
+            sectionsData,
+            topicsData,
+            premiumHeaderData
+          )}
         </ThemeProvider>
       </ApolloProvider>
     </>
@@ -102,11 +112,17 @@ MyApp.getInitialProps = async () => {
         url: URL_STATIC_COMBO_TOPICS,
         timeout: API_TIMEOUT,
       }),
+      axios({
+        method: 'get',
+        url: URL_STATIC_PREMIUM_SECTIONS,
+        timeout: API_TIMEOUT,
+      }),
     ])
     /** @type {PromiseFulfilledResult<AxiosResponse>} */
     const sectionsResponse = responses[0].status === 'fulfilled' && responses[0]
     /** @type {PromiseFulfilledResult<AxiosResponse>} */
     const topicsResponse = responses[1].status === 'fulfilled' && responses[1]
+    const premiumResponse = responses[2].status === 'fulfilled' && responses[2]
 
     const sectionsData = Array.isArray(sectionsResponse?.value?.data?._items)
       ? sectionsResponse?.value?.data?._items
@@ -118,21 +134,26 @@ MyApp.getInitialProps = async () => {
       ? topicsResponse?.value?.data?._endpoints?.topics?._items
       : []
 
+    const premiumHeaderData = premiumResponse?.value?.data
+
     console.log(
       JSON.stringify({
         severity: 'DEBUG',
-        message: `Successfully fetch sections and topics from ${URL_STATIC_COMBO_SECTIONS} and ${URL_STATIC_COMBO_TOPICS}`,
+        message: `Successfully fetch sections and topics from ${URL_STATIC_COMBO_SECTIONS}, ${URL_STATIC_COMBO_TOPICS} and ${URL_STATIC_PREMIUM_SECTIONS}`,
       })
     )
+
     return {
       sectionsData,
       topicsData,
+      premiumHeaderData,
     }
   } catch (error) {
     console.log(JSON.stringify({ severity: 'ERROR', message: error.stack }))
     return {
       sectionsData: [],
       topicsData: [],
+      premiumHeaderData: {},
     }
   }
 }

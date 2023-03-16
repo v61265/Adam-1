@@ -15,6 +15,7 @@ let API_PORT = ''
 let URL_STATIC_COMBO_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/combo?endpoint=topics`
 let URL_K3_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/getposts?where={"categories":{"$in":["5979ac0de531830d00e330a7","5979ac33e531830d00e330a9","57e1e16dee85930e00cad4ec","57e1e200ee85930e00cad4f3"]},"isAudioSiteOnly":false}&clean=content&max_results=10&page=1&sort=-publishedDate`
 let URL_STATIC_COMBO_SECTIONS = ''
+let URL_STATIC_PREMIUM_SECTIONS = ''
 let URL_STATIC_POST_EXTERNAL = ''
 let DONATION_PAGE_URL = ''
 let GA_MEASUREMENT_ID = ''
@@ -29,6 +30,8 @@ switch (ENV) {
     URL_K3_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/getposts?where={"categories":{"$in":["5979ac0de531830d00e330a7","5979ac33e531830d00e330a9","57e1e16dee85930e00cad4ec","57e1e200ee85930e00cad4f3"]},"isAudioSiteOnly":false}&clean=content&max_results=10&page=1&sort=-publishedDate`
     URL_STATIC_COMBO_SECTIONS =
       'https://statics.mirrormedia.mg/json/sections.json'
+    URL_STATIC_PREMIUM_SECTIONS =
+      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_member.json'
     URL_STATIC_POST_EXTERNAL =
       'https://statics.mirrormedia.mg/json/post_external'
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
@@ -44,6 +47,8 @@ switch (ENV) {
     URL_K3_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/getposts?where={"categories":{"$in":["5979ac0de531830d00e330a7","5979ac33e531830d00e330a9","57e1e16dee85930e00cad4ec","57e1e200ee85930e00cad4f3"]},"isAudioSiteOnly":false}&clean=content&max_results=10&page=1&sort=-publishedDate`
     URL_STATIC_COMBO_SECTIONS =
       'https://statics.mirrormedia.mg/json/sections.json'
+    URL_STATIC_PREMIUM_SECTIONS =
+      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_member.json'
     URL_STATIC_POST_EXTERNAL =
       'https://statics.mirrormedia.mg/json/post_external'
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
@@ -60,6 +65,8 @@ switch (ENV) {
     URL_K3_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/getposts?where={"categories":{"$in":["5979ac0de531830d00e330a7","5979ac33e531830d00e330a9","57e1e16dee85930e00cad4ec","57e1e200ee85930e00cad4f3"]},"isAudioSiteOnly":false}&clean=content&max_results=10&page=1&sort=-publishedDate`
     URL_STATIC_COMBO_SECTIONS =
       'https://statics.mirrormedia.mg/json/sections.json'
+    URL_STATIC_PREMIUM_SECTIONS =
+      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_member.json'
     URL_STATIC_POST_EXTERNAL =
       'https://statics.mirrormedia.mg/dev/post_external'
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
@@ -72,6 +79,8 @@ switch (ENV) {
     API_PORT = '8080'
     API_HOST = 'mirror-cms-gql-dev-ufaummkd5q-de.a.run.app'
     URL_STATIC_COMBO_SECTIONS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/sections.json`
+    URL_STATIC_PREMIUM_SECTIONS =
+      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_member.json'
     URL_STATIC_COMBO_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/api/v2/combo?endpoint=topics`
     URL_K3_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/api/v2/getposts?where={"categories":{"$in":["5979ac0de531830d00e330a7","5979ac33e531830d00e330a9","57e1e16dee85930e00cad4ec","57e1e200ee85930e00cad4f3"]},"isAudioSiteOnly":false}&clean=content&max_results=10&page=1&sort=-publishedDate`
     URL_STATIC_POST_EXTERNAL = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/post_external`
@@ -86,6 +95,7 @@ export {
   API_TIMEOUT,
   API_HOST,
   URL_STATIC_COMBO_SECTIONS,
+  URL_STATIC_PREMIUM_SECTIONS,
   URL_STATIC_COMBO_TOPICS,
   URL_K3_FLASH_NEWS,
   URL_STATIC_POST_EXTERNAL,
