@@ -5,6 +5,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 const INITIAL_PAGE = 1
 
 const Test = styled.div`
+  display: none;
   position: fixed;
   top: 0;
   left: 0;

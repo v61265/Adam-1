@@ -18,6 +18,18 @@ const CategoryContainer = styled.main`
     width: 1024px;
     padding: 0;
   }
+
+  ${({ isPremium, theme }) =>
+    isPremium &&
+    `
+     margin-top: 20px;
+     ${theme.breakpoint.md} {
+      margin-top: 28px;
+     }
+     ${theme.breakpoint.xl} {
+      margin-top: 36px;
+     }
+  `}
 `
 const CategoryTitle = styled.h1`
   margin: 20px 0 16px 16px;
@@ -106,7 +118,7 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Category({ postsCount, posts, category, isPremium }) {
   return (
-    <CategoryContainer>
+    <CategoryContainer isPremium={isPremium}>
       {isPremium ? (
         <PremiumCategoryTitle sectionName={category?.sections?.slug}>
           {category?.name}

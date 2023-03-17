@@ -1,22 +1,18 @@
 import React from 'react'
-import Header from './header'
+import PremiumHeader from './premium-header'
 
 /**
+ * @typedef {import('./premium-header').PremiumHeaderData} PremiumHeaderData
  *
  * @param {Object} props
- * @param {import('../type').Section[]} props.sectionsData
- * @param {import('../type').Topic[]} props.topicsData
+ * @param {PremiumHeaderData} props.premiumHeaderData
  * @param {React.ReactNode} props.children
  * @returns {React.ReactElement}
  */
-export default function PremiumLayout({
-  sectionsData = [],
-  topicsData = [],
-  children,
-}) {
+export default function PremiumLayout({ premiumHeaderData, children }) {
   return (
     <>
-      <Header sectionsData={sectionsData} topicsData={topicsData} />
+      <PremiumHeader premiumHeaderData={premiumHeaderData} />
       {children}
     </>
   )
