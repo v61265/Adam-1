@@ -27,7 +27,7 @@ const CategoryTitle = styled.h1`
   color: ${
     /**
      * @param {Object} props
-     * @param {String } props.sectionName
+     * @param {string } props.sectionName
      * @param {Theme} [props.theme]
      */
     ({ sectionName, theme }) =>
@@ -92,9 +92,14 @@ const PremiumCategoryTitle = styled.h1`
 const RENDER_PAGE_SIZE = 12
 
 /**
+ * @typedef {import('../../components/category/category-articles').Article} Article
+ * @typedef {import('../../components/category/category-articles').Category} Category
+ */
+
+/**
  * @param {Object} props
- * @param {import('../../type/shared/article').Article[]} props.posts
- * @param {import('../../type/category').Category} props.category
+ * @param {Article[]} props.posts
+ * @param {Category} props.category
  * @param {number} props.postsCount
  * @param {boolean} props.isPremium
  * @returns {React.ReactElement}
@@ -192,11 +197,11 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
-  /** @type {Number} postsCount */
+  /** @type {number} postsCount */
   const postsCount = handledResponses[0]?.postsCount || 0
-  /** @type {import('../../type/shared/article').Article[]} */
+  /** @type {Article[]} */
   const posts = handledResponses[0]?.posts || []
-  /** @type {import('../../type/category').Category} */
+  /** @type {Category} */
   const category = handledResponses[1]?.category || {}
   const isPremium = category.isMemberOnly
 
@@ -206,6 +211,5 @@ export async function getServerSideProps({ query, req }) {
     category,
     isPremium,
   }
-
   return { props }
 }

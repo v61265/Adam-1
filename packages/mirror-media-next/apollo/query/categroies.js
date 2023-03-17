@@ -1,17 +1,11 @@
 import { gql } from '@apollo/client'
+import { categroyWithSection } from '../fragments/category'
 
 const fetchCategorySections = gql`
+  ${categroyWithSection}
   query ($categorySlug: String) {
     category(where: { slug: $categorySlug }) {
-      id
-      name
-      slug
-      isMemberOnly
-      sections {
-        id
-        name
-        slug
-      }
+      ...categroyWithSection
     }
   }
 `

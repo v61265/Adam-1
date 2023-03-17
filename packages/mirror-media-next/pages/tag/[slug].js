@@ -61,9 +61,14 @@ const TagTitle = styled.h1`
 const RENDER_PAGE_SIZE = 12
 
 /**
+ * @typedef {import('../../components/tag/tag-articles').Article} Article
+ * @typedef {import('../../components/tag/tag-articles').Tag} Tag
+ */
+
+/**
  * @param {Object} props
- * @param {import('../../type/shared/article').Article[]} props.posts
- * @param {import('../../type/tag').Tag} props.tag
+ * @param {Article[]} props.posts
+ * @param {Tag} props.tag
  * @param {Number} props.postsCount
  * @returns {React.ReactElement}
  */
@@ -153,11 +158,11 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
-  /** @type {Number} postsCount */
+  /** @type {number} postsCount */
   const postsCount = handledResponses[0]?.postsCount || 0
-  /** @type {import('../../type/shared/article').Article[]} */
+  /** @type {Article[]} */
   const posts = handledResponses[0]?.posts || []
-  /** @type {import('../../type/tag').Tag} */
+  /** @type {Tag} */
   const tag = handledResponses[1]?.tag || {}
 
   const props = {
