@@ -9,14 +9,16 @@ import { GCP_PROJECT_ID } from '../../config/index.mjs'
 
 const SectionContainer = styled.main`
   width: 320px;
-  margin: 0 auto;
+  margin: 20px auto 0;
 
   ${({ theme }) => theme.breakpoint.md} {
     width: 672px;
+    margin: 28px auto 0;
   }
   ${({ theme }) => theme.breakpoint.xl} {
     width: 1024px;
     padding: 0;
+    margin: 36px auto 0;
   }
 `
 const SectionTitle = styled.h1`
