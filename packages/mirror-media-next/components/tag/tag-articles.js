@@ -48,7 +48,7 @@ export default function TagArticles({
         query: fetchPosts,
         variables: {
           take: renderPageSize * 2,
-          skip: page * renderPageSize * 2,
+          skip: (page - 1) * renderPageSize * 2,
           orderBy: { publishedDate: 'desc' },
           filter: {
             state: { equals: 'published' },

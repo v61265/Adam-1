@@ -51,11 +51,33 @@ export default function SectionArticles({
         query: fetchPosts,
         variables: {
           take: renderPageSize * 2,
-          skip: page * renderPageSize * 2,
+          skip: (page - 1) * renderPageSize * 2,
           orderBy: { publishedDate: 'desc' },
           filter: {
             state: { equals: 'published' },
             sections: { some: { slug: { equals: section.slug } } },
+          },
+        },
+      })
+      return response.data.posts
+    } catch (error) {}
+    return
+  }
+
+  async function fetchPremiumPostsFromPage(page) {
+    try {
+      const response = await client.query({
+        query: fetchPosts,
+        variables: {
+          take: renderPageSize * 2,
+          skip: (page - 1) * renderPageSize * 2,
+          orderBy: { publishedDate: 'desc' },
+          filter: {
+            state: { equals: 'published' },
+            AND: [
+              { sections: { some: { slug: { equals: section.slug } } } },
+              { sections: { some: { slug: { equals: 'member' } } } },
+            ],
           },
         },
       })
@@ -75,7 +97,9 @@ export default function SectionArticles({
       initialList={posts}
       renderAmount={renderPageSize}
       fetchCount={Math.ceil(postsCount / renderPageSize)}
-      fetchListInPage={fetchPostsFromPage}
+      fetchListInPage={
+        isPremium ? fetchPremiumPostsFromPage : fetchPostsFromPage
+      }
       loader={loader}
     >
       {(renderList) =>
