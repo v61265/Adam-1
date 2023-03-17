@@ -9,6 +9,8 @@ import { ApolloProvider } from '@apollo/client'
 import client from '../apollo/apollo-client'
 import PremiumLayout from '../components/premium-layout'
 import * as gtag from '../utils/gtag'
+import TagManager from 'react-gtm-module'
+import { ENV, GTM_ID } from '../config/index.mjs'
 import {
   URL_STATIC_COMBO_SECTIONS,
   URL_STATIC_COMBO_TOPICS,
@@ -46,8 +48,12 @@ function defaultGetLayout(page, sectionsData, topicsData) {
 
 function MyApp({ Component, pageProps, sectionsData = [], topicsData = [] }) {
   const router = useRouter()
+  //Temporarily enable google analytics and google tag manager only in dev and local environment.
   useEffect(() => {
-    gtag.init()
+    if (ENV === 'dev' || ENV === 'local') {
+      gtag.init()
+      TagManager.initialize({ gtmId: GTM_ID })
+    }
   }, [])
   const getLayout = Component.getLayout || defaultGetLayout
   return (
