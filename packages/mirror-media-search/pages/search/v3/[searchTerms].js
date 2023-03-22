@@ -1,5 +1,6 @@
 import axios from 'axios'
 import styled from 'styled-components'
+import Image from 'next/legacy/image'
 import Layout from '../../../components/layout'
 import {
   URL_STATIC_COMBO_SECTIONS,
@@ -10,8 +11,7 @@ import {
   API_PORT,
 } from '../../../config'
 import { getSearchResult } from '../../../utils/api/programmable-search'
-
-// import SearchArticles from '../../components/tag/tag-articles'
+import SearchedArticles from '../../../components/searched-articles'
 
 const SearchContainer = styled.main`
   width: 320px;
@@ -43,14 +43,14 @@ const SearchTitleWrapper = styled.div`
 
 const SearchTitle = styled.h1`
   display: inline-block;
-  margin: 16px 0 16px 16px;
+  margin: 16px 0 16px;
   padding: 4px 16px;
   font-size: 16px;
   line-height: 1.15;
   font-weight: 600;
-  color: white;
-  background-color: black;
   border-radius: 6px;
+  display: flex;
+  align-items: start;
   ${({ theme }) => theme.breakpoint.md} {
     margin: 20px 0 24px;
     padding: 4px 8px;
@@ -64,21 +64,48 @@ const SearchTitle = styled.h1`
   }
 `
 
-export default function Search({
-  // postsCount, posts,
-  tag,
-}) {
+const CommaStart = styled.span`
+  display: inline-flex;
+  margin-right: 6px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-right: 8px;
+  }
+`
+const CommaEnd = styled.span`
+  display: inline-flex;
+  margin-left: 6px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-left: 16px;
+  }
+`
+
+export default function Search({ searchResult }) {
+  const searchTerms = searchResult?.queries?.request[0].exactTerms ?? ''
+
   return (
     <SearchContainer>
       <SearchTitleWrapper>
-        <SearchTitle>{tag?.name}</SearchTitle>
+        <SearchTitle>
+          <CommaStart>
+            <Image
+              src="/images/double-comma-start.svg"
+              alt="double comma start"
+              width={8}
+              height={6.6}
+            ></Image>
+          </CommaStart>
+          {searchTerms}
+          <CommaEnd>
+            <Image
+              src="/images/double-comma-end.svg"
+              alt="double comma end"
+              width={8}
+              height={6.6}
+            ></Image>
+          </CommaEnd>
+        </SearchTitle>
       </SearchTitleWrapper>
-      {/* <SearchArticles
-        postsCount={postsCount}
-        posts={posts}
-        tag={tag}
-        renderPageSize={RENDER_PAGE_SIZE}
-      /> */}
+      <SearchedArticles searchResult={searchResult} />
     </SearchContainer>
   )
 }
