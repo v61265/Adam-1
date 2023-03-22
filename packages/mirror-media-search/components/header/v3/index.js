@@ -177,7 +177,7 @@ export default function Header({ sectionsData = [], topicsData = [] }) {
       .replace(/\s+/g, ',')
 
     if (trimedSearchTerms === '') return setSearchTerms('')
-    location.assign(`/search/${trimedSearchTerms}`)
+    location.assign(`/search/v3/${trimedSearchTerms}`)
   }
 
   const sections =
