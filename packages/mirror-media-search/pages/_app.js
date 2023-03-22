@@ -6,6 +6,8 @@ import { useRouter } from 'next/router'
 import { GA_TRACKING_ID, URL_MIRROR_MEDIA } from '../config'
 import { useEffect } from 'react'
 import { RedirectUrlContext } from '../context/redirectUrl'
+import { ThemeProvider } from 'styled-components'
+import { theme } from '../styles/theme'
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
@@ -49,9 +51,11 @@ function MyApp({ Component, pageProps }) {
         `}
       </Script>
       <GlobalStyles />
-      <RedirectUrlContext.Provider value={redirectUrl || URL_MIRROR_MEDIA}>
-        {getLayout(<Component {...pageProps} />, pageProps)}
-      </RedirectUrlContext.Provider>
+      <ThemeProvider theme={theme}>
+        <RedirectUrlContext.Provider value={redirectUrl || URL_MIRROR_MEDIA}>
+          {getLayout(<Component {...pageProps} />, pageProps)}
+        </RedirectUrlContext.Provider>
+      </ThemeProvider>
     </>
   )
 }
