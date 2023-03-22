@@ -3,11 +3,13 @@ import { GlobalStyles } from '../styles/global-styles'
 import Script from 'next/script'
 import { initGA, logPageView } from '../utils/programmable-search/analytics'
 import { useRouter } from 'next/router'
-import { GA_TRACKING_ID } from '../config'
+import { GA_TRACKING_ID, URL_MIRROR_MEDIA } from '../config'
 import { useEffect } from 'react'
+import { RedirectUrlContext } from '../context/redirectUrl'
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
+
   useEffect(() => {
     initGA()
     // `routeChangeComplete` won't run for the first page load unless the query string is
@@ -18,6 +20,9 @@ function MyApp({ Component, pageProps }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const getLayout = Component.getLayout || ((page) => page)
+  const { redirectUrl } = pageProps
 
   return (
     <>
@@ -44,7 +49,9 @@ function MyApp({ Component, pageProps }) {
         `}
       </Script>
       <GlobalStyles />
-      <Component {...pageProps} />
+      <RedirectUrlContext.Provider value={redirectUrl || URL_MIRROR_MEDIA}>
+        {getLayout(<Component {...pageProps} />, pageProps)}
+      </RedirectUrlContext.Provider>
     </>
   )
 }
