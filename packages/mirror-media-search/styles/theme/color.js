@@ -1,19 +1,11 @@
-export const sectionColors = {
-  member: '#e51731',
-  news: '#30bac8',
-  entertainment: '#bf3284',
-  businessmoney: '#009045',
-  people: '#efa256',
-  videohub: '#969696',
-  international: '#911f27',
-  foodtravel: '#eac151',
-  mafalda: '#662d8e',
-  culture: '#009245',
-  carandwatch: '#003153',
-  external: '#30bac8',
+const brandColor = {
+  darkBlue: '#054F77',
+  lightBlue: '#61B8C6',
+  black: '#000000',
+  white: '#ffffff',
+  gray: '#888888',
 }
-
-export const v3SectionColors = {
+const sectionsColor = {
   member: '#e51731',
   news: '#61B8C6',
   entertainment: '#D43E96',
@@ -28,3 +20,5 @@ export const v3SectionColors = {
   external: '#30bac8', //not updated yet
   mirrorcolumn: '#B79479',
 }
+
+export const color = { brandColor, sectionsColor }

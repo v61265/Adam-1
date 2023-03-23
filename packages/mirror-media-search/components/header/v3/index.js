@@ -1,12 +1,13 @@
 //TODO: replace <a> with <Link> from Nextjs for Single Page Application
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
+import { RedirectUrlContext } from '../../../context/redirectUrl'
 import styled from 'styled-components'
 import {
   SUB_BRAND_LINKS,
   PROMOTION_LINKS,
   SOCIAL_MEDIA_LINKS,
-} from '../constants'
+} from '../../../utils/mirror-media/const'
 
 import SubBrandList from './sub-brand-list'
 import SearchBarDesktop from './search-bar-desktop'
@@ -17,7 +18,6 @@ import MemberLoginButton from './member-login-button'
 import SearchBarInput from './search-bar-input'
 import MobileSidebar from './mobile-sidebar'
 import Logo from './logo'
-import { SEARCH_URL } from '../config/index.mjs'
 
 const HeaderWrapper = styled.div`
   background-color: rgba(255, 255, 255, 1);
@@ -141,6 +141,7 @@ export default function Header({ sectionsData = [], topicsData = [] }) {
   const [searchTerms, setSearchTerms] = useState('')
   const mobileSearchButtonRef = useRef(null)
   const mobileSearchWrapperRef = useRef(null)
+  const redirectUrl = useContext(RedirectUrlContext)
 
   // If user click search button, will show/hide search field search input field.
   // If user click outside of search input field, or outside of search button, will hide  search field if needed.
@@ -176,7 +177,7 @@ export default function Header({ sectionsData = [], topicsData = [] }) {
       .replace(/\s+/g, ',')
 
     if (trimedSearchTerms === '') return setSearchTerms('')
-    location.assign(`${SEARCH_URL}/search/v3/${trimedSearchTerms}`)
+    location.assign(`/search/v3/${trimedSearchTerms}`)
   }
 
   const sections =
@@ -191,7 +192,7 @@ export default function Header({ sectionsData = [], topicsData = [] }) {
     <HeaderWrapper>
       <HeaderTop>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/">
+        <a href={`${redirectUrl}`}>
           <HeaderLogo />
         </a>
         <GptAd />

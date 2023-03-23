@@ -8,6 +8,7 @@ import Logo from './logo'
 import PremiumMobileSidebar from './premium-mobile-sidebar'
 import PremiumNavSections from './premium-nav-sections'
 import PremiumMemberLoginButton from './premium-member-login-button'
+import { SEARCH_URL } from '../config/index.mjs'
 
 const HeaderWrapper = styled.div`
   background-color: rgba(255, 255, 255, 1);
@@ -199,7 +200,7 @@ export default function PremiumHeader({ premiumHeaderData }) {
       .replace(/\s+/g, ',')
 
     if (trimedSearchTerms === '') return setSearchTerms('')
-    location.assign(`/search/${trimedSearchTerms}`)
+    location.assign(`${SEARCH_URL}/search/v3/${trimedSearchTerms}`)
   }
 
   const sections = premiumHeaderData.sections

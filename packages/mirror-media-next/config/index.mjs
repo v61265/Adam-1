@@ -20,6 +20,8 @@ let URL_STATIC_POST_EXTERNAL = ''
 let DONATION_PAGE_URL = ''
 let GA_MEASUREMENT_ID = ''
 let GTM_ID = ''
+let SEARCH_URL = 'search-url/search'
+
 switch (ENV) {
   case 'prod':
     API_TIMEOUT = 1500
@@ -37,6 +39,7 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-341XFN0675'
     GTM_ID = 'GTM-NCH86SP'
+    SEARCH_URL = 'https://adam-mirror-media-search-prod-ufaummkd5q-de.a.run.app'
     break
   case 'staging':
     API_TIMEOUT = 1500
@@ -54,7 +57,8 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
     GTM_ID = 'GTM-KVDZ27K'
-
+    SEARCH_URL =
+      'https://adam-mirror-media-search-staging-ufaummkd5q-de.a.run.app'
     break
   case 'dev':
     API_TIMEOUT = 5000
@@ -72,6 +76,7 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
+    SEARCH_URL = 'https://adam-mirror-media-search-dev-ufaummkd5q-de.a.run.app'
     break
   default:
     API_TIMEOUT = 5000
@@ -86,6 +91,7 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
+    SEARCH_URL = 'https://adam-mirror-media-search-dev-ufaummkd5q-de.a.run.app'
 }
 
 export {
@@ -101,4 +107,5 @@ export {
   DONATION_PAGE_URL,
   GA_MEASUREMENT_ID,
   GTM_ID,
+  SEARCH_URL,
 }
