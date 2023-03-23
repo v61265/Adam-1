@@ -17,6 +17,7 @@ import MemberLoginButton from './member-login-button'
 import SearchBarInput from './search-bar-input'
 import MobileSidebar from './mobile-sidebar'
 import Logo from './logo'
+import { SEARCH_URL } from '../config/index.mjs'
 
 const HeaderWrapper = styled.div`
   background-color: rgba(255, 255, 255, 1);
@@ -175,7 +176,7 @@ export default function Header({ sectionsData = [], topicsData = [] }) {
       .replace(/\s+/g, ',')
 
     if (trimedSearchTerms === '') return setSearchTerms('')
-    location.assign(`/search/${trimedSearchTerms}`)
+    location.assign(`${SEARCH_URL}/search/v3/${trimedSearchTerms}`)
   }
 
   const sections =
