@@ -11,7 +11,7 @@ import {
 import SearchResult from '../../components/search-result'
 import { getSearchResult } from '../../utils/api/programmable-search'
 import styled from 'styled-components'
-import Layout from '../../components/layout'
+import Layout from '../../components/old-layout'
 
 const Wrapper = styled.div`
   display: flex;
