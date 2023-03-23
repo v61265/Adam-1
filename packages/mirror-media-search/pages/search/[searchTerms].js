@@ -11,7 +11,7 @@ import {
 import SearchResult from '../../components/search-result'
 import { getSearchResult } from '../../utils/api/programmable-search'
 import styled from 'styled-components'
-import OldLayout from '../../components/old-layout'
+import Layout from '../../components/layout'
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,9 +30,9 @@ export default function Search({ searchResult }) {
 Search.getLayout = function getLayout(page, pageProps) {
   const { sectionsData = [], topicsData = [] } = pageProps
   return (
-    <OldLayout sectionsData={sectionsData} topicsData={topicsData}>
+    <Layout sectionsData={sectionsData} topicsData={topicsData}>
       {page}
-    </OldLayout>
+    </Layout>
   )
 }
 

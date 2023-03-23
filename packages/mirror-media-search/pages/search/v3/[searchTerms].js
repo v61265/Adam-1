@@ -1,7 +1,7 @@
 import axios from 'axios'
 import styled from 'styled-components'
 import Image from 'next/legacy/image'
-import Layout from '../../../components/layout'
+import Layout from '../../../components/v3-layout'
 import {
   URL_STATIC_COMBO_SECTIONS,
   URL_MIRROR_MEDIA_V3,

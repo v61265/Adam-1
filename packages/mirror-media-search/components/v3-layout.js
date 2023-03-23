@@ -1,7 +1,6 @@
-import Header from './shared/mirror-media-header-old'
-import Footer from './shared/mirror-media-footer'
+import Header from '../components/header/v3'
 
-export default function OldLayout({
+export default function V3Layout({
   sectionsData = [],
   topicsData = [],
   children,
@@ -10,7 +9,6 @@ export default function OldLayout({
     <>
       <Header sectionsData={sectionsData} topicsData={topicsData} />
       {children}
-      <Footer />
     </>
   )
 }

@@ -1,4 +1,5 @@
-import Header from '../components/header/v3'
+import Header from './shared/mirror-media-header-old'
+import Footer from './shared/mirror-media-footer'
 
 export default function Layout({
   sectionsData = [],
@@ -9,6 +10,7 @@ export default function Layout({
     <>
       <Header sectionsData={sectionsData} topicsData={topicsData} />
       {children}
+      <Footer />
     </>
   )
 }
