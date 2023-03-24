@@ -1299,11 +1299,12 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@mirrormedia/lilith-draft-renderer@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@mirrormedia/lilith-draft-renderer/-/lilith-draft-renderer-1.0.0.tgz#eb29a1c2cc3603e3f670e30c697101678475143a"
-  integrity sha512-NecqJYJ0kXObXUXrT4n9ed3lLMjtrS8VgPrYsUClZftek/RpD1TQGF/FRom5DPPFoiwXRP/+ZDVAwtTk1GKggw==
+"@mirrormedia/lilith-draft-renderer@1.1.0-alpha.4":
+  version "1.1.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@mirrormedia/lilith-draft-renderer/-/lilith-draft-renderer-1.1.0-alpha.4.tgz#3944afbc083ef4d08a58b8fe9111f440f6111770"
+  integrity sha512-3uJpYa5rFBKWDqsVTMYxlv45bp4jUyF0bFCnLhSwguCir/eCYIWC7IZwk0Nuw8Wj/D+zVhwrkODsiSqsDPR8KQ==
   dependencies:
+    "@readr-media/react-image" "^1.5.1"
     draft-js "^0.11.7"
 
 "@next/env@13.0.7":
