@@ -126,7 +126,7 @@ const ItemDate = styled.div`
  *  slug: string,
  *  title: string,
  *  publishedDate: string,
- *  draft: Draft,
+ *  brief: import('../../type/draft-js').Draft,
  *  categroies: Category[],
  *  sections: Section[],
  *  heroImage: HeroImage,
