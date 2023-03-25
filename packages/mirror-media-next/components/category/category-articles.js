@@ -63,7 +63,9 @@ export default function CategoryArticles({
         },
       })
       return response.data.posts
-    } catch (error) {}
+    } catch (error) {
+      console.error(error)
+    }
     return []
   }
 
