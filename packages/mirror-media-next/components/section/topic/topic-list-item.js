@@ -32,13 +32,10 @@ const ItemTitle = styled.div`
   color: #054f77;
   line-height: 25px;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 
-  ${({ theme }) => theme.breakpoint.md} {
-    height: 75px;
-  }
   ${({ theme }) => theme.breakpoint.xl} {
     font-size: 18px;
   }
