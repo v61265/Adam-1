@@ -60,7 +60,9 @@ export default function SectionArticles({
         },
       })
       return response.data.posts
-    } catch (error) {}
+    } catch (error) {
+      console.error(error)
+    }
     return
   }
 
@@ -82,7 +84,9 @@ export default function SectionArticles({
         },
       })
       return response.data.posts
-    } catch (error) {}
+    } catch (error) {
+      console.error(error)
+    }
     return
   }
 
