@@ -22,7 +22,8 @@ import RelatedArticleList from '../../components/story/normal/related-article-li
 import { transformTimeDataIntoTaipeiTime } from '../../utils'
 import { fetchListingPosts } from '../../apollo/query/posts'
 import { fetchPostBySlug } from '../../apollo/query/post'
-
+import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+const { DraftRenderer } = MirrorMedia
 /**
  * @typedef {import('../../type/theme').Theme} Theme
  */
@@ -410,6 +411,7 @@ export default function Story({ postData }) {
     tags = [],
     brief = [],
     relateds = [],
+    content = {},
   } = postData
   const [section] = sections
 
@@ -494,6 +496,12 @@ export default function Story({ postData }) {
               sectionSlug={section?.slug}
               brief={brief}
             ></ArticleBrief>
+            <div>
+              <DraftRenderer
+                rawContentBlock={content}
+                image="/images/default-og-img.png"
+              ></DraftRenderer>
+            </div>
             <DonateBanner />
             <SocialNetworkServiceSmall />
             <SubscribeInviteBanner />

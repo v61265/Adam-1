@@ -1,15 +1,11 @@
 import styled from 'styled-components'
-import { convertFromRaw, Editor, EditorState } from 'draft-js'
-
-import { atomicBlockRenderer } from '../../draft/block-redender-fn'
-import decorators from '../../draft/entity-decorator'
-
+import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+const { DraftRenderer } = MirrorMedia
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
 
 const BriefContainer = styled.div`
-  color: white;
   background-color: ${
     /**
      * @param {Object} props
@@ -30,6 +26,24 @@ const BriefContainer = styled.div`
     font-size: 19.2px;
     padding: 19.2px 48.6px 20.8px 28.4px;
   }
+  *,
+  *::before,
+  *::after {
+    color: white;
+  }
+  .DraftEditor-editorContainer {
+    background-color: ${
+      /**
+       * @param {Object} props
+       * @param {String} props.sectionSlug
+       * @param {Theme} [props.theme]
+       */
+      ({ theme, sectionSlug }) =>
+        sectionSlug && theme.color.sectionsColor[sectionSlug]
+          ? theme.color.sectionsColor[sectionSlug]
+          : theme.color.brandColor.darkBlue
+    };
+  }
 `
 /**
  *
@@ -42,23 +56,9 @@ export default function ArticleBrief({
   brief = { blocks: [], entityMap: {} },
   sectionSlug = '',
 }) {
-  const contentState = convertFromRaw(brief)
-  const editorState = EditorState.createWithContent(contentState, decorators)
-
-  const blockRendererFn = (block) => {
-    const atomicBlockObj = atomicBlockRenderer(block)
-    return atomicBlockObj
-  }
-
   return (
     <BriefContainer sectionSlug={sectionSlug}>
-      <Editor
-        onChange={() => {}}
-        editorState={editorState}
-        readOnly
-        editorKey="editor"
-        blockRendererFn={blockRendererFn}
-      />
+      <DraftRenderer rawContentBlock={brief}></DraftRenderer>
     </BriefContainer>
   )
 }
