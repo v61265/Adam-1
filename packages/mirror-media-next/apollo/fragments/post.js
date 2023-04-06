@@ -38,6 +38,7 @@ export const listingPost = gql`
     heroImage {
       ...heroImage
     }
+    isFeatured
   }
 `
 
@@ -130,6 +131,7 @@ export const asideListingPost = gql`
  * @property {Draft} content - post content
  * @property {Related[] } relateds related articles selected by cms users
  * @property {Related[] | null} manualOrderOfRelateds related articles with adjusted order
+ * @property {boolean} isFeatured
  */
 
 export const post = gql`

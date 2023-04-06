@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client'
 import { heroImage } from './photo'
+import { post } from './post'
 
 /**
  * @typedef {Object} Topic
@@ -9,10 +10,28 @@ import { heroImage } from './photo'
  * @property {import('./photo').Photo} heroImage
  * @property {number} sortOrder
  * @property {string} createdAt
+ * @property {string} leading
+ * @property {string} type
+ * @property {string} style
+ * @property {number} postsCount
+ * @property {import('./post').Post[]} posts
  */
+
+export const simpleTopic = gql`
+  ${heroImage}
+  fragment simpleTopic on Topic {
+    id
+    name
+    brief
+    heroImage {
+      ...heroImage
+    }
+  }
+`
 
 export const topic = gql`
   ${heroImage}
+  ${post}
   fragment topic on Topic {
     id
     name
@@ -20,7 +39,17 @@ export const topic = gql`
     heroImage {
       ...heroImage
     }
-    sortOrder
-    createdAt
+    leading
+    type
+    style
+    postsCount(where: $postsFilter)
+    posts(
+      where: $postsFilter
+      orderBy: $postsOrderBy
+      take: $postsTake
+      skip: $postsSkip
+    ) {
+      ...post
+    }
   }
 `
