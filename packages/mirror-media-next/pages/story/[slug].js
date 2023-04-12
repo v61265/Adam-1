@@ -19,7 +19,10 @@ import SubscribeInviteBanner from '../../components/story/normal/subscribe-invit
 import DonateBanner from '../../components/story/shared/donate-banner'
 import MagazineInviteBanner from '../../components/story/shared/magazine-invite-banner'
 import RelatedArticleList from '../../components/story/normal/related-article-list'
-import { transformTimeDataIntoTaipeiTime } from '../../utils'
+import {
+  transformTimeDataIntoTaipeiTime,
+  sortArrayWithOtherArrayId,
+} from '../../utils'
 import { fetchListingPosts } from '../../apollo/query/posts'
 import { fetchPostBySlug } from '../../apollo/query/post'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
@@ -66,9 +69,7 @@ const { DraftRenderer } = MirrorMedia
  */
 
 /**
- * @typedef {(import('../../apollo/query/post').Related & {
- *  id: string, slug: string, title: string, heroImage: HeroImage})[]
- * } Relateds
+ * @typedef {import('../../components/story/normal/related-article-list').Relateds} Relateds
  */
 
 /**
@@ -83,7 +84,9 @@ const { DraftRenderer } = MirrorMedia
  * updatedAt: string,
  * state: "published" | "draft" | "scheduled" | "archived" | "invisible",
  * sections: Sections | [],
- * writers: Contacts | [],
+ * manualOrderOfSections: Sections | [] | null,
+ * writers: import('../../components/story/normal/article-info').Contacts | [],
+ * manualOrderOfWriters: Contacts | [] | null,
  * photographers: Contacts | [],
  * camera_man: Contacts | [],
  * designers: Contacts | [],
@@ -399,9 +402,11 @@ export default function Story({ postData }) {
     title = '',
     slug = '',
     sections = [],
+    manualOrderOfSections = [],
     publishedDate = '',
     updatedAt = '',
     writers = [],
+    manualOrderOfWriters = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -411,9 +416,25 @@ export default function Story({ postData }) {
     tags = [],
     brief = [],
     relateds = [],
+    manualOrderOfRelateds = [],
     content = {},
   } = postData
-  const [section] = sections
+
+  const sectionsWithOrdered =
+    manualOrderOfSections && manualOrderOfSections.length
+      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+      : sections
+  const relatedsWithOrdered =
+    manualOrderOfRelateds && manualOrderOfRelateds.length
+      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+      : relateds
+
+  const writersWithOrdered =
+    manualOrderOfWriters && manualOrderOfWriters.length
+      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+      : writers
+
+  const [section] = sectionsWithOrdered
 
   /**
    * @returns {Promise<AsideArticleData[] | []>}
@@ -438,7 +459,7 @@ export default function Story({ postData }) {
   }, [section, slug])
 
   const credits = [
-    { writers: writers },
+    { writers: writersWithOrdered },
     { photographers: photographers },
     { camera_man: camera_man },
     { designers: designers },
@@ -505,7 +526,7 @@ export default function Story({ postData }) {
             <DonateBanner />
             <SocialNetworkServiceSmall />
             <SubscribeInviteBanner />
-            <RelatedArticleList relateds={relateds} />
+            <RelatedArticleList relateds={relatedsWithOrdered} />
             <M_AT3_Advertisement
               text="M_AT3 336*280"
               width="336px"
