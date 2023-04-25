@@ -37,7 +37,7 @@ const Topic = styled.div`
   }
   ${({ theme }) => theme.breakpoint.xl} {
     height: 600px;
-    background-size: contain;
+    padding-top 0;
   }
 `
 const TopicTitle = styled.div`

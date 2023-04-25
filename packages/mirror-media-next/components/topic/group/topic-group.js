@@ -23,11 +23,9 @@ const Topic = styled.div`
   background-position: 50%;
   background-size: cover;
 
-  ${({ theme }) => theme.breakpoint.md} {
-  }
   ${({ theme }) => theme.breakpoint.xl} {
     height: 600px;
-    background-size: contain;
+    padding-top: 0;
   }
 `
 
