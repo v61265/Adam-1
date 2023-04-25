@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 import { heroImage } from './photo'
 import { post } from './post'
+import { tag } from './tag'
 
 /**
  * @typedef {Object} Topic
@@ -15,6 +16,7 @@ import { post } from './post'
  * @property {string} style
  * @property {number} postsCount
  * @property {import('./post').Post[]} posts
+ * @property {import('./tag').Tag[]} tags
  */
 
 export const simpleTopic = gql`
@@ -32,6 +34,7 @@ export const simpleTopic = gql`
 export const topic = gql`
   ${heroImage}
   ${post}
+  ${tag}
   fragment topic on Topic {
     id
     name
@@ -50,6 +53,9 @@ export const topic = gql`
       skip: $postsSkip
     ) {
       ...post
+    }
+    tags {
+      ...tag
     }
   }
 `

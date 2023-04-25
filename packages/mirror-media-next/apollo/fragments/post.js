@@ -39,6 +39,9 @@ export const listingPost = gql`
       ...heroImage
     }
     isFeatured
+    tags {
+      ...tag
+    }
   }
 `
 
@@ -132,6 +135,7 @@ export const asideListingPost = gql`
  * @property {Related[] } relateds related articles selected by cms users
  * @property {Related[] | null} manualOrderOfRelateds related articles with adjusted order
  * @property {boolean} isFeatured
+ * @property {import('./tag').Tag[]} tags
  */
 
 export const post = gql`

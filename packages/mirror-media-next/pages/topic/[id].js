@@ -6,6 +6,7 @@ import axios from 'axios'
 import { fetchTopic } from '../../apollo/query/topics'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import TopicList from '../../components/topic/list/topic-list'
+import TopicGroup from '../../components/topic/group/topic-group'
 
 const RENDER_PAGE_SIZE = 12
 
@@ -30,7 +31,8 @@ export default function Topic({ topic, slideshowData }) {
           slideshowData={slideshowData}
         />
       )
-
+    case 'group':
+      return <TopicGroup topic={topic} />
     default:
       break
   }
@@ -57,7 +59,7 @@ export async function getServerSideProps({ query, req }) {
         topicFilter: { id: topicId },
         postsFilter: { state: { equals: 'published' } },
         postsOrderBy: [{ isFeatured: 'desc' }, { publishedDate: 'desc' }],
-        postsTake: RENDER_PAGE_SIZE * 2,
+        postsTake: RENDER_PAGE_SIZE,
         postsSkip: 0,
       },
     }),
@@ -109,6 +111,31 @@ export async function getServerSideProps({ query, req }) {
       timeout: 1500,
     })
     slideshowData = data?._items
+  }
+
+  /**
+   * load all group articles at once
+   * (potential performance [issue](https://nextjs.org/docs/messages/large-page-data))
+   * might need to optimize to load more on client side in next phase
+   */
+  if (topic && topic.type === 'group' && topic.postsCount > RENDER_PAGE_SIZE) {
+    let posts = topic.posts
+    while (posts.length < topic.postsCount) {
+      const topicData = await client.query({
+        query: fetchTopic,
+        variables: {
+          topicFilter: { id: topicId },
+          postsFilter: { state: { equals: 'published' } },
+          postsOrderBy: [{ isFeatured: 'desc' }, { publishedDate: 'desc' }],
+          postsTake: RENDER_PAGE_SIZE,
+          postsSkip: posts.length,
+        },
+      })
+      /** @type {Topic} */
+      const newTopic = topicData.data.topic
+      posts = [...posts, ...newTopic.posts]
+    }
+    topic.posts = posts
   }
 
   const props = {
