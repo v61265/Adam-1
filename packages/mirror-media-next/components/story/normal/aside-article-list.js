@@ -79,7 +79,7 @@ const ArticleWrapper = styled.ul`
   ${({ theme }) => theme.breakpoint.xl} {
     border: 1px solid #dedede;
     padding: 20.5px 20px;
-    width: 100%;
+    width: 365px;
     min-height: ${({ renderAmount }) =>
       // 20.5px is padding-top and padding-bottom of articleWrapper
       `calc(20.5px + 20.5px + ${
