@@ -61,21 +61,9 @@ const ItemBrief = styled.div`
 `
 
 /**
- * @typedef {import('../../../apollo/fragments/photo').Photo & {
- *  id: String,
- *  name: String,
- *  imageFile: import('../../../apollo/fragments/photo').ImageFile,
- *  resized: import('../../../apollo/fragments/photo').Resized
- * }} HeroImage
+ * @typedef {import('../../../apollo/fragments/photo').Photo} HeroImage
  *
- * @typedef {import('../../../apollo/fragments/topic').Topic & {
- *  id: string,
- *  name: string,
- *  brief: import('../../../type/draft-js').Draft,
- *  heroImage: HeroImage,
- *  sortOrder: number,
- *  createdAt: string,
- * }} Topic
+ * @typedef {import('../../../apollo/fragments/topic').Topic} Topic
  *
  */
 

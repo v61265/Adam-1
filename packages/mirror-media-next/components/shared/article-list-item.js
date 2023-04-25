@@ -90,35 +90,13 @@ const ItemBrief = styled.div`
 `
 
 /**
- * @typedef {import('../../apollo/fragments/section').Section & {
- *  id: string,
- *  name: string,
- *  slug: string,
- * }} Section
+ * @typedef {import('../../apollo/fragments/section').Section } Section
  *
- * @typedef {import('../../apollo/fragments/category').Category & {
- *  id: string,
- *  name: string,
- *  slug: string,
- * }} Category
+ * @typedef {Pick<import('../../apollo/fragments/category').Category, 'id' |'name' | 'slug'>} Category
  *
- * @typedef {import('../../apollo/fragments/photo').Photo & {
- *  id: String,
- *  name: String,
- *  imageFile: import('../../apollo/fragments/photo').ImageFile,
- *  resized: import('../../apollo/fragments/photo').Resized
- * }} HeroImage
+ * @typedef {import('../../apollo/fragments/photo').Photo} HeroImage
  *
- * @typedef {import('../../apollo/fragments/post').ListingPost & {
- *  id: string,
- *  slug: string,
- *  title: string,
- *  publishedDate: string,
- *  brief: import('../../type/draft-js').Draft,
- *  categroies: Category[],
- *  sections: Section[],
- *  heroImage: HeroImage,
- * }} Article
+ * @typedef {import('../../apollo/fragments/post').ListingPost } Article
  */
 
 /**
