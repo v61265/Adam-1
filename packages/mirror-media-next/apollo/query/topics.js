@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
-import { topic } from '../fragments/topic'
+import { simpleTopic, topic } from '../fragments/topic'
 
 const fetchTopics = gql`
-  ${topic}
+  ${simpleTopic}
   query (
     $take: Int
     $skip: Int
@@ -11,9 +11,24 @@ const fetchTopics = gql`
   ) {
     topicsCount(where: $filter)
     topics(take: $take, skip: $skip, orderBy: $orderBy, where: $filter) {
+      ...simpleTopic
+    }
+  }
+`
+
+const fetchTopic = gql`
+  ${topic}
+  query (
+    $topicFilter: TopicWhereUniqueInput!
+    $postsFilter: PostWhereInput!
+    $postsOrderBy: [PostOrderByInput!]!
+    $postsTake: Int
+    $postsSkip: Int!
+  ) {
+    topic(where: $topicFilter) {
       ...topic
     }
   }
 `
 
-export { fetchTopics }
+export { fetchTopics, fetchTopic }
