@@ -41,7 +41,7 @@ switch (ENV) {
     GA_MEASUREMENT_ID = 'G-341XFN0675'
     GTM_ID = 'GTM-NCH86SP'
     SEARCH_URL = 'https://adam-mirror-media-search-prod-ufaummkd5q-de.a.run.app'
-    URL_STATIC_POPULAR_NEWS = `https://storage.googleapis.com/static-mirrormedia-${ENV}/files/json/popular.json`
+    URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
     break
   case 'staging':
     API_TIMEOUT = 1500
@@ -61,7 +61,7 @@ switch (ENV) {
     GTM_ID = 'GTM-KVDZ27K'
     SEARCH_URL =
       'https://adam-mirror-media-search-staging-ufaummkd5q-de.a.run.app'
-    URL_STATIC_POPULAR_NEWS = `https://storage.googleapis.com/static-mirrormedia-${ENV}/files/json/popular.json`
+    URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
     break
   case 'dev':
     API_TIMEOUT = 5000
@@ -80,7 +80,7 @@ switch (ENV) {
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
     SEARCH_URL = 'https://adam-mirror-media-search-dev-ufaummkd5q-de.a.run.app'
-    URL_STATIC_POPULAR_NEWS = `https://storage.googleapis.com/static-mirrormedia-${ENV}/files/json/popular.json`
+    URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
 
     break
   default:
