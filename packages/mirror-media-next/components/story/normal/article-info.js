@@ -11,8 +11,9 @@ const Date = styled.div`
   width: fit-content;
   height: auto;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1;
   color: #a1a1a1;
+  margin-bottom: 8px;
   ${({ theme }) => theme.breakpoint.md} {
     display: none;
   }
@@ -21,11 +22,12 @@ const Date = styled.div`
 const Credits = styled.div`
   font-size: 16px;
   line-height: 1.5;
-
+  margin-top: 20px;
   ${({ theme }) => theme.breakpoint.md} {
     display: flex;
     flex-wrap: wrap;
     gap: 4px 20px;
+    margin-top: 12px;
   }
 `
 
@@ -71,6 +73,10 @@ const Tags = styled.div`
   display: flex;
   gap: 12px 8px;
   flex-wrap: wrap;
+  margin-top: 20px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 25.5px;
+  }
 `
 
 const SocialMedia = styled.div`
@@ -78,8 +84,11 @@ const SocialMedia = styled.div`
   gap: 10px;
   padding: 0;
   position: relative;
+  margin-bottom: 20px;
+
   ${({ theme }) => theme.breakpoint.md} {
-    padding: 0 20px;
+    padding: 0 40px;
+    margin-bottom: 0px;
     &::before,
     &::after {
       position: absolute;
@@ -91,10 +100,10 @@ const SocialMedia = styled.div`
       top: 50%;
     }
     &::before {
-      left: 0;
+      left: 20px;
     }
     &::after {
-      right: 0;
+      right: 20px;
     }
   }
 `
@@ -104,8 +113,10 @@ const SocialMediaAndDonateLink = styled.div`
   align-items: center;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
+  margin-top: 20px;
+
   ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 40px;
     flex-direction: row;
     align-items: center;
   }
@@ -121,18 +132,10 @@ const ArticleInfoContainer = styled.div`
   border-left: 2px ${({ theme }) => theme.color.brandColor.darkBlue} solid;
   padding-left: 24px;
   margin: 32px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
   ${({ theme }) => theme.breakpoint.md} {
     border: none;
     padding-left: 0px;
     margin: 0 0 16px;
-    gap: 12px;
-
-    ${Date} {
-      display: none;
-    }
   }
 `
 const CREDIT_TITLE_NAME_MAP = {
@@ -232,13 +235,10 @@ export default function ArticleInfo({
   ) : null
   return (
     <ArticleInfoContainer>
-      <div>
-        <Date>發布時間：{publishedDate}</Date>
-        <Date>更新時間：{updatedDate}</Date>
-      </div>
+      <Date>發布時間：{publishedDate}</Date>
+      <Date>更新時間：{updatedDate}</Date>
 
       {creditsJsx}
-      {tagsJsx}
       <SocialMediaAndDonateLink>
         <Link className="link-to-index" href="/">
           <Image
@@ -269,6 +269,7 @@ export default function ArticleInfo({
         </SocialMedia>
         <DonateLink />
       </SocialMediaAndDonateLink>
+      {tagsJsx}
     </ArticleInfoContainer>
   )
 }
