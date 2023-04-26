@@ -39,9 +39,6 @@ export const listingPost = gql`
       ...heroImage
     }
     isFeatured
-    tags {
-      ...tag
-    }
   }
 `
 
