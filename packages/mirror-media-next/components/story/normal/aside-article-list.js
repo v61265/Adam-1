@@ -137,7 +137,7 @@ const Label = styled.div`
     display: block;
     width: fit-content;
     height: 25px;
-    padding: 0 8px;
+    padding: ${({ sectionTitle }) => (sectionTitle ? '0 8px' : '0')};
     text-align: center;
     color: white;
     font-size: 14px;
