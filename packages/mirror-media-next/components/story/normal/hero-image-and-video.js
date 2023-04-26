@@ -1,6 +1,7 @@
 import CustomImage from '@readr-media/react-image'
 import styled from 'styled-components'
-
+import Image from 'next/image'
+import defaultImage from '../../../public/images/default-og-img.png'
 /**
  * @typedef {import('../../../apollo/fragments/post').HeroImage &
  * {
@@ -90,11 +91,9 @@ export default function HeroImageAndVideo({
 }) {
   const shouldShowHeroVideo = Boolean(heroVideo)
   const shouldShowHeroImage = Boolean(!shouldShowHeroVideo && heroImage)
-  const shouldShowHeroCaption =
-    heroCaption && (shouldShowHeroVideo || shouldShowHeroImage)
-  return shouldShowHeroVideo || shouldShowHeroImage ? (
-    <Wrapper className={className}>
-      {shouldShowHeroVideo && (
+  const heroJsx = () => {
+    if (shouldShowHeroVideo) {
+      return (
         <video
           preload="metadata"
           controlsList="nodownload"
@@ -103,8 +102,9 @@ export default function HeroImageAndVideo({
           poster={heroVideo?.heroImage?.resized?.original}
           src={heroVideo.urlOriginal}
         />
-      )}
-      {shouldShowHeroImage && (
+      )
+    } else if (shouldShowHeroImage) {
+      return (
         <HeroImage>
           <CustomImage
             images={heroImage.resized}
@@ -115,10 +115,20 @@ export default function HeroImageAndVideo({
             priority={true}
           />
         </HeroImage>
-      )}
+      )
+    }
+    return (
+      <Image src={defaultImage} alt={heroCaption ? heroCaption : title}></Image>
+    )
+  }
+  const shouldShowHeroCaption =
+    heroCaption && (shouldShowHeroVideo || shouldShowHeroImage)
+  return (
+    <Wrapper className={className}>
+      {heroJsx()}
       {shouldShowHeroCaption && (
         <HeroCaption>{shouldShowHeroCaption ? heroCaption : null}</HeroCaption>
       )}
     </Wrapper>
-  ) : null
+  )
 }
