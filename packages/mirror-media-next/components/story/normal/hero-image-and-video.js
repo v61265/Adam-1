@@ -108,7 +108,7 @@ export default function HeroImageAndVideo({
         <HeroImage>
           <CustomImage
             images={heroImage.resized}
-            loadingImage={'/images/loading.gif'}
+            loadingImage={'/images/loading@4x.gif'}
             defaultImage={'/images/default-og-img.png'}
             alt={heroCaption ? heroCaption : title}
             objectFit={'cover'}
