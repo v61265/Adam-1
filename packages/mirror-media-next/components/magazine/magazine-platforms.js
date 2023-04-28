@@ -1,0 +1,92 @@
+import Link from 'next/link'
+import Image from 'next/image'
+import styled from 'styled-components'
+import { magazinePlatformLinks } from '../../constants/magazine-platform-links'
+
+const PlatformsList = styled.div`
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    width: 540px;
+    flex-direction: row;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    width: 960px;
+  }
+
+  img {
+    height: 48px;
+    width: auto;
+    margin-top: 32px;
+
+    ${({ theme }) => theme.breakpoint.md} {
+      margin-right: 32px;
+      margin-top: 48px;
+      &:not(:last-child) {
+        margin-right: 0px;
+      }
+    }
+  }
+`
+
+const KonoLinks = styled.div`
+  margin: 8px 0 0 0;
+  font-size: 16px;
+  line-height: 150%;
+  color: #4a4a4a;
+  display: flex;
+  justify-content: center;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    justify-content: flex-end;
+    width: 360px;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    width: 860px;
+  }
+`
+
+export default function MagazinePlatforms() {
+  return (
+    <PlatformsList>
+      {magazinePlatformLinks.slice(0, 4).map((item) => (
+        <Link
+          key={item.name}
+          href={item.href}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <Image width={0} height={0} src={item.svgIcon} alt={item.name} />
+        </Link>
+      ))}
+      <Image
+        width={0}
+        height={0}
+        alt={magazinePlatformLinks[4].name}
+        src={magazinePlatformLinks[4].svgIcon}
+      />
+      <KonoLinks>
+        <Link
+          href={magazinePlatformLinks[4].linkA}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <span>A本</span>
+        </Link>
+        <span>｜</span>
+        <Link
+          href={magazinePlatformLinks[4].linkB}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <span>B本</span>
+        </Link>
+      </KonoLinks>
+    </PlatformsList>
+  )
+}
