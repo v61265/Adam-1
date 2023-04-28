@@ -35,10 +35,6 @@ const Title = styled.h2`
 `
 
 export default function Magazine() {
-  const {
-    data: { magazines },
-  } = specials
-  console.log(magazines)
   const books = Object.keys(mockData)
 
   return (
@@ -79,7 +75,7 @@ export default function Magazine() {
 
       <Section>
         <Title>特刊</Title>
-        <MagazineSpecials />
+        <MagazineSpecials specials={specials} />
       </Section>
     </Page>
   )

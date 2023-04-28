@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import styled from 'styled-components'
+import { transformTimeDataIntoSlashFormat } from '../../utils/index'
 // @ts-ignore
 import DownloadSvg from '../../public/images/magazine-download-icon.svg'
 
@@ -44,6 +45,14 @@ const IssueCard = styled.li`
 const ImageWrapper = styled.div`
   position: relative;
   z-index: 0;
+  width: 132px;
+  height: 178px;
+  overflow: hidden;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    width: 144px;
+    height: 194px;
+  }
 
   svg {
     position: absolute;
@@ -121,24 +130,60 @@ const IssueTitle = styled.p`
   color: #4a4a4a;
 `
 
-export default function MagazineSpecials() {
+export default function MagazineSpecials({ specials }) {
+  const {
+    data: { magazines },
+  } = specials
+
   return (
     <CardsList>
-      <Link href={''} rel="noopener noreferrer" target="_blank">
-        <IssueCard>
-          <ImageWrapper>
-            <Image
-              width={144}
-              height={194}
-              src="https://storage.googleapis.com/static-mirrormedia-dev/images/20220720153522-72bbfe8799ade5af38d4e2d8ebb28211-w480.jpg"
-              alt={''}
-            />
-            <DownloadSvg />
-          </ImageWrapper>
-          <Date>2023/01/10</Date>
-          <IssueTitle>《鏡週刊》327期-C本</IssueTitle>
+      {magazines.map((magazine) => (
+        <IssueCard key={magazine.id}>
+          {magazine.urlOriginal ? (
+            <Link
+              href={magazine.urlOriginal}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <ImageWrapper>
+                <Image
+                  width={144}
+                  height={194}
+                  src={magazine.coverPhoto.resized.w480}
+                  alt={magazine.title}
+                />
+                <DownloadSvg />
+              </ImageWrapper>
+              <Date>
+                {transformTimeDataIntoSlashFormat(magazine.publishedDate).slice(
+                  0,
+                  10
+                )}
+              </Date>
+              <IssueTitle>{magazine.title}</IssueTitle>
+            </Link>
+          ) : (
+            <Link href="/404">
+              <ImageWrapper>
+                <Image
+                  width={144}
+                  height={194}
+                  src={magazine.coverPhoto.resized.w480}
+                  alt={magazine.title}
+                />
+                <DownloadSvg />
+              </ImageWrapper>
+              <Date>
+                {transformTimeDataIntoSlashFormat(magazine.publishedDate).slice(
+                  0,
+                  10
+                )}
+              </Date>
+              <IssueTitle>{magazine.title}</IssueTitle>
+            </Link>
+          )}
         </IssueCard>
-      </Link>
+      ))}
     </CardsList>
   )
 }
