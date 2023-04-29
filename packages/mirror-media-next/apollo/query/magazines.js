@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 const fetchSpecials = gql`
   query {
     magazines(
-      where: { type: { equals: "special" } }
+      where: { type: { equals: "special" }, state: { equals: "published" } }
       orderBy: { publishedDate: desc }
     ) {
       id
@@ -19,6 +19,7 @@ const fetchSpecials = gql`
         }
       }
       type
+      state
       publishedDate
       createdAt
       updatedAt
@@ -26,4 +27,31 @@ const fetchSpecials = gql`
   }
 `
 
-export { fetchSpecials }
+const fetchWeeklys = gql`
+  query {
+    magazines(
+      where: { type: { equals: "weekly" }, state: { equals: "published" } }
+      orderBy: { publishedDate: desc }
+      take: 8
+    ) {
+      id
+      slug
+      title
+      coverPhoto {
+        resized {
+          original
+          w480
+          w800
+          w1200
+        }
+      }
+      type
+      state
+      publishedDate
+      createdAt
+      updatedAt
+    }
+  }
+`
+
+export { fetchSpecials, fetchWeeklys }

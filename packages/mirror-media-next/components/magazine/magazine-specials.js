@@ -148,8 +148,6 @@ const MagazineLink = ({ urlOriginal, children }) => {
 }
 
 export default function MagazineSpecials({ specials }) {
-  console.log(specials)
-
   return (
     <CardsList>
       {specials.map((magazine) => (
@@ -159,7 +157,7 @@ export default function MagazineSpecials({ specials }) {
               <Image
                 width={144}
                 height={194}
-                src={magazine.coverPhoto.resized.w480}
+                src={magazine.coverPhoto?.resized?.w480}
                 alt={magazine.title}
               />
               <DownloadSvg />
