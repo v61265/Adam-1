@@ -130,6 +130,23 @@ const IssueTitle = styled.p`
   color: #4a4a4a;
 `
 
+// If urlOriginal is a falsy value, redirect to /404 page.
+const MagazineLink = ({ urlOriginal, children }) => {
+  if (urlOriginal) {
+    return (
+      <Link href={urlOriginal} rel="noopener noreferrer" target="_blank">
+        {children}
+      </Link>
+    )
+  } else {
+    return (
+      <Link href="/404" rel="noopener noreferrer" target="_blank">
+        {children}
+      </Link>
+    )
+  }
+}
+
 export default function MagazineSpecials({ specials }) {
   const {
     data: { magazines },
@@ -139,49 +156,24 @@ export default function MagazineSpecials({ specials }) {
     <CardsList>
       {magazines.map((magazine) => (
         <IssueCard key={magazine.id}>
-          {magazine.urlOriginal ? (
-            <Link
-              href={magazine.urlOriginal}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <ImageWrapper>
-                <Image
-                  width={144}
-                  height={194}
-                  src={magazine.coverPhoto.resized.w480}
-                  alt={magazine.title}
-                />
-                <DownloadSvg />
-              </ImageWrapper>
-              <Date>
-                {transformTimeDataIntoSlashFormat(magazine.publishedDate).slice(
-                  0,
-                  10
-                )}
-              </Date>
-              <IssueTitle>{magazine.title}</IssueTitle>
-            </Link>
-          ) : (
-            <Link href="/404">
-              <ImageWrapper>
-                <Image
-                  width={144}
-                  height={194}
-                  src={magazine.coverPhoto.resized.w480}
-                  alt={magazine.title}
-                />
-                <DownloadSvg />
-              </ImageWrapper>
-              <Date>
-                {transformTimeDataIntoSlashFormat(magazine.publishedDate).slice(
-                  0,
-                  10
-                )}
-              </Date>
-              <IssueTitle>{magazine.title}</IssueTitle>
-            </Link>
-          )}
+          <MagazineLink urlOriginal={magazine.urlOriginal}>
+            <ImageWrapper>
+              <Image
+                width={144}
+                height={194}
+                src={magazine.coverPhoto.resized.w480}
+                alt={magazine.title}
+              />
+              <DownloadSvg />
+            </ImageWrapper>
+            <Date>
+              {transformTimeDataIntoSlashFormat(magazine.publishedDate).slice(
+                0,
+                10
+              )}
+            </Date>
+            <IssueTitle>{magazine.title}</IssueTitle>
+          </MagazineLink>
         </IssueCard>
       ))}
     </CardsList>
