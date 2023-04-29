@@ -56,7 +56,7 @@ const ImageWrapper = styled.div`
 
   svg {
     position: absolute;
-    top: 30%;
+    top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
     fill: white;
@@ -83,7 +83,7 @@ const ImageWrapper = styled.div`
   &::after {
     content: '立即下載';
     position: absolute;
-    top: 70%;
+    top: 75%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: #ffffff;
@@ -148,13 +148,11 @@ const MagazineLink = ({ urlOriginal, children }) => {
 }
 
 export default function MagazineSpecials({ specials }) {
-  const {
-    data: { magazines },
-  } = specials
+  console.log(specials)
 
   return (
     <CardsList>
-      {magazines.map((magazine) => (
+      {specials.map((magazine) => (
         <IssueCard key={magazine.id}>
           <MagazineLink urlOriginal={magazine.urlOriginal}>
             <ImageWrapper>
