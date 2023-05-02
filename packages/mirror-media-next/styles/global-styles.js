@@ -1,10 +1,14 @@
 import { createGlobalStyle } from 'styled-components'
-import { Noto_Sans_TC, Oswald } from '@next/font/google'
+import { Noto_Sans_TC, Oswald, Noto_Serif_TC } from '@next/font/google'
 
 const oswald = Oswald({
   subsets: ['latin'],
 })
 const notosansTC = Noto_Sans_TC({
+  subsets: ['latin'],
+  weight: ['500'],
+})
+const notoserifTC = Noto_Serif_TC({
   subsets: ['latin'],
   weight: ['500'],
 })
@@ -24,6 +28,7 @@ export const GlobalStyles = createGlobalStyle`
 :root{
       --oswald-font : ${oswald.style.fontFamily};
       --notosansTC-font : ${notosansTC.style.fontFamily};
+      --notoserifTC-font : ${notoserifTC.style.fontFamily};
    }
 
  //default font family  
