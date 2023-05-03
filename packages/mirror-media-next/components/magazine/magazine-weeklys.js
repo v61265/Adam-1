@@ -1,7 +1,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import styled from 'styled-components'
-import { transformTimeDataIntoSlashFormat } from '../../utils/index'
+import {
+  transformTimeDataIntoSlashFormat,
+  getMagazineHrefFromSlug,
+} from '../../utils/index'
+
 // @ts-ignore
 import ReadingSvg from '../../public/images/magazine-online.svg'
 
@@ -149,6 +153,10 @@ const ReadingBtn = styled.button`
   align-items: center;
   grid-column-gap: 10px;
 
+  :focus {
+    outline: none;
+  }
+
   :hover {
     background: linear-gradient(
         0deg,
@@ -164,7 +172,11 @@ export default function MagazineWeeklys({ weeklys }) {
     <CardsList>
       {weeklys.map((magazine) => (
         <IssueCard key={magazine.id}>
-          <Link href="/">
+          <Link
+            href={getMagazineHrefFromSlug(magazine.slug)}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
             <ImageWrapper>
               <Image
                 width={144}

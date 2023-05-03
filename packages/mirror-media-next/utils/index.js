@@ -238,6 +238,14 @@ const sortArrayWithOtherArrayId = (arrayNeedToSort, arraySortReference) => {
   return sortedArray
 }
 
+// Get the magazine href from slug
+const getMagazineHrefFromSlug = (slug) => {
+  const issue = slug.match(/\d+/)[0]
+  const book = slug.endsWith('A本') ? 'A' : 'B'
+  const href = `/magazine/Book_${book}/${book}${issue}-Publish`
+  return href
+}
+
 export {
   transformRawDataToArticleInfo,
   transformTimeDataIntoDotFormat,
@@ -246,4 +254,5 @@ export {
   getSectionTitleGql,
   getArticleHref,
   sortArrayWithOtherArrayId,
+  getMagazineHrefFromSlug,
 }

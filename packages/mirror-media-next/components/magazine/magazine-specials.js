@@ -130,7 +130,7 @@ const IssueTitle = styled.p`
   color: #4a4a4a;
 `
 
-// If urlOriginal is a falsy value, redirect to /404 page.
+// If urlOriginal is a falsy value, redirect to /magazine page.
 const MagazineLink = ({ urlOriginal, children }) => {
   if (urlOriginal) {
     return (
@@ -139,11 +139,7 @@ const MagazineLink = ({ urlOriginal, children }) => {
       </Link>
     )
   } else {
-    return (
-      <Link href="/404" rel="noopener noreferrer" target="_blank">
-        {children}
-      </Link>
-    )
+    return <Link href="/magazine">{children}</Link>
   }
 }
 

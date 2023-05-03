@@ -41,12 +41,11 @@ const Title = styled.h2`
 `
 
 export default function Magazine({ specials, weeklys }) {
+  // Sort the weekly magazines
   const sortedMagazines = weeklys.sort((a, b) => {
-    // Extract issue number and version from slug
     const [aIssueNumber, aVersion] = a.slug.match(/(\d+)期-(\w)本/).slice(1)
     const [bIssueNumber, bVersion] = b.slug.match(/(\d+)期-(\w)本/).slice(1)
 
-    // Sort by issue number in descending order
     if (Number(bIssueNumber) !== Number(aIssueNumber)) {
       return Number(bIssueNumber) - Number(aIssueNumber)
     }
@@ -59,9 +58,6 @@ export default function Magazine({ specials, weeklys }) {
     // If version is also the same, maintain the original order
     return 0
   })
-
-  console.log(sortedMagazines.slice(0, 2))
-  console.log(sortedMagazines.slice(2))
 
   return (
     <Page>
@@ -146,10 +142,10 @@ export async function getServerSideProps() {
   const specials = handledResponses[0]?.magazines || []
   const weeklys = handledResponses[1]?.magazines || []
 
-  const props = {
-    specials,
-    weeklys,
+  return {
+    props: {
+      specials,
+      weeklys,
+    },
   }
-
-  return { props }
 }

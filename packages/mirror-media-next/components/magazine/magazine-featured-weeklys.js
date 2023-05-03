@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import styled from 'styled-components'
+import { getMagazineHrefFromSlug } from '../../utils/index'
 
 // @ts-ignore
 import ReadingSvg from '../../public/images/magazine-online.svg'
@@ -116,6 +117,10 @@ const ReadingBtn = styled.button`
   align-items: center;
   grid-column-gap: 10px;
 
+  :focus {
+    outline: none;
+  }
+
   :hover {
     background: linear-gradient(
         0deg,
@@ -130,7 +135,12 @@ export default function MagazineFeatures({ features }) {
   return (
     <CardsList>
       {features.map((magazine) => (
-        <Link href="/" key={magazine.id}>
+        <Link
+          href={getMagazineHrefFromSlug(magazine.slug)}
+          key={magazine.id}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
           <IssueCard>
             <ImageWrapper>
               <Image
