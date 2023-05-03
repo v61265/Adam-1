@@ -6,6 +6,8 @@ import { fetchSpecials, fetchWeeklys } from '../../apollo/query/magazines'
 
 import MagazinePlatforms from '../../components/magazine/magazine-platforms'
 import MagazineSpecials from '../../components/magazine/magazine-specials'
+import MagazineWeeklys from '../../components/magazine/magazine-weeklys'
+import MagazineFeatures from '../../components/magazine/magazine-featured-weeklys'
 
 const Section = styled.div`
   padding: 48px 0;
@@ -67,12 +69,14 @@ export default function Magazine({ specials, weeklys }) {
         <Title>
           當期<span>動態雜誌</span>
         </Title>
+        <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
       </Section>
 
       <Section>
         <Title>
           近期<span>動態雜誌</span>
         </Title>
+        <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
       </Section>
 
       <Section>
