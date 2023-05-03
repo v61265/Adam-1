@@ -105,7 +105,6 @@ export async function getServerSideProps() {
 
   const handledResponses = responses.map((response) => {
     if (response.status === 'fulfilled') {
-      console.log(response.value.data)
       return response.value.data
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
