@@ -44,6 +44,15 @@ const IssueCard = styled.li`
     width: 100%;
     z-index: 0;
   }
+
+  &:hover button {
+    background: linear-gradient(
+        0deg,
+        rgba(5, 79, 119, 0.05),
+        rgba(5, 79, 119, 0.05)
+      ),
+      #ffffff;
+  }
 `
 
 const ImageWrapper = styled.div`
@@ -125,7 +134,7 @@ const Date = styled.p`
   line-height: 150%;
   text-align: center;
   color: #1d9fb8;
-  padding: 12px;
+  padding: 12px 0 8px 0;
 `
 const IssueTitle = styled.p`
   font-weight: 400;
@@ -155,15 +164,6 @@ const ReadingBtn = styled.button`
 
   :focus {
     outline: none;
-  }
-
-  :hover {
-    background: linear-gradient(
-        0deg,
-        rgba(5, 79, 119, 0.05),
-        rgba(5, 79, 119, 0.05)
-      ),
-      #ffffff;
   }
 `
 

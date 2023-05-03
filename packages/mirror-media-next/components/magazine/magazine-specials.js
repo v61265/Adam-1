@@ -120,7 +120,7 @@ const Date = styled.p`
   line-height: 150%;
   text-align: center;
   color: #1d9fb8;
-  padding: 12px;
+  padding: 12px 0 8px 0;
 `
 const IssueTitle = styled.p`
   font-weight: 400;

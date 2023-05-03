@@ -45,6 +45,15 @@ const IssueCard = styled.li`
   ${({ theme }) => theme.breakpoint.xl} {
     width: 544px;
   }
+
+  &:hover button {
+    background: linear-gradient(
+        0deg,
+        rgba(29, 159, 184, 0.5),
+        rgba(29, 159, 184, 0.5)
+      ),
+      #054f77;
+  }
 `
 
 const ImageWrapper = styled.div`
@@ -119,15 +128,6 @@ const ReadingBtn = styled.button`
 
   :focus {
     outline: none;
-  }
-
-  :hover {
-    background: linear-gradient(
-        0deg,
-        rgba(29, 159, 184, 0.5),
-        rgba(29, 159, 184, 0.5)
-      ),
-      #054f77;
   }
 `
 
