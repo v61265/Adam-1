@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import styled from 'styled-components'
-import { magazinePlatformLinks } from '../../constants/magazine-platform-links'
+import { MAGAZINE_PLATFORM_LINKS } from '../../constants/magazine-platform-links'
 
 const PlatformsList = styled.div`
   margin: auto;
@@ -54,7 +54,7 @@ const KonoLinks = styled.div`
 export default function MagazinePlatforms() {
   return (
     <PlatformsList>
-      {magazinePlatformLinks.slice(0, 4).map((item) => (
+      {MAGAZINE_PLATFORM_LINKS.slice(0, 4).map((item) => (
         <Link
           key={item.name}
           href={item.href}
@@ -72,12 +72,12 @@ export default function MagazinePlatforms() {
       <Image
         width={48}
         height={48}
-        alt={`購買動態雜誌平台_${magazinePlatformLinks[4].name}`}
-        src={magazinePlatformLinks[4].svgIcon}
+        alt={`購買動態雜誌平台_${MAGAZINE_PLATFORM_LINKS[4].name}`}
+        src={MAGAZINE_PLATFORM_LINKS[4].svgIcon}
       />
       <KonoLinks>
         <Link
-          href={magazinePlatformLinks[4].linkA}
+          href={MAGAZINE_PLATFORM_LINKS[4].linkA}
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -85,7 +85,7 @@ export default function MagazinePlatforms() {
         </Link>
         <span>｜</span>
         <Link
-          href={magazinePlatformLinks[4].linkB}
+          href={MAGAZINE_PLATFORM_LINKS[4].linkB}
           rel="noopener noreferrer"
           target="_blank"
         >

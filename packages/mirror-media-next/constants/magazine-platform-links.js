@@ -1,4 +1,4 @@
-const magazinePlatformLinks = [
+const MAGAZINE_PLATFORM_LINKS = [
   {
     name: 'hami',
     href: 'https://bookstore.emome.net/Searchs/finish/keyword:%E9%8F%A1%E9%80%B1%E5%88%8A',
@@ -28,4 +28,4 @@ const magazinePlatformLinks = [
   },
 ]
 
-export { magazinePlatformLinks }
+export { MAGAZINE_PLATFORM_LINKS }

@@ -43,22 +43,24 @@ const Title = styled.h2`
 
 export default function Magazine({ specials, weeklys }) {
   // Sort the weekly magazines
-  const sortedMagazines = weeklys.sort((a, b) => {
-    const [aIssueNumber, aVersion] = a.slug.match(/(\d+)期-(\w)本/).slice(1)
-    const [bIssueNumber, bVersion] = b.slug.match(/(\d+)期-(\w)本/).slice(1)
+  const sortedMagazines = weeklys?.length
+    ? weeklys.sort((a, b) => {
+        const [aIssueNumber, aVersion] = a.slug.match(/(\d+)期-(\w)本/).slice(1)
+        const [bIssueNumber, bVersion] = b.slug.match(/(\d+)期-(\w)本/).slice(1)
 
-    if (Number(bIssueNumber) !== Number(aIssueNumber)) {
-      return Number(bIssueNumber) - Number(aIssueNumber)
-    }
+        if (Number(bIssueNumber) !== Number(aIssueNumber)) {
+          return Number(bIssueNumber) - Number(aIssueNumber)
+        }
 
-    // If issue number is the same, sort by version in ascending order
-    if (bVersion !== aVersion) {
-      return aVersion.localeCompare(bVersion)
-    }
+        // If issue number is the same, sort by version in ascending order
+        if (bVersion !== aVersion) {
+          return aVersion.localeCompare(bVersion)
+        }
 
-    // If version is also the same, maintain the original order
-    return 0
-  })
+        // If version is also the same, maintain the original order
+        return 0
+      })
+    : []
 
   return (
     <Page>
