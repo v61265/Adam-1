@@ -2,6 +2,7 @@ import errors from '@twreporter/errors'
 import styled from 'styled-components'
 
 import client from '../../apollo/apollo-client'
+import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchSpecials, fetchWeeklys } from '../../apollo/query/magazines'
 
 import MagazinePlatforms from '../../components/magazine/magazine-platforms'
@@ -16,7 +17,7 @@ const Section = styled.div`
   }
 `
 const Page = styled.div`
-  background-color: #fffff;
+  background-color: #ffffff;
   & ${Section}:nth-child(even) {
     background-color: #f2f2f2;
   }
@@ -91,8 +92,15 @@ export default function Magazine({ specials, weeklys }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
+  const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
+  if (traceHeader && !Array.isArray(traceHeader)) {
+    const [trace] = traceHeader.split('/')
+    globalLogFields[
+      'logging.googleapis.com/trace'
+    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
+  }
 
   const responses = await Promise.allSettled([
     client.query({

@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import client from '../../../apollo/apollo-client'
+import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import { fetchWeeklys } from '../../../apollo/query/magazines'
 
 const Page = styled.div`
@@ -48,8 +49,15 @@ export default function BookBIssuePublish({ weeklys }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps() {
+export async function getServerSideProps({ req }) {
+  const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
+  if (traceHeader && !Array.isArray(traceHeader)) {
+    const [trace] = traceHeader.split('/')
+    globalLogFields[
+      'logging.googleapis.com/trace'
+    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
+  }
 
   const responses = await Promise.allSettled([
     client.query({
