@@ -160,10 +160,7 @@ export default function MagazineSpecials({ specials }) {
               <DownloadSvg />
             </ImageWrapper>
             <Date>
-              {transformTimeDataIntoSlashFormat(magazine.publishedDate).slice(
-                0,
-                10
-              )}
+              {transformTimeDataIntoSlashFormat(magazine.publishedDate, false)}
             </Date>
             <IssueTitle>{magazine.title}</IssueTitle>
           </MagazineLink>

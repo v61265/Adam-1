@@ -166,7 +166,7 @@ const transformRawDataToArticleInfo = (rawData) => {
  * depend on the type 'dot' or 'slash'
  * If `time` is not a valid date, this function will return undefined
  * @param {string} time
- * @param {'dot' | 'slash'} format
+ * @param {'dot' | 'slash'| 'slashWithTime'} format
  * @returns {string | undefined}
  */
 const transformTimeData = (time, format) => {
@@ -194,6 +194,8 @@ const transformTimeData = (time, format) => {
           date
         )} ${formattedUnit(hour)}:${formattedUnit(minute)}`
       case 'slash':
+        return `${year}/${formattedUnit(month)}/${formattedUnit(date)} `
+      case 'slashWithTime':
         return `${year}/${formattedUnit(month)}/${formattedUnit(
           date
         )} ${formattedUnit(hour)}:${formattedUnit(minute)}`
@@ -217,10 +219,12 @@ const transformTimeDataIntoDotFormat = (time) => {
  * Transform params `time` into `YYYY/MM/DD HH:MM` pattern
  * If `time` is not a valid date, this function will return undefined
  * @param {String} time
+ * @param {boolean} includeTime - Whether to include time or not. Default is true.
  * @returns {string | undefined}
  */
-const transformTimeDataIntoSlashFormat = (time) => {
-  return transformTimeData(time, 'slash')
+const transformTimeDataIntoSlashFormat = (time, includeTime = true) => {
+  const format = includeTime ? 'slashWithTime' : 'slash'
+  return transformTimeData(time, format)
 }
 
 //TODO: add more specific type in param `arrayNeedToSort` and `arraySortReference`
