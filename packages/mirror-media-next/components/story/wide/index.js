@@ -14,6 +14,7 @@ import HeroImageAndVideo from './hero-image-and-video'
 import DonateBanner from '../shared/donate-banner'
 import RelatedArticleList from './related-article-list'
 import AsideArticleList from './aside-article-list'
+import NavSubtitleNavigator from './nav-subtitle-navigator'
 import Divider from '../shared/divider'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
 
@@ -58,7 +59,7 @@ const ContentWrapper = styled.section`
   margin: 0 auto;
   padding: 0 20px 20px;
   border: none;
-
+  position: relative;
   .content {
     width: 100%;
     margin: 20px auto 0;
@@ -177,6 +178,7 @@ export default function StoryWideStyle({ postData }) {
           title={title}
         />
         <ContentWrapper>
+          <NavSubtitleNavigator></NavSubtitleNavigator>
           <DateWrapper>
             <Date>更新時間 {updatedAtFormatTime}</Date>
             <Date>發布時間 {publishedDateFormatTime}</Date>
@@ -186,6 +188,7 @@ export default function StoryWideStyle({ postData }) {
             <DraftRenderBlock rawContentBlock={brief} contentLayout="wide" />
             <DraftRenderBlock rawContentBlock={content} contentLayout="wide" />
           </section>
+
           <StyledDonateBanner />
         </ContentWrapper>
         <Aside>
