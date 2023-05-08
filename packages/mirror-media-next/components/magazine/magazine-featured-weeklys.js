@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from '@readr-media/react-image'
 import styled from 'styled-components'
 import { getMagazineHrefFromSlug } from '../../utils/index'
 
@@ -144,14 +144,11 @@ export default function MagazineFeatures({ features }) {
           <IssueCard>
             <ImageWrapper>
               <Image
-                width={200}
-                height={265}
-                src={
-                  magazine.coverPhoto?.resized?.w480
-                    ? magazine.coverPhoto.resized.w480
-                    : '/images/logo-circle@2x.png'
-                }
+                images={magazine.coverPhoto?.resized}
+                loadingImage="/images/loading.gif"
+                defaultImage="/images/default-og-img.png"
                 alt={magazine.title}
+                rwd={{ tablet: '160px', desktop: '200px', default: '100%' }}
               />
             </ImageWrapper>
             <ContentWrapper>

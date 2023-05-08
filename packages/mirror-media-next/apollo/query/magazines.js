@@ -16,6 +16,8 @@ const fetchSpecials = gql`
           w480
           w800
           w1200
+          w1600
+          w2400
         }
       }
       type
@@ -43,6 +45,8 @@ const fetchWeeklys = gql`
           w480
           w800
           w1200
+          w1600
+          w2400
         }
       }
       type

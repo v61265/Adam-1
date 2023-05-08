@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from '@readr-media/react-image'
 import styled from 'styled-components'
 import {
   transformTimeDataIntoSlashFormat,
@@ -179,14 +179,11 @@ export default function MagazineWeeklys({ weeklys }) {
           >
             <ImageWrapper>
               <Image
-                width={144}
-                height={194}
-                src={
-                  magazine.coverPhoto?.resized?.w480
-                    ? magazine.coverPhoto.resized.w480
-                    : '/images/logo-circle@2x.png'
-                }
+                images={magazine.coverPhoto?.resized}
+                loadingImage="/images/loading.gif"
+                defaultImage="/images/default-og-img.png"
                 alt={magazine.title}
+                rwd={{ mobile: '132px', tablet: '144px', default: '100%' }}
               />
               <ReadingSvg />
             </ImageWrapper>

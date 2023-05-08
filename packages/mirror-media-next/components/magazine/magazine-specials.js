@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import Image from '@readr-media/react-image'
 import styled from 'styled-components'
 import { transformTimeDataIntoSlashFormat } from '../../utils/index'
 // @ts-ignore
@@ -151,10 +151,11 @@ export default function MagazineSpecials({ specials }) {
           <MagazineLink urlOriginal={magazine.urlOriginal}>
             <ImageWrapper>
               <Image
-                width={144}
-                height={194}
-                src={magazine.coverPhoto?.resized?.w480}
+                images={magazine.coverPhoto?.resized}
+                loadingImage="/images/loading.gif"
+                defaultImage="/images/default-og-img.png"
                 alt={magazine.title}
+                rwd={{ mobile: '132px', tablet: '144px', default: '100%' }}
               />
               <DownloadSvg />
             </ImageWrapper>

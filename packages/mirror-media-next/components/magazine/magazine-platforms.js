@@ -61,13 +61,18 @@ export default function MagazinePlatforms() {
           rel="noopener noreferrer"
           target="_blank"
         >
-          <Image width={0} height={0} src={item.svgIcon} alt={item.name} />
+          <Image
+            width={48}
+            height={48}
+            src={item.svgIcon}
+            alt={`購買動態雜誌平台_${item.name}`}
+          />
         </Link>
       ))}
       <Image
-        width={0}
-        height={0}
-        alt={magazinePlatformLinks[4].name}
+        width={48}
+        height={48}
+        alt={`購買動態雜誌平台_${magazinePlatformLinks[4].name}`}
         src={magazinePlatformLinks[4].svgIcon}
       />
       <KonoLinks>
