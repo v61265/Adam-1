@@ -1,3 +1,6 @@
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+
 /**
  * @typedef {import('../type/raw-data.typedef').RawData} RawData
  */
@@ -162,43 +165,31 @@ const transformRawDataToArticleInfo = (rawData) => {
 }
 
 /**
- * Transform params `time` into `YYYY.MM.DD HH:MM 臺北時間` || `YYYY/MM/DD HH:MM` pattern
- * depend on the type 'dot' or 'slash'
+ * Transform params `time` into different pattern
+ * depend on the type 'dot' or 'slash' or 'slashWithTime'
  * If `time` is not a valid date, this function will return undefined
  * @param {string} time
  * @param {'dot' | 'slash'| 'slashWithTime'} format
  * @returns {string | undefined}
  */
 const transformTimeData = (time, format) => {
-  const timeData = new Date(time)
-  const timestamp = timeData.getTime()
-  if (isNaN(timestamp)) {
+  dayjs.extend(utc)
+
+  const timeData = dayjs(time).utcOffset(8)
+
+  if (!timeData.isValid()) {
     return undefined
   } else {
-    const year = timeData.getFullYear()
-    const month = timeData.getMonth() + 1
-    const date = timeData.getDate()
-    const hour = timeData.getHours()
-    const minute = timeData.getMinutes()
-    const formattedUnit = (unit) => {
-      if (unit < 10) {
-        return `0${unit}`
-      } else {
-        return unit
-      }
-    }
-
     switch (format) {
       case 'dot':
-        return `${year}.${formattedUnit(month)}.${formattedUnit(
-          date
-        )} ${formattedUnit(hour)}:${formattedUnit(minute)}`
+        return timeData.format('YYYY.MM.DD HH:mm')
+
       case 'slash':
-        return `${year}/${formattedUnit(month)}/${formattedUnit(date)} `
+        return timeData.format('YYYY/MM/DD')
+
       case 'slashWithTime':
-        return `${year}/${formattedUnit(month)}/${formattedUnit(
-          date
-        )} ${formattedUnit(hour)}:${formattedUnit(minute)}`
+        return timeData.format('YYYY/MM/DD HH:mm')
+
       default:
         return undefined
     }
