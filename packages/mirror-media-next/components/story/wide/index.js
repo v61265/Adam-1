@@ -19,6 +19,9 @@ import RelatedArticleList from './related-article-list'
 import AsideArticleList from './aside-article-list'
 import NavSubtitleNavigator from './nav-subtitle-navigator'
 import Divider from '../shared/divider'
+import ButtonCopyLink from '../shared/button-copy-link'
+import ButtonSocialNetworkShare from '../shared/button-social-network-share'
+
 import { fetchAsidePosts } from '../../../apollo/query/posts'
 
 /**
@@ -97,6 +100,21 @@ const Aside = styled.aside`
   }
   ${({ theme }) => theme.breakpoint.xl} {
     margin-top: 64px;
+  }
+`
+
+const SocialMediaAndDonateLink = styled.ul`
+  margin-bottom: 20px;
+`
+
+const SocialMedia = styled.li`
+  display: none;
+  ${({ theme }) => theme.breakpoint.md} {
+    display: flex;
+    margin-bottom: 12px;
+    a {
+      margin-right: 10px;
+    }
   }
 `
 
@@ -183,9 +201,22 @@ export default function StoryWideStyle({ postData }) {
           title={title}
         />
         <ContentWrapper>
-          <NavSubtitleNavigator
-            h2AndH3Block={h2AndH3Block}
-          ></NavSubtitleNavigator>
+          <NavSubtitleNavigator h2AndH3Block={h2AndH3Block}>
+            <SocialMediaAndDonateLink>
+              <SocialMedia>
+                <ButtonSocialNetworkShare
+                  type="facebook"
+                  width={28}
+                  height={28}
+                />
+                <ButtonSocialNetworkShare type="line" width={28} height={28} />
+                <ButtonCopyLink width={28} height={28} />
+              </SocialMedia>
+              {/* <li>
+                <DonateLink />
+              </li> */}
+            </SocialMediaAndDonateLink>
+          </NavSubtitleNavigator>
           <DateWrapper>
             <Date>更新時間 {updatedAtFormatTime}</Date>
             <Date>發布時間 {publishedDateFormatTime}</Date>

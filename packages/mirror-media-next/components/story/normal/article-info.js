@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 import Link from 'next/link'
 import Image from 'next/image'
-import ButtonCopyLink from '../button-copy-link'
+import ButtonCopyLink from '../shared/button-copy-link'
 import DonateLink from '../shared/donate-link'
+import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
@@ -249,22 +250,8 @@ export default function ArticleInfo({
           ></Image>
         </Link>
         <SocialMedia>
-          <Link href="/" target="_blank">
-            <Image
-              src={'/images/fb-logo.svg'}
-              width={35}
-              height={35}
-              alt="facebook-share"
-            ></Image>
-          </Link>
-          <Link href="/" target="_blank">
-            <Image
-              src={'/images/line-logo.svg'}
-              width={35}
-              height={35}
-              alt="line-share"
-            ></Image>
-          </Link>
+          <ButtonSocialNetworkShare type="facebook" />
+          <ButtonSocialNetworkShare type="line" />
           <ButtonCopyLink />
         </SocialMedia>
         <DonateLink />
