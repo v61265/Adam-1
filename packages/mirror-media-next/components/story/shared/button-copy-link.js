@@ -39,7 +39,13 @@ const ClickButton = styled.button`
   }
 `
 
-export default function ButtonCopyLink() {
+/**
+ * @param {Object} props
+ * @param {number} [props.width] - width of the button
+ * @param {number} [props.height] - height of the button
+ * @returns {JSX.Element}
+ */
+export default function ButtonCopyLink({ width = 35, height = 35 }) {
   const [shouldShowMessage, setShouldShowMessage] = useState(false)
   const { asPath } = useRouter()
   const handleCopyLink = () => {
@@ -66,8 +72,8 @@ export default function ButtonCopyLink() {
       <ClickButton onClick={handleCopyLink}>
         <Image
           src={'/images/link-logo.svg'}
-          width={35}
-          height={35}
+          width={width}
+          height={height}
           alt="copy link button"
         ></Image>
       </ClickButton>
