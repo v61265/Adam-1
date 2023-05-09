@@ -20,11 +20,19 @@ const CardsList = styled.ul`
   gap: 48px 16px;
 
   ${({ theme }) => theme.breakpoint.md} {
+    grid-template-columns: repeat(3, 1fr);
+    width: 496px;
+    grid-gap: 48px 32px;
+    gap: 48px 32px;
+  }
+
+  ${({ theme }) => theme.breakpoint.lg} {
     grid-template-columns: repeat(4, 1fr);
     width: 672px;
     grid-gap: 48px 32px;
     gap: 48px 32px;
   }
+
   ${({ theme }) => theme.breakpoint.xl} {
     grid-template-columns: repeat(6, 1fr);
     margin-top: 48px;
