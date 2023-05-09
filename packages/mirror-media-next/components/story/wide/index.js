@@ -135,6 +135,7 @@ export default function StoryWideStyle({ postData }) {
     sections = [],
     manualOrderOfSections = [],
     relateds = [],
+    manualOrderOfRelateds = [],
     slug = '',
     content = null,
     brief = null,
@@ -146,6 +147,11 @@ export default function StoryWideStyle({ postData }) {
       ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
       : sections
   const [section] = sectionsWithOrdered
+
+  const relatedsWithOrdered =
+    manualOrderOfRelateds && manualOrderOfRelateds.length
+      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+      : relateds
 
   /**
    * @returns {Promise<AsideArticleData[] | []>}
@@ -230,7 +236,7 @@ export default function StoryWideStyle({ postData }) {
           <StyledDonateBanner />
         </ContentWrapper>
         <Aside>
-          <RelatedArticleList relateds={relateds} />
+          <RelatedArticleList relateds={relatedsWithOrdered} />
           <AsideArticleList
             heading="最新文章"
             fetchArticle={handleFetchLatestNews}
