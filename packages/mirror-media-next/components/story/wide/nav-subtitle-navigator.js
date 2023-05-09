@@ -63,13 +63,17 @@ const Nav = styled.nav`
     height: auto;
   }
 `
+
 /**
- * TODO: add feature for scroll into certain subtitle
  * @param {Object} props
  * @param {H2AndH3Block[]} props.h2AndH3Block
+ * @param {JSX.Element} [props.children]
  * @returns {JSX.Element}
  */
-export default function NavSubtitleNavigator({ h2AndH3Block = [] }) {
+export default function NavSubtitleNavigator({
+  h2AndH3Block = [],
+  children = null,
+}) {
   const [currentIndex, setCurrentIndex] = useState(undefined)
   const handleOnClick = (key) => {
     const target = document.querySelector(`[data-offset-key*="${key}"]`)
@@ -152,8 +156,9 @@ export default function NavSubtitleNavigator({ h2AndH3Block = [] }) {
 
   return (
     <NavWrapper>
-      {h2AndH3Block.length ? (
-        <Nav>
+      <Nav>
+        {children}
+        {h2AndH3Block.length ? (
           <ul>
             {h2AndH3Block.map((item) => (
               <NavItem
@@ -168,8 +173,8 @@ export default function NavSubtitleNavigator({ h2AndH3Block = [] }) {
               </NavItem>
             ))}
           </ul>
-        </Nav>
-      ) : null}
+        ) : null}
+      </Nav>
     </NavWrapper>
   )
 }
