@@ -242,7 +242,11 @@ const sortArrayWithOtherArrayId = (arrayNeedToSort, arraySortReference) => {
   return sortedArray
 }
 
-// Get the magazine href from slug
+/**
+Get the magazine href from a given slug.
+@param {string} slug 
+@returns {string} 
+*/
 const getMagazineHrefFromSlug = (slug) => {
   const issue = slug.match(/\d+/)[0]
   const book = slug.endsWith('A本') ? 'A' : 'B'
