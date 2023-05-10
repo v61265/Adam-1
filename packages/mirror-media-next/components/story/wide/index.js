@@ -1,9 +1,10 @@
+//TODO: add jsDoc for credits
+
 import { useCallback } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import client from '../../../apollo/apollo-client'
 import DraftRenderBlock from '../shared/draft-renderer-block'
-
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { getContentBlocksH2H3 } = MirrorMedia
 
@@ -14,6 +15,8 @@ import {
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 import DonateLink from '../shared/donate-link'
 import HeroImageAndVideo from './hero-image-and-video'
+import Credits from './credits'
+
 import DonateBanner from '../shared/donate-banner'
 import RelatedArticleList from './related-article-list'
 import AsideArticleList from './aside-article-list'
@@ -134,7 +137,17 @@ export default function StoryWideStyle({ postData }) {
     publishedDate = '',
     sections = [],
     manualOrderOfSections = [],
+    writers = [],
+    manualOrderOfWriters = [],
+    photographers = [],
+    camera_man = [],
+    designers = [],
+    engineers = [],
+    vocals = [],
+    extend_byline = '',
+
     relateds = [],
+    manualOrderOfRelateds = [],
     slug = '',
     content = null,
     brief = null,
@@ -147,6 +160,25 @@ export default function StoryWideStyle({ postData }) {
       : sections
   const [section] = sectionsWithOrdered
 
+  const relatedsWithOrdered =
+    manualOrderOfRelateds && manualOrderOfRelateds.length
+      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+      : relateds
+
+  const writersWithOrdered =
+    manualOrderOfWriters && manualOrderOfWriters.length
+      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+      : writers
+
+  const credits = [
+    { writers: writersWithOrdered },
+    { photographers: photographers },
+    { camera_man: camera_man },
+    { designers: designers },
+    { engineers: engineers },
+    { vocals: vocals },
+    { extend_byline: extend_byline },
+  ]
   /**
    * @returns {Promise<AsideArticleData[] | []>}
    */
@@ -217,6 +249,7 @@ export default function StoryWideStyle({ postData }) {
               </li> */}
             </SocialMediaAndDonateLink>
           </NavSubtitleNavigator>
+          <Credits credits={credits}></Credits>
           <DateWrapper>
             <Date>更新時間 {updatedAtFormatTime}</Date>
             <Date>發布時間 {publishedDateFormatTime}</Date>
@@ -230,18 +263,16 @@ export default function StoryWideStyle({ postData }) {
           <StyledDonateBanner />
         </ContentWrapper>
         <Aside>
-          <RelatedArticleList relateds={relateds} />
+          <RelatedArticleList relateds={relatedsWithOrdered} />
           <AsideArticleList
             heading="最新文章"
             fetchArticle={handleFetchLatestNews}
-            shouldReverseOrder={false}
             renderAmount={6}
           />
           <Divider />
           <AsideArticleList
             heading="熱門文章"
             fetchArticle={handleFetchPopularNews}
-            shouldReverseOrder={false}
             renderAmount={6}
           />
         </Aside>
