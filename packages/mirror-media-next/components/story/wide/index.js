@@ -267,14 +267,12 @@ export default function StoryWideStyle({ postData }) {
           <AsideArticleList
             heading="最新文章"
             fetchArticle={handleFetchLatestNews}
-            shouldReverseOrder={false}
             renderAmount={6}
           />
           <Divider />
           <AsideArticleList
             heading="熱門文章"
             fetchArticle={handleFetchPopularNews}
-            shouldReverseOrder={false}
             renderAmount={6}
           />
         </Aside>

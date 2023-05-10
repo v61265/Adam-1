@@ -17,6 +17,9 @@ const Wrapper = styled.section`
   margin: 24px auto 0;
   width: 100%;
   max-width: 618px;
+  ${({ theme }) => theme.breakpoint.xl} {
+    min-width: 640px;
+  }
 `
 const Heading = styled.h2`
   text-align: center;
@@ -27,25 +30,33 @@ const Heading = styled.h2`
     text-align: left;
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    background-color: ${
+    color: ${
       /**
        * @param {Object} props
        * @param {Theme} props.theme
        */
       ({ theme }) => theme.color.brandColor.darkBlue
     };
-    border: 1px solid #dedede;
-    font-size: 18px;
-    color: #fff;
-    padding: 8px 0 8px 20px;
+    font-size: 20px;
+    position: relative;
+    &::after {
+      position: absolute;
+      content: '';
+      width: 528px;
+      height: 1px;
+      top: 50%;
+      right: 0;
+      background-color: ${({ theme }) => theme.color.brandColor.darkBlue};
+    }
   }
 `
 
 const articleHeightMobile = 254 //px
 const articleHeightTablet = 177 //px
-const articleHeightDesktop = 80 //px
+const articleHeightDesktop = 22 //px
 const articleMarginBottomMobile = 20 //px
 const articleMarginBottomTablet = 36 //px
+const articleMarginBottomDesktop = 24 //px
 const ArticleWrapper = styled.ul`
   display: flex;
   flex-direction: column;
@@ -59,25 +70,27 @@ const ArticleWrapper = styled.ul`
     ({ renderAmount }) =>
       `calc(${
         renderAmount * articleHeightMobile
-      }px + ${articleMarginBottomMobile}px * ${renderAmount - 1}) `
+      }px + ${articleMarginBottomMobile}px * ${renderAmount}) `
   };
   ${({ theme }) => theme.breakpoint.md} {
     min-height: ${({ renderAmount }) =>
       `calc(${
         renderAmount * articleHeightTablet
-      }px + ${articleMarginBottomTablet}px * ${renderAmount - 1}) `};
+      }px + ${articleMarginBottomTablet}px * ${renderAmount}) `};
     margin-bottom: ${`${articleMarginBottomTablet}px`};
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    border: 1px solid #dedede;
-    padding: 20.5px 20px;
+    padding: 0;
     width: 100%;
+    margin-top: 16px;
+
     min-height: ${({ renderAmount }) =>
-      // 20.5px is padding-top and padding-bottom of articleWrapper
-      `calc(20.5px + 20.5px + ${
+      // 0px is padding-top and padding-bottom of articleWrapper
+      `calc(0px + 0px + ${
         renderAmount * articleHeightDesktop
-      }px + ${articleMarginBottomTablet}px * ${renderAmount - 1}) `};
+      }px + ${articleMarginBottomDesktop}px * ${renderAmount}) `};
     height: fit-content;
+    margin-bottom: 0;
   }
 `
 const Article = styled.figure`
@@ -103,21 +116,38 @@ const Article = styled.figure`
     }
   }
   ${({ theme }) => theme.breakpoint.xl} {
+    margin: 0 auto ${`${articleMarginBottomDesktop}px`} 0;
+
     height: ${`${articleHeightDesktop}px`};
-    flex-direction: ${
-      /**
-       * @param {Object} props
-       * @param {boolean} props.shouldReverseOrder
-       */
-      ({ shouldReverseOrder }) => (shouldReverseOrder ? 'row-reverse' : 'row')
-    };
-    /* gap: 12px; */
+
+    position: relative;
+    padding-left: 24px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      margin: 0 6px;
+      top: 50%;
+      left: 6px;
+      width: 8px;
+      height: 8px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background-color: rgba(74, 74, 74, 1);
+    }
+    &::after {
+      content: '';
+      position: absolute;
+
+      bottom: -12px;
+      left: 6px;
+      width: 100%;
+      height: 1px;
+      background-color: #f4f5f6;
+    }
+
     .article-image {
-      min-width: 120px;
-      img {
-        width: 100%;
-        height: 100%;
-      }
+      display: none;
     }
   }
 `
@@ -145,20 +175,13 @@ const Title = styled.span`
     height: 100%;
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    margin-top: 8px;
     text-align: left;
     width: 100%;
     font-size: 16px;
-    line-height: 1.5;
+    line-height: 1.375;
 
-    font-weight: 600;
-    color: ${
-      /**
-       * @param {Object} props
-       * @param {Theme} props.theme
-       */
-      ({ theme }) => theme.color.brandColor.darkBlue
-    };
+    font-weight: 400;
+    color: rgba(74, 74, 74, 1);
 
     -webkit-line-clamp: 2;
   }
@@ -175,11 +198,6 @@ const Loading = styled.div`
  *
  * @param {Object} props
  * @param {string} props.heading - heading of this components, showing user what kind of news is
- * @param {boolean} props.shouldReverseOrder
- * - control the css layout of article.
- * - If is true, image of article should display at right, title and label should display at left.
- * - If is false, image of article should display at left, title and label should display at right.
- * optional, default value is `false`.
  * @param {()=>Promise<ArticleData[] | []>} props.fetchArticle
  * - A Promise base function for fetching article.
  * - If fulfilled, it will return a array of object, which item is a article.
@@ -190,7 +208,6 @@ const Loading = styled.div`
  */
 export default function AsideArticleList({
   heading = '',
-  shouldReverseOrder = false,
   fetchArticle,
   renderAmount = 6,
 }) {
@@ -233,7 +250,7 @@ export default function AsideArticleList({
     const articleHref = getArticleHref(item.slug, item.style, undefined)
     return (
       <li key={item.id}>
-        <Article shouldReverseOrder={shouldReverseOrder}>
+        <Article>
           <Link href={articleHref} target="_blank" className="article-image">
             <Image
               images={item?.heroImage?.resized}
