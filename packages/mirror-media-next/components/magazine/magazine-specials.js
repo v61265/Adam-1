@@ -151,6 +151,14 @@ const MagazineLink = ({ urlOriginal, children }) => {
   }
 }
 
+/**
+ * @typedef {import('../../apollo/fragments/magazine').Magazine} Magazine
+ * @typedef {object} Props
+ * @property {Magazine[]} specials
+ * @param {Props} props
+ * @returns {JSX.Element}
+ */
+
 export default function MagazineSpecials({ specials }) {
   return (
     <CardsList>

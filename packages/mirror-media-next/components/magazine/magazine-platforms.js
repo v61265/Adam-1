@@ -51,7 +51,24 @@ const KonoLinks = styled.div`
   }
 `
 
+/**
+ * @returns {React.ReactElement}
+ */
+
 export default function MagazinePlatforms() {
+  /**
+   * @typedef {Object} PlatformItem
+   * @property {string} name
+   * @property {string} href
+   * @property {string} svgIcon
+   * @property {string} linkA
+   * @property {string} linkB
+   */
+
+  /**
+   * @type {PlatformItem[]}
+   */
+
   return (
     <PlatformsList>
       {MAGAZINE_PLATFORM_LINKS.slice(0, 4).map((item) => (
