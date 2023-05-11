@@ -131,6 +131,14 @@ const ReadingBtn = styled.button`
   }
 `
 
+/**
+ * @typedef {import('../../apollo/fragments/magazine').Magazine} Magazine
+ * @typedef {object} Props
+ * @property {Magazine[]} features
+ * @param {Props} props
+ * @returns {JSX.Element}
+ */
+
 export default function MagazineFeatures({ features }) {
   return (
     <CardsList>
