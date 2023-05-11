@@ -3,27 +3,8 @@ import React, { Fragment, useState, useRef } from 'react'
 import { sectionColors } from '../styles/sections-color'
 import useClickOutside from '../hooks/useClickOutside'
 import Link from 'next/link'
-const SideBarButton = styled.button`
-  user-select: none;
-  display: block;
-  margin-left: 16px;
-  &:focus {
-    border: none;
-    outline: none;
-  }
-  .hamburger {
-    display: block;
-    width: 16px;
-    height: 2px;
-    background-color: black;
-    margin: 2px 0;
-    border-radius: 12px;
-  }
-
-  ${({ theme }) => theme.breakpoint.xl} {
-    display: none;
-  }
-`
+import HamburgerButton from './shared/hamburger-button'
+import CloseButton from './shared/close-button'
 const SideBar = styled.section`
   display: flex;
   flex-direction: column;
@@ -54,46 +35,7 @@ const SideBar = styled.section`
     display: none;
   }
 `
-const CloseButton = styled.button`
-  width: 36px;
-  height: 36px;
-  padding: 4px;
-  display: flex;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  &:focus {
-    outline: none;
-  }
-  .close {
-    border: 1px solid #fff;
-    border-radius: 50%;
-    height: 20px;
-    width: 20px;
-    margin: 0 5px 0 0;
-    position: relative;
-    &:before,
-    :after {
-      position: absolute;
-      left: 8.5px;
-      top: 5px;
-      transform: translate(-50%, -50%);
-      content: ' ';
-      height: 8.5px;
-      width: 1.2px;
-      background-color: #fff;
-    }
-    &:before {
-      transform: rotate(45deg);
-    }
-    &:after {
-      transform: rotate(-45deg);
-    }
-  }
-`
+
 const Topics = styled.div`
   display: flex;
   gap: 10px;
@@ -276,16 +218,13 @@ export default function MobileSidebar({
 
   return (
     <>
-      <SideBarButton onClick={() => setOpenSidebar((val) => !val)}>
-        <i className="hamburger"></i>
-        <i className="hamburger"></i>
-        <i className="hamburger"></i>
-      </SideBarButton>
+      <HamburgerButton handleOnClick={() => setOpenSidebar((val) => !val)} />
       <SideBar shouldShowSidebar={openSidebar} ref={sideBarRef}>
         <SideBarTop>
-          <CloseButton onClick={() => setOpenSidebar((val) => !val)}>
-            <i className="close"></i>
-          </CloseButton>
+          <CloseButton
+            color="white"
+            handleOnClick={() => setOpenSidebar((val) => !val)}
+          />
           <Topics>
             {topics.map((topic) => (
               <Topic href={`topic/${topic._id}`} key={topic._id}>
