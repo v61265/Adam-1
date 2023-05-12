@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic'
 
 import { fetchPostBySlug } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
-
+import ShareHeader from '../../components/shared/share-header'
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
 const StoryPhotographyStyle = dynamic(() =>
   import('../../components/story/photography')
@@ -125,6 +125,7 @@ export default function Story({ postData }) {
   return (
     <>
       {headJsx}
+      <ShareHeader pageLayoutType="empty" />
       {!storyLayout && <MockLoading>Loading...</MockLoading>}
       <div style={{ display: `${storyLayout ? 'block' : 'none'}` }}>{jsx}</div>
     </>

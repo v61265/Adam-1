@@ -1,10 +1,12 @@
 //TODO: adjust margin and padding of all margin and padding after implement advertisement.
+//TODO: refactor jsx structure, make it more readable.
 
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import client from '../../../apollo/apollo-client'
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
 import axios from 'axios'
+import errors from '@twreporter/errors'
 import MockAdvertisement from '../../../components/mock-advertisement'
 import ArticleInfo from '../../../components/story/normal/article-info'
 import ArticleBrief from '../../../components/story/normal/brief'
@@ -18,10 +20,12 @@ import RelatedArticleList from '../../../components/story/normal/related-article
 import ArticleContent from './article-content'
 import HeroImageAndVideo from './hero-image-and-video'
 import Divider from '../shared/divider'
+import ShareHeader from '../../shared/share-header'
 import {
   transformTimeDataIntoDotFormat,
   sortArrayWithOtherArrayId,
 } from '../../../utils'
+import { fetchHeaderDataInDefaultPageLayout } from '../../../utils/api'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 /**
@@ -361,6 +365,11 @@ export default function StoryNormalStyle({ postData }) {
     content = { blocks: [], entityMap: {} },
   } = postData
 
+  const [headerData, setHeaderData] = useState({
+    sectionsData: [],
+    topicsData: [],
+  })
+  const [isHeaderDataLoaded, setIsHeaderDataLoaded] = useState(false)
   const sectionsWithOrdered =
     manualOrderOfSections && manualOrderOfSections.length
       ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
@@ -430,9 +439,47 @@ export default function StoryNormalStyle({ postData }) {
 
   const publishedTaipeiTime = transformTimeDataIntoDotFormat(publishedDate)
   const updatedTaipeiTime = transformTimeDataIntoDotFormat(updatedAt)
+  useEffect(() => {
+    let ignore = false
+    fetchHeaderDataInDefaultPageLayout()
+      .then((res) => {
+        if (!ignore && !isHeaderDataLoaded) {
+          const { sectionsData, topicsData } = res
+          setHeaderData({ sectionsData, topicsData })
+          setIsHeaderDataLoaded(true)
+        }
+      })
+      .catch((error) => {
+        if (!ignore && !isHeaderDataLoaded) {
+          console.log(
+            errors.helpers.printAll(
+              error,
+              {
+                withStack: true,
+                withPayload: true,
+              },
+              0,
+              0
+            )
+          )
+          setIsHeaderDataLoaded(true)
+        }
+      })
 
+    return () => {
+      ignore = true
+    }
+  }, [isHeaderDataLoaded])
   return (
     <>
+      <ShareHeader
+        pageLayoutType="default"
+        headerData={{
+          sectionsData: headerData.sectionsData,
+          topicsData: headerData.topicsData,
+        }}
+      ></ShareHeader>
+
       <PC_HD_Advertisement
         width="970px"
         height="250px"
