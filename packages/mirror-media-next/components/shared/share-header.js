@@ -30,7 +30,7 @@ const getPremiumHeader = (headerData) => {
  *
  * @param {Object} props
  * @param {'default' | 'premium' | 'empty'} props.pageLayoutType
- * @param {HeaderData} props.headerData
+ * @param {HeaderData} [props.headerData]
  * @returns {JSX.Element}
  */
 export default function ShareHeader({
