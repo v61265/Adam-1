@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import errors from '@twreporter/errors'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -6,6 +7,7 @@ import styled from 'styled-components'
 import client from '../../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import { fetchWeeklys } from '../../../apollo/query/magazines'
+import ShareHeader from '../../../components/shared/share-header'
 
 const Page = styled.div`
   padding: 0;
@@ -40,9 +42,16 @@ export default function BookBIssuePublish({ weeklys }) {
   }, [weeklys, iframeSrc, router])
 
   return (
-    <Page>
-      <iframe src={iframeSrc} />
-    </Page>
+    <>
+      <ShareHeader pageLayoutType="empty" />
+      <Head>
+        <title>{`鏡週刊 Mirror Media｜動態雜誌 ${book} ${issue}`}</title>
+      </Head>
+
+      <Page>
+        <iframe src={iframeSrc} />
+      </Page>
+    </>
   )
 }
 
