@@ -1,10 +1,13 @@
+//TODO: add jsDoc of param  on component `Share-Header`
+
 import Header from '../header'
 import PremiumHeader from '../premium-header'
-
+import FlashNews from '../flash-news'
 /**
  * @typedef {Object} HeaderData
  * @property {Array} [sectionsData]
  * @property {Array} [topicsData]
+ * @property {Array} [flashNewsData]
  */
 
 const getDefaultHeader = (headerData) => {
@@ -16,6 +19,30 @@ const getDefaultHeader = (headerData) => {
   }
 
   return <Header sectionsData={sectionsData} topicsData={topicsData} />
+}
+const getDefaultHeaderWithFlashNews = (headerData) => {
+  const { sectionsData, topicsData, flashNewsData } = headerData
+  if (!sectionsData || !sectionsData.length) {
+    console.warn('There is no sections data for header of default page layout')
+  } else if (!topicsData || !topicsData.length) {
+    console.warn('There is no topics data for header of default page layout')
+  } else if (!flashNewsData || !flashNewsData.length) {
+    console.warn(
+      'There is no flash news data for header of default page layout'
+    )
+  }
+  const flashNews = flashNewsData.map(({ slug, title }) => {
+    return {
+      title,
+      slug,
+      href: `/story/${slug}`,
+    }
+  })
+  return (
+    <Header sectionsData={sectionsData} topicsData={topicsData}>
+      <FlashNews flashNews={flashNews} />
+    </Header>
+  )
 }
 const getPremiumHeader = (headerData) => {
   const { sectionsData } = headerData
@@ -29,8 +56,9 @@ const getPremiumHeader = (headerData) => {
 /**
  *
  * @param {Object} props
- * @param {'default' | 'premium' | 'empty'} props.pageLayoutType
+ * @param {'default' | 'default-with-flash-news' | 'premium' | 'empty' } props.pageLayoutType
  * @param {HeaderData} [props.headerData]
+ * @param {JSX.Element | null} [props.children]
  * @returns {JSX.Element}
  */
 export default function ShareHeader({
@@ -42,6 +70,11 @@ export default function ShareHeader({
       case 'default': {
         const defaultHeader = getDefaultHeader(headerData)
         return defaultHeader
+      }
+      case 'default-with-flash-news': {
+        const defaultHeaderWithFlashNews =
+          getDefaultHeaderWithFlashNews(headerData)
+        return defaultHeaderWithFlashNews
       }
       case 'premium': {
         const premiumHeader = getPremiumHeader(headerData)
