@@ -333,6 +333,13 @@ const AdvertisementDableMobile = styled(AdvertisementDable)`
     width: 640px;
   }
 `
+const HeaderPlaceHolder = styled.header`
+  background-color: transparent;
+  height: 175px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+`
 
 /**
  *
@@ -472,13 +479,17 @@ export default function StoryNormalStyle({ postData }) {
   }, [isHeaderDataLoaded])
   return (
     <>
-      <ShareHeader
-        pageLayoutType="default"
-        headerData={{
-          sectionsData: headerData.sectionsData,
-          topicsData: headerData.topicsData,
-        }}
-      ></ShareHeader>
+      {isHeaderDataLoaded ? (
+        <ShareHeader
+          pageLayoutType="default"
+          headerData={{
+            sectionsData: headerData.sectionsData,
+            topicsData: headerData.topicsData,
+          }}
+        ></ShareHeader>
+      ) : (
+        <HeaderPlaceHolder />
+      )}
 
       <PC_HD_Advertisement
         width="970px"
