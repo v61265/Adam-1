@@ -13,16 +13,14 @@ const Wrapper = styled.section`
 
 const Credits = styled.section`
   font-size: 16px;
-  line-height: 1;
   font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-  /* ${({ theme }) => theme.breakpoint.md} {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 20px;
-    margin-top: 12px;
-  } */
   text-align: center;
+  width: 100%;
+  line-height: 1.5;
 `
 
 const CreditTitle = styled.figcaption`
@@ -30,12 +28,10 @@ const CreditTitle = styled.figcaption`
   color: rgba(0, 0, 0, 0.5);
 
   position: relative;
-  width: fit-content;
-  min-width: 32px;
+
+  width: 38px;
   text-align: left;
   margin-right: 14px;
-
-  color: rgba(52, 73, 94, 1);
 
   &::after {
     position: absolute;
@@ -48,18 +44,27 @@ const CreditTitle = styled.figcaption`
 `
 
 const CreditList = styled.figure`
-  width: 100%;
   display: flex;
-  justify-content: center;
+  margin: 0 auto;
+  justify-content: flex-start;
+  width: 100%;
 
   ul {
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
+
+    justify-content: space-between;
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fill, minmax(48px, max-content));
+    gap: 0 16px;
+    &.no-link-list {
+      display: block;
+    }
     li {
-      margin-right: 8px;
-      margin-bottom: 8px;
+      width: auto;
+      display: block;
+      line-height: 1.5;
       &.link {
         position: relative;
 
@@ -71,18 +76,12 @@ const CreditList = styled.figure`
 
       &.no-link {
         text-align: left;
-        line-height: 1.5;
         color: rgba(52, 73, 94, 1);
       }
     }
   }
 
   ${({ theme }) => theme.breakpoint.md} {
-    margin: 0 auto;
-    ul {
-      width: auto;
-      justify-content: center;
-    }
   }
 `
 
@@ -145,7 +144,9 @@ export default function CreditsWra({ credits }) {
         return (
           <CreditList key={index}>
             <CreditTitle>{titleName}</CreditTitle>
-            <ul>
+            <ul
+              className={Array.isArray(people) ? 'link-list' : 'no-link-list'}
+            >
               {Array.isArray(people) ? (
                 people.map((person) => (
                   <li key={person.id} className="link">
