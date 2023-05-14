@@ -1,9 +1,12 @@
+import Head from 'next/head'
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 
 import client from '../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchSpecials, fetchWeeklys } from '../../apollo/query/magazines'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import ShareHeader from '../../components/shared/share-header'
 
 import MagazinePlatforms from '../../components/magazine/magazine-platforms'
 import MagazineSpecials from '../../components/magazine/magazine-specials'
@@ -41,7 +44,12 @@ const Title = styled.h2`
   }
 `
 
-export default function Magazine({ specials, weeklys }) {
+export default function Magazine({
+  specials = [],
+  weeklys = [],
+  sectionsData = [],
+  topicsData = [],
+}) {
   // Sort the weekly magazines
   const sortedMagazines = weeklys?.length
     ? weeklys.sort((a, b) => {
@@ -63,31 +71,40 @@ export default function Magazine({ specials, weeklys }) {
     : []
 
   return (
-    <Page>
-      <Section>
-        <Title>
-          當期<span>動態雜誌</span>
-        </Title>
-        <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
-      </Section>
+    <>
+      <ShareHeader
+        pageLayoutType="default"
+        headerData={{ sectionsData: sectionsData, topicsData }}
+      />
+      <Head>
+        <title>鏡週刊 Mirror Media｜動態雜誌</title>
+      </Head>
+      <Page>
+        <Section>
+          <Title>
+            當期<span>動態雜誌</span>
+          </Title>
+          <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
+        </Section>
 
-      <Section>
-        <Title>
-          近期<span>動態雜誌</span>
-        </Title>
-        <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
-      </Section>
+        <Section>
+          <Title>
+            近期<span>動態雜誌</span>
+          </Title>
+          <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
+        </Section>
 
-      <Section>
-        <Title>購買線上雜誌</Title>
-        <MagazinePlatforms />
-      </Section>
+        <Section>
+          <Title>購買線上雜誌</Title>
+          <MagazinePlatforms />
+        </Section>
 
-      <Section>
-        <Title>特刊</Title>
-        <MagazineSpecials specials={specials} />
-      </Section>
-    </Page>
+        <Section>
+          <Title>特刊</Title>
+          <MagazineSpecials specials={specials} />
+        </Section>
+      </Page>
+    </>
   )
 }
 
@@ -151,10 +168,37 @@ export async function getServerSideProps({ req }) {
   const specials = handledResponses[0]?.magazines || []
   const weeklys = handledResponses[1]?.magazines || []
 
+  // Fetch header data
+  let sectionsData = []
+  let topicsData = []
+  try {
+    const headerData = await fetchHeaderDataInDefaultPageLayout()
+    if (Array.isArray(headerData.sectionsData)) {
+      sectionsData = headerData.sectionsData
+    }
+    if (Array.isArray(headerData.topicsData)) {
+      topicsData = headerData.topicsData
+    }
+  } catch (err) {
+    const annotatingAxiosError = errors.helpers.annotateAxiosError(err)
+    console.error(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(annotatingAxiosError, {
+          withStack: true,
+          withPayload: true,
+        }),
+        ...globalLogFields,
+      })
+    )
+  }
+
   return {
     props: {
       specials,
       weeklys,
+      sectionsData,
+      topicsData,
     },
   }
 }
