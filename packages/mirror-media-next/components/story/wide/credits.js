@@ -11,7 +11,7 @@ const Wrapper = styled.section`
   margin: 24px auto;
 `
 
-const Credits = styled.section`
+const CreditsWrapper = styled.section`
   font-size: 16px;
   font-weight: 400;
   display: flex;
@@ -116,20 +116,17 @@ const CREDIT_TITLE_NAME_MAP = {
 
 /**
  * @param {Object} props
- * @param {string} props.updatedDate
- * @param {string} props.publishedDate
  * @param {Credit[]} props.credits
- * @param {Tags} props.tags
  * @returns {JSX.Element}
  */
-export default function CreditsWra({ credits }) {
+export default function Credits({ credits }) {
   const shouldShowCredits = credits.some((credit) => {
     const [people] = Object.values(credit)
     return people.length !== 0 || (typeof people === 'string' && people.trim())
   })
 
   const creditsJsx = shouldShowCredits ? (
-    <Credits>
+    <CreditsWrapper>
       {credits.map((credit, index) => {
         const title = Object.keys(credit)
         const titleName = CREDIT_TITLE_NAME_MAP[title]
@@ -168,7 +165,7 @@ export default function CreditsWra({ credits }) {
           </CreditList>
         )
       })}
-    </Credits>
+    </CreditsWrapper>
   ) : null
 
   return <Wrapper>{creditsJsx}</Wrapper>
