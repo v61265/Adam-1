@@ -3,7 +3,7 @@
 //TODO: add typedef of editor choice data
 //TODO: add component to add html head dynamically, not jus write head in every pag
 //TODO: add jsDoc of `props.sectionsData`
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
@@ -19,9 +19,7 @@ import {
 } from '../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
 import { transformRawDataToArticleInfo } from '../utils'
-import FlashNews from '../components/flash-news'
-import NavTopics from '../components/nav-topics'
-import SubscribeMagazine from '../components/subscribe-magazine'
+
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
 import ShareHeader from '../components/shared/share-header'
@@ -34,10 +32,6 @@ const IndexContainer = styled.main`
     height: 500vh;
   }
   margin: 0 auto;
-`
-
-const IndexTop = styled.div`
-  display: flex;
 `
 
 /**
@@ -59,34 +53,18 @@ export default function Home({
   latestNewsTimestamp,
   sectionsData = [],
 }) {
-  const flashNews = flashNewsData.map(({ slug, title }) => {
-    return {
-      title,
-      slug,
-      href: `/story/${slug}`,
-    }
-  })
   const editorChoice = transformRawDataToArticleInfo(editorChoicesData)
-  const topics = useMemo(
-    () => topicsData.filter((topic) => topic.isFeatured).slice(0, 9) ?? [],
-    [topicsData]
-  )
 
   return (
     <>
       <ShareHeader
-        pageLayoutType="default"
-        headerData={{ sectionsData: sectionsData, topicsData }}
+        pageLayoutType="default-with-flash-news"
+        headerData={{ sectionsData, topicsData, flashNewsData }}
       />
       <Head>
         <title>鏡週刊 Mirror Media</title>
       </Head>
       <IndexContainer>
-        <FlashNews flashNews={flashNews} />
-        <IndexTop>
-          <NavTopics topics={topics} />
-          <SubscribeMagazine />
-        </IndexTop>
         <EditorChoice editorChoice={editorChoice}></EditorChoice>
         <LatestNews
           latestNewsData={latestNewsData}

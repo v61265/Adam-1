@@ -17,6 +17,8 @@ import MemberLoginButton from './member-login-button'
 import SearchBarInput from './search-bar-input'
 import MobileSidebar from './mobile-sidebar'
 import Logo from './logo'
+import SubscribeMagazine from './subscribe-magazine'
+import NavTopics from './nav-topics'
 import { SEARCH_URL } from '../config/index.mjs'
 
 const HeaderWrapper = styled.div`
@@ -115,6 +117,13 @@ const SearchInputWrapper = styled.div`
   }
 `
 
+const TopicsAndFlashNews = styled.section`
+  margin-top: 10px;
+`
+const TopicsAndSubscribe = styled.section`
+  display: flex;
+`
+
 /**
  * TODO: use typedef in `../apollo/fragments/section`
  * Should be done after fetch header data from new json file
@@ -139,9 +148,14 @@ function filterOutIsMemberOnlyCategoriesInNormalSection(section) {
  * @param {Object} props
  * @param {import('../type').Section[]} props.sectionsData
  * @param {import('../type').Topic[]} props.topicsData
+ * @param {JSX.Element} [props.children]
  * @returns {React.ReactElement}
  */
-export default function Header({ sectionsData = [], topicsData = [] }) {
+export default function Header({
+  sectionsData = [],
+  topicsData = [],
+  children = null,
+}) {
   const [showSearchField, setShowSearchField] = useState(false)
   const [searchTerms, setSearchTerms] = useState('')
   const mobileSearchButtonRef = useRef(null)
@@ -246,6 +260,13 @@ export default function Header({ sectionsData = [], topicsData = [] }) {
           />
         </SearchInputWrapper>
         <NavSections sections={sections} />
+        <TopicsAndFlashNews>
+          {children}
+          <TopicsAndSubscribe>
+            <NavTopics topics={topics} />
+            <SubscribeMagazine />
+          </TopicsAndSubscribe>
+        </TopicsAndFlashNews>
       </HeaderBottom>
     </HeaderWrapper>
   )
