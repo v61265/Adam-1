@@ -525,7 +525,7 @@ export default function StoryNormalStyle({ postData }) {
           <ArticleContent content={content} />
           <DateUnderContent>
             <span>更新時間｜</span>
-            <span className="time">{updatedTaipeiTime}</span>
+            <span className="time">{updatedTaipeiTime} 臺北時間</span>
           </DateUnderContent>
           <DonateBanner />
           <SocialNetworkServiceSmall />

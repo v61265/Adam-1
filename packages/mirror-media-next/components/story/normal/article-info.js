@@ -236,8 +236,8 @@ export default function ArticleInfo({
   ) : null
   return (
     <ArticleInfoContainer>
-      <Date>發布時間：{publishedDate}</Date>
-      <Date>更新時間：{updatedDate}</Date>
+      <Date>發布時間：{publishedDate} 臺北時間</Date>
+      <Date>更新時間：{updatedDate} 臺北時間</Date>
 
       {creditsJsx}
       <SocialMediaAndDonateLink>

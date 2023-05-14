@@ -259,8 +259,8 @@ export default function StoryWideStyle({ postData }) {
             </NavSubtitleNavigator>
             <Credits credits={credits}></Credits>
             <DateWrapper>
-              <Date>更新時間 {updatedAtFormatTime}</Date>
-              <Date>發布時間 {publishedDateFormatTime}</Date>
+              <Date>更新時間 {updatedAtFormatTime} 臺北時間</Date>
+              <Date>發布時間 {publishedDateFormatTime} 臺北時間</Date>
             </DateWrapper>
             <StyledDonateLink />
             <section className="content">
