@@ -5,6 +5,12 @@ import client from '../../apollo/apollo-client'
 import { fetchTopics } from '../../apollo/query/topics'
 import SectionTopics from '../../components/section/topic/section-topics'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import ShareHeader from '../../components/shared/share-header'
+
+/**
+ * @typedef {import('../../type/theme').Theme} Theme
+ */
 
 const TopicsContainer = styled.main`
   width: 320px;
@@ -51,18 +57,22 @@ const RENDER_PAGE_SIZE = 12
  * @param {Object} props
  * @param {Topic[]} props.topics
  * @param {number} props.topicsCount
+ * @param {Object} props.headerData
  * @returns {React.ReactElement}
  */
-export default function Topics({ topics, topicsCount }) {
+export default function Topics({ topics, topicsCount, headerData }) {
   return (
-    <TopicsContainer>
-      <TopicsTitle>Topic</TopicsTitle>
-      <SectionTopics
-        topicsCount={topicsCount}
-        topics={topics}
-        renderPageSize={RENDER_PAGE_SIZE}
-      />
-    </TopicsContainer>
+    <>
+      <ShareHeader pageLayoutType="default" headerData={headerData} />
+      <TopicsContainer>
+        <TopicsTitle>Topic</TopicsTitle>
+        <SectionTopics
+          topicsCount={topicsCount}
+          topics={topics}
+          renderPageSize={RENDER_PAGE_SIZE}
+        />
+      </TopicsContainer>
+    </>
   )
 }
 
@@ -80,6 +90,7 @@ export async function getServerSideProps({ req }) {
   }
 
   const responses = await Promise.allSettled([
+    fetchHeaderDataInDefaultPageLayout(),
     client.query({
       query: fetchTopics,
       variables: {
@@ -93,7 +104,7 @@ export async function getServerSideProps({ req }) {
 
   const handledResponses = responses.map((response) => {
     if (response.status === 'fulfilled') {
-      return response.value.data
+      return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
       const annotatingError = errors.helpers.wrap(
@@ -126,14 +137,29 @@ export async function getServerSideProps({ req }) {
     }
   })
 
+  const headerData =
+    'sectionsData' in handledResponses[0]
+      ? handledResponses[0]
+      : { sectionsData: [], topicsData: [] }
+  const sectionsData = Array.isArray(headerData.sectionsData)
+    ? headerData.sectionsData
+    : []
+  const topicsData = Array.isArray(headerData.topicsData)
+    ? headerData.topicsData
+    : []
   /** @type {number} */
-  const topicsCount = handledResponses[0]?.topicsCount || 0
+  const topicsCount =
+    'data' in handledResponses[1]
+      ? handledResponses[1]?.data?.topicsCount || 0
+      : 0
   /** @type {Topic[]} */
-  const topics = handledResponses[0]?.topics || []
+  const topics =
+    'data' in handledResponses[1] ? handledResponses[1]?.data?.topics || [] : []
 
   const props = {
     topics,
     topicsCount,
+    headerData: { sectionsData, topicsData },
   }
 
   return { props }

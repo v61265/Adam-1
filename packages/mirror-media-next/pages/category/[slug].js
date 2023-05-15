@@ -1,7 +1,6 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 
-import axios from 'axios'
 import client from '../../apollo/apollo-client'
 import { fetchPosts } from '../../apollo/query/posts'
 import { fetchCategorySections } from '../../apollo/query/categroies'
@@ -13,21 +12,46 @@ import {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
 } from '../../utils/api'
+
+/**
+ * @typedef {import('../../type/theme').Theme} Theme
+ */
+
 const CategoryContainer = styled.main`
   width: 320px;
   margin: 0 auto;
 
-  ${({ theme }) => theme.breakpoint.md} {
+  ${
+    /**
+     * @param {Object} props
+     * @param {boolean} props.isPremium
+     * @param {Theme} props.theme
+     */
+    ({ theme }) => theme.breakpoint.md
+  } {
     width: 672px;
   }
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${
+    /**
+     * @param {Object} props
+     * @param {boolean} props.isPremium
+     * @param {Theme} props.theme
+     */
+    ({ theme }) => theme.breakpoint.xl
+  } {
     width: 1024px;
     padding: 0;
   }
 
-  ${({ isPremium, theme }) =>
-    isPremium &&
-    `
+  ${
+    /**
+     * @param {Object} props
+     * @param {boolean} props.isPremium
+     * @param {Theme} props.theme
+     */
+    ({ isPremium, theme }) =>
+      isPremium &&
+      `
      margin-top: 20px;
      ${theme.breakpoint.md} {
       margin-top: 28px;
@@ -35,7 +59,8 @@ const CategoryContainer = styled.main`
      ${theme.breakpoint.xl} {
       margin-top: 36px;
      }
-  `}
+  `
+  }
 `
 const CategoryTitle = styled.h1`
   margin: 20px 0 16px 16px;
@@ -138,11 +163,11 @@ export default function Category({
       />
       <CategoryContainer isPremium={isPremium}>
         {isPremium ? (
-          <PremiumCategoryTitle sectionName={category?.sections?.slug}>
+          <PremiumCategoryTitle sectionName={category?.sections?.[0].slug}>
             {category?.name}
           </PremiumCategoryTitle>
         ) : (
-          <CategoryTitle sectionName={category?.sections?.slug}>
+          <CategoryTitle sectionName={category?.sections?.[0].slug}>
             {category?.name}
           </CategoryTitle>
         )}
@@ -195,7 +220,7 @@ export async function getServerSideProps({ query, req }) {
 
   const handledResponses = responses.map((response) => {
     if (response.status === 'fulfilled') {
-      return response.value.data
+      return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
       const annotatingError = errors.helpers.wrap(
@@ -229,11 +254,11 @@ export async function getServerSideProps({ query, req }) {
   })
 
   /** @type {number} postsCount */
-  const postsCount = handledResponses[0]?.postsCount || 0
+  const postsCount = handledResponses[0]?.data?.postsCount || 0
   /** @type {Article[]} */
-  const posts = handledResponses[0]?.posts || []
+  const posts = handledResponses[0]?.data?.posts || []
   /** @type {Category} */
-  const category = handledResponses[1]?.category || {}
+  const category = handledResponses[1]?.data?.category || {}
   const isPremium = category.isMemberOnly
   let sectionsData = []
   let topicsData = []

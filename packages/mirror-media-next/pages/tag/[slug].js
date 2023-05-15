@@ -6,6 +6,8 @@ import { fetchPosts } from '../../apollo/query/posts'
 import { fetchTag } from '../../apollo/query/tags'
 import TagArticles from '../../components/tag/tag-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import ShareHeader from '../../components/shared/share-header'
 
 const TagContainer = styled.main`
   width: 320px;
@@ -70,21 +72,25 @@ const RENDER_PAGE_SIZE = 12
  * @param {Article[]} props.posts
  * @param {Tag} props.tag
  * @param {Number} props.postsCount
+ * @param {Object} props.headerData
  * @returns {React.ReactElement}
  */
-export default function Tag({ postsCount, posts, tag }) {
+export default function Tag({ postsCount, posts, tag, headerData }) {
   return (
-    <TagContainer>
-      <TagTitleWrapper>
-        <TagTitle>{tag?.name}</TagTitle>
-      </TagTitleWrapper>
-      <TagArticles
-        postsCount={postsCount}
-        posts={posts}
-        tag={tag}
-        renderPageSize={RENDER_PAGE_SIZE}
-      />
-    </TagContainer>
+    <>
+      <ShareHeader pageLayoutType="default" headerData={headerData} />
+      <TagContainer>
+        <TagTitleWrapper>
+          <TagTitle>{tag?.name}</TagTitle>
+        </TagTitleWrapper>
+        <TagArticles
+          postsCount={postsCount}
+          posts={posts}
+          tag={tag}
+          renderPageSize={RENDER_PAGE_SIZE}
+        />
+      </TagContainer>
+    </>
   )
 }
 
@@ -103,6 +109,7 @@ export async function getServerSideProps({ query, req }) {
   }
 
   const responses = await Promise.allSettled([
+    fetchHeaderDataInDefaultPageLayout(),
     client.query({
       query: fetchPosts,
       variables: {
@@ -125,7 +132,7 @@ export async function getServerSideProps({ query, req }) {
 
   const handledResponses = responses.map((response) => {
     if (response.status === 'fulfilled') {
-      return response.value.data
+      return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
       const annotatingError = errors.helpers.wrap(
@@ -158,17 +165,33 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
+  const headerData =
+    'sectionsData' in handledResponses[0]
+      ? handledResponses[0]
+      : { sectionsData: [], topicsData: [] }
+  const sectionsData = Array.isArray(headerData.sectionsData)
+    ? headerData.sectionsData
+    : []
+  const topicsData = Array.isArray(headerData.topicsData)
+    ? headerData.topicsData
+    : []
   /** @type {number} postsCount */
-  const postsCount = handledResponses[0]?.postsCount || 0
+  const postsCount =
+    'data' in handledResponses[1]
+      ? handledResponses[1]?.data?.postsCount || 0
+      : 0
   /** @type {Article[]} */
-  const posts = handledResponses[0]?.posts || []
+  const posts =
+    'data' in handledResponses[1] ? handledResponses[1]?.data?.posts || [] : []
   /** @type {Tag} */
-  const tag = handledResponses[1]?.tag || {}
+  const tag =
+    'data' in handledResponses[2] ? handledResponses[2]?.data?.tag || {} : {}
 
   const props = {
     postsCount,
     posts,
     tag,
+    headerData: { sectionsData, topicsData },
   }
 
   return { props }
