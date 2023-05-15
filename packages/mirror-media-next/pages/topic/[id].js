@@ -7,6 +7,8 @@ import { fetchTopic } from '../../apollo/query/topics'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import TopicList from '../../components/topic/list/topic-list'
 import TopicGroup from '../../components/topic/group/topic-group'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import ShareHeader from '../../components/shared/share-header'
 
 const RENDER_PAGE_SIZE = 12
 
@@ -19,12 +21,14 @@ const RENDER_PAGE_SIZE = 12
  * @param {Object} props
  * @param {Topic} props.topic
  * @param {SlideshowItem[]} props.slideshowData
+ * @param {Object} props.headerData
  * @returns
  */
-export default function Topic({ topic, slideshowData }) {
+export default function Topic({ topic, slideshowData, headerData }) {
+  let topicJSX
   switch (topic.type) {
     case 'list':
-      return (
+      topicJSX = (
         <TopicList
           topic={topic}
           renderPageSize={RENDER_PAGE_SIZE}
@@ -32,10 +36,23 @@ export default function Topic({ topic, slideshowData }) {
         />
       )
     case 'group':
-      return <TopicGroup topic={topic} />
+      topicJSX = <TopicGroup topic={topic} />
     default:
-      break
+      topicJSX = (
+        <TopicList
+          topic={topic}
+          renderPageSize={RENDER_PAGE_SIZE}
+          slideshowData={[]}
+        />
+      )
   }
+
+  return (
+    <>
+      <ShareHeader pageLayoutType="default" headerData={headerData} />
+      {topicJSX}
+    </>
+  )
 }
 
 /**
@@ -53,6 +70,7 @@ export async function getServerSideProps({ query, req }) {
   }
 
   const responses = await Promise.allSettled([
+    fetchHeaderDataInDefaultPageLayout(),
     client.query({
       query: fetchTopic,
       variables: {
@@ -67,7 +85,7 @@ export async function getServerSideProps({ query, req }) {
 
   const handledResponses = responses.map((response) => {
     if (response.status === 'fulfilled') {
-      return response.value.data
+      return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
       const annotatingError = errors.helpers.wrap(
@@ -99,8 +117,20 @@ export async function getServerSideProps({ query, req }) {
       return
     }
   })
+
+  const headerData =
+    'sectionsData' in handledResponses[0]
+      ? handledResponses[0]
+      : { sectionsData: [], topicsData: [] }
+  const sectionsData = Array.isArray(headerData.sectionsData)
+    ? headerData.sectionsData
+    : []
+  const topicsData = Array.isArray(headerData.topicsData)
+    ? headerData.topicsData
+    : []
   /** @type {Topic} */
-  const topic = handledResponses[0]?.topic || {}
+  const topic =
+    'data' in handledResponses[1] ? handledResponses[1]?.data?.topic || {} : {}
   /** @type {SlideshowItem[]} */
   let slideshowData = []
   if (topic && topic.leading === 'slideshow') {
@@ -141,6 +171,7 @@ export async function getServerSideProps({ query, req }) {
   const props = {
     topic,
     slideshowData,
+    headerData: { sectionsData, topicsData },
   }
 
   return { props }

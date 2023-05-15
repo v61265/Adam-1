@@ -31,7 +31,7 @@ const Loading = styled.div`
  * @param {Article[]} props.posts
  * @param {Section} props.section
  * @param {number} props.renderPageSize
- * @param {boolean} props.isPremium
+ * @param {boolean} [props.isPremium]
  * @returns {React.ReactElement}
  */
 export default function SectionArticles({
@@ -39,7 +39,7 @@ export default function SectionArticles({
   posts,
   section,
   renderPageSize,
-  isPremium,
+  isPremium = false,
 }) {
   async function fetchPostsFromPage(page) {
     try {

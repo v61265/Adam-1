@@ -6,6 +6,12 @@ import { fetchPosts } from '../../apollo/query/posts'
 import { fetchSection } from '../../apollo/query/sections'
 import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
+import ShareHeader from '../../components/shared/share-header'
+
+/**
+ * @typedef {import('../../type/theme').Theme} Theme
+ */
 
 const SectionContainer = styled.main`
   width: 320px;
@@ -76,21 +82,25 @@ const RENDER_PAGE_SIZE = 12
  * @param {Article[]} props.posts
  * @param {Section} props.section
  * @param {number} props.postsCount
- * @param {boolean} props.isPremium
+ * @param {Object} props.headerData
+ *
  * @returns {React.ReactElement}
  */
-export default function Section({ postsCount, posts, section, isPremium }) {
+export default function Section({ postsCount, posts, section, headerData }) {
   return (
-    <SectionContainer>
-      <SectionTitle sectionName={section?.slug}>{section?.name}</SectionTitle>
-      <SectionArticles
-        postsCount={postsCount}
-        posts={posts}
-        section={section}
-        renderPageSize={RENDER_PAGE_SIZE}
-        isPremium={isPremium}
-      />
-    </SectionContainer>
+    <>
+      <ShareHeader pageLayoutType="premium" headerData={headerData} />
+      <SectionContainer>
+        <SectionTitle sectionName={section?.slug}>{section?.name}</SectionTitle>
+        <SectionArticles
+          postsCount={postsCount}
+          posts={posts}
+          section={section}
+          renderPageSize={RENDER_PAGE_SIZE}
+          isPremium={true}
+        />
+      </SectionContainer>
+    </>
   )
 }
 
@@ -109,6 +119,7 @@ export async function getServerSideProps({ query, req }) {
   }
 
   const responses = await Promise.allSettled([
+    fetchHeaderDataInPremiumPageLayout(),
     client.query({
       query: fetchPosts,
       variables: {
@@ -134,7 +145,7 @@ export async function getServerSideProps({ query, req }) {
 
   const handledResponses = responses.map((response) => {
     if (response.status === 'fulfilled') {
-      return response.value.data
+      return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
       const annotatingError = errors.helpers.wrap(
@@ -167,18 +178,31 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
+  const headerData =
+    'sectionsData' in handledResponses[0]
+      ? handledResponses[0]
+      : { sectionsData: [] }
+
+  const sectionsData = headerData.sectionsData || []
   /** @type {number} postsCount */
-  const postsCount = handledResponses[0]?.postsCount || 0
+  const postsCount =
+    'data' in handledResponses[1]
+      ? handledResponses[1]?.data?.postsCount || 0
+      : 0
   /** @type {Article[]} */
-  const posts = handledResponses[0]?.posts || []
+  const posts =
+    'data' in handledResponses[1] ? handledResponses[1]?.data?.posts || [] : []
   /** @type {Section} */
-  const section = handledResponses[1]?.section || {}
+  const section =
+    'data' in handledResponses[2]
+      ? handledResponses[2]?.data?.section || {}
+      : {}
 
   const props = {
     postsCount,
     posts,
     section,
-    isPremium: true,
+    headerData: { sectionsData },
   }
 
   return { props }

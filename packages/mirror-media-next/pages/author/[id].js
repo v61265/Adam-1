@@ -6,6 +6,8 @@ import { fetchContact } from '../../apollo/query/contact'
 import { fetchPosts } from '../../apollo/query/posts'
 import AuthorArticles from '../../components/author/author-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import ShareHeader from '../../components/shared/share-header'
 
 const AuthorContainer = styled.main`
   width: 320px;
@@ -50,19 +52,23 @@ const RENDER_PAGE_SIZE = 12
  * @param {Article[]} props.posts
  * @param {Author} props.author
  * @param {number} props.postsCount
+ * @param {Object} props.headerData
  * @returns {React.ReactElement}
  */
-export default function Author({ postsCount, posts, author }) {
+export default function Author({ postsCount, posts, author, headerData }) {
   return (
-    <AuthorContainer>
-      <AuthorTitle>{author?.name}</AuthorTitle>
-      <AuthorArticles
-        postsCount={postsCount}
-        posts={posts}
-        author={author}
-        renderPageSize={RENDER_PAGE_SIZE}
-      />
-    </AuthorContainer>
+    <>
+      <ShareHeader pageLayoutType="default" headerData={headerData} />
+      <AuthorContainer>
+        <AuthorTitle>{author?.name}</AuthorTitle>
+        <AuthorArticles
+          postsCount={postsCount}
+          posts={posts}
+          author={author}
+          renderPageSize={RENDER_PAGE_SIZE}
+        />
+      </AuthorContainer>
+    </>
   )
 }
 
@@ -81,6 +87,7 @@ export async function getServerSideProps({ query, req }) {
   }
 
   const responses = await Promise.allSettled([
+    fetchHeaderDataInDefaultPageLayout(),
     client.query({
       query: fetchPosts,
       variables: {
@@ -106,7 +113,7 @@ export async function getServerSideProps({ query, req }) {
 
   const handledResponses = responses.map((response) => {
     if (response.status === 'fulfilled') {
-      return response.value.data
+      return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
       const annotatingError = errors.helpers.wrap(
@@ -139,17 +146,35 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
+  const headerData =
+    'sectionsData' in handledResponses[0]
+      ? handledResponses[0]
+      : { sectionsData: [], topicsData: [] }
+  const sectionsData = Array.isArray(headerData.sectionsData)
+    ? headerData.sectionsData
+    : []
+  const topicsData = Array.isArray(headerData.topicsData)
+    ? headerData.topicsData
+    : []
   /** @type {number} postsCount */
-  const postsCount = handledResponses[0]?.postsCount || 0
+  const postsCount =
+    'data' in handledResponses[1]
+      ? handledResponses[1]?.data?.postsCount || 0
+      : 0
   /** @type {Article[]} */
-  const posts = handledResponses[0]?.posts || []
+  const posts =
+    'data' in handledResponses[1] ? handledResponses[1]?.data?.posts || [] : []
   /** @type {Author} */
-  const author = handledResponses[1]?.contact || {}
+  const author =
+    'data' in handledResponses[2]
+      ? handledResponses[2]?.data?.contact || {}
+      : {}
 
   const props = {
     postsCount,
     posts,
     author,
+    headerData: { sectionsData, topicsData },
   }
 
   return { props }
