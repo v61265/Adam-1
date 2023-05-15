@@ -1,8 +1,29 @@
 //TODO: When user at certain section, at category which belongs to certain section, at story which belongs to certain section
 //component <Section> will change color of title to section color defined at /styles/sections-color.
 //TODO: Replace <a> to <Link> for Single Page Application
-import styled from 'styled-components'
-import { sectionColors } from '../styles/sections-color'
+import styled, { css } from 'styled-components'
+/**
+ * @typedef {import('../type/theme').Theme} Theme
+ */
+
+const colorCss = css`
+  ${
+    /**
+     * @param {Object} param
+     * @param {string} [param.sectionSlug]
+     * @param {Theme} [param.theme]
+     */
+    ({ sectionSlug, theme }) => {
+      if (sectionSlug === 'member') {
+        return '#e51731'
+      } else if (sectionSlug && theme.color.sectionsColor[sectionSlug]) {
+        return theme.color.sectionsColor[sectionSlug]
+      } else {
+        return '#fff'
+      }
+    }
+  };
+`
 
 const SectionsWrapper = styled.nav`
   font-size: 14px;
@@ -52,8 +73,34 @@ const Section = styled.li`
   user-select: none;
   line-height: 1.15;
   color: rgba(0, 0, 0, 0.87);
+  &:hover {
+    color: ${
+      /**
+       *
+       * @param {Object} param
+       * @param {Theme} param.theme
+       * @param {string} [param.sectionSlug]
+       */
+      ({ sectionSlug, theme }) => {
+        if (sectionSlug === 'member') {
+          return '#e51731'
+        } else if (sectionSlug && theme.color.sectionsColor[sectionSlug]) {
+          return `${theme.color.sectionsColor[sectionSlug]}`
+        } else {
+          return '#000'
+        }
+      }
+    };
+  }
 
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${
+    /**
+     * @param {Object} param
+     * @param {Theme} param.theme
+     * @param {string} [param.sectionSlug]
+     */
+    ({ theme }) => theme.breakpoint.xl
+  } {
     line-height: 150%;
     flex-shrink: 1;
     width: 100%;
@@ -63,10 +110,8 @@ const Section = styled.li`
       background-color: #000000;
     }
   }
-  &:hover {
-    ${({ color }) => color && `color: ${color}`}
-  }
 `
+
 const SectionLink = styled.a`
   display: block;
   width: 100%;
@@ -96,9 +141,17 @@ const SectionDropDown = styled.div`
 const CategoryLink = styled.a`
   display: block;
   &:hover {
-    ${({ color }) => color && `color: ${color};`}
+    color: ${({ sectionSlug }) => (sectionSlug ? colorCss : ' #fff')};
   }
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${
+    /**
+     *
+     * @param {Object} param
+     * @param {Theme} param.theme
+     * @param {string} param.sectionSlug
+     */
+    ({ theme }) => theme.breakpoint.xl
+  } {
     padding: 8px 14px 8px 14px;
   }
 `
@@ -113,11 +166,7 @@ export default function PremiumNavSections({ sections, children }) {
     <SectionsWrapper>
       <Sections>
         {sections.map((section) => (
-          <Section
-            key={section.id}
-            color={sectionColors[section.name]}
-            className={section.name}
-          >
+          <Section key={section.id} sectionSlug={section?.slug}>
             <SectionLink href={`/premiumsection/${section.slug}`}>
               <h2>{section.name}</h2>
             </SectionLink>
@@ -126,7 +175,7 @@ export default function PremiumNavSections({ sections, children }) {
                 <CategoryLink
                   key={category.id}
                   href={`/category/${category.slug}`}
-                  color={sectionColors[section.title]}
+                  sectionSlug={section.slug}
                 >
                   <h3>{category.name}</h3>
                 </CategoryLink>
