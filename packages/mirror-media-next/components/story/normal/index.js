@@ -9,7 +9,7 @@ import axios from 'axios'
 import errors from '@twreporter/errors'
 import MockAdvertisement from '../../../components/mock-advertisement'
 import ArticleInfo from '../../../components/story/normal/article-info'
-import ArticleBrief from '../../../components/story/normal/brief'
+import ArticleBrief from '../shared/brief'
 import AsideArticleList from '../../../components/story/normal/aside-article-list'
 import FbPagePlugin from '../../../components/story/normal/fb-page-plugin'
 import SocialNetworkService from '../../../components/story/normal/social-network-service'
@@ -53,7 +53,7 @@ import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
  */
 
 /**
- * @typedef {import('./brief').Brief} Brief
+ * @typedef {import('../shared/brief').Brief} Brief
  */
 /**
  * @typedef {import('./article-content').Content} Content

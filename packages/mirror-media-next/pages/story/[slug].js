@@ -91,7 +91,7 @@ export default function Story({ postData }) {
       case 'style-photography':
         return <StoryPhotographyStyle />
       case 'style-premium':
-        return <StoryPremiumStyle />
+        return <StoryPremiumStyle postData={postData} />
       default:
         return <StoryNormalStyle postData={postData} />
     }
