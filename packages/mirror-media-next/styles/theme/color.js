@@ -20,5 +20,14 @@ const sectionsColor = {
   external: '#2ECDA7',
   mirrorcolumn: '#B79479',
 }
+const videoCategoryColor = {
+  video_coverstory: '#30bac8',
+  video_entertainment: '#bf3385',
+  video_society: '#8b572a',
+  video_investigation: '#417505',
+  video_finance: '#8b222c',
+  video_people: '#4a90e2',
+  video_foodtravel: '#f1a356',
+}
 
-export const color = { brandColor, sectionsColor }
+export const color = { brandColor, sectionsColor, videoCategoryColor }
