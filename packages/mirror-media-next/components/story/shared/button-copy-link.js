@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { useRouter } from 'next/router'
 
 import styled from 'styled-components'
 import Image from 'next/image'
-
+import useSharedUrl from '../../../hooks/use-shared-url'
 const CopiedMessage = styled.div`
   position: fixed;
   top: 64px;
@@ -46,15 +45,9 @@ const ClickButton = styled.button`
  */
 export default function ButtonCopyLink({ width = 35, height = 35 }) {
   const [shouldShowMessage, setShouldShowMessage] = useState(false)
-  const { asPath } = useRouter()
+  const sharedUrl = useSharedUrl()
   const handleCopyLink = () => {
-    const origin =
-      typeof window !== 'undefined' && window.location.origin
-        ? window.location.origin
-        : 'https://www.mirrormedia.mg'
-
-    const URL = `${origin}${asPath}`
-    window.navigator.clipboard.writeText(URL)
+    window.navigator.clipboard.writeText(sharedUrl)
 
     setShouldShowMessage(true)
     const timeout = setTimeout(() => {
