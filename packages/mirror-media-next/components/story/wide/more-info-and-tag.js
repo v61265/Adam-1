@@ -12,9 +12,13 @@ import Tags from '../shared/tags'
 const Wrapper = styled.section`
   margin-top: 32px;
   .copyright-warning {
-    color: rgba(0, 0, 0, 0.5);
-    font-size: 14px;
-    line-height: 1.8;
+    display: none;
+    ${({ theme }) => theme.breakpoint.md} {
+      display: block;
+      color: rgba(0, 0, 0, 0.5);
+      font-size: 14px;
+      line-height: 1.8;
+    }
   }
   .more-info {
     display: none;
