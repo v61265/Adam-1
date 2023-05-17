@@ -1,10 +1,12 @@
 import axios from 'axios'
 import { URL_RESTFUL_SERVER } from '../../config/index.mjs'
 import styled from 'styled-components'
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import LoadingPage from '../../public/images/loading_page.gif'
 import InfiniteScrollList from '../infinite-scroll-list'
 import { useState } from 'react'
+import { simplifyYoutubePlaylistVideo } from '../../utils/youtube.js'
+import VideoList from './video-list.js'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -17,7 +19,7 @@ const Loading = styled.div`
   }
 `
 
-export default function VideoItems({ videoItems, initialNextPageToken }) {
+export default function CategoryVideos({ videoItems, initialNextPageToken }) {
   const [nextPageToken, setNextPageToken] = useState(initialNextPageToken)
   const [count, setCount] = useState(1)
   async function fetchYoutubeVideo(nextToken) {
@@ -36,8 +38,10 @@ export default function VideoItems({ videoItems, initialNextPageToken }) {
       const nextPageToken = response.data.nextPageToken
       setNextPageToken(nextPageToken)
       setCount((count) => count + 1)
-      return response.data.items.filter(
-        (item) => item.status.privacyStatus === 'public'
+      return simplifyYoutubePlaylistVideo(
+        response.data.items.filter(
+          (item) => item.status.privacyStatus === 'public'
+        )
       )
     } catch (error) {
       console.error(error)
@@ -59,18 +63,7 @@ export default function VideoItems({ videoItems, initialNextPageToken }) {
       fetchCount={nextPageToken ? count + 2 : count}
       loader={loader}
     >
-      {(renderList) => (
-        <div>
-          {renderList.map((videoItem) => (
-            <div
-              style={{ height: '50px' }}
-              key={videoItem.snippet?.resourceId?.videoId}
-            >
-              {videoItem.snippet.title}
-            </div>
-          ))}
-        </div>
-      )}
+      {(renderList) => <VideoList videos={renderList} />}
     </InfiniteScrollList>
   )
 }
