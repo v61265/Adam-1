@@ -26,72 +26,85 @@ const ArticleTitle = styled.h1`
   font-weight: 700;
   text-align: center;
   margin: 20px 10px 0;
-
+  display: block;
   width: auto;
   max-width: 800px;
   ${({ theme }) => theme.breakpoint.md} {
     position: absolute;
     left: 50%;
-    bottom: 18px;
+    bottom: calc(100% - 100vh);
     transform: translate(-50%, 0%);
     color: rgba(255, 255, 255, 0.87);
     margin: 0 auto;
     width: 90vw;
+    margin-bottom: 10vh;
+    max-width: 800px;
     font-size: 36px;
     line-height: 52px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    bottom: 60px;
     font-size: 40px;
     line-height: 1.5;
   }
 `
-const Wrapper = styled.section`
-  ${({ theme }) => theme.breakpoint.md} {
-    position: relative;
-  }
-`
+
 const Figure = styled.figure`
   margin: 0 0 0;
-  height: 100vh;
-  background-color: #d9d9d9;
-  position: relative;
+  height: 100%;
 
   video {
-    position: absolute;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     object-position: center center;
   }
   .readr-media-react-image {
-    position: absolute;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     object-position: center center;
+  }
+  .empty {
+    width: 100%;
+    height: 100vh;
+    background-color: #d9d9d9;
+  }
+  &::after {
+    content: ' ';
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15));
   }
   ${({ theme }) => theme.breakpoint.md} {
     margin: 0 0 0;
-
-    &::after {
-      content: ' ';
-      position: absolute;
-      display: block;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(
-        0deg,
-        rgba(0, 0, 0, 0.15),
-        rgba(0, 0, 0, 0.15)
-      );
-    }
+  }
+`
+const Empty = styled.div`
+  margin: 0 0 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #d9d9d9;
+`
+const HeroCaption = styled.figcaption`
+  display: block;
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.8;
+  font-weight: 400;
+  color: #9f9f9f;
+  margin: 12px auto 0;
+  padding: 0 20px;
+  max-width: 680px;
+  text-align: center;
+  ${({ theme }) => theme.breakpoint.md} {
+    font-size: 14px;
   }
 `
 
-const HeroCaption = styled.figcaption`
-  display: none;
-`
 /**
  *
  * @param {Object} props
@@ -99,7 +112,7 @@ const HeroCaption = styled.figcaption`
  * @param {HeroVideo | null} props.heroVideo
  * @param {string} props.heroCaption
  * @param {string} props.title
- * @returns
+ * @returns {JSX.Element}
  */
 export default function HeroImageAndVideo({
   heroImage = null,
@@ -109,6 +122,7 @@ export default function HeroImageAndVideo({
 }) {
   const shouldShowHeroVideo = Boolean(heroVideo)
   const shouldShowHeroImage = Boolean(!shouldShowHeroVideo && heroImage)
+
   const heroJsx = () => {
     if (shouldShowHeroVideo) {
       return (
@@ -140,12 +154,16 @@ export default function HeroImageAndVideo({
   }
 
   return (
-    <Wrapper>
-      <Figure>
-        {heroJsx()}
-        <HeroCaption>{title}</HeroCaption>
-      </Figure>
+    <>
+      {shouldShowHeroImage || shouldShowHeroVideo ? (
+        <Figure>
+          {heroJsx()}
+          {heroCaption ? <HeroCaption>{heroCaption}</HeroCaption> : null}
+        </Figure>
+      ) : (
+        <Empty />
+      )}
       <ArticleTitle>{title}</ArticleTitle>
-    </Wrapper>
+    </>
   )
 }
