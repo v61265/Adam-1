@@ -232,11 +232,13 @@ export default function LeadingVideoItem({ video, slug, playlistTitle }) {
       </Youtube>
 
       <Title>
-        <a href={`/video/${video.id}`}>{video.title}</a>
+        <a href={`/video/${video.id}`} target="_blank" rel="noreferrer">
+          {video.title}
+        </a>
       </Title>
 
       <Description>
-        <a href={`/video/${video.id}`}>
+        <a href={`/video/${video.id}`} target="_blank" rel="noreferrer">
           {video.description?.split('-----')[0]}
         </a>
       </Description>

@@ -43,18 +43,20 @@ export default function VideoCategory({
   const firstVideo = videos[0]
   const remainingVideos = videos.slice(1)
   return (
-    <Wrapper>
+    <>
       <ShareHeader pageLayoutType="default" headerData={headerData} />
-      <LeadingVideo
-        video={firstVideo}
-        title={category.name}
-        slug={category.slug}
-      />
-      <CategoryVideos
-        videoItems={remainingVideos}
-        initialNextPageToken={ytNextPageToken}
-      />
-    </Wrapper>
+      <Wrapper>
+        <LeadingVideo
+          video={firstVideo}
+          title={category.name}
+          slug={category.slug}
+        />
+        <CategoryVideos
+          videoItems={remainingVideos}
+          initialNextPageToken={ytNextPageToken}
+        />
+      </Wrapper>
+    </>
   )
 }
 

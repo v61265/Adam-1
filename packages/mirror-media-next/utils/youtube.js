@@ -8,6 +8,8 @@ function simplifyYoutubeSearchedVideo(videos) {
     title: video.snippet.title,
     description: video.snippet.description,
     thumbnail: video.snippet.thumbnails.high.url,
+    publishedAt: video.snippet.publishedAt,
+    channelId: video.snippet.channelId,
   }))
 }
 
@@ -21,7 +23,24 @@ function simplifyYoutubePlaylistVideo(videos) {
     title: video.snippet.title,
     description: video.snippet.description,
     thumbnail: video.snippet.thumbnails.high.url,
+    publishedAt: video.snippet.publishedAt,
+    channelId: video.snippet.channelId,
   }))
 }
 
 export { simplifyYoutubeSearchedVideo, simplifyYoutubePlaylistVideo }
+
+/**
+ * @param {import("../type/youtube").YoutubeRawVideo[]} videos
+ * @returns {import("../type/youtube").YoutubeVideo[]}
+ */
+export function simplifyYoutubeVideo(videos) {
+  return videos.map((video) => ({
+    id: video.id,
+    title: video.snippet.title,
+    description: video.snippet.description,
+    thumbnail: video.snippet.thumbnails.high.url,
+    publishedAt: video.snippet.publishedAt,
+    channelId: video.snippet.channelId,
+  }))
+}

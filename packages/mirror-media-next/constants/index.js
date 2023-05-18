@@ -148,6 +148,9 @@ const MIRROR_YOUTUBE_CHANNELS = [
   },
 ]
 
+const SHARE_URL_FACEBOOK = 'https://www.facebook.com/share.php?u='
+const SHARE_URL_LINE = 'https://social-plugins.line.me/lineit/share?url='
+
 export {
   SITE_TITLE,
   SOCIAL_MEDIA_LINKS,
@@ -155,4 +158,6 @@ export {
   SUB_BRAND_LINKS,
   VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING,
   MIRROR_YOUTUBE_CHANNELS,
+  SHARE_URL_FACEBOOK,
+  SHARE_URL_LINE,
 }
