@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import WineWarning from '../../components/story/shared/wine-warning'
 
 import { fetchPostBySlug } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
@@ -79,7 +80,12 @@ const mockMemberSystem = () => {
  * @returns {JSX.Element}
  */
 export default function Story({ postData }) {
-  const { title = '', style = 'article', isMember = false } = postData
+  const {
+    title = '',
+    style = 'article',
+    isMember = false,
+    categories = [],
+  } = postData
 
   const [storyLayout, setStoryLayout] = useState(null)
 
@@ -129,6 +135,7 @@ export default function Story({ postData }) {
       <ShareHeader pageLayoutType="empty" />
       {!storyLayout && <MockLoading>Loading...</MockLoading>}
       <div style={{ display: `${storyLayout ? 'block' : 'none'}` }}>{jsx}</div>
+      <WineWarning categories={categories} />
     </>
   )
 }
