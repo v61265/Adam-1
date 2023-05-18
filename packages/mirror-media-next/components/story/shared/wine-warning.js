@@ -40,18 +40,17 @@ export default function WineWarning({ categories }) {
     (category) => category.slug === 'wine' || category.slug === 'wine1'
   )
 
-  return (
-    <>
-      {categoryOfWineSlug.length > 0 && (
-        <Wrapper>
-          <Image
-            className="wine-warning-image"
-            src={'/images/wine-warning.jpg'}
-            fill={true}
-            alt="wine-warning"
-          />
-        </Wrapper>
-      )}
-    </>
-  )
+  const wineWarningJsx =
+    categoryOfWineSlug.length > 0 ? (
+      <Wrapper>
+        <Image
+          className="wine-warning-image"
+          src={'/images/wine-warning.jpg'}
+          fill={true}
+          alt="wine-warning"
+        />
+      </Wrapper>
+    ) : null
+
+  return <>{wineWarningJsx}</>
 }
