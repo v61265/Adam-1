@@ -108,8 +108,6 @@ export const asideListingPost = gql`
  * @property {string} id - unique id of post
  * @property {string} slug - post slug
  * @property {string} title - post title
- * @property {'dark' | 'light'} titleColor - font color of title should be light or dark
- * @property {string} subtitle - post subtitle
  * @property {string} publishedDate - post published date
  * @property {string} updatedAt - post updated date
  * @property {PostState} state - post state, different states will have different post access of viewing
@@ -147,8 +145,7 @@ export const post = gql`
     id
     slug
     title
-    titleColor
-    subtitle
+
     style
     isMember
     publishedDate
