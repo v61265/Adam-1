@@ -12,7 +12,7 @@ import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 
 import Header from './header'
 import DonateLink from '../shared/donate-link'
-import HeroImageAndVideo from './hero-image-and-video'
+import HeroImageAndVideo from '../shared/hero-image-and-video'
 import Credits from '../shared/credits'
 import DonateBanner from '../shared/donate-banner'
 import RelatedArticleList from './related-article-list'
