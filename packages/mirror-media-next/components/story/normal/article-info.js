@@ -4,6 +4,7 @@ import Image from 'next/image'
 import ButtonCopyLink from '../shared/button-copy-link'
 import DonateLink from '../shared/donate-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
+import Tags from '../shared/tags'
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
@@ -53,30 +54,6 @@ const CreditList = styled.span`
 
   .no-link {
     color: rgba(52, 73, 94, 1);
-  }
-`
-
-const Tag = styled.a`
-  font-size: 14px;
-  line-height: 20px;
-  padding: 4px 8px;
-  border-radius: 2px;
-  background-color: ${
-    /**
-     * @param {{theme:Theme}} param
-     */
-    ({ theme }) => theme.color.brandColor.darkBlue
-  };
-  color: white;
-  font-weight: 400;
-`
-const Tags = styled.div`
-  display: flex;
-  gap: 12px 8px;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  ${({ theme }) => theme.breakpoint.md} {
-    margin-top: 25.5px;
   }
 `
 
@@ -187,7 +164,6 @@ export default function ArticleInfo({
     return people.length !== 0 || (typeof people === 'string' && people.trim())
   })
 
-  const shouldShowTags = tags && tags.length
   const creditsJsx = shouldShowCredits ? (
     <Credits>
       {credits.map((credit, index) => {
@@ -224,16 +200,12 @@ export default function ArticleInfo({
       })}
     </Credits>
   ) : null
-
-  const tagsJsx = shouldShowTags ? (
-    <Tags>
-      {tags.map((tag) => (
-        <Tag key={tag.id} href={`/tag/${tag.slug}`} target="_blank">
-          {tag.name}
-        </Tag>
-      ))}
-    </Tags>
-  ) : null
+  const StyledTags = styled(Tags)`
+    margin-top: 20px;
+    ${({ theme }) => theme.breakpoint.md} {
+      margin-top: 25.5px;
+    }
+  `
   return (
     <ArticleInfoContainer>
       <Date>發布時間：{publishedDate} 臺北時間</Date>
@@ -256,7 +228,7 @@ export default function ArticleInfo({
         </SocialMedia>
         <DonateLink />
       </SocialMediaAndDonateLink>
-      {tagsJsx}
+      <StyledTags tags={tags} />
     </ArticleInfoContainer>
   )
 }

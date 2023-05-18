@@ -7,7 +7,6 @@ import client from '../../../apollo/apollo-client'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { getContentBlocksH2H3 } = MirrorMedia
-
 import {
   transformTimeDataIntoDotFormat,
   sortArrayWithOtherArrayId,
@@ -22,6 +21,7 @@ import DonateBanner from '../shared/donate-banner'
 import RelatedArticleList from './related-article-list'
 import AsideArticleList from './aside-article-list'
 import NavSubtitleNavigator from './nav-subtitle-navigator'
+import MoreInfoAndTag from './more-info-and-tag'
 
 import Divider from '../shared/divider'
 import ButtonCopyLink from '../shared/button-copy-link'
@@ -33,6 +33,9 @@ import { fetchAsidePosts } from '../../../apollo/query/posts'
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
  */
 
+/**
+ * @typedef {import('../../../type/theme').Theme} Theme
+ */
 const Main = styled.main`
   margin: auto;
   width: 100%;
@@ -74,12 +77,9 @@ const ContentWrapper = styled.section`
   .content {
     width: 100%;
     margin: 20px auto 0;
-    max-width: 640px;
   }
 
   ${({ theme }) => theme.breakpoint.md} {
-    padding: 0 0 32px;
-
     border-bottom: 1px black solid;
     .content {
       margin: 40px auto 0;
@@ -87,14 +87,9 @@ const ContentWrapper = styled.section`
   }
 `
 const StyledDonateBanner = styled(DonateBanner)`
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
-  max-width: 640px;
-  ${({ theme }) => theme.breakpoint.md} {
-    margin-left: auto;
-    margin-right: auto;
-  }
 `
 const Aside = styled.aside`
   width: 100%;
@@ -153,6 +148,7 @@ export default function StoryWideStyle({ postData }) {
     slug = '',
     content = null,
     brief = null,
+    tags = [],
   } = postData
   const updatedAtFormatTime = transformTimeDataIntoDotFormat(updatedAt)
   const publishedDateFormatTime = transformTimeDataIntoDotFormat(publishedDate)
@@ -270,7 +266,7 @@ export default function StoryWideStyle({ postData }) {
                 contentLayout="wide"
               />
             </section>
-
+            <MoreInfoAndTag tags={tags} />
             <StyledDonateBanner />
           </ContentWrapper>
           <Aside>
