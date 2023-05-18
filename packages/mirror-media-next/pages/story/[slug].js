@@ -5,6 +5,7 @@ import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
+import { GCP_PROJECT_ID } from '../../config/index.mjs'
 
 import { fetchPostBySlug } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
@@ -135,8 +136,17 @@ export default function Story({ postData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ params, req }) {
   const { slug } = params
+  const traceHeader = req.headers?.['x-cloud-trace-context']
+  let globalLogFields = {}
+  if (traceHeader && !Array.isArray(traceHeader)) {
+    const [trace] = traceHeader.split('/')
+    globalLogFields[
+      'logging.googleapis.com/trace'
+    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
+  }
+
   try {
     const result = await client.query({
       query: fetchPostBySlug,
@@ -160,7 +170,7 @@ export async function getServerSideProps({ params }) {
     const annotatingError = errors.helpers.wrap(
       err,
       'UnhandledError',
-      'Error occurs while getting index page data'
+      'Error occurs while getting story page data'
     )
 
     console.log(
@@ -180,6 +190,7 @@ export async function getServerSideProps({ params }) {
           clientErrors,
           networkError,
         },
+        ...globalLogFields,
       })
     )
     return { notFound: true }
