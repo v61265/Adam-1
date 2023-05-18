@@ -35,10 +35,16 @@ const Wrapper = styled.div`
  * @returns {JSX.Element}
  */
 
-export default function WineWarning({ categories }) {
-  const categoryOfWineSlug = categories.filter(
-    (category) => category.slug === 'wine' || category.slug === 'wine1'
-  )
+export default function WineWarning({ categories = [] }) {
+  let categoryOfWineSlug //array of categories with the slug 'wine' or 'wine1'.
+
+  if (Array.isArray(categories)) {
+    categoryOfWineSlug = categories.filter(
+      (category) => category.slug === 'wine' || category.slug === 'wine1'
+    )
+  } else {
+    categoryOfWineSlug = []
+  }
 
   const wineWarningJsx =
     categoryOfWineSlug.length > 0 ? (
