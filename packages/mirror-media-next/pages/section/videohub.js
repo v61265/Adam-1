@@ -177,7 +177,6 @@ export async function getServerSideProps({ req }) {
     'data' in handledResponses[3]
       ? handledResponses[3]?.data?.section.categories
       : []
-  console.log('categories', categories)
 
   const channelIds = categories.map(
     (category) => VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING[category.slug]
