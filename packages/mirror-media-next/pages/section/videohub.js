@@ -155,7 +155,7 @@ export async function getServerSideProps({ req }) {
   })
 
   const headerData =
-    'sectionsData' in handledResponses[0]
+    handledResponses[0] && 'sectionsData' in handledResponses[0]
       ? handledResponses[0]
       : { sectionsData: [], topicsData: [] }
   const sectionsData = Array.isArray(headerData.sectionsData)
@@ -166,17 +166,17 @@ export async function getServerSideProps({ req }) {
     : []
 
   let highestViewCountVideo =
-    'data' in handledResponses[1]
+    handledResponses[1] && 'data' in handledResponses[1]
       ? simplifyYoutubeSearchedVideo(handledResponses[1]?.data?.items)[0]
       : {}
 
   const latestVideos =
-    'data' in handledResponses[2]
+    handledResponses[2] && 'data' in handledResponses[2]
       ? simplifyYoutubeSearchedVideo(handledResponses[2]?.data?.items)
       : []
 
   const categories =
-    'data' in handledResponses[3]
+    handledResponses[3] && 'data' in handledResponses[3]
       ? handledResponses[3]?.data?.section.categories
       : []
 
@@ -245,16 +245,18 @@ export async function getServerSideProps({ req }) {
   })
 
   highestViewCountVideo =
-    'data' in handledPlaylistResponses[0]
+    handledPlaylistResponses[0] && 'data' in handledPlaylistResponses[0]
       ? simplifyYoutubeVideo(handledPlaylistResponses[0]?.data?.items)[0]
       : highestViewCountVideo
 
   const playlistsVideos = categories.map((category, index) => ({
     ...category,
     items: simplifyYoutubePlaylistVideo(
-      handledPlaylistResponses[index + 1].data.items
-        ?.filter((item) => item.status.privacyStatus === 'public')
-        .slice(0, 4)
+      handledPlaylistResponses[index + 1]
+        ? handledPlaylistResponses[index + 1].data?.items
+            ?.filter((item) => item.status.privacyStatus === 'public')
+            .slice(0, 4)
+        : []
     ),
   }))
 

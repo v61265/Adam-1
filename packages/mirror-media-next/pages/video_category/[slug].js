@@ -123,7 +123,7 @@ export async function getServerSideProps({ query, req }) {
   })
 
   const headerData =
-    'sectionsData' in handledResponses[0]
+    handledResponses[0] && 'sectionsData' in handledResponses[0]
       ? handledResponses[0]
       : { sectionsData: [], topicsData: [] }
   const sectionsData = Array.isArray(headerData.sectionsData)
@@ -134,20 +134,26 @@ export async function getServerSideProps({ query, req }) {
     : []
 
   const videos =
-    'data' in handledResponses[1]
+    handledResponses[1] && 'data' in handledResponses[1]
       ? simplifyYoutubePlaylistVideo(
           handledResponses[1]?.data?.items.filter(
+            /**
+             * @param {import('../section/videohub.js').YoutubeRawPlaylistVideo} item
+             * @returns
+             */
             (item) => item.status.privacyStatus === 'public'
           )
         )
       : []
   const ytNextPageToken =
-    'data' in handledResponses[1]
+    handledResponses[1] && 'data' in handledResponses[1]
       ? handledResponses[1]?.data?.nextPageToken
       : ''
 
   const category =
-    'data' in handledResponses[2] ? handledResponses[2]?.data?.category : {}
+    handledResponses[2] && 'data' in handledResponses[2]
+      ? handledResponses[2]?.data?.category
+      : {}
 
   const props = {
     videos,

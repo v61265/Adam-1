@@ -60,6 +60,8 @@ export default {}
  * @property {Object} snippet.resourceId
  * @property {string} snippet.resourceId.kind
  * @property {string} snippet.resourceId.videoId
+ * @property {Object} status
+ * @property {string} status.privacyStatus
  */
 
 /**
