@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
-import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+// import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 import Credits from '../wide/credits'
 
 const Main = styled.main`
