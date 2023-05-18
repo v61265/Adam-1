@@ -151,6 +151,13 @@ const MIRROR_YOUTUBE_CHANNELS = [
 const SHARE_URL_FACEBOOK = 'https://www.facebook.com/share.php?u='
 const SHARE_URL_LINE = 'https://social-plugins.line.me/lineit/share?url='
 
+const Z_INDEX = {
+  top: 10000,
+  coverHeader: 2000,
+  header: 1000,
+  coverContent: 100,
+}
+
 export {
   SITE_TITLE,
   SOCIAL_MEDIA_LINKS,
@@ -160,4 +167,5 @@ export {
   MIRROR_YOUTUBE_CHANNELS,
   SHARE_URL_FACEBOOK,
   SHARE_URL_LINE,
+  Z_INDEX,
 }
