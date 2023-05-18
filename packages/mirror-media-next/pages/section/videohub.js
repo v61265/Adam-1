@@ -13,6 +13,7 @@ import SubscribeChannels from '../../components/section/videohub/subscribe-chann
 import {
   simplifyYoutubePlaylistVideo,
   simplifyYoutubeSearchedVideo,
+  simplifyYoutubeVideo,
 } from '../../utils/youtube.js'
 import LeadingVideo from '../../components/shared/leading-video.js'
 
@@ -164,10 +165,11 @@ export async function getServerSideProps({ req }) {
     ? headerData.topicsData
     : []
 
-  const highestViewCountVideo =
+  let highestViewCountVideo =
     'data' in handledResponses[1]
       ? simplifyYoutubeSearchedVideo(handledResponses[1]?.data?.items)[0]
-      : []
+      : {}
+
   const latestVideos =
     'data' in handledResponses[2]
       ? simplifyYoutubeSearchedVideo(handledResponses[2]?.data?.items)
@@ -183,6 +185,21 @@ export async function getServerSideProps({ req }) {
   )
 
   const playlistResponses = await Promise.allSettled([
+    // fetch highest view count with youtube/videos to get full snippet.description
+    // cause in youtube/search we only receieve truncated one
+    highestViewCountVideo.id
+      ? axios({
+          method: 'get',
+          url: `${URL_RESTFUL_SERVER}/youtube/videos`,
+          // use URLSearchParams to add two values for key 'part'
+          params: new URLSearchParams([
+            ['id', highestViewCountVideo.id],
+            ['part', 'snippet'],
+            ['part', 'status'],
+            ['maxResults', '1'],
+          ]),
+        })
+      : Promise.resolve({}),
     ...channelIds.map((channelId) =>
       axios({
         method: 'get',
@@ -200,7 +217,7 @@ export async function getServerSideProps({ req }) {
   ])
   const handledPlaylistResponses = playlistResponses.map((response) => {
     if (response.status === 'fulfilled') {
-      return response.value.data
+      return response.value
     } else if (response.status === 'rejected') {
       const annotatingError = errors.helpers.wrap(
         response.reason,
@@ -227,10 +244,15 @@ export async function getServerSideProps({ req }) {
     }
   })
 
+  highestViewCountVideo =
+    'data' in handledPlaylistResponses[0]
+      ? simplifyYoutubeVideo(handledPlaylistResponses[0]?.data?.items)[0]
+      : highestViewCountVideo
+
   const playlistsVideos = categories.map((category, index) => ({
     ...category,
     items: simplifyYoutubePlaylistVideo(
-      handledPlaylistResponses[index].items
+      handledPlaylistResponses[index + 1].data.items
         ?.filter((item) => item.status.privacyStatus === 'public')
         .slice(0, 4)
     ),
