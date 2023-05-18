@@ -1,6 +1,7 @@
 import Image from 'next/image'
 
 import styled from 'styled-components'
+import { Z_INDEX } from '../../../constants'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
   position: fixed;
   left: 0;
   bottom: 0;
-  z-index: 9999;
+  z-index: ${Z_INDEX.coverContent};
   display: flex;
   align-items: center;
   justify-content: center;
