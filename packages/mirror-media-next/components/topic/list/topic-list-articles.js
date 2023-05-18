@@ -49,7 +49,6 @@ export default function TopicListArticles({
           postsSkip: (page - 1) * renderPageSize,
         },
       })
-      console.log(response.data)
       return response.data.topic.posts
     } catch (error) {
       console.error(error)

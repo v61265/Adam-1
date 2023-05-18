@@ -86,4 +86,78 @@ const READR_LINK = {
 }
 const SUB_BRAND_LINKS = [MIRRORVOICE_LINK, MIRRORFICTION_LINK, READR_LINK]
 
-export { SITE_TITLE, SOCIAL_MEDIA_LINKS, PROMOTION_LINKS, SUB_BRAND_LINKS }
+const VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING = {
+  // 鏡封面
+  video_coverstory: 'PLftq_bkhPR3ZtDGBhyqVGObQXazG_O3M3',
+
+  // 鏡娛樂
+  video_entertainment: 'PLftq_bkhPR3aj8UaqBvel6wia54AM5wlh',
+
+  // 鏡社會
+  video_society: 'PLftq_bkhPR3bLVBh5khl2pLxgFoPwrbfl',
+
+  // 鏡調查
+  video_investigation: 'PLftq_bkhPR3YOrSnIpcqSkY3hPE2TjXfW',
+
+  // 鏡人物
+  video_people: 'PLftq_bkhPR3YkNjH8VQZ__8nXZ9INIjAu',
+
+  // 鏡財經
+  video_finance: 'PLftq_bkhPR3afBv0Wg_oUqjd_pkWIJm2h',
+
+  // 鏡食旅
+  video_foodtravel: 'PLftq_bkhPR3baCfd6RU_1hbkY8ynXssun',
+
+  // 娛樂透視
+  video_ent_perspective: 'PLftq_bkhPR3YxUNEIHIMA2fsM-DqxCHMb',
+
+  // 鏡錶誌
+  video_carandwatch: 'PLgvIJQ8OtT8LOdwVF4P9hdQiuf6uAiwb6',
+}
+
+const MIRROR_YOUTUBE_CHANNELS = [
+  {
+    title: '鏡週刊',
+    id: 'UCYkldEK001GxR884OZMFnRw',
+    name: 'media',
+    icon: '/images/video-mirror-weekly.svg',
+  },
+  {
+    title: '鏡人物',
+    id: 'UCccoVnb8YmHzArr7yrX7bTA',
+    name: 'people',
+    icon: '/images/video-mirror-people.svg',
+  },
+  {
+    title: '鏡娛樂',
+    id: 'UCSGNZVECzarsXTxPsNS9Zow',
+    name: 'fun',
+    icon: '/images/video-mirror-fun.svg',
+  },
+  {
+    title: '鏡食旅',
+    id: 'UCglE1_DI0TDSY70WfeoPSOQ',
+    name: 'food',
+    icon: '/images/video-mirror-food.svg',
+  },
+  {
+    title: '鏡錶誌',
+    id: 'UCbeskkrp36Virbj6lcxWxJA',
+    name: 'watch',
+    icon: '/images/video-mirror-watch.svg',
+  },
+]
+
+const SHARE_URL_FACEBOOK = 'https://www.facebook.com/share.php?u='
+const SHARE_URL_LINE = 'https://social-plugins.line.me/lineit/share?url='
+
+export {
+  SITE_TITLE,
+  SOCIAL_MEDIA_LINKS,
+  PROMOTION_LINKS,
+  SUB_BRAND_LINKS,
+  VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING,
+  MIRROR_YOUTUBE_CHANNELS,
+  SHARE_URL_FACEBOOK,
+  SHARE_URL_LINE,
+}
