@@ -121,7 +121,7 @@ export async function getServerSideProps({ query, req }) {
   })
 
   const headerData =
-    'sectionsData' in handledResponses[0]
+    handledResponses[0] && 'sectionsData' in handledResponses[0]
       ? handledResponses[0]
       : { sectionsData: [], topicsData: [] }
   const sectionsData = Array.isArray(headerData.sectionsData)
@@ -132,7 +132,7 @@ export async function getServerSideProps({ query, req }) {
     : []
 
   const video =
-    'data' in handledResponses[1]
+    handledResponses[1] && 'data' in handledResponses[1]
       ? simplifyYoutubeVideo(handledResponses[1]?.data?.items)[0]
       : { channelId: '' }
   const channelId = video.channelId
