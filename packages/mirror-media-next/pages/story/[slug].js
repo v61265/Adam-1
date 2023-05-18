@@ -98,7 +98,7 @@ export default function Story({ postData }) {
       case 'style-wide':
         return <StoryWideStyle postData={postData} />
       case 'style-photography':
-        return <StoryPhotographyStyle />
+        return <StoryPhotographyStyle postData={postData} />
       case 'style-premium':
         return <StoryPremiumStyle postData={postData} />
       default:
