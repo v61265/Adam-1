@@ -117,6 +117,7 @@ export const asideListingPost = gql`
  * @property {PostState} state - post state, different states will have different post access of viewing
  * @property {'article'| 'wide' | 'projects' | 'photography' | 'script' | 'campaign' | 'readr'} style - what kind of article style is
  * @property {boolean} isMember - whether this post is a member article
+ * @property {boolean} isAdult - whether this post only adults can read
  * @property {Section[] | null } sections - which sections does this post belong to
  * @property {Section[] | null} manualOrderOfSections - sections with adjusted order
  * @property {Pick<Category, 'id' | 'name'  | 'slug'>[] } categories - which categories does this post belong to
@@ -154,6 +155,7 @@ export const post = gql`
 
     style
     isMember
+    isAdult
     publishedDate
     updatedAt
     sections {

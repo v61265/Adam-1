@@ -7,6 +7,7 @@ import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import WineWarning from '../../components/story/shared/wine-warning'
+import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 
 import { fetchPostBySlug } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
@@ -84,6 +85,7 @@ export default function Story({ postData }) {
     title = '',
     style = 'article',
     isMember = false,
+    isAdult = false,
     categories = [],
   } = postData
 
@@ -136,6 +138,7 @@ export default function Story({ postData }) {
       {!storyLayout && <MockLoading>Loading...</MockLoading>}
       <div style={{ display: `${storyLayout ? 'block' : 'none'}` }}>{jsx}</div>
       <WineWarning categories={categories} />
+      <AdultOnlyWarning isAdult={isAdult} />
     </>
   )
 }
