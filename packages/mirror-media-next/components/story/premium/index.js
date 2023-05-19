@@ -4,9 +4,15 @@ import ShareHeader from '../../shared/share-header'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import ArticleBrief from '../shared/brief'
 import { fetchHeaderDataInPremiumPageLayout } from '../../../utils/api'
+import { sortArrayWithOtherArrayId } from '../../../utils'
 import errors from '@twreporter/errors'
+import TitleAndInfoAndHero from './title-and-info-and-hero'
+
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
+ */
+/**
+ * @typedef {import('../../../type/theme').Theme} Theme
  */
 
 const HeaderPlaceHolder = styled.header`
@@ -47,6 +53,30 @@ const ContentWrapper = styled.section`
     }
   }
 `
+
+/**
+ * In premium article, we have to select one element in array `sections` and render it's name.
+ * The logic of select title for render is :
+ * 1. If the first element's slug is `member`, and second element is existed,
+ * then show second element's name.
+ * 2. If the first element's slug is `member`, but second element is not existed,
+ * then show first element's name, which is `會員專區`.
+ * 3. If the first element's slug is not `member`,
+ * then show first element's name, which name is definitely not `member`.
+ * @param {import('../../../apollo/fragments/section').Section[]} sections
+ * @returns {string | undefined}
+ */
+function getSectionLabelFirst(sections) {
+  if (!sections || !sections.length) {
+    return undefined
+  }
+  if (sections?.[0]?.slug === 'member' && sections?.[1]) {
+    return sections?.[1]?.name
+  } else {
+    return sections?.[0]?.name
+  }
+}
+
 /**
  *
  * @param {Object} props
@@ -58,6 +88,47 @@ export default function StoryPremiumStyle({ postData }) {
     sectionsData: [],
   })
   const [isHeaderDataLoaded, setIsHeaderDataLoaded] = useState(false)
+  const {
+    title,
+    brief = { blocks: [], entityMap: {} },
+    content = { blocks: [], entityMap: {} },
+    sections = [],
+    manualOrderOfSections = [],
+    writers = [],
+    manualOrderOfWriters = [],
+    photographers = [],
+    camera_man = [],
+    designers = [],
+    engineers = [],
+    vocals = [],
+    extend_byline = '',
+    updatedAt = '',
+    publishedDate = '',
+    tags = [],
+    heroImage,
+    heroVideo,
+    heroCaption,
+  } = postData
+
+  const sectionsWithOrdered =
+    manualOrderOfSections && manualOrderOfSections.length
+      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+      : sections
+  const sectionLabelFirst = getSectionLabelFirst(sectionsWithOrdered)
+  const writersWithOrdered =
+    manualOrderOfWriters && manualOrderOfWriters.length
+      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+      : writers
+
+  const credits = [
+    { writers: writersWithOrdered },
+    { photographers: photographers },
+    { camera_man: camera_man },
+    { designers: designers },
+    { engineers: engineers },
+    { vocals: vocals },
+    { extend_byline: extend_byline },
+  ]
 
   useEffect(() => {
     let ignore = false
@@ -91,7 +162,6 @@ export default function StoryPremiumStyle({ postData }) {
     }
   }, [isHeaderDataLoaded])
 
-  const { content, brief } = postData
   return (
     <>
       {isHeaderDataLoaded ? (
@@ -107,6 +177,18 @@ export default function StoryPremiumStyle({ postData }) {
 
       <Main>
         <article>
+          <TitleAndInfoAndHero
+            sectionLabelFirst={sectionLabelFirst}
+            title={title}
+            heroImage={heroImage}
+            heroVideo={heroVideo}
+            heroCaption={heroCaption}
+            credits={credits}
+            publishedDate={publishedDate}
+            updatedAt={updatedAt}
+            tags={tags}
+          />
+
           <ContentWrapper>
             <section className="content">
               <ArticleBrief
