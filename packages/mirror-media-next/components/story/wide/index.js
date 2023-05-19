@@ -7,22 +7,19 @@ import client from '../../../apollo/apollo-client'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { getContentBlocksH2H3 } = MirrorMedia
-import {
-  transformTimeDataIntoDotFormat,
-  sortArrayWithOtherArrayId,
-} from '../../../utils'
+import { sortArrayWithOtherArrayId } from '../../../utils'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 
 import Header from './header'
 import DonateLink from '../shared/donate-link'
-import HeroImageAndVideo from './hero-image-and-video'
-import Credits from './credits'
+import HeroImageAndVideo from '../shared/hero-image-and-video'
+import Credits from '../shared/credits'
 import DonateBanner from '../shared/donate-banner'
 import RelatedArticleList from './related-article-list'
 import AsideArticleList from './aside-article-list'
 import NavSubtitleNavigator from './nav-subtitle-navigator'
 import MoreInfoAndTag from './more-info-and-tag'
-
+import Date from '../shared/date'
 import Divider from '../shared/divider'
 import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
@@ -54,16 +51,10 @@ const DateWrapper = styled.div`
     margin-top: 20px;
   }
 `
-const Date = styled.div`
-  width: fit-content;
-  height: auto;
-  font-size: 14px;
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.5);
+const StyledDate = styled(Date)`
   margin: 8px auto 0;
 
   ${({ theme }) => theme.breakpoint.md} {
-    line-height: 1.8;
     margin: 0 auto;
   }
 `
@@ -150,8 +141,6 @@ export default function StoryWideStyle({ postData }) {
     brief = null,
     tags = [],
   } = postData
-  const updatedAtFormatTime = transformTimeDataIntoDotFormat(updatedAt)
-  const publishedDateFormatTime = transformTimeDataIntoDotFormat(publishedDate)
   const sectionsWithOrdered =
     manualOrderOfSections && manualOrderOfSections.length
       ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
@@ -255,8 +244,8 @@ export default function StoryWideStyle({ postData }) {
             </NavSubtitleNavigator>
             <Credits credits={credits}></Credits>
             <DateWrapper>
-              <Date>更新時間 {updatedAtFormatTime} 臺北時間</Date>
-              <Date>發布時間 {publishedDateFormatTime} 臺北時間</Date>
+              <StyledDate timeData={publishedDate} timeType="publishedDate" />
+              <StyledDate timeData={updatedAt} timeType="updatedDate" />
             </DateWrapper>
             <StyledDonateLink />
             <section className="content">
