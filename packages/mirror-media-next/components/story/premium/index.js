@@ -7,7 +7,9 @@ import { fetchHeaderDataInPremiumPageLayout } from '../../../utils/api'
 import { sortArrayWithOtherArrayId } from '../../../utils'
 import errors from '@twreporter/errors'
 import TitleAndInfoAndHero from './title-and-info-and-hero'
-
+import CopyrightWarning from '../shared/copyright-warning'
+import DonateBanner from '../shared/donate-banner'
+import Aside from '../shared/aside'
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
  */
@@ -35,22 +37,13 @@ const ContentWrapper = styled.section`
   width: 100%;
   max-width: 680px;
   margin: 0 auto;
-  padding: 0 20px 20px;
+  padding: 0 20px;
   border: none;
   position: relative;
   .content {
     width: 100%;
-    margin: 20px auto 0;
+    margin: 32px auto;
     max-width: 640px;
-  }
-
-  ${({ theme }) => theme.breakpoint.md} {
-    padding: 0 0 32px;
-
-    border-bottom: 1px black solid;
-    .content {
-      margin: 40px auto 0;
-    }
   }
 `
 
@@ -105,21 +98,28 @@ export default function StoryPremiumStyle({ postData }) {
     updatedAt = '',
     publishedDate = '',
     tags = [],
-    heroImage,
-    heroVideo,
-    heroCaption,
+    heroImage = null,
+    heroVideo = null,
+    heroCaption = '',
+    relateds = [],
+    slug = '',
+    manualOrderOfRelateds = [],
   } = postData
 
   const sectionsWithOrdered =
     manualOrderOfSections && manualOrderOfSections.length
       ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
       : sections
+  const [section] = sectionsWithOrdered
   const sectionLabelFirst = getSectionLabelFirst(sectionsWithOrdered)
   const writersWithOrdered =
     manualOrderOfWriters && manualOrderOfWriters.length
       ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
       : writers
-
+  const relatedsWithOrdered =
+    manualOrderOfRelateds && manualOrderOfRelateds.length
+      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+      : relateds
   const credits = [
     { writers: writersWithOrdered },
     { photographers: photographers },
@@ -196,14 +196,23 @@ export default function StoryPremiumStyle({ postData }) {
                 brief={brief}
                 contentLayout="premium"
               ></ArticleBrief>
+            </section>
+            <section className="content">
               <DraftRenderBlock
                 contentLayout="premium"
                 rawContentBlock={content}
               ></DraftRenderBlock>
             </section>
+            <CopyrightWarning />
+            <DonateBanner />
           </ContentWrapper>
         </article>
       </Main>
+      <Aside
+        relateds={relatedsWithOrdered}
+        sectionSlug={section.slug}
+        storySlug={slug}
+      ></Aside>
     </>
   )
 }
