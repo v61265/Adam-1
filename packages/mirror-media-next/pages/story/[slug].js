@@ -174,21 +174,27 @@ export async function getServerSideProps({ params, req }) {
     const redirectData = postData?.redirect.trim()
 
     if (redirectData.length > 0) {
-      if (redirectData.charAt(0) === '/') {
-        const redirectSlug = redirectData.substring(1).trim()
+      if (
+        redirectData.startsWith('https://') ||
+        redirectData.startsWith('http://')
+      ) {
         return {
           redirect: {
-            destination: `${redirectSlug} `,
+            destination: `${redirectData} `,
+            permanent: false,
+          },
+        }
+      } else if (redirectData.startsWith('www.')) {
+        return {
+          redirect: {
+            destination: `https://${redirectData}`,
             permanent: false,
           },
         }
       } else {
-        const formattedRedirectUrl = redirectData.startsWith('http')
-          ? redirectData
-          : `https://${redirectData}`
         return {
           redirect: {
-            destination: `${formattedRedirectUrl}`,
+            destination: `/story/${redirectData} `,
             permanent: false,
           },
         }
