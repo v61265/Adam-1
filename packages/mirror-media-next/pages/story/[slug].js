@@ -170,6 +170,31 @@ export async function getServerSideProps({ params, req }) {
       return { notFound: true }
     }
 
+    //redirect to specific slug or external url
+    const redirectData = postData?.redirect.trim()
+
+    if (redirectData.length > 0) {
+      if (redirectData.charAt(0) === '/') {
+        const redirectSlug = redirectData.substring(1).trim()
+        return {
+          redirect: {
+            destination: `${redirectSlug} `,
+            permanent: false,
+          },
+        }
+      } else {
+        const formattedRedirectUrl = redirectData.startsWith('http')
+          ? redirectData
+          : `https://${redirectData}`
+        return {
+          redirect: {
+            destination: `${formattedRedirectUrl}`,
+            permanent: false,
+          },
+        }
+      }
+    }
+
     return {
       props: {
         postData,
