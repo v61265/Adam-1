@@ -81,6 +81,12 @@ const ArticleInfoContainer = styled.div`
     margin: 0 0 24px;
   }
 `
+const StyledTags = styled(Tags)`
+  margin-top: 20px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 25.5px;
+  }
+`
 
 /**
  * @typedef {import('../../../apollo/fragments/contact').Contact[]} Contacts
@@ -115,12 +121,6 @@ export default function ArticleInfo({
   credits,
   tags,
 }) {
-  const StyledTags = styled(Tags)`
-    margin-top: 20px;
-    ${({ theme }) => theme.breakpoint.md} {
-      margin-top: 25.5px;
-    }
-  `
   return (
     <ArticleInfoContainer>
       <Date>發布時間：{publishedDate} 臺北時間</Date>
