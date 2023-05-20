@@ -99,6 +99,7 @@ export default function Header({ h2AndH3Block = [] }) {
   useClickOutside(sideBarRef, () => {
     setShouldOpenSideBar(false)
   })
+  // While the sidebar is open, disable body scroll.
   useEffect(() => {
     const sideBar = sideBarRef.current
     if (!sideBar) {
@@ -106,11 +107,12 @@ export default function Header({ h2AndH3Block = [] }) {
     }
     if (shouldOpenSideBar) {
       disableBodyScroll(sideBar)
+      return () => enableBodyScroll(sideBar)
     } else {
-      enableBodyScroll(sideBar)
+      return undefined
     }
-    return () => clearAllBodyScrollLocks()
   }, [shouldOpenSideBar])
+
   return (
     <HeaderWrapper>
       <Link href="/">
