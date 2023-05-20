@@ -1,7 +1,8 @@
 // @ts-nocheck
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
-import Credits from './credits'
+import Credits from './potography-credits'
+import PhotoSlider from './photo-slider-v2'
 
 const Main = styled.main`
   height: auto;
@@ -33,12 +34,17 @@ const HeroImage = styled.div`
 
   height: 100vh;
   background-repeat: no-repeat;
-  background-attachment: fixed;
   background-position: center;
   background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+
+  ${() =>
+    !isIOS() &&
+    css`
+      background-attachment: fixed;
+    `}
 `
 
 const TitleBox = styled.div`
@@ -67,7 +73,7 @@ const TitleBox = styled.div`
 
   .brief {
     font-size: 16px;
-    line-height: 20px;
+    line-height: 22px;
     color: #ffffff;
   }
 `
@@ -86,8 +92,14 @@ const Container = styled.div`
  * @param {PostData} param.postData
  * @returns
  */
+
+const isIOS = () => {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+}
+
 export default function StoryPhotographyStyle({ postData }) {
   console.log(postData)
+
   const {
     title = '',
     heroImage = null,
@@ -142,6 +154,7 @@ export default function StoryPhotographyStyle({ postData }) {
           <p className="brief">{brief.blocks[0].text}</p>
         </TitleBox>
       </HeroImage>
+      <PhotoSlider />
       <Container>
         <section className="content">
           <DraftRenderBlock
