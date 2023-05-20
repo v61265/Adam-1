@@ -29,8 +29,8 @@ const fetchHeaderDataInDefaultPageLayout = async () => {
   let topicsData = []
   try {
     const responses = await Promise.all([fetchNormalSections(), fetchTopics()])
-    if (responses[0]?.data?._items) {
-      sectionsData = responses[0]?.data?._items
+    if (responses[0]?.data?.sections) {
+      sectionsData = responses[0]?.data?.sections
     }
     if (responses[1]?.data?._endpoints?.topics?._items) {
       topicsData = responses[1].data._endpoints.topics._items
