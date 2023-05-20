@@ -11,7 +11,7 @@ import useClickOutside from '../../../hooks/useClickOutside'
 import LogoSvg from '../../../public/images/mirror-media-logo.svg'
 import HamburgerButton from '../../shared/hamburger-button'
 import CloseButton from '../../shared/close-button'
-import NavSubtitleNavigator from './nav-subtitle-navigator'
+import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import ButtonCopyLink from '../shared/button-copy-link'
 /**
