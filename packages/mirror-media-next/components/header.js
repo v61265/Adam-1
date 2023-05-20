@@ -21,6 +21,10 @@ import SubscribeMagazine from './subscribe-magazine'
 import NavTopics from './nav-topics'
 import { SEARCH_URL } from '../config/index.mjs'
 
+/**
+ * @typedef {import('./nav-sections').Sections} Sections
+ */
+
 const HeaderWrapper = styled.div`
   background-color: rgba(255, 255, 255, 1);
   margin: 0 auto;
@@ -125,18 +129,15 @@ const TopicsAndSubscribe = styled.section`
 `
 
 /**
- * TODO: use typedef in `../apollo/fragments/section`
- * Should be done after fetch header data from new json file
- *
  * Remove item from array `categories` if which is member only category.
- * @param {import('../type').Section} section
- * @returns {import('../type').Section}
+ * @param {import('../apollo/fragments/section').Section} section
+ * @returns {import('../apollo/fragments/section').Section}
  */
 function filterOutIsMemberOnlyCategoriesInNormalSection(section) {
   return {
     ...section,
     categories:
-      section.name === 'member'
+      section.slug === 'member'
         ? section.categories
         : section.categories.filter((category) => !category.isMemberOnly),
   }
@@ -146,7 +147,7 @@ function filterOutIsMemberOnlyCategoriesInNormalSection(section) {
  * TODO: use typedef in `../apollo/fragments/section` and  `../apollo/fragments/topic`
  * Should be done after fetch header data from new json file
  * @param {Object} props
- * @param {import('../type').Section[]} props.sectionsData
+ * @param {Sections} props.sectionsData
  * @param {import('../type').Topic[]} props.topicsData
  * @param {JSX.Element} [props.children]
  * @returns {React.ReactElement}
@@ -199,9 +200,7 @@ export default function Header({
   }
 
   const sections =
-    sectionsData
-      .filter((section) => section.isFeatured)
-      .map(filterOutIsMemberOnlyCategoriesInNormalSection) ?? []
+    sectionsData.map(filterOutIsMemberOnlyCategoriesInNormalSection) ?? []
 
   const topics =
     topicsData.filter((topic) => topic.isFeatured).slice(0, 9) ?? []

@@ -5,6 +5,11 @@ import useClickOutside from '../hooks/useClickOutside'
 import Link from 'next/link'
 import HamburgerButton from './shared/hamburger-button'
 import CloseButton from './shared/close-button'
+
+/**
+ * @typedef {import('../apollo/fragments/section').Section[]} Sections
+ */
+
 const SideBar = styled.section`
   display: flex;
   flex-direction: column;
@@ -196,7 +201,7 @@ const SocialMediaList = styled.div`
  * Should be done after fetch header data from new json file
  * @param {Object} props
  * @param {import('../type').Topic[]} props.topics
- * @param {import('../type').Section[]} props.sections
+ * @param {Sections} props.sections
  * @param {import('../type').SubBrand[]} props.subBrands
  * @param {import('../type').Promotion[]} props.promotions
  * @param {import('../type').SocialMedia[]} props.socialMedia
@@ -233,24 +238,24 @@ export default function MobileSidebar({
             ))}
             <Topic href={`/section/topic`}>更多</Topic>
           </Topics>
-          {sections.map(({ _id, title, categories, name }) => (
-            <Fragment key={_id}>
-              <Section color={sectionColors[name]}>
-                <Link style={{ width: '50%' }} href={`/section/${title}`}>
-                  <h3>{title}</h3>
+          {sections.map(({ id, slug, categories, name }) => (
+            <Fragment key={id}>
+              <Section color={sectionColors[slug]}>
+                <Link style={{ width: '50%' }} href={`/section/${slug}`}>
+                  <h3>{name}</h3>
                 </Link>
                 <SectionToggle
-                  onClick={() => setOpenSection(name)}
-                  shouldOpen={name === openSection}
+                  onClick={() => setOpenSection(slug)}
+                  shouldOpen={slug === openSection}
                 ></SectionToggle>
               </Section>
               <Categories
-                shouldShowCategories={name === openSection}
-                color={sectionColors[name]}
+                shouldShowCategories={slug === openSection}
+                color={sectionColors[slug]}
               >
                 {categories.map((category) => (
-                  <a key={category._id} href={`/category/${category.name}`}>
-                    {category.title}
+                  <a key={category.id} href={`/category/${category.slug}`}>
+                    {category.name}
                   </a>
                 ))}
               </Categories>
