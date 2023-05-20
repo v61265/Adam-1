@@ -1,11 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
-import {
-  disableBodyScroll,
-  enableBodyScroll,
-  clearAllBodyScrollLocks,
-} from 'body-scroll-lock'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 import useClickOutside from '../../../hooks/useClickOutside'
 
 import LogoSvg from '../../../public/images/mirror-media-logo.svg'
