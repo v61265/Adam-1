@@ -99,9 +99,6 @@ const Article = styled.figure`
   max-width: 276px;
   margin: 0 auto ${`${articleMarginBottomMobile}px`} auto;
 
-  .article-image {
-    height: 184px;
-  }
   ${({ theme }) => theme.breakpoint.md} {
     flex-direction: row;
     height: ${`${articleHeightTablet}px`};
@@ -184,6 +181,10 @@ const Title = styled.span`
     color: rgba(74, 74, 74, 1);
 
     -webkit-line-clamp: 2;
+  }
+  :active,
+  :hover {
+    text-decoration: underline;
   }
 `
 
