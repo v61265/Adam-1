@@ -10,6 +10,12 @@ import TitleAndInfoAndHero from './title-and-info-and-hero'
 import CopyrightWarning from '../shared/copyright-warning'
 import DonateBanner from '../shared/donate-banner'
 import Aside from '../shared/aside'
+import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
+import ButtonCopyLink from '../shared/button-copy-link'
+import ButtonSocialNetworkShare from '../shared/button-social-network-share'
+import DonateLink from '../shared/donate-link'
+const { getContentBlocksH2H3 } = MirrorMedia
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
  */
@@ -44,6 +50,21 @@ const ContentWrapper = styled.section`
     width: 100%;
     margin: 32px auto;
     max-width: 640px;
+  }
+`
+
+const SocialMediaAndDonateLink = styled.ul`
+  margin-bottom: 20px;
+`
+
+const SocialMedia = styled.li`
+  display: none;
+  ${({ theme }) => theme.breakpoint.md} {
+    display: flex;
+    margin-bottom: 12px;
+    a {
+      margin-right: 10px;
+    }
   }
 `
 
@@ -105,7 +126,7 @@ export default function StoryPremiumStyle({ postData }) {
     slug = '',
     manualOrderOfRelateds = [],
   } = postData
-
+  const h2AndH3Block = getContentBlocksH2H3(content)
   const sectionsWithOrdered =
     manualOrderOfSections && manualOrderOfSections.length
       ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
@@ -190,6 +211,26 @@ export default function StoryPremiumStyle({ postData }) {
           />
 
           <ContentWrapper>
+            <NavSubtitleNavigator h2AndH3Block={h2AndH3Block}>
+              <SocialMediaAndDonateLink>
+                <SocialMedia>
+                  <ButtonSocialNetworkShare
+                    type="facebook"
+                    width={28}
+                    height={28}
+                  />
+                  <ButtonSocialNetworkShare
+                    type="line"
+                    width={28}
+                    height={28}
+                  />
+                  <ButtonCopyLink width={28} height={28} />
+                </SocialMedia>
+                <li>
+                  <DonateLink />
+                </li>
+              </SocialMediaAndDonateLink>
+            </NavSubtitleNavigator>
             <section className="content">
               <ArticleBrief
                 sectionSlug="member"

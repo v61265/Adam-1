@@ -11,7 +11,7 @@ import useClickOutside from '../../../hooks/useClickOutside'
 import LogoSvg from '../../../public/images/mirror-media-logo.svg'
 import HamburgerButton from '../../shared/hamburger-button'
 import CloseButton from '../../shared/close-button'
-import NavSubtitleNavigator from './nav-subtitle-navigator'
+import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import ButtonCopyLink from '../shared/button-copy-link'
 /**
@@ -99,6 +99,7 @@ export default function Header({ h2AndH3Block = [] }) {
   useClickOutside(sideBarRef, () => {
     setShouldOpenSideBar(false)
   })
+  // While the sidebar is open, disable body scroll.
   useEffect(() => {
     const sideBar = sideBarRef.current
     if (!sideBar) {
@@ -106,11 +107,12 @@ export default function Header({ h2AndH3Block = [] }) {
     }
     if (shouldOpenSideBar) {
       disableBodyScroll(sideBar)
+      return () => enableBodyScroll(sideBar)
     } else {
-      enableBodyScroll(sideBar)
+      return undefined
     }
-    return () => clearAllBodyScrollLocks()
   }, [shouldOpenSideBar])
+
   return (
     <HeaderWrapper>
       <Link href="/">

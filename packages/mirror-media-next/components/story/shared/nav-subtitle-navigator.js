@@ -184,11 +184,22 @@ const Nav = styled.nav`
  */
 
 /**
+ * Component for showing index of h2 and h3.
+ * This component will show the text of `<h2>` and `h3` in article.
+ * User can click the index and screen will scroll to the corresponding h2 or h3.
+ * If certain `<h2>` or `<h3>` is appear in the middle of screen, corresponding index will have different style.
+ * This component is currently used at story page wide and premium layout.
  * @param {Object} props
  * @param {H2AndH3Block[]} props.h2AndH3Block
+ * - Detail of h2 and h3, which will contain key of h2 and h3.
+ * - This details can help the component to locate where the corresponding h2 or h3 are, and show the text of h2 or h3.
+ *
  * @param {ComponentStyle} [props.componentStyle]
- * @param {JSX.Element} [props.children]
- * @param {HandleCloseSideBar} [props.handleCloseSideBar]
+ * - Style of component. Because this component will be used at different place and have different style.
+ * - If value is `side-index`, it should be used at the side of the article.
+ * - If value is `side-bar`, it should be used at the side-bar of header (side-bar can be opened by clicking header's hamburger).
+ * @param {JSX.Element} [props.children] - Component that should be placed above the index of h2 and h3.
+ * @param {HandleCloseSideBar} [props.handleCloseSideBar] - If `params.componentStyle` is `side-bar`, it should close the side bar when click side index.
  * @returns {JSX.Element}
  */
 export default function NavSubtitleNavigator({
@@ -269,7 +280,7 @@ export default function NavSubtitleNavigator({
         })
       }
       observer = new IntersectionObserver(callback, {
-        threshold: 0.5,
+        threshold: 0,
         rootMargin: '50% 0px -50% 0px',
       })
       targets.forEach((item) => observer.observe(item))
