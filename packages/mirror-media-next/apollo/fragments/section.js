@@ -2,8 +2,10 @@ import { gql } from '@apollo/client'
 
 /**
  * @typedef {Object} sectionWithCategory
+ * @property {string} id
  * @property {string} name
  * @property {string} slug
+ * @property {boolean} isMemberOnly
  */
 
 /**
