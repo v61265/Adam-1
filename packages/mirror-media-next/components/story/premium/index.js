@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import ShareHeader from '../../shared/share-header'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import ArticleBrief from '../shared/brief'
 import { fetchHeaderDataInPremiumPageLayout } from '../../../utils/api'
@@ -15,6 +14,7 @@ import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
 import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import DonateLink from '../shared/donate-link'
+import PremiumHeader from '../../premium-header'
 const { getContentBlocksH2H3 } = MirrorMedia
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
@@ -186,12 +186,13 @@ export default function StoryPremiumStyle({ postData }) {
   return (
     <>
       {isHeaderDataLoaded ? (
-        <ShareHeader
-          pageLayoutType="premium"
-          headerData={{
-            sectionsData: headerData.sectionsData,
+        <PremiumHeader
+          premiumHeaderData={{
+            sections: headerData.sectionsData,
           }}
-        ></ShareHeader>
+          h2AndH3Block={h2AndH3Block}
+          shouldShowSubtitleNavigator={true}
+        ></PremiumHeader>
       ) : (
         <HeaderPlaceHolder />
       )}
