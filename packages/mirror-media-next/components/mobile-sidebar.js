@@ -7,8 +7,17 @@ import HamburgerButton from './shared/hamburger-button'
 import CloseButton from './shared/close-button'
 
 /**
- * @typedef {import('../apollo/fragments/section').Section[]} Sections
+ * @typedef {import('../apollo/fragments/section').Section} Section
  */
+
+/**
+ * @typedef {import('../apollo/fragments/section').SectionWithCategory} SectionWithCategory
+ */
+
+/**
+ * @typedef {Omit<Section, 'categories'> & { categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
+ */
+
 /**
  * @typedef {Pick<import('../apollo/fragments/topic').Topic, 'id' | 'name'>[]} Topics
  */
@@ -204,7 +213,7 @@ const SocialMediaList = styled.div`
  * Should be done after fetch header data from new json file
  * @param {Object} props
  * @param {Topics} props.topics
- * @param {Sections} props.sections
+ * @param {SectionWithHrefTemp[]} props.sections
  * @param {import('../type').SubBrand[]} props.subBrands
  * @param {import('../type').Promotion[]} props.promotions
  * @param {import('../type').SocialMedia[]} props.socialMedia
@@ -257,7 +266,7 @@ export default function MobileSidebar({
                 color={sectionColors[slug]}
               >
                 {categories.map((category) => (
-                  <a key={category.id} href={`/category/${category.slug}`}>
+                  <a key={category.id} href={category.href}>
                     {category.name}
                   </a>
                 ))}

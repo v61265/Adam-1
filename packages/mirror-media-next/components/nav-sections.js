@@ -7,9 +7,16 @@ import { sectionColors } from '../styles/sections-color'
 import Logo from './logo'
 
 /**
- * @typedef {import('../apollo/fragments/section').Section[]} Sections
+ * @typedef {import('../apollo/fragments/section').Section} Section
  */
 
+/**
+ * @typedef {import('../apollo/fragments/section').SectionWithCategory} SectionWithCategory
+ */
+
+/**
+ * @typedef {Omit<Section, 'categories'> & { categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
+ */
 const SectionsWrapper = styled.nav`
   font-size: 14px;
   line-height: 1.5;
@@ -124,18 +131,10 @@ const CategoryLink = styled.a`
     padding: 8px 14px 8px 14px;
   }
 `
-function getCategoryHref(sectionName, categoryName) {
-  if (sectionName === 'videohub') {
-    return `/video_category/${categoryName}`
-  }
-  if (categoryName === 'magazine') {
-    return '/magazine/'
-  }
-  return `/category/${categoryName}`
-}
+
 /**
  * @param {Object} props
- * @param {Sections} props.sections
+ * @param {SectionWithHrefTemp[]} props.sections
  * @returns {React.ReactElement}
  */
 export default function NavSections({ sections = [] }) {
@@ -161,7 +160,7 @@ export default function NavSections({ sections = [] }) {
               {section.categories.map((category) => (
                 <CategoryLink
                   key={category.id}
-                  href={getCategoryHref(section.slug, category.slug)}
+                  href={category.href}
                   color={sectionColors[section.slug]}
                 >
                   <h3>{category.name}</h3>
