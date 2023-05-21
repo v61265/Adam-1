@@ -2,7 +2,7 @@
 import styled, { css } from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import Credits from './potography-credits'
-import PhotoSlider from './photo-slider-v2'
+import PhotoSlider from './photo-slider'
 
 const Main = styled.main`
   height: auto;
@@ -21,6 +21,17 @@ const Main = styled.main`
 
   p {
     color: white;
+  }
+
+  // snap scrolling effect
+  height: 100vh;
+  scroll-snap-type: y mandatory;
+  overflow: auto;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none;
   }
 `
 
@@ -45,6 +56,8 @@ const HeroImage = styled.div`
     css`
       background-attachment: fixed;
     `}
+
+  scroll-snap-align:start;
 `
 
 const TitleBox = styled.div`
@@ -81,6 +94,8 @@ const TitleBox = styled.div`
 const Container = styled.div`
   width: 80%;
   margin: auto;
+  scroll-snap-align: start;
+  height: auto;
 `
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
