@@ -32,8 +32,8 @@ const fetchHeaderDataInDefaultPageLayout = async () => {
     if (responses[0]?.data?.sections) {
       sectionsData = responses[0]?.data?.sections
     }
-    if (responses[1]?.data?._endpoints?.topics?._items) {
-      topicsData = responses[1].data._endpoints.topics._items
+    if (responses[1]?.data?.topics) {
+      topicsData = responses[1].data.topics
     }
     return { sectionsData, topicsData }
   } catch (err) {
