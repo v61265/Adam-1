@@ -1,5 +1,5 @@
 // @ts-nocheck
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import Credits from './potography-credits'
 import PhotoSlider from './photo-slider'
@@ -35,63 +35,6 @@ const Main = styled.main`
   }
 `
 
-const HeroImage = styled.div`
-  background-image: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0),
-      rgba(0, 0, 0, 0.4)
-    ),
-    url(${(props) => props.imageUrl});
-
-  height: 100vh;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-
-  ${() =>
-    !isIOS() &&
-    css`
-      background-attachment: fixed;
-    `}
-
-  // snap scrolling effect
-  scroll-snap-align:start;
-`
-
-const TitleBox = styled.div`
-  color: white;
-  width: 80%;
-  margin: 0 auto;
-  text-align: center;
-  margin-bottom: 80px;
-  font-family: var(--inter-font);
-  font-style: normal;
-  font-weight: 400;
-  text-shadow: 0.9px 0px 0.5px rgba(0, 0, 0, 0.8);
-
-  .title {
-    font-size: 40px;
-    line-height: 48px;
-    color: #ffffff;
-  }
-
-  .hero-caption {
-    font-size: 16px;
-    line-height: 20px;
-    color: #d1d1d1;
-    margin: 32px 0;
-  }
-
-  .brief {
-    font-size: 16px;
-    line-height: 22px;
-    color: #ffffff;
-  }
-`
-
 const ContentContainer = styled.div`
   width: 80%;
   margin: auto;
@@ -110,10 +53,6 @@ const ContentContainer = styled.div`
  * @param {PostData} param.postData
  * @returns
  */
-
-const isIOS = () => {
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-}
 
 export default function StoryPhotographyStyle({ postData }) {
   console.log(postData)
@@ -156,21 +95,13 @@ export default function StoryPhotographyStyle({ postData }) {
 
   return (
     <Main>
-      <HeroImage
-        imageUrl={
-          heroImage?.resized?.original ||
-          heroImage?.resized?.w2400 ||
-          heroImage?.resized?.w1600 ||
-          ''
-        }
-      >
-        <TitleBox>
-          <h1 className="title">{title}</h1>
-          <p className="hero-caption">{heroCaption}</p>
-          <p className="brief">{brief.blocks[0].text}</p>
-        </TitleBox>
-      </HeroImage>
-      <PhotoSlider photos={photosArray} />
+      <PhotoSlider
+        photos={photosArray}
+        title={title}
+        heroCaption={heroCaption}
+        brief={brief.blocks[0].text}
+        heroImage={heroImage}
+      />
       <ContentContainer>
         <section className="content">
           <DraftRenderBlock
