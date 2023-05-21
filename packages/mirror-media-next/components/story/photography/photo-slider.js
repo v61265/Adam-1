@@ -1,8 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
   width: 100%;
   margin: auto;
+  background-color: #333333;
 `
 const Slide = styled.div`
   display: block;
@@ -12,38 +14,31 @@ const Slide = styled.div`
 
   text-align: center;
   font-size: 18px;
-  background: #fff;
   color: #000;
 
+  // snap scrolling effect
   scroll-snap-align: start;
   scroll-snap-stop: always;
 
-  /* Center slide text vertically */
+  /* Center slide content vertically */
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 
-  border: 1px solid #000;
+  /* img {
+    width: 100%;
+  } */
 `
 
-export default function PhotoSlider(
-  {
-    // heroImage = null,
-    // heroCaption = '',
-    // title = '',
-  }
-) {
+export default function PhotoSlider({ photos = [] }) {
   return (
     <Wrapper>
-      <Slide>Slide 1</Slide>
-      <Slide>Slide 2</Slide>
-      <Slide>Slide 3</Slide>
-      <Slide>Slide 4</Slide>
-      <Slide>Slide 5</Slide>
-      <Slide>Slide 6</Slide>
-      <Slide>Slide 7</Slide>
-      <Slide>Slide 8</Slide>
-      <Slide>Slide 9</Slide>
+      {photos.map((photo, index) => (
+        <Slide key={index}>
+          <img src={photo.data.resized.original} alt={photo.data.desc} />
+        </Slide>
+      ))}
     </Wrapper>
   )
 }

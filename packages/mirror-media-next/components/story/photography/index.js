@@ -57,6 +57,7 @@ const HeroImage = styled.div`
       background-attachment: fixed;
     `}
 
+  // snap scrolling effect
   scroll-snap-align:start;
 `
 
@@ -65,7 +66,7 @@ const TitleBox = styled.div`
   width: 80%;
   margin: 0 auto;
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 80px;
   font-family: var(--inter-font);
   font-style: normal;
   font-weight: 400;
@@ -91,11 +92,13 @@ const TitleBox = styled.div`
   }
 `
 
-const Container = styled.div`
+const ContentContainer = styled.div`
   width: 80%;
   margin: auto;
+
+  // snap scrolling effect
   scroll-snap-align: start;
-  height: auto;
+  height: 1000px;
 `
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
@@ -147,11 +150,9 @@ export default function StoryPhotographyStyle({ postData }) {
   ]
 
   // Get images array from content.entityMap
-  const imageArray = Object.values(content.entityMap).filter(
+  const photosArray = Object.values(content.entityMap).filter(
     (item) => item.type === 'image'
   )
-
-  console.log(imageArray)
 
   return (
     <Main>
@@ -169,8 +170,8 @@ export default function StoryPhotographyStyle({ postData }) {
           <p className="brief">{brief.blocks[0].text}</p>
         </TitleBox>
       </HeroImage>
-      <PhotoSlider />
-      <Container>
+      <PhotoSlider photos={photosArray} />
+      <ContentContainer>
         <section className="content">
           <DraftRenderBlock
             rawContentBlock={content}
@@ -178,7 +179,7 @@ export default function StoryPhotographyStyle({ postData }) {
           />
         </section>
         <Credits credits={credits}></Credits>
-      </Container>
+      </ContentContainer>
     </Main>
   )
 }
