@@ -24,6 +24,9 @@ import { SEARCH_URL } from '../config/index.mjs'
 /**
  * @typedef {import('./nav-sections').Sections} Sections
  */
+/**
+ * @typedef {import('./nav-topics').Topics} Topics
+ */
 
 const HeaderWrapper = styled.div`
   background-color: rgba(255, 255, 255, 1);
@@ -148,7 +151,7 @@ function filterOutIsMemberOnlyCategoriesInNormalSection(section) {
  * Should be done after fetch header data from new json file
  * @param {Object} props
  * @param {Sections} props.sectionsData
- * @param {import('../type').Topic[]} props.topicsData
+ * @param {Topics} props.topicsData
  * @param {JSX.Element} [props.children]
  * @returns {React.ReactElement}
  */
@@ -202,8 +205,7 @@ export default function Header({
   const sections =
     sectionsData.map(filterOutIsMemberOnlyCategoriesInNormalSection) ?? []
 
-  const topics =
-    topicsData.filter((topic) => topic.isFeatured).slice(0, 9) ?? []
+  const topics = topicsData.slice(0, 9)
 
   return (
     <HeaderWrapper>

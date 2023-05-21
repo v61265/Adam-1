@@ -9,6 +9,9 @@ import CloseButton from './shared/close-button'
 /**
  * @typedef {import('../apollo/fragments/section').Section[]} Sections
  */
+/**
+ * @typedef {Pick<import('../apollo/fragments/topic').Topic, 'id' | 'name'>[]} Topics
+ */
 
 const SideBar = styled.section`
   display: flex;
@@ -200,7 +203,7 @@ const SocialMediaList = styled.div`
  * TODO: use typedef in `../apollo/fragments/section`
  * Should be done after fetch header data from new json file
  * @param {Object} props
- * @param {import('../type').Topic[]} props.topics
+ * @param {Topics} props.topics
  * @param {Sections} props.sections
  * @param {import('../type').SubBrand[]} props.subBrands
  * @param {import('../type').Promotion[]} props.promotions
@@ -232,7 +235,7 @@ export default function MobileSidebar({
           />
           <Topics>
             {topics.map((topic) => (
-              <Topic href={`topic/${topic._id}`} key={topic._id}>
+              <Topic href={`topic/${topic.id}`} key={topic.id}>
                 {topic.name}
               </Topic>
             ))}
