@@ -11,10 +11,9 @@ const Wrapper = styled.div`
   font-size: 18px;
   line-height: 2;
   font-weight: 400;
-  border: 3px solid ${({ theme }) => theme.color.brandColor.darkBlue};
+
   ${({ theme }) => theme.breakpoint.md} {
     margin-top: 32px;
-    border: none;
   }
   a {
     color: rgba(234, 193, 81, 1);
