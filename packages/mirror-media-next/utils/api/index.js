@@ -1,8 +1,8 @@
 import errors from '@twreporter/errors'
 import {
-  URL_STATIC_COMBO_SECTIONS,
+  URL_STATIC_NORMAL_SECTIONS,
   URL_STATIC_PREMIUM_SECTIONS,
-  URL_STATIC_COMBO_TOPICS,
+  URL_STATIC_TOPICS,
 } from '../../config/index.mjs'
 import axiosInstance from '../../axios/index.js'
 
@@ -27,9 +27,9 @@ const errorLogger = (errorMessage) => {
 }
 
 /** @type {() => Promise<import('axios').AxiosResponse<{sections: Sections}>>} */
-const fetchNormalSections = createAxiosRequest(URL_STATIC_COMBO_SECTIONS)
+const fetchNormalSections = createAxiosRequest(URL_STATIC_NORMAL_SECTIONS)
 /** @type {() => Promise<import('axios').AxiosResponse<{topics: Topics}>>} */
-const fetchTopics = createAxiosRequest(URL_STATIC_COMBO_TOPICS)
+const fetchTopics = createAxiosRequest(URL_STATIC_TOPICS)
 
 const fetchPremiumSections = createAxiosRequest(URL_STATIC_PREMIUM_SECTIONS)
 
