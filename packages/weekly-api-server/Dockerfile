@@ -2,7 +2,7 @@ ARG NODE_VERSION=16.19.1
 
 FROM node:${NODE_VERSION} AS build
 
-WORKDIR /build
+WORKDIR /app
 
 COPY package.json yarn.lock /build/
 
@@ -14,8 +14,6 @@ RUN yarn build
 
 
 FROM node:${NODE_VERSION}
-
-WORKDIR /app
 
 ENV NODE_ENV=production
 
