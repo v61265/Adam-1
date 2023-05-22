@@ -1,5 +1,5 @@
+import styled, { css } from 'styled-components'
 import CustomImage from '@readr-media/react-image'
-import styled from 'styled-components'
 /**
  * @typedef {import('../../../apollo/fragments/post').HeroImage &
  * {
@@ -18,7 +18,19 @@ import styled from 'styled-components'
 /**
  * @typedef {import('../../../apollo/fragments/video').HeroVideo } HeroVideo
  */
-
+const heroCssWide = css`
+  width: 100%;
+  height: 100vh;
+  object-position: center center;
+`
+const heroCssPremium = css`
+  width: 100%;
+  margin: 0 auto;
+  height: 66.67vw;
+  max-width: 1200px;
+  max-height: 800px;
+  object-position: center center;
+`
 const ArticleTitle = styled.h1`
   color: rgba(0, 0, 0, 0.87);
   font-size: 24px;
@@ -53,27 +65,23 @@ const Figure = styled.figure`
   height: 100%;
   position: relative;
   video {
-    width: 100%;
-    height: 100vh;
-    object-position: center center;
+    ${({ isStyleWide }) =>
+      isStyleWide ? `${heroCssWide}` : `${heroCssPremium}`}
   }
   .readr-media-react-image {
-    width: 100%;
-    height: 100vh;
-    object-position: center center;
+    ${({ isStyleWide }) =>
+      isStyleWide ? `${heroCssWide}` : `${heroCssPremium}`}
   }
   .empty {
-    width: 100%;
-    height: 100vh;
-    background-color: #d9d9d9;
+    ${heroCssWide}
   }
   ${
     /**
      * @param {Object} param
-     * @param {boolean} param.shouldShowMask
+     * @param {boolean} param.isStyleWide
      */
-    ({ shouldShowMask }) =>
-      shouldShowMask &&
+    ({ isStyleWide }) =>
+      isStyleWide &&
       `&::after {
       content: ' ';
       position: absolute;
@@ -123,10 +131,11 @@ const HeroCaption = styled.figcaption`
  * This component will change it style by `props.style`.
  * If `props.style` is `wide`, component will render style for story page wide layout.
  * If `props.style` is `premium`, component will render style for story page premium layout.
- * There are three difference between 'wide' and `premium`:
+ * There are four difference between 'wide' and `premium`:
  * 1. In `wide`, there is a `<h1>` in middle of bottom of component. In `premium`, there is no `<h1>` have to render.
  * 2. In `wide`, there is a semitransparent mask above image or video. In `premium`, there is no `<h1>` have to render.
  * 3. In `wide`, there is full-size block with gray background if no image and video is selected.  In `premium`, there is no have to render a full-size block.
+ * 3. In `wide`, height of hero-image and hero-video are `100vh`. In `premium`, height are `66.vw`, and max-width is `1200px`, max-height is `800px`.
  * @param {Object} props
  * @param {'wide' | 'premium'} [props.style] - The style of the component, it will change the components style by assigning different value.
  * @param {HeroImage | null} props.heroImage - The hero image data.
@@ -178,7 +187,7 @@ export default function HeroImageAndVideo({
   return (
     <>
       {shouldShowHeroImage || shouldShowHeroVideo ? (
-        <Figure shouldShowMask={style === 'wide'}>
+        <Figure isStyleWide={style === 'wide'}>
           {heroJsx()}
           {heroCaption ? <HeroCaption>{heroCaption}</HeroCaption> : null}
         </Figure>
