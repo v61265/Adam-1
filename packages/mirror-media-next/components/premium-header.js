@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 
 import SearchBarDesktop from './search-bar-desktop'
-
+import { Z_INDEX } from '../constants'
 import SearchBarInput from './search-bar-input'
 import Logo from './logo'
 import PremiumMobileSidebar from './premium-mobile-sidebar'
@@ -10,9 +10,23 @@ import PremiumNavSections from './premium-nav-sections'
 import PremiumMemberLoginButton from './premium-member-login-button'
 import { SEARCH_URL } from '../config/index.mjs'
 
+/**
+ * @typedef {import('./premium-mobile-sidebar').H2AndH3Block} H2AndH3Block
+ */
 const HeaderWrapper = styled.div`
   background-color: rgba(255, 255, 255, 1);
   margin: 0 auto;
+  ${
+    /**
+     * @param {Object} param
+     * @param {boolean} param.shouldSticky
+     */
+    ({ shouldSticky }) =>
+      shouldSticky &&
+      `position: sticky;
+    z-index: ${Z_INDEX.header};
+    top: 0;`
+  }
 `
 const HeaderTop = styled.div`
   display: flex;
@@ -158,9 +172,15 @@ const MobilePremiumMemberLoginButton = styled(PremiumMemberLoginButton)`
 /**
  * @param {Object} props
  * @param {PremiumHeaderData} props.premiumHeaderData
+ * @param {boolean} [props.shouldShowSubtitleNavigator]
+ * @param {H2AndH3Block[]} [props.h2AndH3Block]
  * @returns {React.ReactElement}
  */
-export default function PremiumHeader({ premiumHeaderData }) {
+export default function PremiumHeader({
+  premiumHeaderData,
+  shouldShowSubtitleNavigator = false,
+  h2AndH3Block = [],
+}) {
   const [showSearchField, setShowSearchField] = useState(false)
   const [searchTerms, setSearchTerms] = useState('')
   const mobileSearchButtonRef = useRef(null)
@@ -206,7 +226,7 @@ export default function PremiumHeader({ premiumHeaderData }) {
   const sections = premiumHeaderData.sections
 
   return (
-    <HeaderWrapper>
+    <HeaderWrapper shouldSticky={shouldShowSubtitleNavigator}>
       <HeaderTop>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/">
@@ -223,7 +243,11 @@ export default function PremiumHeader({ premiumHeaderData }) {
             <img src="/images/search-button-mobile.svg" alt="search-button" />
           </SearchButtonMobile>
           <MobilePremiumMemberLoginButton />
-          <PremiumMobileSidebar sections={sections} />
+          <PremiumMobileSidebar
+            sections={sections}
+            shouldShowSubtitleNavigator={shouldShowSubtitleNavigator}
+            h2AndH3Block={h2AndH3Block}
+          />
         </ActionWrapper>
       </HeaderTop>
       <HeaderBottom>
