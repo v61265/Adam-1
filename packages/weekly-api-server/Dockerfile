@@ -24,4 +24,5 @@ ENV NODE_ENV=production
 #COPY --from=build /build/.next/standalone ./
 #COPY --from=build /build/.next/static ./.next/static
 
-CMD ["node", "server.js"]
+#CMD ["node", "server.js"]
+CMD ["yarn", "start"]
