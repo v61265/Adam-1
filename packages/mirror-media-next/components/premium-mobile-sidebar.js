@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import React, { Fragment, useState, useRef } from 'react'
 import { sectionColors } from '../styles/sections-color'
 import useClickOutside from '../hooks/useClickOutside'
-import Link from 'next/link'
 
 const SideBarButton = styled.button`
   user-select: none;
@@ -202,9 +201,9 @@ export default function PremiumMobileSidebar({ sections }) {
           {sections.map(({ id, name, categories, slug }) => (
             <Fragment key={id}>
               <Section color={sectionColors[slug]}>
-                <Link style={{ width: '50%' }} href={`/section/${name}`}>
+                <a style={{ width: '50%' }} href={`/premiumsection/${slug}`}>
                   <h3>{name}</h3>
-                </Link>
+                </a>
                 <SectionToggle
                   onClick={() => setOpenSection(slug)}
                   shouldOpen={slug === openSection}
