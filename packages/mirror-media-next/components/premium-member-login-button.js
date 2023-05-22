@@ -70,7 +70,7 @@ const dropdownMenuItem = [
 
 /**
  * @param {Object} props
- * @param {string} props.className
+ * @param {string} [props.className]
  * @returns {React.ReactElement}
  */
 export default function PremiumMemberLoginButton({ className }) {
