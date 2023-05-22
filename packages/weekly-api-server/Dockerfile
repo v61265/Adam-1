@@ -4,11 +4,11 @@ FROM node:${NODE_VERSION} AS build
 
 WORKDIR /app
 
-COPY package.json yarn.lock /build/
+COPY package.json yarn.lock /app/
 
 RUN yarn install
 
-COPY . /build/
+COPY . /app/
 
 RUN yarn build
 
