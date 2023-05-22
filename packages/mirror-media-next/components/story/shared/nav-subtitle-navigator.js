@@ -261,11 +261,15 @@ export default function NavSubtitleNavigator({
 
         if (item && item.isIntersecting !== isIntersecting) {
           item.isIntersecting = isIntersecting
-          const lastIndex = visibleSubtitles.findLastIndex(
+
+          //Find the visible subtitle and select its key, if there is multiple subtitle are visible, then select the last one.
+          const reverseArray = [...visibleSubtitles].reverse()
+          const lastIndex = reverseArray.findIndex(
             (item) => item.isIntersecting
           )
+
           if (lastIndex !== -1) {
-            const lastKey = visibleSubtitles[lastIndex].key
+            const lastKey = reverseArray[lastIndex].key
             setCurrentIndex(lastKey)
           }
         }
