@@ -21,6 +21,18 @@ import SubscribeMagazine from './subscribe-magazine'
 import NavTopics from './nav-topics'
 import { SEARCH_URL } from '../config/index.mjs'
 
+/**
+ *
+ *  @typedef {import('../apollo/fragments/section').Section[]} Sections
+ */
+/**
+ * @typedef {import('./nav-sections').SectionWithHrefTemp} SectionWithHrefTemp
+ */
+
+/**
+ * @typedef {import('./nav-topics').Topics} Topics
+ */
+
 const HeaderWrapper = styled.div`
   background-color: rgba(255, 255, 255, 1);
   margin: 0 auto;
@@ -125,29 +137,53 @@ const TopicsAndSubscribe = styled.section`
 `
 
 /**
- * TODO: use typedef in `../apollo/fragments/section`
- * Should be done after fetch header data from new json file
- *
  * Remove item from array `categories` if which is member only category.
- * @param {import('../type').Section} section
- * @returns {import('../type').Section}
+ * @param {import('../apollo/fragments/section').Section} section
+ * @returns {import('../apollo/fragments/section').Section}
  */
 function filterOutIsMemberOnlyCategoriesInNormalSection(section) {
   return {
     ...section,
     categories:
-      section.name === 'member'
+      section.slug === 'member'
         ? section.categories
         : section.categories.filter((category) => !category.isMemberOnly),
   }
 }
 
 /**
+ * Remove item from array `categories` if which is member only category.
+ * @param {import('../apollo/fragments/section').Section} section
+ * @return {SectionWithHrefTemp}
+ */
+function getCategoryHref(section) {
+  const getHref = (sectionSlug, categorySlug) => {
+    if (sectionSlug === 'videohub') {
+      return `/video_category/${categorySlug}`
+    }
+    if (categorySlug === 'magazine') {
+      return '/magazine/'
+    }
+    return `/category/${categorySlug}`
+  }
+  const getCategoryContainHref = (section, categories) => {
+    return categories.map((category) => {
+      return { ...category, href: getHref(section.slug, category.slug) }
+    })
+  }
+  const newSection = {
+    ...section,
+    categories: getCategoryContainHref(section, section.categories),
+  }
+  return newSection
+}
+
+/**
  * TODO: use typedef in `../apollo/fragments/section` and  `../apollo/fragments/topic`
  * Should be done after fetch header data from new json file
  * @param {Object} props
- * @param {import('../type').Section[]} props.sectionsData
- * @param {import('../type').Topic[]} props.topicsData
+ * @param {Sections} props.sectionsData
+ * @param {Topics} props.topicsData
  * @param {JSX.Element} [props.children]
  * @returns {React.ReactElement}
  */
@@ -200,11 +236,9 @@ export default function Header({
 
   const sections =
     sectionsData
-      .filter((section) => section.isFeatured)
-      .map(filterOutIsMemberOnlyCategoriesInNormalSection) ?? []
-
-  const topics =
-    topicsData.filter((topic) => topic.isFeatured).slice(0, 9) ?? []
+      .map(filterOutIsMemberOnlyCategoriesInNormalSection)
+      .map(getCategoryHref) ?? []
+  const topics = topicsData.slice(0, 9)
 
   return (
     <HeaderWrapper>

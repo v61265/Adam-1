@@ -1,9 +1,11 @@
 import { gql } from '@apollo/client'
 
 /**
- * @typedef {Object} sectionWithCategory
+ * @typedef {Object} SectionWithCategory
+ * @property {string} id
  * @property {string} name
  * @property {string} slug
+ * @property {boolean} isMemberOnly
  */
 
 /**
@@ -11,7 +13,7 @@ import { gql } from '@apollo/client'
  * @property {string} id
  * @property {string} name
  * @property {string} slug
- * @property {sectionWithCategory[]} categories
+ * @property {SectionWithCategory[]} categories
  */
 
 export const section = gql`

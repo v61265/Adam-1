@@ -5,6 +5,18 @@ import styled from 'styled-components'
 import { minWidth } from '../styles/media'
 import { sectionColors } from '../styles/sections-color'
 import Logo from './logo'
+
+/**
+ * @typedef {import('../apollo/fragments/section').Section} Section
+ */
+
+/**
+ * @typedef {import('../apollo/fragments/section').SectionWithCategory} SectionWithCategory
+ */
+
+/**
+ * @typedef {Omit<Section, 'categories'> & { categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
+ */
 const SectionsWrapper = styled.nav`
   font-size: 14px;
   line-height: 1.5;
@@ -119,22 +131,13 @@ const CategoryLink = styled.a`
     padding: 8px 14px 8px 14px;
   }
 `
-function getCategoryHref(sectionName, categoryName) {
-  if (sectionName === 'videohub') {
-    return `/video_category/${categoryName}`
-  }
-  if (categoryName === 'magazine') {
-    return '/magazine/'
-  }
-  return `/category/${categoryName}`
-}
+
 /**
- * TODO: use typedef in `../apollo/fragments/section`
- * Should be done after fetch header data from new json file
- * @param {{sections: import('../type').Section[] | []  }} props
+ * @param {Object} props
+ * @param {SectionWithHrefTemp[]} props.sections
  * @returns {React.ReactElement}
  */
-export default function NavSections({ sections }) {
+export default function NavSections({ sections = [] }) {
   return (
     <SectionsWrapper>
       <SectionLogo>
@@ -146,21 +149,21 @@ export default function NavSections({ sections }) {
       <Sections>
         {sections.map((section) => (
           <Section
-            key={section._id}
-            color={sectionColors[section.name]}
-            className={section.name}
+            key={section.id}
+            color={sectionColors[section.slug]}
+            className={section.slug}
           >
-            <SectionLink href={`/section/${section.name}`}>
-              <h2>{section.title}</h2>
+            <SectionLink href={`/section/${section.slug}`}>
+              <h2>{section.name}</h2>
             </SectionLink>
             <SectionDropDown>
               {section.categories.map((category) => (
                 <CategoryLink
-                  key={category._id}
-                  href={getCategoryHref(section.name, category.name)}
-                  color={sectionColors[section.name]}
+                  key={category.id}
+                  href={category.href}
+                  color={sectionColors[section.slug]}
                 >
-                  <h3>{category.title}</h3>
+                  <h3>{category.name}</h3>
                 </CategoryLink>
               ))}
             </SectionDropDown>

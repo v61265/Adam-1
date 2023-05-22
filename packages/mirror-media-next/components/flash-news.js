@@ -3,7 +3,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 
 import styled from 'styled-components'
-
+/**
+ * @typedef {Pick<import('../apollo/fragments/post').Post, 'id' | 'slug' |'title'>} FlashNews
+ */
 const FlashNewsWrapper = styled.div`
   display: flex;
   align-items: center;
@@ -110,10 +112,6 @@ const FlashNew = styled.a`
 `
 
 /**
- * @typedef {import('../type').FlashNews} FlashNews
- */
-
-/**
  *
  * @param {Object} props
  * @param {FlashNews[]} props.flashNews
@@ -198,8 +196,8 @@ export default function FlashNews({ flashNews = [] }) {
       >
         {displayedArticle.map((item) => (
           <FlashNew
-            href={item?.href}
-            key={item?.slug}
+            key={item.id}
+            href={`/story/${item.slug}`}
             target="_blank"
             rel="noreferrer noopenner"
           >
