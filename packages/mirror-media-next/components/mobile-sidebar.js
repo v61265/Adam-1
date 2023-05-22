@@ -15,9 +15,8 @@ import CloseButton from './shared/close-button'
  */
 
 /**
- * @typedef {Omit<Section, 'categories'> & { categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
+ * @typedef {Omit<Section, 'categories' > & {href: string, categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
  */
-
 /**
  * @typedef {Pick<import('../apollo/fragments/topic').Topic, 'id' | 'name'>[]} Topics
  */
@@ -250,10 +249,10 @@ export default function MobileSidebar({
             ))}
             <Topic href={`/section/topic`}>更多</Topic>
           </Topics>
-          {sections.map(({ id, slug, categories, name }) => (
+          {sections.map(({ id, slug, categories, name, href }) => (
             <Fragment key={id}>
               <Section color={sectionColors[slug]}>
-                <Link style={{ width: '50%' }} href={`/section/${slug}`}>
+                <Link style={{ width: '50%' }} href={href}>
                   <h3>{name}</h3>
                 </Link>
                 <SectionToggle

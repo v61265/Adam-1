@@ -15,7 +15,7 @@ import Logo from './logo'
  */
 
 /**
- * @typedef {Omit<Section, 'categories'> & { categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
+ * @typedef {Omit<Section, 'categories' > & {href: string, categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
  */
 const SectionsWrapper = styled.nav`
   font-size: 14px;
@@ -153,7 +153,7 @@ export default function NavSections({ sections = [] }) {
             color={sectionColors[section.slug]}
             className={section.slug}
           >
-            <SectionLink href={`/section/${section.slug}`}>
+            <SectionLink href={section.href}>
               <h2>{section.name}</h2>
             </SectionLink>
             <SectionDropDown>
