@@ -35,7 +35,7 @@ export default function SubscribeInviteBanner() {
     <Wrapper>
       <p>
         鏡週刊訂閱制上線，讓有價的閱聽成就更多優質文章，並獻上無廣告的閱讀環境，讓您盡情享受15類會員專屬內容，誠摯邀請您
-        <Link href={href}>立即體驗</Link>。
+        <Link href={href}>立即加入</Link>。
       </p>
     </Wrapper>
   )
