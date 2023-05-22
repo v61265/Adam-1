@@ -156,8 +156,8 @@ function filterOutIsMemberOnlyCategoriesInNormalSection(section) {
  * @param {import('../apollo/fragments/section').Section} section
  * @return {SectionWithHrefTemp}
  */
-function getCategoryHref(section) {
-  const getHref = (sectionSlug, categorySlug) => {
+function getSectionAndCategoryHref(section) {
+  const getCategoryHref = (sectionSlug, categorySlug) => {
     if (sectionSlug === 'videohub') {
       return `/video_category/${categorySlug}`
     }
@@ -166,14 +166,28 @@ function getCategoryHref(section) {
     }
     return `/category/${categorySlug}`
   }
-  const getCategoryContainHref = (section, categories) => {
+
+  /**
+   *
+   * @param {string} sectionSlug
+   * @returns {string}
+   */
+  const getSectionHref = (sectionSlug) => {
+    if (sectionSlug === 'member') {
+      return `/premiumsection/${sectionSlug}`
+    } else {
+      return `/section/${sectionSlug}`
+    }
+  }
+  const getCategoryWithHref = (section, categories) => {
     return categories.map((category) => {
-      return { ...category, href: getHref(section.slug, category.slug) }
+      return { ...category, href: getCategoryHref(section.slug, category.slug) }
     })
   }
   const newSection = {
     ...section,
-    categories: getCategoryContainHref(section, section.categories),
+    href: getSectionHref(section.slug),
+    categories: getCategoryWithHref(section, section.categories),
   }
   return newSection
 }
@@ -237,7 +251,7 @@ export default function Header({
   const sections =
     sectionsData
       .map(filterOutIsMemberOnlyCategoriesInNormalSection)
-      .map(getCategoryHref) ?? []
+      .map(getSectionAndCategoryHref) ?? []
   const topics = topicsData.slice(0, 9)
 
   return (
