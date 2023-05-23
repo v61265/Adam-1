@@ -31,15 +31,15 @@ switch (ENV) {
     RESTFUL_API_HOST = '' //currently unset
     API_PORT = '' //currently unset
     URL_STATIC_PREMIUM_SECTIONS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_member.json'
+      'https://storage.googleapis.com/v3-statics.mirrormedia.mg/files/json/header_member.json'
     URL_STATIC_NORMAL_SECTIONS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_sections.json'
+      'https://storage.googleapis.com/v3-statics.mirrormedia.mg/files/json/header_sections.json'
     URL_STATIC_TOPICS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_topics.json'
+      'https://storage.googleapis.com/v3-statics.mirrormedia.mg/files/json/header_topics.json'
     URL_STATIC_POST_FLASH_NEWS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_posts.json'
+      'https://storage.googleapis.com/v3-statics.mirrormedia.mg/files/json/header_posts.json'
     URL_STATIC_POST_EXTERNAL =
-      'https://statics.mirrormedia.mg/json/post_external'
+      'https://storage.googleapis.com/v3-statics.mirrormedia.mg/files/json/post_external'
     URL_RESTFUL_SERVER = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}`
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-341XFN0675'
@@ -53,15 +53,15 @@ switch (ENV) {
     RESTFUL_API_HOST = '' //currently unset
     API_PORT = '' //currently unset
     URL_STATIC_PREMIUM_SECTIONS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_member.json'
+      'https://storage.googleapis.com/v3-statics-staging.mirrormedia.mg/files/json/header_member.json'
     URL_STATIC_NORMAL_SECTIONS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_sections.json'
+      'https://storage.googleapis.com/v3-statics-staging.mirrormedia.mg/files/json/header_sections.json'
     URL_STATIC_TOPICS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_topics.json'
+      'https://storage.googleapis.com/v3-statics-staging.mirrormedia.mg/files/json/header_topics.json'
     URL_STATIC_POST_FLASH_NEWS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_posts.json'
+      'https://storage.googleapis.com/v3-statics-staging.mirrormedia.mg/files/json/header_posts.json'
     URL_STATIC_POST_EXTERNAL =
-      'https://statics.mirrormedia.mg/json/post_external'
+      'https://storage.googleapis.com/v3-statics-staging.mirrormedia.mg/files/json/post_external'
     URL_RESTFUL_SERVER = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}`
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
@@ -76,15 +76,15 @@ switch (ENV) {
     RESTFUL_API_HOST = '104.199.190.189'
     API_PORT = '8080'
     URL_STATIC_PREMIUM_SECTIONS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_member.json'
+      'https://storage.googleapis.com/v3-statics-dev.mirrormedia.mg/files/json/header_member.json'
     URL_STATIC_NORMAL_SECTIONS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_sections.json'
+      'https://storage.googleapis.com/v3-statics-dev.mirrormedia.mg/files/json/header_sections.json'
     URL_STATIC_TOPICS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_topics.json'
+      'https://storage.googleapis.com/v3-statics-dev.mirrormedia.mg/files/json/header_topics.json'
     URL_STATIC_POST_FLASH_NEWS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_posts.json'
+      'https://storage.googleapis.com/v3-statics-dev.mirrormedia.mg/files/json/header_posts.json'
     URL_STATIC_POST_EXTERNAL =
-      'https://statics.mirrormedia.mg/dev/post_external'
+      'https://storage.googleapis.com/v3-statics-dev.mirrormedia.mg/files/json/post_external'
     URL_RESTFUL_SERVER = 'https://rest-dev.mirrormedia.mg'
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
