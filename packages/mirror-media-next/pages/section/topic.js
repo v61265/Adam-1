@@ -7,6 +7,7 @@ import SectionTopics from '../../components/section/topic/section-topics'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import ShareHeader from '../../components/shared/share-header'
+import Footer from '../../components/footer'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -72,6 +73,7 @@ export default function Topics({ topics, topicsCount, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
       </TopicsContainer>
+      <Footer />
     </>
   )
 }

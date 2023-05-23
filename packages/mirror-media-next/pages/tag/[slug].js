@@ -8,6 +8,7 @@ import TagArticles from '../../components/tag/tag-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import ShareHeader from '../../components/shared/share-header'
+import Footer from '../../components/footer'
 
 const TagContainer = styled.main`
   width: 320px;
@@ -90,6 +91,7 @@ export default function Tag({ postsCount, posts, tag, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
       </TagContainer>
+      <Footer />
     </>
   )
 }

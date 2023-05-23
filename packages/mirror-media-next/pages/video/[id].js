@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 
 import ShareHeader from '../../components/shared/share-header'
+import Footer from '../../components/footer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { GCP_PROJECT_ID, URL_RESTFUL_SERVER } from '../../config/index.mjs'
 import {
@@ -61,6 +62,7 @@ export default function Video({ video, latestVideos, headerData }) {
         </ContentWrapper>
         <YoutubePolicy />
       </Wrapper>
+      <Footer />
     </>
   )
 }

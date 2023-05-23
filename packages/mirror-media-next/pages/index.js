@@ -24,6 +24,7 @@ import { transformRawDataToArticleInfo } from '../utils'
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
 import ShareHeader from '../components/shared/share-header'
+import Footer from '../components/footer'
 
 /**
  * @typedef {import('../components/shared/share-header').HeaderData['flashNewsData']} FlashNewsData
@@ -83,6 +84,7 @@ export default function Home({
           latestNewsTimestamp={latestNewsTimestamp}
         />
       </IndexContainer>
+      <Footer />
     </>
   )
 }

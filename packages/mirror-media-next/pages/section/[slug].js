@@ -7,6 +7,7 @@ import { fetchSection } from '../../apollo/query/sections'
 import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import ShareHeader from '../../components/shared/share-header'
+import Footer from '../../components/footer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 
 /**
@@ -80,6 +81,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
       </SectionContainer>
+      <Footer />
     </>
   )
 }

@@ -9,6 +9,7 @@ import TopicList from '../../components/topic/list/topic-list'
 import TopicGroup from '../../components/topic/group/topic-group'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import ShareHeader from '../../components/shared/share-header'
+import Footer from '../../components/footer'
 
 const RENDER_PAGE_SIZE = 12
 
@@ -51,6 +52,7 @@ export default function Topic({ topic, slideshowData, headerData }) {
     <>
       <ShareHeader pageLayoutType="default" headerData={headerData} />
       {topicJSX}
+      <Footer />
     </>
   )
 }

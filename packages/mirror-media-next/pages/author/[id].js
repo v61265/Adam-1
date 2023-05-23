@@ -8,6 +8,7 @@ import AuthorArticles from '../../components/author/author-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import ShareHeader from '../../components/shared/share-header'
+import Footer from '../../components/footer'
 
 const AuthorContainer = styled.main`
   width: 320px;
@@ -68,6 +69,7 @@ export default function Author({ postsCount, posts, author, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
       </AuthorContainer>
+      <Footer />
     </>
   )
 }

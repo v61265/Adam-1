@@ -8,6 +8,7 @@ import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
 import ShareHeader from '../../components/shared/share-header'
+import Footer from '../../components/footer'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -100,6 +101,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
           isPremium={true}
         />
       </SectionContainer>
+      <Footer />
     </>
   )
 }

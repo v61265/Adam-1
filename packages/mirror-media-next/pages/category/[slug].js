@@ -6,6 +6,7 @@ import { fetchPosts } from '../../apollo/query/posts'
 import { fetchCategorySections } from '../../apollo/query/categroies'
 import CategoryArticles from '../../components/category/category-articles'
 import ShareHeader from '../../components/shared/share-header'
+import Footer from '../../components/footer'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 
 import {
@@ -179,6 +180,7 @@ export default function Category({
           isPremium={isPremium}
         />
       </CategoryContainer>
+      <Footer />
     </>
   )
 }
