@@ -62,7 +62,7 @@ const CAMPAIGN_LINK = {
 const AD_LINK = {
   name: 'ad',
   title: '廣告合作',
-  href: 'https://www.mirrormedia.mg/story/ad1018001/index.html',
+  href: 'https://www.mirrormedia.mg/story/ad1018001/',
 }
 
 const DOWNLOAD_APP_LINK = {
