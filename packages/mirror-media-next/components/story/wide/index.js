@@ -199,7 +199,7 @@ export default function StoryWideStyle({ postData }) {
           </ContentWrapper>
           <Aside
             relateds={relatedsWithOrdered}
-            sectionSlug={section.slug}
+            sectionSlug={section?.slug || 'news'}
             storySlug={slug}
           ></Aside>
         </article>
