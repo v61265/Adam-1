@@ -171,30 +171,31 @@ export async function getServerSideProps({ params, req }) {
     }
 
     //redirect to specific slug or external url
-    const redirectData = postData?.redirect.trim()
+    const redirect = postData?.redirect
 
-    if (redirectData.length > 0) {
+    if (redirect && redirect.trim()) {
+      const redirectHref = postData?.redirect.trim()
       if (
-        redirectData.startsWith('https://') ||
-        redirectData.startsWith('http://')
+        redirectHref.startsWith('https://') ||
+        redirectHref.startsWith('http://')
       ) {
         return {
           redirect: {
-            destination: `${redirectData} `,
+            destination: `${redirectHref} `,
             permanent: false,
           },
         }
-      } else if (redirectData.startsWith('www.')) {
+      } else if (redirectHref.startsWith('www.')) {
         return {
           redirect: {
-            destination: `https://${redirectData}`,
+            destination: `https://${redirectHref}`,
             permanent: false,
           },
         }
       } else {
         return {
           redirect: {
-            destination: `/story/${redirectData} `,
+            destination: `/story/${redirectHref} `,
             permanent: false,
           },
         }
