@@ -96,17 +96,19 @@ export default function AdultOnlyWarning({ isAdult = false }) {
 
   const warningRef = useRef(null)
 
+  // While warning show (`shouldShowAdultWarning` = true), disable body scroll.
   useEffect(() => {
     const adultWarning = warningRef.current
 
-    if (adultWarning) {
-      disableBodyScroll(adultWarning)
-    } else {
-      enableBodyScroll(adultWarning)
+    if (!adultWarning) {
+      return
     }
 
-    return () => {
-      clearAllBodyScrollLocks()
+    if (shouldShowAdultWarning) {
+      disableBodyScroll(adultWarning)
+      return () => enableBodyScroll(adultWarning)
+    } else {
+      return undefined
     }
   }, [shouldShowAdultWarning])
 
