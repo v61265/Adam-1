@@ -7,7 +7,7 @@ import { fetchSection } from '../../apollo/query/sections'
 import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
+import Footer from '../../components/shared/footer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 
 /**

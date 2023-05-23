@@ -9,7 +9,7 @@ import TopicList from '../../components/topic/list/topic-list'
 import TopicGroup from '../../components/topic/group/topic-group'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
+import Footer from '../../components/shared/footer'
 
 const RENDER_PAGE_SIZE = 12
 

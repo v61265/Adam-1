@@ -7,7 +7,7 @@ import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchSpecials, fetchWeeklys } from '../../apollo/query/magazines'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
+import Footer from '../../components/shared/footer'
 
 import MagazinePlatforms from '../../components/magazine/magazine-platforms'
 import MagazineSpecials from '../../components/magazine/magazine-specials'

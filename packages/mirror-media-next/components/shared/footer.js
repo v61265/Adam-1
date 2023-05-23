@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import Nextink from 'next/link'
 
-import { FOOTER_PROMOTION_LINKS } from '../constants/index'
-import { FOOTER_SOCIAL_MEDIA_LISTS } from '../constants/footer'
+import { FOOTER_PROMOTION_LINKS } from '../../constants/index'
+import { FOOTER_SOCIAL_MEDIA_LISTS } from '../../constants/footer'
 
 const {
   PAPER_MAGAZINE_LINK,

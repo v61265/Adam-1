@@ -8,7 +8,7 @@ import client from '../../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import { fetchWeeklys } from '../../../apollo/query/magazines'
 import ShareHeader from '../../../components/shared/share-header'
-import Footer from '../../../components/footer'
+import Footer from '../../../components/shared/footer'
 
 const Page = styled.div`
   padding: 0;

@@ -12,7 +12,7 @@ import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 import { fetchPostBySlug } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
 import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
+import Footer from '../../components/shared/footer'
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
 const StoryPhotographyStyle = dynamic(() =>
   import('../../components/story/photography')

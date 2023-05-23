@@ -7,7 +7,7 @@ import SectionTopics from '../../components/section/topic/section-topics'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
+import Footer from '../../components/shared/footer'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme

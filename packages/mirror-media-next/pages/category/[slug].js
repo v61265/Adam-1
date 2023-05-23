@@ -6,13 +6,14 @@ import { fetchPosts } from '../../apollo/query/posts'
 import { fetchCategorySections } from '../../apollo/query/categroies'
 import CategoryArticles from '../../components/category/category-articles'
 import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
+import Footer from '../../components/shared/footer'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 
 import {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
 } from '../../utils/api'
+import Layout from '../../components/layout'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -162,25 +163,27 @@ export default function Category({
         pageLayoutType={isPremium ? 'premium' : 'default'}
         headerData={headerData}
       />
-      <CategoryContainer isPremium={isPremium}>
-        {isPremium ? (
-          <PremiumCategoryTitle sectionName={category?.sections?.[0].slug}>
-            {category?.name}
-          </PremiumCategoryTitle>
-        ) : (
-          <CategoryTitle sectionName={category?.sections?.[0].slug}>
-            {category?.name}
-          </CategoryTitle>
-        )}
-        <CategoryArticles
-          postsCount={postsCount}
-          posts={posts}
-          category={category}
-          renderPageSize={RENDER_PAGE_SIZE}
-          isPremium={isPremium}
-        />
-      </CategoryContainer>
-      <Footer />
+      <Layout>
+        <CategoryContainer isPremium={isPremium}>
+          {isPremium ? (
+            <PremiumCategoryTitle sectionName={category?.sections?.[0].slug}>
+              {category?.name}
+            </PremiumCategoryTitle>
+          ) : (
+            <CategoryTitle sectionName={category?.sections?.[0].slug}>
+              {category?.name}
+            </CategoryTitle>
+          )}
+          <CategoryArticles
+            postsCount={postsCount}
+            posts={posts}
+            category={category}
+            renderPageSize={RENDER_PAGE_SIZE}
+            isPremium={isPremium}
+          />
+        </CategoryContainer>
+        <Footer />
+      </Layout>
     </>
   )
 }
