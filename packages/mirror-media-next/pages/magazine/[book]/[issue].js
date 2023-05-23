@@ -7,8 +7,7 @@ import styled from 'styled-components'
 import client from '../../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import { fetchWeeklys } from '../../../apollo/query/magazines'
-import ShareHeader from '../../../components/shared/share-header'
-import Footer from '../../../components/shared/footer'
+import Layout from '../../../components/shared/layout'
 
 const Page = styled.div`
   padding: 0;
@@ -43,17 +42,17 @@ export default function BookBIssuePublish({ weeklys }) {
   }, [weeklys, iframeSrc, router])
 
   return (
-    <>
-      <ShareHeader pageLayoutType="empty" />
-      <Head>
-        <title>{`鏡週刊 Mirror Media｜動態雜誌 ${book} ${issue}`}</title>
-      </Head>
+    <Layout header={{ type: 'empty' }}>
+      <>
+        <Head>
+          <title>{`鏡週刊 Mirror Media｜動態雜誌 ${book} ${issue}`}</title>
+        </Head>
 
-      <Page>
-        <iframe src={iframeSrc} />
-      </Page>
-      <Footer />
-    </>
+        <Page>
+          <iframe src={iframeSrc} />
+        </Page>
+      </>
+    </Layout>
   )
 }
 

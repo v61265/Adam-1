@@ -7,8 +7,7 @@ import { fetchPosts } from '../../apollo/query/posts'
 import AuthorArticles from '../../components/author/author-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
-import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/shared/footer'
+import Layout from '../../components/shared/layout'
 
 const AuthorContainer = styled.main`
   width: 320px;
@@ -58,8 +57,7 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Author({ postsCount, posts, author, headerData }) {
   return (
-    <>
-      <ShareHeader pageLayoutType="default" headerData={headerData} />
+    <Layout header={{ type: 'default', data: headerData }}>
       <AuthorContainer>
         <AuthorTitle>{author?.name}</AuthorTitle>
         <AuthorArticles
@@ -69,8 +67,7 @@ export default function Author({ postsCount, posts, author, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
       </AuthorContainer>
-      <Footer />
-    </>
+    </Layout>
   )
 }
 

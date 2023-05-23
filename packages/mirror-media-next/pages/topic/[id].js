@@ -8,8 +8,7 @@ import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import TopicList from '../../components/topic/list/topic-list'
 import TopicGroup from '../../components/topic/group/topic-group'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
-import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/shared/footer'
+import Layout from '../../components/shared/layout'
 
 const RENDER_PAGE_SIZE = 12
 
@@ -49,11 +48,7 @@ export default function Topic({ topic, slideshowData, headerData }) {
   }
 
   return (
-    <>
-      <ShareHeader pageLayoutType="default" headerData={headerData} />
-      {topicJSX}
-      <Footer />
-    </>
+    <Layout header={{ type: 'default', data: headerData }}>{topicJSX}</Layout>
   )
 }
 

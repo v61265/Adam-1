@@ -5,13 +5,12 @@ import { GCP_PROJECT_ID, URL_RESTFUL_SERVER } from '../../config/index.mjs'
 import CategoryVideos from '../../components/video_category/category-videos.js'
 import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants/index.js'
 import styled from 'styled-components'
-import ShareHeader from '../../components/shared/share-header.js'
-import Footer from '../../components/shared/footer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api/index.js'
 import client from '../../apollo/apollo-client.js'
 import { fetchCategory } from '../../apollo/query/categroies.js'
 import { simplifyYoutubePlaylistVideo } from '../../utils/youtube.js'
 import LeadingVideo from '../../components/shared/leading-video.js'
+import Layout from '../../components/shared/layout.js'
 
 const Wrapper = styled.div`
   width: 320px;
@@ -44,8 +43,7 @@ export default function VideoCategory({
   const firstVideo = videos[0]
   const remainingVideos = videos.slice(1)
   return (
-    <>
-      <ShareHeader pageLayoutType="default" headerData={headerData} />
+    <Layout header={{ type: 'default', data: headerData }}>
       <Wrapper>
         <LeadingVideo
           video={firstVideo}
@@ -57,8 +55,7 @@ export default function VideoCategory({
           initialNextPageToken={ytNextPageToken}
         />
       </Wrapper>
-      <Footer />
-    </>
+    </Layout>
   )
 }
 

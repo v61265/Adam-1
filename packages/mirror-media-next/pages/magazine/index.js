@@ -6,13 +6,12 @@ import client from '../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchSpecials, fetchWeeklys } from '../../apollo/query/magazines'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
-import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/shared/footer'
 
 import MagazinePlatforms from '../../components/magazine/magazine-platforms'
 import MagazineSpecials from '../../components/magazine/magazine-specials'
 import MagazineWeeklys from '../../components/magazine/magazine-weeklys'
 import MagazineFeatures from '../../components/magazine/magazine-featured-weeklys'
+import Layout from '../../components/shared/layout'
 
 const Section = styled.div`
   padding: 48px 0;
@@ -72,41 +71,43 @@ export default function Magazine({
     : []
 
   return (
-    <>
-      <ShareHeader
-        pageLayoutType="default"
-        headerData={{ sectionsData: sectionsData, topicsData }}
-      />
-      <Head>
-        <title>鏡週刊 Mirror Media｜動態雜誌</title>
-      </Head>
-      <Page>
-        <Section>
-          <Title>
-            當期<span>動態雜誌</span>
-          </Title>
-          <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
-        </Section>
+    <Layout
+      header={{
+        type: 'default',
+        data: { sectionsData: sectionsData, topicsData },
+      }}
+    >
+      <>
+        <Head>
+          <title>鏡週刊 Mirror Media｜動態雜誌</title>
+        </Head>
+        <Page>
+          <Section>
+            <Title>
+              當期<span>動態雜誌</span>
+            </Title>
+            <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
+          </Section>
 
-        <Section>
-          <Title>
-            近期<span>動態雜誌</span>
-          </Title>
-          <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
-        </Section>
+          <Section>
+            <Title>
+              近期<span>動態雜誌</span>
+            </Title>
+            <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
+          </Section>
 
-        <Section>
-          <Title>購買線上雜誌</Title>
-          <MagazinePlatforms />
-        </Section>
+          <Section>
+            <Title>購買線上雜誌</Title>
+            <MagazinePlatforms />
+          </Section>
 
-        <Section>
-          <Title>特刊</Title>
-          <MagazineSpecials specials={specials} />
-        </Section>
-      </Page>
-      <Footer />
-    </>
+          <Section>
+            <Title>特刊</Title>
+            <MagazineSpecials specials={specials} />
+          </Section>
+        </Page>
+      </>
+    </Layout>
   )
 }
 

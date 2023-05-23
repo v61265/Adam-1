@@ -23,8 +23,7 @@ import { transformRawDataToArticleInfo } from '../utils'
 
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
-import ShareHeader from '../components/shared/share-header'
-import Footer from '../components/shared/footer'
+import Layout from '../components/shared/layout'
 
 /**
  * @typedef {import('../components/shared/share-header').HeaderData['flashNewsData']} FlashNewsData
@@ -69,23 +68,25 @@ export default function Home({
   const editorChoice = transformRawDataToArticleInfo(editorChoicesData)
 
   return (
-    <>
-      <ShareHeader
-        pageLayoutType="default-with-flash-news"
-        headerData={{ sectionsData, topicsData, flashNewsData }}
-      />
-      <Head>
-        <title>鏡週刊 Mirror Media</title>
-      </Head>
-      <IndexContainer>
-        <EditorChoice editorChoice={editorChoice}></EditorChoice>
-        <LatestNews
-          latestNewsData={latestNewsData}
-          latestNewsTimestamp={latestNewsTimestamp}
-        />
-      </IndexContainer>
-      <Footer />
-    </>
+    <Layout
+      header={{
+        type: 'default-with-flash-news',
+        data: { sectionsData, topicsData, flashNewsData },
+      }}
+    >
+      <>
+        <Head>
+          <title>鏡週刊 Mirror Media</title>
+        </Head>
+        <IndexContainer>
+          <EditorChoice editorChoice={editorChoice}></EditorChoice>
+          <LatestNews
+            latestNewsData={latestNewsData}
+            latestNewsTimestamp={latestNewsTimestamp}
+          />
+        </IndexContainer>
+      </>
+    </Layout>
   )
 }
 

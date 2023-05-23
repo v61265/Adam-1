@@ -11,8 +11,7 @@ import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 
 import { fetchPostBySlug } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
-import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/shared/footer'
+import Layout from '../../components/shared/layout'
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
 const StoryPhotographyStyle = dynamic(() =>
   import('../../components/story/photography')
@@ -133,15 +132,17 @@ export default function Story({ postData }) {
   )
 
   return (
-    <>
-      {headJsx}
-      <ShareHeader pageLayoutType="empty" />
-      {!storyLayout && <MockLoading>Loading...</MockLoading>}
-      <div style={{ display: `${storyLayout ? 'block' : 'none'}` }}>{jsx}</div>
-      <WineWarning categories={categories} />
-      <AdultOnlyWarning isAdult={isAdult} />
-      <Footer />
-    </>
+    <Layout header={{ type: 'empty' }}>
+      <>
+        {headJsx}
+        {!storyLayout && <MockLoading>Loading...</MockLoading>}
+        <div style={{ display: `${storyLayout ? 'block' : 'none'}` }}>
+          {jsx}
+        </div>
+        <WineWarning categories={categories} />
+        <AdultOnlyWarning isAdult={isAdult} />
+      </>
+    </Layout>
   )
 }
 

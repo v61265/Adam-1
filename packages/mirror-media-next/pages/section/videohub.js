@@ -5,8 +5,6 @@ import { GCP_PROJECT_ID, URL_RESTFUL_SERVER } from '../../config/index.mjs'
 import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants'
 import client from '../../apollo/apollo-client.js'
 import { fetchSectionWithCategory } from '../../apollo/query/sections.js'
-import ShareHeader from '../../components/shared/share-header.js'
-import Footer from '../../components/shared/footer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api/index.js'
 import styled from 'styled-components'
 import VideoList from '../../components/section/videohub/video-list.js'
@@ -17,6 +15,7 @@ import {
   simplifyYoutubeVideo,
 } from '../../utils/youtube.js'
 import LeadingVideo from '../../components/shared/leading-video.js'
+import Layout from '../../components/shared/layout.js'
 
 /**
  * @typedef {import('../../type/youtube.js').YoutubeRawPlaylistVideo} YoutubeRawPlaylistVideo
@@ -57,8 +56,7 @@ export default function SectionVideohub({
   headerData,
 }) {
   return (
-    <>
-      <ShareHeader pageLayoutType="default" headerData={headerData} />
+    <Layout header={{ type: 'default', data: headerData }}>
       <Wrapper>
         <LeadingVideo video={highestViewCountVideo} title="熱門影片" />
         <VideoList videos={latestVideos} name="最新影片" />
@@ -72,8 +70,7 @@ export default function SectionVideohub({
           />
         ))}
       </Wrapper>
-      <Footer />
-    </>
+    </Layout>
   )
 }
 
