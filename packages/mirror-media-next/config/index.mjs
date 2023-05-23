@@ -38,7 +38,6 @@ switch (ENV) {
       'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_topics.json'
     URL_STATIC_POST_FLASH_NEWS =
       'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_posts.json'
-
     URL_STATIC_POST_EXTERNAL =
       'https://statics.mirrormedia.mg/json/post_external'
     URL_RESTFUL_SERVER = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}`
@@ -61,7 +60,6 @@ switch (ENV) {
       'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_topics.json'
     URL_STATIC_POST_FLASH_NEWS =
       'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_posts.json'
-
     URL_STATIC_POST_EXTERNAL =
       'https://statics.mirrormedia.mg/json/post_external'
     URL_RESTFUL_SERVER = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}`
@@ -85,9 +83,9 @@ switch (ENV) {
       'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_topics.json'
     URL_STATIC_POST_FLASH_NEWS =
       'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_posts.json'
-
     URL_STATIC_POST_EXTERNAL =
       'https://statics.mirrormedia.mg/dev/post_external'
+    URL_RESTFUL_SERVER = 'https://rest-dev.mirrormedia.mg'
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
@@ -104,9 +102,8 @@ switch (ENV) {
     URL_STATIC_NORMAL_SECTIONS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_sections.json`
     URL_STATIC_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_topics.json`
     URL_STATIC_POST_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_posts.json`
-
-    URL_RESTFUL_SERVER = 'https://rest-dev.mirrormedia.mg'
     URL_STATIC_POST_EXTERNAL = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/post_external`
+    URL_RESTFUL_SERVER = 'https://rest-dev.mirrormedia.mg'
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
