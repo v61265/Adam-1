@@ -174,7 +174,7 @@ export async function getServerSideProps({ params, req }) {
     const redirect = postData?.redirect
 
     if (redirect && redirect.trim()) {
-      const redirectHref = postData?.redirect.trim()
+      const redirectHref = redirect.trim()
       if (
         redirectHref.startsWith('https://') ||
         redirectHref.startsWith('http://')
