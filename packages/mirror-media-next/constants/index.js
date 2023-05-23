@@ -35,16 +35,30 @@ const SOCIAL_MEDIA_LINKS = [
   EMAIL_LINK,
 ]
 
+const PAPER_MAGAZINE_LINK = {
+  name: 'paper-magazine',
+  title: '鏡週刊紙本雜誌',
+  href: 'https://www.mirrormedia.mg/papermag',
+}
+
 const MAGAZINE_LINK = {
   name: 'magazine',
   title: '訂閱電子雜誌',
   href: 'https://mybook.taiwanmobile.com/contentGroup/MIR0100100001',
 }
+
 const AUTH_LINK = {
   name: 'auth',
   title: '內容授權',
   href: 'https://www.mirrormedia.mg/story/webauthorize/',
 }
+
+const CAMPAIGN_LINK = {
+  name: 'campaign',
+  title: '活動專區',
+  href: 'https://www.mirrormedia.mg/category/campaign',
+}
+
 const AD_LINK = {
   name: 'ad',
   title: '廣告合作',
@@ -56,11 +70,13 @@ const DOWNLOAD_APP_LINK = {
   title: '下載APP',
   href: 'https://www.mirrormedia.mg/story/20161228corpmkt001/',
 }
+
 const MEDIA_DISCIPLINE_LINK = {
   name: 'discipline',
   title: '新聞自律綱要',
   href: 'https://www.mirrormedia.mg/story/20200710edi030/',
 }
+
 const PROMOTION_LINKS = [
   MAGAZINE_LINK,
   AUTH_LINK,
@@ -68,6 +84,16 @@ const PROMOTION_LINKS = [
   DOWNLOAD_APP_LINK,
   MEDIA_DISCIPLINE_LINK,
 ]
+
+const FOOTER_PROMOTION_LINKS = {
+  PAPER_MAGAZINE_LINK,
+  AD_LINK,
+  MAGAZINE_LINK,
+  AUTH_LINK,
+  CAMPAIGN_LINK,
+  DOWNLOAD_APP_LINK,
+  MEDIA_DISCIPLINE_LINK,
+}
 
 const MIRRORVOICE_LINK = {
   name: 'mirrorvoice',
@@ -168,4 +194,11 @@ export {
   SHARE_URL_FACEBOOK,
   SHARE_URL_LINE,
   Z_INDEX,
+  LINE_LINK,
+  WEIBO_LINK,
+  FACEBOOK_LINK,
+  INSTAGRAM_LINK,
+  RSS_LINK,
+  EMAIL_LINK,
+  FOOTER_PROMOTION_LINKS,
 }
