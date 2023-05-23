@@ -1,34 +1,22 @@
 //TODO: add jsDoc for credits
 
-import { useCallback } from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
-import client from '../../../apollo/apollo-client'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { getContentBlocksH2H3 } = MirrorMedia
-import {
-  transformTimeDataIntoDotFormat,
-  sortArrayWithOtherArrayId,
-} from '../../../utils'
-import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
+import { sortArrayWithOtherArrayId } from '../../../utils'
 
 import Header from './header'
 import DonateLink from '../shared/donate-link'
-import HeroImageAndVideo from './hero-image-and-video'
-import Credits from './credits'
+import HeroImageAndVideo from '../shared/hero-image-and-video'
+import Credits from '../shared/credits'
 import DonateBanner from '../shared/donate-banner'
-import RelatedArticleList from './related-article-list'
-import AsideArticleList from './aside-article-list'
-import NavSubtitleNavigator from './nav-subtitle-navigator'
-import MoreInfoAndTag from './more-info-and-tag'
-
-import Divider from '../shared/divider'
+import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
+import MoreInfoAndTag from '../shared/more-info-and-tag'
+import Date from '../shared/date'
 import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
-
-import { fetchAsidePosts } from '../../../apollo/query/posts'
-
+import Aside from '../shared/aside'
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
  */
@@ -54,16 +42,10 @@ const DateWrapper = styled.div`
     margin-top: 20px;
   }
 `
-const Date = styled.div`
-  width: fit-content;
-  height: auto;
-  font-size: 14px;
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.5);
+const StyledDate = styled(Date)`
   margin: 8px auto 0;
 
   ${({ theme }) => theme.breakpoint.md} {
-    line-height: 1.8;
     margin: 0 auto;
   }
 `
@@ -90,17 +72,6 @@ const StyledDonateBanner = styled(DonateBanner)`
   margin-left: auto;
   margin-right: auto;
   width: 100%;
-`
-const Aside = styled.aside`
-  width: 100%;
-  max-width: 640px;
-  margin: 20px auto;
-  ${({ theme }) => theme.breakpoint.md} {
-    margin-top: 32px;
-  }
-  ${({ theme }) => theme.breakpoint.xl} {
-    margin-top: 64px;
-  }
 `
 
 const SocialMediaAndDonateLink = styled.ul`
@@ -150,8 +121,6 @@ export default function StoryWideStyle({ postData }) {
     brief = null,
     tags = [],
   } = postData
-  const updatedAtFormatTime = transformTimeDataIntoDotFormat(updatedAt)
-  const publishedDateFormatTime = transformTimeDataIntoDotFormat(publishedDate)
   const sectionsWithOrdered =
     manualOrderOfSections && manualOrderOfSections.length
       ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
@@ -177,47 +146,6 @@ export default function StoryWideStyle({ postData }) {
     { vocals: vocals },
     { extend_byline: extend_byline },
   ]
-  /**
-   * @returns {Promise<AsideArticleData[] | []>}
-   */
-  const handleFetchLatestNews = useCallback(async () => {
-    try {
-      /**
-       * @type {import('@apollo/client').ApolloQueryResult<{posts: any[]}>}
-       */
-      const res = await client.query({
-        query: fetchAsidePosts,
-        variables: {
-          take: 6,
-          sectionSlug: section.slug,
-          storySlug: slug,
-        },
-      })
-      return res.data?.posts
-    } catch (err) {
-      console.error(err)
-      return []
-    }
-  }, [section, slug])
-
-  /**
-   * @returns {Promise<any[] | []>}
-   */
-  const handleFetchPopularNews = async () => {
-    try {
-      /**
-       * @type {import('axios').AxiosResponse<any[] | []>}>}
-       */
-      const { data } = await axios({
-        method: 'get',
-        url: URL_STATIC_POPULAR_NEWS,
-        timeout: API_TIMEOUT,
-      })
-      return data.filter((data) => data).slice(0, 6)
-    } catch (err) {
-      return []
-    }
-  }
 
   const h2AndH3Block = getContentBlocksH2H3(content)
 
@@ -255,8 +183,8 @@ export default function StoryWideStyle({ postData }) {
             </NavSubtitleNavigator>
             <Credits credits={credits}></Credits>
             <DateWrapper>
-              <Date>更新時間 {updatedAtFormatTime} 臺北時間</Date>
-              <Date>發布時間 {publishedDateFormatTime} 臺北時間</Date>
+              <StyledDate timeData={publishedDate} timeType="publishedDate" />
+              <StyledDate timeData={updatedAt} timeType="updatedDate" />
             </DateWrapper>
             <StyledDonateLink />
             <section className="content">
@@ -269,20 +197,11 @@ export default function StoryWideStyle({ postData }) {
             <MoreInfoAndTag tags={tags} />
             <StyledDonateBanner />
           </ContentWrapper>
-          <Aside>
-            <RelatedArticleList relateds={relatedsWithOrdered} />
-            <AsideArticleList
-              heading="最新文章"
-              fetchArticle={handleFetchLatestNews}
-              renderAmount={6}
-            />
-            <Divider />
-            <AsideArticleList
-              heading="熱門文章"
-              fetchArticle={handleFetchPopularNews}
-              renderAmount={6}
-            />
-          </Aside>
+          <Aside
+            relateds={relatedsWithOrdered}
+            sectionSlug={section.slug}
+            storySlug={slug}
+          ></Aside>
         </article>
       </Main>
     </>

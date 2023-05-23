@@ -61,6 +61,10 @@ const Title = styled.p`
   -webkit-line-clamp: 2;
   overflow: hidden;
   height: 39.2px;
+  &:active,
+  &:hover {
+    text-decoration: underline;
+  }
   ${({ theme }) => theme.breakpoint.md} {
     margin-top: 12px;
     line-height: 1.5;

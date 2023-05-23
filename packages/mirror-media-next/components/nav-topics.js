@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
+/**
+ * @typedef {Pick<import('../apollo/fragments/topic').Topic, 'id' | 'name'>[]} Topics
+ */
 const TopicsWrapper = styled.section`
   display: none;
   ${({ theme }) => theme.breakpoint.xl} {
@@ -39,15 +42,16 @@ const Topics = styled.div`
 `
 
 /**
- * @param {{topics: import('../type').Topic[] | []  }} props
+ * @param {Object} props
+ * @param {Topics} props.topics
  * @returns {React.ReactElement}
  */
-export default function NavTopics({ topics }) {
+export default function NavTopics({ topics = [] }) {
   return (
     <TopicsWrapper>
       <Topics>
         {topics.map((topic) => (
-          <Topic key={topic._id} href={`topic/${topic._id}`}>
+          <Topic key={topic.id} href={`topic/${topic.id}`}>
             <h2>{topic.name}</h2>
           </Topic>
         ))}

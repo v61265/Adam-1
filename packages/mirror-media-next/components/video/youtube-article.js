@@ -44,12 +44,12 @@ const Description = styled.div`
   line-height: 1.5;
   color: #9b9b9b;
   margin-top: 12px;
-  x ${({ theme }) => theme.breakpoint.md} {
-    font-size: 20px;
+  ${({ theme }) => theme.breakpoint.md} {
+    font-size: 18px;
   }
 
-  ${({ theme }) => theme.breakpoint.xl} {
-    font-size: 24px;
+  > a {
+    text-decoration: underline;
   }
 `
 

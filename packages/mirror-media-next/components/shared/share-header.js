@@ -3,11 +3,12 @@
 import Header from '../header'
 import PremiumHeader from '../premium-header'
 import FlashNews from '../flash-news'
+
 /**
  * @typedef {Object} HeaderData
  * @property {Array} [sectionsData]
  * @property {Array} [topicsData]
- * @property {Array} [flashNewsData]
+ * @property {import('../flash-news').FlashNews[]} [flashNewsData]
  */
 
 const getDefaultHeader = (headerData) => {
@@ -31,13 +32,7 @@ const getDefaultHeaderWithFlashNews = (headerData) => {
       'There is no flash news data for header of default page layout'
     )
   }
-  const flashNews = flashNewsData.map(({ slug, title }) => {
-    return {
-      title,
-      slug,
-      href: `/story/${slug}`,
-    }
-  })
+  const flashNews = flashNewsData
   return (
     <Header sectionsData={sectionsData} topicsData={topicsData}>
       <FlashNews flashNews={flashNews} />

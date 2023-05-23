@@ -11,27 +11,8 @@ import styled from 'styled-components'
 const TagsWrapper = styled.section`
   display: flex;
   justify-content: start;
-  width: 100%;
+  width: fit-content;
   flex-wrap: wrap;
-  /* gap: 8px; */
-  .tag {
-    font-size: 14px;
-    line-height: 20px;
-    padding: 4px 8px;
-    margin-bottom: 8px;
-    margin-right: 8px;
-    border-radius: 2px;
-    background-color: ${
-      /**
-       * @param {{theme:Theme}} param
-       */
-      ({ theme }) => theme.color.brandColor.darkBlue
-    };
-
-    background-color: #000;
-    color: white;
-    font-weight: 400;
-  }
 `
 const Tag = styled.a`
   font-size: 14px;

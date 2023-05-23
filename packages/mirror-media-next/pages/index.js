@@ -13,16 +13,28 @@ import { gql } from '@apollo/client'
 import {
   ENV,
   API_TIMEOUT,
-  URL_K3_FLASH_NEWS,
+  URL_STATIC_POST_FLASH_NEWS,
   URL_STATIC_POST_EXTERNAL,
   GCP_PROJECT_ID,
 } from '../config/index.mjs'
+
 import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
 import { transformRawDataToArticleInfo } from '../utils'
 
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
 import ShareHeader from '../components/shared/share-header'
+
+/**
+ * @typedef {import('../components/shared/share-header').HeaderData['flashNewsData']} FlashNewsData
+ */
+/**
+ * @typedef {import('../components/shared/share-header').HeaderData['sectionsData']} SectionsData
+ */
+/**
+ * @typedef {import('../components/shared/share-header').HeaderData['topicsData']} TopicsData
+ */
+
 const IndexContainer = styled.main`
   background-color: rgba(255, 255, 255, 1);
   max-width: 596px;
@@ -38,7 +50,7 @@ const IndexContainer = styled.main`
  *
  * @param {Object} props
  * @param {import('../type').Topic[]} props.topicsData
- * @param {import('../type').FlashNews[]} props.flashNewsData
+ * @param {FlashNewsData} props.flashNewsData
  * @param {import('../type/raw-data.typedef').RawData[] } [props.editorChoicesData=[]]
  * @param {import('../type/raw-data.typedef').RawData[] } [props.latestNewsData=[]]
  * @param {Object[] } props.sectionsData
@@ -81,12 +93,9 @@ export default function Home({
 
 /**
  * @typedef {Object} DataRes
- * @property {Object} [_endpoints]
- * @property {Object} [_endpoints.topics]
- * @property {Items} [_endpoints.topics._items]
- * @property {Items} [_items]
- * @property {Object} _links
- * @property {Object} _meta
+ * @property {FlashNewsData} [posts]
+ * @property {TopicsData} [topics]
+ * @property {SectionsData} [sections]
  */
 
 //TODO: rename typedef, make it more clear
@@ -130,7 +139,7 @@ export async function getServerSideProps({ res, req }) {
     const responses = await Promise.allSettled([
       axios({
         method: 'get',
-        url: URL_K3_FLASH_NEWS,
+        url: URL_STATIC_POST_FLASH_NEWS,
         timeout: API_TIMEOUT,
       }),
       axios({
@@ -181,8 +190,8 @@ export async function getServerSideProps({ res, req }) {
     const postResponse = responses[1].status === 'fulfilled' && responses[1]
     const headerDataResponse =
       responses[2].status === 'fulfilled' && responses[2]
-    flashNewsData = Array.isArray(flashNewsResponse.value?.data?._items)
-      ? flashNewsResponse.value?.data?._items
+    flashNewsData = Array.isArray(flashNewsResponse.value?.data?.posts)
+      ? flashNewsResponse.value?.data?.posts
       : []
     editorChoicesData = Array.isArray(postResponse.value?.data?.choices)
       ? postResponse.value?.data?.choices
