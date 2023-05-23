@@ -84,6 +84,7 @@ const PromotionLists = styled.ul`
   }
 
   li {
+    line-height: 1.5;
     color: #9d9d9d;
     cursor: pointer;
 
