@@ -1,10 +1,30 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import React, { Fragment, useState, useRef } from 'react'
-import { sectionColors } from '../styles/sections-color'
 import useClickOutside from '../hooks/useClickOutside'
-import Link from 'next/link'
 import NavSubtitleNavigator from './story/shared/nav-subtitle-navigator'
 
+/**
+ * @typedef {import('../type/theme').Theme} Theme
+ */
+
+const colorCss = css`
+  ${
+    /**
+     * @param {Object} param
+     * @param {string} [param.sectionSlug]
+     * @param {Theme} [param.theme]
+     */
+    ({ sectionSlug, theme }) => {
+      if (sectionSlug === 'member') {
+        return '#e51731'
+      } else if (sectionSlug && theme.color.sectionsColor[sectionSlug]) {
+        return theme.color.sectionsColor[sectionSlug]
+      } else {
+        return '#fff'
+      }
+    }
+  };
+`
 /**
  * @typedef {import('./story/shared/nav-subtitle-navigator').H2AndH3Block} H2AndH3Block
  */
@@ -134,37 +154,51 @@ const SectionToggle = styled.button`
       /**
        * @param {Object} props
        * @param {Boolean} props.shouldOpen
+       * @param {string} props.sectionSlug
+       * @param {Theme} [props.Theme]
        */
       ({ shouldOpen }) => (shouldOpen ? '10.4px 6px 0 6px' : '6px 10.4px 6px 0')
     };
-    border-color: ${({ shouldOpen, color }) =>
-      shouldOpen
-        ? `${color ? color : '#fff'} transparent transparent transparent`
-        : 'transparent #fff transparent transparent'};
+    border-color: ${({ shouldOpen, sectionSlug, theme }) => {
+      if (shouldOpen) {
+        if (sectionSlug === 'member') {
+          return `red transparent transparent transparent`
+        } else if (sectionSlug && theme.color.sectionsColor[sectionSlug])
+          return `${theme.color.sectionsColor[sectionSlug]} transparent transparent transparent;`
+        else {
+          return `#fff transparent transparent transparent`
+        }
+      } else {
+        return 'transparent #fff transparent transparent;'
+      }
+    }};
   }
 `
+
 const Categories = styled.div`
   display: flex;
   font-weight: 400;
   flex-wrap: wrap;
   gap: 4px 12px;
-  color: ${({ color }) => (color ? color : '#fff')};
-  margin: ${
-    /** @param {{shouldShowCategories: Boolean}} props */
-    ({ shouldShowCategories }) =>
-      shouldShowCategories ? '12px 0 8px 0' : '0px'
-  };
-  gap: ${
-    /** @param {{shouldShowCategories: Boolean}} props */
-    ({ shouldShowCategories }) => (shouldShowCategories ? '4px 12px' : '0px')
-  };
+
+  margin: ${({ shouldShowCategories }) =>
+    shouldShowCategories ? '12px 0 8px 0' : '0px'};
+  gap: ${({ shouldShowCategories }) =>
+    shouldShowCategories ? '4px 12px' : '0px'};
   transition: all 0.5s ease-in-out;
 
+  color: ${
+    /**
+     * @param {Object} props
+     * @param {boolean} props.shouldShowCategories
+     * @param {string} props.sectionSlug
+     */
+    ({ sectionSlug }) => (sectionSlug ? colorCss : '#fff')
+  };
+
   a {
-    height: ${
-      /** @param {{shouldShowCategories: Boolean}} props */
-      ({ shouldShowCategories }) => (shouldShowCategories ? '21px' : '0')
-    };
+    height: ${({ shouldShowCategories }) =>
+      shouldShowCategories ? '21px' : '0'};
     visibility: ${({ shouldShowCategories }) =>
       shouldShowCategories ? 'visible' : 'hidden'};
     opacity: ${({ shouldShowCategories }) =>
@@ -231,19 +265,19 @@ export default function PremiumMobileSidebar({
           </CloseButton>
           {sections.map(({ id, name, categories, slug }) => (
             <Fragment key={id}>
-              <Section color={sectionColors[slug]}>
+              <Section>
                 <a style={{ width: '50%' }} href={`/premiumsection/${slug}`}>
                   <h3>{name}</h3>
                 </a>
                 <SectionToggle
                   onClick={() => setOpenSection(slug)}
                   shouldOpen={slug === openSection}
-                  color={sectionColors[slug]}
+                  sectionSlug={slug}
                 ></SectionToggle>
               </Section>
               <Categories
                 shouldShowCategories={slug === openSection}
-                color={sectionColors[slug]}
+                sectionSlug={slug}
               >
                 {categories.map((category) => (
                   <a key={category.id} href={`/category/${category.slug}`}>
