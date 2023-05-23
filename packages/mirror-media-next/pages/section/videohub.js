@@ -6,6 +6,7 @@ import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants'
 import client from '../../apollo/apollo-client.js'
 import { fetchSectionWithCategory } from '../../apollo/query/sections.js'
 import ShareHeader from '../../components/shared/share-header.js'
+import Footer from '../../components/footer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api/index.js'
 import styled from 'styled-components'
 import VideoList from '../../components/section/videohub/video-list.js'
@@ -71,6 +72,7 @@ export default function SectionVideohub({
           />
         ))}
       </Wrapper>
+      <Footer />
     </>
   )
 }
