@@ -139,6 +139,7 @@ export const asideListingPost = gql`
  * @property {Related[] | null} manualOrderOfRelateds related articles with adjusted order
  * @property {boolean} isFeatured
  * @property {import('./tag').Tag[]} tags
+ * @property {string} redirect - post redirect slug or external url
  */
 
 export const post = gql`
@@ -206,5 +207,6 @@ export const post = gql`
       }
     }
     manualOrderOfRelateds
+    redirect
   }
 `
