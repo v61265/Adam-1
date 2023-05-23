@@ -5,6 +5,7 @@ import ButtonCopyLink from '../shared/button-copy-link'
 import DonateLink from '../shared/donate-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import Tags from '../shared/tags'
+import Credits from '../shared/credits'
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
@@ -18,42 +19,6 @@ const Date = styled.div`
   margin-bottom: 8px;
   ${({ theme }) => theme.breakpoint.md} {
     display: none;
-  }
-`
-
-const Credits = styled.div`
-  font-size: 16px;
-  line-height: 1.5;
-  margin-top: 20px;
-  ${({ theme }) => theme.breakpoint.md} {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 20px;
-    margin-top: 12px;
-  }
-`
-
-const CreditTitle = styled.span`
-  color: rgba(0, 0, 0, 0.5);
-  width: fit-content;
-  ${({ theme }) => theme.breakpoint.md} {
-    color: rgba(52, 73, 94, 1);
-  }
-`
-
-const CreditList = styled.span`
-  display: flex;
-  gap: 0px 6px;
-  flex-wrap: wrap;
-  .link {
-    color: ${
-      /** @param {{theme:Theme}} param */
-      ({ theme }) => theme.color.brandColor.darkBlue
-    };
-  }
-
-  .no-link {
-    color: rgba(52, 73, 94, 1);
   }
 `
 
@@ -116,15 +81,12 @@ const ArticleInfoContainer = styled.div`
     margin: 0 0 24px;
   }
 `
-const CREDIT_TITLE_NAME_MAP = {
-  writers: '文',
-  photographers: '攝影',
-  camera_man: '影音',
-  designers: '設計',
-  engineers: '工程',
-  vocals: '主播',
-  extend_byline: '特約記者',
-}
+const StyledTags = styled(Tags)`
+  margin-top: 20px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 25.5px;
+  }
+`
 
 /**
  * @typedef {import('../../../apollo/fragments/contact').Contact[]} Contacts
@@ -159,59 +121,12 @@ export default function ArticleInfo({
   credits,
   tags,
 }) {
-  const shouldShowCredits = credits.some((credit) => {
-    const [people] = Object.values(credit)
-    return people.length !== 0 || (typeof people === 'string' && people.trim())
-  })
-
-  const creditsJsx = shouldShowCredits ? (
-    <Credits>
-      {credits.map((credit, index) => {
-        const title = Object.keys(credit)
-        const titleName = CREDIT_TITLE_NAME_MAP[title]
-        const [people] = Object.values(credit)
-        if (
-          !titleName ||
-          people.length === 0 ||
-          (typeof people === 'string' && !people.trim())
-        ) {
-          return null
-        }
-        return (
-          <CreditList key={index}>
-            <CreditTitle>{titleName} | </CreditTitle>
-            {Array.isArray(people) ? (
-              people.map((person) => (
-                <Link
-                  target="_blank"
-                  rel="noreferrer noopenner"
-                  href={`/author/${person.id}`}
-                  key={person.id}
-                  className="link"
-                >
-                  {person.name}
-                </Link>
-              ))
-            ) : (
-              <p className="no-link">{people}</p>
-            )}
-          </CreditList>
-        )
-      })}
-    </Credits>
-  ) : null
-  const StyledTags = styled(Tags)`
-    margin-top: 20px;
-    ${({ theme }) => theme.breakpoint.md} {
-      margin-top: 25.5px;
-    }
-  `
   return (
     <ArticleInfoContainer>
       <Date>發布時間：{publishedDate} 臺北時間</Date>
       <Date>更新時間：{updatedDate} 臺北時間</Date>
 
-      {creditsJsx}
+      <Credits credits={credits}></Credits>
       <SocialMediaAndDonateLink>
         <Link className="link-to-index" href="/">
           <Image

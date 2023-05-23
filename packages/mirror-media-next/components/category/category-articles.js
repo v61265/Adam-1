@@ -82,7 +82,10 @@ export default function CategoryArticles({
           isPremium ? (
             <PremiumArticleList renderList={renderList} />
           ) : (
-            <ArticleList renderList={renderList} />
+            <ArticleList
+              renderList={renderList}
+              section={category.sections[0]}
+            />
           )
         }
       </InfiniteScrollList>

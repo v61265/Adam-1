@@ -3,7 +3,11 @@ import React, { Fragment, useState, useRef } from 'react'
 import { sectionColors } from '../styles/sections-color'
 import useClickOutside from '../hooks/useClickOutside'
 import Link from 'next/link'
+import NavSubtitleNavigator from './story/shared/nav-subtitle-navigator'
 
+/**
+ * @typedef {import('./story/shared/nav-subtitle-navigator').H2AndH3Block} H2AndH3Block
+ */
 const SideBarButton = styled.button`
   user-select: none;
   display: block;
@@ -168,18 +172,35 @@ const Categories = styled.div`
     transition: all 0.5s ease-in-out;
   }
 `
-const SideBarTop = styled.div`
+const SideBarBottom = styled.div`
   padding: 24px;
-  margin-top: 108px;
+  margin-top: ${
+    /**
+     * @param {Object} param
+     * @param {boolean} param.isLargerMarginTop
+     */
+    ({ isLargerMarginTop }) => (isLargerMarginTop ? '108px' : 0)
+  };
+`
+const SideBarTop = styled.div`
+  background-color: #3e3e3e;
+
+  width: 100%;
 `
 
 /**
  *
  * @param {Object} props
  * @param {import('./premium-header').PremiumHeaderSection[]} props.sections
+ * @param {boolean} [props.shouldShowSubtitleNavigator]
+ * @param {H2AndH3Block[]} [props.h2AndH3Block]
  * @returns {React.ReactElement}
  */
-export default function PremiumMobileSidebar({ sections }) {
+export default function PremiumMobileSidebar({
+  sections,
+  shouldShowSubtitleNavigator = false,
+  h2AndH3Block = [],
+}) {
   const [openSidebar, setOpenSidebar] = useState(false)
   const [openSection, setOpenSection] = useState('')
   const sideBarRef = useRef(null)
@@ -195,16 +216,25 @@ export default function PremiumMobileSidebar({ sections }) {
         <i className="hamburger"></i>
       </SideBarButton>
       <SideBar shouldShowSidebar={openSidebar} ref={sideBarRef}>
-        <SideBarTop>
+        {shouldShowSubtitleNavigator && (
+          <SideBarTop>
+            <NavSubtitleNavigator
+              h2AndH3Block={h2AndH3Block}
+              componentStyle="side-bar"
+              handleCloseSideBar={() => setOpenSidebar(false)}
+            ></NavSubtitleNavigator>
+          </SideBarTop>
+        )}
+        <SideBarBottom isLargerMarginTop={!shouldShowSubtitleNavigator}>
           <CloseButton onClick={() => setOpenSidebar((val) => !val)}>
             <i className="close"></i>
           </CloseButton>
           {sections.map(({ id, name, categories, slug }) => (
             <Fragment key={id}>
               <Section color={sectionColors[slug]}>
-                <Link style={{ width: '50%' }} href={`/section/${name}`}>
+                <a style={{ width: '50%' }} href={`/premiumsection/${slug}`}>
                   <h3>{name}</h3>
-                </Link>
+                </a>
                 <SectionToggle
                   onClick={() => setOpenSection(slug)}
                   shouldOpen={slug === openSection}
@@ -223,7 +253,7 @@ export default function PremiumMobileSidebar({ sections }) {
               </Categories>
             </Fragment>
           ))}
-        </SideBarTop>
+        </SideBarBottom>
       </SideBar>
     </>
   )

@@ -51,7 +51,7 @@ const ArticleTitle = styled.h1`
 const Figure = styled.figure`
   margin: 0 0 0;
   height: 100%;
-
+  position: relative;
   video {
     width: 100%;
     height: 100vh;
@@ -67,17 +67,29 @@ const Figure = styled.figure`
     height: 100vh;
     background-color: #d9d9d9;
   }
-  &::after {
-    content: ' ';
-    position: absolute;
-    display: block;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100vh;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15));
+  ${
+    /**
+     * @param {Object} param
+     * @param {boolean} param.shouldShowMask
+     */
+    ({ shouldShowMask }) =>
+      shouldShowMask &&
+      `&::after {
+      content: ' ';
+      position: absolute;
+      display: block;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15)
+      );
+    }`
   }
   ${({ theme }) => theme.breakpoint.md} {
     margin: 0 0 0;
@@ -106,12 +118,21 @@ const HeroCaption = styled.figcaption`
 `
 
 /**
- *
+ * Component for rending hero image of hero video.
+ * This component is currently used at story page wide and premium layout.
+ * This component will change it style by `props.style`.
+ * If `props.style` is `wide`, component will render style for story page wide layout.
+ * If `props.style` is `premium`, component will render style for story page premium layout.
+ * There are three difference between 'wide' and `premium`:
+ * 1. In `wide`, there is a `<h1>` in middle of bottom of component. In `premium`, there is no `<h1>` have to render.
+ * 2. In `wide`, there is a semitransparent mask above image or video. In `premium`, there is no `<h1>` have to render.
+ * 3. In `wide`, there is full-size block with gray background if no image and video is selected.  In `premium`, there is no have to render a full-size block.
  * @param {Object} props
- * @param {HeroImage | null} props.heroImage
- * @param {HeroVideo | null} props.heroVideo
- * @param {string} props.heroCaption
- * @param {string} props.title
+ * @param {'wide' | 'premium'} [props.style] - The style of the component, it will change the components style by assigning different value.
+ * @param {HeroImage | null} props.heroImage - The hero image data.
+ * @param {HeroVideo | null} props.heroVideo - The hero video data.
+ * @param {string} props.heroCaption - The caption for the hero image or video.
+ * @param {string} [props.title] - The title of the article. Optional, only render if `props.style` is wide
  * @returns {JSX.Element}
  */
 export default function HeroImageAndVideo({
@@ -119,6 +140,7 @@ export default function HeroImageAndVideo({
   heroVideo = null,
   heroCaption = '',
   title = '',
+  style = 'wide',
 }) {
   const shouldShowHeroVideo = Boolean(heroVideo)
   const shouldShowHeroImage = Boolean(!shouldShowHeroVideo && heroImage)
@@ -156,14 +178,14 @@ export default function HeroImageAndVideo({
   return (
     <>
       {shouldShowHeroImage || shouldShowHeroVideo ? (
-        <Figure>
+        <Figure shouldShowMask={style === 'wide'}>
           {heroJsx()}
           {heroCaption ? <HeroCaption>{heroCaption}</HeroCaption> : null}
         </Figure>
       ) : (
-        <Empty />
+        <>{style === 'wide' ? <Empty /> : null}</>
       )}
-      <ArticleTitle>{title}</ArticleTitle>
+      {style === 'wide' && title ? <ArticleTitle>{title}</ArticleTitle> : null}
     </>
   )
 }

@@ -8,7 +8,7 @@ import Link from 'next/link'
 const Wrapper = styled.section`
   width: 100%;
   max-width: 640px;
-  margin: 24px auto;
+  margin: 24px auto 0;
 `
 
 const CreditsWrapper = styled.section`
@@ -29,7 +29,8 @@ const CreditTitle = styled.figcaption`
 
   position: relative;
 
-  width: 38px;
+  min-width: 38px;
+  max-width: 38px;
   text-align: left;
   margin-right: 14px;
 
@@ -117,9 +118,10 @@ const CREDIT_TITLE_NAME_MAP = {
 /**
  * @param {Object} props
  * @param {Credit[]} props.credits
+ * @param {string} [props.className]
  * @returns {JSX.Element}
  */
-export default function Credits({ credits }) {
+export default function Credits({ credits = [], className = '' }) {
   const shouldShowCredits = credits.some((credit) => {
     const [people] = Object.values(credit)
     return people.length !== 0 || (typeof people === 'string' && people.trim())
@@ -168,5 +170,5 @@ export default function Credits({ credits }) {
     </CreditsWrapper>
   ) : null
 
-  return <Wrapper>{creditsJsx}</Wrapper>
+  return <Wrapper className={className}>{creditsJsx}</Wrapper>
 }

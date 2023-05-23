@@ -5,6 +5,22 @@ import useClickOutside from '../hooks/useClickOutside'
 import Link from 'next/link'
 import HamburgerButton from './shared/hamburger-button'
 import CloseButton from './shared/close-button'
+
+/**
+ * @typedef {import('../apollo/fragments/section').Section} Section
+ */
+
+/**
+ * @typedef {import('../apollo/fragments/section').SectionWithCategory} SectionWithCategory
+ */
+
+/**
+ * @typedef {Omit<Section, 'categories' > & {href: string, categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
+ */
+/**
+ * @typedef {Pick<import('../apollo/fragments/topic').Topic, 'id' | 'name'>[]} Topics
+ */
+
 const SideBar = styled.section`
   display: flex;
   flex-direction: column;
@@ -195,8 +211,8 @@ const SocialMediaList = styled.div`
  * TODO: use typedef in `../apollo/fragments/section`
  * Should be done after fetch header data from new json file
  * @param {Object} props
- * @param {import('../type').Topic[]} props.topics
- * @param {import('../type').Section[]} props.sections
+ * @param {Topics} props.topics
+ * @param {SectionWithHrefTemp[]} props.sections
  * @param {import('../type').SubBrand[]} props.subBrands
  * @param {import('../type').Promotion[]} props.promotions
  * @param {import('../type').SocialMedia[]} props.socialMedia
@@ -227,30 +243,30 @@ export default function MobileSidebar({
           />
           <Topics>
             {topics.map((topic) => (
-              <Topic href={`topic/${topic._id}`} key={topic._id}>
+              <Topic href={`topic/${topic.id}`} key={topic.id}>
                 {topic.name}
               </Topic>
             ))}
             <Topic href={`/section/topic`}>更多</Topic>
           </Topics>
-          {sections.map(({ _id, title, categories, name }) => (
-            <Fragment key={_id}>
-              <Section color={sectionColors[name]}>
-                <Link style={{ width: '50%' }} href={`/section/${title}`}>
-                  <h3>{title}</h3>
+          {sections.map(({ id, slug, categories, name, href }) => (
+            <Fragment key={id}>
+              <Section color={sectionColors[slug]}>
+                <Link style={{ width: '50%' }} href={href}>
+                  <h3>{name}</h3>
                 </Link>
                 <SectionToggle
-                  onClick={() => setOpenSection(name)}
-                  shouldOpen={name === openSection}
+                  onClick={() => setOpenSection(slug)}
+                  shouldOpen={slug === openSection}
                 ></SectionToggle>
               </Section>
               <Categories
-                shouldShowCategories={name === openSection}
-                color={sectionColors[name]}
+                shouldShowCategories={slug === openSection}
+                color={sectionColors[slug]}
               >
                 {categories.map((category) => (
-                  <a key={category._id} href={`/category/${category.name}`}>
-                    {category.title}
+                  <a key={category.id} href={category.href}>
+                    {category.name}
                   </a>
                 ))}
               </Categories>

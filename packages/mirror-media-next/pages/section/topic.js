@@ -65,7 +65,7 @@ export default function Topics({ topics, topicsCount, headerData }) {
     <>
       <ShareHeader pageLayoutType="default" headerData={headerData} />
       <TopicsContainer>
-        <TopicsTitle>Topic</TopicsTitle>
+        <TopicsTitle>精選專區</TopicsTitle>
         <SectionTopics
           topicsCount={topicsCount}
           topics={topics}
