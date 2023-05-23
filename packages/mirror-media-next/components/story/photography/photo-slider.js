@@ -1,13 +1,12 @@
 // @ts-nocheck
 /* eslint-disable @next/next/no-img-element */
+import { useRef } from 'react'
 import styled, { css } from 'styled-components'
 
 const Wrapper = styled.div`
-  width: 100%;
-  margin: auto;
-  background-color: #333333;
+  /* height: auto;
+  overflow: auto; */
 `
-
 const HeroImage = styled.div`
   background-image: linear-gradient(
       to bottom,
@@ -29,9 +28,6 @@ const HeroImage = styled.div`
     css`
       background-attachment: fixed;
     `}
-
-  // snap scrolling effect
-  scroll-snap-align:start;
 `
 
 const TitleBox = styled.div`
@@ -39,7 +35,7 @@ const TitleBox = styled.div`
   width: 80%;
   margin: 0 auto;
   text-align: center;
-  margin-bottom: 80px;
+  margin-bottom: 120px;
   font-family: var(--inter-font);
   font-style: normal;
   font-weight: 400;
@@ -66,6 +62,7 @@ const TitleBox = styled.div`
 `
 
 const Slide = styled.div`
+  position: relative; /* Required for positioning the arrow button */
   display: block;
   width: 100%;
   height: 100vh;
@@ -84,10 +81,28 @@ const Slide = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
+`
 
-  /* img {
-    width: 100%;
-  } */
+const ArrowButton = styled.button`
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: aqua;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: yellow;
+  }
 `
 
 const isIOS = () => {
@@ -100,29 +115,63 @@ export default function PhotoSlider({
   heroCaption = '',
   brief = '',
   heroImage = null,
+  contentRef = null,
 }) {
+  const HeroImageRef = useRef(null)
+  const slideRefs = [useRef(null), useRef(null), useRef(null)]
+
+  const scrollToNextSlide = (slideIndex) => {
+    if (slideIndex === HeroImageRef) {
+      // Scroll to HeroImageRef
+      const heroImageSlider = HeroImageRef.current
+      if (heroImageSlider) {
+        heroImageSlider.scrollIntoView({ behavior: 'smooth' })
+      }
+    } else {
+      // Scroll to other slides based on slide index
+      const slider = slideRefs[slideIndex].current
+      if (slider) {
+        slider.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }
+
   return (
     <Wrapper>
-      <HeroImage
-        // @ts-ignore
-        imageUrl={
-          heroImage?.resized?.original ||
-          heroImage?.resized?.w2400 ||
-          heroImage?.resized?.w1600 ||
-          ''
-        }
-      >
-        <TitleBox>
-          <h1 className="title">{title}</h1>
-          <p className="hero-caption">{heroCaption}</p>
-          <p className="brief">{brief}</p>
-        </TitleBox>
-      </HeroImage>
-      {photos.map((photo, index) => (
+      <Slide ref={HeroImageRef}>
+        <HeroImage
+          // @ts-ignore
+          imageUrl={
+            heroImage?.resized?.original ||
+            heroImage?.resized?.w2400 ||
+            heroImage?.resized?.w1600 ||
+            ''
+          }
+        >
+          <TitleBox>
+            <h1 className="title">{title}</h1>
+            <p className="hero-caption">{heroCaption}</p>
+            <p className="brief">{brief}</p>
+          </TitleBox>
+        </HeroImage>
+        <ArrowButton onClick={() => scrollToNextSlide(1)}>▼</ArrowButton>
+      </Slide>
+      <Slide ref={slideRefs[1]}>
+        <p>Slide 2</p>
+        <ArrowButton onClick={() => scrollToNextSlide(2)}>▼</ArrowButton>
+      </Slide>
+      <Slide ref={slideRefs[2]}>
+        <p>Slide 3</p>
+        <ArrowButton onClick={() => scrollToNextSlide(HeroImageRef)}>
+          ▼
+        </ArrowButton>
+      </Slide>
+      {/* {photos.map((photo, index) => (
         <Slide key={index}>
           <img src={photo.data.resized.original} alt={photo.data.desc} />
+          <ArrowButton onClick={handleArrowButtonClick}>▼</ArrowButton>
         </Slide>
-      ))}
+      ))} */}
     </Wrapper>
   )
 }

@@ -1,11 +1,11 @@
 // @ts-nocheck
+import { useRef } from 'react'
 import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import Credits from './potography-credits'
 import PhotoSlider from './photo-slider'
 
 const Main = styled.main`
-  height: auto;
   margin: auto;
   padding-bottom: 40px;
   width: 100%;
@@ -23,10 +23,12 @@ const Main = styled.main`
     color: white;
   }
 
-  // snap scrolling effect
+  // Snap scrolling effect
   height: 100vh;
   scroll-snap-type: y mandatory;
   overflow: auto;
+
+  // Hide the scroll bar
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
 
@@ -43,6 +45,7 @@ const ContentContainer = styled.div`
   scroll-snap-align: start;
   height: 1000px;
 `
+
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
  */
@@ -93,6 +96,8 @@ export default function StoryPhotographyStyle({ postData }) {
     (item) => item.type === 'image'
   )
 
+  const contentRef = useRef(null)
+
   return (
     <Main>
       <PhotoSlider
@@ -101,8 +106,9 @@ export default function StoryPhotographyStyle({ postData }) {
         heroCaption={heroCaption}
         brief={brief.blocks[0].text}
         heroImage={heroImage}
+        contentRef={contentRef}
       />
-      <ContentContainer>
+      <ContentContainer ref={contentRef}>
         <section className="content">
           <DraftRenderBlock
             rawContentBlock={content}
