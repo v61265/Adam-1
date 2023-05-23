@@ -53,12 +53,6 @@ const AUTH_LINK = {
   href: 'https://www.mirrormedia.mg/story/webauthorize/',
 }
 
-const CAMPAIGN_LINK = {
-  name: 'campaign',
-  title: '活動專區',
-  href: 'https://www.mirrormedia.mg/category/campaign',
-}
-
 const AD_LINK = {
   name: 'ad',
   title: '廣告合作',
@@ -87,10 +81,9 @@ const PROMOTION_LINKS = [
 
 const FOOTER_PROMOTION_LINKS = {
   PAPER_MAGAZINE_LINK,
-  AD_LINK,
   MAGAZINE_LINK,
   AUTH_LINK,
-  CAMPAIGN_LINK,
+  AD_LINK,
   DOWNLOAD_APP_LINK,
   MEDIA_DISCIPLINE_LINK,
 }
