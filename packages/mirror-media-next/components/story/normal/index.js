@@ -405,7 +405,7 @@ export default function StoryNormalStyle({ postData }) {
         query: fetchAsidePosts,
         variables: {
           take: 6,
-          sectionSlug: section.slug,
+          sectionSlug: section?.slug || 'news',
           storySlug: slug,
         },
       })
