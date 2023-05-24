@@ -8,7 +8,6 @@ const {
   PAPER_MAGAZINE_LINK,
   MAGAZINE_LINK,
   AUTH_LINK,
-  CAMPAIGN_LINK,
   DOWNLOAD_APP_LINK,
   MEDIA_DISCIPLINE_LINK,
   AD_LINK,
@@ -18,21 +17,15 @@ const DESKTOP_PROMOTION_LISTS = [
   PAPER_MAGAZINE_LINK,
   MAGAZINE_LINK,
   AUTH_LINK,
-  CAMPAIGN_LINK,
   DOWNLOAD_APP_LINK,
   MEDIA_DISCIPLINE_LINK,
 ]
 
-const MOBILE_PROMOTION_LISTS = [
-  PAPER_MAGAZINE_LINK,
-  AD_LINK,
-  CAMPAIGN_LINK,
-  AUTH_LINK,
-]
+const MOBILE_PROMOTION_LISTS = [PAPER_MAGAZINE_LINK, AD_LINK, AUTH_LINK]
 
 const FooterWrapper = styled.div`
   background: #f5f5f5;
-  padding: 8px 62px;
+  padding: 8px 0px;
   width: 100%;
   max-width: 1024px;
   margin: 24px auto 0px;
@@ -70,7 +63,6 @@ const PromotionLists = styled.ul`
   justify-content: center;
   flex-wrap: wrap;
   gap: 4px 20px;
-  max-width: 270px;
   margin: auto;
 
   ${({ theme }) => theme.breakpoint.sm} {
