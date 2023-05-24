@@ -58,6 +58,7 @@ export default function Video({ video, latestVideos, headerData }) {
         imageUrl: video?.thumbnail,
       }}
       header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
     >
       <Wrapper>
         <YoutubeIframe videoId={video.id} />

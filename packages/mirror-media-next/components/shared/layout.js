@@ -8,16 +8,20 @@ import CustomHead from './custom-head'
  * @property {import('./share-header').HeaderData} [data]
  *
  * @typedef {import('./custom-head').HeadProps} Head
+ *
+ * @typedef {Object} Footer
+ * @property {import('./footer').FooterType} type
  */
 
 /**
  * @param {Object} props
  * @param {Head} [props.head]
  * @param {Header} props.header
+ * @param {Footer} props.footer
  * @param {JSX.Element} props.children
  * @returns
  */
-export default function Layout({ head, header, children }) {
+export default function Layout({ head, header, footer, children }) {
   return (
     <>
       <CustomHead
@@ -27,7 +31,7 @@ export default function Layout({ head, header, children }) {
       />
       <ShareHeader pageLayoutType={header.type} headerData={header.data} />
       {children}
-      <Footer />
+      <Footer footerType={footer.type} />
     </>
   )
 }

@@ -97,7 +97,7 @@ const MediaLists = styled.ul`
   }
 `
 
-export default function ShareFooter() {
+function Footer() {
   const desktopPromotionLinks = DESKTOP_PROMOTION_LISTS.map((item) => {
     return (
       <li key={item.name} aria-label={item.title}>
@@ -157,4 +157,32 @@ export default function ShareFooter() {
       <MediaLists>{socialMediaLinks}</MediaLists>
     </FooterWrapper>
   )
+}
+
+/**
+ * @typedef {'default' | 'empty'} FooterType
+ */
+
+/**
+ * @param {Object} props
+ * @param {FooterType} props.footerType
+ * @returns
+ */
+export default function ShareFooter({ footerType }) {
+  /**
+   * @param {FooterType} footerType
+   * @returns {React.ReactElement}
+   */
+  const getFooterJsx = (footerType) => {
+    switch (footerType) {
+      case 'default':
+        return <Footer />
+      case 'empty':
+        return <></>
+      default:
+        return <Footer />
+    }
+  }
+
+  return getFooterJsx(footerType)
 }

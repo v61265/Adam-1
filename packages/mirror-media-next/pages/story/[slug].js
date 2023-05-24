@@ -135,6 +135,7 @@ export default function Story({ postData }) {
           postData.og_image?.resized?.w1200,
       }}
       header={{ type: 'empty' }}
+      footer={{ type: 'empty' }}
     >
       <>
         {!storyLayout && <MockLoading>Loading...</MockLoading>}

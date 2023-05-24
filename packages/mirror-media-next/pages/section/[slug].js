@@ -72,6 +72,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
     <Layout
       head={{ title: `${section?.name}分類報導` }}
       header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
     >
       <SectionContainer>
         <SectionTitle sectionName={section?.slug}>{section?.name}</SectionTitle>

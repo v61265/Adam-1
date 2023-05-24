@@ -46,6 +46,7 @@ export default function VideoCategory({
     <Layout
       head={{ title: `${category.name}影音` }}
       header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
     >
       <Wrapper>
         <LeadingVideo

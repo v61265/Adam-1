@@ -59,6 +59,7 @@ export default function SectionVideohub({
     <Layout
       head={{ title: `影音` }}
       header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
     >
       <Wrapper>
         <LeadingVideo video={highestViewCountVideo} title="熱門影片" />

@@ -159,6 +159,7 @@ export default function Category({
     <Layout
       head={{ title: `${category?.name}分類報導` }}
       header={{ type: isPremium ? 'premium' : 'default', data: headerData }}
+      footer={{ type: 'default' }}
     >
       <CategoryContainer isPremium={isPremium}>
         {isPremium ? (

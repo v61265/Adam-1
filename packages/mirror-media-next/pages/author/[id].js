@@ -60,6 +60,7 @@ export default function Author({ postsCount, posts, author, headerData }) {
     <Layout
       head={{ title: `${author?.name}相關報導` }}
       header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
     >
       <AuthorContainer>
         <AuthorTitle>{author?.name}</AuthorTitle>

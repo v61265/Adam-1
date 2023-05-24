@@ -56,6 +56,7 @@ export default function Topic({ topic, slideshowData, headerData }) {
         imageUrl: parseUrl(topic?.style),
       }}
       header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
     >
       {topicJSX}
     </Layout>

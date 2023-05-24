@@ -65,6 +65,7 @@ export default function Topics({ topics, topicsCount, headerData }) {
     <Layout
       head={{ title: `精選專區分類報導` }}
       header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
     >
       <TopicsContainer>
         <TopicsTitle>精選專區</TopicsTitle>

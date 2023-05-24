@@ -76,6 +76,7 @@ export default function Magazine({
         type: 'default',
         data: { sectionsData: sectionsData, topicsData },
       }}
+      footer={{ type: 'default' }}
     >
       <Page>
         <Section>

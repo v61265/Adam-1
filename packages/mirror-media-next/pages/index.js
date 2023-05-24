@@ -72,6 +72,9 @@ export default function Home({
         type: 'default-with-flash-news',
         data: { sectionsData, topicsData, flashNewsData },
       }}
+      footer={{
+        type: 'default',
+      }}
     >
       <IndexContainer>
         <EditorChoice editorChoice={editorChoice}></EditorChoice>

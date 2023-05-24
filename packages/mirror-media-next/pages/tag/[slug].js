@@ -80,6 +80,7 @@ export default function Tag({ postsCount, posts, tag, headerData }) {
     <Layout
       head={{ title: `${tag?.name}相關報導` }}
       header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
     >
       <TagContainer>
         <TagTitleWrapper>
