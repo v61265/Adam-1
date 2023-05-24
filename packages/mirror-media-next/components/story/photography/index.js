@@ -205,7 +205,7 @@ export default function StoryPhotographyStyle({ postData }) {
 
   // Page ArrowDown button click handler
   const pageRefs = useRef([])
-  let index = 0
+  const buttonRefs = useRef([])
   const lastContentRef = useRef(null)
 
   const handleHeroButtonClick = () => {
@@ -214,12 +214,13 @@ export default function StoryPhotographyStyle({ postData }) {
     }
   }
 
-  const handleSlidesButtonClick = () => {
-    if (index < photosArray.length - 1) {
-      pageRefs.current[index + 1].scrollIntoView({ behavior: 'smooth' })
-      index += 1
-    } else if (index === photosArray.length - 1) {
-      lastContentRef.current.scrollIntoView({ behavior: 'smooth' })
+  const handleSlidesButtonClick = (buttonIndex) => {
+    if (buttonIndex < photosArray.length - 1) {
+      pageRefs.current[buttonIndex + 1].scrollIntoView({ behavior: 'smooth' })
+    } else if (buttonIndex === photosArray.length - 1) {
+      if (lastContentRef.current) {
+        lastContentRef.current.scrollIntoView({ behavior: 'smooth' })
+      }
     }
   }
 
@@ -248,7 +249,12 @@ export default function StoryPhotographyStyle({ postData }) {
           <Slide>
             <img src={photo.data.resized.original} alt={photo.data.desc} />
           </Slide>
-          <ArrowButton onClick={handleSlidesButtonClick}>▼</ArrowButton>
+          <ArrowButton
+            ref={(el) => (buttonRefs.current[index] = el)}
+            onClick={() => handleSlidesButtonClick(index)}
+          >
+            ▼
+          </ArrowButton>
         </Page>
       ))}
 
