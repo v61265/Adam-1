@@ -8,7 +8,6 @@ import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
 import client from '../apollo/apollo-client'
-import Head from 'next/head'
 import { gql } from '@apollo/client'
 import {
   ENV,
@@ -74,18 +73,13 @@ export default function Home({
         data: { sectionsData, topicsData, flashNewsData },
       }}
     >
-      <>
-        <Head>
-          <title>鏡週刊 Mirror Media</title>
-        </Head>
-        <IndexContainer>
-          <EditorChoice editorChoice={editorChoice}></EditorChoice>
-          <LatestNews
-            latestNewsData={latestNewsData}
-            latestNewsTimestamp={latestNewsTimestamp}
-          />
-        </IndexContainer>
-      </>
+      <IndexContainer>
+        <EditorChoice editorChoice={editorChoice}></EditorChoice>
+        <LatestNews
+          latestNewsData={latestNewsData}
+          latestNewsTimestamp={latestNewsTimestamp}
+        />
+      </IndexContainer>
     </Layout>
   )
 }

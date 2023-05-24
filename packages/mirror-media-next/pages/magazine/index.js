@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 
@@ -12,6 +11,7 @@ import MagazineSpecials from '../../components/magazine/magazine-specials'
 import MagazineWeeklys from '../../components/magazine/magazine-weeklys'
 import MagazineFeatures from '../../components/magazine/magazine-featured-weeklys'
 import Layout from '../../components/shared/layout'
+import { SITE_TITLE } from '../../constants'
 
 const Section = styled.div`
   padding: 48px 0;
@@ -72,41 +72,37 @@ export default function Magazine({
 
   return (
     <Layout
+      head={{ title: `動態雜誌 - ${SITE_TITLE}` }}
       header={{
         type: 'default',
         data: { sectionsData: sectionsData, topicsData },
       }}
     >
-      <>
-        <Head>
-          <title>鏡週刊 Mirror Media｜動態雜誌</title>
-        </Head>
-        <Page>
-          <Section>
-            <Title>
-              當期<span>動態雜誌</span>
-            </Title>
-            <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
-          </Section>
+      <Page>
+        <Section>
+          <Title>
+            當期<span>動態雜誌</span>
+          </Title>
+          <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
+        </Section>
 
-          <Section>
-            <Title>
-              近期<span>動態雜誌</span>
-            </Title>
-            <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
-          </Section>
+        <Section>
+          <Title>
+            近期<span>動態雜誌</span>
+          </Title>
+          <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
+        </Section>
 
-          <Section>
-            <Title>購買線上雜誌</Title>
-            <MagazinePlatforms />
-          </Section>
+        <Section>
+          <Title>購買線上雜誌</Title>
+          <MagazinePlatforms />
+        </Section>
 
-          <Section>
-            <Title>特刊</Title>
-            <MagazineSpecials specials={specials} />
-          </Section>
-        </Page>
-      </>
+        <Section>
+          <Title>特刊</Title>
+          <MagazineSpecials specials={specials} />
+        </Section>
+      </Page>
     </Layout>
   )
 }

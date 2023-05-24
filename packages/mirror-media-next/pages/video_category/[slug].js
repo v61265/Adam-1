@@ -3,7 +3,10 @@ import axios from 'axios'
 
 import { GCP_PROJECT_ID, URL_RESTFUL_SERVER } from '../../config/index.mjs'
 import CategoryVideos from '../../components/video_category/category-videos.js'
-import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants/index.js'
+import {
+  SITE_TITLE,
+  VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING,
+} from '../../constants/index.js'
 import styled from 'styled-components'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api/index.js'
 import client from '../../apollo/apollo-client.js'
@@ -43,7 +46,10 @@ export default function VideoCategory({
   const firstVideo = videos[0]
   const remainingVideos = videos.slice(1)
   return (
-    <Layout header={{ type: 'default', data: headerData }}>
+    <Layout
+      head={{ title: `${category.name}影音 - ${SITE_TITLE}` }}
+      header={{ type: 'default', data: headerData }}
+    >
       <Wrapper>
         <LeadingVideo
           video={firstVideo}

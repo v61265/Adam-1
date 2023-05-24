@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import errors from '@twreporter/errors'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
@@ -8,6 +7,7 @@ import client from '../../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import { fetchWeeklys } from '../../../apollo/query/magazines'
 import Layout from '../../../components/shared/layout'
+import { SITE_TITLE } from '../../../constants'
 
 const Page = styled.div`
   padding: 0;
@@ -25,7 +25,8 @@ const Page = styled.div`
 export default function BookBIssuePublish({ weeklys }) {
   const router = useRouter()
   const { book, issue } = router.query
-  const iframeSrc = `https://storage.googleapis.com/mm-magazine/${book}/${issue}/index.html`
+  const issueString = Array.isArray(issue) ? issue.join('') : issue
+  const iframeSrc = `https://storage.googleapis.com/mm-magazine/${book}/${issueString}/index.html`
 
   // Check if iframeSrc is valid, if not, redirect to /404 page
 
@@ -42,16 +43,13 @@ export default function BookBIssuePublish({ weeklys }) {
   }, [weeklys, iframeSrc, router])
 
   return (
-    <Layout header={{ type: 'empty' }}>
-      <>
-        <Head>
-          <title>{`鏡週刊 Mirror Media｜動態雜誌 ${book} ${issue}`}</title>
-        </Head>
-
-        <Page>
-          <iframe src={iframeSrc} />
-        </Page>
-      </>
+    <Layout
+      head={{ title: `動態雜誌 ${issueString.split('-')[0]} - ${SITE_TITLE}` }}
+      header={{ type: 'empty' }}
+    >
+      <Page>
+        <iframe src={iframeSrc} />
+      </Page>
     </Layout>
   )
 }

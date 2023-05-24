@@ -1,21 +1,30 @@
 import ShareHeader from './share-header'
 import Footer from './footer'
+import CustomHead from './custom-head'
 
 /**
  * @typedef {Object} Header
  * @property {import('./share-header').HeaderType} type
  * @property {import('./share-header').HeaderData} [data]
+ *
+ * @typedef {import('./custom-head').HeadProps} Head
  */
 
 /**
  * @param {Object} props
+ * @param {Head} [props.head]
  * @param {Header} props.header
  * @param {JSX.Element} props.children
  * @returns
  */
-export default function Layout({ header, children }) {
+export default function Layout({ head, header, children }) {
   return (
     <>
+      <CustomHead
+        title={head?.title}
+        description={head?.description}
+        imageUrl={head?.imageUrl}
+      />
       <ShareHeader pageLayoutType={header.type} headerData={header.data} />
       {children}
       <Footer />

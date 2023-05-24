@@ -9,6 +9,8 @@ import TopicList from '../../components/topic/list/topic-list'
 import TopicGroup from '../../components/topic/group/topic-group'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
+import { SITE_TITLE } from '../../constants'
+import { parseUrl } from '../../utils/topic'
 
 const RENDER_PAGE_SIZE = 12
 
@@ -48,7 +50,16 @@ export default function Topic({ topic, slideshowData, headerData }) {
   }
 
   return (
-    <Layout header={{ type: 'default', data: headerData }}>{topicJSX}</Layout>
+    <Layout
+      head={{
+        title: `${topic?.name} - ${SITE_TITLE}`,
+        description: topic?.brief?.blocks[0]?.text,
+        imageUrl: parseUrl(topic?.style),
+      }}
+      header={{ type: 'default', data: headerData }}
+    >
+      {topicJSX}
+    </Layout>
   )
 }
 

@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react'
 import client from '../../apollo/apollo-client'
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
-import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import WineWarning from '../../components/story/shared/wine-warning'
@@ -12,6 +11,7 @@ import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 import { fetchPostBySlug } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
 import Layout from '../../components/shared/layout'
+import { SITE_TITLE } from '../../constants'
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
 const StoryPhotographyStyle = dynamic(() =>
   import('../../components/story/photography')
@@ -125,16 +125,19 @@ export default function Story({ postData }) {
       })
   }, [style, isMember])
 
-  const headJsx = (
-    <Head>
-      <title>{title}</title>
-    </Head>
-  )
-
   return (
-    <Layout header={{ type: 'empty' }}>
+    <Layout
+      head={{
+        title: `${title} - ${SITE_TITLE}`,
+        description:
+          postData.brief?.blocks[0]?.text ?? postData.content?.blocks[0]?.text,
+        imageUrl:
+          postData.heroImage?.resized?.w1200 ??
+          postData.og_image?.resized?.w1200,
+      }}
+      header={{ type: 'empty' }}
+    >
       <>
-        {headJsx}
         {!storyLayout && <MockLoading>Loading...</MockLoading>}
         <div style={{ display: `${storyLayout ? 'block' : 'none'}` }}>
           {jsx}
