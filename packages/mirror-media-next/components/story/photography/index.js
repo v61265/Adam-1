@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 // @ts-nocheck
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import Credits from './potography-credits'
@@ -146,7 +146,10 @@ const ArrowButton = styled.button`
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s;
-  z-index: 100;
+
+  :focus {
+    outline: 0;
+  }
 
   &:hover {
     background-color: yellow;
@@ -223,6 +226,31 @@ export default function StoryPhotographyStyle({ postData }) {
       }
     }
   }
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'ArrowDown') {
+      const currentIndex = buttonRefs.current.findIndex(
+        (ref) => ref && ref === document.activeElement
+      )
+      if (currentIndex >= 0 && currentIndex < buttonRefs.current.length - 1) {
+        buttonRefs.current[currentIndex + 1].focus()
+      }
+    } else if (event.key === 'ArrowUp') {
+      const currentIndex = buttonRefs.current.findIndex(
+        (ref) => ref && ref === document.activeElement
+      )
+      if (currentIndex > 0) {
+        buttonRefs.current[currentIndex - 1].focus()
+      }
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
 
   return (
     <Main>
