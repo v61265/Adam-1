@@ -12,7 +12,6 @@ import {
   fetchHeaderDataInPremiumPageLayout,
 } from '../../utils/api'
 import Layout from '../../components/shared/layout'
-import { SITE_TITLE } from '../../constants'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -158,7 +157,7 @@ export default function Category({
 }) {
   return (
     <Layout
-      head={{ title: `${category?.name}分類報導 - ${SITE_TITLE}` }}
+      head={{ title: `${category?.name}分類報導` }}
       header={{ type: isPremium ? 'premium' : 'default', data: headerData }}
     >
       <CategoryContainer isPremium={isPremium}>

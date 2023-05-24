@@ -7,7 +7,6 @@ import SectionTopics from '../../components/section/topic/section-topics'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
-import { SITE_TITLE } from '../../constants'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -64,7 +63,7 @@ const RENDER_PAGE_SIZE = 12
 export default function Topics({ topics, topicsCount, headerData }) {
   return (
     <Layout
-      head={{ title: `精選專區分類報導 - ${SITE_TITLE}` }}
+      head={{ title: `精選專區分類報導` }}
       header={{ type: 'default', data: headerData }}
     >
       <TopicsContainer>

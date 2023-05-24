@@ -8,7 +8,6 @@ import AuthorArticles from '../../components/author/author-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
-import { SITE_TITLE } from '../../constants'
 
 const AuthorContainer = styled.main`
   width: 320px;
@@ -59,7 +58,7 @@ const RENDER_PAGE_SIZE = 12
 export default function Author({ postsCount, posts, author, headerData }) {
   return (
     <Layout
-      head={{ title: `${author?.name}相關報導 - ${SITE_TITLE}` }}
+      head={{ title: `${author?.name}相關報導` }}
       header={{ type: 'default', data: headerData }}
     >
       <AuthorContainer>

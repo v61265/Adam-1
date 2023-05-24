@@ -8,7 +8,6 @@ import TagArticles from '../../components/tag/tag-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
-import { SITE_TITLE } from '../../constants'
 
 const TagContainer = styled.main`
   width: 320px;
@@ -79,7 +78,7 @@ const RENDER_PAGE_SIZE = 12
 export default function Tag({ postsCount, posts, tag, headerData }) {
   return (
     <Layout
-      head={{ title: `${tag?.name}相關報導 - ${SITE_TITLE}` }}
+      head={{ title: `${tag?.name}相關報導` }}
       header={{ type: 'default', data: headerData }}
     >
       <TagContainer>

@@ -2,10 +2,7 @@ import errors from '@twreporter/errors'
 import axios from 'axios'
 
 import { GCP_PROJECT_ID, URL_RESTFUL_SERVER } from '../../config/index.mjs'
-import {
-  SITE_TITLE,
-  VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING,
-} from '../../constants'
+import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants'
 import client from '../../apollo/apollo-client.js'
 import { fetchSectionWithCategory } from '../../apollo/query/sections.js'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api/index.js'
@@ -60,7 +57,7 @@ export default function SectionVideohub({
 }) {
   return (
     <Layout
-      head={{ title: `影音 - ${SITE_TITLE}` }}
+      head={{ title: `影音` }}
       header={{ type: 'default', data: headerData }}
     >
       <Wrapper>

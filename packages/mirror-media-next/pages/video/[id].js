@@ -13,7 +13,6 @@ import YoutubeArticle from '../../components/video/youtube-article'
 import VideoList from '../../components/video/video-list'
 import YoutubePolicy from '../../components/shared/youtube-policy'
 import Layout from '../../components/shared/layout'
-import { SITE_TITLE } from '../../constants'
 
 const Wrapper = styled.main`
   width: 320px;
@@ -54,7 +53,7 @@ export default function Video({ video, latestVideos, headerData }) {
   return (
     <Layout
       head={{
-        title: `${video?.title} - ${SITE_TITLE}`,
+        title: `${video?.title}`,
         description: video?.description,
         imageUrl: video?.thumbnail,
       }}

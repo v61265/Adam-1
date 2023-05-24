@@ -7,7 +7,6 @@ import client from '../../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import { fetchWeeklys } from '../../../apollo/query/magazines'
 import Layout from '../../../components/shared/layout'
-import { SITE_TITLE } from '../../../constants'
 
 const Page = styled.div`
   padding: 0;
@@ -44,7 +43,7 @@ export default function BookBIssuePublish({ weeklys }) {
 
   return (
     <Layout
-      head={{ title: `動態雜誌 ${issueString.split('-')[0]} - ${SITE_TITLE}` }}
+      head={{ title: `動態雜誌 ${issueString.split('-')[0]}` }}
       header={{ type: 'empty' }}
     >
       <Page>

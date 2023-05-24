@@ -11,7 +11,6 @@ import MagazineSpecials from '../../components/magazine/magazine-specials'
 import MagazineWeeklys from '../../components/magazine/magazine-weeklys'
 import MagazineFeatures from '../../components/magazine/magazine-featured-weeklys'
 import Layout from '../../components/shared/layout'
-import { SITE_TITLE } from '../../constants'
 
 const Section = styled.div`
   padding: 48px 0;
@@ -72,7 +71,7 @@ export default function Magazine({
 
   return (
     <Layout
-      head={{ title: `動態雜誌 - ${SITE_TITLE}` }}
+      head={{ title: `動態雜誌` }}
       header={{
         type: 'default',
         data: { sectionsData: sectionsData, topicsData },
