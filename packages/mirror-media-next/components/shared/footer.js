@@ -165,8 +165,8 @@ function Footer() {
 
 /**
  * @param {Object} props
- * @param {FooterType} props.footerType
- * @returns
+ * @param {FooterType} props.footerType - string enum used to select the corresponding footer
+ * @returns {React.ReactElement}
  */
 export default function ShareFooter({ footerType }) {
   /**

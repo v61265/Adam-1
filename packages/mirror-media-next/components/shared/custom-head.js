@@ -87,9 +87,9 @@ const OpenGraph = ({ properties }) => {
 
 /**
  * @typedef {Object} HeadProps
- * @property {string} [title]
- * @property {string} [description]
- * @property {string} [imageUrl]
+ * @property {string} [title] - head title used to setup title other title related meta
+ * @property {string} [description] - head description used to setup description related meta
+ * @property {string} [imageUrl] - image url used to setup image related meta
  */
 
 /**
