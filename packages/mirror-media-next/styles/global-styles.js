@@ -6,7 +6,7 @@ const oswald = Oswald({
 })
 const notosansTC = Noto_Sans_TC({
   subsets: ['latin'],
-  weight: ['500'],
+  weight: ['900', '500', '400'],
 })
 const notoserifTC = Noto_Serif_TC({
   subsets: ['latin'],
@@ -40,7 +40,7 @@ export const GlobalStyles = createGlobalStyle`
  //default font family  
  html {
   font-family: PingFang TC, ${notosansTC.style.fontFamily},${notoserifTC.style.fontFamily},${inter.style.fontFamily}, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; 
-  line-height: 1.15; /* 1 */
+  line-height: 1.5; /* 2 */
   -webkit-text-size-adjust: 100%; /* 2 */
 }
 

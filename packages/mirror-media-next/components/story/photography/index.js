@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-// @ts-nocheck
+
 import { useRef, useEffect } from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import Credits from './potography-credits'
+import HeroSection from './hero-section'
+import { ArrowDown } from './icons'
 
 const Main = styled.main`
   margin: auto;
@@ -46,64 +48,6 @@ const Page = styled.div`
   scroll-snap-stop: always;
 `
 
-const HeroImage = styled.div`
-  background-image: linear-gradient(
-      to bottom,
-      rgba(255, 255, 255, 0),
-      rgba(0, 0, 0, 0.4)
-    ),
-    url(${(props) => props.imageUrl});
-
-  height: 100vh;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-
-  ${() =>
-    !isIOS() &&
-    css`
-      background-attachment: fixed;
-    `}
-`
-
-const TitleBox = styled.div`
-  color: white;
-  width: 80%;
-  margin: 0 auto;
-  text-align: center;
-  margin-bottom: 120px;
-  font-family: var(--inter-font);
-  font-style: normal;
-  font-weight: 400;
-  text-shadow: 0.9px 0px 0.5px rgba(0, 0, 0, 0.8);
-
-  .title {
-    font-size: 40px;
-    line-height: 48px;
-    color: #ffffff;
-  }
-
-  .hero-caption {
-    font-size: 16px;
-    line-height: 20px;
-    color: #d1d1d1;
-    margin: 32px 0;
-  }
-
-  .brief {
-    font-size: 16px;
-    line-height: 22px;
-    color: #ffffff;
-  }
-`
-
-const isIOS = () => {
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-}
-
 const Slide = styled.div`
   display: block;
   width: 100%;
@@ -124,10 +68,6 @@ const Slide = styled.div`
 const ContentContainer = styled.div`
   width: 80%;
   margin: auto;
-
-  // snap scrolling effect
-  scroll-snap-align: start;
-  height: 1000px;
 `
 
 const ArrowButton = styled.button`
@@ -135,13 +75,12 @@ const ArrowButton = styled.button`
   bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: aqua;
   border: none;
   outline: none;
   cursor: pointer;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 24px;
+  height: 12px;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,8 +90,24 @@ const ArrowButton = styled.button`
     outline: 0;
   }
 
+  svg {
+    line {
+      stroke: rgba(255, 255, 255, 0.7);
+    }
+  }
+
   &:hover {
-    background-color: yellow;
+    svg {
+      line {
+        stroke: white;
+      }
+    }
+  }
+
+  ${({ theme }) => theme.breakpoint.md} {
+    bottom: 24px;
+    width: 52px;
+    height: 26px;
   }
 `
 
@@ -255,33 +210,36 @@ export default function StoryPhotographyStyle({ postData }) {
   return (
     <Main>
       <Page>
-        <HeroImage
-          imageUrl={
-            heroImage?.resized?.original ||
-            heroImage?.resized?.w2400 ||
-            heroImage?.resized?.w1600 ||
-            ''
-          }
-        >
-          <TitleBox>
-            <h1 className="title">{title}</h1>
-            <p className="hero-caption">{heroCaption}</p>
-            <p className="brief">{brief.blocks[0].text}</p>
-          </TitleBox>
-        </HeroImage>
-        <ArrowButton onClick={handleHeroButtonClick}>▼</ArrowButton>
+        <HeroSection
+          title={title}
+          heroCaption={heroCaption}
+          brief={brief.blocks[0].text}
+          heroImage={heroImage}
+        />
+
+        <ArrowButton onClick={handleHeroButtonClick}>
+          <ArrowDown />
+        </ArrowButton>
       </Page>
 
       {photosArray.map((photo, index) => (
         <Page key={index} ref={(el) => (pageRefs.current[index] = el)}>
           <Slide>
-            <img src={photo.data.resized.original} alt={photo.data.desc} />
+            <img
+              src={
+                photo?.data.resized?.original ||
+                photo?.data.resized?.w2400 ||
+                photo?.data.resized?.w1600 ||
+                '/images/default-og-img.png'
+              }
+              alt={photo.data.desc}
+            />
           </Slide>
           <ArrowButton
             ref={(el) => (buttonRefs.current[index] = el)}
             onClick={() => handleSlidesButtonClick(index)}
           >
-            ▼
+            <ArrowDown />
           </ArrowButton>
         </Page>
       ))}
