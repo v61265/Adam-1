@@ -94,6 +94,7 @@ export default function ExternalListItem({ item }) {
           onError={() => {
             setItemImage('/images/default-og-img.png')
           }}
+          sizes="100%"
         />
       </ImageContainer>
       <ItemDetail>
