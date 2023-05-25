@@ -8,14 +8,12 @@ import AmpHero from './amp-hero'
 import AmpInfo from './amp-info'
 
 const MainWrapper = styled.div`
-  padding: 0 20px;
   margin-top: 24px;
 
   .i-amp-credits {
     display: flex;
-    margin-top: 20px;
-    max-width: 100vw;
-    min-width: 100vw;
+    margin: 20px 20px 0 20px;
+    width: 100$;
     align-items: center;
     flex-direction: column;
     font-size: 16px;

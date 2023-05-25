@@ -13,7 +13,7 @@ const Section = styled.div`
 `
 
 const Title = styled.h1`
-  margin: 4px 0 12px 0;
+  margin: 4px 20px 12px 20px;
   font-size: 24px;
   line-height: 34px;
   text-align: center;

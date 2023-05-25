@@ -1,10 +1,8 @@
 import styled from 'styled-components'
 
 const HeroWrapper = styled.div`
-  margin-left: -20px;
   margin-top: 20px;
-  max-width: 100vw;
-  min-width: 100vw;
+  width: 100%;
   height: 67.18vw;
   position: relative;
   display: flex;
