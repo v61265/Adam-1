@@ -15,12 +15,6 @@ export const config = { amp: true }
 
 const AmpBody = styled.body`
   background: #f5f5f5;
-  .i-amp-hero__image amp-img img {
-    object-fit: contain;
-  }
-  .i-amp-hero__video amp-video video {
-    object-fit: contain;
-  }
 `
 
 /**

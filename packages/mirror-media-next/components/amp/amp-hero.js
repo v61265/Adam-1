@@ -9,6 +9,12 @@ const HeroWrapper = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
+  amp-img img {
+    object-fit: contain;
+  }
+  amp-video video {
+    object-fit: contain;
+  }
 `
 
 const HeroCaption = styled.figcaption`
@@ -68,7 +74,7 @@ export default function AmpHero({
   //   .join(', ')
 
   return (
-    <figure className="i-amp-hero">
+    <figure>
       {shouldShowHeroImage && (
         <HeroWrapper>
           {/** @ts-ignore */}

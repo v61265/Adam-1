@@ -5,8 +5,6 @@ import {
 } from '../../utils'
 import { color } from '../../styles/theme/color'
 
-const Wrapper = styled.section``
-
 const Section = styled.div`
   font-weight: 400;
   font-size: 18px;
@@ -22,7 +20,7 @@ const Title = styled.h1`
   color: rgba(0, 0, 0, 0.87);
 `
 
-const DateRow = styled.div`
+const DateRow = styled.p`
   text-align: center;
   font-size: 14px;
   line-height: 14px;
@@ -57,22 +55,23 @@ export default function AmpInfo({
       ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
       : sections
   const [section] = sectionsWithOrdered
-  const sectionColor = color.sectionsColor[section.slug]
+  let sectionColor
+  if (section) sectionColor = color.sectionsColor[section.slug]
 
   return (
-    <Wrapper>
+    <section>
       <Section style={{ color: sectionColor || '#000' }}>
         {section?.name || ''}
       </Section>
       <Title>{title}</Title>
       <DateRow>
         <span>發佈時間</span>
-        <span>{publishedTaipeiTime}</span>
+        <span>{publishedTaipeiTime} 臺北時間</span>
       </DateRow>
       <DateRow>
-        <span>發佈時間</span>
-        <span>{updatedTaipeiTime}</span>
+        <span>更新時間</span>
+        <span>{updatedTaipeiTime} 臺北時間</span>
       </DateRow>
-    </Wrapper>
+    </section>
   )
 }
