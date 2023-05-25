@@ -52,7 +52,8 @@ export default function Topic({ topic, slideshowData, headerData }) {
     <Layout
       head={{
         title: `${topic?.name}`,
-        description: topic?.brief?.blocks[0]?.text,
+        // fallback to undefined if text is empty string or falsy value
+        description: topic?.brief?.blocks[0]?.text || undefined,
         imageUrl: parseUrl(topic?.style),
       }}
       header={{ type: 'default', data: headerData }}

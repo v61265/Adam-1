@@ -128,8 +128,11 @@ export default function Story({ postData }) {
     <Layout
       head={{
         title: `${title}`,
+        // fallback to undefined if both text is empty string or falsy value
         description:
-          postData.brief?.blocks[0]?.text ?? postData.content?.blocks[0]?.text,
+          postData.brief?.blocks[0]?.text ||
+          postData.content?.blocks[0]?.text ||
+          undefined,
         imageUrl:
           postData.heroImage?.resized?.w1200 ??
           postData.og_image?.resized?.w1200,
