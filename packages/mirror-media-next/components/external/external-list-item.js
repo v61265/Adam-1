@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import NextImage from 'next/image'
-import { useState } from 'react'
+import Image from '@readr-media/react-image'
 
 const ItemWrapper = styled.a`
   display: block;
@@ -80,21 +79,17 @@ const ItemBrief = styled.div`
  * @returns {React.ReactElement}
  */
 export default function ExternalListItem({ item }) {
-  const [itemImage, setItemImage] = useState(item.thumb)
+  const IMAGES_URL = { original: item.thumb }
 
   return (
     <ItemWrapper href={`/external/${item.slug}`} target="_blank">
       <ImageContainer>
-        <NextImage
-          src={itemImage}
+        <Image
+          images={IMAGES_URL}
           alt={item.title}
-          fill={true}
-          placeholder="blur"
-          blurDataURL="/images/loading.gif"
-          onError={() => {
-            setItemImage('/images/default-og-img.png')
-          }}
-          sizes="100%"
+          loadingImage="/images/loading.gif"
+          defaultImage="/images/default-og-img.png"
+          rwd={{ tablet: '320px', desktop: '220px' }}
         />
       </ImageContainer>
       <ItemDetail>
