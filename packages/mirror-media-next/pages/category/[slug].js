@@ -5,14 +5,13 @@ import client from '../../apollo/apollo-client'
 import { fetchPosts } from '../../apollo/query/posts'
 import { fetchCategorySections } from '../../apollo/query/categroies'
 import CategoryArticles from '../../components/category/category-articles'
-import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 
 import {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
 } from '../../utils/api'
+import Layout from '../../components/shared/layout'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -157,11 +156,11 @@ export default function Category({
   headerData,
 }) {
   return (
-    <>
-      <ShareHeader
-        pageLayoutType={isPremium ? 'premium' : 'default'}
-        headerData={headerData}
-      />
+    <Layout
+      head={{ title: `${category?.name}分類報導` }}
+      header={{ type: isPremium ? 'premium' : 'default', data: headerData }}
+      footer={{ type: 'default' }}
+    >
       <CategoryContainer isPremium={isPremium}>
         {isPremium ? (
           <PremiumCategoryTitle sectionName={category?.sections?.[0].slug}>
@@ -180,8 +179,7 @@ export default function Category({
           isPremium={isPremium}
         />
       </CategoryContainer>
-      <Footer />
-    </>
+    </Layout>
   )
 }
 

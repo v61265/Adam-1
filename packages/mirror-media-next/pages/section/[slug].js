@@ -6,9 +6,8 @@ import { fetchPosts } from '../../apollo/query/posts'
 import { fetchSection } from '../../apollo/query/sections'
 import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
-import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import Layout from '../../components/shared/layout'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -70,8 +69,11 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Section({ postsCount, posts, section, headerData }) {
   return (
-    <>
-      <ShareHeader pageLayoutType="default" headerData={headerData} />
+    <Layout
+      head={{ title: `${section?.name}分類報導` }}
+      header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
+    >
       <SectionContainer>
         <SectionTitle sectionName={section?.slug}>{section?.name}</SectionTitle>
         <SectionArticles
@@ -81,8 +83,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
       </SectionContainer>
-      <Footer />
-    </>
+    </Layout>
   )
 }
 

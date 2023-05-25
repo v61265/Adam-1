@@ -9,6 +9,8 @@ import FlashNews from '../flash-news'
  * @property {Array} [sectionsData]
  * @property {Array} [topicsData]
  * @property {import('../flash-news').FlashNews[]} [flashNewsData]
+ *
+ * @typedef {'default' | 'default-with-flash-news' | 'premium' | 'empty'} HeaderType
  */
 
 const getDefaultHeader = (headerData) => {
@@ -51,7 +53,7 @@ const getPremiumHeader = (headerData) => {
 /**
  *
  * @param {Object} props
- * @param {'default' | 'default-with-flash-news' | 'premium' | 'empty' } props.pageLayoutType
+ * @param {HeaderType } props.pageLayoutType
  * @param {HeaderData} [props.headerData]
  * @param {JSX.Element | null} [props.children]
  * @returns {JSX.Element}

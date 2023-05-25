@@ -7,8 +7,7 @@ import { fetchSection } from '../../apollo/query/sections'
 import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
-import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
+import Layout from '../../components/shared/layout'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -89,8 +88,11 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Section({ postsCount, posts, section, headerData }) {
   return (
-    <>
-      <ShareHeader pageLayoutType="premium" headerData={headerData} />
+    <Layout
+      head={{ title: `${section?.name}分類報導` }}
+      header={{ type: 'premium', data: headerData }}
+      footer={{ type: 'default' }}
+    >
       <SectionContainer>
         <SectionTitle sectionName={section?.slug}>{section?.name}</SectionTitle>
         <SectionArticles
@@ -101,8 +103,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
           isPremium={true}
         />
       </SectionContainer>
-      <Footer />
-    </>
+    </Layout>
   )
 }
 

@@ -6,8 +6,7 @@ import { fetchTopics } from '../../apollo/query/topics'
 import SectionTopics from '../../components/section/topic/section-topics'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
-import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
+import Layout from '../../components/shared/layout'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -63,8 +62,11 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Topics({ topics, topicsCount, headerData }) {
   return (
-    <>
-      <ShareHeader pageLayoutType="default" headerData={headerData} />
+    <Layout
+      head={{ title: `精選專區分類報導` }}
+      header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
+    >
       <TopicsContainer>
         <TopicsTitle>精選專區</TopicsTitle>
         <SectionTopics
@@ -73,8 +75,7 @@ export default function Topics({ topics, topicsCount, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
       </TopicsContainer>
-      <Footer />
-    </>
+    </Layout>
   )
 }
 

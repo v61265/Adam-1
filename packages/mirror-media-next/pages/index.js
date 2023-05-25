@@ -8,7 +8,6 @@ import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
 import client from '../apollo/apollo-client'
-import Head from 'next/head'
 import { gql } from '@apollo/client'
 import {
   ENV,
@@ -23,8 +22,7 @@ import { transformRawDataToArticleInfo } from '../utils'
 
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
-import ShareHeader from '../components/shared/share-header'
-import Footer from '../components/footer'
+import Layout from '../components/shared/layout'
 
 /**
  * @typedef {import('../components/shared/share-header').HeaderData['flashNewsData']} FlashNewsData
@@ -69,14 +67,15 @@ export default function Home({
   const editorChoice = transformRawDataToArticleInfo(editorChoicesData)
 
   return (
-    <>
-      <ShareHeader
-        pageLayoutType="default-with-flash-news"
-        headerData={{ sectionsData, topicsData, flashNewsData }}
-      />
-      <Head>
-        <title>鏡週刊 Mirror Media</title>
-      </Head>
+    <Layout
+      header={{
+        type: 'default-with-flash-news',
+        data: { sectionsData, topicsData, flashNewsData },
+      }}
+      footer={{
+        type: 'default',
+      }}
+    >
       <IndexContainer>
         <EditorChoice editorChoice={editorChoice}></EditorChoice>
         <LatestNews
@@ -84,8 +83,7 @@ export default function Home({
           latestNewsTimestamp={latestNewsTimestamp}
         />
       </IndexContainer>
-      <Footer />
-    </>
+    </Layout>
   )
 }
 

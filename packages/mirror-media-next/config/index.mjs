@@ -6,6 +6,8 @@ const ENV = process.env.NEXT_PUBLIC_ENV || 'local'
 
 // The following variables are given values according to different `ENV`
 
+let SITE_URL = ''
+
 let API_TIMEOUT = 5000
 let API_PROTOCOL = 'http'
 let API_HOST = ''
@@ -26,6 +28,7 @@ let URL_RESTFUL_SERVER = ''
 
 switch (ENV) {
   case 'prod':
+    SITE_URL = 'www.mirrormedia.mg'
     API_TIMEOUT = 1500
     API_HOST = '' //currently unset
     RESTFUL_API_HOST = '' //currently unset
@@ -48,6 +51,7 @@ switch (ENV) {
     URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
     break
   case 'staging':
+    SITE_URL = 'staging-next.mirrormedia.mg'
     API_TIMEOUT = 1500
     API_HOST = '' //currently unset
     RESTFUL_API_HOST = '' //currently unset
@@ -71,6 +75,7 @@ switch (ENV) {
     URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
     break
   case 'dev':
+    SITE_URL = 'dev-next.mirrormedia.mg'
     API_TIMEOUT = 5000
     API_HOST = 'mirror-cms-gql-dev-ufaummkd5q-de.a.run.app'
     RESTFUL_API_HOST = '104.199.190.189'
@@ -94,6 +99,7 @@ switch (ENV) {
 
     break
   default:
+    SITE_URL = 'localhost'
     API_TIMEOUT = 5000
     RESTFUL_API_HOST = 'localhost'
     API_PORT = '8080'
@@ -112,6 +118,7 @@ switch (ENV) {
 }
 export {
   ENV,
+  SITE_URL,
   GCP_PROJECT_ID,
   API_TIMEOUT,
   API_HOST,
