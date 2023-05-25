@@ -210,7 +210,9 @@ export const post = gql`
     manualOrderOfRelateds
     redirect
     og_image {
-      ...heroImage
+      resized {
+        w1200
+      }
     }
   }
 `
