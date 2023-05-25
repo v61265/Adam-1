@@ -52,7 +52,7 @@ export default function ExternalArticles({
           },
         },
       })
-      return response.data.posts
+      return response.data.externals
     } catch (error) {
       console.error(error)
     }
