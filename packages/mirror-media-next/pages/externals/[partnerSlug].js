@@ -5,7 +5,7 @@ import client from '../../apollo/apollo-client'
 import ExternalArticles from '../../components/external/external-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/footer'
+import Footer from '../../components/shared/footer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 
 import {
