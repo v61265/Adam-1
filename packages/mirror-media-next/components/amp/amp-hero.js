@@ -77,7 +77,6 @@ export default function AmpHero({
         <HeroWrapper>
           {/** @ts-ignore */}
           <amp-img
-            className="contain"
             src={heroImage.resized?.original}
             alt={heroCaption ?? title}
             layout="fill"

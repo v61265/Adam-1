@@ -13,7 +13,7 @@ const MainWrapper = styled.div`
   .i-amp-credits {
     display: flex;
     margin: 20px 20px 0 20px;
-    width: 100$;
+    width: 100%;
     align-items: center;
     flex-direction: column;
     font-size: 16px;
@@ -133,7 +133,7 @@ export default function AmpMain({ postData }) {
   ]
 
   return (
-    <MainWrapper className="i-amp-main">
+    <MainWrapper>
       <AmpInfo
         title={title}
         sections={sections}
@@ -161,7 +161,6 @@ export default function AmpMain({ postData }) {
               target="_blank"
               rel="noreferrer"
               href={`/tag/${tagItem.slug}`}
-              className="i-amp-tags__item"
             >
               {tagItem.name}
             </TagItem>

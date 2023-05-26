@@ -78,6 +78,7 @@ export async function getServerSideProps({ params, req }) {
     }
 
     //redirect to specific slug or external url
+    // TODO: 抽成一個 utils function
     const redirect = postData?.redirect
 
     if (redirect && redirect.trim()) {

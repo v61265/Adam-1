@@ -2,8 +2,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 
 const RelatedWrapper = styled.section`
-  max-width: 100vw;
-  min-width: 100vw;
+  width: 100%;
   padding: 0 20px;
 `
 
@@ -46,7 +45,6 @@ export default function AmpHeader({ relateds }) {
       {relateds.map((relatedItem, index) => {
         return (
           <RelatedItem
-            className="i-amp-related__item"
             href={`/story/${relatedItem.slug}`}
             target="_blank"
             key={index}

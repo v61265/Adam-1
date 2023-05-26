@@ -55,7 +55,6 @@ export default function AmpFooter() {
       {sharesArr.map((shareItem, index) => {
         return (
           <FooterItem
-            className="i-amp-footer__item"
             key={index}
             href={shareItem.href}
             target="_blank"
