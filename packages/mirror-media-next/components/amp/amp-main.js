@@ -74,9 +74,9 @@ const TagsWrapper = styled.ul`
 const TagItem = styled(Link)`
   font-size: 14px;
   line-height: 20px;
-  color: #054f77;
+  color: ${({ theme }) => theme.color.brandColor.darkBlue}};
   padding: 4px 8px;
-  border: 1px solid #054f77;
+  border: 1px solid ${({ theme }) => theme.color.brandColor.darkBlue}};
   border-radius: 2px;
   margin-top: 8px;
   & + & {
