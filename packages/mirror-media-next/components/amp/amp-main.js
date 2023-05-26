@@ -13,7 +13,7 @@ const MainWrapper = styled.div`
   .i-amp-credits {
     display: flex;
     margin: 20px 20px 0 20px;
-    width: 100%;
+    width: auto;
     align-items: center;
     flex-direction: column;
     font-size: 16px;
