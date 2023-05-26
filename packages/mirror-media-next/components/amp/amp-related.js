@@ -10,7 +10,7 @@ const RelatedTitle = styled.h2`
   font-weight: 600;
   font-size: 21px;
   line-height: 150%;
-  color: ${({ theme }) => theme.color.brandColor.grey}}
+  color: ${({ theme }) => theme.color.brandColor.gray}}
   margin: 24px 0;
   text-align: center;
 `
