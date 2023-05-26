@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import Credits from './potography-credits'
 import HeroSection from './hero-section'
-import { ArrowDown } from './icons'
+import ArrowButton from './arrow-down-button'
 
 const Main = styled.main`
   margin: auto;
@@ -68,47 +68,6 @@ const Slide = styled.div`
 const ContentContainer = styled.div`
   width: 80%;
   margin: auto;
-`
-
-const ArrowButton = styled.button`
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: none;
-  outline: none;
-  cursor: pointer;
-  width: 24px;
-  height: 12px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s;
-
-  :focus {
-    outline: 0;
-  }
-
-  svg {
-    line {
-      stroke: rgba(255, 255, 255, 0.7);
-    }
-  }
-
-  &:hover {
-    svg {
-      line {
-        stroke: white;
-      }
-    }
-  }
-
-  ${({ theme }) => theme.breakpoint.md} {
-    bottom: 24px;
-    width: 52px;
-    height: 26px;
-  }
 `
 
 /**
@@ -217,9 +176,7 @@ export default function StoryPhotographyStyle({ postData }) {
           heroImage={heroImage}
         />
 
-        <ArrowButton onClick={handleHeroButtonClick}>
-          <ArrowDown />
-        </ArrowButton>
+        <ArrowButton onClick={handleHeroButtonClick} />
       </Page>
 
       {photosArray.map((photo, index) => (
@@ -238,9 +195,7 @@ export default function StoryPhotographyStyle({ postData }) {
           <ArrowButton
             ref={(el) => (buttonRefs.current[index] = el)}
             onClick={() => handleSlidesButtonClick(index)}
-          >
-            <ArrowDown />
-          </ArrowButton>
+          />
         </Page>
       ))}
 

@@ -13,7 +13,7 @@ export function ArrowDown() {
         x2="50.5858"
         y2="1"
         stroke="white"
-        strokeWidth="2"
+        strokeWidth="2.5"
         strokeLinecap="round"
       />
       <line
@@ -22,7 +22,7 @@ export function ArrowDown() {
         x2="26"
         y2="25.5858"
         stroke="white"
-        strokeWidth="2"
+        strokeWidth="2.5"
         strokeLinecap="round"
       />
     </svg>
