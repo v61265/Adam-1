@@ -61,7 +61,7 @@ export default function ButtonCopyLink({ width = 35, height = 35 }) {
         已複製連結
       </CopiedMessage>
 
-      <ClickButton onClick={handleCopyLink}>
+      <ClickButton onClick={handleCopyLink} on="tap:clipboard-example.copy">
         <Image
           src={'/images/link-logo.svg'}
           width={width}
@@ -69,6 +69,14 @@ export default function ButtonCopyLink({ width = 35, height = 35 }) {
           alt="copy link button"
         ></Image>
       </ClickButton>
+
+      <input
+        id="clipboard-example"
+        type="text"
+        value={sharedUrl}
+        readOnly
+        style={{ position: 'absolute', left: '-9999px' }}
+      />
     </>
   )
 }
