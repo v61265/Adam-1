@@ -2,11 +2,7 @@ import styled from 'styled-components'
 import { Z_INDEX } from '../../../constants'
 import NextLink from 'next/link'
 import { useState, useEffect, useRef } from 'react'
-import {
-  disableBodyScroll,
-  enableBodyScroll,
-  clearAllBodyScrollLocks,
-} from 'body-scroll-lock'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 const Wrapper = styled.div`
   position: fixed;
