@@ -13,9 +13,10 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.3",
-    "@mirrormedia/lilith-draft-renderer": "file:.yalc/@mirrormedia/lilith-draft-renderer",
+    "@mirrormedia/lilith-draft-renderer": "^1.2.0-alpha.23",
     "@next/font": "^13.1.2",
     "@readr-media/react-image": "^1.5.1",
+    "@readr-media/share-button": "^1.0.3",
     "@svgr/webpack": "^6.3.1",
     "@twreporter/errors": "^1.1.2",
     "axios": "^1.2.0",

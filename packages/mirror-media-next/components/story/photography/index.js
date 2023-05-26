@@ -6,7 +6,7 @@ import DraftRenderBlock from '../shared/draft-renderer-block'
 import Credits from './potography-credits'
 import HeroSection from './hero-section'
 import { ArrowDown } from './icons'
-// import ArrowButton from './arrow-down-button'
+import ShareIcons from './share-icons'
 
 const Main = styled.main`
   margin: auto;
@@ -222,6 +222,7 @@ export default function StoryPhotographyStyle({ postData }) {
         <ArrowButton onClick={handleHeroButtonClick}>
           <ArrowDown />
         </ArrowButton>
+        <ShareIcons />
       </Page>
 
       {photosArray.map((photo, index) => (
