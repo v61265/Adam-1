@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import Credits from './potography-credits'
 import HeroSection from './hero-section'
+import Header from './header'
 import { ArrowDown } from './icons'
-import ShareIcons from './share-icons'
 
 const Main = styled.main`
   margin: auto;
@@ -93,7 +93,7 @@ const ArrowButton = styled.button`
 
   svg {
     line {
-      stroke: rgba(255, 255, 255, 0.8);
+      stroke: rgba(255, 255, 255, 0.7);
     }
   }
 
@@ -211,6 +211,7 @@ export default function StoryPhotographyStyle({ postData }) {
 
   return (
     <Main>
+      <Header />
       <Page>
         <HeroSection
           title={title}
@@ -222,7 +223,6 @@ export default function StoryPhotographyStyle({ postData }) {
         <ArrowButton onClick={handleHeroButtonClick}>
           <ArrowDown />
         </ArrowButton>
-        <ShareIcons />
       </Page>
 
       {photosArray.map((photo, index) => (

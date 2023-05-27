@@ -31,6 +31,11 @@ const TitleBox = styled.div`
   margin-bottom: 120px;
   font-family: var(--notosansTC-font);
 
+  margin-top: 52px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 70px;
+  }
+
   .title {
     color: #ffffff;
     font-weight: 900;

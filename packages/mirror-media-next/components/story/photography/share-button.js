@@ -19,7 +19,7 @@ export default function ShareIcons() {
       <ShareButton
         pathColor="#FFF"
         direction="vertical"
-        className="custom-name"
+        className="share-button"
         onClick={handleClickButton}
         LineClick={handleClickLine}
         FbClick={handleClickFB}
