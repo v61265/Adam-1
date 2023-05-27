@@ -4,8 +4,9 @@ import styled, { css } from 'styled-components'
 const HeroImage = styled.div`
   background-image: linear-gradient(
       to bottom,
-      rgba(255, 255, 255, 0),
-      rgba(0, 0, 0, 0.4)
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.05) 50%,
+      rgba(0, 0, 0, 0.2) 100%
     ),
     url(${(props) => props.imageUrl});
 
@@ -41,7 +42,7 @@ const TitleBox = styled.div`
     font-weight: 900;
     font-size: 20px;
     line-height: 150%;
-    text-shadow: 2px 8px 8px rgba(0, 0, 0, 0.5);
+    text-shadow: 0px 10px 10px rgba(0, 0, 0, 0.4);
 
     ${({ theme }) => theme.breakpoint.md} {
       font-size: 40px;

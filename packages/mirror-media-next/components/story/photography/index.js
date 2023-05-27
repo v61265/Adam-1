@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import Credits from './potography-credits'
 import HeroSection from './hero-section'
-import Header from './header'
+import Header from './photography-header'
 import { ArrowDown } from './icons'
 
 const Main = styled.main`
@@ -64,6 +64,11 @@ const Slide = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
+
+  p {
+    position: absolute;
+    bottom: 140px;
+  }
 `
 
 const ContentContainer = styled.div`
@@ -125,8 +130,6 @@ const ArrowButton = styled.button`
  */
 
 export default function StoryPhotographyStyle({ postData }) {
-  console.log(postData)
-
   const {
     title = '',
     heroImage = null,
@@ -162,6 +165,8 @@ export default function StoryPhotographyStyle({ postData }) {
   const photosArray = Object.values(content.entityMap).filter(
     (item) => item.type === 'image'
   )
+
+  console.log(photosArray)
 
   // Page ArrowDown button click handler
   const pageRefs = useRef([])
@@ -237,6 +242,7 @@ export default function StoryPhotographyStyle({ postData }) {
               }
               alt={photo.data.desc}
             />
+            <p>{photo?.data?.desc}</p>
           </Slide>
           <ArrowButton
             ref={(el) => (buttonRefs.current[index] = el)}

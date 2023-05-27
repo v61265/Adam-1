@@ -11,7 +11,6 @@ const Nav = styled.nav`
   top: 0%;
   bottom: 0%;
   height: 52px;
-  /* background: rgba(0, 0, 4, 0.3); */
   padding: 12px;
   display: flex;
   align-items: center;
@@ -47,11 +46,12 @@ const IconsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  /* gap: 20px; */
 
   .share-button {
     width: 22px;
     height: 22px;
+    margin-left: 20px;
 
     ${({ theme }) => theme.breakpoint.md} {
       width: 34px;
@@ -64,6 +64,8 @@ const PhotosIndexButton = styled.button`
   .photos-index-icon {
     width: 22px;
     height: 22px;
+    margin-left: 20px;
+
     ${({ theme }) => theme.breakpoint.md} {
       width: 32px;
       height: 32px;
