@@ -3,6 +3,10 @@
 import styled from 'styled-components'
 import Image from '@readr-media/react-image'
 import Link from 'next/link'
+import MicroAdWithLabel from '../../ads/micro-ad/micro-ad-with-label'
+import useWindowDimensions from '../../../hooks/use-window-dimensions'
+import { mediaSize } from '../../../styles/media'
+import { MICRO_AD_UNITS } from '../../../constants/ads'
 
 /**
  * @typedef {import('../../../apollo/fragments/post').HeroImage &
@@ -127,6 +131,10 @@ const AdvertisementWrapper = styled.div`
  * @returns {JSX.Element}
  */
 export default function RelatedArticleList({ relateds }) {
+  const { width } = useWindowDimensions()
+  const isDesktopWidth = width >= mediaSize.xl
+  const device = isDesktopWidth ? 'PC' : 'MB'
+
   const relatedsArticleJsx = relateds.length ? (
     <ArticleWrapper>
       {relateds.map((related) => (
@@ -167,6 +175,10 @@ export default function RelatedArticleList({ relateds }) {
       {relatedsArticleJsx}
       <AdvertisementWrapper>
         特企區塊施工中......
+        {/* just a example, should be refactored as a separate componet including the device variable logic */}
+        {MICRO_AD_UNITS.STORY[device].map((unit) => (
+          <MicroAdWithLabel key={unit.name} unitId={unit.id} />
+        ))}
         {/* micro ad */}
         {/* popin */}
       </AdvertisementWrapper>
