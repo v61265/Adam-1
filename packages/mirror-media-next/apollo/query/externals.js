@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
-import { external } from '../fragments/external'
+import { listingExternal, external } from '../fragments/external'
 
 const fetchExternalsByPartnerSlug = gql`
-  ${external}
+  ${listingExternal}
   query (
     $take: Int
     $skip: Int
@@ -10,7 +10,7 @@ const fetchExternalsByPartnerSlug = gql`
     $filter: ExternalWhereInput!
   ) {
     externals(take: $take, skip: $skip, orderBy: $orderBy, where: $filter) {
-      ...external
+      ...listingExternal
     }
   }
 `
