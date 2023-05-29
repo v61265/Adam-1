@@ -6,6 +6,7 @@ import ButtonSocialNetworkShare from '../story/shared/button-social-network-shar
 import AmpCredits from '../story/shared/credits'
 import AmpHero from './amp-hero'
 import AmpInfo from './amp-info'
+import ArticleBrief from '../story/shared/brief'
 
 const MainWrapper = styled.div`
   margin-top: 24px;
@@ -84,6 +85,17 @@ const TagItem = styled(Link)`
   }
 `
 
+const AmpBriefContainer = styled.section`
+  & > * {
+    background: rgba(0, 0, 0, 0);
+    padding: 0 44px;
+    margin-top: 52px;
+  }
+  * {
+    color: ${({ theme }) => theme.color.brandColor.darkBlue}};
+  }
+`
+
 /**
  * @typedef {import('../../apollo/fragments/post').Post} PostData
  */
@@ -113,7 +125,7 @@ export default function AmpMain({ postData }) {
     vocals = [],
     extend_byline = '',
     tags = [],
-    // brief = { blocks: [], entityMap: {} },
+    brief = { blocks: [], entityMap: {} },
     // content = { blocks: [], entityMap: {} },
   } = postData
 
@@ -167,6 +179,12 @@ export default function AmpMain({ postData }) {
           )
         })}
       </TagsWrapper>
+      <AmpBriefContainer>
+        <ArticleBrief
+          sectionSlug={sections?.[0]?.slug}
+          brief={brief}
+        ></ArticleBrief>
+      </AmpBriefContainer>
     </MainWrapper>
   )
 }
