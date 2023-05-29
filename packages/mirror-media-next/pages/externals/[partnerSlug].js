@@ -5,7 +5,7 @@ import client from '../../apollo/apollo-client'
 import ExternalArticles from '../../components/externals/externals-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
-import Layout from '~/components/shared/layout'
+import Layout from '../../components/shared/layout'
 
 import {
   fetchExternalsByPartnerSlug,

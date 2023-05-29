@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import client from '~/apollo/apollo-client'
+import client from '../../apollo/apollo-client'
 
 import InfiniteScrollList from '../infinite-scroll-list'
 import Image from 'next/legacy/image'
-import LoadingPage from '~/public/images/loading_page.gif'
+import LoadingPage from '../../public/images/loading_page.gif'
 import ExternalList from './externals-list'
-import { fetchExternalsByPartnerSlug } from '~/apollo/query/externals'
+import { fetchExternalsByPartnerSlug } from '../../apollo/query/externals'
 
 const Loading = styled.div`
   margin: 20px auto 0;
