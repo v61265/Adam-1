@@ -25,8 +25,22 @@ import { partner } from './partner'
  */
 
 /**
- * @typedef {Pick<GenericExternal, 'id' | 'slug' | 'title' | 'thumb' | 'brief' | 'content' | 'partner'>} External
+ * @typedef {Pick<GenericExternal, 'id' | 'slug' | 'partner' |  'title' | 'thumb' | 'brief' | 'content' | 'publishedDate' | 'extend_byline' | 'updatedAt' >} External
  */
+
+/**
+ * @typedef {Pick<GenericExternal, 'id' | 'slug' | 'title' | 'thumb' | 'brief' >} ListingExternal
+ */
+
+export const listingExternal = gql`
+  fragment listingExternal on External {
+    id
+    slug
+    title
+    thumb
+    brief
+  }
+`
 
 export const external = gql`
   ${partner}
@@ -37,6 +51,8 @@ export const external = gql`
     thumb
     brief
     content
+    publishedDate
+    extend_byline
     partner {
       ...partner
     }

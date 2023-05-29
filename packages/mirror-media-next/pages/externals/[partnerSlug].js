@@ -2,11 +2,10 @@ import errors from '@twreporter/errors'
 import styled from 'styled-components'
 
 import client from '../../apollo/apollo-client'
-import ExternalArticles from '../../components/external/external-articles'
+import ExternalArticles from '../../components/externals/externals-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
-import ShareHeader from '../../components/shared/share-header'
-import Footer from '../../components/shared/footer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import Layout from '../../components/shared/layout'
 
 import {
   fetchExternalsByPartnerSlug,
@@ -53,13 +52,13 @@ const PartnerTitle = styled.h1`
 const RENDER_PAGE_SIZE = 12
 
 /**
- * @typedef {import('../../apollo/fragments/external').External} External
+ * @typedef {import('../../apollo/fragments/external').ListingExternal} ListingExternal
  * @typedef {import('../../apollo/fragments/partner').Partner} Partner
  */
 
 /**
  * @param {Object} props
- * @param {External[]} props.externals
+ * @param {ListingExternal[]} props.externals
  * @param {number} props.externalsCount
  * @param {Object} props.headerData
  * @param {Partner} props.partner
@@ -74,17 +73,21 @@ export default function ExternalPartner({
 }) {
   return (
     <>
-      <ShareHeader pageLayoutType="default" headerData={headerData} />
-      <PartnerContainer>
-        <PartnerTitle>{partner?.name}</PartnerTitle>
-        <ExternalArticles
-          externalsCount={externalsCount}
-          externals={externals}
-          partner={partner}
-          renderPageSize={RENDER_PAGE_SIZE}
-        />
-      </PartnerContainer>
-      <Footer />
+      <Layout
+        head={{ title: `${partner?.name}分類報導` }}
+        header={{ type: 'default', data: headerData }}
+        footer={{ type: 'default' }}
+      >
+        <PartnerContainer>
+          <PartnerTitle>{partner?.name}</PartnerTitle>
+          <ExternalArticles
+            externalsCount={externalsCount}
+            externals={externals}
+            partner={partner}
+            renderPageSize={RENDER_PAGE_SIZE}
+          />
+        </PartnerContainer>
+      </Layout>
     </>
   )
 }
@@ -92,8 +95,8 @@ export default function ExternalPartner({
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
-  const partnerSlug = query.partnerSlug
+export async function getServerSideProps({ params, req }) {
+  const { partnerSlug } = params
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -104,6 +107,7 @@ export async function getServerSideProps({ query, req }) {
   }
 
   const responses = await Promise.allSettled([
+    fetchHeaderDataInDefaultPageLayout(), //fetch header data
     client.query({
       query: fetchExternalsByPartnerSlug,
       variables: {
@@ -166,47 +170,40 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
-  /** @type {External[]} */
+  const headerData =
+    'sectionsData' in handledResponses[0]
+      ? handledResponses[0]
+      : {
+          sectionsData: [],
+          topicsData: [],
+        }
+  const sectionsData = Array.isArray(headerData.sectionsData)
+    ? headerData.sectionsData
+    : []
+  const topicsData = Array.isArray(headerData.topicsData)
+    ? headerData.topicsData
+    : []
+
+  /** @type {ListingExternal[]} */
   const externals =
-    'data' in handledResponses[0]
-      ? handledResponses[0]?.data?.externals || []
+    'data' in handledResponses[1]
+      ? handledResponses[1]?.data?.externals || []
       : []
 
   /** @type {number} */
   const externalsCount =
-    'data' in handledResponses[1]
-      ? handledResponses[1]?.data?.externalsCount || 0
+    'data' in handledResponses[2]
+      ? handledResponses[2]?.data?.externalsCount || 0
       : 0
 
   /** @type {Partner} */
   const partner =
-    'data' in handledResponses[2]
-      ? handledResponses[2]?.data?.partner || {}
+    'data' in handledResponses[3]
+      ? handledResponses[3]?.data?.partners[0] || {}
       : {}
 
-  // fetch header data
-  let sectionsData = []
-  let topicsData = []
-  try {
-    const headerData = await fetchHeaderDataInDefaultPageLayout()
-    if (Array.isArray(headerData.sectionsData)) {
-      sectionsData = headerData.sectionsData
-    }
-    if (Array.isArray(headerData.topicsData)) {
-      topicsData = headerData.topicsData
-    }
-  } catch (err) {
-    const annotatingAxiosError = errors.helpers.annotateAxiosError(err)
-    console.error(
-      JSON.stringify({
-        severity: 'ERROR',
-        message: errors.helpers.printAll(annotatingAxiosError, {
-          withStack: true,
-          withPayload: true,
-        }),
-        ...globalLogFields,
-      })
-    )
+  if (!Object.keys(partner).length) {
+    return { notFound: true }
   }
 
   const props = {

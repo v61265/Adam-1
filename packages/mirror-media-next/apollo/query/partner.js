@@ -4,7 +4,7 @@ import { partner } from '../fragments/partner'
 const fetchPartnerBySlug = gql`
   ${partner}
   query fetchPartnerBySlug($slug: String) {
-    partner(where: { slug: $slug }) {
+    partners(where: { slug: { equals: $slug }, public: { equals: true } }) {
       ...partner
     }
   }
