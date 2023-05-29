@@ -135,6 +135,12 @@ export default function AmpMain({ postData }) {
     content = { blocks: [], entityMap: {} },
   } = postData
 
+  const sectionsWithOrdered =
+    manualOrderOfSections && manualOrderOfSections.length
+      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+      : sections
+  const [section] = sectionsWithOrdered
+
   const writersWithOrdered =
     manualOrderOfWriters && manualOrderOfWriters.length
       ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
@@ -154,10 +160,9 @@ export default function AmpMain({ postData }) {
     <MainWrapper>
       <AmpInfo
         title={title}
-        sections={sections}
+        section={section}
         publishedDate={publishedDate}
         updatedAt={updatedAt}
-        manualOrderOfSections={manualOrderOfSections}
       />
       <SharesWrapper>
         <ButtonSocialNetworkShare type="facebook" />
@@ -186,10 +191,7 @@ export default function AmpMain({ postData }) {
         })}
       </TagsWrapper>
       <AmpBriefContainer>
-        <ArticleBrief
-          sectionSlug={sections?.[0]?.slug}
-          brief={brief}
-        ></ArticleBrief>
+        <ArticleBrief sectionSlug={section?.slug} brief={brief}></ArticleBrief>
       </AmpBriefContainer>
       <AmpContentContainer>
         <DraftRenderBlock rawContentBlock={content} contentLayout="normal" />
