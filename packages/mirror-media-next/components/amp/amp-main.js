@@ -192,11 +192,7 @@ export default function AmpMain({ postData }) {
         ></ArticleBrief>
       </AmpBriefContainer>
       <AmpContentContainer>
-        <DraftRenderBlock
-          rawContentBlock={content}
-          contentLayout="normal"
-          wrapper={(children) => children}
-        />
+        <DraftRenderBlock rawContentBlock={content} contentLayout="normal" />
       </AmpContentContainer>
     </MainWrapper>
   )
