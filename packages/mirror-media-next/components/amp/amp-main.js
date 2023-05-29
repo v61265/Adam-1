@@ -76,9 +76,9 @@ const TagsWrapper = styled.ul`
 const TagItem = styled(Link)`
   font-size: 14px;
   line-height: 20px;
-  color: ${({ theme }) => theme.color.brandColor.darkBlue}};
+  color: ${({ theme }) => theme.color.brandColor.darkBlue};
   padding: 4px 8px;
-  border: 1px solid ${({ theme }) => theme.color.brandColor.darkBlue}};
+  border: 1px solid ${({ theme }) => theme.color.brandColor.darkBlue};
   border-radius: 2px;
   margin-top: 8px;
   & + & {
@@ -93,7 +93,7 @@ const AmpBriefContainer = styled.section`
     margin-top: 52px;
   }
   * {
-    color: ${({ theme }) => theme.color.brandColor.darkBlue}};
+    color: ${({ theme }) => theme.color.brandColor.darkBlue};
   }
 `
 
