@@ -7,6 +7,7 @@ import AmpCredits from '../story/shared/credits'
 import AmpHero from './amp-hero'
 import AmpInfo from './amp-info'
 import ArticleBrief from '../story/shared/brief'
+import DraftRenderBlock from '../story/shared/draft-renderer-block'
 
 const MainWrapper = styled.div`
   margin-top: 24px;
@@ -96,6 +97,11 @@ const AmpBriefContainer = styled.section`
   }
 `
 
+const AmpContentContainer = styled.section`
+  padding: 0 20px;
+  margin-top: 36px;
+`
+
 /**
  * @typedef {import('../../apollo/fragments/post').Post} PostData
  */
@@ -126,7 +132,7 @@ export default function AmpMain({ postData }) {
     extend_byline = '',
     tags = [],
     brief = { blocks: [], entityMap: {} },
-    // content = { blocks: [], entityMap: {} },
+    content = { blocks: [], entityMap: {} },
   } = postData
 
   const writersWithOrdered =
@@ -185,6 +191,13 @@ export default function AmpMain({ postData }) {
           brief={brief}
         ></ArticleBrief>
       </AmpBriefContainer>
+      <AmpContentContainer>
+        <DraftRenderBlock
+          rawContentBlock={content}
+          contentLayout="normal"
+          wrapper={(children) => children}
+        />
+      </AmpContentContainer>
     </MainWrapper>
   )
 }
