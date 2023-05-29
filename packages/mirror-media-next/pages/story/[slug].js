@@ -134,8 +134,9 @@ export default function Story({ postData }) {
           postData.content?.blocks[0]?.text ||
           undefined,
         imageUrl:
-          postData.heroImage?.resized?.w1200 ??
-          postData.og_image?.resized?.w1200,
+          postData.heroImage?.resized?.original ||
+          postData.og_image?.resized?.original ||
+          undefined,
       }}
       header={{ type: 'empty' }}
       footer={{ type: 'empty' }}
