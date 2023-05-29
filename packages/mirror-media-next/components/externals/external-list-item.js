@@ -14,11 +14,6 @@ const ImageContainer = styled.div`
   width: 100%;
   height: 214px;
 
-  img {
-    object-fit: cover;
-    filter: unset;
-  }
-
   ${({ theme }) => theme.breakpoint.xl} {
     height: 147px;
   }
@@ -70,31 +65,32 @@ const ItemBrief = styled.div`
 `
 
 /**
- * @typedef {import('../../apollo/fragments/external').External} External
+ * @typedef {import('../../apollo/fragments/external').ListingExternal} ListingExternal
  */
 
 /**
  * @param {Object} props
- * @param {External} props.item
+ * @param {ListingExternal} props.item
  * @returns {React.ReactElement}
  */
 export default function ExternalListItem({ item }) {
-  const IMAGES_URL = { original: item.thumb }
+  const { thumb = '', slug = '', title = '', brief = '' } = item
+  const IMAGES_URL = { original: thumb }
 
   return (
-    <ItemWrapper href={`/external/${item.slug}`} target="_blank">
+    <ItemWrapper href={`/external/${slug}`} target="_blank">
       <ImageContainer>
         <Image
           images={IMAGES_URL}
-          alt={item.title}
+          alt={title}
           loadingImage="/images/loading.gif"
           defaultImage="/images/default-og-img.png"
           rwd={{ tablet: '320px', desktop: '220px' }}
         />
       </ImageContainer>
       <ItemDetail>
-        <ItemTitle>{item.title}</ItemTitle>
-        <ItemBrief>{item.brief}</ItemBrief>
+        <ItemTitle>{title}</ItemTitle>
+        <ItemBrief>{brief}</ItemBrief>
       </ItemDetail>
     </ItemWrapper>
   )

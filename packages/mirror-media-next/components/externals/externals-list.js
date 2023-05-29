@@ -18,12 +18,12 @@ const ItemContainer = styled.div`
 `
 
 /**
- * @typedef {import('../../apollo/fragments/external').External} External
+ * @typedef {import('../../apollo/fragments/external').ListingExternal} ListingExternal
  */
 
 /**
  * @param {Object} props
- * @param {External[]} props.renderList
+ * @param {ListingExternal[]} props.renderList
  * @returns {React.ReactElement}
  */
 export default function ExternalList({ renderList }) {

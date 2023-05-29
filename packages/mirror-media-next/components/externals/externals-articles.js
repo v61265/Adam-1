@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import client from '../../apollo/apollo-client'
+import client from '~/apollo/apollo-client'
 
 import InfiniteScrollList from '../infinite-scroll-list'
 import Image from 'next/legacy/image'
-import LoadingPage from '../../public/images/loading_page.gif'
-import ExternalList from './external-list'
-import { fetchExternalsByPartnerSlug } from '../../apollo/query/externals'
+import LoadingPage from '~/public/images/loading_page.gif'
+import ExternalList from './externals-list'
+import { fetchExternalsByPartnerSlug } from '~/apollo/query/externals'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -19,7 +19,7 @@ const Loading = styled.div`
 `
 
 /**
- * @typedef {import('../../apollo/fragments/external').External} External
+ * @typedef {import('../../apollo/fragments/external').ListingExternal} ListingExternal
  * @typedef {import('../../apollo/fragments/partner').Partner} Partner
  */
 
@@ -27,8 +27,8 @@ const Loading = styled.div`
  *
  * @param {Object} props
  * @param {number} props.externalsCount
- * @param {External[]} props.externals
- * @param {Pick<Partner, 'id' | 'slug' | 'name'>} props.partner
+ * @param {ListingExternal[]} props.externals
+ * @param {Partner} props.partner
  * @param {number} props.renderPageSize
  * @returns {React.ReactElement}
  */
