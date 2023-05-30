@@ -67,14 +67,14 @@ const TitleBox = styled.div`
     width: fit-content;
     text-align: center;
     padding: 2px;
-    margin: 20px auto;
+    margin-top: 20px;
 
     ${({ theme }) => theme.breakpoint.md} {
       font-size: 12px;
-      margin: 29px auto;
+      margin-top: 29px;
     }
     ${({ theme }) => theme.breakpoint.xl} {
-      margin: 32px auto;
+      margin-top: 32px;
       line-height: 21px;
       font-size: 14px;
     }
@@ -89,10 +89,15 @@ const TitleBox = styled.div`
     text-align: center;
     color: #ffffff;
     text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
 
     ${({ theme }) => theme.breakpoint.md} {
       font-weight: 500;
       font-size: 16px;
+      margin-top: 29px;
+    }
+    ${({ theme }) => theme.breakpoint.xl} {
+      margin-top: 32px;
     }
   }
 `

@@ -143,8 +143,6 @@ export default function StoryPhotographyStyle({ postData }) {
     (item) => item.type === 'image'
   )
 
-  console.log(photosArray)
-
   // Page ArrowDown button click handler
   const pageRefs = useRef([])
   const buttonRefs = useRef([])
