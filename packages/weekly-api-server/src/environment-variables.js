@@ -7,6 +7,20 @@ const {
   CORS_ALLOW_ORIGINS,
 } = process.env
 
+/**
+ *
+ * @param {string} [cors]
+ * @returns {'*' | string[]}
+ */
+const getAllowOrigins = (cors) => {
+  if (cors === '*') {
+    return '*'
+  } else if (typeof cors === 'string') {
+    return cors.split(',')
+  } else {
+    return ['https://www.mirrormedia.mg', 'https://mirrormedia.mg']
+  }
+}
 const envVar = {
   jwt: {
     secret: JWT_SECRET || 'jwt-secret',
@@ -19,19 +33,14 @@ const envVar = {
   },
   apis: {
     israfel: {
-      origin:
-        ISRAFEL_GQL_ORIGIN || 'https://israfel-gql.mirrormedia.mg',
+      origin: ISRAFEL_GQL_ORIGIN || 'https://israfel-gql.mirrormedia.mg',
     },
     weekly: {
-      origin:
-        WEEKLY_GQL_ORIGIN || 'https://weekly-gql.mirrormedia.mg',
+      origin: WEEKLY_GQL_ORIGIN || 'https://weekly-gql.mirrormedia.mg',
     },
   },
   cors: {
-    allowOrigins:
-      typeof CORS_ALLOW_ORIGINS === 'string'
-        ? CORS_ALLOW_ORIGINS.split(',')
-        : ['https://www.mirrormedia.mg', 'https://mirrormedia.mg'],
+    allowOrigins: getAllowOrigins(CORS_ALLOW_ORIGINS),
   },
 }
 

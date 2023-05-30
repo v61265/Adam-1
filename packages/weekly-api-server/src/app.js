@@ -12,7 +12,7 @@ const statusCodes = consts.statusCodes
  *  This function creates an express application.
  *  This application aims to handle requests' authentication and authorization by
  *
- *  1. providing `/access_token` route, which will response access token
+ *  1. providing `/access-token` route, which will response access token
  *  if the request contains valid firebase ID token, and that firebase token
  *  refers to a valid member in our Israfel member system.
  *
@@ -56,6 +56,21 @@ export function createApp({
     middlewareCreator.createLoggerMw(gcpProjectId), // log request
     cors(corsOpts), // handle cors request
     middlewareCreator.verifyIdTokenByFirebaseAdmin({ firebaseProjectId }), // check authentication
+    middlewareCreator.signAccessTokenForInternalColleague({jwtSecret: jwtSecret}),
+    /** @type {express.RequestHandler} */
+    (req, res, next) => {
+      const payload = res.locals.accessTokenPayload
+      // return response if jwt token is generated successfully
+      if (payload) {
+        res.status(statusCodes.ok).send({
+          status: 'success',
+          data: payload,
+        })
+        return
+      }
+      // otherwise, call next middlewares
+      return next()
+    },
     middlewareCreator.queryMemberInfo({ apiUrl: israfelProxyOrigin + '/api/graphql' }), // query member access permission
     middlewareCreator.signAccessToken({ jwtSecret: jwtSecret }), // sign access token according to member permission
     /** @type {express.RequestHandler} */
