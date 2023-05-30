@@ -13,11 +13,11 @@ import { partner } from './partner'
  * @property {string} title
  * @property {string} state
  * @property {string} publishedDate
- * @property {string} extend_byline
- * @property {string} thumb
+ * @property {string} extend_byline - author
+ * @property {string} thumb - heroImage URL
  * @property {string} brief
  * @property {string} content
- * @property {string} source
+ * @property {string} source - original article URL
  * @property {string} createdAt
  * @property {string} updatedAt
  * @property {string} createdBy
@@ -56,5 +56,6 @@ export const external = gql`
     partner {
       ...partner
     }
+    updatedAt
   }
 `
