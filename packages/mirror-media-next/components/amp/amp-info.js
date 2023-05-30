@@ -33,8 +33,7 @@ const DateRow = styled.p`
 
 /**
  * @param {Object} props
- * @property {Section[]} sections
- * @property {Section[]} manualOrderOfSections
+ * @property {Section} section
  * @property {string} title - post title
  * @property {string} publishedDate - post published date
  * @property {string} updatedAt - post updated date
@@ -42,19 +41,13 @@ const DateRow = styled.p`
  */
 export default function AmpInfo({
   title = '',
-  sections = [],
-  manualOrderOfSections = [],
+  section = {},
   publishedDate = '',
   updatedAt = '',
 }) {
   const publishedTaipeiTime = transformTimeDataIntoDotFormat(publishedDate)
   const updatedTaipeiTime = transformTimeDataIntoDotFormat(updatedAt)
 
-  const sectionsWithOrdered =
-    manualOrderOfSections && manualOrderOfSections.length
-      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
-      : sections
-  const [section] = sectionsWithOrdered
   let sectionColor
   if (section) sectionColor = color.sectionsColor[section.slug]
 

@@ -13,6 +13,7 @@ let API_PROTOCOL = 'http'
 let API_HOST = ''
 let RESTFUL_API_HOST = ''
 let API_PORT = ''
+let WEEKLY_API_SERVER_HOST = ''
 
 let URL_STATIC_PREMIUM_SECTIONS = ''
 let URL_STATIC_NORMAL_SECTIONS = ''
@@ -33,6 +34,8 @@ switch (ENV) {
     API_HOST = '' //currently unset
     RESTFUL_API_HOST = '' //currently unset
     API_PORT = '' //currently unset
+    WEEKLY_API_SERVER_HOST = '' //currently unset
+
     URL_STATIC_PREMIUM_SECTIONS =
       'https://v3-statics.mirrormedia.mg/files/json/header_member.json'
     URL_STATIC_NORMAL_SECTIONS =
@@ -56,6 +59,8 @@ switch (ENV) {
     API_HOST = '' //currently unset
     RESTFUL_API_HOST = '' //currently unset
     API_PORT = '' //currently unset
+    WEEKLY_API_SERVER_HOST = '' //currently unset
+
     URL_STATIC_PREMIUM_SECTIONS =
       'https://v3-statics-staging.mirrormedia.mg/files/json/header_member.json'
     URL_STATIC_NORMAL_SECTIONS =
@@ -80,6 +85,8 @@ switch (ENV) {
     API_HOST = 'mirror-cms-gql-dev-ufaummkd5q-de.a.run.app'
     RESTFUL_API_HOST = '104.199.190.189'
     API_PORT = '8080'
+    WEEKLY_API_SERVER_HOST =
+      'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
     URL_STATIC_PREMIUM_SECTIONS =
       'https://v3-statics-dev.mirrormedia.mg/files/json/header_member.json'
     URL_STATIC_NORMAL_SECTIONS =
@@ -104,6 +111,9 @@ switch (ENV) {
     RESTFUL_API_HOST = 'localhost'
     API_PORT = '8080'
     API_HOST = 'mirror-cms-gql-dev-ufaummkd5q-de.a.run.app'
+    WEEKLY_API_SERVER_HOST =
+      'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
+
     URL_STATIC_PREMIUM_SECTIONS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_member.json`
     URL_STATIC_NORMAL_SECTIONS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_sections.json`
     URL_STATIC_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_topics.json`
@@ -122,6 +132,7 @@ export {
   GCP_PROJECT_ID,
   API_TIMEOUT,
   API_HOST,
+  WEEKLY_API_SERVER_HOST,
   URL_STATIC_PREMIUM_SECTIONS,
   URL_STATIC_NORMAL_SECTIONS,
   URL_STATIC_TOPICS,

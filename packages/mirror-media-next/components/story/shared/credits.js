@@ -5,21 +5,15 @@ import Link from 'next/link'
  * @typedef {import('../../../type/theme').Theme} Theme
  */
 
-const Wrapper = styled.section`
-  width: 100%;
-  max-width: 640px;
-  margin: 24px auto 0;
-`
-
 const CreditsWrapper = styled.section`
   font-size: 16px;
   font-weight: 400;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 
-  text-align: center;
+  margin-top: 24px;
+
+  text-align: left;
   width: 100%;
+  max-width: 300px;
   line-height: 1.5;
 `
 
@@ -46,19 +40,16 @@ const CreditTitle = styled.figcaption`
 
 const CreditList = styled.figure`
   display: flex;
-  margin: 0 auto;
   justify-content: flex-start;
-  width: 100%;
+  width: auto;
 
   ul {
     width: 100%;
 
-    justify-content: space-between;
-
-    display: grid;
-
-    grid-template-columns: repeat(auto-fill, minmax(48px, max-content));
     gap: 0 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
     &.no-link-list {
       display: block;
     }
@@ -128,7 +119,7 @@ export default function Credits({ credits = [], className = '' }) {
   })
 
   const creditsJsx = shouldShowCredits ? (
-    <CreditsWrapper>
+    <>
       {credits.map((credit, index) => {
         const title = Object.keys(credit)
         const titleName = CREDIT_TITLE_NAME_MAP[title]
@@ -167,8 +158,8 @@ export default function Credits({ credits = [], className = '' }) {
           </CreditList>
         )
       })}
-    </CreditsWrapper>
+    </>
   ) : null
 
-  return <Wrapper className={className}>{creditsJsx}</Wrapper>
+  return <CreditsWrapper className={className}>{creditsJsx}</CreditsWrapper>
 }

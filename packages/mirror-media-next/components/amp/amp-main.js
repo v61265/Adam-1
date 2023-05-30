@@ -6,6 +6,8 @@ import ButtonSocialNetworkShare from '../story/shared/button-social-network-shar
 import AmpCredits from '../story/shared/credits'
 import AmpHero from './amp-hero'
 import AmpInfo from './amp-info'
+import ArticleBrief from '../story/shared/brief'
+import DraftRenderBlock from '../story/shared/draft-renderer-block'
 
 const MainWrapper = styled.div`
   margin-top: 24px;
@@ -74,14 +76,30 @@ const TagsWrapper = styled.ul`
 const TagItem = styled(Link)`
   font-size: 14px;
   line-height: 20px;
-  color: ${({ theme }) => theme.color.brandColor.darkBlue}};
+  color: ${({ theme }) => theme.color.brandColor.darkBlue};
   padding: 4px 8px;
-  border: 1px solid ${({ theme }) => theme.color.brandColor.darkBlue}};
+  border: 1px solid ${({ theme }) => theme.color.brandColor.darkBlue};
   border-radius: 2px;
   margin-top: 8px;
   & + & {
     margin-left: 8px;
   }
+`
+
+const AmpBriefContainer = styled.section`
+  & > * {
+    background: rgba(0, 0, 0, 0);
+    padding: 0 44px;
+    margin-top: 52px;
+  }
+  * {
+    color: ${({ theme }) => theme.color.brandColor.darkBlue};
+  }
+`
+
+const AmpContentContainer = styled.section`
+  padding: 0 20px;
+  margin-top: 36px;
 `
 
 /**
@@ -113,9 +131,15 @@ export default function AmpMain({ postData }) {
     vocals = [],
     extend_byline = '',
     tags = [],
-    // brief = { blocks: [], entityMap: {} },
-    // content = { blocks: [], entityMap: {} },
+    brief = { blocks: [], entityMap: {} },
+    content = { blocks: [], entityMap: {} },
   } = postData
+
+  const sectionsWithOrdered =
+    manualOrderOfSections && manualOrderOfSections.length
+      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+      : sections
+  const [section] = sectionsWithOrdered
 
   const writersWithOrdered =
     manualOrderOfWriters && manualOrderOfWriters.length
@@ -136,10 +160,9 @@ export default function AmpMain({ postData }) {
     <MainWrapper>
       <AmpInfo
         title={title}
-        sections={sections}
+        section={section}
         publishedDate={publishedDate}
         updatedAt={updatedAt}
-        manualOrderOfSections={manualOrderOfSections}
       />
       <SharesWrapper>
         <ButtonSocialNetworkShare type="facebook" />
@@ -167,6 +190,12 @@ export default function AmpMain({ postData }) {
           )
         })}
       </TagsWrapper>
+      <AmpBriefContainer>
+        <ArticleBrief sectionSlug={section?.slug} brief={brief}></ArticleBrief>
+      </AmpBriefContainer>
+      <AmpContentContainer>
+        <DraftRenderBlock rawContentBlock={content} contentLayout="normal" />
+      </AmpContentContainer>
     </MainWrapper>
   )
 }
