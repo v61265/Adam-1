@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Image from 'next/image'
-import ShareIcons from './share-button'
 import { Z_INDEX } from '../../../constants'
+import { ShareButton } from '@readr-media/share-button'
 
 const Nav = styled.nav`
   position: fixed;
@@ -115,7 +115,11 @@ export default function Header() {
             height={32}
           />
         </PhotosIndexButton>
-        <ShareIcons />
+        <ShareButton
+          pathColor="#FFF"
+          direction="vertical"
+          className="share-button"
+        />
       </IconsWrapper>
     </Nav>
   )
