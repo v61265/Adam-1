@@ -88,7 +88,10 @@ const SocialMedia = styled.li`
     }
   }
 `
-
+const StyledCredits = styled(Credits)`
+  margin-left: auto;
+  margin-right: auto;
+`
 /**
  *
  * @param {Object} param
@@ -181,7 +184,7 @@ export default function StoryWideStyle({ postData }) {
               </li> */}
               </SocialMediaAndDonateLink>
             </NavSubtitleNavigator>
-            <Credits credits={credits}></Credits>
+            <StyledCredits credits={credits}></StyledCredits>
             <DateWrapper>
               <StyledDate timeData={publishedDate} timeType="publishedDate" />
               <StyledDate timeData={updatedAt} timeType="updatedDate" />
