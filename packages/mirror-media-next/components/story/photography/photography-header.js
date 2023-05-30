@@ -78,7 +78,7 @@ export default function Header() {
     <Nav>
       <LogoWrapper>
         <a
-          href="https://mnews.tw/?utm_source=project&utm_medium=2023mazu"
+          href="https://www.mirrormedia.mg/"
           target="_blank"
           rel="noreferrer noopenner"
         >

@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import Credits from './potography-credits'
@@ -50,7 +49,6 @@ const Page = styled.div`
 `
 
 const Slide = styled.div`
-  display: block;
   width: 100%;
   height: 100vh;
   object-fit: cover;
@@ -61,13 +59,19 @@ const Slide = styled.div`
 
   /* Center slide content vertically */
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
   overflow: hidden;
+  padding-top: 52px;
 
-  p {
-    position: absolute;
-    bottom: 140px;
+  ${({ theme }) => theme.breakpoint.md} {
+    padding-top: 74px;
+  }
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    justify-content: center;
+    padding-top: 0px;
   }
 `
 
@@ -115,6 +119,73 @@ const ArrowButton = styled.button`
     bottom: 24px;
     width: 52px;
     height: 26px;
+  }
+`
+const CaptionBoxPC = styled.div`
+  display: none;
+  position: relative;
+  position: absolute;
+  bottom: 130px;
+  left: 67px;
+
+  cursor: pointer;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: flex;
+  }
+`
+const CaptionPC = styled.div`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 150%;
+  color: #ffffff;
+  width: 682px;
+  height: auto;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 0.5px solid #ffffff;
+  pointer-events: none;
+  user-select: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  ${({
+    // @ts-ignore
+    transparent,
+  }) =>
+    transparent
+      ? `
+      border: transparent;
+      background: transparent;
+      color: transparent;
+    `
+      : ''}
+`
+const ShowCaptionIcon = styled.div`
+  height: auto;
+  width: 4px;
+  background-color: #ffffff;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: calc(50% - 12px);
+    left: -24px;
+    width: 24px;
+    height: 24px;
+    background-image: url(/images/caption-icon.svg);
+  }
+`
+
+const CaptionMB = styled.div`
+  padding: 20px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 150%;
+  text-align: justify;
+
+  color: #ffffff;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
   }
 `
 
@@ -214,6 +285,11 @@ export default function StoryPhotographyStyle({ postData }) {
     }
   }, [])
 
+  const [isTransparent, setIsTransparent] = useState(true)
+  const handleCaptionClick = () => {
+    setIsTransparent((prevState) => !prevState)
+  }
+
   return (
     <Main>
       <Header />
@@ -242,7 +318,16 @@ export default function StoryPhotographyStyle({ postData }) {
               }
               alt={photo.data.desc}
             />
-            <p>{photo?.data?.desc}</p>
+            <CaptionBoxPC onClick={handleCaptionClick}>
+              <ShowCaptionIcon />
+              <CaptionPC
+                // @ts-ignore
+                transparent={isTransparent}
+              >
+                {photo?.data?.desc}
+              </CaptionPC>
+            </CaptionBoxPC>
+            <CaptionMB>{photo?.data?.desc}</CaptionMB>
           </Slide>
           <ArrowButton
             ref={(el) => (buttonRefs.current[index] = el)}
