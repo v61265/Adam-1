@@ -32,10 +32,11 @@ const LogoWrapper = styled.div`
   align-items: center;
 
   .logo {
-    width: auto;
+    width: 67.5px;
     height: 28px;
 
     ${({ theme }) => theme.breakpoint.md} {
+      width: 90px;
       height: 38px;
     }
   }
@@ -88,7 +89,6 @@ export default function Header() {
             className="logo"
             width={90}
             height={38}
-            priority
           />
         </a>
       </LogoWrapper>
@@ -104,7 +104,6 @@ export default function Header() {
             className="sponsor-button"
             width={100}
             height={32}
-            priority
           />
         </a>
         <PhotosIndexButton>
@@ -114,7 +113,6 @@ export default function Header() {
             className="photos-index-icon"
             width={32}
             height={32}
-            priority
           />
         </PhotosIndexButton>
         <ShareIcons />
