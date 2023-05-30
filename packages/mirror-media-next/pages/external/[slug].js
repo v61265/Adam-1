@@ -4,7 +4,7 @@ import errors from '@twreporter/errors'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 
 import { fetchExternalBySlug } from '../../apollo/query/externals'
-import ExternalNormalStyle from '~/components/external/external-normal-style'
+import ExternalNormalStyle from '../../components/external/external-normal-style'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
 

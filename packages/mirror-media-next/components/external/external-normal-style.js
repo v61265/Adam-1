@@ -2,7 +2,7 @@
 //TODO: refactor jsx structure, make it more readable.
 
 import { useCallback } from 'react'
-import client from '~/apollo/apollo-client'
+import client from '../../apollo/apollo-client'
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
 import axios from 'axios'
@@ -18,7 +18,7 @@ import MagazineInviteBanner from '../../components/story/shared/magazine-invite-
 // import ArticleContent from '../../components/story/normal/article-content'
 import ExternalHeroImage from '../../components/external/external-hero-image'
 import Divider from '../../components/story/shared/divider'
-import { transformTimeDataIntoDotFormat } from '~/utils'
+import { transformTimeDataIntoDotFormat } from '../../utils'
 import { fetchAsidePosts } from '../../apollo/query/posts'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../config/index.mjs'
 import {
@@ -377,7 +377,7 @@ export default function ExternalNormalStyle({ external }) {
       console.error(err)
       return []
     }
-  }, [slug])
+  }, [slug, EXTERNAL_DEFAULT_SECTION.slug])
 
   /**
    * @returns {Promise<AsideArticleData[] | []>}
