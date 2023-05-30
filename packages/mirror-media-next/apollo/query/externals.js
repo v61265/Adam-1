@@ -21,4 +21,15 @@ const fetchExternalCounts = gql`
   }
 `
 
-export { fetchExternalsByPartnerSlug, fetchExternalCounts }
+const fetchExternalBySlug = gql`
+  ${external}
+  query ($slug: String) {
+    externals(
+      where: { slug: { equals: $slug }, state: { equals: "published" } }
+    ) {
+      ...external
+    }
+  }
+`
+
+export { fetchExternalsByPartnerSlug, fetchExternalCounts, fetchExternalBySlug }
