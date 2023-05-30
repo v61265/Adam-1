@@ -22,7 +22,7 @@ const SlideContainer = styled.div`
     padding-top: 74px;
   }
 
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${({ theme }) => theme.breakpoint.lg} {
     justify-content: center;
     padding-top: 0px;
   }
@@ -36,7 +36,7 @@ const CaptionBoxPC = styled.div`
 
   cursor: pointer;
 
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${({ theme }) => theme.breakpoint.lg} {
     display: flex;
   }
 `
@@ -90,7 +90,7 @@ const CaptionMB = styled.div`
 
   color: #ffffff;
 
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${({ theme }) => theme.breakpoint.lg} {
     display: none;
   }
 `
