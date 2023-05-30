@@ -191,10 +191,14 @@ export default function AmpMain({ postData }) {
         })}
       </TagsWrapper>
       <AmpBriefContainer>
-        <ArticleBrief sectionSlug={section?.slug} brief={brief}></ArticleBrief>
+        <ArticleBrief
+          sectionSlug={section?.slug}
+          brief={brief}
+          contentLayout="amp"
+        ></ArticleBrief>
       </AmpBriefContainer>
       <AmpContentContainer>
-        <DraftRenderBlock rawContentBlock={content} contentLayout="normal" />
+        <DraftRenderBlock rawContentBlock={content} contentLayout="amp" />
       </AmpContentContainer>
     </MainWrapper>
   )

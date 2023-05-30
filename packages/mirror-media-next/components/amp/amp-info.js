@@ -1,8 +1,5 @@
 import styled from 'styled-components'
-import {
-  transformTimeDataIntoDotFormat,
-  sortArrayWithOtherArrayId,
-} from '../../utils'
+import { transformTimeDataIntoDotFormat } from '../../utils'
 import { color } from '../../styles/theme/color'
 
 const Section = styled.div`
