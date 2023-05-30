@@ -167,7 +167,7 @@ export function signAccessToken({ jwtSecret }) {
       // TODO: add domain name mapping
       // and return different hostname according to different environment
       iss: 'https://api-v2.mirrormedia.mg',
-      sub: `mirror-weekly|${memberId}`,
+      sub: `mirror-weekly|${firebaseId}`,
       aud: [
         // TODO: return one of the following according to different environment
         'https://www.mirrormedia.mg',
@@ -203,3 +203,70 @@ export function signAccessToken({ jwtSecret }) {
     next()
   }
 }
+
+/**
+ *  This function creates an Express middleware.
+ *  The created middleware could sign the JWT access token
+ *  to our internal colleagues.
+ *
+ *  @param {Object} opts
+ *  @param {string} opts.jwtSecret
+ *  @returns {express.RequestHandler}
+ */
+export function signAccessTokenForInternalColleague({ jwtSecret }) {
+  return (req, res, next) => {
+    const nowTs = Math.round(new Date().getTime() / 1000) // timestamp
+    const expiresIn = nowTs + 3600 // one hour later
+    const firebaseId =
+      res.locals.auth?.decodedIdToken?.uid
+    const email = res.locals.auth?.decodedIdToken?.email
+
+    // skip this middleware if email does not ends with '@mirrormedia.mg'
+    if (typeof email === 'string' && !email.endsWith('@mirrormedia.mg')) {
+      return next()
+    }
+
+    // grant whole posts access permission
+    const scope = `read:posts read:member-posts:all read:member-info:${firebaseId} write:member-info:${firebaseId}`
+
+    const jwtPayload = {
+      // TODO: add domain name mapping
+      // and return different hostname according to different environment
+      iss: 'https://api-v2.mirrormedia.mg',
+      sub: `mirror-weekly|${firebaseId}`,
+      aud: [
+        // TODO: return one of the following according to different environment
+        'https://www.mirrormedia.mg',
+        'https://www-staging.mirrormedia.mg',
+        'https://dev.mirrormedia.mg',
+        'http://localhost:3000',
+      ],
+      exp: expiresIn, // one hour later
+      iat: nowTs,
+      // roles,
+      scope,
+    }
+
+    let token
+    try {
+      token = jwt.sign(jwtPayload, jwtSecret)
+    } catch (err) {
+      const annotatingError = errors.helpers.wrap(
+        err,
+        'SignJWTError',
+        'Error to sign JWT access token'
+      )
+      next(annotatingError)
+      return
+    }
+
+    res.locals.accessTokenPayload = {
+      access_token: token,
+      token_type: 'Bearer',
+      expires_in: expiresIn,
+    }
+
+    next()
+  }
+}
+
