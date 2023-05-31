@@ -139,6 +139,8 @@ export const asideListingPost = gql`
  * @property {Related[] | null} manualOrderOfRelateds related articles with adjusted order
  * @property {boolean} isFeatured
  * @property {import('./tag').Tag[]} tags
+ * @property {string} redirect - post redirect slug or external url
+ * @property {HeroImage | null} og_image - og image of the post
  */
 
 export const post = gql`
@@ -206,5 +208,11 @@ export const post = gql`
       }
     }
     manualOrderOfRelateds
+    redirect
+    og_image {
+      resized {
+        w1200
+      }
+    }
   }
 `

@@ -5,21 +5,15 @@ import Link from 'next/link'
  * @typedef {import('../../../type/theme').Theme} Theme
  */
 
-const Wrapper = styled.section`
-  width: 100%;
-  max-width: 640px;
-  margin: 24px auto;
-`
-
 const CreditsWrapper = styled.section`
   font-size: 16px;
   font-weight: 400;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 
-  text-align: center;
+  margin-top: 24px;
+
+  text-align: left;
   width: 100%;
+  max-width: 300px;
   line-height: 1.5;
 `
 
@@ -29,7 +23,8 @@ const CreditTitle = styled.figcaption`
 
   position: relative;
 
-  width: 38px;
+  min-width: 38px;
+  max-width: 38px;
   text-align: left;
   margin-right: 14px;
 
@@ -45,19 +40,16 @@ const CreditTitle = styled.figcaption`
 
 const CreditList = styled.figure`
   display: flex;
-  margin: 0 auto;
   justify-content: flex-start;
-  width: 100%;
+  width: auto;
 
   ul {
     width: 100%;
 
-    justify-content: space-between;
-
-    display: grid;
-
-    grid-template-columns: repeat(auto-fill, minmax(48px, max-content));
     gap: 0 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
     &.no-link-list {
       display: block;
     }
@@ -117,16 +109,17 @@ const CREDIT_TITLE_NAME_MAP = {
 /**
  * @param {Object} props
  * @param {Credit[]} props.credits
+ * @param {string} [props.className]
  * @returns {JSX.Element}
  */
-export default function Credits({ credits }) {
+export default function Credits({ credits = [], className = '' }) {
   const shouldShowCredits = credits.some((credit) => {
     const [people] = Object.values(credit)
     return people.length !== 0 || (typeof people === 'string' && people.trim())
   })
 
   const creditsJsx = shouldShowCredits ? (
-    <CreditsWrapper>
+    <>
       {credits.map((credit, index) => {
         const title = Object.keys(credit)
         const titleName = CREDIT_TITLE_NAME_MAP[title]
@@ -165,8 +158,8 @@ export default function Credits({ credits }) {
           </CreditList>
         )
       })}
-    </CreditsWrapper>
+    </>
   ) : null
 
-  return <Wrapper>{creditsJsx}</Wrapper>
+  return <CreditsWrapper className={className}>{creditsJsx}</CreditsWrapper>
 }

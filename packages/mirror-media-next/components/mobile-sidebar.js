@@ -1,10 +1,48 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import React, { Fragment, useState, useRef } from 'react'
-import { sectionColors } from '../styles/sections-color'
 import useClickOutside from '../hooks/useClickOutside'
 import Link from 'next/link'
 import HamburgerButton from './shared/hamburger-button'
 import CloseButton from './shared/close-button'
+
+/**
+ * @typedef {import('../apollo/fragments/section').Section} Section
+ */
+
+/**
+ * @typedef {import('../apollo/fragments/section').SectionWithCategory} SectionWithCategory
+ */
+
+/**
+ * @typedef {Omit<Section, 'categories' > & {href: string, categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
+ */
+/**
+ * @typedef {Pick<import('../apollo/fragments/topic').Topic, 'id' | 'name'>[]} Topics
+ */
+
+/**
+ * @typedef {import('../type/theme').Theme} Theme
+ */
+
+const colorCss = css`
+  ${
+    /**
+     * @param {Object} param
+     * @param {string} [param.sectionSlug]
+     * @param {Theme} [param.theme]
+     */
+    ({ sectionSlug, theme }) => {
+      if (sectionSlug === 'member') {
+        return '#e51731'
+      } else if (sectionSlug && theme.color.sectionsColor[sectionSlug]) {
+        return theme.color.sectionsColor[sectionSlug]
+      } else {
+        return '#fff'
+      }
+    }
+  };
+`
+
 const SideBar = styled.section`
   display: flex;
   flex-direction: column;
@@ -26,10 +64,7 @@ const SideBar = styled.section`
 
   ${({ theme }) => theme.breakpoint.md} {
     width: 320px;
-    left: ${
-      /** @param {{shouldShowSidebar: Boolean}} props */
-      ({ shouldShowSidebar }) => (shouldShowSidebar ? '0' : '-100%')
-    };
+    left: ${({ shouldShowSidebar }) => (shouldShowSidebar ? '0' : '-100%')};
   }
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
@@ -69,7 +104,13 @@ const Section = styled.div`
     left: 0;
     width: 8px;
     height: 16px;
-    background-color: ${({ color }) => (color ? color : '#fff')};
+    background-color: ${
+      /**
+       * @param {Object} param
+       * @param {string} [param.sectionSlug]
+       */
+      ({ sectionSlug }) => (sectionSlug ? colorCss : '#fff')
+    };
   }
 `
 
@@ -109,22 +150,24 @@ const Categories = styled.div`
   font-weight: 400;
   flex-wrap: wrap;
   gap: 4px 12px;
-  color: ${({ color }) => (color ? color : '#fff')};
-  margin-top: ${
-    /** @param {{shouldShowCategories: Boolean}} props */
-    ({ shouldShowCategories }) => (shouldShowCategories ? '12px' : '0px')
+  color: ${
+    /**
+     * @param {Object} param
+     * @param {string} [param.sectionSlug]
+     * @param {boolean} [param.shouldShowCategories]
+     */
+    ({ sectionSlug }) => (sectionSlug ? colorCss : '#fff')
   };
-  gap: ${
-    /** @param {{shouldShowCategories: Boolean}} props */
-    ({ shouldShowCategories }) => (shouldShowCategories ? '4px 12px' : '0px')
-  };
+
+  margin-top: ${({ shouldShowCategories }) =>
+    shouldShowCategories ? '12px' : '0px'};
+  gap: ${({ shouldShowCategories }) =>
+    shouldShowCategories ? '4px 12px' : '0px'};
   transition: all 0.5s ease-in-out;
 
   a {
-    height: ${
-      /** @param {{shouldShowCategories: Boolean}} props */
-      ({ shouldShowCategories }) => (shouldShowCategories ? '21px' : '0')
-    };
+    height: ${({ shouldShowCategories }) =>
+      shouldShowCategories ? '21px' : '0'};
     visibility: ${({ shouldShowCategories }) =>
       shouldShowCategories ? 'visible' : 'hidden'};
     opacity: ${({ shouldShowCategories }) =>
@@ -195,8 +238,8 @@ const SocialMediaList = styled.div`
  * TODO: use typedef in `../apollo/fragments/section`
  * Should be done after fetch header data from new json file
  * @param {Object} props
- * @param {import('../type').Topic[]} props.topics
- * @param {import('../type').Section[]} props.sections
+ * @param {Topics} props.topics
+ * @param {SectionWithHrefTemp[]} props.sections
  * @param {import('../type').SubBrand[]} props.subBrands
  * @param {import('../type').Promotion[]} props.promotions
  * @param {import('../type').SocialMedia[]} props.socialMedia
@@ -227,30 +270,30 @@ export default function MobileSidebar({
           />
           <Topics>
             {topics.map((topic) => (
-              <Topic href={`topic/${topic._id}`} key={topic._id}>
+              <Topic href={`topic/${topic.id}`} key={topic.id}>
                 {topic.name}
               </Topic>
             ))}
             <Topic href={`/section/topic`}>更多</Topic>
           </Topics>
-          {sections.map(({ _id, title, categories, name }) => (
-            <Fragment key={_id}>
-              <Section color={sectionColors[name]}>
-                <Link style={{ width: '50%' }} href={`/section/${title}`}>
-                  <h3>{title}</h3>
+          {sections.map(({ id, slug, categories, name, href }) => (
+            <Fragment key={id}>
+              <Section sectionSlug={slug}>
+                <Link style={{ width: '50%' }} href={href}>
+                  <h3>{name}</h3>
                 </Link>
                 <SectionToggle
-                  onClick={() => setOpenSection(name)}
-                  shouldOpen={name === openSection}
+                  onClick={() => setOpenSection(slug)}
+                  shouldOpen={slug === openSection}
                 ></SectionToggle>
               </Section>
               <Categories
-                shouldShowCategories={name === openSection}
-                color={sectionColors[name]}
+                shouldShowCategories={slug === openSection}
+                sectionSlug={slug}
               >
                 {categories.map((category) => (
-                  <a key={category._id} href={`/category/${category.name}`}>
-                    {category.title}
+                  <a key={category.id} href={category.href}>
+                    {category.name}
                   </a>
                 ))}
               </Categories>

@@ -1,10 +1,43 @@
 //TODO: When user at certain section, at category which belongs to certain section, at story which belongs to certain section
 //component <Section> will change color of title to section color defined at /styles/sections-color.
 //TODO: Replace <a> to <Link> for Single Page Application
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { minWidth } from '../styles/media'
-import { sectionColors } from '../styles/sections-color'
 import Logo from './logo'
+/**
+ * @typedef {import('../type/theme').Theme} Theme
+ */
+
+const colorCss = css`
+  color: ${
+    /**
+     * @param {Object} param
+     * @param {string} [param.sectionSlug]
+     * @param {Theme} [param.theme]
+     */
+    ({ sectionSlug, theme }) => {
+      if (sectionSlug === 'member') {
+        return '#e51731'
+      } else if (sectionSlug && theme.color.sectionsColor[sectionSlug]) {
+        return theme.color.sectionsColor[sectionSlug]
+      } else {
+        return '#fff'
+      }
+    }
+  };
+`
+
+/**
+ * @typedef {import('../apollo/fragments/section').Section} Section
+ */
+
+/**
+ * @typedef {import('../apollo/fragments/section').SectionWithCategory} SectionWithCategory
+ */
+
+/**
+ * @typedef {Omit<Section, 'categories' > & {href: string, categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
+ */
 const SectionsWrapper = styled.nav`
   font-size: 14px;
   line-height: 1.5;
@@ -37,11 +70,11 @@ const Sections = styled.ul`
     width: 0;
     height: 0;
   }
-  @media ${minWidth.md} {
+  ${({ theme }) => theme.breakpoint.md} {
     width: 100%;
     justify-content: space-between;
   }
-  @media ${minWidth.xl} {
+  ${({ theme }) => theme.breakpoint.xl} {
     height: auto;
     overflow: visible;
   }
@@ -54,7 +87,7 @@ const Section = styled.li`
   line-height: 1.15;
   color: rgba(0, 0, 0, 0.87);
 
-  @media ${minWidth.xl} {
+  ${({ theme }) => theme.breakpoint.xl} {
     line-height: 150%;
     flex-shrink: 1;
     width: 100%;
@@ -65,7 +98,13 @@ const Section = styled.li`
     }
   }
   &:hover {
-    ${({ color }) => color && `color: ${color}`}
+    ${
+      /**
+       * @param {Object} param
+       * @param {string} param.sectionSlug
+       */
+      ({ sectionSlug }) => (sectionSlug ? colorCss : 'color: #fff;')
+    }
   }
 `
 const SectionLink = styled.a`
@@ -73,7 +112,7 @@ const SectionLink = styled.a`
   width: 100%;
   font-weight: 700;
   padding: 7px 6px 5px 6px;
-  @media ${minWidth.xl} {
+  ${({ theme }) => theme.breakpoint.xl} {
     padding: 9px 16px 9px 16px;
   }
 `
@@ -81,7 +120,7 @@ const SectionLink = styled.a`
 const LogoIcon = styled(Logo)`
   width: 49px;
   height: 20.72px;
-  @media ${minWidth.md} {
+  ${({ theme }) => theme.breakpoint.md} {
     display: none;
   }
 `
@@ -89,7 +128,7 @@ const SectionLogo = styled.div`
   background-color: #fff;
 
   padding: 4px 0 4px 8px;
-  @media ${minWidth.md} {
+  ${({ theme }) => theme.breakpoint.md} {
     display: none;
   }
 `
@@ -104,7 +143,7 @@ const SectionDropDown = styled.div`
   text-align: center;
   z-index: 20;
   color: #fff;
-  @media ${minWidth.xl} {
+  ${({ theme }) => theme.breakpoint.xl} {
     ${Section}:hover & {
       display: block;
     }
@@ -113,28 +152,25 @@ const SectionDropDown = styled.div`
 const CategoryLink = styled.a`
   display: block;
   &:hover {
-    ${({ color }) => color && `color: ${color};`}
+    ${
+      /**
+       * @param {Object} param
+       * @param {string} param.sectionSlug
+       */
+      ({ sectionSlug }) => (sectionSlug ? colorCss : 'color: #fff;')
+    }
   }
-  @media ${minWidth.xl} {
+  ${({ theme }) => theme.breakpoint.xl} {
     padding: 8px 14px 8px 14px;
   }
 `
-function getCategoryHref(sectionName, categoryName) {
-  if (sectionName === 'videohub') {
-    return `/video_category/${categoryName}`
-  }
-  if (categoryName === 'magazine') {
-    return '/magazine/'
-  }
-  return `/category/${categoryName}`
-}
+
 /**
- * TODO: use typedef in `../apollo/fragments/section`
- * Should be done after fetch header data from new json file
- * @param {{sections: import('../type').Section[] | []  }} props
+ * @param {Object} props
+ * @param {SectionWithHrefTemp[]} props.sections
  * @returns {React.ReactElement}
  */
-export default function NavSections({ sections }) {
+export default function NavSections({ sections = [] }) {
   return (
     <SectionsWrapper>
       <SectionLogo>
@@ -145,22 +181,18 @@ export default function NavSections({ sections }) {
       </SectionLogo>
       <Sections>
         {sections.map((section) => (
-          <Section
-            key={section._id}
-            color={sectionColors[section.name]}
-            className={section.name}
-          >
-            <SectionLink href={`/section/${section.name}`}>
-              <h2>{section.title}</h2>
+          <Section key={section.id} sectionSlug={section?.slug}>
+            <SectionLink href={section.href}>
+              <h2>{section.name}</h2>
             </SectionLink>
             <SectionDropDown>
               {section.categories.map((category) => (
                 <CategoryLink
-                  key={category._id}
-                  href={getCategoryHref(section.name, category.name)}
-                  color={sectionColors[section.name]}
+                  key={category.id}
+                  href={category.href}
+                  sectionSlug={section?.slug}
                 >
-                  <h3>{category.title}</h3>
+                  <h3>{category.name}</h3>
                 </CategoryLink>
               ))}
             </SectionDropDown>

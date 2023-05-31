@@ -1299,10 +1299,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@mirrormedia/lilith-draft-renderer@^1.2.0-alpha.23":
-  version "1.2.0-alpha.23"
-  resolved "https://registry.yarnpkg.com/@mirrormedia/lilith-draft-renderer/-/lilith-draft-renderer-1.2.0-alpha.23.tgz#c5ad4ad7ba4bb93ff96267af9895d8c2849b0f69"
-  integrity sha512-QxByZ5y8vw0nYIFM1maTfm+PoD17x7G8BVVRIgvhZq4tuaLQdZssq7YIK0bkskc7FSwbrZ5LVJwwU9sXr4b8Ag==
+"@mirrormedia/lilith-draft-renderer@^1.2.0-alpha.24":
+  version "1.2.0-alpha.24"
+  resolved "https://registry.yarnpkg.com/@mirrormedia/lilith-draft-renderer/-/lilith-draft-renderer-1.2.0-alpha.24.tgz#9d72d38aa3effcd30923916882f87b76ea96683d"
+  integrity sha512-Fm2cwjb8kZdgOUBehszKsQmmAVz8W8usq0ZtIMzUtPBs9nYmigXVNy4DuljKwvFeuT1Z2CiUqkmf81f51MQRRQ==
+
   dependencies:
     "@readr-media/react-image" "^1.5.1"
     body-scroll-lock "3.1.5"
@@ -2020,6 +2021,15 @@ axios@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.2.0.tgz#1cb65bd75162c70e9f8d118a905126c4a201d383"
   integrity sha512-zT7wZyNYu3N5Bu0wuZ6QccIf93Qk1eV8LOewxgjOZFd2DenOs98cJ7+Y6703d0wkaXGY6/nZd4EweJaHz9uzQw==
+  dependencies:
+    follow-redirects "^1.15.0"
+    form-data "^4.0.0"
+    proxy-from-env "^1.1.0"
+
+axios@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.4.0.tgz#38a7bf1224cd308de271146038b551d725f0be1f"
+  integrity sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"

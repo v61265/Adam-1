@@ -3,11 +3,14 @@
 import Header from '../header'
 import PremiumHeader from '../premium-header'
 import FlashNews from '../flash-news'
+
 /**
  * @typedef {Object} HeaderData
  * @property {Array} [sectionsData]
  * @property {Array} [topicsData]
- * @property {Array} [flashNewsData]
+ * @property {import('../flash-news').FlashNews[]} [flashNewsData]
+ *
+ * @typedef {'default' | 'default-with-flash-news' | 'premium' | 'empty'} HeaderType
  */
 
 const getDefaultHeader = (headerData) => {
@@ -31,13 +34,7 @@ const getDefaultHeaderWithFlashNews = (headerData) => {
       'There is no flash news data for header of default page layout'
     )
   }
-  const flashNews = flashNewsData.map(({ slug, title }) => {
-    return {
-      title,
-      slug,
-      href: `/story/${slug}`,
-    }
-  })
+  const flashNews = flashNewsData
   return (
     <Header sectionsData={sectionsData} topicsData={topicsData}>
       <FlashNews flashNews={flashNews} />
@@ -56,7 +53,7 @@ const getPremiumHeader = (headerData) => {
 /**
  *
  * @param {Object} props
- * @param {'default' | 'default-with-flash-news' | 'premium' | 'empty' } props.pageLayoutType
+ * @param {HeaderType } props.pageLayoutType
  * @param {HeaderData} [props.headerData]
  * @param {JSX.Element | null} [props.children]
  * @returns {JSX.Element}

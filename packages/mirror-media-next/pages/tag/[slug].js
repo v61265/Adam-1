@@ -7,7 +7,7 @@ import { fetchTag } from '../../apollo/query/tags'
 import TagArticles from '../../components/tag/tag-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
-import ShareHeader from '../../components/shared/share-header'
+import Layout from '../../components/shared/layout'
 
 const TagContainer = styled.main`
   width: 320px;
@@ -77,8 +77,11 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Tag({ postsCount, posts, tag, headerData }) {
   return (
-    <>
-      <ShareHeader pageLayoutType="default" headerData={headerData} />
+    <Layout
+      head={{ title: `${tag?.name}相關報導` }}
+      header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
+    >
       <TagContainer>
         <TagTitleWrapper>
           <TagTitle>{tag?.name}</TagTitle>
@@ -90,7 +93,7 @@ export default function Tag({ postsCount, posts, tag, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
       </TagContainer>
-    </>
+    </Layout>
   )
 }
 

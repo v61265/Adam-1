@@ -2,7 +2,6 @@ import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import axios from 'axios'
 
-import ShareHeader from '../../components/shared/share-header'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { GCP_PROJECT_ID, URL_RESTFUL_SERVER } from '../../config/index.mjs'
 import {
@@ -13,6 +12,7 @@ import YoutubeIframe from '../../components/shared/youtube-iframe'
 import YoutubeArticle from '../../components/video/youtube-article'
 import VideoList from '../../components/video/video-list'
 import YoutubePolicy from '../../components/shared/youtube-policy'
+import Layout from '../../components/shared/layout'
 
 const Wrapper = styled.main`
   width: 320px;
@@ -51,8 +51,15 @@ const ContentWrapper = styled.div`
  */
 export default function Video({ video, latestVideos, headerData }) {
   return (
-    <>
-      <ShareHeader pageLayoutType="default" headerData={headerData} />
+    <Layout
+      head={{
+        title: `${video?.title}`,
+        description: video?.description,
+        imageUrl: video?.thumbnail,
+      }}
+      header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
+    >
       <Wrapper>
         <YoutubeIframe videoId={video.id} />
         <ContentWrapper>
@@ -61,7 +68,7 @@ export default function Video({ video, latestVideos, headerData }) {
         </ContentWrapper>
         <YoutubePolicy />
       </Wrapper>
-    </>
+    </Layout>
   )
 }
 

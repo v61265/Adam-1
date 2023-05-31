@@ -6,16 +6,19 @@ const ENV = process.env.NEXT_PUBLIC_ENV || 'local'
 
 // The following variables are given values according to different `ENV`
 
+let SITE_URL = ''
+
 let API_TIMEOUT = 5000
 let API_PROTOCOL = 'http'
 let API_HOST = ''
 let RESTFUL_API_HOST = ''
 let API_PORT = ''
+let WEEKLY_API_SERVER_HOST = ''
 
-let URL_STATIC_COMBO_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/combo?endpoint=topics`
-let URL_K3_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/getposts?where={"categories":{"$in":["5979ac0de531830d00e330a7","5979ac33e531830d00e330a9","57e1e16dee85930e00cad4ec","57e1e200ee85930e00cad4f3"]},"isAudioSiteOnly":false}&clean=content&max_results=10&page=1&sort=-publishedDate`
-let URL_STATIC_COMBO_SECTIONS = ''
 let URL_STATIC_PREMIUM_SECTIONS = ''
+let URL_STATIC_NORMAL_SECTIONS = ''
+let URL_STATIC_TOPICS = ''
+let URL_STATIC_POST_FLASH_NEWS = ''
 let URL_STATIC_POST_EXTERNAL = ''
 let DONATION_PAGE_URL = ''
 let GA_MEASUREMENT_ID = ''
@@ -26,18 +29,23 @@ let URL_RESTFUL_SERVER = ''
 
 switch (ENV) {
   case 'prod':
+    SITE_URL = 'www.mirrormedia.mg'
     API_TIMEOUT = 1500
     API_HOST = '' //currently unset
     RESTFUL_API_HOST = '' //currently unset
     API_PORT = '' //currently unset
-    URL_STATIC_COMBO_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/combo?endpoint=topics`
-    URL_K3_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/getposts?where={"categories":{"$in":["5979ac0de531830d00e330a7","5979ac33e531830d00e330a9","57e1e16dee85930e00cad4ec","57e1e200ee85930e00cad4f3"]},"isAudioSiteOnly":false}&clean=content&max_results=10&page=1&sort=-publishedDate`
-    URL_STATIC_COMBO_SECTIONS =
-      'https://statics.mirrormedia.mg/json/sections.json'
+    WEEKLY_API_SERVER_HOST = '' //currently unset
+
     URL_STATIC_PREMIUM_SECTIONS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_member.json'
+      'https://v3-statics.mirrormedia.mg/files/json/header_member.json'
+    URL_STATIC_NORMAL_SECTIONS =
+      'https://v3-statics.mirrormedia.mg/files/json/header_sections.json'
+    URL_STATIC_TOPICS =
+      'https://v3-statics.mirrormedia.mg/files/json/header_topics.json'
+    URL_STATIC_POST_FLASH_NEWS =
+      'https://v3-statics.mirrormedia.mg/files/json/header_posts.json'
     URL_STATIC_POST_EXTERNAL =
-      'https://statics.mirrormedia.mg/json/post_external'
+      'https://v3-statics.mirrormedia.mg/files/json/post_external'
     URL_RESTFUL_SERVER = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}`
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-341XFN0675'
@@ -46,18 +54,23 @@ switch (ENV) {
     URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
     break
   case 'staging':
+    SITE_URL = 'staging-next.mirrormedia.mg'
     API_TIMEOUT = 1500
     API_HOST = '' //currently unset
     RESTFUL_API_HOST = '' //currently unset
     API_PORT = '' //currently unset
-    URL_STATIC_COMBO_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/combo?endpoint=topics`
-    URL_K3_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/getposts?where={"categories":{"$in":["5979ac0de531830d00e330a7","5979ac33e531830d00e330a9","57e1e16dee85930e00cad4ec","57e1e200ee85930e00cad4f3"]},"isAudioSiteOnly":false}&clean=content&max_results=10&page=1&sort=-publishedDate`
-    URL_STATIC_COMBO_SECTIONS =
-      'https://statics.mirrormedia.mg/json/sections.json'
+    WEEKLY_API_SERVER_HOST = '' //currently unset
+
     URL_STATIC_PREMIUM_SECTIONS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_member.json'
+      'https://v3-statics-staging.mirrormedia.mg/files/json/header_member.json'
+    URL_STATIC_NORMAL_SECTIONS =
+      'https://v3-statics-staging.mirrormedia.mg/files/json/header_sections.json'
+    URL_STATIC_TOPICS =
+      'https://v3-statics-staging.mirrormedia.mg/files/json/header_topics.json'
+    URL_STATIC_POST_FLASH_NEWS =
+      'https://v3-statics-staging.mirrormedia.mg/files/json/header_posts.json'
     URL_STATIC_POST_EXTERNAL =
-      'https://statics.mirrormedia.mg/json/post_external'
+      'https://v3-statics-staging.mirrormedia.mg/files/json/post_external'
     URL_RESTFUL_SERVER = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}`
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
@@ -67,19 +80,24 @@ switch (ENV) {
     URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
     break
   case 'dev':
+    SITE_URL = 'dev-next.mirrormedia.mg'
     API_TIMEOUT = 5000
     API_HOST = 'mirror-cms-gql-dev-ufaummkd5q-de.a.run.app'
     RESTFUL_API_HOST = '104.199.190.189'
     API_PORT = '8080'
-    URL_STATIC_COMBO_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/combo?endpoint=topics`
-    URL_K3_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/getposts?where={"categories":{"$in":["5979ac0de531830d00e330a7","5979ac33e531830d00e330a9","57e1e16dee85930e00cad4ec","57e1e200ee85930e00cad4f3"]},"isAudioSiteOnly":false}&clean=content&max_results=10&page=1&sort=-publishedDate`
-    URL_RESTFUL_SERVER = 'https://rest-dev.mirrormedia.mg'
-    URL_STATIC_COMBO_SECTIONS =
-      'https://statics.mirrormedia.mg/json/sections.json'
+    WEEKLY_API_SERVER_HOST =
+      'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
     URL_STATIC_PREMIUM_SECTIONS =
-      'https://storage.googleapis.com/static-mirrormedia-dev/files/json/header_member.json'
+      'https://v3-statics-dev.mirrormedia.mg/files/json/header_member.json'
+    URL_STATIC_NORMAL_SECTIONS =
+      'https://v3-statics-dev.mirrormedia.mg/files/json/header_sections.json'
+    URL_STATIC_TOPICS =
+      'https://v3-statics-dev.mirrormedia.mg/files/json/header_topics.json'
+    URL_STATIC_POST_FLASH_NEWS =
+      'https://v3-statics-dev.mirrormedia.mg/files/json/header_posts.json'
     URL_STATIC_POST_EXTERNAL =
-      'https://statics.mirrormedia.mg/dev/post_external'
+      'https://v3-statics-dev.mirrormedia.mg/files/json/post_external'
+    URL_RESTFUL_SERVER = 'https://rest-dev.mirrormedia.mg'
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
@@ -88,16 +106,20 @@ switch (ENV) {
 
     break
   default:
+    SITE_URL = 'localhost'
     API_TIMEOUT = 5000
     RESTFUL_API_HOST = 'localhost'
     API_PORT = '8080'
     API_HOST = 'mirror-cms-gql-dev-ufaummkd5q-de.a.run.app'
-    URL_STATIC_COMBO_SECTIONS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/sections.json`
+    WEEKLY_API_SERVER_HOST =
+      'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
+
     URL_STATIC_PREMIUM_SECTIONS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_member.json`
-    URL_STATIC_COMBO_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/api/v2/combo?endpoint=topics`
-    URL_K3_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/api/v2/getposts?where={"categories":{"$in":["5979ac0de531830d00e330a7","5979ac33e531830d00e330a9","57e1e16dee85930e00cad4ec","57e1e200ee85930e00cad4f3"]},"isAudioSiteOnly":false}&clean=content&max_results=10&page=1&sort=-publishedDate`
-    URL_RESTFUL_SERVER = 'https://rest-dev.mirrormedia.mg'
+    URL_STATIC_NORMAL_SECTIONS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_sections.json`
+    URL_STATIC_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_topics.json`
+    URL_STATIC_POST_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_posts.json`
     URL_STATIC_POST_EXTERNAL = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/post_external`
+    URL_RESTFUL_SERVER = 'https://rest-dev.mirrormedia.mg'
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
@@ -106,13 +128,15 @@ switch (ENV) {
 }
 export {
   ENV,
+  SITE_URL,
   GCP_PROJECT_ID,
   API_TIMEOUT,
   API_HOST,
-  URL_STATIC_COMBO_SECTIONS,
+  WEEKLY_API_SERVER_HOST,
   URL_STATIC_PREMIUM_SECTIONS,
-  URL_STATIC_COMBO_TOPICS,
-  URL_K3_FLASH_NEWS,
+  URL_STATIC_NORMAL_SECTIONS,
+  URL_STATIC_TOPICS,
+  URL_STATIC_POST_FLASH_NEWS,
   URL_STATIC_POST_EXTERNAL,
   URL_RESTFUL_SERVER,
   DONATION_PAGE_URL,

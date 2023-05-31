@@ -19,11 +19,8 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-#COPY --from=build /build/public ./public
-
 # Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-#COPY --from=build /build/.next/standalone ./
-#COPY --from=build /build/.next/static ./.next/static
+COPY --from=build /build/node_modules ./node_modules
+COPY --from=build /build/lib ./lib
 
-CMD ["node", "server.js"]
+CMD ["node", "lib/server.js"]

@@ -2,11 +2,7 @@ import styled from 'styled-components'
 import { Z_INDEX } from '../../../constants'
 import NextLink from 'next/link'
 import { useState, useEffect, useRef } from 'react'
-import {
-  disableBodyScroll,
-  enableBodyScroll,
-  clearAllBodyScrollLocks,
-} from 'body-scroll-lock'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 const Wrapper = styled.div`
   position: fixed;
@@ -96,17 +92,19 @@ export default function AdultOnlyWarning({ isAdult = false }) {
 
   const warningRef = useRef(null)
 
+  // While adult-warning show (`shouldShowAdultWarning` = true), disable body scroll.
   useEffect(() => {
     const adultWarning = warningRef.current
 
-    if (adultWarning) {
-      disableBodyScroll(adultWarning)
-    } else {
-      enableBodyScroll(adultWarning)
+    if (!adultWarning) {
+      return
     }
 
-    return () => {
-      clearAllBodyScrollLocks()
+    if (shouldShowAdultWarning) {
+      disableBodyScroll(adultWarning)
+      return () => enableBodyScroll(adultWarning)
+    } else {
+      return undefined
     }
   }, [shouldShowAdultWarning])
 
