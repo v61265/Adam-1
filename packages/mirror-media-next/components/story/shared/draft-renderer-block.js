@@ -13,7 +13,7 @@ const { DraftRenderer, hasContentInRawContentBlock, removeEmptyContentBlock } =
  * We use package `@mirrormedia/draft-renderer` to render the block of draft.js
  * @param {Object} props
  * @param {import('../../../type/draft-js').Draft} props.rawContentBlock - The blocks of draft.js we want to render.
- * @param { 'normal' | 'wide' | 'photography' | 'premium' } [props.contentLayout]
+ * @param { 'normal' | 'wide' | 'photography' | 'premium' | 'amp' } [props.contentLayout]
  * - Which layout we want to render.
  * - Different layout will affect the style of blocks.
  * - Optional, default value is `normal`
