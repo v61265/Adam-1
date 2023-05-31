@@ -34,29 +34,61 @@ function transformStringToDraft(id = '', text = '') {
  * When the partner's slug is 'ebc', the section title will be '時事'.
  * For all other partners, the section title will be '合作媒體'.
  *
- * @param {Partner} partner
- * @returns {string}
+ * @param {Partner | null} partner
+ * @returns {string | undefined}
  */
-function getExternalSectionTitle(partner = {}) {
+function getExternalSectionTitle(partner) {
   let sectionTitle
-  switch (partner['slug']) {
-    case 'healthnews':
-    case 'zuchi':
-    case '5678news':
-      sectionTitle = '生活'
-      break
-    case 'ebc':
-      sectionTitle = '時事'
-      break
-    case undefined:
-      sectionTitle = ''
-      break
-    default:
-      sectionTitle = '合作媒體'
-      break
+
+  if (partner && partner.slug) {
+    switch (partner.slug) {
+      case 'healthnews':
+      case 'zuchi':
+      case '5678news':
+        sectionTitle = '生活'
+        break
+      case 'ebc':
+        sectionTitle = '時事'
+        break
+      default:
+        sectionTitle = '合作媒體'
+        break
+    }
+  } else {
+    sectionTitle = undefined
   }
 
   return sectionTitle
+}
+
+/**
+ * Special requirement:
+ * When the partner's slug is 'healthnews', 'zuchi', 'ebc' or '5678news', the title color will be '#61B8C6'
+ * For all other partners, the title color will be '#3855BC'
+ *
+ * @param {Partner | null} partner
+ * @returns {string | undefined}
+ */
+function getExternalPartnerColor(partner) {
+  let partnerColor
+
+  if (partner && partner.slug) {
+    switch (partner.slug) {
+      case 'healthnews':
+      case 'zuchi':
+      case '5678news':
+      case 'ebc':
+        partnerColor = '#61B8C6'
+        break
+      default:
+        partnerColor = '#3855BC'
+        break
+    }
+  } else {
+    partnerColor = undefined
+  }
+
+  return partnerColor
 }
 
 /**
@@ -73,4 +105,9 @@ function getCreditsHtml(credits = '') {
   }
 }
 
-export { transformStringToDraft, getExternalSectionTitle, getCreditsHtml }
+export {
+  transformStringToDraft,
+  getExternalSectionTitle,
+  getCreditsHtml,
+  getExternalPartnerColor,
+}
