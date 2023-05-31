@@ -1,14 +1,19 @@
-// @ts-nocheck
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
+
+/**
+ * @param {Object} props
+ * @param {string} props.imageUrl
+ */
+const getImageUrl = (props) => props.imageUrl
 
 const HeroImage = styled.div`
-  background-image: linear-gradient(
+  background: linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0.2) 0%,
       rgba(0, 0, 0, 0.05) 50%,
       rgba(0, 0, 0, 0.2) 100%
     ),
-    url(${(props) => props.imageUrl});
+    url(${getImageUrl});
 
   height: 100vh;
   background-repeat: no-repeat;
@@ -18,11 +23,7 @@ const HeroImage = styled.div`
   flex-direction: column;
   justify-content: center;
 
-  ${() =>
-    !isIOS() &&
-    css`
-      background-attachment: fixed;
-    `}
+  background-attachment: ${() => (!isIOS() ? 'fixed' : 'initial')};
 `
 
 const TitleBox = styled.div`
@@ -103,6 +104,7 @@ const TitleBox = styled.div`
 `
 
 const isIOS = () => {
+  // @ts-ignore
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
 }
 
@@ -118,6 +120,9 @@ export default function HeroSection({
         heroImage?.resized?.original ||
         heroImage?.resized?.w2400 ||
         heroImage?.resized?.w1600 ||
+        heroImage?.resized?.w1200 ||
+        heroImage?.resized?.w800 ||
+        heroImage?.resized?.w480 ||
         '/images/default-og-img.png'
       }
     >

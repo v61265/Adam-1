@@ -14,10 +14,15 @@ const Main = styled.main`
   background-color: #333333;
 
   .content {
-    margin-top: 40px;
     // Only render contents besides the images and captions via draft renderer.
     figure {
       display: none;
+    }
+
+    margin-top: 52px;
+
+    ${({ theme }) => theme.breakpoint.md} {
+      margin-top: 70px;
     }
   }
 
