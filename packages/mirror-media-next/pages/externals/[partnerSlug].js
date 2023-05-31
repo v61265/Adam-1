@@ -12,6 +12,7 @@ import {
   fetchExternalCounts,
 } from '../../apollo/query/externals'
 import { fetchPartnerBySlug } from '../../apollo/query/partner'
+import { getExternalPartnerColor } from '../../utils/external'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -29,13 +30,19 @@ const PartnerContainer = styled.main`
     padding: 0;
   }
 `
+
 const PartnerTitle = styled.h1`
   margin: 20px 0 16px 16px;
   font-size: 16px;
   line-height: 1.15;
   font-weight: 500;
 
-  color: ${({ theme }) => theme.color.brandColor.lightBlue};
+  color: ${
+    /**
+     * @param {Object} props
+     * @param {string} props.partnerColor
+     */ ({ partnerColor }) => partnerColor || 'black'
+  };
 
   ${({ theme }) => theme.breakpoint.md} {
     margin: 20px 0 24px;
@@ -72,23 +79,23 @@ export default function ExternalPartner({
   headerData,
 }) {
   return (
-    <>
-      <Layout
-        head={{ title: `${partner?.name}分類報導` }}
-        header={{ type: 'default', data: headerData }}
-        footer={{ type: 'default' }}
-      >
-        <PartnerContainer>
-          <PartnerTitle>{partner?.name}</PartnerTitle>
-          <ExternalArticles
-            externalsCount={externalsCount}
-            externals={externals}
-            partner={partner}
-            renderPageSize={RENDER_PAGE_SIZE}
-          />
-        </PartnerContainer>
-      </Layout>
-    </>
+    <Layout
+      head={{ title: `${partner?.name}分類報導` }}
+      header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
+    >
+      <PartnerContainer>
+        <PartnerTitle partnerColor={getExternalPartnerColor(partner)}>
+          {partner?.name}
+        </PartnerTitle>
+        <ExternalArticles
+          externalsCount={externalsCount}
+          externals={externals}
+          partner={partner}
+          renderPageSize={RENDER_PAGE_SIZE}
+        />
+      </PartnerContainer>
+    </Layout>
   )
 }
 
