@@ -27,13 +27,13 @@ const HeroImage = styled.figure`
  */
 /**
  * @param {Object} props
- * @param {Resized} props.images
+ * @param {Resized | null} props.images
  * @param {string} props.title
  * @param {string} [props.className]
  * @returns
  */
 export default function ExternalHeroImage({
-  images = {},
+  images = null,
   title = '',
   className = '',
 }) {
