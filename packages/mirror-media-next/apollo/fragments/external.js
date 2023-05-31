@@ -9,7 +9,7 @@ import { partner } from './partner'
  * @typedef {Object} GenericExternal
  * @property {string} id
  * @property {string} slug
- * @property {Partner} partner
+ * @property {Partner | null} partner
  * @property {string} title
  * @property {string} state
  * @property {string} publishedDate
@@ -29,16 +29,20 @@ import { partner } from './partner'
  */
 
 /**
- * @typedef {Pick<GenericExternal, 'id' | 'slug' | 'title' | 'thumb' | 'brief' >} ListingExternal
+ * @typedef {Pick<GenericExternal, 'id' | 'slug' | 'title' | 'thumb' | 'brief' | 'partner'>} ListingExternal
  */
 
 export const listingExternal = gql`
+  ${partner}
   fragment listingExternal on External {
     id
     slug
     title
     thumb
     brief
+    partner {
+      ...partner
+    }
   }
 `
 
