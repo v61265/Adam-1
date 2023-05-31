@@ -101,9 +101,9 @@ const Section = styled.li`
     ${
       /**
        * @param {Object} param
-       * @param {string} param.sectionSlug
+       * @param {string} [param.sectionSlug]
        */
-      ({ sectionSlug }) => (sectionSlug ? colorCss : 'color: #fff;')
+      ({ sectionSlug }) => (sectionSlug ? colorCss : 'color: #000;')
     }
   }
 `
@@ -168,9 +168,10 @@ const CategoryLink = styled.a`
 /**
  * @param {Object} props
  * @param {SectionWithHrefTemp[]} props.sections
+ * @param {{name: string, href:string}[]} props.displayedPartners
  * @returns {React.ReactElement}
  */
-export default function NavSections({ sections = [] }) {
+export default function NavSections({ sections = [], displayedPartners = [] }) {
   return (
     <SectionsWrapper>
       <SectionLogo>
@@ -198,6 +199,15 @@ export default function NavSections({ sections = [] }) {
             </SectionDropDown>
           </Section>
         ))}
+        <>
+          {displayedPartners.map((partner) => (
+            <Section key={partner.name}>
+              <SectionLink href={partner.href}>
+                <h2>{partner.name}</h2>
+              </SectionLink>
+            </Section>
+          ))}
+        </>
       </Sections>
     </SectionsWrapper>
   )

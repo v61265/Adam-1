@@ -243,14 +243,16 @@ const SocialMediaList = styled.div`
  * @param {import('../type').SubBrand[]} props.subBrands
  * @param {import('../type').Promotion[]} props.promotions
  * @param {import('../type').SocialMedia[]} props.socialMedia
+ * @param {{name: string, href:string}[]} props.displayedPartners
  * @returns {React.ReactElement}
  */
 export default function MobileSidebar({
   topics,
-  sections,
+  sections = [],
   subBrands,
   promotions,
   socialMedia,
+  displayedPartners = [],
 }) {
   const [openSidebar, setOpenSidebar] = useState(false)
   const [openSection, setOpenSection] = useState('')
@@ -298,6 +300,13 @@ export default function MobileSidebar({
                 ))}
               </Categories>
             </Fragment>
+          ))}
+          {displayedPartners.map(({ name, href }) => (
+            <Section key={name}>
+              <Link style={{ width: '50%' }} href={href}>
+                <h3>{name}</h3>
+              </Link>
+            </Section>
           ))}
         </SideBarTop>
         <SideBarBottom>
