@@ -16,3 +16,10 @@ export default {}
  * @property {String} text
  * @property {String} type
  */
+
+/**
+ * @typedef {Object} EntityMap
+ * @property {Object} data
+ * @property {String} type
+ * @property {String} mutability
+ */
