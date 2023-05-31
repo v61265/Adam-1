@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import Image from 'next/image'
 import { Z_INDEX } from '../../../constants'
+import { DONATION_PAGE_URL } from '../../../config/index.mjs'
 import { ShareButton } from '@readr-media/share-button'
 
 const Nav = styled.nav`
@@ -78,11 +79,7 @@ export default function Header() {
   return (
     <Nav>
       <LogoWrapper>
-        <a
-          href="https://www.mirrormedia.mg/"
-          target="_blank"
-          rel="noreferrer noopenner"
-        >
+        <a href="/" target="_blank" rel="noreferrer noopenner">
           <Image
             src="/images/weekly-logo-white.svg"
             alt="mirror media logo"
@@ -93,11 +90,7 @@ export default function Header() {
         </a>
       </LogoWrapper>
       <IconsWrapper>
-        <a
-          href="https://mirrormedia.oen.tw/"
-          target="_blank"
-          rel="noreferrer noopenner"
-        >
+        <a href={DONATION_PAGE_URL} target="_blank" rel="noreferrer noopenner">
           <Image
             src="/images/sponsor-button.svg"
             alt="sponsor this article"
