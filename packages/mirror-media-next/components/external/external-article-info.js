@@ -7,7 +7,7 @@ import ButtonSocialNetworkShare from '../../components/story/shared/button-socia
 import { getCreditsHtml } from '../../utils/external'
 
 /**
- * @typedef {import('~/type/theme').Theme} Theme
+ * @typedef {import('../../type/theme').Theme} Theme
  */
 
 const Date = styled.div`

@@ -3,7 +3,7 @@
 
 import { useCallback } from 'react'
 import client from '../../apollo/apollo-client'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import Link from 'next/link'
 import axios from 'axios'
 import MockAdvertisement from '../../components/mock-advertisement'
@@ -24,6 +24,7 @@ import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../config/index.mjs'
 import {
   transformStringToDraft,
   getExternalSectionTitle,
+  getExternalPartnerColor,
 } from '../../utils/external'
 
 /**
@@ -35,20 +36,6 @@ import {
 /**
  * @typedef {import('../../apollo/fragments/external').External} External
  */
-
-const sectionColor = css`
-  ${
-    /**
-     * @param {Object} props
-     * @param {String} [props.sectionSlug]
-     * @param {Theme} [props.theme]
-     */
-    ({ sectionSlug, theme }) =>
-      sectionSlug && theme.color.sectionsColor[sectionSlug]
-        ? theme.color.sectionsColor[sectionSlug]
-        : 'black'
-  };
-`
 
 const PC_HD_Advertisement = styled(MockAdvertisement)`
   display: none;
@@ -130,9 +117,8 @@ const ExternalSection = styled.div`
   color: ${
     /**
      * @param {Object} props
-     * @param {Boolean} [props.shouldShowSectionColor]
-     */
-    ({ shouldShowSectionColor }) => shouldShowSectionColor && sectionColor
+     * @param {string | undefined} props.partnerColor
+     */ ({ partnerColor }) => partnerColor || 'black'
   };
 
   margin-left: 4px;
@@ -156,9 +142,8 @@ const ExternalSection = styled.div`
       background-color: ${
         /**
          * @param {Object} props
-         * @param {Boolean} [props.shouldShowSectionColor]
-         */
-        ({ shouldShowSectionColor }) => shouldShowSectionColor && sectionColor
+         * @param {string | undefined} props.partnerColor
+         */ ({ partnerColor }) => partnerColor || 'none'
       };
 
       left: -4px;
@@ -326,7 +311,7 @@ export default function ExternalNormalStyle({ external }) {
     thumb = '',
     brief = '',
     // content = '',
-    partner = {},
+    partner = null,
     publishedDate = '',
     updatedAt = '',
     extend_byline = '',
@@ -350,11 +335,7 @@ export default function ExternalNormalStyle({ external }) {
 
   const externalSectionTitle = getExternalSectionTitle(partner)
   const externalBrief = transformStringToDraft(id, brief)
-
-  //Note: Since the `external` page has a default `section` value, the section color will be determined based on the value of sectionTitle.
-  const shouldShowSectionColor = Boolean(
-    EXTERNAL_DEFAULT_SECTION.slug && externalSectionTitle
-  )
+  const partnerColor = getExternalPartnerColor(partner)
 
   /**
    * @returns {Promise<AsideArticleData[] | []>}
@@ -408,10 +389,7 @@ export default function ExternalNormalStyle({ external }) {
       <Main>
         <Article>
           <SectionAndDate>
-            <ExternalSection
-              sectionSlug={EXTERNAL_DEFAULT_SECTION.slug}
-              shouldShowSectionColor={shouldShowSectionColor}
-            >
+            <ExternalSection partnerColor={partnerColor}>
               {externalSectionTitle}
             </ExternalSection>
             <Date>{publishedTaipeiTime} 臺北時間</Date>
