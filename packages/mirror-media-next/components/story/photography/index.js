@@ -116,8 +116,6 @@ export default function StoryPhotographyStyle({ postData }) {
     title = '',
     heroImage = null,
     heroCaption = '',
-    // updatedAt = '',
-    // publishedDate = '',
     writers = [],
     manualOrderOfWriters = [],
     photographers = [],

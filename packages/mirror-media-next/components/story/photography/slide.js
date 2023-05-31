@@ -53,17 +53,19 @@ const CaptionPC = styled.div`
   pointer-events: none;
   user-select: none;
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-  ${({
-    // @ts-ignore
-    transparent,
-  }) =>
-    transparent
-      ? `
+  ${
+    /**
+     * @param {Object} props
+     * @param {boolean} props.transparent
+     */ ({ transparent }) =>
+      transparent
+        ? `
       border: transparent;
       background: transparent;
       color: transparent;
     `
-      : ''}
+        : ''
+  }
 `
 const ShowCaptionIcon = styled.div`
   height: auto;
@@ -94,7 +96,18 @@ const CaptionMB = styled.div`
     display: none;
   }
 `
+/**
+ * @typedef {import('../../../type/draft-js').EntityMap } EntityMap
+ */
 
+/**
+ *
+ * @param {Object} props
+ * @param {boolean} props.isTransparent
+ * @param {EntityMap} props.photoData
+ * @param {()=>void} props.handleCaptionClick
+ * @returns {JSX.Element}
+ */
 const Slide = ({ photoData, isTransparent, handleCaptionClick }) => {
   return (
     <SlideContainer>
@@ -103,16 +116,16 @@ const Slide = ({ photoData, isTransparent, handleCaptionClick }) => {
           photoData?.data.resized?.original ||
           photoData?.data.resized?.w2400 ||
           photoData?.data.resized?.w1600 ||
+          photoData?.data.resized?.w1200 ||
+          photoData?.data.resized?.w800 ||
+          photoData?.data.resized?.w480 ||
           '/images/default-og-img.png'
         }
         alt={photoData.data.desc}
       />
       <CaptionBoxPC onClick={handleCaptionClick}>
         <ShowCaptionIcon />
-        <CaptionPC
-          // @ts-ignore
-          transparent={isTransparent}
-        >
+        <CaptionPC transparent={isTransparent}>
           {photoData?.data?.desc}
         </CaptionPC>
       </CaptionBoxPC>

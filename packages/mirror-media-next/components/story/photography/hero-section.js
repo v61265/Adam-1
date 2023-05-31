@@ -108,6 +108,19 @@ const isIOS = () => {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
 }
 
+/**
+ * @typedef {import('../../../apollo/fragments/post').HeroImage } HeroImage
+ */
+
+/**
+ * @param {Object} props
+ * @param {string} props.title
+ * @param {string} props.heroCaption
+ * @param {string} props.brief
+ * @param {HeroImage | null} props.heroImage
+ * @returns {JSX.Element}
+ */
+
 export default function HeroSection({
   title = '',
   heroCaption = '',
