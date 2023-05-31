@@ -8,6 +8,8 @@ import {
   SOCIAL_MEDIA_LINKS,
 } from '../constants'
 
+const DISPLAY_PARTNERS = [{ name: '生活暖流', href: '/externals/warmlife' }]
+
 import SubBrandList from './sub-brand-list'
 import SearchBarDesktop from './search-bar-desktop'
 import PromotionLinks from './promotion-links'
@@ -278,6 +280,7 @@ export default function Header({
           <MobileSidebar
             topics={topics}
             sections={sections}
+            displayedPartners={DISPLAY_PARTNERS}
             subBrands={SUB_BRAND_LINKS}
             promotions={PROMOTION_LINKS}
             socialMedia={SOCIAL_MEDIA_LINKS}
@@ -307,7 +310,7 @@ export default function Header({
             }
           />
         </SearchInputWrapper>
-        <NavSections sections={sections} />
+        <NavSections sections={sections} displayedPartners={DISPLAY_PARTNERS} />
         <TopicsAndFlashNews>
           {children}
           <TopicsAndSubscribe>
