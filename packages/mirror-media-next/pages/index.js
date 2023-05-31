@@ -7,8 +7,7 @@ import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
-import client from '../apollo/apollo-client'
-import { gql } from '@apollo/client'
+
 import {
   ENV,
   API_TIMEOUT,
@@ -53,7 +52,6 @@ const IndexContainer = styled.main`
  * @param {import('../type/raw-data.typedef').RawData[] } [props.editorChoicesData=[]]
  * @param {import('../type/raw-data.typedef').RawData[] } [props.latestNewsData=[]]
  * @param {Object[] } props.sectionsData
- * @param {String} [props.latestNewsTimestamp]
  * @returns {React.ReactElement}
  */
 export default function Home({
@@ -61,7 +59,6 @@ export default function Home({
   flashNewsData = [],
   editorChoicesData = [],
   latestNewsData = [],
-  latestNewsTimestamp,
   sectionsData = [],
 }) {
   const editorChoice = transformRawDataToArticleInfo(editorChoicesData)
@@ -78,10 +75,7 @@ export default function Home({
     >
       <IndexContainer>
         <EditorChoice editorChoice={editorChoice}></EditorChoice>
-        <LatestNews
-          latestNewsData={latestNewsData}
-          latestNewsTimestamp={latestNewsTimestamp}
-        />
+        <LatestNews latestNewsData={latestNewsData} />
       </IndexContainer>
     </Layout>
   )
@@ -133,7 +127,6 @@ export async function getServerSideProps({ res, req }) {
   let flashNewsData = []
   let editorChoicesData = []
   let latestNewsData = []
-  let latestNewsTimestamp = null
   let sectionsData = []
   try {
     const responses = await Promise.allSettled([
@@ -199,7 +192,6 @@ export async function getServerSideProps({ res, req }) {
     latestNewsData = Array.isArray(postResponse.value?.data?.latest)
       ? postResponse.value?.data?.latest
       : []
-    latestNewsTimestamp = postResponse.value?.data?.timestamp
     sectionsData = Array.isArray(headerDataResponse.value?.sectionsData)
       ? headerDataResponse.value?.sectionsData
       : []
@@ -250,70 +242,6 @@ export async function getServerSideProps({ res, req }) {
       })
     )
   }
-  //request fetched by `apollo`, should replace request fetched by `axios` in the future
-  try {
-    const editorChoiceApollo = await client.query({
-      query: gql`
-        query GetEditorChoices {
-          editorChoices(
-            orderBy: { order: asc }
-            where: {
-              state: { equals: "published" }
-              choices: { state: { equals: "published" } }
-            }
-          ) {
-            id
-            order
-            choices {
-              id
-              slug
-              title
-              subtitle
-              state
-              publishedDate
-              sections {
-                id
-                name
-              }
-              categories {
-                id
-                name
-              }
-            }
-          }
-        }
-      `,
-    })
-    console.log(editorChoiceApollo)
-  } catch (err) {
-    const { graphQLErrors, clientErrors, networkError } = err
-    const annotatingError = errors.helpers.wrap(
-      err,
-      'UnhandledError',
-      'Error occurs while getting index page data'
-    )
-
-    console.log(
-      JSON.stringify({
-        severity: 'ERROR',
-        message: errors.helpers.printAll(
-          annotatingError,
-          {
-            withStack: true,
-            withPayload: true,
-          },
-          0,
-          0
-        ),
-        debugPayload: {
-          graphQLErrors,
-          clientErrors,
-          networkError,
-        },
-        ...globalLogFields,
-      })
-    )
-  }
 
   return {
     props: {
@@ -321,7 +249,6 @@ export async function getServerSideProps({ res, req }) {
       flashNewsData,
       editorChoicesData,
       latestNewsData,
-      latestNewsTimestamp,
       sectionsData,
     },
   }
