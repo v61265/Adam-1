@@ -96,7 +96,6 @@ const transformRawDataContent = function (articleRawData) {
 /**
  * @param {Object} props
  * @param {RawData[]} [props.latestNewsData = []]
- * @param {String} [props.latestNewsTimestamp = '']
  * @returns {JSX.Element}
  */
 
