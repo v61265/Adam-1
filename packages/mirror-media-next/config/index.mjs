@@ -28,7 +28,9 @@ let URL_STATIC_POPULAR_NEWS = ''
 let URL_RESTFUL_SERVER = ''
 let URL_STATIC_EXTERNALS_WARMLIFE = ''
 let GPT_MODE = ''
-
+// It is safe to expose the configuration of Firebase.
+// See: https://firebase.google.com/docs/projects/api-keys
+let FIREBASE_CONFIG = {}
 switch (ENV) {
   case 'prod':
     SITE_URL = 'www.mirrormedia.mg'
@@ -57,6 +59,15 @@ switch (ENV) {
     URL_STATIC_EXTERNALS_WARMLIFE =
       'https://v3-statics.mirrormedia.mg/json/life_feed.json'
     GPT_MODE = 'prod'
+    FIREBASE_CONFIG = {
+      apiKey: 'AIzaSyBZVaJXDbtc6O6Iy36OeYDG8Cd9pB2vq54',
+      authDomain: 'www.mirrormedia.mg',
+      projectId: 'mirror-weekly',
+      storageBucket: 'mirror-weekly.appspot.com',
+      messagingSenderId: '814835936704',
+      appId: '1:814835936704:web:ce5288f6d1c0f71828ec25',
+      measurementId: 'G-2FDRC4S37L',
+    }
     break
 
   case 'staging':
@@ -87,6 +98,14 @@ switch (ENV) {
     URL_STATIC_EXTERNALS_WARMLIFE =
       'https://v3-statics-staging.mirrormedia.mg/json/life_feed.json'
     GPT_MODE = 'prod'
+    FIREBASE_CONFIG = {
+      apiKey: 'AIzaSyD-cFjoIjlEn7-dZtl3zw7OYCRPerl5URs',
+      authDomain: 'www-staging.mirrormedia.mg',
+      projectId: 'mirrormedia-staging',
+      storageBucket: 'mirrormedia-staging.appspot.com',
+      messagingSenderId: '388524095772',
+      appId: '1:388524095772:web:e3739160c042909827a2d9',
+    }
     break
 
   case 'dev':
@@ -116,6 +135,16 @@ switch (ENV) {
     URL_STATIC_EXTERNALS_WARMLIFE =
       'https://v3-statics-dev.mirrormedia.mg/json/life_feed.json'
     GPT_MODE = 'dev'
+    FIREBASE_CONFIG = {
+      apiKey: 'AIzaSyAavk46-8OQ4B2cv0TOqxOMjd5Fe4tIauc',
+      authDomain: 'mirrormediaapptest.firebaseapp.com',
+      databaseURL: 'https://mirrormediaapptest.firebaseio.com',
+      projectId: 'mirrormediaapptest',
+      storageBucket: 'mirrormediaapptest.appspot.com',
+      messagingSenderId: '305253456270',
+      appId: '1:305253456270:web:21f9851dd09f60ebfbacdf',
+      measurementId: 'G-EY5CYC602Z',
+    }
     break
 
   default:
@@ -141,6 +170,16 @@ switch (ENV) {
     URL_STATIC_EXTERNALS_WARMLIFE =
       'https://v3-statics-dev.mirrormedia.mg/json/life_feed.json'
     GPT_MODE = 'dev'
+    FIREBASE_CONFIG = {
+      apiKey: 'AIzaSyAavk46-8OQ4B2cv0TOqxOMjd5Fe4tIauc',
+      authDomain: 'mirrormediaapptest.firebaseapp.com',
+      databaseURL: 'https://mirrormediaapptest.firebaseio.com',
+      projectId: 'mirrormediaapptest',
+      storageBucket: 'mirrormediaapptest.appspot.com',
+      messagingSenderId: '305253456270',
+      appId: '1:305253456270:web:21f9851dd09f60ebfbacdf',
+      measurementId: 'G-EY5CYC602Z',
+    }
 }
 
 export {
@@ -163,4 +202,5 @@ export {
   URL_STATIC_POPULAR_NEWS,
   URL_STATIC_EXTERNALS_WARMLIFE,
   GPT_MODE,
+  FIREBASE_CONFIG,
 }
