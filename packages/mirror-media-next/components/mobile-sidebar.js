@@ -190,14 +190,12 @@ const SubBrandList = styled.ul`
   }
 `
 const PromotionList = styled.ul`
-  display: flex;
   color: #bcbcbc;
-  justify-content: start;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   flex-wrap: wrap;
   row-gap: 9px;
-  li {
-    min-width: 33.33%;
-  }
 `
 // The way to display social-media link is copied from mirror-media-nuxt,
 // should be refactor if has separate image of each social media.
@@ -243,14 +241,16 @@ const SocialMediaList = styled.div`
  * @param {import('../type').SubBrand[]} props.subBrands
  * @param {import('../type').Promotion[]} props.promotions
  * @param {import('../type').SocialMedia[]} props.socialMedia
+ * @param {{name: string, href:string}[]} props.displayedPartners
  * @returns {React.ReactElement}
  */
 export default function MobileSidebar({
   topics,
-  sections,
+  sections = [],
   subBrands,
   promotions,
   socialMedia,
+  displayedPartners = [],
 }) {
   const [openSidebar, setOpenSidebar] = useState(false)
   const [openSection, setOpenSection] = useState('')
@@ -299,6 +299,13 @@ export default function MobileSidebar({
               </Categories>
             </Fragment>
           ))}
+          {displayedPartners.map(({ name, href }) => (
+            <Section key={name}>
+              <Link style={{ width: '50%' }} href={href}>
+                <h3>{name}</h3>
+              </Link>
+            </Section>
+          ))}
         </SideBarTop>
         <SideBarBottom>
           <SubBrandList>
@@ -321,7 +328,9 @@ export default function MobileSidebar({
           <PromotionList>
             {promotions.map((promotion) => (
               <li key={promotion.name}>
-                <a href={promotion.href}>{promotion.title}</a>
+                <Link href={promotion.href} target="_blank">
+                  {promotion.title}
+                </Link>
               </li>
             ))}
           </PromotionList>
