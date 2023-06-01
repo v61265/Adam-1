@@ -25,6 +25,8 @@ const Topic = styled.a`
   cursor: pointer;
   position: relative;
   text-decoration-line: underline;
+  text-underline-offset: 2.5px;
+  text-decoration-thickness: 1px;
   color: #ffffff;
   display: list-item;
   list-style-type: disc;
