@@ -1,6 +1,8 @@
 import { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
+import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+const { getContentTextBlocks } = MirrorMedia
 import Credits from './potography-credits'
 import HeroSection from './hero-section'
 import Header from './photography-header'
@@ -131,6 +133,9 @@ export default function StoryPhotographyStyle({ postData }) {
     brief = null,
   } = postData
 
+  const filteredBrief = getContentTextBlocks(brief)
+  console.log(filteredBrief)
+
   const credits = [
     { writers: manualOrderOfWriters ? manualOrderOfWriters : writers },
     { photographers: photographers },
@@ -204,7 +209,7 @@ export default function StoryPhotographyStyle({ postData }) {
         <HeroSection
           title={title}
           heroCaption={heroCaption}
-          brief={brief.blocks[0].text}
+          brief={filteredBrief}
           heroImage={heroImage}
         />
 
