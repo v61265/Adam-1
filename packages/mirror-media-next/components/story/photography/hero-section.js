@@ -68,6 +68,7 @@ const TitleBox = styled.div`
     width: fit-content;
     text-align: center;
     padding: 2px;
+    margin: auto;
     margin-top: 20px;
 
     ${({ theme }) => theme.breakpoint.md} {
@@ -83,23 +84,24 @@ const TitleBox = styled.div`
 
   .brief {
     padding-top: 16px;
+  }
+`
 
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 150%;
-    text-align: center;
-    color: #ffffff;
-    text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
-    margin-top: 20px;
-
-    ${({ theme }) => theme.breakpoint.md} {
-      font-weight: 500;
-      font-size: 16px;
-      margin-top: 29px;
-    }
-    ${({ theme }) => theme.breakpoint.xl} {
-      margin-top: 32px;
-    }
+const BriefWrapper = styled.div`
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 150%;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.5);
+  margin-top: 20px;
+  ${({ theme }) => theme.breakpoint.md} {
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 29px;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-top: 32px;
   }
 `
 
@@ -116,7 +118,7 @@ const isIOS = () => {
  * @param {Object} props
  * @param {string} props.title
  * @param {string} props.heroCaption
- * @param {string} props.brief
+ * @param {Array<{ key: string, text: string }>} props.brief
  * @param {HeroImage | null} props.heroImage
  * @returns {JSX.Element}
  */
@@ -124,7 +126,7 @@ const isIOS = () => {
 export default function HeroSection({
   title = '',
   heroCaption = '',
-  brief = '',
+  brief = [],
   heroImage = null,
 }) {
   return (
@@ -144,7 +146,13 @@ export default function HeroSection({
           <h1 className="title">{title}</h1>
           {heroCaption && <p className="hero-caption">{heroCaption}</p>}
         </div>
-        <p className="brief">{brief}</p>
+        <BriefWrapper>
+          {brief.map((p) => (
+            <p className="brief" key={p.key}>
+              {p.text}
+            </p>
+          ))}
+        </BriefWrapper>
       </TitleBox>
     </HeroImage>
   )
