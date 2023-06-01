@@ -29,7 +29,12 @@ const AmpBody = styled.body`
  */
 
 function StoryAmpPage({ postData }) {
-  const { title = '', relateds = [], manualOrderOfRelateds = [] } = postData
+  const {
+    title = '',
+    relateds = [],
+    manualOrderOfRelateds = [],
+    isMember,
+  } = postData
 
   const relatedsWithOrdered =
     manualOrderOfRelateds && manualOrderOfRelateds.length
@@ -42,7 +47,7 @@ function StoryAmpPage({ postData }) {
       </Head>
       <AmpBody>
         <AmpHeader />
-        <AmpMain postData={postData} />
+        <AmpMain postData={postData} isMember={isMember} />
         <AmpRelated relateds={relatedsWithOrdered} />
         <AmpFooter />
       </AmpBody>
