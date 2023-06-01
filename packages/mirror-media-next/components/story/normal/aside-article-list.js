@@ -1,5 +1,3 @@
-//TODOs:
-// 1. add loading UI
 import Link from 'next/link'
 import styled from 'styled-components'
 import { useEffect, useState, useRef, useCallback } from 'react'
@@ -15,7 +13,14 @@ import Image from '@readr-media/react-image'
  */
 
 /** @typedef {import('../../../apollo/fragments/post').AsideListingPost} ArticleData */
+const TestButton = styled.button`
+  position: fixed;
 
+  left: 0;
+  width: 100px;
+  height: 100px;
+  background-color: pink;
+`
 const Wrapper = styled.section`
   margin: 20px auto 0;
   ${({ theme }) => theme.breakpoint.md} {
@@ -25,15 +30,10 @@ const Wrapper = styled.section`
     width: 100%;
   }
 `
-const Heading = styled.h2`
-  text-align: center;
-  color: ${({ theme, color }) => theme.color.brandColor[color]};
-  font-size: 21px;
-  line-height: 1.5;
+const Heading = styled.section`
+  width: 100%;
   margin-bottom: 20px;
-  ${({ theme }) => theme.breakpoint.md} {
-    text-align: left;
-  }
+
   ${({ theme }) => theme.breakpoint.xl} {
     margin-bottom: 0;
     background-color: ${
@@ -44,9 +44,33 @@ const Heading = styled.h2`
       ({ theme }) => theme.color.brandColor.darkBlue
     };
     border: 1px solid #dedede;
-    font-size: 18px;
-    color: #fff;
     padding: 8px 0 8px 20px;
+  }
+  h2 {
+    color: ${({ theme, color }) => theme.color.brandColor[color]};
+    font-size: 21px;
+    line-height: 1.5;
+
+    width: fit-content;
+    margin: 0 auto;
+    ${({ theme }) => theme.breakpoint.md} {
+      margin: 0 auto 0 0;
+    }
+    ${({ theme }) => theme.breakpoint.xl} {
+      font-size: 18px;
+      color: #fff;
+    }
+  }
+`
+const HeadingLoading = styled(Heading)`
+  border: none;
+
+  h2 {
+    background-color: #efefef;
+    color: #efefef;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    background-color: #efefef;
   }
 `
 
@@ -64,6 +88,7 @@ const ArticleWrapper = styled.ul`
      *
      * @param {Object} param
      * @param {number} param.renderAmount
+     * @param {boolean} param.isLoaded
      */
     ({ renderAmount }) =>
       `calc(${
@@ -77,7 +102,9 @@ const ArticleWrapper = styled.ul`
       }px + ${articleWrapperGap}px * ${renderAmount - 1}) `};
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    border: 1px solid #dedede;
+    border: ${({ isLoaded }) => (isLoaded ? '1px solid #dedede' : 'none')};
+    background-color: ${({ isLoaded }) => (isLoaded ? 'unset' : '#efefef')};
+
     padding: 20.5px 20px;
     width: 100%;
     min-height: ${({ renderAmount }) =>
@@ -88,11 +115,13 @@ const ArticleWrapper = styled.ul`
     height: fit-content;
   }
 `
+
 const Article = styled.figure`
   display: flex;
   flex-direction: column;
   max-width: 276px;
   margin: 0 auto;
+  height: ${`${articleHeightMobile}px`};
   .article-image {
     height: 184px;
   }
@@ -191,13 +220,24 @@ const Title = styled.p`
   }
 `
 
-const Loading = styled.div`
-  height: 500px;
-  margin: auto;
-  width: 100%;
-  background-color: pink;
+const ArticleLoading = styled(Article)`
+  /* background-color: #efefef; */
+  .article-image__loading {
+    background-color: #efefef;
+  }
 `
-
+const TitleLoading = styled(Title)`
+  background-color: #efefef;
+  color: #efefef;
+  //height is same as line-height in Title
+  height: 27px;
+  ${({ theme }) => theme.breakpoint.md} {
+    height: 32px;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    height: 24px;
+  }
+`
 /**
  *
  * @param {Object} props
@@ -225,12 +265,14 @@ export default function AsideArticleList({
   const [item, setItem] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
   const handleLoadMore = useCallback(() => {
+    //Temporarily remove setIsLoaded for testing  style of loading component.
+
     fetchArticle().then((articles) => {
       if (articles.length && Array.isArray(articles)) {
         setItem(articles)
-        setIsLoaded(true)
+        // setIsLoaded(true)
       } else {
-        setIsLoaded(true)
+        // setIsLoaded(true)
       }
     })
   }, [fetchArticle])
@@ -262,38 +304,71 @@ export default function AsideArticleList({
     const articleHref = getArticleHref(item.slug, item.style, undefined)
     return (
       <li key={item.id}>
-        <Article shouldReverseOrder={shouldReverseOrder}>
-          <Link href={articleHref} target="_blank" className="article-image">
-            <Image
-              images={item?.heroImage?.resized}
-              alt={item.title}
-              loadingImage={'/images/loading.gif'}
-              defaultImage={'/images/default-og-img.png'}
-              rwd={{ mobile: '276px', tablet: '266px', desktop: '120px' }}
-            />
-          </Link>
-
-          <FigureCaption>
-            <Label sectionTitle={sectionTitle}>{sectionName}</Label>
-            <Link href={articleHref} target="_blank">
-              <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
-                {item.title}
-              </Title>
+        {isLoaded ? (
+          <Article shouldReverseOrder={shouldReverseOrder}>
+            <Link href={articleHref} target="_blank" className="article-image">
+              <Image
+                images={item?.heroImage?.resized}
+                alt={item.title}
+                loadingImage={'/images/loading.gif'}
+                defaultImage={'/images/default-og-img.png'}
+                rwd={{ mobile: '276px', tablet: '266px', desktop: '120px' }}
+              />
             </Link>
-          </FigureCaption>
-        </Article>
+
+            <FigureCaption>
+              <Label sectionTitle={sectionTitle}>{sectionName}</Label>
+              <Link href={articleHref} target="_blank">
+                <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
+                  {item.title}
+                </Title>
+              </Link>
+            </FigureCaption>
+          </Article>
+        ) : (
+          <ArticleLoading shouldReverseOrder={shouldReverseOrder}>
+            <div className="article-image article-image__loading"></div>
+
+            <FigureCaption>
+              <TitleLoading />
+            </FigureCaption>
+          </ArticleLoading>
+        )}
       </li>
     )
   })
 
+  //Temporarily add for testing  style of loading component.
+  const handleOnClick = () => {
+    setIsLoaded((pre) => !pre)
+  }
   return (
-    <Wrapper>
-      <Heading color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
-        {heading}
-      </Heading>
-      <ArticleWrapper renderAmount={renderAmount} ref={wrapperRef}>
-        {isLoaded ? newsJsx : <Loading>Loading...</Loading>}
-      </ArticleWrapper>
-    </Wrapper>
+    <>
+      {/* TestButton is temporarily added for testing style of loading component. */}
+      <TestButton
+        onClick={handleOnClick}
+        style={{ top: heading === '熱門文章' ? '250px' : '100px' }}
+      >
+        {heading}目前狀態{isLoaded ? '載入完畢' : '載入中'}
+      </TestButton>
+      <Wrapper>
+        {isLoaded ? (
+          <Heading color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
+            <h2>{heading}</h2>
+          </Heading>
+        ) : (
+          <HeadingLoading>
+            <h2>{heading}</h2>
+          </HeadingLoading>
+        )}
+        <ArticleWrapper
+          renderAmount={renderAmount}
+          isLoaded={isLoaded}
+          ref={wrapperRef}
+        >
+          {newsJsx}
+        </ArticleWrapper>
+      </Wrapper>
+    </>
   )
 }
