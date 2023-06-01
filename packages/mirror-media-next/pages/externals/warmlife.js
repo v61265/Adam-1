@@ -11,6 +11,10 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
 import axios from 'axios'
 
+const RENDER_PAGE_SIZE = 12
+const WARM_LIFE_DEFAULT_TITLE = `生活暖流`
+const WARM_LIFE_DEFAULT_COLOR = 'lightBlue'
+
 /**
  * @typedef {import('../../type/theme').Theme} Theme
  */
@@ -33,7 +37,7 @@ const WarmLifeTitle = styled.h1`
   line-height: 1.15;
   font-weight: 500;
 
-  color: ${({ theme }) => theme.color.brandColor.lightBlue};
+  color: ${({ theme }) => theme.color.brandColor[WARM_LIFE_DEFAULT_COLOR]};
 
   ${({ theme }) => theme.breakpoint.md} {
     margin: 20px 0 24px;
@@ -46,9 +50,6 @@ const WarmLifeTitle = styled.h1`
     font-size: 28px;
   }
 `
-
-const RENDER_PAGE_SIZE = 12
-const WARM_LIFE_TITLE = `生活暖流`
 
 /**
  * @typedef {import('../../apollo/fragments/external').ListingExternal} ListingExternal
@@ -63,12 +64,12 @@ const WARM_LIFE_TITLE = `生活暖流`
 export default function WarmLife({ warmLifeData, headerData }) {
   return (
     <Layout
-      head={{ title: `${WARM_LIFE_TITLE}分類報導` }}
+      head={{ title: `${WARM_LIFE_DEFAULT_TITLE}分類報導` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
       <WarmLifeContainer>
-        <WarmLifeTitle>{WARM_LIFE_TITLE}</WarmLifeTitle>
+        <WarmLifeTitle>{WARM_LIFE_DEFAULT_TITLE}</WarmLifeTitle>
         <WarmLifeArticles
           warmLifeExternals={warmLifeData}
           renderPageSize={RENDER_PAGE_SIZE}
