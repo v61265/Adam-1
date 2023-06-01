@@ -18,18 +18,23 @@ const StoryPhotographyStyle = dynamic(() =>
 const StoryPremiumStyle = dynamic(() =>
   import('../../components/story/premium')
 )
+import Image from 'next/image'
+import Skeleton from '../../public/images/skeleton.png'
 
 /**
  * @typedef {import('../../components/story/normal').PostData} PostData
  */
 
 //Todo: adjust height, make it not to scroll when loading
-const MockLoading = styled.div`
+const Loading = styled.div`
   width: 100%;
-  height: 100vh;
-  background-color: pink;
-  text-align: center;
-  font-size: 32px;
+  height: 100%;
+  margin: 0 auto;
+  position: fixed;
+
+  img {
+    margin: 0 auto;
+  }
 `
 /**
  *
@@ -142,10 +147,16 @@ export default function Story({ postData }) {
       footer={{ type: 'empty' }}
     >
       <>
-        {!storyLayout && <MockLoading>Loading...</MockLoading>}
+        {!storyLayout && (
+          <Loading>
+            <Image src={Skeleton} alt="loading..."></Image>
+          </Loading>
+        )}
+
         <div style={{ display: `${storyLayout ? 'block' : 'none'}` }}>
           {jsx}
         </div>
+
         <WineWarning categories={categories} />
         <AdultOnlyWarning isAdult={isAdult} />
       </>
