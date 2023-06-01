@@ -1,9 +1,9 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 
-import { WEEKLY_API_SERVER_HOST } from '../config/index.mjs'
+import { WEEKLY_API_SERVER_ORIGIN } from '../config/index.mjs'
 
 const client = new ApolloClient({
-  uri: `https://${WEEKLY_API_SERVER_HOST}/content/graphql`,
+  uri: `https://${WEEKLY_API_SERVER_ORIGIN}/content/graphql`,
   cache: new InMemoryCache(),
   defaultOptions: {
     watchQuery: {
