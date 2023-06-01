@@ -26,6 +26,7 @@ let GTM_ID = ''
 let SEARCH_URL = 'search-url/search'
 let URL_STATIC_POPULAR_NEWS = ''
 let URL_RESTFUL_SERVER = ''
+let URL_STATIC_EXTERNALS_WARMLIFE = ''
 
 switch (ENV) {
   case 'prod':
@@ -52,7 +53,11 @@ switch (ENV) {
     GTM_ID = 'GTM-NCH86SP'
     SEARCH_URL = 'https://adam-mirror-media-search-prod-ufaummkd5q-de.a.run.app'
     URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
+    URL_STATIC_EXTERNALS_WARMLIFE =
+      'https://v3-statics.mirrormedia.mg/json/life_feed.json'
+
     break
+
   case 'staging':
     SITE_URL = 'staging-next.mirrormedia.mg'
     API_TIMEOUT = 1500
@@ -78,7 +83,11 @@ switch (ENV) {
     SEARCH_URL =
       'https://adam-mirror-media-search-staging-ufaummkd5q-de.a.run.app'
     URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
+    URL_STATIC_EXTERNALS_WARMLIFE =
+      'https://v3-statics-staging.mirrormedia.mg/json/life_feed.json'
+
     break
+
   case 'dev':
     SITE_URL = 'dev-next.mirrormedia.mg'
     API_TIMEOUT = 5000
@@ -103,8 +112,11 @@ switch (ENV) {
     GTM_ID = 'GTM-PBNLSMX'
     SEARCH_URL = 'https://adam-mirror-media-search-dev-ufaummkd5q-de.a.run.app'
     URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
+    URL_STATIC_EXTERNALS_WARMLIFE =
+      'https://v3-statics-dev.mirrormedia.mg/json/life_feed.json'
 
     break
+
   default:
     SITE_URL = 'localhost'
     API_TIMEOUT = 5000
@@ -125,7 +137,10 @@ switch (ENV) {
     GTM_ID = 'GTM-PBNLSMX'
     SEARCH_URL = 'https://adam-mirror-media-search-dev-ufaummkd5q-de.a.run.app'
     URL_STATIC_POPULAR_NEWS = `http://localhost:8080/json/popular.json`
+    URL_STATIC_EXTERNALS_WARMLIFE =
+      'https://v3-statics-dev.mirrormedia.mg/json/life_feed.json'
 }
+
 export {
   ENV,
   SITE_URL,
@@ -144,4 +159,5 @@ export {
   GTM_ID,
   SEARCH_URL,
   URL_STATIC_POPULAR_NEWS,
+  URL_STATIC_EXTERNALS_WARMLIFE,
 }

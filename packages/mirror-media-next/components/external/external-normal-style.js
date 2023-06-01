@@ -379,6 +379,13 @@ export default function ExternalNormalStyle({ external }) {
     }
   }
 
+  const updatedTimeJsx = updatedTaipeiTime ? (
+    <DateUnderContent>
+      <span>更新時間｜</span>
+      <span className="time">{updatedTaipeiTime} 臺北時間</span>
+    </DateUnderContent>
+  ) : null
+
   return (
     <>
       <PC_HD_Advertisement
@@ -411,10 +418,8 @@ export default function ExternalNormalStyle({ external }) {
 
           {/* <ArticleContent content={content} /> */}
 
-          <DateUnderContent>
-            <span>更新時間｜</span>
-            <span className="time">{updatedTaipeiTime} 臺北時間</span>
-          </DateUnderContent>
+          {updatedTimeJsx}
+
           <DonateBanner />
           <SocialNetworkServiceSmall />
           <SubscribeInviteBanner />

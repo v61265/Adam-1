@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import ExternalListItem from './external-list-item'
+import ExternalListItem from './externals-list-item'
 
 const ItemContainer = styled.div`
   display: grid;

@@ -1,24 +1,25 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 
-import client from '../../apollo/apollo-client'
-import ExternalArticles from '../../components/externals/partner-articles'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import WarmLifeArticles from '../../components/externals/warmlife-articles'
+import {
+  GCP_PROJECT_ID,
+  API_TIMEOUT,
+  URL_STATIC_EXTERNALS_WARMLIFE,
+} from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
+import axios from 'axios'
 
-import {
-  fetchExternalsByPartnerSlug,
-  fetchExternalCounts,
-} from '../../apollo/query/externals'
-import { fetchPartnerBySlug } from '../../apollo/query/partner'
-import { getExternalPartnerColor } from '../../utils/external'
+const RENDER_PAGE_SIZE = 12
+const WARM_LIFE_DEFAULT_TITLE = `生活暖流`
+const WARM_LIFE_DEFAULT_COLOR = 'lightBlue'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
  */
 
-const PartnerContainer = styled.main`
+const WarmLifeContainer = styled.main`
   width: 320px;
   margin: 0 auto;
 
@@ -30,19 +31,13 @@ const PartnerContainer = styled.main`
     padding: 0;
   }
 `
-
-const PartnerTitle = styled.h1`
+const WarmLifeTitle = styled.h1`
   margin: 20px 0 16px 16px;
   font-size: 16px;
   line-height: 1.15;
   font-weight: 500;
 
-  color: ${
-    /**
-     * @param {Object} props
-     * @param {string} props.partnerColor
-     */ ({ partnerColor }) => partnerColor || 'black'
-  };
+  color: ${({ theme }) => theme.color.brandColor[WARM_LIFE_DEFAULT_COLOR]};
 
   ${({ theme }) => theme.breakpoint.md} {
     margin: 20px 0 24px;
@@ -56,45 +51,30 @@ const PartnerTitle = styled.h1`
   }
 `
 
-const RENDER_PAGE_SIZE = 12
-
 /**
  * @typedef {import('../../apollo/fragments/external').ListingExternal} ListingExternal
- * @typedef {import('../../apollo/fragments/partner').Partner} Partner
  */
 
 /**
  * @param {Object} props
- * @param {ListingExternal[]} props.externals
- * @param {number} props.externalsCount
+ * @param {ListingExternal[]} props.warmLifeData
  * @param {Object} props.headerData
- * @param {Partner} props.partner
  * @returns {React.ReactElement}
  */
-
-export default function ExternalPartner({
-  externalsCount,
-  externals,
-  partner,
-  headerData,
-}) {
+export default function WarmLife({ warmLifeData, headerData }) {
   return (
     <Layout
-      head={{ title: `${partner?.name}分類報導` }}
+      head={{ title: `${WARM_LIFE_DEFAULT_TITLE}分類報導` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
-      <PartnerContainer>
-        <PartnerTitle partnerColor={getExternalPartnerColor(partner)}>
-          {partner?.name}
-        </PartnerTitle>
-        <ExternalArticles
-          externalsCount={externalsCount}
-          externals={externals}
-          partner={partner}
+      <WarmLifeContainer>
+        <WarmLifeTitle>{WARM_LIFE_DEFAULT_TITLE}</WarmLifeTitle>
+        <WarmLifeArticles
+          warmLifeExternals={warmLifeData}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-      </PartnerContainer>
+      </WarmLifeContainer>
     </Layout>
   )
 }
@@ -102,8 +82,7 @@ export default function ExternalPartner({
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ params, req }) {
-  const { partnerSlug } = params
+export async function getServerSideProps({ req }) {
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -114,31 +93,11 @@ export async function getServerSideProps({ params, req }) {
   }
 
   const responses = await Promise.allSettled([
-    fetchHeaderDataInDefaultPageLayout(), //fetch header data
-    client.query({
-      query: fetchExternalsByPartnerSlug,
-      variables: {
-        take: RENDER_PAGE_SIZE * 2,
-        skip: 0,
-        orderBy: { publishedDate: 'desc' },
-        filter: {
-          state: { equals: 'published' },
-          partner: { slug: { equals: partnerSlug } },
-        },
-      },
-    }),
-    client.query({
-      query: fetchExternalCounts,
-      variables: {
-        filter: {
-          state: { equals: 'published' },
-          partner: { slug: { equals: partnerSlug } },
-        },
-      },
-    }),
-    client.query({
-      query: fetchPartnerBySlug,
-      variables: { slug: partnerSlug },
+    fetchHeaderDataInDefaultPageLayout(),
+    axios({
+      method: 'get',
+      url: URL_STATIC_EXTERNALS_WARMLIFE,
+      timeout: API_TIMEOUT,
     }),
   ])
 
@@ -184,6 +143,7 @@ export async function getServerSideProps({ params, req }) {
           sectionsData: [],
           topicsData: [],
         }
+
   const sectionsData = Array.isArray(headerData.sectionsData)
     ? headerData.sectionsData
     : []
@@ -191,32 +151,28 @@ export async function getServerSideProps({ params, req }) {
     ? headerData.topicsData
     : []
 
-  /** @type {ListingExternal[]} */
-  const externals =
-    'data' in handledResponses[1]
-      ? handledResponses[1]?.data?.externals || []
+  const warmLifeData =
+    responses[1].status === 'fulfilled' && responses[1].value?.data
+      ? responses[1].value?.data._items || []
       : []
 
-  /** @type {number} */
-  const externalsCount =
-    'data' in handledResponses[2]
-      ? handledResponses[2]?.data?.externalsCount || 0
-      : 0
-
-  /** @type {Partner} */
-  const partner =
-    'data' in handledResponses[3]
-      ? handledResponses[3]?.data?.partners[0] || {}
-      : {}
-
-  if (!Object.keys(partner).length) {
-    return { notFound: true }
-  }
+  /** @type {ListingExternal[]} */
+  const filterWarmLifeData = warmLifeData.map((item) => ({
+    id: item._id || '',
+    title: item.title || '',
+    slug: item.name || '',
+    thumb: item.thumb || '',
+    brief: item.brief || '',
+    partner:
+      {
+        id: item.partner._id,
+        name: item.partner.display,
+        slug: item.partner.name,
+      } || null,
+  }))
 
   const props = {
-    externalsCount,
-    externals,
-    partner,
+    warmLifeData: filterWarmLifeData,
     headerData: { sectionsData, topicsData },
   }
 
