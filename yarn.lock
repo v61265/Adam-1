@@ -1657,6 +1657,11 @@
   resolved "https://registry.yarnpkg.com/@types/facebook-js-sdk/-/facebook-js-sdk-3.3.6.tgz#a07bc686304c34953931546a207df455777d9ccf"
   integrity sha512-CxTLMVtZsgrj9Ven5Pn1vcFumCFs+CG8Jfc63xWq/8b9e6uWjGyZlMnvQk7lIVn97Zd1vpu0ZK/OFWAoap0RCw==
 
+"@types/google-publisher-tag@^1.20230410.0":
+  version "1.20230410.0"
+  resolved "https://registry.yarnpkg.com/@types/google-publisher-tag/-/google-publisher-tag-1.20230410.0.tgz#f6b866f3710c46b729b3f7cfb60f3975a2ecf4a4"
+  integrity sha512-H2oBE/QXFzxP7iLJq+ohEb5yflIwhIfc6E4F4AkMpiCYfvKFZkQaH2VoBs/Jf8QdthT7ZkHYTzNiRoI2ch0D1Q==
+
 "@types/http-proxy@^1.17.8":
   version "1.17.9"
   resolved "https://registry.yarnpkg.com/@types/http-proxy/-/http-proxy-1.17.9.tgz#7f0e7931343761efde1e2bf48c40f02f3f75705a"

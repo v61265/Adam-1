@@ -8,6 +8,7 @@ import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
+import GPTAd from '../../components/ads/gpt/gpt-ad'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -52,6 +53,14 @@ const SectionTitle = styled.h1`
   }
 `
 
+const StyledGPTAd = styled(GPTAd)`
+  height: 280px;
+  margin-top: 20px;
+  ${({ theme }) => theme.breakpoint.xl} {
+    height: 250px;
+  }
+`
+
 const RENDER_PAGE_SIZE = 12
 
 /**
@@ -75,6 +84,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
       footer={{ type: 'default' }}
     >
       <SectionContainer>
+        <StyledGPTAd pageKey="57e1e0e5ee85930e00cad4e9" adKey="HD" />
         <SectionTitle sectionName={section?.slug}>{section?.name}</SectionTitle>
         <SectionArticles
           postsCount={postsCount}

@@ -27,6 +27,7 @@ let SEARCH_URL = 'search-url/search'
 let URL_STATIC_POPULAR_NEWS = ''
 let URL_RESTFUL_SERVER = ''
 let URL_STATIC_EXTERNALS_WARMLIFE = ''
+let GPT_MODE = ''
 
 switch (ENV) {
   case 'prod':
@@ -55,7 +56,7 @@ switch (ENV) {
     URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
     URL_STATIC_EXTERNALS_WARMLIFE =
       'https://v3-statics.mirrormedia.mg/json/life_feed.json'
-
+    GPT_MODE = 'prod'
     break
 
   case 'staging':
@@ -85,7 +86,7 @@ switch (ENV) {
     URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
     URL_STATIC_EXTERNALS_WARMLIFE =
       'https://v3-statics-staging.mirrormedia.mg/json/life_feed.json'
-
+    GPT_MODE = 'prod'
     break
 
   case 'dev':
@@ -114,7 +115,7 @@ switch (ENV) {
     URL_STATIC_POPULAR_NEWS = `https://editools-gcs-${ENV}.readr.tw/popular.json`
     URL_STATIC_EXTERNALS_WARMLIFE =
       'https://v3-statics-dev.mirrormedia.mg/json/life_feed.json'
-
+    GPT_MODE = 'dev'
     break
 
   default:
@@ -139,6 +140,7 @@ switch (ENV) {
     URL_STATIC_POPULAR_NEWS = `http://localhost:8080/json/popular.json`
     URL_STATIC_EXTERNALS_WARMLIFE =
       'https://v3-statics-dev.mirrormedia.mg/json/life_feed.json'
+    GPT_MODE = 'dev'
 }
 
 export {
@@ -160,4 +162,5 @@ export {
   SEARCH_URL,
   URL_STATIC_POPULAR_NEWS,
   URL_STATIC_EXTERNALS_WARMLIFE,
+  GPT_MODE,
 }

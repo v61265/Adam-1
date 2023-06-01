@@ -177,6 +177,19 @@ const Z_INDEX = {
   coverContent: 100,
 }
 
+const SECTION_IDS = {
+  member: '5fe15f1e123c831000ee54c2',
+  news: '57e1e0e5ee85930e00cad4e9',
+  entertainment: '57e1e11cee85930e00cad4ea',
+  businessmoney: '596441d04bbe120f002a319a',
+  people: '596441604bbe120f002a3197',
+  international: '5964400d4bbe120f002a3191',
+  foodtravel: '57dfe399ee85930e00cad4d6',
+  mafalda: '5971aa8ce531830d00e32812',
+  culture: '5964418a4bbe120f002a3198',
+  carandwatch: '57dfe3b0ee85930e00cad4d7',
+}
+
 export {
   SITE_TITLE,
   SOCIAL_MEDIA_LINKS,
@@ -194,4 +207,5 @@ export {
   RSS_LINK,
   EMAIL_LINK,
   FOOTER_PROMOTION_LINKS,
+  SECTION_IDS,
 }

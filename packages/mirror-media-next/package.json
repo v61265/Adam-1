@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@types/facebook-js-sdk": "^3.3.6",
+    "@types/google-publisher-tag": "^1.20230410.0",
     "concurrently": "^7.4.0",
     "eslint-config-next": "12.2.5",
     "express": "^4.18.1"

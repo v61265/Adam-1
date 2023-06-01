@@ -7,6 +7,7 @@ import client from '../apollo/apollo-client'
 import * as gtag from '../utils/gtag'
 import TagManager from 'react-gtm-module'
 import { ENV, GTM_ID } from '../config/index.mjs'
+import WholeSiteScript from '../components/whole-site-script'
 
 /**
  *
@@ -31,6 +32,9 @@ function MyApp({ Component, pageProps }) {
       <GlobalStyles />
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
+          {/* some script may need member type to decide render or not,
+           make sure the WholeSiteScript component is placed inside contextProvider or other provider  */}
+          <WholeSiteScript />
           <Component {...pageProps} />
         </ThemeProvider>
       </ApolloProvider>
