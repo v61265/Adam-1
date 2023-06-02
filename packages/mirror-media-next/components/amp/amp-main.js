@@ -34,6 +34,7 @@ const MainWrapper = styled.div`
       }
     }
     figure {
+      width: calc(100vw - 40px);
       & + figure {
         margin-top: 8px;
       }
@@ -138,7 +139,6 @@ export default function AmpMain({ postData, isMember }) {
   } = postData
 
   const sharedUrl = useSharedUrl()
-  console.log({ sharedUrl })
 
   const sectionsWithOrdered =
     manualOrderOfSections && manualOrderOfSections.length
