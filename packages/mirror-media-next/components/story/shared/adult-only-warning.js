@@ -82,10 +82,11 @@ const ButtonWrapper = styled.div`
  *
  * @param {Object} props
  * @param {boolean} props.isAdult
+ * @param {string} [props.onEvent]
  * @returns {JSX.Element}
  */
 
-export default function AdultOnlyWarning({ isAdult = false }) {
+export default function AdultOnlyWarning({ isAdult = false, onEvent = '' }) {
   const [isAgreed, setIsAgreed] = useState(false)
 
   const shouldShowAdultWarning = Boolean(isAdult && !isAgreed)
@@ -127,7 +128,7 @@ export default function AdultOnlyWarning({ isAdult = false }) {
             onClick={() => {
               setIsAgreed(true)
             }}
-            on="tap:adult-only-warning.hide,amp-page.toggleClass(class='disable-scroll')"
+            on={onEvent}
             aria-label="是，我已年滿十八歲"
           >
             是，我已年滿十八歲

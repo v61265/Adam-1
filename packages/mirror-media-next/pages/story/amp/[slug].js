@@ -54,7 +54,10 @@ function StoryAmpPage({ postData }) {
       </Head>
       <AmpBody id="amp-page" className={isAdult && 'disable-scroll'}>
         <AmpHeader />
-        <AdultOnlyWarning isAdult={isAdult} />
+        <AdultOnlyWarning
+          isAdult={isAdult}
+          onEvent="tap:adult-only-warning.hide,amp-page.toggleClass(class='disable-scroll')"
+        />
         <AmpMain postData={postData} isMember={isMember} />
         <AmpRelated relateds={relatedsWithOrdered} />
         <AmpFooter />
