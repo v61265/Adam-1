@@ -3,10 +3,12 @@ import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { getContentTextBlocks } = MirrorMedia
+import { sortArrayWithOtherArrayId } from '../../../utils'
 import Credits from './potography-credits'
 import HeroSection from './hero-section'
 import Header from './photography-header'
 import Slide from './slide'
+import RelatedPosts from './related-posts'
 import { ArrowDown } from './icons'
 
 const Main = styled.main`
@@ -126,15 +128,13 @@ export default function StoryPhotographyStyle({ postData }) {
     engineers = [],
     vocals = [],
     extend_byline = '',
-    // relateds = [],
-    // manualOrderOfRelateds = [],
-    // slug = '',
+    relateds = [],
+    manualOrderOfRelateds = [],
     content = null,
     brief = null,
   } = postData
 
   const filteredBrief = getContentTextBlocks(brief)
-  console.log(filteredBrief)
 
   const credits = [
     { writers: manualOrderOfWriters ? manualOrderOfWriters : writers },
@@ -145,6 +145,11 @@ export default function StoryPhotographyStyle({ postData }) {
     { vocals: vocals },
     { extend_byline: extend_byline },
   ]
+
+  const relatedsWithOrdered =
+    manualOrderOfRelateds && manualOrderOfRelateds.length
+      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+      : relateds
 
   // Get images array from content.entityMap
   const photosArray = Object.values(content.entityMap).filter(
@@ -244,6 +249,7 @@ export default function StoryPhotographyStyle({ postData }) {
           </section>
           <Credits credits={credits}></Credits>
         </ContentContainer>
+        <RelatedPosts relateds={relatedsWithOrdered} />
       </Page>
     </Main>
   )
