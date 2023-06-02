@@ -97,6 +97,10 @@ const ImageWrapper = styled.div`
  */
 
 export default function RelatedPosts({ relateds = [] }) {
+  if (!relateds.length) {
+    return null // not to render anything if relateds is empty
+  }
+
   return (
     <Wrapper>
       <Title>延伸閱讀</Title>
