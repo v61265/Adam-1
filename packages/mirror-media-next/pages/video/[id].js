@@ -142,7 +142,22 @@ export async function getServerSideProps({ query, req }) {
     handledResponses[1] && 'data' in handledResponses[1]
       ? simplifyYoutubeVideo(handledResponses[1]?.data?.items)[0]
       : { channelId: '' }
-  const channelId = video.channelId
+  if (!video) {
+    console.log(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: `/video/${videoId} can't not get video from youtube api`,
+        ...globalLogFields,
+      })
+    )
+    return {
+      redirect: {
+        destination: '/section/videohub',
+        premanent: false,
+      },
+    }
+  }
+  const channelId = video?.channelId
 
   /** @type {import('../../type/youtube').YoutubeVideo[]} */
   let latestVideos = []
