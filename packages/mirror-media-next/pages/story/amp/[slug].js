@@ -10,7 +10,6 @@ import {
   getCategoryOfWineSlug,
 } from '../../../utils'
 import { fetchPostBySlug } from '../../../apollo/query/posts'
-// @ts-ignore
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import styled from 'styled-components'
 import AdultOnlyWarning from '../../../components/story/shared/adult-only-warning'
@@ -67,7 +66,7 @@ function StoryAmpPage({ postData }) {
       <AmpBody>
         <section
           id="amp-page"
-          className={`${categoryOfWineSlug.length && 'is-wine'} ${
+          className={`${!!categoryOfWineSlug.length && 'is-wine'} ${
             isAdult && 'disable-scroll'
           }`}
         >
