@@ -3,6 +3,7 @@ import { Z_INDEX } from '../../../constants'
 import NextLink from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
+import { useAmp } from 'next/amp'
 
 const Wrapper = styled.div`
   position: fixed;
@@ -82,11 +83,11 @@ const ButtonWrapper = styled.div`
  *
  * @param {Object} props
  * @param {boolean} props.isAdult
- * @param {string} [props.onEvent]
  * @returns {JSX.Element}
  */
 
-export default function AdultOnlyWarning({ isAdult = false, onEvent = '' }) {
+export default function AdultOnlyWarning({ isAdult = false }) {
+  const isAmp = useAmp()
   const [isAgreed, setIsAgreed] = useState(false)
 
   const shouldShowAdultWarning = Boolean(isAdult && !isAgreed)
@@ -109,6 +110,31 @@ export default function AdultOnlyWarning({ isAdult = false, onEvent = '' }) {
     }
   }, [shouldShowAdultWarning])
 
+  let agreeBtnJsx
+  if (isAmp) {
+    agreeBtnJsx = (
+      <button
+        className="agree-button"
+        on="tap:adult-only-warning.hide,amp-page.toggleClass(class='disable-scroll')"
+        aria-label="是，我已年滿十八歲"
+      >
+        是，我已年滿十八歲
+      </button>
+    )
+  } else {
+    agreeBtnJsx = (
+      <button
+        className="agree-button"
+        onClick={() => {
+          setIsAgreed(true)
+        }}
+        aria-label="是，我已年滿十八歲"
+      >
+        是，我已年滿十八歲
+      </button>
+    )
+  }
+
   const adultOnlyJsx = shouldShowAdultWarning ? (
     <Wrapper ref={warningRef} id="adult-only-warning">
       <WarningContent>
@@ -123,16 +149,7 @@ export default function AdultOnlyWarning({ isAdult = false, onEvent = '' }) {
         </p>
 
         <ButtonWrapper>
-          <button
-            className="agree-button"
-            onClick={() => {
-              setIsAgreed(true)
-            }}
-            on={onEvent}
-            aria-label="是，我已年滿十八歲"
-          >
-            是，我已年滿十八歲
-          </button>
+          {agreeBtnJsx}
           <NextLink href="/" aria-label="離開">
             <button>離開</button>
           </NextLink>

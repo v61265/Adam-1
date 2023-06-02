@@ -16,10 +16,10 @@ export const config = { amp: true }
 
 const AmpBody = styled.body`
   background: #f5f5f5;
-  &.disable-scroll {
+  #amp-page.disable-scroll {
     margin: 0;
-    height: 100vh !important;
-    overflow: hidden !important;
+    height: 100vh;
+    overflow: hidden;
   }
 `
 
@@ -52,15 +52,14 @@ function StoryAmpPage({ postData }) {
       <Head>
         <title>{title}</title>
       </Head>
-      <AmpBody id="amp-page" className={isAdult && 'disable-scroll'}>
-        <AmpHeader />
-        <AdultOnlyWarning
-          isAdult={isAdult}
-          onEvent="tap:adult-only-warning.hide,amp-page.toggleClass(class='disable-scroll')"
-        />
-        <AmpMain postData={postData} isMember={isMember} />
-        <AmpRelated relateds={relatedsWithOrdered} />
-        <AmpFooter />
+      <AmpBody>
+        <section id="amp-page" className={isAdult && 'disable-scroll'}>
+          <AmpHeader />
+          <AdultOnlyWarning isAdult={isAdult} />
+          <AmpMain postData={postData} isMember={isMember} />
+          <AmpRelated relateds={relatedsWithOrdered} />
+          <AmpFooter />
+        </section>
       </AmpBody>
     </div>
   )
