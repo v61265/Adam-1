@@ -10,6 +10,7 @@ import Header from './photography-header'
 import Slide from './slide'
 import RelatedPosts from './related-posts'
 import { ArrowDown } from './icons'
+import Footer from '../../shared/footer'
 
 const Main = styled.main`
   margin: auto;
@@ -250,6 +251,7 @@ export default function StoryPhotographyStyle({ postData }) {
           <Credits credits={credits}></Credits>
         </ContentContainer>
         <RelatedPosts relateds={relatedsWithOrdered} />
+        <Footer footerType="default" />
       </Page>
     </Main>
   )

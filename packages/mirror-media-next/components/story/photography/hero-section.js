@@ -129,8 +129,6 @@ export default function HeroSection({
   brief = [],
   heroImage = null,
 }) {
-  console.log(brief)
-
   return (
     <HeroImage
       imageUrl={
