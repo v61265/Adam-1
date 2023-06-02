@@ -44,7 +44,6 @@ const AmpBody = styled.body`
  */
 
 function StoryAmpPage({ postData }) {
-  const isWine = getCategoryOfWineSlug()
   const {
     title = '',
     relateds = [],
@@ -53,6 +52,8 @@ function StoryAmpPage({ postData }) {
     isAdult = false,
     categories = [],
   } = postData
+
+  const categoryOfWineSlug = getCategoryOfWineSlug(categories)
 
   const relatedsWithOrdered =
     manualOrderOfRelateds && manualOrderOfRelateds.length
@@ -66,7 +67,7 @@ function StoryAmpPage({ postData }) {
       <AmpBody>
         <section
           id="amp-page"
-          className={`${getCategoryOfWineSlug?.length > 0 && 'is-wine'} ${
+          className={`${categoryOfWineSlug.length && 'is-wine'} ${
             isAdult && 'disable-scroll'
           }`}
         >
