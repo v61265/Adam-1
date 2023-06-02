@@ -6,81 +6,54 @@ import Link from 'next/link'
  */
 
 const Wrapper = styled.section`
-  margin: 32px 0;
+  display: flex;
+  margin: 80px auto;
+  font-weight: 400;
+  font-size: 16px;
 `
 
-const CreditsWrapper = styled.section`
-  font-size: 16px;
-  font-weight: 400;
+const CreditsWrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
 
-  text-align: center;
-  width: 100%;
-  line-height: 1.5;
-`
-
-const CreditTitle = styled.figcaption`
-  display: block;
-  color: white;
-
-  position: relative;
-
-  width: 40px;
-  text-align: left;
-  margin-right: 18px;
-
-  &::after {
-    position: absolute;
-    content: ' | ';
-    right: -7px;
-    transform: translate(50%, 1px);
-    top: 0;
-    color: white;
+  ${({ theme }) => theme.breakpoint.md} {
+    align-items: center;
   }
 `
 
-const CreditList = styled.figure`
+const CreditTitle = styled.div`
+  color: white;
   display: flex;
-  margin: 0 auto;
+  min-width: 50px;
+`
+
+const CreditList = styled.div`
+  display: flex;
+  color: #61b8c6;
   justify-content: flex-start;
-  width: 100%;
 
   ul {
-    width: 100%;
     display: flex;
-    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
 
-    &.no-link-list {
-      display: block;
-    }
-    li {
-      width: auto;
-      display: block;
-      line-height: 1.5;
-      margin-right: 16px;
-      &.link {
-        position: relative;
-        color: white;
-      }
-
-      &.no-link {
-        text-align: left;
-        color: white;
-      }
-    }
+  li:not(:last-child)::after {
+    content: '・';
+    color: #c4c4c4;
+    margin-left: 5px;
+    margin-right: 5px;
   }
 `
 
 const CREDIT_TITLE_NAME_MAP = {
-  writers: '記者',
-  photographers: '攝影',
-  camera_man: '影音',
-  designers: '設計',
-  engineers: '工程',
-  vocals: '主播',
-  extend_byline: '特約記者',
+  writers: '記者｜',
+  photographers: '攝影｜',
+  camera_man: '影音｜',
+  designers: '設計｜',
+  engineers: '工程｜',
+  vocals: '主播｜',
+  extend_byline: '特約記者｜',
 }
 
 /**

@@ -1,6 +1,3 @@
-//TODOs:
-// 1. add loading UI
-// 2. adjust desktop style
 import Link from 'next/link'
 import styled from 'styled-components'
 import { useEffect, useState, useRef, useCallback } from 'react'
@@ -13,6 +10,15 @@ import Image from '@readr-media/react-image'
 
 /** @typedef {import('../../../apollo/fragments/post').AsideListingPost} ArticleData */
 
+const TestButton = styled.button`
+  position: fixed;
+
+  left: 0;
+  width: 100px;
+  height: 100px;
+  background-color: pink;
+`
+
 const Wrapper = styled.section`
   margin: 24px auto 0;
   width: 100%;
@@ -21,23 +27,9 @@ const Wrapper = styled.section`
     min-width: 640px;
   }
 `
-const Heading = styled.h2`
-  text-align: center;
-  color: ${({ theme, color }) => theme.color.brandColor[color]};
-  font-size: 21px;
-  line-height: 1.5;
-  ${({ theme }) => theme.breakpoint.md} {
-    text-align: left;
-  }
+const Heading = styled.section`
+  width: 100%;
   ${({ theme }) => theme.breakpoint.xl} {
-    color: ${
-      /**
-       * @param {Object} props
-       * @param {Theme} props.theme
-       */
-      ({ theme }) => theme.color.brandColor.darkBlue
-    };
-    font-size: 20px;
     position: relative;
     &::after {
       position: absolute;
@@ -49,8 +41,36 @@ const Heading = styled.h2`
       background-color: ${({ theme }) => theme.color.brandColor.darkBlue};
     }
   }
-`
+  h2 {
+    width: fit-content;
+    text-align: center;
+    margin: 0 auto;
+    color: ${({ theme, color }) => theme.color.brandColor[color]};
+    font-size: 21px;
+    line-height: 1.5;
 
+    ${({ theme }) => theme.breakpoint.xl} {
+      margin: 0 auto 0 0;
+      color: ${
+        /**
+         * @param {Object} props
+         * @param {Theme} props.theme
+         */
+        ({ theme }) => theme.color.brandColor.darkBlue
+      };
+      font-size: 20px;
+    }
+  }
+`
+const HeadingLoading = styled(Heading)`
+  h2 {
+    background-color: #efefef;
+    color: #efefef;
+  }
+  &::after {
+    display: none;
+  }
+`
 const articleHeightMobile = 254 //px
 const articleHeightTablet = 177 //px
 const articleHeightDesktop = 22 //px
@@ -98,7 +118,9 @@ const Article = styled.figure`
   flex-direction: column;
   max-width: 276px;
   margin: 0 auto ${`${articleMarginBottomMobile}px`} auto;
-
+  .article-image {
+    height: 184px;
+  }
   ${({ theme }) => theme.breakpoint.md} {
     flex-direction: row;
     height: ${`${articleHeightTablet}px`};
@@ -148,6 +170,17 @@ const Article = styled.figure`
     }
   }
 `
+const ArticleLoading = styled(Article)`
+  .article-image__loading {
+    background-color: #efefef;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    padding: 0;
+    &::before {
+      display: none;
+    }
+  }
+`
 const FigureCaption = styled.figcaption`
   width: 100%;
 `
@@ -169,7 +202,6 @@ const Title = styled.span`
     margin-top: 0;
     height: auto;
     -webkit-line-clamp: 5;
-    height: 100%;
   }
   ${({ theme }) => theme.breakpoint.xl} {
     text-align: left;
@@ -180,7 +212,7 @@ const Title = styled.span`
     font-weight: 400;
     color: rgba(74, 74, 74, 1);
 
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
   }
   :active,
   :hover {
@@ -188,11 +220,24 @@ const Title = styled.span`
   }
 `
 
-const Loading = styled.div`
-  height: 500px;
-  margin: auto;
-  width: 100%;
-  background-color: pink;
+const TitleLoading = styled(Title)`
+  /* background-color: #efefef; */
+  color: #efefef;
+
+  .decoration-bar {
+    background-color: #efefef;
+    width: 100%;
+    height: 22px;
+    margin-bottom: 8px;
+    ${({ theme }) => theme.breakpoint.md} {
+      height: 22px;
+    }
+    ${({ theme }) => theme.breakpoint.xl} {
+      &:first-child {
+        display: none;
+      }
+    }
+  }
 `
 
 /**
@@ -216,12 +261,14 @@ export default function AsideArticleList({
   const [item, setItem] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
   const handleLoadMore = useCallback(() => {
+    //Temporarily remove setIsLoaded for testing  style of loading component.
+
     fetchArticle().then((articles) => {
       if (articles.length && Array.isArray(articles)) {
         setItem(articles)
-        setIsLoaded(true)
+        // setIsLoaded(true)
       } else {
-        setIsLoaded(true)
+        // setIsLoaded(true)
       }
     })
   }, [fetchArticle])
@@ -251,37 +298,73 @@ export default function AsideArticleList({
     const articleHref = getArticleHref(item.slug, item.style, undefined)
     return (
       <li key={item.id}>
-        <Article>
-          <Link href={articleHref} target="_blank" className="article-image">
-            <Image
-              images={item?.heroImage?.resized}
-              alt={item.title}
-              loadingImage={'/images/loading.gif'}
-              defaultImage={'/images/default-og-img.png'}
-              rwd={{ mobile: '276px', tablet: '266px', desktop: '120px' }}
-            />
-          </Link>
-
-          <FigureCaption>
-            <Link href={articleHref} target="_blank">
-              <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
-                {item.title}
-              </Title>
+        {isLoaded ? (
+          <Article>
+            <Link href={articleHref} target="_blank" className="article-image">
+              <Image
+                images={item?.heroImage?.resized}
+                alt={item.title}
+                loadingImage={'/images/loading.gif'}
+                defaultImage={'/images/default-og-img.png'}
+                rwd={{ mobile: '276px', tablet: '266px', desktop: '120px' }}
+              />
             </Link>
-          </FigureCaption>
-        </Article>
+
+            <FigureCaption>
+              <Link href={articleHref} target="_blank">
+                <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
+                  {item.title}
+                </Title>
+              </Link>
+            </FigureCaption>
+          </Article>
+        ) : (
+          <ArticleLoading>
+            <div className="article-image article-image__loading"></div>
+
+            <FigureCaption>
+              <TitleLoading
+                color={heading === '熱門文章' ? 'darkBlue' : 'gray'}
+              >
+                <div className="decoration-bar"></div>
+                <div className="decoration-bar"></div>
+              </TitleLoading>
+            </FigureCaption>
+          </ArticleLoading>
+        )}
       </li>
     )
   })
 
+  //Temporarily add for testing  style of loading component.
+  const handleOnClick = () => {
+    setIsLoaded((pre) => !pre)
+  }
+
   return (
-    <Wrapper>
-      <Heading color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
-        {heading}
-      </Heading>
-      <ArticleWrapper renderAmount={renderAmount} ref={wrapperRef}>
-        {isLoaded ? newsJsx : <Loading>Loading...</Loading>}
-      </ArticleWrapper>
-    </Wrapper>
+    <>
+      {/* TestButton is temporarily added for testing style of loading component. */}
+      <TestButton
+        onClick={handleOnClick}
+        style={{ top: heading === '熱門文章' ? '250px' : '100px' }}
+      >
+        {heading}目前狀態{isLoaded ? '載入完畢' : '載入中'}
+      </TestButton>
+
+      <Wrapper>
+        {isLoaded ? (
+          <Heading color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
+            <h2>{heading}</h2>
+          </Heading>
+        ) : (
+          <HeadingLoading>
+            <h2>{heading}</h2>
+          </HeadingLoading>
+        )}
+        <ArticleWrapper renderAmount={renderAmount} ref={wrapperRef}>
+          {newsJsx}
+        </ArticleWrapper>
+      </Wrapper>
+    </>
   )
 }

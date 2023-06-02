@@ -8,20 +8,21 @@ import AmpHero from './amp-hero'
 import AmpInfo from './amp-info'
 import ArticleBrief from '../story/shared/brief'
 import DraftRenderBlock from '../story/shared/draft-renderer-block'
+import useSharedUrl from '../../hooks/use-shared-url'
 
 const MainWrapper = styled.div`
   margin-top: 24px;
 
   .i-amp-credits {
-    display: flex;
     margin: 20px 20px 0 20px;
-    width: auto;
-    align-items: center;
     flex-direction: column;
     font-size: 16px;
     line-height: 16px;
     color: #4a4a4a;
+    display: flex;
+    flex-direction: column;
     figcaption {
+      line-height: 24px;
       padding-right: 8px;
       margin-right: 8px;
       border-right: 1px solid #4a4a4a;
@@ -33,16 +34,17 @@ const MainWrapper = styled.div`
       }
     }
     figure {
+      width: calc(100vw - 40px);
       & + figure {
         margin-top: 8px;
       }
       li {
         color: #4a4a4a;
       }
-      li + li {
+      li:not(:last-child) {
         display: flex;
         position: relative;
-        &:before {
+        &:after {
           content: '';
           display: block;
           position: absolute;
@@ -51,8 +53,8 @@ const MainWrapper = styled.div`
           border-radius: 50%;
           background: #c4c4c4;
           top: 50%;
-          left: 0;
-          transform: translate(calc(-8px - 50%), -50%);
+          left: 100%;
+          transform: translate(calc(8px - 50%), -50%);
         }
       }
     }
@@ -110,9 +112,10 @@ const AmpContentContainer = styled.section`
  *
  * @param {Object} props
  * @param {PostData} props.postData
+ * @param {boolean} props.isMember
  * @returns {JSX.Element}
  */
-export default function AmpMain({ postData }) {
+export default function AmpMain({ postData, isMember }) {
   const {
     title = '',
     sections = [],
@@ -134,6 +137,8 @@ export default function AmpMain({ postData }) {
     brief = { blocks: [], entityMap: {} },
     content = { blocks: [], entityMap: {} },
   } = postData
+
+  const sharedUrl = useSharedUrl()
 
   const sectionsWithOrdered =
     manualOrderOfSections && manualOrderOfSections.length
@@ -199,6 +204,11 @@ export default function AmpMain({ postData }) {
       </AmpBriefContainer>
       <AmpContentContainer>
         <DraftRenderBlock rawContentBlock={content} contentLayout="amp" />
+        {isMember && (
+          <Link href={sharedUrl.replace('/amp/', '/')}>
+            【 加入鏡週刊會員，觀看全文 】
+          </Link>
+        )}
       </AmpContentContainer>
     </MainWrapper>
   )

@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.3",
-    "@mirrormedia/lilith-draft-renderer": "^1.2.0-alpha.24",
+    "@mirrormedia/lilith-draft-renderer": "^1.2.0-alpha.25",
     "@next/font": "^13.1.2",
     "@readr-media/react-image": "^1.5.1",
     "@readr-media/share-button": "^1.0.3",
@@ -23,6 +23,7 @@
     "body-scroll-lock": "3.1.5",
     "cors": "^2.8.5",
     "dayjs": "^1.11.7",
+    "firebase": "^9.22.0",
     "graphql": "^16.6.0",
     "next": "^13.0.7",
     "react": "18.2.0",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@types/facebook-js-sdk": "^3.3.6",
+    "@types/google-publisher-tag": "^1.20230410.0",
     "concurrently": "^7.4.0",
     "eslint-config-next": "12.2.5",
     "express": "^4.18.1"
