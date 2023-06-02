@@ -109,7 +109,7 @@ export default function AdultOnlyWarning({ isAdult = false }) {
   }, [shouldShowAdultWarning])
 
   const adultOnlyJsx = shouldShowAdultWarning ? (
-    <Wrapper ref={warningRef}>
+    <Wrapper ref={warningRef} id="adult-only-warning">
       <WarningContent>
         <WarningTitle>
           您即將進入之內容
@@ -127,6 +127,7 @@ export default function AdultOnlyWarning({ isAdult = false }) {
             onClick={() => {
               setIsAgreed(true)
             }}
+            on="tap:adult-only-warning.hide,amp-page.toggleClass(class='disable-scroll')"
             aria-label="是，我已年滿十八歲"
           >
             是，我已年滿十八歲

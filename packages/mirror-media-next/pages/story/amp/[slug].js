@@ -10,11 +10,17 @@ import { fetchPostBySlug } from '../../../apollo/query/posts'
 // @ts-ignore
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import styled from 'styled-components'
+import AdultOnlyWarning from '../../../components/story/shared/adult-only-warning'
 
 export const config = { amp: true }
 
 const AmpBody = styled.body`
   background: #f5f5f5;
+  &.disable-scroll {
+    margin: 0;
+    height: 100vh !important;
+    overflow: hidden !important;
+  }
 `
 
 /**
@@ -33,7 +39,8 @@ function StoryAmpPage({ postData }) {
     title = '',
     relateds = [],
     manualOrderOfRelateds = [],
-    isMember,
+    isMember = false,
+    isAdult = false,
   } = postData
 
   const relatedsWithOrdered =
@@ -45,8 +52,9 @@ function StoryAmpPage({ postData }) {
       <Head>
         <title>{title}</title>
       </Head>
-      <AmpBody>
+      <AmpBody id="amp-page" className={isAdult && 'disable-scroll'}>
         <AmpHeader />
+        <AdultOnlyWarning isAdult={isAdult} />
         <AmpMain postData={postData} isMember={isMember} />
         <AmpRelated relateds={relatedsWithOrdered} />
         <AmpFooter />
