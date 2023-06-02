@@ -5,21 +5,30 @@ import AmpHeader from '../../../components/amp/amp-header'
 import AmpFooter from '../../../components/amp/amp-footer'
 import AmpRelated from '../../../components/amp/amp-related'
 import AmpMain from '../../../components/amp/amp-main'
-import { sortArrayWithOtherArrayId } from '../../../utils'
+import {
+  sortArrayWithOtherArrayId,
+  getCategoryOfWineSlug,
+} from '../../../utils'
 import { fetchPostBySlug } from '../../../apollo/query/posts'
 // @ts-ignore
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import styled from 'styled-components'
 import AdultOnlyWarning from '../../../components/story/shared/adult-only-warning'
+import WineWarning from '../../../components/story/shared/wine-warning'
 
 export const config = { amp: true }
 
 const AmpBody = styled.body`
   background: #f5f5f5;
   #amp-page.disable-scroll {
-    margin: 0;
     height: 100vh;
     overflow: hidden;
+  }
+  #amp-page.is-wine {
+    margin-bottom: 5vh;
+    ${({ theme }) => theme.breakpoint.sm} {
+      margin-bottom: 10vh;
+    }
   }
 `
 
@@ -35,12 +44,14 @@ const AmpBody = styled.body`
  */
 
 function StoryAmpPage({ postData }) {
+  const isWine = getCategoryOfWineSlug()
   const {
     title = '',
     relateds = [],
     manualOrderOfRelateds = [],
     isMember = false,
     isAdult = false,
+    categories = [],
   } = postData
 
   const relatedsWithOrdered =
@@ -53,13 +64,19 @@ function StoryAmpPage({ postData }) {
         <title>{title}</title>
       </Head>
       <AmpBody>
-        <section id="amp-page" className={isAdult && 'disable-scroll'}>
+        <section
+          id="amp-page"
+          className={`${getCategoryOfWineSlug?.length > 0 && 'is-wine'} ${
+            isAdult && 'disable-scroll'
+          }`}
+        >
           <AmpHeader />
-          <AdultOnlyWarning isAdult={isAdult} />
           <AmpMain postData={postData} isMember={isMember} />
           <AmpRelated relateds={relatedsWithOrdered} />
           <AmpFooter />
         </section>
+        <AdultOnlyWarning isAdult={isAdult} />
+        <WineWarning categories={categories} />
       </AmpBody>
     </div>
   )

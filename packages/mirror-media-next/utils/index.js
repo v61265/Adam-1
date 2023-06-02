@@ -245,6 +245,20 @@ const getMagazineHrefFromSlug = (slug) => {
   return href
 }
 
+/**
+array of categories with the slug 'wine' or 'wine1'.
+@param {Object[]} categories
+@returns {Object[]} 
+*/
+const getCategoryOfWineSlug = (categories) => {
+  if (Array.isArray(categories)) {
+    return categories.filter(
+      (category) => category.slug === 'wine' || category.slug === 'wine1'
+    )
+  }
+  return []
+}
+
 export {
   transformRawDataToArticleInfo,
   transformTimeDataIntoDotFormat,
@@ -254,4 +268,5 @@ export {
   getArticleHref,
   sortArrayWithOtherArrayId,
   getMagazineHrefFromSlug,
+  getCategoryOfWineSlug,
 }

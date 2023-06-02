@@ -2,6 +2,7 @@ import Image from 'next/image'
 
 import styled from 'styled-components'
 import { Z_INDEX } from '../../../constants'
+import { getCategoryOfWineSlug } from '../../../utils/index'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -37,15 +38,7 @@ const Wrapper = styled.div`
  */
 
 export default function WineWarning({ categories = [] }) {
-  let categoryOfWineSlug //array of categories with the slug 'wine' or 'wine1'.
-
-  if (Array.isArray(categories)) {
-    categoryOfWineSlug = categories.filter(
-      (category) => category.slug === 'wine' || category.slug === 'wine1'
-    )
-  } else {
-    categoryOfWineSlug = []
-  }
+  let categoryOfWineSlug = getCategoryOfWineSlug(categories)
 
   const wineWarningJsx =
     categoryOfWineSlug.length > 0 ? (
