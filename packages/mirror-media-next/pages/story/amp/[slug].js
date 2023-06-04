@@ -5,16 +5,30 @@ import AmpHeader from '../../../components/amp/amp-header'
 import AmpFooter from '../../../components/amp/amp-footer'
 import AmpRelated from '../../../components/amp/amp-related'
 import AmpMain from '../../../components/amp/amp-main'
-import { sortArrayWithOtherArrayId } from '../../../utils'
+import {
+  sortArrayWithOtherArrayId,
+  getCategoryOfWineSlug,
+} from '../../../utils'
 import { fetchPostBySlug } from '../../../apollo/query/posts'
-// @ts-ignore
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import styled from 'styled-components'
+import AdultOnlyWarning from '../../../components/story/shared/adult-only-warning'
+import WineWarning from '../../../components/story/shared/wine-warning'
 
 export const config = { amp: true }
 
 const AmpBody = styled.body`
   background: #f5f5f5;
+  #amp-page.disable-scroll {
+    height: 100vh;
+    overflow: hidden;
+  }
+  #amp-page.is-wine {
+    margin-bottom: 5vh;
+    ${({ theme }) => theme.breakpoint.sm} {
+      margin-bottom: 10vh;
+    }
+  }
 `
 
 /**
@@ -33,8 +47,12 @@ function StoryAmpPage({ postData }) {
     title = '',
     relateds = [],
     manualOrderOfRelateds = [],
-    isMember,
+    isMember = false,
+    isAdult = false,
+    categories = [],
   } = postData
+
+  const categoryOfWineSlug = getCategoryOfWineSlug(categories)
 
   const relatedsWithOrdered =
     manualOrderOfRelateds && manualOrderOfRelateds.length
@@ -46,10 +64,19 @@ function StoryAmpPage({ postData }) {
         <title>{title}</title>
       </Head>
       <AmpBody>
-        <AmpHeader />
-        <AmpMain postData={postData} isMember={isMember} />
-        <AmpRelated relateds={relatedsWithOrdered} />
-        <AmpFooter />
+        <section
+          id="amp-page"
+          className={`${!!categoryOfWineSlug.length && 'is-wine'} ${
+            isAdult && 'disable-scroll'
+          }`}
+        >
+          <AmpHeader />
+          <AmpMain postData={postData} isMember={isMember} />
+          <AmpRelated relateds={relatedsWithOrdered} />
+          <AmpFooter />
+        </section>
+        <AdultOnlyWarning isAdult={isAdult} />
+        <WineWarning categories={categories} />
       </AmpBody>
     </div>
   )

@@ -245,6 +245,24 @@ const getMagazineHrefFromSlug = (slug) => {
   return href
 }
 
+/**
+ * @typedef {import('../apollo/fragments/category').Category} Category - category information
+ */
+
+/**
+ * array of categories with the slug 'wine' or 'wine1'.
+ * @param {Pick<Category, 'id' | 'name' | 'slug'>[]} categories - certain category information
+ * @returns {Pick<Category, 'id' | 'name' | 'slug'>[] | []}
+ */
+const getCategoryOfWineSlug = (categories) => {
+  if (Array.isArray(categories)) {
+    return categories.filter(
+      (category) => category.slug === 'wine' || category.slug === 'wine1'
+    )
+  }
+  return []
+}
+
 export {
   transformRawDataToArticleInfo,
   transformTimeDataIntoDotFormat,
@@ -254,4 +272,5 @@ export {
   getArticleHref,
   sortArrayWithOtherArrayId,
   getMagazineHrefFromSlug,
+  getCategoryOfWineSlug,
 }

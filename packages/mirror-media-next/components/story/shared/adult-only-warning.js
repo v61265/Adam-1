@@ -3,6 +3,7 @@ import { Z_INDEX } from '../../../constants'
 import NextLink from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
+import { useAmp } from 'next/amp'
 
 const Wrapper = styled.div`
   position: fixed;
@@ -86,6 +87,7 @@ const ButtonWrapper = styled.div`
  */
 
 export default function AdultOnlyWarning({ isAdult = false }) {
+  const isAmp = useAmp()
   const [isAgreed, setIsAgreed] = useState(false)
 
   const shouldShowAdultWarning = Boolean(isAdult && !isAgreed)
@@ -108,8 +110,33 @@ export default function AdultOnlyWarning({ isAdult = false }) {
     }
   }, [shouldShowAdultWarning])
 
+  let agreeBtnJsx
+  if (isAmp) {
+    agreeBtnJsx = (
+      <button
+        className="agree-button"
+        on="tap:adult-only-warning.hide,amp-page.toggleClass(class='disable-scroll')"
+        aria-label="是，我已年滿十八歲"
+      >
+        是，我已年滿十八歲
+      </button>
+    )
+  } else {
+    agreeBtnJsx = (
+      <button
+        className="agree-button"
+        onClick={() => {
+          setIsAgreed(true)
+        }}
+        aria-label="是，我已年滿十八歲"
+      >
+        是，我已年滿十八歲
+      </button>
+    )
+  }
+
   const adultOnlyJsx = shouldShowAdultWarning ? (
-    <Wrapper ref={warningRef}>
+    <Wrapper ref={warningRef} id="adult-only-warning">
       <WarningContent>
         <WarningTitle>
           您即將進入之內容
@@ -122,15 +149,7 @@ export default function AdultOnlyWarning({ isAdult = false }) {
         </p>
 
         <ButtonWrapper>
-          <button
-            className="agree-button"
-            onClick={() => {
-              setIsAgreed(true)
-            }}
-            aria-label="是，我已年滿十八歲"
-          >
-            是，我已年滿十八歲
-          </button>
+          {agreeBtnJsx}
           <NextLink href="/" aria-label="離開">
             <button>離開</button>
           </NextLink>
