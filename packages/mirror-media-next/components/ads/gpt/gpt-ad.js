@@ -60,7 +60,7 @@ export default function GPTAd({
   className,
 }) {
   const [adWidth, setAdWidth] = useState('')
-  const [adOptDiv, setAdOptDiv] = useState('')
+  const [adDivId, setAdDivId] = useState('')
   const { width } = useWindowDimensions()
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function GPTAd({
     const adDivId = adUnitPath
     const adWidth = getAdWidth(adSize)
     setAdWidth(adWidth)
-    setAdOptDiv(adDivId)
+    setAdDivId(adDivId)
 
     /**
      * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
@@ -139,7 +139,7 @@ export default function GPTAd({
 
   return (
     <Wrapper className={`${className} gpt-ad`}>
-      <Ad width={adWidth} id={adOptDiv} />
+      <Ad width={adWidth} id={adDivId} />
     </Wrapper>
   )
 }
