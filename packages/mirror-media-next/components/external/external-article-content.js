@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { draftEditorCssExternal } from '@mirrormedia/lilith-draft-renderer'
+import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+const { draftEditorCssExternal } = MirrorMedia
 
 const Wrapper = styled.section`
   margin-top: 32px;
