@@ -15,7 +15,7 @@ import SocialNetworkService from '../../components/story/normal/social-network-s
 import SubscribeInviteBanner from '../../components/story/normal/subscribe-invite-banner'
 import DonateBanner from '../../components/story/shared/donate-banner'
 import MagazineInviteBanner from '../../components/story/shared/magazine-invite-banner'
-// import ArticleContent from '../../components/story/normal/article-content'
+import ExternalArticleContent from '../../components/external/external-article-content'
 import ExternalHeroImage from '../../components/external/external-hero-image'
 import Divider from '../../components/story/shared/divider'
 import { transformTimeDataIntoDotFormat } from '../../utils'
@@ -310,7 +310,7 @@ export default function ExternalNormalStyle({ external }) {
     title = '',
     thumb = '',
     brief = '',
-    // content = '',
+    content = '',
     partner = null,
     publishedDate = '',
     updatedAt = '',
@@ -416,7 +416,7 @@ export default function ExternalNormalStyle({ external }) {
 
           <ArticleBrief brief={externalBrief} />
 
-          {/* <ArticleContent content={content} /> */}
+          <ExternalArticleContent content={content} />
 
           {updatedTimeJsx}
 
