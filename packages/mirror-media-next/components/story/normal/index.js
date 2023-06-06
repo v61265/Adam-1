@@ -28,6 +28,7 @@ import {
 import { fetchHeaderDataInDefaultPageLayout } from '../../../utils/api'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
+import DableAd from '../../ads/dable/dable-ad'
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
@@ -549,6 +550,7 @@ export default function StoryNormalStyle({ postData }) {
           />
           <AdvertisementDableMobile>
             dable廣告(手機版)施工中......
+            <DableAd isDesktop={false} />
           </AdvertisementDableMobile>
           <StoryEndDesktop>
             <StoryMoreInfo>
@@ -569,6 +571,7 @@ export default function StoryNormalStyle({ postData }) {
             <MagazineInviteBanner />
             <AdvertisementDableDesktop>
               dable廣告 (桌機版) 施工中......
+              <DableAd isDesktop={true} />
             </AdvertisementDableDesktop>
           </StoryEndDesktop>
         </Article>
