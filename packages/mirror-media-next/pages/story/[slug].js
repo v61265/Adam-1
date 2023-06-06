@@ -12,6 +12,7 @@ import { fetchPostBySlug } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
 import Layout from '../../components/shared/layout'
 import { convertDraftToText, getResizedUrl } from '../../utils/index'
+import { handleStoryPageRedirect } from '../../utils/story'
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
 const StoryPhotographyStyle = dynamic(() =>
   import('../../components/story/photography')
@@ -191,35 +192,7 @@ export async function getServerSideProps({ params, req }) {
 
     //redirect to specific slug or external url
     const redirect = postData?.redirect
-
-    if (redirect && redirect.trim()) {
-      const redirectHref = redirect.trim()
-      if (
-        redirectHref.startsWith('https://') ||
-        redirectHref.startsWith('http://')
-      ) {
-        return {
-          redirect: {
-            destination: `${redirectHref} `,
-            permanent: false,
-          },
-        }
-      } else if (redirectHref.startsWith('www.')) {
-        return {
-          redirect: {
-            destination: `https://${redirectHref}`,
-            permanent: false,
-          },
-        }
-      } else {
-        return {
-          redirect: {
-            destination: `/story/${redirectHref} `,
-            permanent: false,
-          },
-        }
-      }
-    }
+    handleStoryPageRedirect(redirect)
 
     return {
       props: {
