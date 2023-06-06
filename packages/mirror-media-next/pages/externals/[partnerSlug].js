@@ -80,7 +80,7 @@ export default function ExternalPartner({
 }) {
   return (
     <Layout
-      head={{ title: `${partner?.name}分類報導` }}
+      head={{ title: `${partner?.name}相關報導` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >

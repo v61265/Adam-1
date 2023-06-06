@@ -63,7 +63,7 @@ const RENDER_PAGE_SIZE = 12
 export default function Topics({ topics, topicsCount, headerData }) {
   return (
     <Layout
-      head={{ title: `精選專區分類報導` }}
+      head={{ title: `精選專區` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >

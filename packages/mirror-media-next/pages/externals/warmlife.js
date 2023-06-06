@@ -64,7 +64,7 @@ const WarmLifeTitle = styled.h1`
 export default function WarmLife({ warmLifeData, headerData }) {
   return (
     <Layout
-      head={{ title: `${WARM_LIFE_DEFAULT_TITLE}分類報導` }}
+      head={{ title: `${WARM_LIFE_DEFAULT_TITLE}相關報導` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >

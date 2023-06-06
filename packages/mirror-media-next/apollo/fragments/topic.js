@@ -17,6 +17,8 @@ import { tag } from './tag'
  * @property {number} postsCount
  * @property {import('./post').Post[]} posts
  * @property {import('./tag').Tag[]} tags
+ * @property {string} og_description
+ * @property {import('./photo').Photo} og_image
  */
 
 export const simpleTopic = gql`
@@ -56,6 +58,10 @@ export const topic = gql`
     }
     tags {
       ...tag
+    }
+    og_description
+    og_image {
+      ...heroImage
     }
   }
 `
