@@ -1,6 +1,6 @@
 /**
  * @typedef {Object} Redirect
- * @property {{ destination: string,permanent: boolean }} redirect
+ * @property {{ destination: string, permanent: boolean }} redirect
  */
 /**
  *
