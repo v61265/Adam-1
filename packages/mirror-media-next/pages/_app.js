@@ -11,6 +11,7 @@ import WholeSiteScript from '../components/whole-site-script'
 import { auth } from '../firebase'
 import axios from 'axios'
 import { WEEKLY_API_SERVER_ORIGIN } from '../config/index.mjs'
+
 /**
  *
  * @param {Object} props
