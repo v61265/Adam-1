@@ -11,6 +11,7 @@ import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 import { fetchPostBySlug } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
 import Layout from '../../components/shared/layout'
+import { convertDraftToText, getResizedUrl } from '../../utils/index'
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
 const StoryPhotographyStyle = dynamic(() =>
   import('../../components/story/photography')
@@ -133,15 +134,12 @@ export default function Story({ postData }) {
     <Layout
       head={{
         title: `${title}`,
-        // fallback to undefined if both text is empty string or falsy value
         description:
-          postData.brief?.blocks[0]?.text ||
-          postData.content?.blocks[0]?.text ||
-          undefined,
+          convertDraftToText(postData.brief) ||
+          convertDraftToText(postData.content),
         imageUrl:
-          postData.heroImage?.resized?.original ||
-          postData.og_image?.resized?.original ||
-          undefined,
+          getResizedUrl(postData.og_image?.resized) ||
+          getResizedUrl(postData.heroImage?.resized),
       }}
       header={{ type: 'empty' }}
       footer={{ type: 'empty' }}
