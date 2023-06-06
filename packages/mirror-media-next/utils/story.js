@@ -4,6 +4,7 @@
  */
 /**
  *
+ * Decide whether to redirect, or should redirect to external URL, or `story/[slug]` page.
  * @param {string} redirect - post's redirect URL
  * @returns {Redirect}
  */
