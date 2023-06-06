@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 
 import { getAdSlotParam, getAdWidth } from '../../../utils/gpt-ad.js'
 import styled from 'styled-components'
-import useWindowDimensions from '../../../hooks/useWindowDimensions.js'
 
 // use global object store cross component div id name and prevent re-render when update
 const GPTAdSlotsDefined = {}
@@ -60,14 +59,10 @@ export default function GPTAd({
   className,
 }) {
   const [adWidth, setAdWidth] = useState('')
-  const [adOptDiv, setAdOptDiv] = useState('')
-  const { width } = useWindowDimensions()
+  const [adDivId, setAdDivId] = useState('')
 
   useEffect(() => {
-    if (!width) {
-      return
-    }
-
+    const width = window.innerWidth
     const adSlotParam = getAdSlotParam(pageKey, adKey, width)
     if (!adSlotParam) {
       return
@@ -76,7 +71,7 @@ export default function GPTAd({
     const adDivId = adUnitPath
     const adWidth = getAdWidth(adSize)
     setAdWidth(adWidth)
-    setAdOptDiv(adDivId)
+    setAdDivId(adDivId)
 
     /**
      * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
@@ -135,11 +130,11 @@ export default function GPTAd({
         window.googletag.destroySlots([adSlot])
       })
     }
-  }, [adKey, pageKey, width, onSlotRequested, onSlotRenderEnded])
+  }, [adKey, pageKey, onSlotRequested, onSlotRenderEnded])
 
   return (
     <Wrapper className={`${className} gpt-ad`}>
-      <Ad width={adWidth} id={adOptDiv} />
+      <Ad width={adWidth} id={adDivId} />
     </Wrapper>
   )
 }

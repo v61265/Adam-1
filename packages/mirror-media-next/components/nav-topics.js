@@ -53,7 +53,7 @@ export default function NavTopics({ topics = [] }) {
     <TopicsWrapper>
       <Topics>
         {topics.map((topic) => (
-          <Topic key={topic.id} href={`topic/${topic.id}`}>
+          <Topic key={topic.id} href={`/topic/${topic.id}`}>
             <h2>{topic.name}</h2>
           </Topic>
         ))}
