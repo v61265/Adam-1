@@ -263,6 +263,51 @@ const getCategoryOfWineSlug = (categories) => {
   return []
 }
 
+/**
+ * Convert the `text` content in `rawContentBlock` data (h2, h3, unstyled)
+ * and combine the first 160 characters as a plain text description for `og-description`.
+ * @param {import('../type/draft-js').Draft} rawContentBlock
+ * @returns {string | undefined}
+ */
+const convertDraftToText = (rawContentBlock) => {
+  if (
+    rawContentBlock &&
+    rawContentBlock?.blocks &&
+    rawContentBlock.blocks.length > 0
+  ) {
+    const text = rawContentBlock.blocks.map((block) => block.text).join('')
+
+    const ogDescription =
+      text && text.length > 160
+        ? text.trim().slice(0, 160) + '...'
+        : text.trim()
+
+    return ogDescription
+  } else {
+    return undefined
+  }
+}
+
+/**
+ * To get the URL link for `og-image`, sorted in ascending order based on file size.
+ * @param {import('../apollo/fragments/photo').Resized | undefined | null} resized
+ * @returns {string | undefined}
+ */
+const getResizedUrl = (resized) => {
+  if (resized) {
+    return (
+      resized?.w480 ||
+      resized?.w800 ||
+      resized?.w1200 ||
+      resized?.w1600 ||
+      resized?.w2400 ||
+      resized?.original
+    )
+  } else {
+    return undefined
+  }
+}
+
 export {
   transformRawDataToArticleInfo,
   transformTimeDataIntoDotFormat,
@@ -273,4 +318,6 @@ export {
   sortArrayWithOtherArrayId,
   getMagazineHrefFromSlug,
   getCategoryOfWineSlug,
+  convertDraftToText,
+  getResizedUrl,
 }
