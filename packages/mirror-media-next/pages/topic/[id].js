@@ -10,6 +10,7 @@ import TopicGroup from '../../components/topic/group/topic-group'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
 import { parseUrl } from '../../utils/topic'
+import { convertDraftToText, getResizedUrl } from '../../utils/index'
 
 const RENDER_PAGE_SIZE = 12
 
@@ -53,8 +54,12 @@ export default function Topic({ topic, slideshowData, headerData }) {
       head={{
         title: `${topic?.name}`,
         // fallback to undefined if text is empty string or falsy value
-        description: topic?.brief?.blocks[0]?.text || undefined,
-        imageUrl: parseUrl(topic?.style),
+        description:
+          topic?.og_description ||
+          convertDraftToText(topic?.brief) ||
+          undefined,
+        imageUrl:
+          getResizedUrl(topic?.og_image?.resized) || parseUrl(topic?.style),
       }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
