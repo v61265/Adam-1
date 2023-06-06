@@ -9,6 +9,7 @@ import {
   sortArrayWithOtherArrayId,
   getCategoryOfWineSlug,
 } from '../../../utils'
+import { handleStoryPageRedirect } from '../../../utils/story'
 import { fetchPostBySlug } from '../../../apollo/query/posts'
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import styled from 'styled-components'
@@ -110,37 +111,8 @@ export async function getServerSideProps({ params, req }) {
     }
 
     //redirect to specific slug or external url
-    // TODO: 抽成一個 utils function
     const redirect = postData?.redirect
-
-    if (redirect && redirect.trim()) {
-      const redirectHref = redirect.trim()
-      if (
-        redirectHref.startsWith('https://') ||
-        redirectHref.startsWith('http://')
-      ) {
-        return {
-          redirect: {
-            destination: `${redirectHref} `,
-            permanent: false,
-          },
-        }
-      } else if (redirectHref.startsWith('www.')) {
-        return {
-          redirect: {
-            destination: `https://${redirectHref}`,
-            permanent: false,
-          },
-        }
-      } else {
-        return {
-          redirect: {
-            destination: `/story/${redirectHref} `,
-            permanent: false,
-          },
-        }
-      }
-    }
+    handleStoryPageRedirect(redirect)
 
     return {
       props: {
