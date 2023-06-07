@@ -7,6 +7,7 @@ import {
   getArticleHref,
 } from '../../../utils'
 import Image from '@readr-media/react-image'
+import PopInAdInHotList from '../../ads/pop-in/pop-in-ad-in-hot-list'
 
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
@@ -342,6 +343,10 @@ export default function AsideArticleList({
   const handleOnClick = () => {
     setIsLoaded((pre) => !pre)
   }
+
+  // sample code to use Pop In ad, need to deal with the order to insert
+  newsJsx.unshift(<PopInAdInHotList />)
+
   return (
     <>
       {/* TestButton is temporarily added for testing style of loading component. */}

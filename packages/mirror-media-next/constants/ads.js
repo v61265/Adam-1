@@ -36,6 +36,11 @@ const MICRO_AD_UNITS = {
   },
 }
 
+const POP_IN_IDS = {
+  RELATED: ['_popIn_recommend'],
+  HOT: ['_popIn_recommend_hot', '_popIn_recommend_hot_2'],
+}
+
 const DABLE_WIDGET_IDS = {
   MB: '6XgaOJ7N',
   PC: 'GlYwenoy',
@@ -1551,4 +1556,10 @@ const GPT_UNITS = {
 
 const GPT_AD_NETWORK = '40175602'
 
-export { MICRO_AD_UNITS, DABLE_WIDGET_IDS, GPT_UNITS, GPT_AD_NETWORK }
+export {
+  MICRO_AD_UNITS,
+  POP_IN_IDS,
+  DABLE_WIDGET_IDS,
+  GPT_UNITS,
+  GPT_AD_NETWORK,
+}

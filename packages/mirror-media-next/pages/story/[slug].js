@@ -13,6 +13,7 @@ import StoryNormalStyle from '../../components/story/normal'
 import Layout from '../../components/shared/layout'
 import { convertDraftToText, getResizedUrl } from '../../utils/index'
 import { handleStoryPageRedirect } from '../../utils/story'
+
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
 const StoryPhotographyStyle = dynamic(() =>
   import('../../components/story/photography')
@@ -96,6 +97,7 @@ export default function Story({ postData }) {
   } = postData
 
   const [storyLayout, setStoryLayout] = useState(null)
+  // add pop in script for example, need to place to the right postition (story type)
 
   const renderStoryLayout = () => {
     switch (storyLayout) {
