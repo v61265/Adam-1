@@ -3,9 +3,6 @@ import { useEffect, useState } from 'react'
 import { getAdSlotParam, getAdWidth } from '../../../utils/gpt-ad.js'
 import styled from 'styled-components'
 
-// use global object store cross component div id name and prevent re-render when update
-const GPTAdSlotsDefined = {}
-
 const Wrapper = styled.div`
   /**
  * 廣告有時會替換掉原本 <Ad> 元件裡頭的根元素 <div>
@@ -65,7 +62,9 @@ export default function GPTAd({
 
   useEffect(() => {
     if (!(pageKey && adKey)) {
-      console.error(`GPTAd not receive necessary pageKey ${pageKe} or ${adKey}`)
+      console.error(
+        `GPTAd not receive necessary pageKey ${pageKey} or ${adKey}`
+      )
       return
     }
     const width = window.innerWidth
@@ -82,24 +81,16 @@ export default function GPTAd({
     /**
      * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
      */
-    let adSlot = GPTAdSlotsDefined[adDivId]
-    if (!adSlot) {
-      window.googletag.cmd.push(() => {
-        adSlot = window.googletag
-          .defineSlot(adUnitPath, adSize, adDivId)
-          .addService(window.googletag.pubads())
+    let adSlot
+    window.googletag.cmd.push(() => {
+      adSlot = window.googletag
+        .defineSlot(adUnitPath, adSize, adDivId)
+        .addService(window.googletag.pubads())
+    })
 
-        GPTAdSlotsDefined[adDivId] = adSlot
-      })
-
-      window.googletag.cmd.push(() => {
-        window.googletag.display(adDivId)
-      })
-    } else {
-      window.googletag.cmd.push(() => {
-        window.googletag.pubads().refresh([adSlot])
-      })
-    }
+    window.googletag.cmd.push(() => {
+      window.googletag.display(adDivId)
+    })
 
     // all events, check https://developers.google.com/publisher-tag/reference?hl=en#googletag.events.eventtypemap for all events
     window.googletag.cmd.push(() => {
