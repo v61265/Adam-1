@@ -64,6 +64,10 @@ export default function GPTAd({
   const [adDivId, setAdDivId] = useState('')
 
   useEffect(() => {
+    if (!(pageKey && adKey)) {
+      console.error(`GPTAd not receive necessary pageKey ${pageKe} or ${adKey}`)
+      return
+    }
     const width = window.innerWidth
     const adSlotParam = getAdSlotParam(pageKey, adKey, width)
     if (!adSlotParam) {
