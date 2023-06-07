@@ -6,7 +6,8 @@
     "dev": "concurrently \"node mocks/server\" \"next dev\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "start-amp-proxy-server": "node amp-proxy-server"
   },
   "engines": {
     "node": ">=14.0.0 <17.0.0"

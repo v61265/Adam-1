@@ -25,4 +25,8 @@ COPY --from=build /build/public ./public
 COPY --from=build /build/.next/standalone ./
 COPY --from=build /build/.next/static ./.next/static
 
-CMD ["node", "server.js"]
+## Use tini to manage zombie processes and signal forwarding
+## https://github.com/krallin/tini
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
+CMD ["/app/run.sh"]
