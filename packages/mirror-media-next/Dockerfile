@@ -8,6 +8,8 @@ RUN set -e; \
     apt-get update -y && apt-get -y install tini; \
     apt-get clean
 
+RUN whereis tini
+
 COPY package.json yarn.lock /build/
 
 RUN yarn install
