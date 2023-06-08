@@ -48,8 +48,8 @@ Ref: [ECMAScript Modules | Node.js](https://nodejs.org/docs/latest-v13.x/api/esm
 
 ## Environment Variables (環境變數)
 
-| 變數名稱            | 資料型態 | 初始值 | 變數說明                        |
-| ------------------- | -------- | ------ | ------------------------------- |
-| PROXY_AMP           | 布林     | false  | 是否為 proxy AMP 模式           |
-| PROXY_SERVER_PORT   | 字串     | '3000' | proxy server port               |
-| PROXIED_SERVER_PORT | 字串     | '3001' | 被 proxy 的 next.js server port |
+| 變數名稱            | 資料型態   | 初始值  | 變數說明                        |
+| ------------------- | ---------- | ------- | ------------------------------- |
+| PROXY_AMP           | 字串(布林) | 'false' | 是否為 proxy AMP 模式           |
+| PROXY_SERVER_PORT   | 字串(整數) | '3000'  | proxy server port               |
+| PROXIED_SERVER_PORT | 字串(整數) | '3001'  | 被 proxy 的 next.js server port |
