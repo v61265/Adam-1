@@ -1,4 +1,4 @@
-ARG NODE_VERSION=14.17.3
+ARG NODE_VERSION=16-slim
 
 FROM node:${NODE_VERSION} AS build
 
@@ -31,7 +31,6 @@ COPY --from=build /build/run.sh /app/
 COPY --from=build /build/.next/standalone ./
 COPY --from=build /build/.next/static ./.next/static
 
-RUN ls /app/
 
 ## Use tini to manage zombie processes and signal forwarding
 ## https://github.com/krallin/tini
