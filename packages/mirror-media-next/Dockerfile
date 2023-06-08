@@ -32,6 +32,7 @@ COPY --from=build /build/.next/standalone ./
 COPY --from=build /build/.next/static ./.next/static
 
 
+RUN chmod +x run.sh
 ## Use tini to manage zombie processes and signal forwarding
 ## https://github.com/krallin/tini
 ENTRYPOINT ["/usr/bin/tini", "--"]
