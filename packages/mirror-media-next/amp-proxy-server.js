@@ -39,6 +39,6 @@ app.use(
 )
 
 // Start Proxy
-app.listen(PORXY_SERVER_PORT, HOST, () => {
+app.listen(PORXY_SERVER_PORT, () => {
   console.log(`Starting Proxy at ${HOST}:${PORXY_SERVER_PORT}`)
 })
