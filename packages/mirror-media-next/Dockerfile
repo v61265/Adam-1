@@ -1,14 +1,14 @@
-RUN set -e; \
-    apt-get update -y && apt-get install -y \
-    tini \
-    apt-get update; \
-    apt-get clean
-
 ARG NODE_VERSION=14.17.3
 
 FROM node:${NODE_VERSION} AS build
 
 WORKDIR /build
+
+RUN set -e; \
+    apt-get update -y && apt-get install -y \
+    tini \
+    apt-get update; \
+    apt-get clean
 
 COPY package.json yarn.lock /build/
 
