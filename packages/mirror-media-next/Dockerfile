@@ -23,10 +23,9 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY . $WORKDIR/
 
 COPY --from=build /build/public ./public
-
+COPY --from=build /build/run.sh /app/
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=build /build/.next/standalone ./
