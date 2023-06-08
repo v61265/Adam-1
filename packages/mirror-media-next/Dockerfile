@@ -6,7 +6,7 @@ WORKDIR /build
 
 RUN set -e; \
     apt-get update -y && apt-get install -y \
-    tini; \
+    tini \
     apt-get update; \
     apt-get clean
 
