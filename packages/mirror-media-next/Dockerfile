@@ -1,10 +1,8 @@
-ARG NODE_VERSION=16-slim
+ARG NODE_VERSION=14.17.3
 
 FROM node:${NODE_VERSION} AS build
 
 WORKDIR /build
-
-RUN whereis tini
 
 COPY package.json yarn.lock /build/
 
@@ -30,6 +28,8 @@ COPY --from=build /build/public ./public
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=build /build/.next/standalone ./
 COPY --from=build /build/.next/static ./.next/static
+
+RUN ls /app/
 
 ## Use tini to manage zombie processes and signal forwarding
 ## https://github.com/krallin/tini
