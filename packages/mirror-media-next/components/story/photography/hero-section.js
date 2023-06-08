@@ -4,7 +4,9 @@ import styled from 'styled-components'
 /**
  * @param {Object} props
  * @param {string} props.imageUrl
+ * @param {boolean} props.isIOS
  */
+
 const getImageUrl = (props) => props.imageUrl
 
 const HeroImage = styled.div`
@@ -24,11 +26,12 @@ const HeroImage = styled.div`
   flex-direction: column;
   justify-content: center;
 
-  background-attachment: ${({
-    // @ts-ignore
-    isIOS,
-  }) => (isIOS ? 'initial' : 'fixed')};
+  background-attachment: ${({ isIOS }) => (isIOS ? 'initial' : 'fixed')};
 `
+/**
+ * Check whether in iOS environment
+ * @returns {boolean} True if the current environment is iOS, false otherwise.
+ */
 const isIOS = () => {
   // @ts-ignore
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
@@ -149,7 +152,6 @@ export default function HeroSection({
         heroImage?.resized?.w480 ||
         '/images/default-og-img.png'
       }
-      // @ts-ignore
       isIOS={isIOSDevice}
     >
       <TitleBox>
