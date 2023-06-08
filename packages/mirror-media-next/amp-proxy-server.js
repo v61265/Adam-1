@@ -24,9 +24,8 @@ app.use(
       const response = responseBuffer.toString('utf8') // convert buffer to string
 
       // manipulate html to remove all amp prohibit attributes
-      const ampProhibitAttributes = ['contenteditable', 'spellcheck']
       return response.replace(
-        new RegExp(ampProhibitAttributes.join('|'), 'g'),
+        /contenteditable|spellcheck/g,
         (match) => `data-${match}`
       )
     }),
