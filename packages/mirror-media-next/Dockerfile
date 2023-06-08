@@ -22,6 +22,9 @@ RUN set -e; \
 WORKDIR /app
 
 ENV NODE_ENV=production
+
+COPY . $WORKDIR/
+
 COPY --from=build /build/public ./public
 
 # Automatically leverage output traces to reduce image size
