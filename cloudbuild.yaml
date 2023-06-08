@@ -15,6 +15,8 @@ steps:
 
   # Pull previous image
   - name: gcr.io/cloud-builders/docker
+    env:
+    - 'NEXT_PUBLIC_ENV=${BRANCH_NAME}'
     args:
       - '-c'
       - 'docker pull gcr.io/$PROJECT_ID/$_IMAGE_NAME:latest || exit 0'
@@ -28,6 +30,8 @@ steps:
         cp yarn.lock packages/$_TARGET_PACKAGE
 
         cd packages/$_TARGET_PACKAGE
+
+        printenv > .env.local
 
         docker build -t \
 
