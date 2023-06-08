@@ -5,9 +5,7 @@ FROM node:${NODE_VERSION} AS build
 WORKDIR /build
 
 RUN set -e; \
-    apt-get update -y && apt-get install -y \
-    tini \
-    apt-get update; \
+    apt-get update -y && apt-get -y install tini; \
     apt-get clean
 
 COPY package.json yarn.lock /build/
