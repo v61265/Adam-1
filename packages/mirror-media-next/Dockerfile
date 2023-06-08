@@ -26,6 +26,7 @@ ENV NODE_ENV=production
 
 COPY --from=build /build/public ./public
 COPY --from=build /build/run.sh /app/
+COPY --from=build /build/amp-proxy-server.js /app/
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=build /build/.next/standalone ./
