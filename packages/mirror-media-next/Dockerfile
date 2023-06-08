@@ -6,9 +6,9 @@ WORKDIR /build
 
 RUN set -e; \
     apt-get update -y && apt-get install -y \
-    tini \
+    tini; \
     apt-get update; \
-    apt-get clean
+    && apt-get clean
 
 COPY package.json yarn.lock /build/
 
