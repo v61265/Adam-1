@@ -23,7 +23,9 @@ const { getContentBlocksH2H3 } = MirrorMedia
  */
 
 /**
- * @typedef {Pick<PostData,'content'>['content']} PostContent
+ * @typedef {Object} PostContent
+ * @property {'fullContent' | 'trimmedContent'} type
+ * @property {Pick<PostData,'content'>['content']} data
  */
 
 /**
@@ -133,11 +135,12 @@ export default function StoryPremiumStyle({ postData, postContent }) {
     heroCaption = '',
     relateds = [],
     slug = '',
-    content = null,
     manualOrderOfRelateds = [],
   } = postData
-  const shouldShowArticleMask = !isLoggedIn || !content
-  const h2AndH3Block = getContentBlocksH2H3(postContent)
+
+  const shouldShowArticleMask =
+    !isLoggedIn || postContent.type === 'trimmedContent'
+  const h2AndH3Block = getContentBlocksH2H3(postContent.data)
   const sectionsWithOrdered =
     manualOrderOfSections && manualOrderOfSections.length
       ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
@@ -253,7 +256,7 @@ export default function StoryPremiumStyle({ postData, postContent }) {
             <section className="content">
               <DraftRenderBlock
                 contentLayout="premium"
-                rawContentBlock={postContent}
+                rawContentBlock={postContent.data}
               ></DraftRenderBlock>
             </section>
             <CopyrightWarning />
