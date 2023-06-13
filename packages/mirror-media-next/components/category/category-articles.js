@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import client from '../../apollo/apollo-client'
+import Image from 'next/legacy/image'
 
 import InfiniteScrollList from '../infinite-scroll-list'
-import Image from 'next/legacy/image'
-import LoadingPage from '../../public/images/loading_page.gif'
 import ArticleList from '../shared/article-list'
-import { fetchPosts } from '../../apollo/query/posts'
 import PremiumArticleList from '../shared/premium-article-list'
+import { fetchPostsByCategorySlug } from '../../utils/api/category'
+import LoadingPage from '../../public/images/loading_page.gif'
+
 const Loading = styled.div`
   margin: 20px auto 0;
   padding: 0 0 20px;
@@ -42,25 +42,21 @@ export default function CategoryArticles({
   isPremium,
 }) {
   const fetchPageSize = renderPageSize * 2
+
   async function fetchPostsFromPage(page) {
+    if (!category?.slug) {
+      return
+    }
     try {
-      const response = await client.query({
-        query: fetchPosts,
-        variables: {
-          take: fetchPageSize,
-          skip: (page - 1) * fetchPageSize,
-          orderBy: { publishedDate: 'desc' },
-          filter: {
-            state: { equals: 'published' },
-            categories: { some: { slug: { equals: category.slug } } },
-          },
-        },
-      })
+      const take = fetchPageSize
+      const skip = (page - 1) * take
+      const response = await fetchPostsByCategorySlug(category.slug, take, skip)
       return response.data.posts
     } catch (error) {
+      // [to-do]: use beacon api to log error on gcs
       console.error(error)
+      return
     }
-    return []
   }
 
   const loader = (
