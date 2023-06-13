@@ -25,7 +25,7 @@ const statusCodes = consts.statusCodes
  *  @param {string} opts.jwtSecret
  *  @param {string} opts.weeklyProxyOrigin
  *  @param {string} opts.israfelProxyOrigin
- *  @param {string[]} [opts.corsAllowOrigin=[]]
+ *  @param {string[]|'*'} [opts.corsAllowOrigin=[]]
  *  @return {express.Application}
  */
 export function createApp({
@@ -43,18 +43,22 @@ export function createApp({
     origin: corsAllowOrigin,
   }
 
-  // enable cors pre-flight request
+  // common middlewares for every request
+  // 1. log requests
+  // 2. handle cors requests
+  app.use(
+    middlewareCreator.createLoggerMw(gcpProjectId),
+    cors(corsOpts),
+  )
+
+  // enable pre-flight request
   app.options(
     '/access-token',
-    middlewareCreator.createLoggerMw(gcpProjectId),
-    cors(corsOpts)
   )
 
   // api route for granting access token
   app.post(
     '/access-token',
-    middlewareCreator.createLoggerMw(gcpProjectId), // log request
-    cors(corsOpts), // handle cors request
     middlewareCreator.verifyIdTokenByFirebaseAdmin({ firebaseProjectId }), // check authentication
     middlewareCreator.signAccessTokenForInternalColleague({jwtSecret: jwtSecret}),
     /** @type {express.RequestHandler} */
@@ -132,7 +136,6 @@ export function createApp({
     createGraphQLProxy({
       gcpProjectId,
       jwtSecret,
-      corsAllowOrigin,
       proxyOrigin: weeklyProxyOrigin,
       proxyPath: '/content/graphql',
     })
@@ -143,7 +146,6 @@ export function createApp({
     createGraphQLProxy({
       gcpProjectId,
       jwtSecret,
-      corsAllowOrigin,
       proxyOrigin: israfelProxyOrigin,
       proxyPath: '/member/graphql',
     })
