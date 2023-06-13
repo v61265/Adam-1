@@ -10,10 +10,13 @@ import {
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
 import axios from 'axios'
+import GPTAd from '../../components/ads/gpt/gpt-ad'
+import { Z_INDEX, SECTION_IDS } from '../../constants/index'
 
 const RENDER_PAGE_SIZE = 12
-const WARM_LIFE_DEFAULT_TITLE = `生活暖流`
-const WARM_LIFE_DEFAULT_COLOR = 'lightBlue'
+const WARMLIFE_DEFAULT_TITLE = `生活暖流`
+const WARMLIFE_DEFAULT_COLOR = 'lightBlue'
+const WARMLIFE_GPT_SECTION_IDS = SECTION_IDS.news // The default section of `warmlife` page is `時事`
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -37,7 +40,7 @@ const WarmLifeTitle = styled.h1`
   line-height: 1.15;
   font-weight: 500;
 
-  color: ${({ theme }) => theme.color.brandColor[WARM_LIFE_DEFAULT_COLOR]};
+  color: ${({ theme }) => theme.color.brandColor[WARMLIFE_DEFAULT_COLOR]};
 
   ${({ theme }) => theme.breakpoint.md} {
     margin: 20px 0 24px;
@@ -48,6 +51,35 @@ const WarmLifeTitle = styled.h1`
   ${({ theme }) => theme.breakpoint.xl} {
     margin: 24px 0 28px;
     font-size: 28px;
+  }
+`
+
+const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  max-width: 336px;
+  margin: auto;
+  height: 280px;
+  margin-top: 20px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    height: 250px;
+  }
+`
+
+const StickyGPTAd = styled(GPTAd)`
+  position: fixed;
+  width: 100%;
+  max-width: 320px;
+  margin: 60px auto 0px;
+  height: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
   }
 `
 
@@ -64,16 +96,19 @@ const WarmLifeTitle = styled.h1`
 export default function WarmLife({ warmLifeData, headerData }) {
   return (
     <Layout
-      head={{ title: `${WARM_LIFE_DEFAULT_TITLE}相關報導` }}
+      head={{ title: `${WARMLIFE_DEFAULT_TITLE}相關報導` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
       <WarmLifeContainer>
-        <WarmLifeTitle>{WARM_LIFE_DEFAULT_TITLE}</WarmLifeTitle>
+        <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="HD" />
+        <WarmLifeTitle>{WARMLIFE_DEFAULT_TITLE}</WarmLifeTitle>
         <WarmLifeArticles
           warmLifeExternals={warmLifeData}
           renderPageSize={RENDER_PAGE_SIZE}
         />
+        <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="FT" />
+        <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="ST" />
       </WarmLifeContainer>
     </Layout>
   )
