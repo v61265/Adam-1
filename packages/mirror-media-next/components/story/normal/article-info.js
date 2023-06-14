@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import ButtonCopyLink from '../shared/button-copy-link'
 import DonateLink from '../shared/donate-link'
+import SubscribeLink from '../shared/subscribe-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import Tags from '../shared/tags'
 import Credits from '../shared/credits'
@@ -69,6 +70,9 @@ const SocialMediaAndDonateLink = styled.div`
       display: block;
     }
   }
+  .subscribe-btn {
+    margin-left: 8px;
+  }
 `
 
 const ArticleInfoContainer = styled.div`
@@ -86,6 +90,10 @@ const StyledTags = styled(Tags)`
   ${({ theme }) => theme.breakpoint.md} {
     margin-top: 25.5px;
   }
+`
+
+const DonateSubscribeWrapper = styled.div`
+  display: flex;
 `
 
 /**
@@ -141,7 +149,10 @@ export default function ArticleInfo({
           <ButtonSocialNetworkShare type="line" />
           <ButtonCopyLink />
         </SocialMedia>
-        <DonateLink />
+        <DonateSubscribeWrapper>
+          <DonateLink />
+          <SubscribeLink className="subscribe-btn" />
+        </DonateSubscribeWrapper>
       </SocialMediaAndDonateLink>
       <StyledTags tags={tags} />
     </ArticleInfoContainer>
