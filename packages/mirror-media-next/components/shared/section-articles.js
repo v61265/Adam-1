@@ -1,13 +1,12 @@
-import client from '../../apollo/apollo-client'
 import styled from 'styled-components'
 import Image from 'next/legacy/image'
 
 import InfiniteScrollList from '../infinite-scroll-list'
 import ArticleList from './article-list'
-import { fetchPosts } from '../../apollo/query/posts'
 import PremiumArticleList from './premium-article-list'
 import { fetchPostsBySectionSlug } from '../../utils/api/section'
 import LoadingPage from '../../public/images/loading_page.gif'
+import { fetchPremiumPostsBySectionSlug } from '../../utils/api/premiumsection'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -65,21 +64,13 @@ export default function SectionArticles({
       return
     }
     try {
-      const response = await client.query({
-        query: fetchPosts,
-        variables: {
-          take: fetchPageSize,
-          skip: (page - 1) * renderPageSize * 2,
-          orderBy: { publishedDate: 'desc' },
-          filter: {
-            state: { equals: 'published' },
-            AND: [
-              { sections: { some: { slug: { equals: section.slug } } } },
-              { sections: { some: { slug: { equals: 'member' } } } },
-            ],
-          },
-        },
-      })
+      const take = fetchPageSize
+      const skip = (page - 1) * take
+      const response = await fetchPremiumPostsBySectionSlug(
+        section.slug,
+        take,
+        skip
+      )
       return response.data.posts
     } catch (error) {
       // [to-do]: use beacon api to log error on gcs
