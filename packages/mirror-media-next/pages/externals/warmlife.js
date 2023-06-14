@@ -117,7 +117,9 @@ export default function WarmLife({ warmLifeData, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, query }) {
+  const mockError = query.error === '500'
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -132,15 +134,16 @@ export async function getServerSideProps({ req }) {
     axios({
       method: 'get',
       url: URL_STATIC_EXTERNALS_WARMLIFE,
-      timeout: API_TIMEOUT,
+      timeout: mockError ? 50 : API_TIMEOUT,
     }),
   ])
-
-  const handledResponses = responses.map((response) => {
+  const handledResponses = responses.map((response, index) => {
     if (response.status === 'fulfilled') {
       return response.value
     } else if (response.status === 'rejected') {
-      const { graphQLErrors, clientErrors, networkError } = response.reason
+      const statusCode = response.reason.response?.status
+      console.log(statusCode, typeof statusCode)
+
       const annotatingError = errors.helpers.wrap(
         response.reason,
         'UnhandledError',
@@ -159,26 +162,30 @@ export async function getServerSideProps({ req }) {
             0,
             0
           ),
-          debugPayload: {
-            graphQLErrors,
-            clientErrors,
-            networkError,
-          },
           ...globalLogFields,
         })
       )
+      if (index === 1) {
+        if (statusCode === 404) {
+          // leave undefined to be checked and redirect to 404
+          return
+        } else {
+          // fetch key data (posts) failed, redirect to 500
+          throw new Error('fetch warmlife posts failed')
+        }
+      }
       return
     }
   })
 
+  // handle header data
   const headerData =
-    'sectionsData' in handledResponses[0]
+    handledResponses[0] && 'sectionsData' in handledResponses[0]
       ? handledResponses[0]
       : {
           sectionsData: [],
           topicsData: [],
         }
-
   const sectionsData = Array.isArray(headerData.sectionsData)
     ? headerData.sectionsData
     : []
@@ -186,9 +193,13 @@ export async function getServerSideProps({ req }) {
     ? headerData.topicsData
     : []
 
+  // handle fetch warmlife post data
+  if (!handledResponses[1]) {
+    return { notFound: true }
+  }
   const warmLifeData =
-    responses[1].status === 'fulfilled' && responses[1].value?.data
-      ? responses[1].value?.data._items || []
+    handledResponses[1] && 'data' in handledResponses[1]
+      ? handledResponses[1]?.data._items || []
       : []
 
   /** @type {ListingExternal[]} */
