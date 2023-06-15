@@ -275,10 +275,16 @@ export default function StoryPremiumStyle({ postData, postContent }) {
             </section>
             <CopyrightWarning />
             {shouldShowArticleMask && <ArticleMask postId={id} />}
-            {memberType === 'one-time-member' ? (
-              <SupportMirrorMediaBanner />
-            ) : (
-              <SupportSingleArticleBanner />
+            {!(
+              memberType === 'not-member' || memberType === 'basic-member'
+            ) && (
+              <div>
+                {memberType === 'one-time-member' ? (
+                  <SupportMirrorMediaBanner />
+                ) : (
+                  <SupportSingleArticleBanner />
+                )}
+              </div>
             )}
           </ContentWrapper>
         </article>
