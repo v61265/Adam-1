@@ -15,6 +15,7 @@ import VideoList from '../../components/video/video-list'
 import YoutubePolicy from '../../components/shared/youtube-policy'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -118,6 +119,8 @@ const StickyGPTAd = styled(GPTAd)`
  * @returns
  */
 export default function Video({ video, latestVideos, headerData }) {
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{
@@ -130,15 +133,23 @@ export default function Video({ video, latestVideos, headerData }) {
     >
       <Wrapper>
         <YoutubeIframe videoId={video.id} />
-        <StyledGPTAd_HD pageKey="videohub" adKey="HD" />
+
+        {shouldShowAd && <StyledGPTAd_HD pageKey="videohub" adKey="HD" />}
+
         <ContentWrapper>
           <YoutubeArticle video={video} />
-          <StyledGPTAd_E1 pageKey="videohub" adKey="E1" />
+          {shouldShowAd && <StyledGPTAd_E1 pageKey="videohub" adKey="E1" />}
           <VideoList videos={latestVideos} />
         </ContentWrapper>
+
         <YoutubePolicy />
-        <StyledGPTAd_FT pageKey="videohub" adKey="FT" />
-        <StickyGPTAd pageKey="videohub" adKey="ST" />
+
+        {shouldShowAd && (
+          <>
+            <StyledGPTAd_FT pageKey="videohub" adKey="FT" />
+            <StickyGPTAd pageKey="videohub" adKey="ST" />
+          </>
+        )}
       </Wrapper>
     </Layout>
   )

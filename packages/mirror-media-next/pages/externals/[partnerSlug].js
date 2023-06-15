@@ -18,6 +18,7 @@ import {
   getPageKeyByPartnerSlug,
 } from '../../utils/external'
 import { Z_INDEX } from '../../constants/index'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -116,6 +117,8 @@ export default function ExternalPartner({
   partner,
   headerData,
 }) {
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `${partner?.name}相關報導` }}
@@ -123,10 +126,12 @@ export default function ExternalPartner({
       footer={{ type: 'default' }}
     >
       <PartnerContainer>
-        <StyledGPTAd
-          pageKey={getPageKeyByPartnerSlug(partner.slug)}
-          adKey="HD"
-        />
+        {shouldShowAd && (
+          <StyledGPTAd
+            pageKey={getPageKeyByPartnerSlug(partner.slug)}
+            adKey="HD"
+          />
+        )}
         <PartnerTitle partnerColor={getExternalPartnerColor(partner)}>
           {partner?.name}
         </PartnerTitle>
@@ -136,14 +141,18 @@ export default function ExternalPartner({
           partner={partner}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-        <StyledGPTAd
-          pageKey={getPageKeyByPartnerSlug(partner.slug)}
-          adKey="FT"
-        />
-        <StickyGPTAd
-          pageKey={getPageKeyByPartnerSlug(partner.slug)}
-          adKey="ST"
-        />
+        {shouldShowAd && (
+          <>
+            <StyledGPTAd
+              pageKey={getPageKeyByPartnerSlug(partner.slug)}
+              adKey="FT"
+            />
+            <StickyGPTAd
+              pageKey={getPageKeyByPartnerSlug(partner.slug)}
+              adKey="ST"
+            />
+          </>
+        )}
       </PartnerContainer>
     </Layout>
   )

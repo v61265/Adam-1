@@ -8,6 +8,7 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
 import { fetchPostsByTagSlug, fetchTagByTagSlug } from '../../utils/api/tag'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -110,6 +111,8 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Tag({ postsCount, posts, tag, headerData }) {
   const tagName = tag.name || ''
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `${tagName}相關報導` }}
@@ -117,12 +120,14 @@ export default function Tag({ postsCount, posts, tag, headerData }) {
       footer={{ type: 'default' }}
     >
       <TagContainer>
-        <StyledGPTAd pageKey="other" adKey="HD" />
+        {shouldShowAd && <StyledGPTAd pageKey="other" adKey="HD" />}
+
         {tagName && (
           <TagTitleWrapper>
             <TagTitle>{tagName}</TagTitle>
           </TagTitleWrapper>
         )}
+
         <TagArticles
           postsCount={postsCount}
           posts={posts}
@@ -130,8 +135,12 @@ export default function Tag({ postsCount, posts, tag, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
 
-        <StyledGPTAd pageKey="other" adKey="FT" />
-        <StickyGPTAd pageKey="other" adKey="ST" />
+        {shouldShowAd && (
+          <>
+            <StyledGPTAd pageKey="other" adKey="FT" />
+            <StickyGPTAd pageKey="other" adKey="ST" />
+          </>
+        )}
       </TagContainer>
     </Layout>
   )

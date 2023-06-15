@@ -12,6 +12,7 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
 import axios from 'axios'
 import { Z_INDEX, SECTION_IDS } from '../../constants/index'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -98,6 +99,8 @@ const StickyGPTAd = styled(GPTAd)`
  * @returns {React.ReactElement}
  */
 export default function WarmLife({ warmLifeData, headerData }) {
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `${WARMLIFE_DEFAULT_TITLE}相關報導` }}
@@ -105,14 +108,20 @@ export default function WarmLife({ warmLifeData, headerData }) {
       footer={{ type: 'default' }}
     >
       <WarmLifeContainer>
-        <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="HD" />
+        {shouldShowAd && (
+          <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="HD" />
+        )}
         <WarmLifeTitle>{WARMLIFE_DEFAULT_TITLE}</WarmLifeTitle>
         <WarmLifeArticles
           warmLifeExternals={warmLifeData}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-        <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="FT" />
-        <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="ST" />
+        {shouldShowAd && (
+          <>
+            <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="FT" />
+            <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="ST" />
+          </>
+        )}
       </WarmLifeContainer>
     </Layout>
   )
