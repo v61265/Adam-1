@@ -58,14 +58,16 @@ export default function GPTAd({
   onSlotRenderEnded,
   className,
 }) {
-  const { memberInfo, isLogInProcessFinished } = useMembership()
-  const { memberType } = memberInfo
+  const { isLogInProcessFinished } = useMembership()
 
   const [adWidth, setAdWidth] = useState('')
   const [adDivId, setAdDivId] = useState('')
-  const [gptAdJsx, setGptAdJsx] = useState(null)
 
   useEffect(() => {
+    if (!isLogInProcessFinished) {
+      return
+    }
+
     if (!(pageKey && adKey)) {
       console.error(
         `GPTAd not receive necessary pageKey ${pageKey} or ${adKey}`
@@ -113,27 +115,17 @@ export default function GPTAd({
         window.googletag.destroySlots([adSlot])
       })
     }
-  }, [adKey, pageKey, onSlotRequested, onSlotRenderEnded])
+  }, [
+    adKey,
+    pageKey,
+    onSlotRequested,
+    onSlotRenderEnded,
+    isLogInProcessFinished,
+  ])
 
-  //When the user's member type is 'not-member', 'one-time-member', or 'basic-member', the AD should be displayed.
-
-  // Since the member type needs to be determined on the client-side, the rendering of `gptAdJsx` should be done on the client-side.
-
-  useEffect(() => {
-    const invalidMemberType = ['not-member', 'one-time-member', 'basic-member']
-
-    if (isLogInProcessFinished) {
-      if (invalidMemberType.includes(memberType)) {
-        setGptAdJsx(
-          <Wrapper className={`${className} gpt-ad`}>
-            <Ad width={adWidth} id={adDivId} />
-          </Wrapper>
-        )
-      } else {
-        return
-      }
-    }
-  }, [adDivId, adWidth, className, isLogInProcessFinished, memberType])
-
-  return <>{gptAdJsx}</>
+  return (
+    <Wrapper className={`${className} gpt-ad`}>
+      <Ad width={adWidth} id={adDivId} />
+    </Wrapper>
+  )
 }
