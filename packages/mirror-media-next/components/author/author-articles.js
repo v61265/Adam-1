@@ -1,11 +1,10 @@
 import styled from 'styled-components'
-import client from '../../apollo/apollo-client'
+import Image from 'next/legacy/image'
 
 import InfiniteScrollList from '../infinite-scroll-list'
-import Image from 'next/legacy/image'
-import LoadingPage from '../../public/images/loading_page.gif'
 import ArticleList from '../shared/article-list'
-import { fetchPosts } from '../../apollo/query/posts'
+import { fetchPostsByAuthorId } from '../../utils/api/author'
+import LoadingPage from '../../public/images/loading_page.gif'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -17,6 +16,7 @@ const Loading = styled.div`
     padding: 0 0 64px;
   }
 `
+
 /**
  * @typedef {import('../shared/article-list').Article} Article
  * @typedef {import('../../apollo/fragments/contact').Contact} Author
@@ -27,38 +27,32 @@ const Loading = styled.div`
  * @param {Object} props
  * @param {number} props.postsCount
  * @param {Article[]} props.posts
- * @param {Author} props.author
+ * @param {Author["id"]} props.authorId
  * @param {number} props.renderPageSize
  * @returns {React.ReactElement}
  */
 export default function AuthorArticles({
   postsCount,
   posts,
-  author,
+  authorId,
   renderPageSize,
 }) {
+  const fetchPageSize = renderPageSize * 2
+
   async function fetchPostsFromPage(page) {
+    if (!authorId) {
+      return
+    }
     try {
-      const response = await client.query({
-        query: fetchPosts,
-        variables: {
-          take: renderPageSize * 2,
-          skip: (page - 1) * renderPageSize * 2,
-          orderBy: { publishedDate: 'desc' },
-          filter: {
-            state: { equals: 'published' },
-            OR: [
-              { writers: { some: { id: { equals: author.id } } } },
-              { photographers: { some: { id: { equals: author.id } } } },
-            ],
-          },
-        },
-      })
+      const take = fetchPageSize
+      const skip = (page - 1) * take
+      const response = await fetchPostsByAuthorId(authorId, take, skip)
       return response.data.posts
     } catch (error) {
+      // [to-do]: use beacon api to log error on gcs
       console.error(error)
+      return
     }
-    return
   }
 
   const loader = (
@@ -71,7 +65,7 @@ export default function AuthorArticles({
     <InfiniteScrollList
       initialList={posts}
       renderAmount={renderPageSize}
-      fetchCount={Math.ceil(postsCount / renderPageSize)}
+      fetchCount={Math.ceil(postsCount / fetchPageSize)}
       fetchListInPage={fetchPostsFromPage}
       loader={loader}
     >

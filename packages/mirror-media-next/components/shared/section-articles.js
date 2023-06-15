@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import client from '../../apollo/apollo-client'
+import Image from 'next/legacy/image'
 
 import InfiniteScrollList from '../infinite-scroll-list'
-import Image from 'next/legacy/image'
-import LoadingPage from '../../public/images/loading_page.gif'
 import ArticleList from './article-list'
-import { fetchPosts } from '../../apollo/query/posts'
 import PremiumArticleList from './premium-article-list'
+import { fetchPostsBySectionSlug } from '../../utils/api/section'
+import LoadingPage from '../../public/images/loading_page.gif'
+import { fetchPremiumPostsBySectionSlug } from '../../utils/api/premiumsection'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -41,46 +41,39 @@ export default function SectionArticles({
   renderPageSize,
   isPremium = false,
 }) {
+  const fetchPageSize = renderPageSize * 2
+
   async function fetchPostsFromPage(page) {
+    if (!section?.slug) {
+      return
+    }
     try {
-      const response = await client.query({
-        query: fetchPosts,
-        variables: {
-          take: renderPageSize * 2,
-          skip: (page - 1) * renderPageSize * 2,
-          orderBy: { publishedDate: 'desc' },
-          filter: {
-            state: { equals: 'published' },
-            sections: { some: { slug: { equals: section.slug } } },
-          },
-        },
-      })
+      const take = fetchPageSize
+      const skip = (page - 1) * take
+      const response = await fetchPostsBySectionSlug(section.slug, take, skip)
       return response.data.posts
     } catch (error) {
+      // [to-do]: use beacon api to log error on gcs
       console.error(error)
     }
     return
   }
 
   async function fetchPremiumPostsFromPage(page) {
+    if (!section?.slug) {
+      return
+    }
     try {
-      const response = await client.query({
-        query: fetchPosts,
-        variables: {
-          take: renderPageSize * 2,
-          skip: (page - 1) * renderPageSize * 2,
-          orderBy: { publishedDate: 'desc' },
-          filter: {
-            state: { equals: 'published' },
-            AND: [
-              { sections: { some: { slug: { equals: section.slug } } } },
-              { sections: { some: { slug: { equals: 'member' } } } },
-            ],
-          },
-        },
-      })
+      const take = fetchPageSize
+      const skip = (page - 1) * take
+      const response = await fetchPremiumPostsBySectionSlug(
+        section.slug,
+        take,
+        skip
+      )
       return response.data.posts
     } catch (error) {
+      // [to-do]: use beacon api to log error on gcs
       console.error(error)
     }
     return
@@ -96,7 +89,7 @@ export default function SectionArticles({
     <InfiniteScrollList
       initialList={posts}
       renderAmount={renderPageSize}
-      fetchCount={Math.ceil(postsCount / renderPageSize)}
+      fetchCount={Math.ceil(postsCount / fetchPageSize)}
       fetchListInPage={
         isPremium ? fetchPremiumPostsFromPage : fetchPostsFromPage
       }
