@@ -114,6 +114,7 @@ const ArticleWrapper = styled.ul`
   padding: 48px 10px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 24px;
   gap: 24px;
   ${({ theme }) => theme.breakpoint.md} {
     background: transparent;
@@ -123,11 +124,16 @@ const ArticleWrapper = styled.ul`
 `
 
 const AdvertisementWrapper = styled.div`
-  height: 300px;
-  background-color: pink;
-  padding: 28px 0 10px;
+  margin-bottom: 30px;
+  padding: 0px 10px 48px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
   ${({ theme }) => theme.breakpoint.md} {
-    padding: 20px 0 0;
+    background: transparent;
+    padding: 0px;
+    gap: 20px;
   }
 `
 
