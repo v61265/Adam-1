@@ -12,6 +12,7 @@ import {
   fetchPostsBySectionSlug,
   fetchSectionBySectionSlug,
 } from '../../utils/api/section'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -112,6 +113,8 @@ export default function Section({ postsCount, posts, section, headerData }) {
       ? SECTION_IDS['culture']
       : SECTION_IDS[section.slug]
 
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `${sectionName}分類報導` }}
@@ -119,7 +122,8 @@ export default function Section({ postsCount, posts, section, headerData }) {
       footer={{ type: 'default' }}
     >
       <SectionContainer>
-        <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="HD" />
+        {shouldShowAd && <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="HD" />}
+
         {sectionName && (
           <SectionTitle sectionName={section.slug}>{sectionName}</SectionTitle>
         )}
@@ -129,8 +133,12 @@ export default function Section({ postsCount, posts, section, headerData }) {
           section={section}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-        <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />
-        <StickyGPTAd pageKey={GPT_PAGE_KEY} adKey="ST" />
+        {shouldShowAd && (
+          <>
+            <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />
+            <StickyGPTAd pageKey={GPT_PAGE_KEY} adKey="ST" />
+          </>
+        )}
       </SectionContainer>
     </Layout>
   )
