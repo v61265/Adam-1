@@ -14,7 +14,7 @@ import AsideArticleList from '../../../components/story/normal/aside-article-lis
 import FbPagePlugin from '../../../components/story/normal/fb-page-plugin'
 import SocialNetworkService from '../../../components/story/normal/social-network-service'
 import SubscribeInviteBanner from '../../../components/story/normal/subscribe-invite-banner'
-import DonateBanner from '../../../components/story/shared/donate-banner'
+import SupportMirrorMediaBanner from '../../../components/story/shared/support-mirrormedia-banner'
 import MagazineInviteBanner from '../../../components/story/shared/magazine-invite-banner'
 import RelatedArticleList from '../../../components/story/normal/related-article-list'
 import ArticleContent from './article-content'
@@ -533,7 +533,7 @@ export default function StoryNormalStyle({ postData, postContent }) {
             <span>更新時間｜</span>
             <span className="time">{updatedTaipeiTime} 臺北時間</span>
           </DateUnderContent>
-          <DonateBanner />
+          <SupportMirrorMediaBanner />
           <SocialNetworkServiceSmall />
           <SubscribeInviteBanner />
           <RelatedArticleList relateds={relatedsWithOrdered} />
