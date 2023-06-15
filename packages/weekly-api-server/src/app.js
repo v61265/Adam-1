@@ -6,6 +6,7 @@ import express from 'express'
 import middlewareCreator from './middlewares'
 import { createGcsProxy } from './gcs-proxy-mini-app'
 import { createGraphQLProxy } from './gql-proxy-mini-app'
+import { createYoutubeProxy } from './youtube-proxy-mini-app'
 
 const statusCodes = consts.statusCodes
 
@@ -27,6 +28,7 @@ const statusCodes = consts.statusCodes
  *  @param {string} opts.weeklyProxyOrigin
  *  @param {string} opts.israfelProxyOrigin
  *  @param {string} opts.gcsProxyOrigin
+ *  @param {string} opts.youtubeProxyOrigin
  *  @param {string[]|'*'} [opts.corsAllowOrigin=[]]
  *  @return {express.Application}
  */
@@ -38,6 +40,7 @@ export function createApp({
   israfelProxyOrigin,
   gcsProxyOrigin,
   corsAllowOrigin = [],
+  youtubeProxyOrigin,
 }) {
   // create express app
   const app = express()
@@ -156,6 +159,13 @@ export function createApp({
   app.use(
     createGcsProxy({
       proxyOrigin: gcsProxyOrigin,
+    })
+  )
+
+  // mini app: youtube proxy
+  app.use(
+    createYoutubeProxy({
+      proxyOrigin: youtubeProxyOrigin,
     })
   )
 

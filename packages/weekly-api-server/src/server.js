@@ -15,6 +15,7 @@ async function start() {
       weeklyProxyOrigin: envVar.apis.weekly.origin,
       gcsProxyOrigin: envVar.gcs.origin,
       corsAllowOrigin: envVar.cors.allowOrigins,
+      youtubeProxyOrigin: envVar.youtube.origin,
     })
     server = http.createServer(app).listen(port, () => {
       console.log(

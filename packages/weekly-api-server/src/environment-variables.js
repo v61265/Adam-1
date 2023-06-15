@@ -6,6 +6,7 @@ const {
   WEEKLY_GQL_ORIGIN,
   CORS_ALLOW_ORIGINS,
   GCS_ORIGIN,
+  YOUTUBE_ORIGIN,
 } = process.env
 
 /**
@@ -45,6 +46,9 @@ const envVar = {
   },
   gcs: {
     origin: GCS_ORIGIN || 'https://v3-statics.mirrormedia.mg'
+  },
+  youtube: {
+    origin: YOUTUBE_ORIGIN || 'https://api.mirrormedia.mg'
   },
 }
 
