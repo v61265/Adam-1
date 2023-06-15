@@ -14,6 +14,7 @@ import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
 import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import DonateLink from '../shared/donate-link'
+import SubscribeLink from '../shared/subscribe-link'
 import PremiumHeader from '../../premium-header'
 import ArticleMask from './article-mask'
 import { useMembership } from '../../../context/membership'
@@ -64,6 +65,10 @@ const ContentWrapper = styled.section`
 
 const SocialMediaAndDonateLink = styled.ul`
   margin-bottom: 20px;
+
+  .subscribe-btn {
+    margin-top: 12px;
+  }
 `
 
 const SocialMedia = styled.li`
@@ -197,6 +202,9 @@ export default function StoryPremiumStyle({ postData, postContent }) {
     }
   }, [isHeaderDataLoaded])
 
+  const { memberInfo } = useMembership()
+  const { memberType } = memberInfo
+
   return (
     <>
       {isHeaderDataLoaded ? (
@@ -243,6 +251,11 @@ export default function StoryPremiumStyle({ postData, postContent }) {
                 </SocialMedia>
                 <li>
                   <DonateLink />
+                  {(memberType === 'not-member' ||
+                    memberType === 'basic-member' ||
+                    memberType === 'one-time-member') && (
+                    <SubscribeLink className="subscribe-btn" />
+                  )}
                 </li>
               </SocialMediaAndDonateLink>
             </NavSubtitleNavigator>
