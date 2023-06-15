@@ -16,6 +16,8 @@ import StoryNormalStyle from '../../components/story/normal'
 import Layout from '../../components/shared/layout'
 import { convertDraftToText, getResizedUrl } from '../../utils/index'
 import { handleStoryPageRedirect } from '../../utils/story'
+import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+const { hasContentInRawContentBlock } = MirrorMedia
 
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
 const StoryPhotographyStyle = dynamic(() =>
@@ -170,7 +172,6 @@ export async function getServerSideProps({ params, req }) {
       'logging.googleapis.com/trace'
     ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
   }
-
   try {
     const result = await client.query({
       query: fetchPostBySlug,
@@ -183,6 +184,26 @@ export async function getServerSideProps({ params, req }) {
 
     if (!postData) {
       return { notFound: true }
+    }
+
+    // Check if the post data has content in the brief, trimmedContent, or content fields
+    const shouldCheckHasContent =
+      postData.style === 'article' ||
+      postData.style === 'wide' ||
+      postData.style === 'photography'
+
+    if (shouldCheckHasContent) {
+      const hasBrief = hasContentInRawContentBlock(postData.brief)
+
+      const hasTrimmedContent = hasContentInRawContentBlock(
+        postData.trimmedContent
+      )
+      const hasFullContent = hasContentInRawContentBlock(postData.content)
+
+      // If none of the fields have content, return notFound as true
+      if (!hasBrief && !hasTrimmedContent && !hasFullContent) {
+        return { notFound: true }
+      }
     }
 
     const redirect = postData?.redirect
@@ -201,18 +222,19 @@ export async function getServerSideProps({ params, req }) {
       'Error occurs while getting story page data'
     )
 
+    const errorMessage = errors.helpers.printAll(
+      annotatingError,
+      {
+        withStack: true,
+        withPayload: true,
+      },
+      0,
+      0
+    )
     console.log(
       JSON.stringify({
         severity: 'ERROR',
-        message: errors.helpers.printAll(
-          annotatingError,
-          {
-            withStack: true,
-            withPayload: true,
-          },
-          0,
-          0
-        ),
+        message: errorMessage,
         debugPayload: {
           graphQLErrors,
           clientErrors,
@@ -221,6 +243,6 @@ export async function getServerSideProps({ params, req }) {
         ...globalLogFields,
       })
     )
-    return { notFound: true }
+    throw new Error(errorMessage)
   }
 }
