@@ -114,13 +114,14 @@ const typeHome = css`
     flex-direction: column;
     justify-content: space-between;
     padding-left: 20px;
-    //Since the advertiser uses inline-style to set the background-color, it is necessary to use !important.
+    //Since AD uses inline-style to set the background-color, it is necessary to use !important.
     background-color: #ffffff !important;
 
     ${({ theme }) => theme.breakpoint.md} {
       position: absolute;
       bottom: 0;
       z-index: 1;
+      //Since AD uses inline-style to set padding, it is necessary to use !important.
       padding-left: 0 !important;
     }
 
@@ -235,7 +236,8 @@ const typeStory = css`
       flex-direction: row-reverse;
       justify-content: space-between;
       color: #808080;
-      background-color: rgb(244, 241, 233);
+      //Since AD uses inline-style to set the background-color, it is necessary to use !important.
+      background-color: #eeeeee !important;
       gap: 20px;
     }
 
@@ -245,6 +247,7 @@ const typeStory = css`
       position: relative;
 
       img {
+        width: 100%;
         height: 100%;
         object-fit: cover;
       }
@@ -259,6 +262,8 @@ const typeStory = css`
 
     // AD Title
     .pop_item_title {
+      //Since AD uses inline-style to set the background-color, it is necessary to use !important.
+      background: none !important;
       ${({ theme }) => theme.breakpoint.md} {
         position: relative;
         padding: 16px 0 0 25.75px;
@@ -318,6 +323,7 @@ const typeStory = css`
 
           img {
             height: 100%;
+            width: 100%;
             object-fit: cover;
           }
         }
@@ -343,6 +349,7 @@ const typeStory = css`
 
           // AD Title
           h2 {
+            text-align: left;
             display: block;
             height: 100%;
             position: relative;
@@ -350,7 +357,7 @@ const typeStory = css`
             font-style: normal;
             font-weight: 400;
             font-size: 18px;
-            line-height: 1.3;
+            line-height: 1.5;
             color: #808080;
 
             &::before {
