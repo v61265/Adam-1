@@ -7,12 +7,17 @@ import dynamic from 'next/dynamic'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import WineWarning from '../../components/story/shared/wine-warning'
 import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
-
-import { fetchPostBySlug } from '../../apollo/query/posts'
+import { useMembership } from '../../context/membership'
+import {
+  fetchPostBySlug,
+  fetchPostFullContentBySlug,
+} from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
 import Layout from '../../components/shared/layout'
 import { convertDraftToText, getResizedUrl } from '../../utils/index'
 import { handleStoryPageRedirect } from '../../utils/story'
+import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+const { hasContentInRawContentBlock } = MirrorMedia
 
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
 const StoryPhotographyStyle = dynamic(() =>
@@ -27,8 +32,10 @@ import Skeleton from '../../public/images/skeleton.png'
 /**
  * @typedef {import('../../components/story/normal').PostData} PostData
  */
+/**
+ * @typedef {import('../../components/story/normal').PostContent} PostContent
+ */
 
-//Todo: adjust height, make it not to scroll when loading
 const Loading = styled.div`
   width: 100%;
   height: 100%;
@@ -39,47 +46,6 @@ const Loading = styled.div`
     margin: 0 auto;
   }
 `
-/**
- *
- * @param {'article'| 'wide' | 'projects' | 'photography' | 'script' | 'campaign' | 'readr'} articleType
- * @param {boolean} isMemberArticle
- * @param { 'yearly' | 'monthly' | 'basic' | undefined} [memberType]
- * @return {'style-normal' | 'style-wide' | 'style-photography' | 'style-premium'}
- */
-const getStoryLayout = (
-  articleType,
-  isMemberArticle = false,
-  memberType = undefined
-) => {
-  switch (articleType) {
-    case 'wide':
-      return 'style-wide'
-
-    case 'photography':
-      return 'style-photography'
-
-    case 'article':
-      if (
-        isMemberArticle ||
-        memberType === 'monthly' ||
-        memberType === 'yearly'
-      ) {
-        return 'style-premium'
-      }
-      return 'style-normal'
-
-    default:
-      return 'style-normal'
-  }
-}
-
-const mockMemberSystem = () => {
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      resolve('basic')
-    }, 1000)
-  )
-}
 
 /**
  *
@@ -90,48 +56,80 @@ const mockMemberSystem = () => {
 export default function Story({ postData }) {
   const {
     title = '',
+    slug = '',
     style = 'article',
     isMember = false,
     isAdult = false,
     categories = [],
+    content = null,
+    trimmedContent = null,
   } = postData
 
-  const [storyLayout, setStoryLayout] = useState(null)
-  // add pop in script for example, need to place to the right postition (story type)
+  /**
+   * The logic for rendering the article content:
+   * We use the state `postContent` to manage the content should render in the story page.
+   * In most cases, the story page can retrieve the full content of the article.
+   * However, if the article is exclusive to members, it is required to get full content by using user's access token, but it is impossible to acquire it at server side.
+   * Before the full content is obtained, the truncated content `trimmedContent` will be used as the displayed data.
+   * If it didn't obtain the full content, and the user is logged in, story page will try to get the full content again by using the user's access token as the request payload.
+   * If successful, the full content will be displayed; if not, the truncated content will still be shown.
+   */
+
+  const { isLoggedIn, accessToken } = useMembership()
+  /** @type { [PostContent, import('react').Dispatch<PostContent> ]} */
+
+  const [postContent, setPostContent] = useState(
+    content
+      ? { type: 'fullContent', data: content }
+      : { type: 'trimmedContent', data: trimmedContent }
+  )
+
+  useEffect(() => {
+    if (!content && isLoggedIn) {
+      const getFullContent = async () => {
+        try {
+          const result = await client.query({
+            query: fetchPostFullContentBySlug,
+            variables: { slug },
+            context: {
+              headers: {
+                authorization: accessToken ? `Bearer ${accessToken}` : '',
+              },
+            },
+          })
+          const fullContent = result?.data?.post?.content ?? null
+          return fullContent
+        } catch (err) {
+          //TODO: send error log to our GCP log viewer
+          console.error(err)
+          return null
+        }
+      }
+      const updatePostContent = async () => {
+        const fullContent = await getFullContent()
+        if (fullContent) {
+          setPostContent({ type: 'fullContent', data: fullContent })
+        }
+      }
+      updatePostContent()
+    }
+  }, [isLoggedIn, content, accessToken, slug])
 
   const renderStoryLayout = () => {
-    switch (storyLayout) {
-      case 'style-normal':
-        return <StoryNormalStyle postData={postData} />
-      case 'style-wide':
-        return <StoryWideStyle postData={postData} />
-      case 'style-photography':
-        return <StoryPhotographyStyle postData={postData} />
-      case 'style-premium':
-        return <StoryPremiumStyle postData={postData} />
-      default:
-        return <StoryNormalStyle postData={postData} />
+    if (style === 'wide') {
+      return <StoryWideStyle postData={postData} postContent={postContent} />
+    } else if (style === 'photography') {
+      return (
+        <StoryPhotographyStyle postData={postData} postContent={postContent} />
+      )
+    } else if (style === 'article' && isMember === true) {
+      return <StoryPremiumStyle postData={postData} postContent={postContent} />
     }
+    return <StoryNormalStyle postData={postData} postContent={postContent} />
   }
-  const jsx = renderStoryLayout()
+  const storyLayout = renderStoryLayout()
 
   //mock for process of changing article type
-  useEffect(() => {
-    async function getMemberType() {
-      const memberType = await mockMemberSystem()
-      return memberType
-    }
-
-    getMemberType()
-      .then((res) => {
-        const storyLayout = getStoryLayout(style, isMember, res)
-        setStoryLayout(storyLayout)
-      })
-      .catch(() => {
-        const storyLayout = getStoryLayout(style, isMember, undefined)
-        setStoryLayout(storyLayout)
-      })
-  }, [style, isMember])
 
   return (
     <Layout
@@ -153,11 +151,7 @@ export default function Story({ postData }) {
             <Image src={Skeleton} alt="loading..."></Image>
           </Loading>
         )}
-
-        <div style={{ display: `${storyLayout ? 'block' : 'none'}` }}>
-          {jsx}
-        </div>
-
+        {storyLayout}
         <WineWarning categories={categories} />
         <AdultOnlyWarning isAdult={isAdult} />
       </>
@@ -178,7 +172,6 @@ export async function getServerSideProps({ params, req }) {
       'logging.googleapis.com/trace'
     ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
   }
-
   try {
     const result = await client.query({
       query: fetchPostBySlug,
@@ -188,11 +181,31 @@ export async function getServerSideProps({ params, req }) {
      * @type {PostData}
      */
     const postData = result?.data?.post
+
     if (!postData) {
       return { notFound: true }
     }
 
-    //redirect to specific slug or external url
+    // Check if the post data has content in the brief, trimmedContent, or content fields
+    const shouldCheckHasContent =
+      postData.style === 'article' ||
+      postData.style === 'wide' ||
+      postData.style === 'photography'
+
+    if (shouldCheckHasContent) {
+      const hasBrief = hasContentInRawContentBlock(postData.brief)
+
+      const hasTrimmedContent = hasContentInRawContentBlock(
+        postData.trimmedContent
+      )
+      const hasFullContent = hasContentInRawContentBlock(postData.content)
+
+      // If none of the fields have content, return notFound as true
+      if (!hasBrief && !hasTrimmedContent && !hasFullContent) {
+        return { notFound: true }
+      }
+    }
+
     const redirect = postData?.redirect
     handleStoryPageRedirect(redirect)
 
@@ -209,18 +222,19 @@ export async function getServerSideProps({ params, req }) {
       'Error occurs while getting story page data'
     )
 
+    const errorMessage = errors.helpers.printAll(
+      annotatingError,
+      {
+        withStack: true,
+        withPayload: true,
+      },
+      0,
+      0
+    )
     console.log(
       JSON.stringify({
         severity: 'ERROR',
-        message: errors.helpers.printAll(
-          annotatingError,
-          {
-            withStack: true,
-            withPayload: true,
-          },
-          0,
-          0
-        ),
+        message: errorMessage,
         debugPayload: {
           graphQLErrors,
           clientErrors,
@@ -229,6 +243,6 @@ export async function getServerSideProps({ params, req }) {
         ...globalLogFields,
       })
     )
-    return { notFound: true }
+    throw new Error(errorMessage)
   }
 }

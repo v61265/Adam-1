@@ -110,13 +110,20 @@ const ArrowButton = styled.button`
  */
 
 /**
+ * @typedef {Object} PostContent
+ * @property {'fullContent' | 'trimmedContent'} type
+ * @property {Pick<PostData,'content'>['content']} data
+ */
+
+/**
  *
  * @param {Object} param
  * @param {PostData} param.postData
+ * @param {PostContent} param.postContent
  * @returns
  */
 
-export default function StoryPhotographyStyle({ postData }) {
+export default function StoryPhotographyStyle({ postData, postContent }) {
   const {
     title = '',
     heroImage = null,
@@ -131,7 +138,7 @@ export default function StoryPhotographyStyle({ postData }) {
     extend_byline = '',
     relateds = [],
     manualOrderOfRelateds = [],
-    content = null,
+
     brief = null,
   } = postData
 
@@ -153,7 +160,7 @@ export default function StoryPhotographyStyle({ postData }) {
       : relateds
 
   // Get images array from content.entityMap
-  const photosArray = Object.values(content.entityMap).filter(
+  const photosArray = Object.values(postContent.data.entityMap).filter(
     (item) => item.type === 'image'
   )
 
@@ -244,7 +251,7 @@ export default function StoryPhotographyStyle({ postData }) {
         <ContentContainer>
           <section className="content">
             <DraftRenderBlock
-              rawContentBlock={content}
+              rawContentBlock={postContent.data}
               contentLayout="photography"
             />
           </section>

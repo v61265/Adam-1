@@ -1,14 +1,21 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 
-import client from '../../apollo/apollo-client'
-import { fetchPosts } from '../../apollo/query/posts'
-import { fetchSection } from '../../apollo/query/sections'
 import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
-import GPTAd from '../../components/ads/gpt/gpt-ad'
+import { Z_INDEX } from '../../constants/index'
+import { SECTION_IDS } from '../../constants/index'
+import {
+  fetchPostsBySectionSlug,
+  fetchSectionBySectionSlug,
+} from '../../utils/api/section'
+
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -54,10 +61,31 @@ const SectionTitle = styled.h1`
 `
 
 const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  max-width: 336px;
+  margin: auto;
   height: 280px;
   margin-top: 20px;
+
   ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
     height: 250px;
+  }
+`
+
+const StickyGPTAd = styled(GPTAd)`
+  position: fixed;
+  width: 100%;
+  max-width: 320px;
+  margin: auto;
+  height: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
   }
 `
 
@@ -77,21 +105,32 @@ const RENDER_PAGE_SIZE = 12
  * @returns {React.ReactElement}
  */
 export default function Section({ postsCount, posts, section, headerData }) {
+  const sectionName = section.name || ''
+  //When the section is `論壇`, use the `culture` AD unit.
+  const GPT_PAGE_KEY =
+    section.slug === 'mirrorcolumn'
+      ? SECTION_IDS['culture']
+      : SECTION_IDS[section.slug]
+
   return (
     <Layout
-      head={{ title: `${section?.name}分類報導` }}
+      head={{ title: `${sectionName}分類報導` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
       <SectionContainer>
-        <StyledGPTAd pageKey="57e1e0e5ee85930e00cad4e9" adKey="HD" />
-        <SectionTitle sectionName={section?.slug}>{section?.name}</SectionTitle>
+        <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="HD" />
+        {sectionName && (
+          <SectionTitle sectionName={section.slug}>{sectionName}</SectionTitle>
+        )}
         <SectionArticles
           postsCount={postsCount}
           posts={posts}
           section={section}
           renderPageSize={RENDER_PAGE_SIZE}
         />
+        <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />
+        <StickyGPTAd pageKey={GPT_PAGE_KEY} adKey="ST" />
       </SectionContainer>
     </Layout>
   )
@@ -101,7 +140,9 @@ export default function Section({ postsCount, posts, section, headerData }) {
  * @type {import('next').GetServerSideProps}
  */
 export async function getServerSideProps({ query, req }) {
-  const sectionSlug = query.slug
+  const sectionSlug = Array.isArray(query.slug) ? query.slug[0] : query.slug
+  const mockError = query.error === '500'
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -113,28 +154,20 @@ export async function getServerSideProps({ query, req }) {
 
   const responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(),
-    client.query({
-      query: fetchPosts,
-      variables: {
-        take: RENDER_PAGE_SIZE * 2,
-        skip: 0,
-        orderBy: { publishedDate: 'desc' },
-        filter: {
-          state: { equals: 'published' },
-          sections: { some: { slug: { equals: sectionSlug } } },
-        },
-      },
-    }),
-    client.query({
-      query: fetchSection,
-      variables: {
-        where: { slug: sectionSlug },
-      },
-    }),
+    fetchPostsBySectionSlug(
+      sectionSlug,
+      RENDER_PAGE_SIZE * 2,
+      mockError ? NaN : 0
+    ),
+    fetchSectionBySectionSlug(sectionSlug),
   ])
 
-  const handledResponses = responses.map((response) => {
+  const handledResponses = responses.map((response, index) => {
     if (response.status === 'fulfilled') {
+      if ('data' in response.value) {
+        // handle gql requests
+        return response.value.data
+      }
       return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
@@ -164,12 +197,17 @@ export async function getServerSideProps({ query, req }) {
           ...globalLogFields,
         })
       )
+      if (index === 1) {
+        // fetch key data (posts) failed, redirect to 500
+        throw new Error('fetch section posts failed')
+      }
       return
     }
   })
 
+  // handle header data
   const headerData =
-    'sectionsData' in handledResponses[0]
+    handledResponses[0] && 'sectionsData' in handledResponses[0]
       ? handledResponses[0]
       : {
           sectionsData: [],
@@ -181,19 +219,27 @@ export async function getServerSideProps({ query, req }) {
   const topicsData = Array.isArray(headerData.topicsData)
     ? headerData.topicsData
     : []
+
+  // handle fetch post data
+  if (handledResponses[1]?.posts?.length === 0) {
+    // fetchPost return empty array -> wrong authorId -> 404
+    console.log(
+      JSON.stringify({
+        severity: 'WARNING',
+        message: `fetch post of sectionSlug ${sectionSlug} return empty posts, redirect to 404`,
+        globalLogFields,
+      })
+    )
+    return { notFound: true }
+  }
   /** @type {number} postsCount */
-  const postsCount =
-    'data' in handledResponses[1]
-      ? handledResponses[1]?.data?.postsCount || 0
-      : 0
+  const postsCount = handledResponses[1]?.postsCount || 0
   /** @type {Article[]} */
-  const posts =
-    'data' in handledResponses[1] ? handledResponses[1]?.data?.posts || [] : []
+  const posts = handledResponses[1]?.posts || []
+
+  // handle fetch section data
   /** @type {Section} */
-  const section =
-    'data' in handledResponses[2]
-      ? handledResponses[2]?.data?.section || {}
-      : {}
+  const section = handledResponses[2]?.section || { slug: sectionSlug }
 
   const props = {
     postsCount,

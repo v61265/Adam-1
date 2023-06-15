@@ -1,17 +1,23 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 
-import client from '../../apollo/apollo-client'
-import { fetchPosts } from '../../apollo/query/posts'
-import { fetchCategorySections } from '../../apollo/query/categroies'
 import CategoryArticles from '../../components/category/category-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
-
 import {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
 } from '../../utils/api'
 import Layout from '../../components/shared/layout'
+import { Z_INDEX } from '../../constants/index'
+import {
+  fetchCategoryByCategorySlug,
+  fetchPostsByCategorySlug,
+} from '../../utils/api/category'
+
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -132,6 +138,35 @@ const PremiumCategoryTitle = styled.h1`
   }
 `
 
+const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  max-width: 336px;
+  margin: auto;
+  height: 280px;
+  margin-top: 20px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    height: 250px;
+  }
+`
+
+const StickyGPTAd = styled(GPTAd)`
+  position: fixed;
+  width: 100%;
+  max-width: 320px;
+  margin: auto;
+  height: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
 const RENDER_PAGE_SIZE = 12
 
 /**
@@ -155,20 +190,22 @@ export default function Category({
   isPremium,
   headerData,
 }) {
+  const categroyName = category.name || ''
   return (
     <Layout
-      head={{ title: `${category?.name}分類報導` }}
+      head={{ title: `${categroyName}分類報導` }}
       header={{ type: isPremium ? 'premium' : 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
       <CategoryContainer isPremium={isPremium}>
+        <StyledGPTAd pageKey="other" adKey="HD" />
         {isPremium ? (
           <PremiumCategoryTitle sectionName={category?.sections?.[0].slug}>
-            {category?.name}
+            {categroyName}
           </PremiumCategoryTitle>
         ) : (
           <CategoryTitle sectionName={category?.sections?.[0].slug}>
-            {category?.name}
+            {categroyName}
           </CategoryTitle>
         )}
         <CategoryArticles
@@ -178,6 +215,9 @@ export default function Category({
           renderPageSize={RENDER_PAGE_SIZE}
           isPremium={isPremium}
         />
+
+        <StyledGPTAd pageKey="other" adKey="FT" />
+        <StickyGPTAd pageKey="other" adKey="ST" />
       </CategoryContainer>
     </Layout>
   )
@@ -187,7 +227,9 @@ export default function Category({
  * @type {import('next').GetServerSideProps}
  */
 export async function getServerSideProps({ query, req }) {
-  const categorySlug = query.slug
+  const categorySlug = Array.isArray(query.slug) ? query.slug[0] : query.slug
+  const mockError = query.error === '500'
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -198,29 +240,18 @@ export async function getServerSideProps({ query, req }) {
   }
 
   const responses = await Promise.allSettled([
-    client.query({
-      query: fetchPosts,
-      variables: {
-        take: RENDER_PAGE_SIZE * 2,
-        skip: 0,
-        orderBy: { publishedDate: 'desc' },
-        filter: {
-          state: { equals: 'published' },
-          categories: { some: { slug: { equals: categorySlug } } },
-        },
-      },
-    }),
-    client.query({
-      query: fetchCategorySections,
-      variables: {
-        categorySlug,
-      },
-    }),
+    fetchPostsByCategorySlug(
+      categorySlug,
+      RENDER_PAGE_SIZE * 2,
+      mockError ? NaN : 0
+    ),
+    fetchCategoryByCategorySlug(categorySlug),
   ])
 
-  const handledResponses = responses.map((response) => {
+  const handledResponses = responses.map((response, index) => {
     if (response.status === 'fulfilled') {
-      return response.value
+      // since only gql requests
+      return response.value.data
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
       const annotatingError = errors.helpers.wrap(
@@ -249,16 +280,38 @@ export async function getServerSideProps({ query, req }) {
           ...globalLogFields,
         })
       )
+
+      if (index === 0) {
+        // fetch key data (posts) failed, redirect to 500
+        throw new Error('fetch category posts failed')
+      }
       return
     }
   })
 
+  // handle fetch post data
+  if (handledResponses[0]?.posts?.length === 0) {
+    // fetchPost return empty array -> wrong authorId -> 404
+    console.log(
+      JSON.stringify({
+        severity: 'WARNING',
+        message: `fetch post of categorySlug ${categorySlug} return empty posts, redirect to 404`,
+        globalLogFields,
+      })
+    )
+    return { notFound: true }
+  }
   /** @type {number} postsCount */
-  const postsCount = handledResponses[0]?.data?.postsCount || 0
+  const postsCount = handledResponses[0]?.postsCount || 0
   /** @type {Article[]} */
-  const posts = handledResponses[0]?.data?.posts || []
+  const posts = handledResponses[0]?.posts || []
   /** @type {Category} */
-  const category = handledResponses[1]?.data?.category || {}
+
+  // handle detch category data, if request failed fallback to isMemberOnly = false
+  const category = handledResponses[1]?.category || {
+    slug: categorySlug,
+    isMemberOnly: false,
+  }
   const isPremium = category.isMemberOnly
   let sectionsData = []
   let topicsData = []

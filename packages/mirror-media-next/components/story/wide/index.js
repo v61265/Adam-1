@@ -8,9 +8,10 @@ import { sortArrayWithOtherArrayId } from '../../../utils'
 
 import Header from './header'
 import DonateLink from '../shared/donate-link'
+import SubscribeLink from '../shared/subscribe-link'
 import HeroImageAndVideo from '../shared/hero-image-and-video'
 import Credits from '../shared/credits'
-import DonateBanner from '../shared/donate-banner'
+import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
 import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
 import MoreInfoAndTag from '../shared/more-info-and-tag'
 import Date from '../shared/date'
@@ -22,6 +23,12 @@ import Aside from '../shared/aside'
  */
 
 /**
+ * @typedef {Object} PostContent
+ * @property {'fullContent' | 'trimmedContent'} type
+ * @property {Pick<PostData,'content'>['content']} data
+ */
+
+/**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
 const Main = styled.main`
@@ -30,12 +37,7 @@ const Main = styled.main`
 
   background-color: white;
 `
-const StyledDonateLink = styled(DonateLink)`
-  margin: 20px auto 0;
-  ${({ theme }) => theme.breakpoint.md} {
-    margin: 12px auto 0;
-  }
-`
+
 const DateWrapper = styled.div`
   margin-top: 16px;
   ${({ theme }) => theme.breakpoint.md} {
@@ -68,11 +70,6 @@ const ContentWrapper = styled.section`
     }
   }
 `
-const StyledDonateBanner = styled(DonateBanner)`
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-`
 
 const SocialMediaAndDonateLink = styled.ul`
   margin-bottom: 20px;
@@ -92,13 +89,31 @@ const StyledCredits = styled(Credits)`
   margin-left: auto;
   margin-right: auto;
 `
+
+const DonateSubscribeWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+
+  margin-top: 20px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 12px;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-top: 24px;
+  }
+
+  .subscribe-btn {
+    margin-left: 8px;
+  }
+`
 /**
  *
  * @param {Object} param
  * @param {PostData} param.postData
- * @returns
+ * @param {PostContent} param.postContent
+ * @returns {JSX.Element}
  */
-export default function StoryWideStyle({ postData }) {
+export default function StoryWideStyle({ postData, postContent }) {
   const {
     title = '',
     heroImage = null,
@@ -120,7 +135,6 @@ export default function StoryWideStyle({ postData }) {
     relateds = [],
     manualOrderOfRelateds = [],
     slug = '',
-    content = null,
     brief = null,
     tags = [],
   } = postData
@@ -150,7 +164,7 @@ export default function StoryWideStyle({ postData }) {
     { extend_byline: extend_byline },
   ]
 
-  const h2AndH3Block = getContentBlocksH2H3(content)
+  const h2AndH3Block = getContentBlocksH2H3(postContent.data)
 
   return (
     <>
@@ -179,9 +193,6 @@ export default function StoryWideStyle({ postData }) {
                   />
                   <ButtonCopyLink width={28} height={28} />
                 </SocialMedia>
-                {/* <li>
-                <DonateLink />
-              </li> */}
               </SocialMediaAndDonateLink>
             </NavSubtitleNavigator>
             <StyledCredits credits={credits}></StyledCredits>
@@ -189,16 +200,19 @@ export default function StoryWideStyle({ postData }) {
               <StyledDate timeData={publishedDate} timeType="publishedDate" />
               <StyledDate timeData={updatedAt} timeType="updatedDate" />
             </DateWrapper>
-            <StyledDonateLink />
+            <DonateSubscribeWrapper>
+              <DonateLink />
+              <SubscribeLink className="subscribe-btn" />
+            </DonateSubscribeWrapper>
             <section className="content">
               <DraftRenderBlock rawContentBlock={brief} contentLayout="wide" />
               <DraftRenderBlock
-                rawContentBlock={content}
+                rawContentBlock={postContent.data}
                 contentLayout="wide"
               />
             </section>
             <MoreInfoAndTag tags={tags} />
-            <StyledDonateBanner />
+            <SupportMirrorMediaBanner />
           </ContentWrapper>
           <Aside
             relateds={relatedsWithOrdered}

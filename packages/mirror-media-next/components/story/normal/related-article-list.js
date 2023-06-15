@@ -3,10 +3,17 @@
 import styled from 'styled-components'
 import Image from '@readr-media/react-image'
 import Link from 'next/link'
-import MicroAdWithLabel from '../../ads/micro-ad/micro-ad-with-label'
+import dynamic from 'next/dynamic'
 import useWindowDimensions from '../../../hooks/use-window-dimensions'
 import { mediaSize } from '../../../styles/media'
 import { MICRO_AD_UNITS } from '../../../constants/ads'
+
+const StyledMicroAd = dynamic(
+  () => import('../../../components/ads/micro-ad/micro-ad-with-label'),
+  {
+    ssr: false,
+  }
+)
 
 /**
  * @typedef {import('../../../apollo/fragments/post').HeroImage &
@@ -107,6 +114,7 @@ const ArticleWrapper = styled.ul`
   padding: 48px 10px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 24px;
   gap: 24px;
   ${({ theme }) => theme.breakpoint.md} {
     background: transparent;
@@ -116,11 +124,21 @@ const ArticleWrapper = styled.ul`
 `
 
 const AdvertisementWrapper = styled.div`
-  height: 300px;
-  background-color: pink;
-  padding: 28px 0 10px;
+  margin-bottom: 24px;
+  padding: 0px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
   ${({ theme }) => theme.breakpoint.md} {
-    padding: 20px 0 0;
+    background: transparent;
+    padding: 0px;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-bottom: 0px;
   }
 `
 
@@ -132,8 +150,7 @@ const AdvertisementWrapper = styled.div`
  */
 export default function RelatedArticleList({ relateds }) {
   const { width } = useWindowDimensions()
-  const isDesktopWidth = width >= mediaSize.xl
-  const device = isDesktopWidth ? 'PC' : 'MB'
+  const device = width >= mediaSize.xl ? 'PC' : 'MB'
 
   const relatedsArticleJsx = relateds.length ? (
     <ArticleWrapper>
@@ -169,17 +186,17 @@ export default function RelatedArticleList({ relateds }) {
     </ArticleWrapper>
   ) : null
 
+  const microAdJsx = MICRO_AD_UNITS.STORY[device].map((unit) => (
+    <StyledMicroAd key={unit.name} unitId={unit.id} microAdType="STORY" />
+  ))
+
   return (
     <Wrapper>
       <h2>延伸閱讀</h2>
       {relatedsArticleJsx}
       <AdvertisementWrapper>
-        特企區塊施工中......
-        {/* just a example, should be refactored as a separate componet including the device variable logic */}
-        {MICRO_AD_UNITS.STORY[device].map((unit) => (
-          <MicroAdWithLabel key={unit.name} unitId={unit.id} />
-        ))}
         {/* micro ad */}
+        {microAdJsx}
         {/* popin */}
       </AdvertisementWrapper>
     </Wrapper>

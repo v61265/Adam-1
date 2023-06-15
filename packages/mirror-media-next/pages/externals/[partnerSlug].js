@@ -1,5 +1,6 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 
 import client from '../../apollo/apollo-client'
 import ExternalArticles from '../../components/externals/partner-articles'
@@ -12,7 +13,15 @@ import {
   fetchExternalCounts,
 } from '../../apollo/query/externals'
 import { fetchPartnerBySlug } from '../../apollo/query/partner'
-import { getExternalPartnerColor } from '../../utils/external'
+import {
+  getExternalPartnerColor,
+  getPageKeyByPartnerSlug,
+} from '../../utils/external'
+import { Z_INDEX } from '../../constants/index'
+
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -56,6 +65,35 @@ const PartnerTitle = styled.h1`
   }
 `
 
+const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  max-width: 336px;
+  margin: auto;
+  height: 280px;
+  margin-top: 20px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    height: 250px;
+  }
+`
+
+const StickyGPTAd = styled(GPTAd)`
+  position: fixed;
+  width: 100%;
+  max-width: 320px;
+  margin: auto;
+  height: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
 const RENDER_PAGE_SIZE = 12
 
 /**
@@ -85,6 +123,10 @@ export default function ExternalPartner({
       footer={{ type: 'default' }}
     >
       <PartnerContainer>
+        <StyledGPTAd
+          pageKey={getPageKeyByPartnerSlug(partner.slug)}
+          adKey="HD"
+        />
         <PartnerTitle partnerColor={getExternalPartnerColor(partner)}>
           {partner?.name}
         </PartnerTitle>
@@ -93,6 +135,14 @@ export default function ExternalPartner({
           externals={externals}
           partner={partner}
           renderPageSize={RENDER_PAGE_SIZE}
+        />
+        <StyledGPTAd
+          pageKey={getPageKeyByPartnerSlug(partner.slug)}
+          adKey="FT"
+        />
+        <StickyGPTAd
+          pageKey={getPageKeyByPartnerSlug(partner.slug)}
+          adKey="ST"
         />
       </PartnerContainer>
     </Layout>

@@ -129,15 +129,23 @@ export async function getServerSideProps({ res, req }) {
   let latestNewsData = []
   let sectionsData = []
   try {
+    const postResponse = await axios({
+      method: 'get',
+      url: `${URL_STATIC_POST_EXTERNAL}01.json`,
+      timeout: API_TIMEOUT,
+    })
+    editorChoicesData = Array.isArray(postResponse?.data?.choices)
+      ? postResponse?.data?.choices
+      : []
+
+    latestNewsData = Array.isArray(postResponse?.data?.latest)
+      ? postResponse?.data?.latest
+      : []
+
     const responses = await Promise.allSettled([
       axios({
         method: 'get',
         url: URL_STATIC_POST_FLASH_NEWS,
-        timeout: API_TIMEOUT,
-      }),
-      axios({
-        method: 'get',
-        url: `${URL_STATIC_POST_EXTERNAL}01.json`,
         timeout: API_TIMEOUT,
       }),
       fetchHeaderDataInDefaultPageLayout(),
@@ -157,21 +165,23 @@ export async function getServerSideProps({ res, req }) {
         const rejectedReason = response.reason
         const annotatingAxiosError =
           errors.helpers.annotateAxiosError(rejectedReason)
+        const errorMessage = errors.helpers.printAll(
+          annotatingAxiosError,
+          {
+            withStack: true,
+            withPayload: false,
+          },
+          0,
+          0
+        )
         console.error(
           JSON.stringify({
             severity: 'ERROR',
-            message: errors.helpers.printAll(
-              annotatingAxiosError,
-              {
-                withStack: true,
-                withPayload: true,
-              },
-              0,
-              0
-            ),
+            message: errorMessage,
             ...globalLogFields,
           })
         )
+        throw new Error(errorMessage)
       }
     })
 
@@ -179,77 +189,51 @@ export async function getServerSideProps({ res, req }) {
     const flashNewsResponse =
       responses[0].status === 'fulfilled' && responses[0]
 
-    /** @type {PromiseFulfilledResult<AxiosPostResponse>} */
-    const postResponse = responses[1].status === 'fulfilled' && responses[1]
     const headerDataResponse =
-      responses[2].status === 'fulfilled' && responses[2]
+      responses[1].status === 'fulfilled' && responses[1]
+
     flashNewsData = Array.isArray(flashNewsResponse.value?.data?.posts)
       ? flashNewsResponse.value?.data?.posts
       : []
-    editorChoicesData = Array.isArray(postResponse.value?.data?.choices)
-      ? postResponse.value?.data?.choices
-      : []
-    latestNewsData = Array.isArray(postResponse.value?.data?.latest)
-      ? postResponse.value?.data?.latest
-      : []
+
     sectionsData = Array.isArray(headerDataResponse.value?.sectionsData)
       ? headerDataResponse.value?.sectionsData
       : []
     topicsData = Array.isArray(headerDataResponse.value?.topicsData)
       ? headerDataResponse.value?.topicsData
       : []
+
+    return {
+      props: {
+        topicsData,
+        flashNewsData,
+        editorChoicesData,
+        latestNewsData,
+        sectionsData,
+      },
+    }
   } catch (err) {
     const annotatingError = errors.helpers.wrap(
       err,
       'UnhandledError',
       'Error occurs while getting index page data'
     )
-
+    const errorMessage = errors.helpers.printAll(
+      annotatingError,
+      {
+        withStack: true,
+        withPayload: false,
+      },
+      0,
+      0
+    )
     console.log(
       JSON.stringify({
         severity: 'ERROR',
-        message: errors.helpers.printAll(
-          annotatingError,
-          {
-            withStack: true,
-            withPayload: true,
-          },
-          0,
-          0
-        ),
+        message: errorMessage,
         ...globalLogFields,
       })
     )
-  }
-  try {
-    const headerData = await fetchHeaderDataInDefaultPageLayout()
-    sectionsData = headerData.sectionsData
-    topicsData = headerData.topicsData
-  } catch (error) {
-    console.error(
-      JSON.stringify({
-        severity: 'ERROR',
-        message: errors.helpers.printAll(
-          error,
-          {
-            withStack: true,
-            withPayload: true,
-          },
-          0,
-          0
-        ),
-        ...globalLogFields,
-      })
-    )
-  }
-
-  return {
-    props: {
-      topicsData,
-      flashNewsData,
-      editorChoicesData,
-      latestNewsData,
-      sectionsData,
-    },
+    throw new Error(errorMessage)
   }
 }

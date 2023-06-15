@@ -1,13 +1,17 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 
-import client from '../../apollo/apollo-client'
-import { fetchPosts } from '../../apollo/query/posts'
-import { fetchTag } from '../../apollo/query/tags'
 import TagArticles from '../../components/tag/tag-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
+import { Z_INDEX } from '../../constants/index'
+import { fetchPostsByTagSlug, fetchTagByTagSlug } from '../../utils/api/tag'
+
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 const TagContainer = styled.main`
   width: 320px;
@@ -60,6 +64,35 @@ const TagTitle = styled.h1`
   }
 `
 
+const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  max-width: 336px;
+  margin: auto;
+  height: 280px;
+  margin-top: 20px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    height: 250px;
+  }
+`
+
+const StickyGPTAd = styled(GPTAd)`
+  position: fixed;
+  width: 100%;
+  max-width: 320px;
+  margin: auto;
+  height: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
 const RENDER_PAGE_SIZE = 12
 
 /**
@@ -76,22 +109,29 @@ const RENDER_PAGE_SIZE = 12
  * @returns {React.ReactElement}
  */
 export default function Tag({ postsCount, posts, tag, headerData }) {
+  const tagName = tag.name || ''
   return (
     <Layout
-      head={{ title: `${tag?.name}相關報導` }}
+      head={{ title: `${tagName}相關報導` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
       <TagContainer>
-        <TagTitleWrapper>
-          <TagTitle>{tag?.name}</TagTitle>
-        </TagTitleWrapper>
+        <StyledGPTAd pageKey="other" adKey="HD" />
+        {tagName && (
+          <TagTitleWrapper>
+            <TagTitle>{tagName}</TagTitle>
+          </TagTitleWrapper>
+        )}
         <TagArticles
           postsCount={postsCount}
           posts={posts}
-          tag={tag}
+          tagSlug={tag.slug}
           renderPageSize={RENDER_PAGE_SIZE}
         />
+
+        <StyledGPTAd pageKey="other" adKey="FT" />
+        <StickyGPTAd pageKey="other" adKey="ST" />
       </TagContainer>
     </Layout>
   )
@@ -101,7 +141,9 @@ export default function Tag({ postsCount, posts, tag, headerData }) {
  * @type {import('next').GetServerSideProps}
  */
 export async function getServerSideProps({ query, req }) {
-  const tagSlug = query.slug
+  const tagSlug = Array.isArray(query.slug) ? query.slug[0] : query.slug
+  const mockError = query.error === '500'
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -113,28 +155,16 @@ export async function getServerSideProps({ query, req }) {
 
   const responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(),
-    client.query({
-      query: fetchPosts,
-      variables: {
-        take: RENDER_PAGE_SIZE * 2,
-        skip: 0,
-        orderBy: { publishedDate: 'desc' },
-        filter: {
-          state: { equals: 'published' },
-          tags: { some: { slug: { equals: tagSlug } } },
-        },
-      },
-    }),
-    client.query({
-      query: fetchTag,
-      variables: {
-        where: { slug: tagSlug },
-      },
-    }),
+    fetchPostsByTagSlug(tagSlug, RENDER_PAGE_SIZE * 2, mockError ? NaN : 0),
+    fetchTagByTagSlug(tagSlug),
   ])
 
-  const handledResponses = responses.map((response) => {
+  const handledResponses = responses.map((response, index) => {
     if (response.status === 'fulfilled') {
+      if ('data' in response.value) {
+        // handle gql requests
+        return response.value.data
+      }
       return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
@@ -164,12 +194,17 @@ export async function getServerSideProps({ query, req }) {
           ...globalLogFields,
         })
       )
+      if (index === 1) {
+        // fetch key data (posts) failed, redirect to 500
+        throw new Error('fetch tag posts failed')
+      }
       return
     }
   })
 
+  // handle header data
   const headerData =
-    'sectionsData' in handledResponses[0]
+    handledResponses[0] && 'sectionsData' in handledResponses[0]
       ? handledResponses[0]
       : { sectionsData: [], topicsData: [] }
   const sectionsData = Array.isArray(headerData.sectionsData)
@@ -178,17 +213,27 @@ export async function getServerSideProps({ query, req }) {
   const topicsData = Array.isArray(headerData.topicsData)
     ? headerData.topicsData
     : []
+
+  // handle fetch post data
+  if (handledResponses[1]?.posts?.length === 0) {
+    // fetchPost return empty array -> wrong authorId -> 404
+    console.log(
+      JSON.stringify({
+        severity: 'WARNING',
+        message: `fetch post of tagSlug ${tagSlug} return empty posts, redirect to 404`,
+        globalLogFields,
+      })
+    )
+    return { notFound: true }
+  }
   /** @type {number} postsCount */
-  const postsCount =
-    'data' in handledResponses[1]
-      ? handledResponses[1]?.data?.postsCount || 0
-      : 0
+  const postsCount = handledResponses[1]?.postsCount || 0
   /** @type {Article[]} */
-  const posts =
-    'data' in handledResponses[1] ? handledResponses[1]?.data?.posts || [] : []
+  const posts = handledResponses[1]?.posts || []
+
+  // handle fetch tag data
   /** @type {Tag} */
-  const tag =
-    'data' in handledResponses[2] ? handledResponses[2]?.data?.tag || {} : {}
+  const tag = handledResponses[2]?.tag || { slug: tagSlug }
 
   const props = {
     postsCount,

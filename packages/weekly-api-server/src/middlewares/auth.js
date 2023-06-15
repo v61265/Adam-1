@@ -130,8 +130,7 @@ export function signAccessToken({ jwtSecret }) {
     } = res.locals.memberInfo || {}
     const firebaseId =
       res.locals.memberInfo?.firebaseId || res.locals.auth?.decodedIdToken?.uid
-    // @TODO: add roles claim in JWT if needed
-    // let roles = ['']
+    let roles = ['']
     let scope = ''
 
     switch (memberType) {
@@ -139,12 +138,12 @@ export function signAccessToken({ jwtSecret }) {
       case 'subscribe_group':
       case 'subscribe_yearly':
       case 'subscribe_monthly': {
-        // roles = ['premium-member']
+        roles = ['premium-member']
         scope = `read:posts read:member-posts:all read:member-info:${firebaseId} write:member-info:${firebaseId}`
         break
       }
       case 'subscribe_one_time': {
-        // roles = ['one-time-member']
+        roles = ['one-time-member']
         scope = `read:posts read:member-info:${firebaseId} write:member-info:${firebaseId}`
         if (Array.isArray(subscriptions)) {
           const postIdArr = subscriptions
@@ -156,9 +155,8 @@ export function signAccessToken({ jwtSecret }) {
       }
       case 'none':
       default: {
-        // roles = ['member']
-        scope =
-          `read:posts read:member-info:${firebaseId} write:member-info:${firebaseId}`
+        roles = ['basic-member']
+        scope = `read:posts read:member-info:${firebaseId} write:member-info:${firebaseId}`
         break
       }
     }
@@ -177,7 +175,7 @@ export function signAccessToken({ jwtSecret }) {
       ],
       exp: expiresIn, // one hour later
       iat: nowTs,
-      // roles,
+      roles,
       scope,
     }
 
@@ -217,12 +215,16 @@ export function signAccessTokenForInternalColleague({ jwtSecret }) {
   return (req, res, next) => {
     const nowTs = Math.round(new Date().getTime() / 1000) // timestamp
     const expiresIn = nowTs + 3600 // one hour later
-    const firebaseId =
-      res.locals.auth?.decodedIdToken?.uid
+    const firebaseId = res.locals.auth?.decodedIdToken?.uid
     const email = res.locals.auth?.decodedIdToken?.email
 
-    // skip this middleware if email does not ends with '@mirrormedia.mg'
-    if (typeof email === 'string' && !email.endsWith('@mirrormedia.mg')) {
+    // skip this middleware if email does not ends with certain email domains
+    if (
+      typeof email === 'string' &&
+      !email.endsWith('@mirrormedia.mg') &&
+      !email.endsWith('@mnews.com.tw') &&
+      !email.endsWith('@mirrorfiction.com')
+    ) {
       return next()
     }
 
@@ -243,7 +245,7 @@ export function signAccessTokenForInternalColleague({ jwtSecret }) {
       ],
       exp: expiresIn, // one hour later
       iat: nowTs,
-      // roles,
+      roles: ['staff'],
       scope,
     }
 
@@ -269,4 +271,3 @@ export function signAccessTokenForInternalColleague({ jwtSecret }) {
     next()
   }
 }
-

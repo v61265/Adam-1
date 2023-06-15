@@ -14,7 +14,7 @@ import AsideArticleList from '../../../components/story/normal/aside-article-lis
 import FbPagePlugin from '../../../components/story/normal/fb-page-plugin'
 import SocialNetworkService from '../../../components/story/normal/social-network-service'
 import SubscribeInviteBanner from '../../../components/story/normal/subscribe-invite-banner'
-import DonateBanner from '../../../components/story/shared/donate-banner'
+import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
 import MagazineInviteBanner from '../../../components/story/shared/magazine-invite-banner'
 import RelatedArticleList from '../../../components/story/normal/related-article-list'
 import ArticleContent from './article-content'
@@ -66,6 +66,12 @@ import DableAd from '../../ads/dable/dable-ad'
 
 /**
  * @typedef {import('../../../apollo/fragments/post').Post } PostData
+ */
+
+/**
+ * @typedef {Object} PostContent
+ * @property {'fullContent' | 'trimmedContent'} type
+ * @property {Pick<PostData,'content'>['content']} data
  */
 
 const sectionColor = css`
@@ -344,10 +350,10 @@ const HeaderPlaceHolder = styled.header`
 
 /**
  *
- * @param {{postData: PostData}} param
+ * @param {{postData: PostData,postContent: PostContent}} param
  * @returns {JSX.Element}
  */
-export default function StoryNormalStyle({ postData }) {
+export default function StoryNormalStyle({ postData, postContent }) {
   const {
     title = '',
     slug = '',
@@ -370,7 +376,6 @@ export default function StoryNormalStyle({ postData }) {
     brief = { blocks: [], entityMap: {} },
     relateds = [],
     manualOrderOfRelateds = [],
-    content = { blocks: [], entityMap: {} },
   } = postData
 
   const [headerData, setHeaderData] = useState({
@@ -523,12 +528,12 @@ export default function StoryNormalStyle({ postData }) {
             sectionSlug={section?.slug}
             brief={brief}
           ></ArticleBrief>
-          <ArticleContent content={content} />
+          <ArticleContent content={postContent.data} />
           <DateUnderContent>
             <span>更新時間｜</span>
             <span className="time">{updatedTaipeiTime} 臺北時間</span>
           </DateUnderContent>
-          <DonateBanner />
+          <SupportMirrorMediaBanner />
           <SocialNetworkServiceSmall />
           <SubscribeInviteBanner />
           <RelatedArticleList relateds={relatedsWithOrdered} />

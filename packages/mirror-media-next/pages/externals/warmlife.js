@@ -1,5 +1,6 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 
 import WarmLifeArticles from '../../components/externals/warmlife-articles'
 import {
@@ -10,10 +11,16 @@ import {
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
 import axios from 'axios'
+import { Z_INDEX, SECTION_IDS } from '../../constants/index'
+
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 const RENDER_PAGE_SIZE = 12
-const WARM_LIFE_DEFAULT_TITLE = `生活暖流`
-const WARM_LIFE_DEFAULT_COLOR = 'lightBlue'
+const WARMLIFE_DEFAULT_TITLE = `生活暖流`
+const WARMLIFE_DEFAULT_COLOR = 'lightBlue'
+const WARMLIFE_GPT_SECTION_IDS = SECTION_IDS.news // The default section of `warmlife` page is `時事`
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -37,7 +44,7 @@ const WarmLifeTitle = styled.h1`
   line-height: 1.15;
   font-weight: 500;
 
-  color: ${({ theme }) => theme.color.brandColor[WARM_LIFE_DEFAULT_COLOR]};
+  color: ${({ theme }) => theme.color.brandColor[WARMLIFE_DEFAULT_COLOR]};
 
   ${({ theme }) => theme.breakpoint.md} {
     margin: 20px 0 24px;
@@ -48,6 +55,35 @@ const WarmLifeTitle = styled.h1`
   ${({ theme }) => theme.breakpoint.xl} {
     margin: 24px 0 28px;
     font-size: 28px;
+  }
+`
+
+const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  max-width: 336px;
+  margin: auto;
+  height: 280px;
+  margin-top: 20px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    height: 250px;
+  }
+`
+
+const StickyGPTAd = styled(GPTAd)`
+  position: fixed;
+  width: 100%;
+  max-width: 320px;
+  margin: auto;
+  height: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
   }
 `
 
@@ -64,16 +100,19 @@ const WarmLifeTitle = styled.h1`
 export default function WarmLife({ warmLifeData, headerData }) {
   return (
     <Layout
-      head={{ title: `${WARM_LIFE_DEFAULT_TITLE}相關報導` }}
+      head={{ title: `${WARMLIFE_DEFAULT_TITLE}相關報導` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
       <WarmLifeContainer>
-        <WarmLifeTitle>{WARM_LIFE_DEFAULT_TITLE}</WarmLifeTitle>
+        <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="HD" />
+        <WarmLifeTitle>{WARMLIFE_DEFAULT_TITLE}</WarmLifeTitle>
         <WarmLifeArticles
           warmLifeExternals={warmLifeData}
           renderPageSize={RENDER_PAGE_SIZE}
         />
+        <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="FT" />
+        <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="ST" />
       </WarmLifeContainer>
     </Layout>
   )
@@ -82,7 +121,9 @@ export default function WarmLife({ warmLifeData, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, query }) {
+  const mockError = query.error === '500'
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -97,15 +138,16 @@ export async function getServerSideProps({ req }) {
     axios({
       method: 'get',
       url: URL_STATIC_EXTERNALS_WARMLIFE,
-      timeout: API_TIMEOUT,
+      timeout: mockError ? 50 : API_TIMEOUT,
     }),
   ])
-
-  const handledResponses = responses.map((response) => {
+  const handledResponses = responses.map((response, index) => {
     if (response.status === 'fulfilled') {
       return response.value
     } else if (response.status === 'rejected') {
-      const { graphQLErrors, clientErrors, networkError } = response.reason
+      const statusCode = response.reason.response?.status
+      console.log(statusCode, typeof statusCode)
+
       const annotatingError = errors.helpers.wrap(
         response.reason,
         'UnhandledError',
@@ -124,26 +166,30 @@ export async function getServerSideProps({ req }) {
             0,
             0
           ),
-          debugPayload: {
-            graphQLErrors,
-            clientErrors,
-            networkError,
-          },
           ...globalLogFields,
         })
       )
+      if (index === 1) {
+        if (statusCode === 404) {
+          // leave undefined to be checked and redirect to 404
+          return
+        } else {
+          // fetch key data (posts) failed, redirect to 500
+          throw new Error('fetch warmlife posts failed')
+        }
+      }
       return
     }
   })
 
+  // handle header data
   const headerData =
-    'sectionsData' in handledResponses[0]
+    handledResponses[0] && 'sectionsData' in handledResponses[0]
       ? handledResponses[0]
       : {
           sectionsData: [],
           topicsData: [],
         }
-
   const sectionsData = Array.isArray(headerData.sectionsData)
     ? headerData.sectionsData
     : []
@@ -151,9 +197,13 @@ export async function getServerSideProps({ req }) {
     ? headerData.topicsData
     : []
 
+  // handle fetch warmlife post data
+  if (!handledResponses[1]) {
+    return { notFound: true }
+  }
   const warmLifeData =
-    responses[1].status === 'fulfilled' && responses[1].value?.data
-      ? responses[1].value?.data._items || []
+    handledResponses[1] && 'data' in handledResponses[1]
+      ? handledResponses[1]?.data._items || []
       : []
 
   /** @type {ListingExternal[]} */

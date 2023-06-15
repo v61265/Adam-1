@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { getAdSlotParam, getAdWidth } from '../../../utils/gpt-ad.js'
 import styled from 'styled-components'
-
-// use global object store cross component div id name and prevent re-render when update
-const GPTAdSlotsDefined = {}
+import { useMembership } from '../../../context/membership'
 
 const Wrapper = styled.div`
   /**
@@ -43,11 +41,13 @@ const Ad = styled.div`
 `
 
 /**
+ * @typedef {function(googletag.events.SlotRequestedEvent):void} GoogleTagEventHandler
+ *
  * @param {Object} props
  * @param {string} props.pageKey - key to access GPT_UNITS first layer
  * @param {string} props.adKey - key to access GPT_UNITS second layer, might need to complete with device
- * @param {function} [props.onSlotRequested] - callback when slotRequested event occurs
- * @param {function} [props.onSlotRenderEnded] - callback when slotRenderEnded event occurs
+ * @param {GoogleTagEventHandler} [props.onSlotRequested] - callback when slotRequested event occurs
+ * @param {GoogleTagEventHandler} [props.onSlotRenderEnded] - callback when slotRenderEnded event occurs
  * @param {string} [props.className] - for styled-component method to add styles
  * @returns
  */
@@ -58,10 +58,20 @@ export default function GPTAd({
   onSlotRenderEnded,
   className,
 }) {
+  const { memberInfo, isLogInProcessFinished } = useMembership()
+  const { memberType } = memberInfo
+
   const [adWidth, setAdWidth] = useState('')
   const [adDivId, setAdDivId] = useState('')
+  const [gptAdJsx, setGptAdJsx] = useState(null)
 
   useEffect(() => {
+    if (!(pageKey && adKey)) {
+      console.error(
+        `GPTAd not receive necessary pageKey ${pageKey} or ${adKey}`
+      )
+      return
+    }
     const width = window.innerWidth
     const adSlotParam = getAdSlotParam(pageKey, adKey, width)
     if (!adSlotParam) {
@@ -76,53 +86,26 @@ export default function GPTAd({
     /**
      * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
      */
-    let adSlot = GPTAdSlotsDefined[adDivId]
-    if (!adSlot) {
-      window.googletag.cmd.push(() => {
-        adSlot = window.googletag
-          .defineSlot(adUnitPath, adSize, adDivId)
-          .addService(window.googletag.pubads())
+    let adSlot
+    window.googletag.cmd.push(() => {
+      adSlot = window.googletag
+        .defineSlot(adUnitPath, adSize, adDivId)
+        .addService(window.googletag.pubads())
+    })
 
-        GPTAdSlotsDefined[adDivId] = adSlot
-      })
+    window.googletag.cmd.push(() => {
+      window.googletag.display(adDivId)
+    })
 
-      window.googletag.cmd.push(() => {
-        window.googletag.display(adDivId)
-      })
-    } else {
-      window.googletag.cmd.push(() => {
-        window.googletag.pubads().refresh([adSlot])
-      })
-    }
-
-    // see: https://developers.google.com/doubleclick-gpt/reference#googletag.service-addeventlistenereventtype,-listener
+    // all events, check https://developers.google.com/publisher-tag/reference?hl=en#googletag.events.eventtypemap for all events
     window.googletag.cmd.push(() => {
       const pubads = window.googletag.pubads()
-      const events = [
-        'slotRequested',
-        'slotRenderEnded',
-        'impressionViewable',
-        'slotOnload',
-        'slotVisibilityChanged',
-      ]
-      events.forEach((event) =>
-        // @ts-ignore
-        pubads.addEventListener(event, (e) => {
-          if (e.slot === adSlot) {
-            switch (event) {
-              case 'slotRequested':
-                onSlotRequested && onSlotRequested(e)
-                break
-              case 'slotRenderEnded':
-                onSlotRenderEnded && onSlotRenderEnded(e)
-                break
-
-              default:
-                break
-            }
-          }
-        })
-      )
+      if (onSlotRequested) {
+        pubads.addEventListener('slotRequested', onSlotRequested)
+      }
+      if (onSlotRenderEnded) {
+        pubads.addEventListener('slotRenderEnded', onSlotRenderEnded)
+      }
     })
 
     return () => {
@@ -132,9 +115,25 @@ export default function GPTAd({
     }
   }, [adKey, pageKey, onSlotRequested, onSlotRenderEnded])
 
-  return (
-    <Wrapper className={`${className} gpt-ad`}>
-      <Ad width={adWidth} id={adDivId} />
-    </Wrapper>
-  )
+  //When the user's member type is 'not-member', 'one-time-member', or 'basic-member', the AD should be displayed.
+
+  // Since the member type needs to be determined on the client-side, the rendering of `gptAdJsx` should be done on the client-side.
+
+  useEffect(() => {
+    const invalidMemberType = ['not-member', 'one-time-member', 'basic-member']
+
+    if (isLogInProcessFinished) {
+      if (invalidMemberType.includes(memberType)) {
+        setGptAdJsx(
+          <Wrapper className={`${className} gpt-ad`}>
+            <Ad width={adWidth} id={adDivId} />
+          </Wrapper>
+        )
+      } else {
+        return
+      }
+    }
+  }, [adDivId, adWidth, className, isLogInProcessFinished, memberType])
+
+  return <>{gptAdJsx}</>
 }

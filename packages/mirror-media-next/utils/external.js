@@ -1,3 +1,5 @@
+import { SECTION_IDS } from '../constants/index'
+
 /**
  * The `brief` of the externals is string and not in the format of a draft.
  * Here convert the string into a data format with `blocks` and `entityMap`.
@@ -105,9 +107,22 @@ function getCreditsHtml(credits = '') {
   }
 }
 
+/**
+ * Returns the GPT pageKey associated with partner's slug.
+ *
+ * @param {string} partnerSlug - The slug of the partner.
+ * @return {string} - The GPT pageKey associated with the partner slug.
+ * Returns 'SECTION_IDS.news' if partnerSlug is valid, otherwise returns 'other'.
+ */
+function getPageKeyByPartnerSlug(partnerSlug = '') {
+  const validSlugs = ['ebc', 'healthnews', 'zuchi', '5678news']
+  return validSlugs.includes(partnerSlug) ? SECTION_IDS.news : 'other'
+}
+
 export {
   transformStringToDraft,
   getExternalSectionTitle,
   getCreditsHtml,
   getExternalPartnerColor,
+  getPageKeyByPartnerSlug,
 }

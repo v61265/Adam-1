@@ -188,61 +188,70 @@ const EditorChoiceContainer = styled.section`
  * @param {import('../type/index').ArticleInfoCard[]} props.editorChoice
  * @returns {React.ReactElement}
  */
-export default function EditorChoice({ editorChoice }) {
+export default function EditorChoice({ editorChoice = [] }) {
+  const shouldShowEditorChoice = editorChoice.length !== 0
   return (
-    <EditorChoiceContainer>
-      <List>
-        <h2>編輯精選</h2>
-        {editorChoice.map((item) => (
-          <ListItem
-            key={item.slug}
-            href={item.href}
-            target="_blank"
-            rel="noreferrer noopenner"
-          >
-            <ListItemLabel sectionName={item.sectionName}>
-              {item.sectionTitle}
-            </ListItemLabel>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={item.imgSrcTablet || '/images/default-og-img.png'}
-              alt={item.title}
-            ></img>
-            <p className="title">{item.title}</p>
-          </ListItem>
-        ))}
-      </List>
-      <SlideShow>
-        <h2>編輯精選</h2>
-        <Swiper
-          spaceBetween={100}
-          centeredSlides={true}
-          autoplay={{
-            delay: 4000,
-            disableOnInteraction: false,
-          }}
-          pagination={{
-            clickable: true,
-          }}
-          loop={true}
-          speed={750}
-          navigation={true}
-          modules={[Autoplay, Pagination, Navigation]}
-        >
-          {editorChoice.map((item) => (
-            <SwiperSlide key={item.slug}>
-              <a href={item.href} target="_blank" rel="noreferrer noopenner">
+    <>
+      {shouldShowEditorChoice ? (
+        <EditorChoiceContainer>
+          <List>
+            <h2>編輯精選</h2>
+            {editorChoice.map((item) => (
+              <ListItem
+                key={item.slug}
+                href={item.href}
+                target="_blank"
+                rel="noreferrer noopenner"
+              >
+                <ListItemLabel sectionName={item.sectionName}>
+                  {item.sectionTitle}
+                </ListItemLabel>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={item.imgSrcTablet || '/images/default-og-img.png'}
                   alt={item.title}
-                />
+                ></img>
                 <p className="title">{item.title}</p>
-              </a>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </SlideShow>
-    </EditorChoiceContainer>
+              </ListItem>
+            ))}
+          </List>
+          <SlideShow>
+            <h2>編輯精選</h2>
+            <Swiper
+              spaceBetween={100}
+              centeredSlides={true}
+              autoplay={{
+                delay: 4000,
+                disableOnInteraction: false,
+              }}
+              pagination={{
+                clickable: true,
+              }}
+              loop={true}
+              speed={750}
+              navigation={true}
+              modules={[Autoplay, Pagination, Navigation]}
+            >
+              {editorChoice.map((item) => (
+                <SwiperSlide key={item.slug}>
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer noopenner"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={item.imgSrcTablet || '/images/default-og-img.png'}
+                      alt={item.title}
+                    />
+                    <p className="title">{item.title}</p>
+                  </a>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </SlideShow>
+        </EditorChoiceContainer>
+      ) : null}
+    </>
   )
 }

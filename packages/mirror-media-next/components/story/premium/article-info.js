@@ -3,8 +3,10 @@ import Credits from '../shared/credits'
 import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import DonateLink from '../shared/donate-link'
+import SubscribeLink from '../shared/subscribe-link'
 import Date from '../shared/date'
 import Tags from '../shared/tags'
+import { useMembership } from '../../../context/membership'
 
 /**
  * @typedef {import('../shared/credits').Credit[]} Credits
@@ -34,6 +36,19 @@ const StyledDonateLink = styled(DonateLink)`
     display: none;
   }
 `
+
+const StyledSubscribeLink = styled(SubscribeLink)`
+  margin-left: 8px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const DonateSubscribeWrapper = styled.div`
+  display: flex;
+`
+
 const DateWrapper = styled.div`
   ${({ theme }) => theme.breakpoint.md} {
     display: flex;
@@ -137,6 +152,9 @@ export default function ArticleInfo({
   tags = [],
   className = '',
 }) {
+  const { memberInfo } = useMembership()
+  const { memberType } = memberInfo
+
   return (
     <Wrapper className={className}>
       <StyledCredits credits={credits}></StyledCredits>
@@ -150,7 +168,12 @@ export default function ArticleInfo({
         <ButtonSocialNetworkShare width={28} height={28} type="line" />
         <ButtonCopyLink width={28} height={28} />
       </SocialMedia>
-      <StyledDonateLink />
+      <DonateSubscribeWrapper>
+        <StyledDonateLink />
+        {(memberType === 'not-member' ||
+          memberType === 'basic-member' ||
+          memberType === 'one-time-member') && <StyledSubscribeLink />}
+      </DonateSubscribeWrapper>
     </Wrapper>
   )
 }

@@ -1,11 +1,10 @@
 import styled from 'styled-components'
-import client from '../../../apollo/apollo-client'
 
 import InfiniteScrollList from '../../infinite-scroll-list'
 import Image from 'next/legacy/image'
 import LoadingPage from '../../../public/images/loading_page.gif'
 import TopicList from './topic-list'
-import { fetchTopics } from '../../../apollo/query/topics'
+import { fetchTopicList } from '../../../utils/api/section-topic'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -31,20 +30,16 @@ const Loading = styled.div`
  * @returns {React.ReactElement}
  */
 export default function SectionTopics({ topics, topicsCount, renderPageSize }) {
+  const fetchPageSize = renderPageSize * 2
   async function fetchTopicsFromPage(page) {
     try {
-      const response = await client.query({
-        query: fetchTopics,
-        variables: {
-          take: renderPageSize * 2,
-          skip: (page - 1) * renderPageSize * 2,
-          orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
-          filter: { state: { equals: 'published' } },
-        },
-      })
+      const take = fetchPageSize
+      const skip = (page - 1) * take
+      const response = await fetchTopicList(take, skip)
       return response.data.topics
     } catch (error) {
-      console.error('fetchTopicsFromPage error', error)
+      // [to-do]: use beacon api to log error on gcs
+      console.error(error)
     }
     return
   }
@@ -59,7 +54,7 @@ export default function SectionTopics({ topics, topicsCount, renderPageSize }) {
     <InfiniteScrollList
       initialList={topics}
       renderAmount={renderPageSize}
-      fetchCount={Math.ceil(topicsCount / renderPageSize)}
+      fetchCount={Math.ceil(topicsCount / fetchPageSize)}
       fetchListInPage={fetchTopicsFromPage}
       loader={loader}
     >
