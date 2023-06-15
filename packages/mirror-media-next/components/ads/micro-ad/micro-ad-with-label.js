@@ -17,6 +17,17 @@ const typeListing = css`
     // AD Image
     .listArticleBlock__figure {
       position: relative;
+      height: 214px;
+
+      ${({ theme }) => theme.breakpoint.xl} {
+        height: 147px;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
       // AD Label ('特企')
       .listArticleBlock__figure--colorBlock {
@@ -25,14 +36,17 @@ const typeListing = css`
         left: 0;
         padding: 8px;
         color: white;
-        font-size: 16px;
-        font-weight: 300;
         background-color: #bcbcbc;
+        font-family: 'PingFang TC';
+        font-style: normal;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 1;
 
         ${({ theme }) => theme.breakpoint.md} {
-          font-size: 18px;
           font-weight: 600;
           padding: 4px 20px;
+          line-height: 1.5;
         }
       }
     }
@@ -283,22 +297,23 @@ const typeStory = css`
 
     // Mobile: AD Label('特企')
     .pop_item--colorBlock {
-      padding: 4px;
-      background: #bcbcbc;
-      width: 48px;
-      height: 22px;
-      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'PingFang TC';
       font-style: normal;
       font-weight: 300;
-      font-size: 20px;
-      line-height: 14px;
+      font-size: 18px;
+      line-height: 1;
+      padding: 8px;
+      background: #bcbcbc;
+      color: #ffffff;
       position: absolute;
       bottom: 0;
       left: 0;
 
       ${({ theme }) => theme.breakpoint.md} {
-        width: 40px;
-        font-size: 16px;
+        font-weight: 600;
       }
     }
 
@@ -337,18 +352,18 @@ const typeStory = css`
         ${({ theme }) => theme.breakpoint.xl} {
           // Desktop: AD Label('特企')
           > div {
-            padding: 4px;
             background: #bcbcbc;
-            width: 48px;
-            height: 22px;
             color: #ffffff;
-            font-style: normal;
-            font-weight: 300;
-            font-size: 20px;
-            line-height: 14px;
             position: absolute;
             bottom: 0;
-            right: 87px;
+            right: 59px;
+            font-family: 'PingFang TC';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 1.5;
+            padding: 8px;
+            padding: 4px 20px;
           }
 
           // Desktop: AD Title

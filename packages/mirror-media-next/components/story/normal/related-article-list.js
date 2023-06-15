@@ -124,8 +124,8 @@ const ArticleWrapper = styled.ul`
 `
 
 const AdvertisementWrapper = styled.div`
-  margin-bottom: 30px;
-  padding: 0px 10px 48px 10px;
+  margin-bottom: 24px;
+  padding: 0px 10px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -134,6 +134,11 @@ const AdvertisementWrapper = styled.div`
     background: transparent;
     padding: 0px;
     gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-bottom: 0px;
   }
 `
 
