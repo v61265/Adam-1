@@ -7,7 +7,8 @@ import { sortArrayWithOtherArrayId } from '../../../utils'
 import errors from '@twreporter/errors'
 import TitleAndInfoAndHero from './title-and-info-and-hero'
 import CopyrightWarning from '../shared/copyright-warning'
-import DonateBanner from '../shared/donate-banner'
+import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
+import SupportSingleArticleBanner from '../shared/support-single-article-banner'
 import Aside from '../shared/aside'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
@@ -274,7 +275,11 @@ export default function StoryPremiumStyle({ postData, postContent }) {
             </section>
             <CopyrightWarning />
             {shouldShowArticleMask && <ArticleMask postId={id} />}
-            <DonateBanner />
+            {memberType === 'one-time-member' ? (
+              <SupportMirrorMediaBanner />
+            ) : (
+              <SupportSingleArticleBanner />
+            )}
           </ContentWrapper>
         </article>
       </Main>

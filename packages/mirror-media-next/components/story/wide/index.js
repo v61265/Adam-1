@@ -11,7 +11,7 @@ import DonateLink from '../shared/donate-link'
 import SubscribeLink from '../shared/subscribe-link'
 import HeroImageAndVideo from '../shared/hero-image-and-video'
 import Credits from '../shared/credits'
-import DonateBanner from '../shared/donate-banner'
+import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
 import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
 import MoreInfoAndTag from '../shared/more-info-and-tag'
 import Date from '../shared/date'
@@ -69,11 +69,6 @@ const ContentWrapper = styled.section`
       margin: 40px auto 0;
     }
   }
-`
-const StyledDonateBanner = styled(DonateBanner)`
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
 `
 
 const SocialMediaAndDonateLink = styled.ul`
@@ -217,7 +212,7 @@ export default function StoryWideStyle({ postData, postContent }) {
               />
             </section>
             <MoreInfoAndTag tags={tags} />
-            <StyledDonateBanner />
+            <SupportMirrorMediaBanner />
           </ContentWrapper>
           <Aside
             relateds={relatedsWithOrdered}
