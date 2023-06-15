@@ -17,6 +17,17 @@ const typeListing = css`
     // AD Image
     .listArticleBlock__figure {
       position: relative;
+      height: 214px;
+
+      ${({ theme }) => theme.breakpoint.xl} {
+        height: 147px;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
       // AD Label ('特企')
       .listArticleBlock__figure--colorBlock {
