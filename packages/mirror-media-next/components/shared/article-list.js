@@ -1,5 +1,15 @@
+import { Fragment } from 'react'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 import ArticleListItem from './article-list-item'
+import { needInsertMicroAdAfter, getMicroAdUnitId } from '../../utils/ad'
+
+const StyledMicroAd = dynamic(
+  () => import('../../components/ads/micro-ad/micro-ad-with-label'),
+  {
+    ssr: false,
+  }
+)
 
 const ItemContainer = styled.div`
   display: grid;
@@ -31,8 +41,16 @@ const ItemContainer = styled.div`
 export default function ArticleList({ renderList, section }) {
   return (
     <ItemContainer>
-      {renderList.map((item) => (
-        <ArticleListItem key={item.id} item={item} section={section} />
+      {renderList.map((item, index) => (
+        <Fragment key={item.id}>
+          <ArticleListItem item={item} section={section} />
+          {needInsertMicroAdAfter(index) && (
+            <StyledMicroAd
+              unitId={getMicroAdUnitId(index, 'LISTING', 'RWD')}
+              microAdType="LISTING"
+            />
+          )}
+        </Fragment>
       ))}
     </ItemContainer>
   )
