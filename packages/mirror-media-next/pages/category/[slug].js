@@ -14,6 +14,7 @@ import {
   fetchCategoryByCategorySlug,
   fetchPostsByCategorySlug,
 } from '../../utils/api/category'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -191,6 +192,8 @@ export default function Category({
   headerData,
 }) {
   const categroyName = category.name || ''
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `${categroyName}分類報導` }}
@@ -198,7 +201,8 @@ export default function Category({
       footer={{ type: 'default' }}
     >
       <CategoryContainer isPremium={isPremium}>
-        <StyledGPTAd pageKey="other" adKey="HD" />
+        {shouldShowAd && <StyledGPTAd pageKey="other" adKey="HD" />}
+
         {isPremium ? (
           <PremiumCategoryTitle sectionName={category?.sections?.[0].slug}>
             {categroyName}
@@ -208,6 +212,7 @@ export default function Category({
             {categroyName}
           </CategoryTitle>
         )}
+
         <CategoryArticles
           postsCount={postsCount}
           posts={posts}
@@ -216,8 +221,12 @@ export default function Category({
           isPremium={isPremium}
         />
 
-        <StyledGPTAd pageKey="other" adKey="FT" />
-        <StickyGPTAd pageKey="other" adKey="ST" />
+        {shouldShowAd && (
+          <>
+            <StyledGPTAd pageKey="other" adKey="FT" />
+            <StickyGPTAd pageKey="other" adKey="ST" />
+          </>
+        )}
       </CategoryContainer>
     </Layout>
   )
