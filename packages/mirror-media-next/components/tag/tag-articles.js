@@ -1,11 +1,10 @@
 import styled from 'styled-components'
-import client from '../../apollo/apollo-client'
+import Image from 'next/legacy/image'
 
 import InfiniteScrollList from '../infinite-scroll-list'
-import Image from 'next/legacy/image'
-import LoadingPage from '../../public/images/loading_page.gif'
 import ArticleList from '../shared/article-list'
-import { fetchPosts } from '../../apollo/query/posts'
+import { fetchPostsByTagSlug } from '../../utils/api/tag'
+import LoadingPage from '../../public/images/loading_page.gif'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -28,32 +27,29 @@ const Loading = styled.div`
  * @param {Object} props
  * @param {number} props.postsCount
  * @param {Article[]} props.posts
- * @param {Tag} props.tag
+ * @param {Tag["slug"]} props.tagSlug
  * @param {number} props.renderPageSize
  * @returns {React.ReactElement}
  */
 export default function TagArticles({
   postsCount,
   posts,
-  tag,
+  tagSlug,
   renderPageSize,
 }) {
+  const fetchPageSize = renderPageSize * 2
+
   async function fetchPostsFromPage(page) {
+    if (!tagSlug) {
+      return
+    }
     try {
-      const response = await client.query({
-        query: fetchPosts,
-        variables: {
-          take: renderPageSize * 2,
-          skip: (page - 1) * renderPageSize * 2,
-          orderBy: { publishedDate: 'desc' },
-          filter: {
-            state: { equals: 'published' },
-            tags: { some: { slug: { equals: tag.slug } } },
-          },
-        },
-      })
+      const take = fetchPageSize
+      const skip = (page - 1) * take
+      const response = await fetchPostsByTagSlug(tagSlug, take, skip)
       return response.data.posts
     } catch (error) {
+      // [to-do]: use beacon api to log error on gcs
       console.error(error)
     }
     return
@@ -69,7 +65,7 @@ export default function TagArticles({
     <InfiniteScrollList
       initialList={posts}
       renderAmount={renderPageSize}
-      fetchCount={Math.ceil(postsCount / renderPageSize)}
+      fetchCount={Math.ceil(postsCount / fetchPageSize)}
       fetchListInPage={fetchPostsFromPage}
       loader={loader}
     >

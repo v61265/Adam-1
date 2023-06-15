@@ -1,12 +1,11 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 
-import client from '../../apollo/apollo-client'
-import { fetchTopics } from '../../apollo/query/topics'
 import SectionTopics from '../../components/section/topic/section-topics'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
+import { fetchTopicList } from '../../utils/api/section-topic'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -82,7 +81,9 @@ export default function Topics({ topics, topicsCount, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, query }) {
+  const mockError = query.error === '500'
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -94,19 +95,15 @@ export async function getServerSideProps({ req }) {
 
   const responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(),
-    client.query({
-      query: fetchTopics,
-      variables: {
-        take: RENDER_PAGE_SIZE * 2,
-        skip: 0,
-        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'asc' }],
-        filter: { state: { equals: 'published' } },
-      },
-    }),
+    fetchTopicList(RENDER_PAGE_SIZE * 2, mockError ? NaN : 0),
   ])
 
-  const handledResponses = responses.map((response) => {
+  const handledResponses = responses.map((response, index) => {
     if (response.status === 'fulfilled') {
+      if ('data' in response.value) {
+        // handle gql requests
+        return response.value.data
+      }
       return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
@@ -136,12 +133,17 @@ export async function getServerSideProps({ req }) {
           ...globalLogFields,
         })
       )
+      if (index === 1) {
+        // fetch key data (topics) failed, redirect to 500
+        throw new Error('fetch topics failed')
+      }
       return
     }
   })
 
+  // handle fetch header data
   const headerData =
-    'sectionsData' in handledResponses[0]
+    handledResponses[0] && 'sectionsData' in handledResponses[0]
       ? handledResponses[0]
       : { sectionsData: [], topicsData: [] }
   const sectionsData = Array.isArray(headerData.sectionsData)
@@ -150,14 +152,23 @@ export async function getServerSideProps({ req }) {
   const topicsData = Array.isArray(headerData.topicsData)
     ? headerData.topicsData
     : []
+
+  // handle fetch topics
+  if (handledResponses[1]?.topics?.length === 0) {
+    // fetchTopic return empty array -> something wrong -> 404
+    console.log(
+      JSON.stringify({
+        severity: 'WARNING',
+        message: `fetch topics return empty posts, redirect to 404`,
+        globalLogFields,
+      })
+    )
+    return { notFound: true }
+  }
   /** @type {number} */
-  const topicsCount =
-    'data' in handledResponses[1]
-      ? handledResponses[1]?.data?.topicsCount || 0
-      : 0
+  const topicsCount = handledResponses[1]?.topicsCount || 0
   /** @type {Topic[]} */
-  const topics =
-    'data' in handledResponses[1] ? handledResponses[1]?.data?.topics || [] : []
+  const topics = handledResponses[1]?.topics || []
 
   const props = {
     topics,
