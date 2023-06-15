@@ -11,6 +11,7 @@ import {
   fetchAuthorByAuthorId,
   fetchPostsByAuthorId,
 } from '../../utils/api/author'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -92,6 +93,7 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Author({ postsCount, posts, author, headerData }) {
   const authorName = author.name || ''
+  const shouldShowAd = useDisplayAd()
   return (
     <Layout
       head={{ title: `${authorName}相關報導` }}
@@ -99,7 +101,7 @@ export default function Author({ postsCount, posts, author, headerData }) {
       footer={{ type: 'default' }}
     >
       <AuthorContainer>
-        <StyledGPTAd pageKey="other" adKey="HD" />
+        {shouldShowAd && <StyledGPTAd pageKey="other" adKey="HD" />}
         {authorName && <AuthorTitle>{authorName}</AuthorTitle>}
         <AuthorArticles
           postsCount={postsCount}
@@ -107,8 +109,12 @@ export default function Author({ postsCount, posts, author, headerData }) {
           authorId={author.id}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-        <StyledGPTAd pageKey="other" adKey="FT" />
-        <StickyGPTAd pageKey="other" adKey="ST" />
+        {shouldShowAd && (
+          <>
+            <StyledGPTAd pageKey="other" adKey="FT" />
+            <StickyGPTAd pageKey="other" adKey="ST" />
+          </>
+        )}
       </AuthorContainer>
     </Layout>
   )
