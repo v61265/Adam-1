@@ -12,12 +12,13 @@ const typeListing = css`
   font-size: 18px;
   background: #f3f1e9;
 
+  // Micro AD container
   #compass-fit-widget-content {
-    // Image
+    // AD Image
     .listArticleBlock__figure {
       position: relative;
 
-      // Label ('特企')
+      // AD Label ('特企')
       .listArticleBlock__figure--colorBlock {
         position: absolute;
         bottom: 0;
@@ -36,6 +37,7 @@ const typeListing = css`
       }
     }
 
+    // AD Detail
     .listArticleBlock__content {
       margin: 20px 20px 36px 20px;
 
@@ -218,7 +220,7 @@ const typeStory = css`
     height: 90px;
   }
 
-  // Micro AD container
+  // Mobile: Micro AD container
   #compass-fit-widget-content {
     max-width: 280px;
     font-size: 18px;
@@ -241,7 +243,7 @@ const typeStory = css`
       gap: 20px;
     }
 
-    // AD Image
+    // Mobile: AD Image
     figure {
       height: 186.67px;
       position: relative;
@@ -260,7 +262,7 @@ const typeStory = css`
       }
     }
 
-    // AD Title
+    // Mobile: AD Title
     .pop_item_title {
       //Since AD uses inline-style to set the background-color, it is necessary to use !important.
       background: none !important;
@@ -279,7 +281,7 @@ const typeStory = css`
       }
     }
 
-    // AD Label('特企')
+    // Mobile: AD Label('特企')
     .pop_item--colorBlock {
       padding: 4px;
       background: #bcbcbc;
@@ -300,6 +302,7 @@ const typeStory = css`
       }
     }
 
+    // Mobile: useless empty component
     .compass-fit-clear {
       display: none;
     }
@@ -315,7 +318,7 @@ const typeStory = css`
         height: 100%;
       }
 
-      // AD Image
+      // Desktop: AD Image
       > a {
         ${({ theme }) => theme.breakpoint.xl} {
           min-width: 135px;
@@ -329,9 +332,10 @@ const typeStory = css`
         }
       }
 
+      // Desktop: AD detail
       .popListVert-list__item--text {
         ${({ theme }) => theme.breakpoint.xl} {
-          // AD Label('特企')
+          // Desktop: AD Label('特企')
           > div {
             padding: 4px;
             background: #bcbcbc;
@@ -347,18 +351,24 @@ const typeStory = css`
             right: 87px;
           }
 
-          // AD Title
+          // Desktop: AD Title
           h2 {
             text-align: left;
             display: block;
             height: 100%;
             position: relative;
-            padding: 16px 0 0 40px;
+            padding: 16px 20px 0 40px;
             font-style: normal;
-            font-weight: 400;
+            //Since AD uses inline-style to set the font-weight, it is necessary to use !important.
+            font-weight: 400 !important;
             font-size: 18px;
             line-height: 1.5;
             color: #808080;
+
+            > a {
+              //Since AD uses inline-style to set the font-weight, it is necessary to use !important.
+              font-weight: 400 !important;
+            }
 
             &::before {
               position: absolute;
