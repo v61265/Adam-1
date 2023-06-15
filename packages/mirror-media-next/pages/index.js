@@ -131,7 +131,7 @@ export async function getServerSideProps({ res, req }) {
   try {
     const postResponse = await axios({
       method: 'get',
-      url: `${URL_STATIC_POST_EXTERNAL}032311.json`,
+      url: `${URL_STATIC_POST_EXTERNAL}01.json`,
       timeout: API_TIMEOUT,
     })
     editorChoicesData = Array.isArray(postResponse?.data?.choices)
