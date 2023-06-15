@@ -13,6 +13,7 @@ async function start() {
       jwtSecret: envVar.jwt.secret,
       israfelProxyOrigin: envVar.apis.israfel.origin,
       weeklyProxyOrigin: envVar.apis.weekly.origin,
+      gcsProxyOrigin: envVar.gcs.origin,
       corsAllowOrigin: envVar.cors.allowOrigins,
     })
     server = http.createServer(app).listen(port, () => {
