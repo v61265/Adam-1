@@ -206,6 +206,15 @@ export default function StoryPremiumStyle({ postData, postContent }) {
   const { memberInfo } = useMembership()
   const { memberType } = memberInfo
 
+  let supportBanner
+  if (postContent.type === 'fullContent') {
+    if (memberType === 'one-time-member') {
+      supportBanner = <SupportMirrorMediaBanner />
+    } else {
+      supportBanner = <SupportSingleArticleBanner />
+    }
+  }
+
   return (
     <>
       {isHeaderDataLoaded ? (
@@ -275,17 +284,7 @@ export default function StoryPremiumStyle({ postData, postContent }) {
             </section>
             <CopyrightWarning />
             {shouldShowArticleMask && <ArticleMask postId={id} />}
-            {!(
-              memberType === 'not-member' || memberType === 'basic-member'
-            ) && (
-              <div>
-                {memberType === 'one-time-member' ? (
-                  <SupportMirrorMediaBanner />
-                ) : (
-                  <SupportSingleArticleBanner />
-                )}
-              </div>
-            )}
+            {supportBanner}
           </ContentWrapper>
         </article>
       </Main>
