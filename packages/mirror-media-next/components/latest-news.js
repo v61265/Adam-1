@@ -11,6 +11,7 @@ import Image from 'next/legacy/image'
 import { needInsertMicroAdAfter, getMicroAdUnitId } from '../utils/ad'
 import useWindowDimensions from '../hooks/use-window-dimensions'
 import { mediaSize } from '../styles/media'
+import { useDisplayAd } from '../hooks/useDisplayAd'
 
 const StyledMicroAd = dynamic(
   () => import('../components/ads/micro-ad/micro-ad-with-label'),
@@ -150,6 +151,8 @@ export default function LatestNews(props) {
   const { width } = useWindowDimensions()
   const device = width >= mediaSize.md ? 'PC' : 'MB'
 
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Wrapper>
       <h2>最新文章</h2>
@@ -169,7 +172,7 @@ export default function LatestNews(props) {
             {renderList.map((item, index) => (
               <Fragment key={item.slug}>
                 <LatestNewsItem itemData={item} />
-                {needInsertMicroAdAfter(index) && (
+                {shouldShowAd && needInsertMicroAdAfter(index) && (
                   <StyledMicroAd
                     unitId={getMicroAdUnitId(index, 'HOME', device)}
                     microAdType="HOME"

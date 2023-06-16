@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 import ArticleListItem from './article-list-item'
 import { needInsertMicroAdAfter, getMicroAdUnitId } from '../../utils/ad'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const StyledMicroAd = dynamic(
   () => import('../../components/ads/micro-ad/micro-ad-with-label'),
@@ -39,12 +40,14 @@ const ItemContainer = styled.div`
  * @returns {React.ReactElement}
  */
 export default function ArticleList({ renderList, section }) {
+  const shouldShowAd = useDisplayAd()
+
   return (
     <ItemContainer>
       {renderList.map((item, index) => (
         <Fragment key={item.id}>
           <ArticleListItem item={item} section={section} />
-          {needInsertMicroAdAfter(index) && (
+          {shouldShowAd && needInsertMicroAdAfter(index) && (
             <StyledMicroAd
               unitId={getMicroAdUnitId(index, 'LISTING', 'RWD')}
               microAdType="LISTING"
