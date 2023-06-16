@@ -1,6 +1,6 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
-import dynamic from 'next/dynamic'
+// import dynamic from 'next/dynamic'
 
 import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
@@ -13,10 +13,11 @@ import {
   fetchSectionBySectionSlug,
 } from '../../utils/api/section'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
+import GPTAd from '../../components/ads/gpt/gpt-ad'
 
-const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
-  ssr: false,
-})
+// const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+//   ssr: false,
+// })
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
