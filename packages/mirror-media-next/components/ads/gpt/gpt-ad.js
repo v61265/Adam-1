@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 
 import { getAdSlotParam, getAdWidth } from '../../../utils/gpt-ad.js'
 import styled from 'styled-components'
-import { useMembership } from '../../../context/membership'
 
 const Wrapper = styled.div`
   /**
@@ -58,16 +57,10 @@ export default function GPTAd({
   onSlotRenderEnded,
   className,
 }) {
-  const { isLogInProcessFinished } = useMembership()
-
   const [adWidth, setAdWidth] = useState('')
   const [adDivId, setAdDivId] = useState('')
 
   useEffect(() => {
-    if (!isLogInProcessFinished) {
-      return
-    }
-
     if (!(pageKey && adKey)) {
       console.error(
         `GPTAd not receive necessary pageKey ${pageKey} or ${adKey}`
@@ -115,13 +108,7 @@ export default function GPTAd({
         window.googletag.destroySlots([adSlot])
       })
     }
-  }, [
-    adKey,
-    pageKey,
-    onSlotRequested,
-    onSlotRenderEnded,
-    isLogInProcessFinished,
-  ])
+  }, [adKey, pageKey, onSlotRequested, onSlotRenderEnded])
 
   return (
     <Wrapper className={`${className} gpt-ad`}>
