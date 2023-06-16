@@ -13,6 +13,8 @@ import {
   fetchSectionBySectionSlug,
 } from '../../utils/api/section'
 import GPTAd from '../../components/ads/gpt/gpt-ad'
+import { useMembership } from '../../context/membership'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 // const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
 //   ssr: false,
@@ -113,6 +115,18 @@ export default function Section({ postsCount, posts, section, headerData }) {
       ? SECTION_IDS['culture']
       : SECTION_IDS[section.slug]
 
+  const { memberInfo, isLogInProcessFinished } = useMembership()
+  const { memberType } = memberInfo
+
+  //When the user's member type is 'not-member', 'one-time-member', or 'basic-member', the AD should be displayed.
+  const invalidMemberType = ['not-member', 'one-time-member', 'basic-member']
+
+  const shouldShowAd = Boolean(
+    isLogInProcessFinished && invalidMemberType.includes(memberType)
+  )
+
+  const shouldShow = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `${sectionName}分類報導` }}
@@ -120,7 +134,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
       footer={{ type: 'default' }}
     >
       <SectionContainer>
-        <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="HD" />
+        {shouldShowAd && <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="HD" />}
 
         {sectionName && (
           <SectionTitle sectionName={section.slug}>{sectionName}</SectionTitle>
@@ -132,7 +146,11 @@ export default function Section({ postsCount, posts, section, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
 
-        <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />
+        {isLogInProcessFinished && (
+          <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />
+        )}
+
+        {shouldShow && <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />}
         <StickyGPTAd pageKey={GPT_PAGE_KEY} adKey="ST" />
       </SectionContainer>
     </Layout>
