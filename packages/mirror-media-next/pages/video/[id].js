@@ -16,10 +16,11 @@ import YoutubePolicy from '../../components/shared/youtube-policy'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
+import GPTAd from '../../components/ads/gpt/gpt-ad'
 
-const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
-  ssr: false,
-})
+// const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+//   ssr: false,
+// })
 
 const Wrapper = styled.main`
   width: 320px;
