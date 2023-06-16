@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic'
 import useWindowDimensions from '../../../hooks/use-window-dimensions'
 import { mediaSize } from '../../../styles/media'
 import { MICRO_AD_UNITS } from '../../../constants/ads'
+import { useDisplayAd } from '../../../hooks/useDisplayAd'
 
 const StyledMicroAd = dynamic(
   () => import('../../../components/ads/micro-ad/micro-ad-with-label'),
@@ -152,6 +153,8 @@ export default function RelatedArticleList({ relateds }) {
   const { width } = useWindowDimensions()
   const device = width >= mediaSize.xl ? 'PC' : 'MB'
 
+  const shouldShowAd = useDisplayAd()
+
   const relatedsArticleJsx = relateds.length ? (
     <ArticleWrapper>
       {relateds.map((related) => (
@@ -186,9 +189,11 @@ export default function RelatedArticleList({ relateds }) {
     </ArticleWrapper>
   ) : null
 
-  const microAdJsx = MICRO_AD_UNITS.STORY[device].map((unit) => (
-    <StyledMicroAd key={unit.name} unitId={unit.id} microAdType="STORY" />
-  ))
+  const microAdJsx = shouldShowAd
+    ? MICRO_AD_UNITS.STORY[device].map((unit) => (
+        <StyledMicroAd key={unit.name} unitId={unit.id} microAdType="STORY" />
+      ))
+    : null
 
   return (
     <Wrapper>
