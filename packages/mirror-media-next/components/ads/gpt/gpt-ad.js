@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { getAdSlotParam, getAdWidth } from '../../../utils/gpt-ad.js'
 import styled from 'styled-components'
@@ -57,10 +57,13 @@ export default function GPTAd({
   onSlotRenderEnded,
   className,
 }) {
+  const [adSize, setAdSize] = useState([])
+  const [adUnitPath, setAdUnitPath] = useState('')
   const [adWidth, setAdWidth] = useState('')
-  const [adDivId, setAdDivId] = useState('')
 
-  useLayoutEffect(() => {
+  const adDivId = adUnitPath // Set the id of the ad `<div>` to be the same as the `adUnitPath`.
+
+  useEffect(() => {
     if (!(pageKey && adKey)) {
       console.error(
         `GPTAd not receive necessary pageKey ${pageKey} or ${adKey}`
@@ -74,11 +77,17 @@ export default function GPTAd({
       return
     }
     const { adUnitPath, adSize } = adSlotParam
-    const adDivId = adUnitPath
-    const adWidth = getAdWidth(adSize)
-    setAdWidth(adWidth)
-    setAdDivId(adDivId)
 
+    const newAdSize = adSize
+    const newAdUnitPath = adUnitPath
+    const newAdWidth = getAdWidth(adSize)
+
+    setAdSize(newAdSize)
+    setAdWidth(newAdWidth)
+    setAdUnitPath(newAdUnitPath)
+  }, [adKey, pageKey])
+
+  useEffect(() => {
     if (adDivId && adWidth) {
       /**
        * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
@@ -111,7 +120,7 @@ export default function GPTAd({
         })
       }
     }
-  }, [adKey, pageKey, onSlotRequested, onSlotRenderEnded])
+  }, [adDivId, adSize, adUnitPath, adWidth, onSlotRenderEnded, onSlotRequested])
 
   return (
     <Wrapper className={`${className} gpt-ad`}>
