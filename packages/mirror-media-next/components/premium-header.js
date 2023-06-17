@@ -204,19 +204,10 @@ const MobilePremiumMemberLoginButton = styled(PremiumMemberLoginButton)`
 
 /**
  *
- * @typedef PremiumHeaderCategory
- * @property {string} id
- * @property {string} name
- * @property {string} slug
- *
- * @typedef PremiumHeaderSection
- * @property {string} id
- * @property {string} name
- * @property {string} slug
- * @property {PremiumHeaderCategory[]} categories
+ * @typedef {import('../apollo/fragments/section').Section[]} PremiumHeaderSections
  *
  * @typedef PremiumHeaderData
- * @property {PremiumHeaderSection[]} sections
+ * @property {PremiumHeaderSections} sections
  */
 
 /**
