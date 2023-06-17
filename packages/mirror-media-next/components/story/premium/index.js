@@ -13,9 +13,9 @@ import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import DonateLink from '../shared/donate-link'
 import SubscribeLink from '../shared/subscribe-link'
-import PremiumHeader from '../../premium-header'
 import ArticleMask from './article-mask'
 import { useMembership } from '../../../context/membership'
+import ShareHeader from '../../shared/share-header'
 const { getContentBlocksH2H3 } = MirrorMedia
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
@@ -173,13 +173,13 @@ export default function StoryPremiumStyle({
 
   return (
     <>
-      <PremiumHeader
-        premiumHeaderData={{
-          sections: headerData?.sectionsData,
+      <ShareHeader
+        pageLayoutType="premium"
+        headerData={{
+          sectionsData: headerData?.sectionsData,
+          h2AndH3Block: h2AndH3Block,
         }}
-        h2AndH3Block={h2AndH3Block}
-        shouldShowSubtitleNavigator={true}
-      ></PremiumHeader>
+      />
 
       <Main>
         <article>
