@@ -12,6 +12,15 @@ import RelatedPosts from './related-posts'
 import { ArrowDown } from './icons'
 import Footer from '../../shared/footer'
 
+/**
+ * Determines if the current browser is Safari.
+ *
+ * @return {boolean} Returns true if the browser is Safari, false otherwise.
+ */
+const isSafari = () => {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+}
+
 const Main = styled.main`
   margin: auto;
   padding-bottom: 40px;
@@ -37,7 +46,10 @@ const Main = styled.main`
 
   // Snap scrolling effect
   height: 100vh;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: ${({
+    // @ts-ignore
+    isSafari,
+  }) => (isSafari ? 'y proximity' : 'y mandatory ')};
   overflow: auto;
 
   // Hide the scroll bar
@@ -215,8 +227,17 @@ export default function StoryPhotographyStyle({ postData, postContent }) {
     setIsTransparent((prevState) => !prevState)
   }
 
+  const [isSafariDevice, setIsSafariDevice] = useState(false)
+
+  useEffect(() => {
+    setIsSafariDevice(isSafari())
+  }, [])
+
   return (
-    <Main>
+    <Main
+      // @ts-ignore
+      isSafari={isSafariDevice}
+    >
       <Header />
       <Page>
         <HeroSection
