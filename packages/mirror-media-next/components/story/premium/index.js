@@ -1,10 +1,7 @@
-import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import ArticleBrief from '../shared/brief'
-import { fetchHeaderDataInPremiumPageLayout } from '../../../utils/api'
 import { sortArrayWithOtherArrayId } from '../../../utils'
-import errors from '@twreporter/errors'
 import TitleAndInfoAndHero from './title-and-info-and-hero'
 import CopyrightWarning from '../shared/copyright-warning'
 import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
@@ -33,17 +30,6 @@ const { getContentBlocksH2H3 } = MirrorMedia
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
-
-const HeaderPlaceHolder = styled.header`
-  background-color: transparent;
-  height: 101px;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  ${({ theme }) => theme.breakpoint.md} {
-    height: 115px;
-  }
-`
 
 const Main = styled.main`
   width: 100%;
@@ -111,14 +97,16 @@ function getSectionLabelFirst(sections) {
  * @param {Object} props
  * @param {PostData} props.postData
  * @param {PostContent} props.postContent
+ * @param {any} props.headerData
  * @returns {JSX.Element}
  */
-export default function StoryPremiumStyle({ postData, postContent }) {
-  const [headerData, setHeaderData] = useState({
-    sectionsData: [],
-  })
+export default function StoryPremiumStyle({
+  postData,
+  postContent,
+  headerData,
+}) {
   const { isLoggedIn } = useMembership()
-  const [isHeaderDataLoaded, setIsHeaderDataLoaded] = useState(false)
+
   const {
     id = '',
     title,
@@ -171,38 +159,6 @@ export default function StoryPremiumStyle({ postData, postContent }) {
     { extend_byline: extend_byline },
   ]
 
-  useEffect(() => {
-    let ignore = false
-    fetchHeaderDataInPremiumPageLayout()
-      .then((res) => {
-        if (!ignore && !isHeaderDataLoaded) {
-          const { sectionsData } = res
-          setHeaderData({ sectionsData })
-          setIsHeaderDataLoaded(true)
-        }
-      })
-      .catch((error) => {
-        if (!ignore && !isHeaderDataLoaded) {
-          console.log(
-            errors.helpers.printAll(
-              error,
-              {
-                withStack: true,
-                withPayload: true,
-              },
-              0,
-              0
-            )
-          )
-          setIsHeaderDataLoaded(true)
-        }
-      })
-
-    return () => {
-      ignore = true
-    }
-  }, [isHeaderDataLoaded])
-
   const { memberInfo } = useMembership()
   const { memberType } = memberInfo
 
@@ -217,17 +173,13 @@ export default function StoryPremiumStyle({ postData, postContent }) {
 
   return (
     <>
-      {isHeaderDataLoaded ? (
-        <PremiumHeader
-          premiumHeaderData={{
-            sections: headerData.sectionsData,
-          }}
-          h2AndH3Block={h2AndH3Block}
-          shouldShowSubtitleNavigator={true}
-        ></PremiumHeader>
-      ) : (
-        <HeaderPlaceHolder />
-      )}
+      <PremiumHeader
+        premiumHeaderData={{
+          sections: headerData?.sectionsData,
+        }}
+        h2AndH3Block={h2AndH3Block}
+        shouldShowSubtitleNavigator={true}
+      ></PremiumHeader>
 
       <Main>
         <article>

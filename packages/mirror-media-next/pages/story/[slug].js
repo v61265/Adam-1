@@ -17,6 +17,8 @@ import Layout from '../../components/shared/layout'
 import { convertDraftToText, getResizedUrl } from '../../utils/index'
 import { handleStoryPageRedirect } from '../../utils/story'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
 const { hasContentInRawContentBlock } = MirrorMedia
 
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
@@ -51,9 +53,10 @@ const Loading = styled.div`
  *
  * @param {Object} props
  * @param {PostData} props.postData
+ * @param {any} props.headerData
  * @returns {JSX.Element}
  */
-export default function Story({ postData }) {
+export default function Story({ postData, headerData }) {
   const {
     title = '',
     slug = '',
@@ -123,9 +126,21 @@ export default function Story({ postData }) {
         <StoryPhotographyStyle postData={postData} postContent={postContent} />
       )
     } else if (style === 'article' && isMember === true) {
-      return <StoryPremiumStyle postData={postData} postContent={postContent} />
+      return (
+        <StoryPremiumStyle
+          postData={postData}
+          postContent={postContent}
+          headerData={headerData}
+        />
+      )
     }
-    return <StoryNormalStyle postData={postData} postContent={postContent} />
+    return (
+      <StoryNormalStyle
+        postData={postData}
+        postContent={postContent}
+        headerData={headerData}
+      />
+    )
   }
   const storyLayout = renderStoryLayout()
 
@@ -185,7 +200,6 @@ export async function getServerSideProps({ params, req }) {
     if (!postData) {
       return { notFound: true }
     }
-
     // Check if the post data has content in the brief, trimmedContent, or content fields
     const shouldCheckHasContent =
       postData.style === 'article' ||
@@ -208,10 +222,61 @@ export async function getServerSideProps({ params, req }) {
 
     const redirect = postData?.redirect
     handleStoryPageRedirect(redirect)
+    let headerData = null
+    const shouldFetchDefaultHeaderData =
+      postData.style === 'article' && !postData.isMember
+    const shouldFetchPremiumHeaderData =
+      postData.style === 'article' && postData.isMember
+    if (shouldFetchDefaultHeaderData) {
+      try {
+        headerData = await fetchHeaderDataInDefaultPageLayout()
+      } catch (err) {
+        headerData = { sectionsData: [], topicsData: [] }
+        const errorMessage = errors.helpers.printAll(
+          err,
+          {
+            withStack: true,
+            withPayload: false,
+          },
+          0,
+          0
+        )
+        console.log(
+          JSON.stringify({
+            severity: 'ERROR',
+            message: errorMessage,
+            ...globalLogFields,
+          })
+        )
+      }
+    } else if (shouldFetchPremiumHeaderData) {
+      try {
+        headerData = await fetchHeaderDataInPremiumPageLayout()
+      } catch (err) {
+        headerData = { sectionsData: [] }
+        const errorMessage = errors.helpers.printAll(
+          err,
+          {
+            withStack: true,
+            withPayload: false,
+          },
+          0,
+          0
+        )
+        console.log(
+          JSON.stringify({
+            severity: 'ERROR',
+            message: errorMessage,
+            ...globalLogFields,
+          })
+        )
+      }
+    }
 
     return {
       props: {
         postData,
+        headerData,
       },
     }
   } catch (err) {
