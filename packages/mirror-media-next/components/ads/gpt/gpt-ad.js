@@ -79,35 +79,37 @@ export default function GPTAd({
     setAdWidth(adWidth)
     setAdDivId(adDivId)
 
-    /**
-     * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
-     */
-    let adSlot
-    window.googletag.cmd.push(() => {
-      adSlot = window.googletag
-        .defineSlot(adUnitPath, adSize, adDivId)
-        .addService(window.googletag.pubads())
-    })
-
-    window.googletag.cmd.push(() => {
-      window.googletag.display(adDivId)
-    })
-
-    // all events, check https://developers.google.com/publisher-tag/reference?hl=en#googletag.events.eventtypemap for all events
-    window.googletag.cmd.push(() => {
-      const pubads = window.googletag.pubads()
-      if (onSlotRequested) {
-        pubads.addEventListener('slotRequested', onSlotRequested)
-      }
-      if (onSlotRenderEnded) {
-        pubads.addEventListener('slotRenderEnded', onSlotRenderEnded)
-      }
-    })
-
-    return () => {
+    if (adDivId && adWidth) {
+      /**
+       * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
+       */
+      let adSlot
       window.googletag.cmd.push(() => {
-        window.googletag.destroySlots([adSlot])
+        adSlot = window.googletag
+          .defineSlot(adUnitPath, adSize, adDivId)
+          .addService(window.googletag.pubads())
       })
+
+      window.googletag.cmd.push(() => {
+        window.googletag.display(adDivId)
+      })
+
+      // all events, check https://developers.google.com/publisher-tag/reference?hl=en#googletag.events.eventtypemap for all events
+      window.googletag.cmd.push(() => {
+        const pubads = window.googletag.pubads()
+        if (onSlotRequested) {
+          pubads.addEventListener('slotRequested', onSlotRequested)
+        }
+        if (onSlotRenderEnded) {
+          pubads.addEventListener('slotRenderEnded', onSlotRenderEnded)
+        }
+      })
+
+      return () => {
+        window.googletag.cmd.push(() => {
+          window.googletag.destroySlots([adSlot])
+        })
+      }
     }
   }, [adKey, pageKey, onSlotRequested, onSlotRenderEnded])
 
