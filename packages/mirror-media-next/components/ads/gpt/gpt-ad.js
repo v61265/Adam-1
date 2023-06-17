@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 
 import { getAdSlotParam, getAdWidth } from '../../../utils/gpt-ad.js'
 import styled from 'styled-components'
@@ -60,13 +60,14 @@ export default function GPTAd({
   const [adWidth, setAdWidth] = useState('')
   const [adDivId, setAdDivId] = useState('')
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!(pageKey && adKey)) {
       console.error(
         `GPTAd not receive necessary pageKey ${pageKey} or ${adKey}`
       )
       return
     }
+
     const width = window.innerWidth
     const adSlotParam = getAdSlotParam(pageKey, adKey, width)
     if (!adSlotParam) {
