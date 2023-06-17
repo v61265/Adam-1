@@ -139,6 +139,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
         {sectionName && (
           <SectionTitle sectionName={section.slug}>{sectionName}</SectionTitle>
         )}
+
         <SectionArticles
           postsCount={postsCount}
           posts={posts}
@@ -146,12 +147,8 @@ export default function Section({ postsCount, posts, section, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
 
-        {isLogInProcessFinished && (
-          <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />
-        )}
-
         {shouldShow && <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />}
-        <StickyGPTAd pageKey={GPT_PAGE_KEY} adKey="ST" />
+        {shouldShow && <StickyGPTAd pageKey={GPT_PAGE_KEY} adKey="ST" />}
       </SectionContainer>
     </Layout>
   )
