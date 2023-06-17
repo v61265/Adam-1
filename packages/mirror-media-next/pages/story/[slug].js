@@ -38,6 +38,10 @@ import Skeleton from '../../public/images/skeleton.png'
  * @typedef {import('../../components/story/normal').PostContent} PostContent
  */
 
+/**
+ * @typedef {'style-normal' | 'style-photography' | 'style-wide' | 'style-premium'} StoryLayoutType
+ */
+
 const Loading = styled.div`
   width: 100%;
   height: 100%;
@@ -51,17 +55,33 @@ const Loading = styled.div`
 
 /**
  *
+ * @param {import('../../components/story/normal').PostData['style']} articleStyle
+ * @param {import('../../components/story/normal').PostData['isMember']} isMemberOnlyArticle
+ * @returns {StoryLayoutType }
+ */
+const getStoryLayoutType = (articleStyle, isMemberOnlyArticle) => {
+  if (articleStyle === 'wide') {
+    return 'style-wide'
+  } else if (articleStyle === 'photography') {
+    return 'style-photography'
+  } else if (articleStyle === 'article' && isMemberOnlyArticle === true) {
+    return 'style-premium'
+  }
+  return 'style-normal'
+}
+
+/**
+ *
  * @param {Object} props
  * @param {PostData} props.postData
  * @param {any} props.headerData
+ * @param {StoryLayoutType} props.storyLayoutType
  * @returns {JSX.Element}
  */
-export default function Story({ postData, headerData }) {
+export default function Story({ postData, headerData, storyLayoutType }) {
   const {
     title = '',
     slug = '',
-    style = 'article',
-    isMember = false,
     isAdult = false,
     categories = [],
     content = null,
@@ -119,32 +139,43 @@ export default function Story({ postData, headerData }) {
   }, [isLoggedIn, content, accessToken, slug])
 
   const renderStoryLayout = () => {
-    if (style === 'wide') {
-      return <StoryWideStyle postData={postData} postContent={postContent} />
-    } else if (style === 'photography') {
-      return (
-        <StoryPhotographyStyle postData={postData} postContent={postContent} />
-      )
-    } else if (style === 'article' && isMember === true) {
-      return (
-        <StoryPremiumStyle
-          postData={postData}
-          postContent={postContent}
-          headerData={headerData}
-        />
-      )
+    switch (storyLayoutType) {
+      case 'style-normal':
+        return (
+          <StoryNormalStyle
+            postData={postData}
+            postContent={postContent}
+            headerData={headerData}
+          />
+        )
+      case 'style-premium':
+        return (
+          <StoryPremiumStyle
+            postData={postData}
+            postContent={postContent}
+            headerData={headerData}
+          />
+        )
+      case 'style-wide':
+        return <StoryWideStyle postData={postData} postContent={postContent} />
+      case 'style-photography':
+        return (
+          <StoryPhotographyStyle
+            postData={postData}
+            postContent={postContent}
+          />
+        )
+      default:
+        return (
+          <StoryNormalStyle
+            postData={postData}
+            postContent={postContent}
+            headerData={headerData}
+          />
+        )
     }
-    return (
-      <StoryNormalStyle
-        postData={postData}
-        postContent={postContent}
-        headerData={headerData}
-      />
-    )
   }
-  const storyLayout = renderStoryLayout()
-
-  //mock for process of changing article type
+  const storyLayoutJsx = renderStoryLayout()
 
   return (
     <Layout
@@ -161,12 +192,12 @@ export default function Story({ postData, headerData }) {
       footer={{ type: 'empty' }}
     >
       <>
-        {!storyLayout && (
+        {!storyLayoutJsx && (
           <Loading>
             <Image src={Skeleton} alt="loading..."></Image>
           </Loading>
         )}
-        {storyLayout}
+        {storyLayoutJsx}
         <WineWarning categories={categories} />
         <AdultOnlyWarning isAdult={isAdult} />
       </>
@@ -222,11 +253,13 @@ export async function getServerSideProps({ params, req }) {
 
     const redirect = postData?.redirect
     handleStoryPageRedirect(redirect)
+    const storyLayoutType = getStoryLayoutType(
+      postData?.style,
+      postData?.isMember
+    )
     let headerData = null
-    const shouldFetchDefaultHeaderData =
-      postData.style === 'article' && !postData.isMember
-    const shouldFetchPremiumHeaderData =
-      postData.style === 'article' && postData.isMember
+    const shouldFetchDefaultHeaderData = storyLayoutType === 'style-normal'
+    const shouldFetchPremiumHeaderData = storyLayoutType === 'style-premium'
     if (shouldFetchDefaultHeaderData) {
       try {
         headerData = await fetchHeaderDataInDefaultPageLayout()
@@ -277,6 +310,7 @@ export async function getServerSideProps({ params, req }) {
       props: {
         postData,
         headerData,
+        storyLayoutType,
       },
     }
   } catch (err) {
