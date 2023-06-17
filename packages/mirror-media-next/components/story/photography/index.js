@@ -18,7 +18,7 @@ import Footer from '../../shared/footer'
  * @return {boolean} Returns true if the browser is Safari, false otherwise.
  */
 const isSafari = () => {
-  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+  return /^((?!chrome|android|mobile).)*safari/i.test(navigator.userAgent)
 }
 
 const Main = styled.main`
