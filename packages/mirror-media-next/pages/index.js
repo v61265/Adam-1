@@ -181,7 +181,6 @@ export async function getServerSideProps({ res, req }) {
             ...globalLogFields,
           })
         )
-        throw new Error(errorMessage)
       }
     })
 

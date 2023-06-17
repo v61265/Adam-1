@@ -1,12 +1,11 @@
 //TODO: adjust margin and padding of all margin and padding after implement advertisement.
 //TODO: refactor jsx structure, make it more readable.
 
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback } from 'react'
 import client from '../../../apollo/apollo-client'
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
 import axios from 'axios'
-import errors from '@twreporter/errors'
 import MockAdvertisement from '../../../components/mock-advertisement'
 import ArticleInfo from '../../../components/story/normal/article-info'
 import ArticleBrief from '../shared/brief'
@@ -25,7 +24,7 @@ import {
   transformTimeDataIntoDotFormat,
   sortArrayWithOtherArrayId,
 } from '../../../utils'
-import { fetchHeaderDataInDefaultPageLayout } from '../../../utils/api'
+// import { fetchHeaderDataInDefaultPageLayout } from '../../../utils/api'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 import DableAd from '../../ads/dable/dable-ad'
@@ -340,20 +339,17 @@ const AdvertisementDableMobile = styled(AdvertisementDable)`
     width: 640px;
   }
 `
-const HeaderPlaceHolder = styled.header`
-  background-color: transparent;
-  height: 175px;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-`
 
 /**
  *
- * @param {{postData: PostData,postContent: PostContent}} param
+ * @param {{postData: PostData,postContent: PostContent, headerData: any}} param
  * @returns {JSX.Element}
  */
-export default function StoryNormalStyle({ postData, postContent }) {
+export default function StoryNormalStyle({
+  postData,
+  postContent,
+  headerData,
+}) {
   const {
     title = '',
     slug = '',
@@ -378,11 +374,6 @@ export default function StoryNormalStyle({ postData, postContent }) {
     manualOrderOfRelateds = [],
   } = postData
 
-  const [headerData, setHeaderData] = useState({
-    sectionsData: [],
-    topicsData: [],
-  })
-  const [isHeaderDataLoaded, setIsHeaderDataLoaded] = useState(false)
   const sectionsWithOrdered =
     manualOrderOfSections && manualOrderOfSections.length
       ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
@@ -452,50 +443,15 @@ export default function StoryNormalStyle({ postData, postContent }) {
 
   const publishedTaipeiTime = transformTimeDataIntoDotFormat(publishedDate)
   const updatedTaipeiTime = transformTimeDataIntoDotFormat(updatedAt)
-  useEffect(() => {
-    let ignore = false
-    fetchHeaderDataInDefaultPageLayout()
-      .then((res) => {
-        if (!ignore && !isHeaderDataLoaded) {
-          const { sectionsData, topicsData } = res
-          setHeaderData({ sectionsData, topicsData })
-          setIsHeaderDataLoaded(true)
-        }
-      })
-      .catch((error) => {
-        if (!ignore && !isHeaderDataLoaded) {
-          console.log(
-            errors.helpers.printAll(
-              error,
-              {
-                withStack: true,
-                withPayload: true,
-              },
-              0,
-              0
-            )
-          )
-          setIsHeaderDataLoaded(true)
-        }
-      })
-
-    return () => {
-      ignore = true
-    }
-  }, [isHeaderDataLoaded])
   return (
     <>
-      {isHeaderDataLoaded ? (
-        <ShareHeader
-          pageLayoutType="default"
-          headerData={{
-            sectionsData: headerData.sectionsData,
-            topicsData: headerData.topicsData,
-          }}
-        ></ShareHeader>
-      ) : (
-        <HeaderPlaceHolder />
-      )}
+      <ShareHeader
+        pageLayoutType="default"
+        headerData={{
+          sectionsData: headerData?.sectionsData,
+          topicsData: headerData?.topicsData,
+        }}
+      ></ShareHeader>
 
       <PC_HD_Advertisement
         width="970px"
