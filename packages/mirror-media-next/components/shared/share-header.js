@@ -3,25 +3,50 @@
 import Header from '../header'
 import PremiumHeader from '../premium-header'
 import FlashNews from '../flash-news'
+
+/**
+ * @typedef {import('../header').Sections} NormalSectionsData
+ * @typedef {import('../header').Topics} TopicsData
+ * @typedef {import('../flash-news').FlashNews[]} FlashNewsData
+ * @typedef {import('../premium-header').PremiumHeaderSections} PremiumSectionsData
+ * @typedef {import('../premium-header').H2AndH3Block[]}  H2AndH3Blocks
+ */
+
 /**
  * @typedef {Object} DefaultHeaderData
- * @property {import('../header').Sections} normalSectionsData
- * @property {import('../header').Topics} topicsData
+ * @property {NormalSectionsData} [sectionsData]
+ * @property {TopicsData} [topicsData]
+ *
+ *
+ * @typedef {Object} DefaultHeaderWithFlashNewsData
+ * @property {Object} [sectionsData]
+ * @property {TopicsData} [topicsData]
+ * @property {FlashNewsData} [flashNewsData]
+ *
  *
  * @typedef {Object} PremiumHeaderData
- * @property {import('../premium-header').PremiumHeaderSection[]} premiumSectionsData
+ * @property {PremiumSectionsData} [sectionsData]
+ *
+ * @typedef {Object} PremiumHeaderWithSubtitleNavigatorData
+ * @property {PremiumSectionsData} [sectionsData]
+ * @property {H2AndH3Blocks} [h2AndH3Block]
  *
  */
 
 /**
  * @typedef {Object} HeaderData
- * @property {DefaultHeaderData['normalSectionsData'] | PremiumHeaderData['premiumSectionsData']} [sectionsData]
+ * @property {DefaultHeaderData['sectionsData'] | PremiumHeaderData['sectionsData']} sectionsData
  * @property {DefaultHeaderData['topicsData']} [topicsData]
- * @property {import('../flash-news').FlashNews[]} [flashNewsData]
+ * @property {DefaultHeaderWithFlashNewsData['flashNewsData']} [flashNewsData]
+ * @property {PremiumHeaderWithSubtitleNavigatorData['h2AndH3Block']} [h2AndH3Block]
  *
- * @typedef {'default' | 'default-with-flash-news' | 'premium' | 'empty'} HeaderType
+ *
+ * @typedef {'default' | 'default-with-flash-news' | 'premium' | 'premium-with-subtitle-navigator' | 'empty' } HeaderType
  */
 
+/**
+ * @param {DefaultHeaderData} headerData
+ */
 const getDefaultHeader = (headerData) => {
   const { sectionsData, topicsData } = headerData
   if (!sectionsData || !sectionsData.length) {
@@ -32,6 +57,9 @@ const getDefaultHeader = (headerData) => {
 
   return <Header sectionsData={sectionsData} topicsData={topicsData} />
 }
+/**
+ * @param {DefaultHeaderWithFlashNewsData} headerData
+ */
 const getDefaultHeaderWithFlashNews = (headerData) => {
   const { sectionsData, topicsData, flashNewsData } = headerData
   if (!sectionsData || !sectionsData.length) {
@@ -50,6 +78,9 @@ const getDefaultHeaderWithFlashNews = (headerData) => {
     </Header>
   )
 }
+/**
+ * @param {PremiumHeaderData} headerData
+ */
 const getPremiumHeader = (headerData) => {
   const { sectionsData } = headerData
   if (!sectionsData || !sectionsData.length) {
@@ -57,6 +88,23 @@ const getPremiumHeader = (headerData) => {
   }
 
   return <PremiumHeader premiumHeaderData={{ sections: sectionsData }} />
+}
+/**
+ * @param {PremiumHeaderWithSubtitleNavigatorData} headerData
+ */
+const getPremiumHeaderWithSubtitleNavigator = (headerData) => {
+  const { sectionsData, h2AndH3Block } = headerData
+  if (!sectionsData || !sectionsData.length) {
+    console.warn('There is no sections data for header of premium page layout')
+  }
+
+  return (
+    <PremiumHeader
+      premiumHeaderData={{ sections: sectionsData }}
+      h2AndH3Block={h2AndH3Block}
+      shouldShowSubtitleNavigator={true}
+    />
+  )
 }
 
 /**
@@ -69,32 +117,36 @@ const getPremiumHeader = (headerData) => {
  */
 export default function ShareHeader({
   pageLayoutType = 'default',
-  headerData = {},
+  headerData = { sectionsData: [] },
 }) {
-  const getheaderJsx = (pageLayoutType) => {
+  const getHeaderJsx = () => {
     switch (pageLayoutType) {
       case 'default': {
-        const defaultHeader = getDefaultHeader(headerData)
-        return defaultHeader
+        const header = getDefaultHeader(headerData)
+        return header
       }
       case 'default-with-flash-news': {
-        const defaultHeaderWithFlashNews =
-          getDefaultHeaderWithFlashNews(headerData)
-        return defaultHeaderWithFlashNews
+        const header = getDefaultHeaderWithFlashNews(headerData)
+        return header
       }
       case 'premium': {
-        const premiumHeader = getPremiumHeader(headerData)
-        return premiumHeader
+        const header = getPremiumHeader(headerData)
+        return header
+      }
+      case 'premium-with-subtitle-navigator': {
+        const header = getPremiumHeaderWithSubtitleNavigator(headerData)
+        return header
       }
       case 'empty':
         return <></>
       default: {
-        const defaultHeader = getDefaultHeader(headerData)
-        return defaultHeader
+        const header = getDefaultHeader(headerData)
+        return header
       }
     }
   }
-  const headerJsx = getheaderJsx(pageLayoutType)
+
+  const headerJsx = getHeaderJsx()
 
   return headerJsx
 }
