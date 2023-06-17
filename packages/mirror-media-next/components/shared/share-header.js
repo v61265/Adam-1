@@ -3,11 +3,20 @@
 import Header from '../header'
 import PremiumHeader from '../premium-header'
 import FlashNews from '../flash-news'
+/**
+ * @typedef {Object} DefaultHeaderData
+ * @property {import('../header').Sections} normalSectionsData
+ * @property {import('../header').Topics} topicsData
+ *
+ * @typedef {Object} PremiumHeaderData
+ * @property {import('../premium-header').PremiumHeaderSection[]} premiumSectionsData
+ *
+ */
 
 /**
  * @typedef {Object} HeaderData
- * @property {Array} [sectionsData]
- * @property {Array} [topicsData]
+ * @property {DefaultHeaderData['normalSectionsData'] | PremiumHeaderData['premiumSectionsData']} [sectionsData]
+ * @property {DefaultHeaderData['topicsData']} [topicsData]
  * @property {import('../flash-news').FlashNews[]} [flashNewsData]
  *
  * @typedef {'default' | 'default-with-flash-news' | 'premium' | 'empty'} HeaderType
@@ -53,7 +62,7 @@ const getPremiumHeader = (headerData) => {
 /**
  *
  * @param {Object} props
- * @param {HeaderType } props.pageLayoutType
+ * @param {HeaderType} props.pageLayoutType
  * @param {HeaderData} [props.headerData]
  * @param {JSX.Element | null} [props.children]
  * @returns {JSX.Element}

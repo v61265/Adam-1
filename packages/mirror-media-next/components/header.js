@@ -207,6 +207,7 @@ import { SEARCH_URL } from '../config/index.mjs'
  *
  *  @typedef {import('../apollo/fragments/section').Section[]} Sections
  */
+
 /**
  * @typedef {import('./nav-sections').SectionWithHrefTemp} SectionWithHrefTemp
  */
