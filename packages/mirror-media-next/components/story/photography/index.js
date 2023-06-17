@@ -49,7 +49,14 @@ const Main = styled.main`
   scroll-snap-type: ${({
     // @ts-ignore
     isSafari,
-  }) => (isSafari ? 'y proximity' : 'y mandatory ')};
+  }) => (isSafari ? 'y proximity' : 'y mandatory')};
+  scroll-snap-type: ${({
+    // @ts-ignore
+    isSafari,
+  }) =>
+    isSafari
+      ? '-webkit-scroll-snap-type: y proximity'
+      : '-webkit-scroll-snap-type: y mandatory'};
   overflow: auto;
 
   // Hide the scroll bar
@@ -68,6 +75,8 @@ const Page = styled.div`
   // snap scrolling effect
   scroll-snap-align: start;
   scroll-snap-stop: always;
+  -webkit-scroll-snap-align: start;
+  -webkit-scroll-snap-stop: always;
 `
 
 const ContentContainer = styled.div`
