@@ -37,8 +37,10 @@ export default function Topic({ topic, slideshowData, headerData }) {
           slideshowData={slideshowData}
         />
       )
+      break
     case 'group':
       topicJSX = <TopicGroup topic={topic} />
+      break
     default:
       topicJSX = (
         <TopicList
