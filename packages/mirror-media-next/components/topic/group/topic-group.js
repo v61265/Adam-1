@@ -1,19 +1,33 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import TopicGroupArticles from './topic-group-articles'
+
+/**
+ * @typedef {import('../../../type/theme').Theme} Theme
+ */
 
 const Container = styled.main`
   margin: 0 auto;
 
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.customCss
+     */
+    ({ theme }) => theme.breakpoint.xl
+  } {
     padding: 0;
   }
 
   // custom css from cms, mainly used class name .topic, .topic-title, .leading
-  ${({ customCss }) =>
-    customCss &&
-    css`
-      ${customCss}
-    `}
+  ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.customCss
+     */
+    ({ customCss }) => customCss
+  }
 `
 
 const Topic = styled.div`
