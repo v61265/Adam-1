@@ -118,6 +118,7 @@ const FlashNew = styled.a`
  * @returns {React.ReactElement}
  */
 export default function FlashNews({ flashNews = [] }) {
+  const hasFlashNews = flashNews && flashNews.length > 0
   //state `move` has three purpose：
   //1. control and the transition distance of component `FlashNewsList`, making the animation of sliding.
   //2. When slide to previous or next news, `move` will plus or minus 1.
@@ -177,35 +178,39 @@ export default function FlashNews({ flashNews = [] }) {
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      handleClickNext()
-    }, 2000)
-    return () => clearTimeout(timer)
-  }, [handleClickNext])
+    if (hasFlashNews) {
+      const timer = setTimeout(() => {
+        handleClickNext()
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [hasFlashNews, handleClickNext])
   return (
-    <FlashNewsWrapper>
-      <ArrowWrapper className="arrows">
-        <Arrow className="prev" onClick={handleClickPrev} />
-        <Arrow className="next" onClick={handleClickNext} />
-      </ArrowWrapper>
-      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-      <FlashNewsList
-        shouldTransition={shouldTransition}
-        move={move}
-        onTransitionEnd={handleTransitionEnd}
-      >
-        {displayedArticle.map((item) => (
-          <FlashNew
-            key={item.id}
-            href={`/story/${item.slug}`}
-            target="_blank"
-            rel="noreferrer noopenner"
-          >
-            <Title>快訊</Title>
-            <p className="content"> {item?.title}</p>
-          </FlashNew>
-        ))}
-      </FlashNewsList>
-    </FlashNewsWrapper>
+    hasFlashNews && (
+      <FlashNewsWrapper>
+        <ArrowWrapper className="arrows">
+          <Arrow className="prev" onClick={handleClickPrev} />
+          <Arrow className="next" onClick={handleClickNext} />
+        </ArrowWrapper>
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <FlashNewsList
+          shouldTransition={shouldTransition}
+          move={move}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {displayedArticle.map((item) => (
+            <FlashNew
+              key={item.id}
+              href={`/story/${item.slug}`}
+              target="_blank"
+              rel="noreferrer noopenner"
+            >
+              <Title>快訊</Title>
+              <p className="content"> {item?.title}</p>
+            </FlashNew>
+          ))}
+        </FlashNewsList>
+      </FlashNewsWrapper>
+    )
   )
 }
