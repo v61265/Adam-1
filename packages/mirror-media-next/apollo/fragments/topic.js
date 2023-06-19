@@ -1,9 +1,13 @@
 import { gql } from '@apollo/client'
-import { heroImage } from './photo'
+import { heroImage, slideshowImage } from './photo'
 import { post } from './post'
 import { tag } from './tag'
 
 /**
+ * @typedef {Object} manualOrderOfSlideshowImage
+ * @property {string} id
+ * @property {string} name
+ *
  * @typedef {Object} Topic
  * @property {string} id
  * @property {string} name
@@ -19,6 +23,8 @@ import { tag } from './tag'
  * @property {import('./tag').Tag[]} tags
  * @property {string} og_description
  * @property {import('./photo').Photo} og_image
+ * @property {import('./photo').SlideshowImage[]} slideshow_images
+ * @property {manualOrderOfSlideshowImage[]} manualOrderOfSlideshowImages
  */
 
 export const simpleTopic = gql`
@@ -34,6 +40,7 @@ export const simpleTopic = gql`
 `
 
 export const topic = gql`
+  ${slideshowImage}
   ${heroImage}
   ${post}
   ${tag}
@@ -63,5 +70,9 @@ export const topic = gql`
     og_image {
       ...heroImage
     }
+    slideshow_images {
+      ...slideshowImage
+    }
+    manualOrderOfSlideshowImages
   }
 `
