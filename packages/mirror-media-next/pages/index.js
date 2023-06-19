@@ -16,7 +16,12 @@ import {
   GCP_PROJECT_ID,
 } from '../config/index.mjs'
 
-import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
+import {
+  fetchHeaderDataInDefaultPageLayout,
+  fetchHeaderDataInDefaultPageLayoutNoSections,
+  fetchHeaderDataInDefaultPageLayoutNoTopics,
+  fetchHeaderDataInDefaultPageLayoutNoAllHeaderData,
+} from '../utils/api'
 import { transformRawDataToArticleInfo } from '../utils'
 
 import EditorChoice from '../components/editor-choice'
@@ -108,11 +113,38 @@ export default function Home({
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ res, req }) {
+export async function getServerSideProps({ res, req, query }) {
   if (ENV === 'dev' || ENV === 'staging' || ENV === 'prod') {
     res.setHeader('Cache-Control', 'public, max-age=180')
   }
-
+  let post_external_url = URL_STATIC_POST_EXTERNAL
+  let flash_news_url = URL_STATIC_POST_FLASH_NEWS
+  let queryHeaderDataFunction = fetchHeaderDataInDefaultPageLayout
+  //mock error situation, should delete after testing
+  const mockError500 = query.error === '500'
+  const mockErrorNoFirstJSON = query.error === 'noFirstJson'
+  const mockErrorNoFlashNews = query.error === 'noFlashNews'
+  const mockErrorNoHeaderSections = query.error === 'noHeaderSections'
+  const mockErrorNoHeaderTopics = query.error === 'noHeaderTopics'
+  const mockErrorNoHeaderSectionsAndTopics =
+    query.error === 'noHeaderSectionsAndTopics'
+  const mockErrorNoHeaderAllData = query.error === 'noHeaderAllData'
+  if (mockError500) {
+    throw new Error()
+  } else if (mockErrorNoFirstJSON) {
+    post_external_url = `${URL_STATIC_POST_EXTERNAL}fake`
+  } else if (mockErrorNoFlashNews) {
+    flash_news_url = `${URL_STATIC_POST_FLASH_NEWS}fake`
+  } else if (mockErrorNoHeaderSections) {
+    queryHeaderDataFunction = fetchHeaderDataInDefaultPageLayoutNoSections
+  } else if (mockErrorNoHeaderTopics) {
+    queryHeaderDataFunction = fetchHeaderDataInDefaultPageLayoutNoTopics
+  } else if (mockErrorNoHeaderSectionsAndTopics) {
+    queryHeaderDataFunction = fetchHeaderDataInDefaultPageLayoutNoAllHeaderData
+  } else if (mockErrorNoHeaderAllData) {
+    queryHeaderDataFunction = fetchHeaderDataInDefaultPageLayoutNoAllHeaderData
+    flash_news_url = `${URL_STATIC_POST_FLASH_NEWS}fake`
+  }
   const headers = req?.headers
   const traceHeader = headers?.['x-cloud-trace-context']
   let globalLogFields = {}
@@ -131,7 +163,7 @@ export async function getServerSideProps({ res, req }) {
   try {
     const postResponse = await axios({
       method: 'get',
-      url: `${URL_STATIC_POST_EXTERNAL}01.json`,
+      url: `${post_external_url}01.json`,
       timeout: API_TIMEOUT,
     })
     editorChoicesData = Array.isArray(postResponse?.data?.choices)
@@ -145,10 +177,10 @@ export async function getServerSideProps({ res, req }) {
     const responses = await Promise.allSettled([
       axios({
         method: 'get',
-        url: URL_STATIC_POST_FLASH_NEWS,
+        url: flash_news_url,
         timeout: API_TIMEOUT,
       }),
-      fetchHeaderDataInDefaultPageLayout(),
+      queryHeaderDataFunction(),
     ])
 
     responses.forEach((response) => {
