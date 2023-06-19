@@ -16,11 +16,10 @@ import YoutubePolicy from '../../components/shared/youtube-policy'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
-import GPTAd from '../../components/ads/gpt/gpt-ad'
 
-// const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
-//   ssr: false,
-// })
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 const Wrapper = styled.main`
   width: 320px;
@@ -52,8 +51,9 @@ const ContentWrapper = styled.div`
 `
 const StyledGPTAd_HD = styled(GPTAd)`
   width: 100%;
+  height: auto;
   max-width: 336px;
-  height: 280px;
+  max-height: 280px;
   margin: 8px auto;
 
   ${({ theme }) => theme.breakpoint.md} {
@@ -62,7 +62,7 @@ const StyledGPTAd_HD = styled(GPTAd)`
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 970px;
-    height: 250px;
+    max-height: 250px;
     margin: 0px auto 28px;
     order: -1;
   }
@@ -70,8 +70,9 @@ const StyledGPTAd_HD = styled(GPTAd)`
 
 const StyledGPTAd_E1 = styled(GPTAd)`
   width: 100%;
+  height: auto;
   max-width: 336px;
-  height: 280px;
+  max-height: 280px;
   margin: 20px auto 0px;
 
   ${({ theme }) => theme.breakpoint.md} {
@@ -85,33 +86,34 @@ const StyledGPTAd_E1 = styled(GPTAd)`
 
 const StyledGPTAd_FT = styled(GPTAd)`
   width: 100%;
+  height: auto;
   max-width: 336px;
-  height: 280px;
+  max-height: 280px;
   margin: 20px auto 0px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 970px;
-    height: 250px;
+    max-height: 250px;
     margin: 28px auto 0px;
   }
 `
 
 const StickyGPTAd = styled(GPTAd)`
   position: fixed;
-  width: 100%;
-  max-width: 320px;
-  margin: auto;
-  height: 50px;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
   z-index: ${Z_INDEX.top};
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
   }
 `
-
 /**
  * @param {Object} props
  * @param {import('../../type/youtube').YoutubeVideo} props.video

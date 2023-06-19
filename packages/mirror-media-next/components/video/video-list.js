@@ -56,8 +56,10 @@ const StyledGPTAd_R1 = styled(GPTAd)`
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: block;
-    width: 300px;
-    height: 600px;
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    max-height: 600px;
     margin: 0px auto 28px;
   }
 `
