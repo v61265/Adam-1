@@ -11,9 +11,9 @@ export const useDisplayAd = () => {
   //When the user's member type is 'not-member', 'one-time-member', or 'basic-member', the AD should be displayed.
   const invalidMemberType = ['not-member', 'one-time-member', 'basic-member']
 
-  const shouldShow = Boolean(
+  const shouldShowAd = Boolean(
     isLogInProcessFinished && invalidMemberType.includes(memberType)
   )
 
-  return shouldShow
+  return shouldShowAd
 }
