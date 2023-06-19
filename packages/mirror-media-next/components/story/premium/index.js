@@ -1,10 +1,7 @@
-import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import ArticleBrief from '../shared/brief'
-import { fetchHeaderDataInPremiumPageLayout } from '../../../utils/api'
 import { sortArrayWithOtherArrayId } from '../../../utils'
-import errors from '@twreporter/errors'
 import TitleAndInfoAndHero from './title-and-info-and-hero'
 import CopyrightWarning from '../shared/copyright-warning'
 import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
@@ -16,9 +13,9 @@ import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import DonateLink from '../shared/donate-link'
 import SubscribeLink from '../shared/subscribe-link'
-import PremiumHeader from '../../premium-header'
 import ArticleMask from './article-mask'
 import { useMembership } from '../../../context/membership'
+import ShareHeader from '../../shared/share-header'
 const { getContentBlocksH2H3 } = MirrorMedia
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
@@ -33,17 +30,6 @@ const { getContentBlocksH2H3 } = MirrorMedia
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
-
-const HeaderPlaceHolder = styled.header`
-  background-color: transparent;
-  height: 101px;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  ${({ theme }) => theme.breakpoint.md} {
-    height: 115px;
-  }
-`
 
 const Main = styled.main`
   width: 100%;
@@ -111,14 +97,16 @@ function getSectionLabelFirst(sections) {
  * @param {Object} props
  * @param {PostData} props.postData
  * @param {PostContent} props.postContent
+ * @param {any} props.headerData
  * @returns {JSX.Element}
  */
-export default function StoryPremiumStyle({ postData, postContent }) {
-  const [headerData, setHeaderData] = useState({
-    sectionsData: [],
-  })
+export default function StoryPremiumStyle({
+  postData,
+  postContent,
+  headerData,
+}) {
   const { isLoggedIn } = useMembership()
-  const [isHeaderDataLoaded, setIsHeaderDataLoaded] = useState(false)
+
   const {
     id = '',
     title,
@@ -171,54 +159,27 @@ export default function StoryPremiumStyle({ postData, postContent }) {
     { extend_byline: extend_byline },
   ]
 
-  useEffect(() => {
-    let ignore = false
-    fetchHeaderDataInPremiumPageLayout()
-      .then((res) => {
-        if (!ignore && !isHeaderDataLoaded) {
-          const { sectionsData } = res
-          setHeaderData({ sectionsData })
-          setIsHeaderDataLoaded(true)
-        }
-      })
-      .catch((error) => {
-        if (!ignore && !isHeaderDataLoaded) {
-          console.log(
-            errors.helpers.printAll(
-              error,
-              {
-                withStack: true,
-                withPayload: true,
-              },
-              0,
-              0
-            )
-          )
-          setIsHeaderDataLoaded(true)
-        }
-      })
-
-    return () => {
-      ignore = true
-    }
-  }, [isHeaderDataLoaded])
-
   const { memberInfo } = useMembership()
   const { memberType } = memberInfo
 
+  let supportBanner
+  if (postContent.type === 'fullContent') {
+    if (memberType === 'one-time-member') {
+      supportBanner = <SupportMirrorMediaBanner />
+    } else {
+      supportBanner = <SupportSingleArticleBanner />
+    }
+  }
+
   return (
     <>
-      {isHeaderDataLoaded ? (
-        <PremiumHeader
-          premiumHeaderData={{
-            sections: headerData.sectionsData,
-          }}
-          h2AndH3Block={h2AndH3Block}
-          shouldShowSubtitleNavigator={true}
-        ></PremiumHeader>
-      ) : (
-        <HeaderPlaceHolder />
-      )}
+      <ShareHeader
+        pageLayoutType="premium"
+        headerData={{
+          sectionsData: headerData?.sectionsData,
+          h2AndH3Block: h2AndH3Block,
+        }}
+      />
 
       <Main>
         <article>
@@ -275,17 +236,7 @@ export default function StoryPremiumStyle({ postData, postContent }) {
             </section>
             <CopyrightWarning />
             {shouldShowArticleMask && <ArticleMask postId={id} />}
-            {!(
-              memberType === 'not-member' || memberType === 'basic-member'
-            ) && (
-              <div>
-                {memberType === 'one-time-member' ? (
-                  <SupportMirrorMediaBanner />
-                ) : (
-                  <SupportSingleArticleBanner />
-                )}
-              </div>
-            )}
+            {supportBanner}
           </ContentWrapper>
         </article>
       </Main>

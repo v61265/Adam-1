@@ -17,6 +17,8 @@ import Layout from '../../components/shared/layout'
 import { convertDraftToText, getResizedUrl } from '../../utils/index'
 import { handleStoryPageRedirect } from '../../utils/story'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
 const { hasContentInRawContentBlock } = MirrorMedia
 
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
@@ -36,6 +38,10 @@ import Skeleton from '../../public/images/skeleton.png'
  * @typedef {import('../../components/story/normal').PostContent} PostContent
  */
 
+/**
+ * @typedef {'style-normal' | 'style-photography' | 'style-wide' | 'style-premium'} StoryLayoutType
+ */
+
 const Loading = styled.div`
   width: 100%;
   height: 100%;
@@ -49,16 +55,33 @@ const Loading = styled.div`
 
 /**
  *
+ * @param {import('../../components/story/normal').PostData['style']} articleStyle
+ * @param {import('../../components/story/normal').PostData['isMember']} isMemberOnlyArticle
+ * @returns {StoryLayoutType }
+ */
+const getStoryLayoutType = (articleStyle, isMemberOnlyArticle) => {
+  if (articleStyle === 'wide') {
+    return 'style-wide'
+  } else if (articleStyle === 'photography') {
+    return 'style-photography'
+  } else if (articleStyle === 'article' && isMemberOnlyArticle === true) {
+    return 'style-premium'
+  }
+  return 'style-normal'
+}
+
+/**
+ *
  * @param {Object} props
  * @param {PostData} props.postData
+ * @param {any} props.headerData
+ * @param {StoryLayoutType} props.storyLayoutType
  * @returns {JSX.Element}
  */
-export default function Story({ postData }) {
+export default function Story({ postData, headerData, storyLayoutType }) {
   const {
     title = '',
     slug = '',
-    style = 'article',
-    isMember = false,
     isAdult = false,
     categories = [],
     content = null,
@@ -116,20 +139,43 @@ export default function Story({ postData }) {
   }, [isLoggedIn, content, accessToken, slug])
 
   const renderStoryLayout = () => {
-    if (style === 'wide') {
-      return <StoryWideStyle postData={postData} postContent={postContent} />
-    } else if (style === 'photography') {
-      return (
-        <StoryPhotographyStyle postData={postData} postContent={postContent} />
-      )
-    } else if (style === 'article' && isMember === true) {
-      return <StoryPremiumStyle postData={postData} postContent={postContent} />
+    switch (storyLayoutType) {
+      case 'style-normal':
+        return (
+          <StoryNormalStyle
+            postData={postData}
+            postContent={postContent}
+            headerData={headerData}
+          />
+        )
+      case 'style-premium':
+        return (
+          <StoryPremiumStyle
+            postData={postData}
+            postContent={postContent}
+            headerData={headerData}
+          />
+        )
+      case 'style-wide':
+        return <StoryWideStyle postData={postData} postContent={postContent} />
+      case 'style-photography':
+        return (
+          <StoryPhotographyStyle
+            postData={postData}
+            postContent={postContent}
+          />
+        )
+      default:
+        return (
+          <StoryNormalStyle
+            postData={postData}
+            postContent={postContent}
+            headerData={headerData}
+          />
+        )
     }
-    return <StoryNormalStyle postData={postData} postContent={postContent} />
   }
-  const storyLayout = renderStoryLayout()
-
-  //mock for process of changing article type
+  const storyLayoutJsx = renderStoryLayout()
 
   return (
     <Layout
@@ -146,12 +192,12 @@ export default function Story({ postData }) {
       footer={{ type: 'empty' }}
     >
       <>
-        {!storyLayout && (
+        {!storyLayoutJsx && (
           <Loading>
             <Image src={Skeleton} alt="loading..."></Image>
           </Loading>
         )}
-        {storyLayout}
+        {storyLayoutJsx}
         <WineWarning categories={categories} />
         <AdultOnlyWarning isAdult={isAdult} />
       </>
@@ -185,7 +231,6 @@ export async function getServerSideProps({ params, req }) {
     if (!postData) {
       return { notFound: true }
     }
-
     // Check if the post data has content in the brief, trimmedContent, or content fields
     const shouldCheckHasContent =
       postData.style === 'article' ||
@@ -208,10 +253,64 @@ export async function getServerSideProps({ params, req }) {
 
     const redirect = postData?.redirect
     handleStoryPageRedirect(redirect)
+    const storyLayoutType = getStoryLayoutType(
+      postData?.style,
+      postData?.isMember
+    )
+    let headerData = null
+    const shouldFetchDefaultHeaderData = storyLayoutType === 'style-normal'
+    const shouldFetchPremiumHeaderData = storyLayoutType === 'style-premium'
+    if (shouldFetchDefaultHeaderData) {
+      try {
+        headerData = await fetchHeaderDataInDefaultPageLayout()
+      } catch (err) {
+        headerData = { sectionsData: [], topicsData: [] }
+        const errorMessage = errors.helpers.printAll(
+          err,
+          {
+            withStack: true,
+            withPayload: false,
+          },
+          0,
+          0
+        )
+        console.log(
+          JSON.stringify({
+            severity: 'ERROR',
+            message: errorMessage,
+            ...globalLogFields,
+          })
+        )
+      }
+    } else if (shouldFetchPremiumHeaderData) {
+      try {
+        headerData = await fetchHeaderDataInPremiumPageLayout()
+      } catch (err) {
+        headerData = { sectionsData: [] }
+        const errorMessage = errors.helpers.printAll(
+          err,
+          {
+            withStack: true,
+            withPayload: false,
+          },
+          0,
+          0
+        )
+        console.log(
+          JSON.stringify({
+            severity: 'ERROR',
+            message: errorMessage,
+            ...globalLogFields,
+          })
+        )
+      }
+    }
 
     return {
       props: {
         postData,
+        headerData,
+        storyLayoutType,
       },
     }
   } catch (err) {
