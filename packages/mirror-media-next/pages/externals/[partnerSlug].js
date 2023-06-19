@@ -65,29 +65,29 @@ const PartnerTitle = styled.h1`
     font-size: 28px;
   }
 `
-
 const StyledGPTAd = styled(GPTAd)`
   width: 100%;
+  height: auto;
   max-width: 336px;
-  margin: auto;
-  height: 280px;
-  margin-top: 20px;
+  max-height: 280px;
+  margin: 20px auto 0px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 970px;
-    height: 250px;
+    max-height: 250px;
   }
 `
 
 const StickyGPTAd = styled(GPTAd)`
   position: fixed;
-  width: 100%;
-  max-width: 320px;
-  margin: auto;
-  height: 50px;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
   z-index: ${Z_INDEX.top};
 
   ${({ theme }) => theme.breakpoint.xl} {

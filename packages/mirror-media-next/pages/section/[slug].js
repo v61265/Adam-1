@@ -1,6 +1,6 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
-// import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic'
 
 import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
@@ -12,13 +12,11 @@ import {
   fetchPostsBySectionSlug,
   fetchSectionBySectionSlug,
 } from '../../utils/api/section'
-import GPTAd from '../../components/ads/gpt/gpt-ad'
-import { useMembership } from '../../context/membership'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
 
-// const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
-//   ssr: false,
-// })
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -65,26 +63,27 @@ const SectionTitle = styled.h1`
 
 const StyledGPTAd = styled(GPTAd)`
   width: 100%;
+  height: auto;
   max-width: 336px;
-  margin: auto;
-  height: 280px;
-  margin-top: 20px;
+  max-height: 280px;
+  margin: 20px auto 0px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 970px;
-    height: 250px;
+    max-height: 250px;
   }
 `
 
 const StickyGPTAd = styled(GPTAd)`
   position: fixed;
-  width: 100%;
-  max-width: 320px;
-  margin: auto;
-  height: 50px;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
   z-index: ${Z_INDEX.top};
 
   ${({ theme }) => theme.breakpoint.xl} {
@@ -115,17 +114,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
       ? SECTION_IDS['culture']
       : SECTION_IDS[section.slug]
 
-  const { memberInfo, isLogInProcessFinished } = useMembership()
-  const { memberType } = memberInfo
-
-  //When the user's member type is 'not-member', 'one-time-member', or 'basic-member', the AD should be displayed.
-  const invalidMemberType = ['not-member', 'one-time-member', 'basic-member']
-
-  const shouldShowAd = Boolean(
-    isLogInProcessFinished && invalidMemberType.includes(memberType)
-  )
-
-  const shouldShow = useDisplayAd()
+  const shouldShowAd = useDisplayAd()
 
   return (
     <Layout
@@ -147,8 +136,12 @@ export default function Section({ postsCount, posts, section, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
 
-        {shouldShow && <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />}
-        {shouldShow && <StickyGPTAd pageKey={GPT_PAGE_KEY} adKey="ST" />}
+        {shouldShowAd && (
+          <>
+            <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />
+            <StickyGPTAd pageKey={GPT_PAGE_KEY} adKey="ST" />
+          </>
+        )}
       </SectionContainer>
     </Layout>
   )
