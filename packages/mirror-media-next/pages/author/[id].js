@@ -110,12 +110,7 @@ export default function Author({ postsCount, posts, author, headerData }) {
           authorId={author.id}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-        {shouldShowAd && (
-          <>
-            <StyledGPTAd pageKey="other" adKey="FT" />
-            <StickyGPTAd pageKey="other" adKey="ST" />
-          </>
-        )}
+        {shouldShowAd && <StickyGPTAd pageKey="other" adKey="ST" />}
       </AuthorContainer>
     </Layout>
   )
