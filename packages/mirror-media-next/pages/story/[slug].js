@@ -19,6 +19,8 @@ import { handleStoryPageRedirect } from '../../utils/story'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
+import { sendGAEvent } from '../../utils/gtag'
+
 const { hasContentInRawContentBlock } = MirrorMedia
 
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
@@ -106,7 +108,11 @@ export default function Story({ postData, headerData, storyLayoutType }) {
       ? { type: 'fullContent', data: content }
       : { type: 'trimmedContent', data: trimmedContent }
   )
-
+  useEffect(() => {
+    if (storyLayoutType === 'style-premium') {
+      sendGAEvent('premium_page_view')
+    }
+  }, [storyLayoutType])
   useEffect(() => {
     if (!content && isLoggedIn) {
       const getFullContent = async () => {

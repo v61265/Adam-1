@@ -11,27 +11,21 @@ const init = () => {
 }
 
 /**
- *
- * @param {string} category
- * @param {string} action
- * @param {string} label
- * @param {number} [value]
+ * @param {string} eventName
+ * @param {Object} [params]
  */
-const sendEvent = (category, action, label, value = undefined) => {
-  if (value) {
-    ga4.event({
-      category,
-      action,
-      label,
-      value,
-    })
+const sendGAEvent = (eventName, params) => {
+  const isParamsAnObject =
+    typeof params === 'object' && params !== null && !Array.isArray(params)
+  const isParamsNotEmptyObject =
+    isParamsAnObject && Object.keys(params).length !== 0
+  const hasParams = !!params && isParamsNotEmptyObject
+
+  if (hasParams) {
+    ga4.event(eventName, params)
   } else {
-    ga4.event({
-      category,
-      action,
-      label,
-    })
+    ga4.event(eventName)
   }
 }
 
-export { init, sendEvent }
+export { init, sendGAEvent }
