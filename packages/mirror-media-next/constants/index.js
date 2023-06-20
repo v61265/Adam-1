@@ -177,6 +177,20 @@ const Z_INDEX = {
   coverContent: 100,
 }
 
+const SECTIONS_TYPE = {
+  MEMBER: 'member',
+  NEWS: 'news',
+  ENTERTAINMENT: 'entertainment',
+  BUSINESSMONAY: 'businessmoney',
+  PEOPLE: 'people',
+  INTERNATIONAL: 'international',
+  FOODTRAVEL: 'foodtravel',
+  MAFALDA: 'mafalda',
+  CULTURE: 'culture',
+  CRANDWATCH: 'carandwatch',
+  MIRRORCOLUMN: 'mirrorcolumn',
+}
+
 const SECTION_IDS = {
   member: '5fe15f1e123c831000ee54c2',
   news: '57e1e0e5ee85930e00cad4e9',
@@ -208,4 +222,5 @@ export {
   EMAIL_LINK,
   FOOTER_PROMOTION_LINKS,
   SECTION_IDS,
+  SECTIONS_TYPE,
 }
