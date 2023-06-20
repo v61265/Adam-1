@@ -19,9 +19,9 @@ const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
 })
 
 const RENDER_PAGE_SIZE = 12
-const WARMLIFE_DEFAULT_TITLE = `生活暖流`
+const WARMLIFE_DEFAULT_TITLE = '生活暖流'
 const WARMLIFE_DEFAULT_COLOR = 'lightBlue'
-const WARMLIFE_GPT_SECTION_IDS = SECTION_IDS.news // The default section of `warmlife` page is `時事`
+const WARMLIFE_GPT_SECTION_IDS = SECTION_IDS.news // the default section of `warmlife` page is `時事`
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -118,10 +118,7 @@ export default function WarmLife({ warmLifeData, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
         {shouldShowAd && (
-          <>
-            <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="FT" />
-            <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="ST" />
-          </>
+          <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="ST" />
         )}
       </WarmLifeContainer>
     </Layout>
