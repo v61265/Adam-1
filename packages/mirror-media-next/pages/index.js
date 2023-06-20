@@ -7,6 +7,7 @@ import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
+import dynamic from 'next/dynamic'
 
 import {
   ENV,
@@ -27,6 +28,11 @@ import { transformRawDataToArticleInfo } from '../utils'
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
 import Layout from '../components/shared/layout'
+import { useDisplayAd } from '../hooks/useDisplayAd'
+
+const GPTAd = dynamic(() => import('../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 /**
  * @typedef {import('../components/shared/share-header').HeaderData['flashNewsData']} FlashNewsData
@@ -49,6 +55,19 @@ const IndexContainer = styled.main`
   margin: 0 auto;
 `
 
+const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+  }
+`
+
 /**
  *
  * @param {Object} props
@@ -68,6 +87,8 @@ export default function Home({
 }) {
   const editorChoice = transformRawDataToArticleInfo(editorChoicesData)
 
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       header={{
@@ -79,7 +100,10 @@ export default function Home({
       }}
     >
       <IndexContainer>
+        {shouldShowAd && <StyledGPTAd pageKey="home" adKey="HD" />}
         <EditorChoice editorChoice={editorChoice}></EditorChoice>
+        {shouldShowAd && <StyledGPTAd pageKey="home" adKey="B1" />}
+        {shouldShowAd && <StyledGPTAd pageKey="home" adKey="L1" />}
         <LatestNews latestNewsData={latestNewsData} />
       </IndexContainer>
     </Layout>
