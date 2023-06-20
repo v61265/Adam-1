@@ -158,6 +158,20 @@ export default function Video({ video, latestVideos, headerData }) {
   )
 }
 
+function fetchYoutubeVideoByVideoId(videoId) {
+  return axios({
+    method: 'get',
+    url: `${URL_RESTFUL_SERVER}/youtube/videos`,
+    // use URLSearchParams to add two values for key 'part'
+    params: new URLSearchParams([
+      ['id', videoId],
+      ['part', 'snippet'],
+      ['part', 'status'],
+      ['maxResults', '1'],
+    ]),
+  })
+}
+
 export async function getServerSideProps({ query, req }) {
   const videoId = query.id
   const traceHeader = req.headers?.['x-cloud-trace-context']
@@ -171,17 +185,7 @@ export async function getServerSideProps({ query, req }) {
 
   const responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(),
-    axios({
-      method: 'get',
-      url: `${URL_RESTFUL_SERVER}/youtube/videos`,
-      // use URLSearchParams to add two values for key 'part'
-      params: new URLSearchParams([
-        ['id', videoId],
-        ['part', 'snippet'],
-        ['part', 'status'],
-        ['maxResults', '1'],
-      ]),
-    }),
+    fetchYoutubeVideoByVideoId(videoId),
   ])
 
   const handledResponses = responses.map((response) => {
