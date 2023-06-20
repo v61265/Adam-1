@@ -1,4 +1,5 @@
 import { MICRO_AD_UNITS } from '../constants/ads'
+import { SECTION_IDS, SECTIONS_TYPE } from '../constants/index'
 
 /**
  * Determining whether to insert a `Micro` advertisement after a specific post index.
@@ -16,12 +17,8 @@ const needInsertMicroAdAfter = (index = 0) => {
 
 /**
  * @typedef {'HOME' | 'LISTING' | 'STORY' } MicroAdType
- */
-/**
  * @typedef {'PC' | 'MB' | 'RWD' } Device
- */
-
-/**
+ *
  * Determining which Micro advertisement ID to take based on the `index`.
  *
  * @param {number} index
@@ -51,4 +48,43 @@ const getMicroAdUnitId = (
   return unitId
 }
 
-export { needInsertMicroAdAfter, getMicroAdUnitId }
+/**
+ * Returns the GPT pageKey associated with partner's slug.
+ *
+ * @param {string} partnerSlug - The slug of the partner.
+ * @return {string} - The GPT pageKey associated with the partner slug.
+ * Returns 'SECTION_IDS.news' if partnerSlug is valid, otherwise returns 'other'.
+ */
+function getPageKeyByPartnerSlug(partnerSlug = '') {
+  const validPartnerSlugs = ['ebc', 'healthnews', 'zuchi', '5678news']
+  return validPartnerSlugs.includes(partnerSlug) ? SECTION_IDS.news : 'other'
+}
+
+/**
+ * Returns the GPT pageKey associated with section's slug.
+ *
+ * @param {string} sectionSlug
+ * @returns {string | undefined}
+ */
+const getSectionGPTPageKey = (sectionSlug = '') => {
+  if (typeof sectionSlug !== 'string') {
+    console.error(
+      `The value for 'sectionSlug' is not of the correct data type 'string'. Please check the data type of the value being passed.`
+    )
+    return undefined
+  }
+
+  //if sectionSlug is `論壇(mirrorcolumn)`, use the `culture` ad unit.
+  if (sectionSlug === SECTIONS_TYPE.MIRRORCOLUMN) {
+    return SECTION_IDS[SECTIONS_TYPE.CULTURE]
+  } else {
+    return SECTION_IDS[sectionSlug]
+  }
+}
+
+export {
+  needInsertMicroAdAfter,
+  getMicroAdUnitId,
+  getPageKeyByPartnerSlug,
+  getSectionGPTPageKey,
+}
