@@ -16,6 +16,7 @@ const LoginButton = styled.button`
   font-size: 13px;
   line-height: 150%;
   text-decoration: underline;
+  text-underline-offset: 2.5px;
   color: #000;
   padding-left: 1px;
   &:focus {

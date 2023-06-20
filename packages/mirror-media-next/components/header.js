@@ -234,9 +234,11 @@ const HeaderTop = styled.div`
   padding: 21px 8px 20px;
   max-width: 596px;
   margin: 0 auto;
+  height: 75px;
 
   ${({ theme }) => theme.breakpoint.md} {
     padding: 21px 8px 20px;
+    height: 69.24px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
     border-bottom: 3px solid black;
