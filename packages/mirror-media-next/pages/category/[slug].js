@@ -15,6 +15,7 @@ import {
   fetchPostsByCategorySlug,
 } from '../../utils/api/category'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
+import { getSectionGPTPageKey } from '../../utils/ad'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -192,25 +193,30 @@ export default function Category({
   isPremium,
   headerData,
 }) {
-  const categroyName = category.name || ''
+  const categoryName = category.name || ''
   const shouldShowAd = useDisplayAd()
+
+  //The type of GPT ad to display depends on which category the section belongs to.
+  const sectionSlug = category?.sections?.[0]?.slug ?? ''
 
   return (
     <Layout
-      head={{ title: `${categroyName}分類報導` }}
+      head={{ title: `${categoryName}分類報導` }}
       header={{ type: isPremium ? 'premium' : 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
       <CategoryContainer isPremium={isPremium}>
-        {shouldShowAd && <StyledGPTAd pageKey="other" adKey="HD" />}
+        {shouldShowAd && (
+          <StyledGPTAd pageKey={getSectionGPTPageKey(sectionSlug)} adKey="HD" />
+        )}
 
         {isPremium ? (
           <PremiumCategoryTitle sectionName={category?.sections?.[0].slug}>
-            {categroyName}
+            {categoryName}
           </PremiumCategoryTitle>
         ) : (
           <CategoryTitle sectionName={category?.sections?.[0].slug}>
-            {categroyName}
+            {categoryName}
           </CategoryTitle>
         )}
 
@@ -223,10 +229,7 @@ export default function Category({
         />
 
         {shouldShowAd && (
-          <>
-            <StyledGPTAd pageKey="other" adKey="FT" />
-            <StickyGPTAd pageKey="other" adKey="ST" />
-          </>
+          <StickyGPTAd pageKey={getSectionGPTPageKey(sectionSlug)} adKey="ST" />
         )}
       </CategoryContainer>
     </Layout>

@@ -13,10 +13,9 @@ import {
   fetchExternalCounts,
 } from '../../apollo/query/externals'
 import { fetchPartnerBySlug } from '../../apollo/query/partner'
-import {
-  getExternalPartnerColor,
-  getPageKeyByPartnerSlug,
-} from '../../utils/external'
+import { getExternalPartnerColor } from '../../utils/external'
+
+import { getPageKeyByPartnerSlug } from '../../utils/ad'
 import { Z_INDEX } from '../../constants/index'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
 
@@ -142,16 +141,10 @@ export default function ExternalPartner({
           renderPageSize={RENDER_PAGE_SIZE}
         />
         {shouldShowAd && (
-          <>
-            <StyledGPTAd
-              pageKey={getPageKeyByPartnerSlug(partner.slug)}
-              adKey="FT"
-            />
-            <StickyGPTAd
-              pageKey={getPageKeyByPartnerSlug(partner.slug)}
-              adKey="ST"
-            />
-          </>
+          <StickyGPTAd
+            pageKey={getPageKeyByPartnerSlug(partner.slug)}
+            adKey="ST"
+          />
         )}
       </PartnerContainer>
     </Layout>
