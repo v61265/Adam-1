@@ -90,9 +90,13 @@ export default function YoutubeArticle({ video }) {
   }
   return (
     <Wrapper>
-      <Title>{video.title}</Title>
-      <Date>{transformTimeDataIntoSlashFormat(video.publishedAt)}</Date>
-      <Description dangerouslySetInnerHTML={{ __html: description }} />
+      {video.title && <Title>{video.title}</Title>}
+      {video.publishedAt && (
+        <Date>{transformTimeDataIntoSlashFormat(video.publishedAt)}</Date>
+      )}
+      {video.description && (
+        <Description dangerouslySetInnerHTML={{ __html: description }} />
+      )}
       <ShareIcons>
         <a href={shareFbUrl} target="_blank" rel="noreferrer">
           <Icon src="/images/video-share-fb.svg" alt="share to facebook" />
