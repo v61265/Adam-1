@@ -55,7 +55,7 @@ const IndexContainer = styled.main`
   margin: 0 auto;
 `
 
-const StyledGPTAd = styled(GPTAd)`
+const StyledGPTAd_HD = styled(GPTAd)`
   width: 100%;
   height: auto;
   max-width: 336px;
@@ -65,6 +65,35 @@ const StyledGPTAd = styled(GPTAd)`
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 970px;
     max-height: 250px;
+  }
+`
+
+const StyledGPTAd_PC_B1 = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+    display: block;
+  }
+`
+
+const StyledGPTAd_MB_L1 = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+    display: none;
   }
 `
 
@@ -100,10 +129,10 @@ export default function Home({
       }}
     >
       <IndexContainer>
-        {shouldShowAd && <StyledGPTAd pageKey="home" adKey="HD" />}
+        {shouldShowAd && <StyledGPTAd_HD pageKey="home" adKey="HD" />}
         <EditorChoice editorChoice={editorChoice}></EditorChoice>
-        {shouldShowAd && <StyledGPTAd pageKey="home" adKey="B1" />}
-        {shouldShowAd && <StyledGPTAd pageKey="home" adKey="L1" />}
+        {shouldShowAd && <StyledGPTAd_PC_B1 pageKey="home" adKey="PC_B1" />}
+        {shouldShowAd && <StyledGPTAd_MB_L1 pageKey="home" adKey="MB_L1" />}
         <LatestNews latestNewsData={latestNewsData} />
       </IndexContainer>
     </Layout>
