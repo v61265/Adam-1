@@ -85,10 +85,8 @@ const getSectionGPTPageKey = (sectionSlug = '') => {
 
   if (invalidSections.includes(sectionSlug)) {
     return SECTION_IDS['culture']
-  } else if (SECTION_IDS.hasOwnProperty(sectionSlug)) {
-    return SECTION_IDS[sectionSlug]
   } else {
-    return 'others'
+    return SECTION_IDS[sectionSlug]
   }
 }
 
