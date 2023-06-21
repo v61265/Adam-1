@@ -20,7 +20,7 @@ import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
 import { sendGAEvent } from '../../utils/gtag'
-
+import FullScreenAds from '../../components/ads/full-screen-ads'
 const { hasContentInRawContentBlock } = MirrorMedia
 
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
@@ -213,6 +213,7 @@ export default function Story({ postData, headerData, storyLayoutType }) {
         {storyLayoutJsx}
         <WineWarning categories={categories} />
         <AdultOnlyWarning isAdult={isAdult} />
+        <FullScreenAds />
       </>
     </Layout>
   )
