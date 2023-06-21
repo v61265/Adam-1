@@ -1,5 +1,5 @@
 import { MICRO_AD_UNITS } from '../constants/ads'
-import { SECTION_IDS, SECTIONS_TYPE } from '../constants/index'
+import { SECTION_IDS } from '../constants/index'
 
 /**
  * Determining whether to insert a `Micro` advertisement after a specific post index.
@@ -9,6 +9,9 @@ import { SECTION_IDS, SECTIONS_TYPE } from '../constants/index'
  */
 const needInsertMicroAdAfter = (index = 0) => {
   if (typeof index !== 'number') {
+    console.error(
+      `The value for 'index' is not of the correct data type 'number'. Please check the data type of the value being passed.`
+    )
     return false
   }
 
@@ -34,6 +37,9 @@ const getMicroAdUnitId = (
   let unitId = null
 
   if (typeof index !== 'number') {
+    console.error(
+      `The value for 'index' is not of the correct data type 'number'. Please check the data type of the value being passed.`
+    )
     return null
   }
 
@@ -74,11 +80,15 @@ const getSectionGPTPageKey = (sectionSlug = '') => {
     return undefined
   }
 
-  //if sectionSlug is `論壇(mirrorcolumn)`, use the `culture` ad unit.
-  if (sectionSlug === SECTIONS_TYPE.MIRRORCOLUMN) {
-    return SECTION_IDS[SECTIONS_TYPE.CULTURE]
-  } else {
+  //if sectionSlug is `論壇(mirrorcolumn)` or `新聞深探(timesquare)`, use the `culture` ad unit.
+  const invalidSections = ['mirrorcolumn', 'timesquare']
+
+  if (invalidSections.includes(sectionSlug)) {
+    return SECTION_IDS['culture']
+  } else if (SECTION_IDS.hasOwnProperty(sectionSlug)) {
     return SECTION_IDS[sectionSlug]
+  } else {
+    return 'others'
   }
 }
 
