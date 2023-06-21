@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
+
 import {
   SUB_BRAND_LINKS,
   PROMOTION_LINKS,
@@ -194,7 +196,6 @@ import SubBrandList from './sub-brand-list'
 import SearchBarDesktop from './search-bar-desktop'
 import PromotionLinks from './promotion-links'
 import NavSections from './nav-sections'
-import GptAd from './gpt-ad.js'
 import MemberLoginButton from './member-login-button'
 import SearchBarInput from './search-bar-input'
 import MobileSidebar from './mobile-sidebar'
@@ -202,6 +203,12 @@ import Logo from './logo'
 import SubscribeMagazine from './subscribe-magazine'
 import NavTopics from './nav-topics'
 import { SEARCH_URL } from '../config/index.mjs'
+
+import { useDisplayAd } from '../hooks/useDisplayAd'
+
+const GPTAd = dynamic(() => import('../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 /**
  *
@@ -227,9 +234,11 @@ const HeaderTop = styled.div`
   padding: 21px 8px 20px;
   max-width: 596px;
   margin: 0 auto;
+  height: 75px;
 
   ${({ theme }) => theme.breakpoint.md} {
     padding: 21px 8px 20px;
+    height: 69.24px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
     border-bottom: 3px solid black;
@@ -317,6 +326,23 @@ const TopicsAndFlashNews = styled.section`
 `
 const TopicsAndSubscribe = styled.section`
   display: flex;
+`
+
+const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 110px;
+  max-height: 50px;
+  margin-right: auto;
+  ${({ theme }) => theme.breakpoint.md} {
+    order: -1;
+    margin-right: 0;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-left: 20px;
+    margin-right: auto;
+    order: 0;
+  }
 `
 
 /**
@@ -467,6 +493,8 @@ export default function Header({
     location.assign(`${SEARCH_URL}/search/v3/${trimedSearchTerms}`)
   }
 
+  const shouldShowAd = useDisplayAd()
+
   return (
     <HeaderWrapper>
       <HeaderTop>
@@ -474,7 +502,7 @@ export default function Header({
         <a href="/">
           <HeaderLogo />
         </a>
-        <GptAd />
+        {shouldShowAd && <StyledGPTAd pageKey="global" adKey="RWD_LOGO" />}
         <ActionWrapper>
           <SubBrandList subBrands={SUB_BRAND_LINKS} />
           <SearchBarDesktop
