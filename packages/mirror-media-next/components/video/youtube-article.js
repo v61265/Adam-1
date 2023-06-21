@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { transformTimeDataIntoSlashFormat } from '../../utils'
 import { useShareFbUrl } from '../../hooks/useShareFbUrl'
 import { useShareLineUrl } from '../../hooks/useShareLineUrl'
+import ButtonCopyLink from '../story/shared/button-copy-link'
 
 const Wrapper = styled.div`
   padding: 0 16px;
@@ -78,16 +79,6 @@ export default function YoutubeArticle({ video }) {
     .replace(/↵|\n/g, '<br>')
     .split('-----')[0]
 
-  const copyLink = () => {
-    navigator.clipboard
-      .writeText(window.location.href)
-      .then(() => {
-        console.log('URL copied to clipboard:', window.location.href)
-      })
-      .catch((error) => {
-        console.error('Failed to copy URL to clipboard:', error)
-      })
-  }
   return (
     <Wrapper>
       {video.title && <Title>{video.title}</Title>}
@@ -104,11 +95,7 @@ export default function YoutubeArticle({ video }) {
         <a href={shareLineUrl} target="_blank" rel="noreferrer">
           <Icon src="/images/video-share-line.svg" alt="share to facebook" />
         </a>
-        <Icon
-          onClick={copyLink}
-          src="/images/video-share-copy-link.svg"
-          alt="share to facebook"
-        />
+        <ButtonCopyLink width={40} height={40} />
       </ShareIcons>
     </Wrapper>
   )
