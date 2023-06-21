@@ -86,6 +86,7 @@ export default function Story({ postData, headerData, storyLayoutType }) {
     slug = '',
     isAdult = false,
     categories = [],
+    isMember = false,
     content = null,
     trimmedContent = null,
   } = postData
@@ -108,11 +109,7 @@ export default function Story({ postData, headerData, storyLayoutType }) {
       ? { type: 'fullContent', data: content }
       : { type: 'trimmedContent', data: trimmedContent }
   )
-  useEffect(() => {
-    if (storyLayoutType === 'style-premium') {
-      sendGAEvent('premium_page_view')
-    }
-  }, [storyLayoutType])
+
   useEffect(() => {
     if (!content && isLoggedIn) {
       const getFullContent = async () => {
@@ -143,6 +140,16 @@ export default function Story({ postData, headerData, storyLayoutType }) {
       updatePostContent()
     }
   }, [isLoggedIn, content, accessToken, slug])
+
+  //Send custom event to Google Analytics
+  //Which event should be send is based on whether is member-only article.
+  useEffect(() => {
+    if (isMember) {
+      sendGAEvent('premium_page_view')
+    } else {
+      sendGAEvent('story_page_view')
+    }
+  }, [isMember])
 
   const renderStoryLayout = () => {
     switch (storyLayoutType) {
