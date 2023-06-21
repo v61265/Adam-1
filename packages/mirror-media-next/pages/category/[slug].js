@@ -78,7 +78,7 @@ const CategoryTitle = styled.h1`
   color: ${
     /**
      * @param {Object} props
-     * @param {string } props.sectionName
+     * @param {string} props.sectionName
      * @param {Theme} [props.theme]
      */
     ({ sectionName, theme }) =>
@@ -105,7 +105,7 @@ const PremiumCategoryTitle = styled.h1`
   color: ${
     /**
      * @param {Object} props
-     * @param {String } props.sectionName
+     * @param {string} props.sectionName
      * @param {Theme} [props.theme]
      */
     ({ sectionName, theme }) =>
@@ -211,11 +211,11 @@ export default function Category({
         )}
 
         {isPremium ? (
-          <PremiumCategoryTitle sectionName={category?.sections?.[0].slug}>
+          <PremiumCategoryTitle sectionName={sectionSlug}>
             {categoryName}
           </PremiumCategoryTitle>
         ) : (
-          <CategoryTitle sectionName={category?.sections?.[0].slug}>
+          <CategoryTitle sectionName={sectionSlug}>
             {categoryName}
           </CategoryTitle>
         )}

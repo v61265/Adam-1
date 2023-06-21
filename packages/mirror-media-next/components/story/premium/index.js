@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import ArticleBrief from '../shared/brief'
 import { sortArrayWithOtherArrayId } from '../../../utils'
@@ -16,6 +17,15 @@ import SubscribeLink from '../shared/subscribe-link'
 import ArticleMask from './article-mask'
 import { useMembership } from '../../../context/membership'
 import ShareHeader from '../../shared/share-header'
+import Footer from '../../shared/footer'
+import { useDisplayAd } from '../../../hooks/useDisplayAd'
+import { Z_INDEX } from '../../../constants/index'
+import { SECTION_IDS } from '../../../constants/index'
+
+const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
+
 const { getContentBlocksH2H3 } = MirrorMedia
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
@@ -66,6 +76,94 @@ const SocialMedia = styled.li`
     a {
       margin-right: 10px;
     }
+  }
+`
+
+const StyledGPTAd_HD = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+  }
+`
+
+const StyledGPTAd_FT = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+    margin: 35px auto;
+  }
+`
+
+const StickyGPTAd_MB_ST = styled(GPTAd)`
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const GPTAdContainer = styled.div`
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  margin: 24px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin: 52px auto 0px;
+    max-height: 250px;
+  }
+`
+
+const StyledGPTAd_E1 = styled(GPTAd)`
+  display: block;
+  margin: 0px auto;
+  width: 100%;
+  height: auto;
+  max-height: 250px;
+  max-width: 300px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin: 0;
+  }
+`
+
+const StyledGPTAd_PC_E2 = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    max-width: 300px;
   }
 `
 
@@ -159,6 +257,7 @@ export default function StoryPremiumStyle({
     { extend_byline: extend_byline },
   ]
 
+  const shouldShowAd = useDisplayAd()
   const { memberInfo } = useMembership()
   const { memberType } = memberInfo
 
@@ -180,6 +279,10 @@ export default function StoryPremiumStyle({
           h2AndH3Block: h2AndH3Block,
         }}
       />
+
+      {shouldShowAd && (
+        <StyledGPTAd_HD pageKey={SECTION_IDS['member']} adKey="HD" />
+      )}
 
       <Main>
         <article>
@@ -226,25 +329,47 @@ export default function StoryPremiumStyle({
                 sectionSlug="member"
                 brief={brief}
                 contentLayout="premium"
-              ></ArticleBrief>
+              />
             </section>
             <section className="content">
               <DraftRenderBlock
                 contentLayout="premium"
                 rawContentBlock={postContent.data}
-              ></DraftRenderBlock>
+              />
             </section>
             <CopyrightWarning />
+
             {shouldShowArticleMask && <ArticleMask postId={id} />}
+
             {supportBanner}
+
+            {shouldShowAd && (
+              <GPTAdContainer>
+                <StyledGPTAd_E1 pageKey={SECTION_IDS['member']} adKey="E1" />
+                <StyledGPTAd_PC_E2
+                  pageKey={SECTION_IDS['member']}
+                  adKey="PC_E2"
+                />
+              </GPTAdContainer>
+            )}
           </ContentWrapper>
         </article>
       </Main>
+
       <Aside
         relateds={relatedsWithOrdered}
         sectionSlug={section?.slug || 'news'}
         storySlug={slug}
-      ></Aside>
+      />
+
+      {shouldShowAd && (
+        <>
+          <StyledGPTAd_FT pageKey={SECTION_IDS['member']} adKey="FT" />
+          <StickyGPTAd_MB_ST pageKey={SECTION_IDS['member']} adKey="MB_ST" />
+        </>
+      )}
+
+      <Footer footerType="default" />
     </>
   )
 }
