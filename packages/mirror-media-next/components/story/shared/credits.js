@@ -31,7 +31,7 @@ const CreditTitle = styled.figcaption`
   &::after {
     position: absolute;
     content: ' | ';
-    right: -7px;
+    right: -3px;
     transform: translate(50%, 1px);
     top: 0;
     color: rgba(0, 0, 0, 0.5);
