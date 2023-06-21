@@ -1,10 +1,9 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
-import axios from 'axios'
 import dynamic from 'next/dynamic'
 
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
-import { GCP_PROJECT_ID, URL_RESTFUL_SERVER } from '../../config/index.mjs'
+import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import {
   simplifyYoutubeSearchedVideo,
   simplifyYoutubeVideo,
@@ -16,6 +15,10 @@ import YoutubePolicy from '../../components/shared/youtube-policy'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
+import {
+  fetchYoutubeLatestVideosByChannelId,
+  fetchYoutubeVideoByVideoId,
+} from '../../utils/api/video'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -127,9 +130,9 @@ export default function Video({ video, latestVideos, headerData }) {
   return (
     <Layout
       head={{
-        title: `${video?.title}`,
-        description: video?.description,
-        imageUrl: video?.thumbnail,
+        title: `${video?.title || ''}`,
+        description: video?.description || '',
+        imageUrl: video?.thumbnail || '',
       }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
@@ -142,7 +145,7 @@ export default function Video({ video, latestVideos, headerData }) {
         <ContentWrapper>
           <YoutubeArticle video={video} />
           {shouldShowAd && <StyledGPTAd_E1 pageKey="videohub" adKey="E1" />}
-          <VideoList videos={latestVideos} />
+          {latestVideos.length > 0 && <VideoList videos={latestVideos} />}
         </ContentWrapper>
 
         <YoutubePolicy />
@@ -158,8 +161,13 @@ export default function Video({ video, latestVideos, headerData }) {
   )
 }
 
+/**
+ * @type {import('next').GetServerSideProps}
+ */
 export async function getServerSideProps({ query, req }) {
-  const videoId = query.id
+  const videoId = Array.isArray(query.id) ? query.id[0] : query.id
+  const mockError = query.error === '500'
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -171,21 +179,15 @@ export async function getServerSideProps({ query, req }) {
 
   const responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(),
-    axios({
-      method: 'get',
-      url: `${URL_RESTFUL_SERVER}/youtube/videos`,
-      // use URLSearchParams to add two values for key 'part'
-      params: new URLSearchParams([
-        ['id', videoId],
-        ['part', 'snippet'],
-        ['part', 'status'],
-        ['maxResults', '1'],
-      ]),
-    }),
+    fetchYoutubeVideoByVideoId(videoId),
   ])
 
   const handledResponses = responses.map((response) => {
     if (response.status === 'fulfilled') {
+      if ('data' in response.value) {
+        // handle simple axios request
+        return response.value.data
+      }
       return response.value
     } else if (response.status === 'rejected') {
       const annotatingError = errors.helpers.wrap(
@@ -213,6 +215,7 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
+  // handle header data
   const headerData =
     handledResponses[0] && 'sectionsData' in handledResponses[0]
       ? handledResponses[0]
@@ -224,11 +227,8 @@ export async function getServerSideProps({ query, req }) {
     ? headerData.topicsData
     : []
 
-  const video =
-    handledResponses[1] && 'data' in handledResponses[1]
-      ? simplifyYoutubeVideo(handledResponses[1]?.data?.items)[0]
-      : { channelId: '' }
-  if (!video) {
+  // handle fetch video data
+  if (handledResponses[1]?.items?.length === 0) {
     console.log(
       JSON.stringify({
         severity: 'ERROR',
@@ -239,27 +239,20 @@ export async function getServerSideProps({ query, req }) {
     return {
       redirect: {
         destination: '/section/videohub',
-        premanent: false,
+        permanent: false,
       },
     }
   }
+  const video = handledResponses[1]?.items
+    ? simplifyYoutubeVideo(handledResponses[1]?.items)[0]
+    : { id: videoId, channelId: '' }
   const channelId = video?.channelId
 
   /** @type {import('../../type/youtube').YoutubeVideo[]} */
   let latestVideos = []
   if (channelId) {
     try {
-      const { data } = await axios({
-        method: 'get',
-        url: `${URL_RESTFUL_SERVER}/youtube/search`,
-        // use URLSearchParams to add two values for key 'part'
-        params: new URLSearchParams([
-          ['channelId', channelId],
-          ['part', 'snippet'],
-          ['order', 'date'],
-          ['maxResults', '6'],
-        ]),
-      })
+      const { data } = await fetchYoutubeLatestVideosByChannelId(channelId)
       latestVideos = simplifyYoutubeSearchedVideo(data.items)
     } catch (error) {
       const annotatingAxiosError = errors.helpers.annotateAxiosError(error)
@@ -276,11 +269,17 @@ export async function getServerSideProps({ query, req }) {
     }
   }
 
-  const props = {
-    video,
-    latestVideos,
-    headerData: { sectionsData, topicsData },
-  }
+  const props = mockError
+    ? {
+        video: { id: videoId, channelId: '' },
+        latestVideos: [],
+        headerData: { sectionsData, topicsData },
+      }
+    : {
+        video,
+        latestVideos,
+        headerData: { sectionsData, topicsData },
+      }
 
   return { props }
 }

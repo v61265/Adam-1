@@ -1,10 +1,7 @@
 import errors from '@twreporter/errors'
-import axios from 'axios'
 
-import { GCP_PROJECT_ID, URL_RESTFUL_SERVER } from '../../config/index.mjs'
+import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants'
-import client from '../../apollo/apollo-client.js'
-import { fetchSectionWithCategory } from '../../apollo/query/sections.js'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api/index.js'
 import styled from 'styled-components'
 import VideoList from '../../components/section/videohub/video-list.js'
@@ -16,6 +13,13 @@ import {
 } from '../../utils/youtube.js'
 import LeadingVideo from '../../components/shared/leading-video.js'
 import Layout from '../../components/shared/layout.js'
+import {
+  fetchVideohubSection,
+  fetchYoutubeHighestViewCountInOneWeek,
+  fetchYoutubeLatestVideos,
+  fetchYoutubePlaylistByChannelId,
+  fetcYoutubeVideoForFullDescription,
+} from '../../utils/api/section-videohub'
 
 /**
  * @typedef {import('../../type/youtube.js').YoutubeRawPlaylistVideo} YoutubeRawPlaylistVideo
@@ -55,6 +59,8 @@ export default function SectionVideohub({
   playlistsVideos,
   headerData,
 }) {
+  const hasHVCVideo = Object.keys(highestViewCountVideo).length > 0
+  const hasLatestVideo = latestVideos.length > 0
   return (
     <Layout
       head={{ title: `影音` }}
@@ -62,8 +68,10 @@ export default function SectionVideohub({
       footer={{ type: 'default' }}
     >
       <Wrapper>
-        <LeadingVideo video={highestViewCountVideo} title="熱門影片" />
-        <VideoList videos={latestVideos} name="最新影片" />
+        {hasHVCVideo && (
+          <LeadingVideo video={highestViewCountVideo} title="熱門影片" />
+        )}
+        {hasLatestVideo && <VideoList videos={latestVideos} name="最新影片" />}
         <SubscribeChannels />
         {playlistsVideos.map((playlistsVideo) => (
           <VideoList
@@ -78,7 +86,9 @@ export default function SectionVideohub({
   )
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ query, req }) {
+  const mockError = query.error === '500'
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -88,48 +98,19 @@ export async function getServerSideProps({ req }) {
     ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
   }
 
-  const date = new Date()
-  // 1 week ago
-  date.setDate(date.getDate() - 7)
-  const oneWeekAgoTS = date.toISOString()
-
   let responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(),
-    axios({
-      method: 'get',
-      url: `${URL_RESTFUL_SERVER}/youtube/search`,
-      params: new URLSearchParams([
-        ['channelId', 'UCYkldEK001GxR884OZMFnRw'],
-        ['part', 'snippet'],
-        ['order', 'viewCount'],
-        ['maxResults', '1'],
-        ['publishedAfter', oneWeekAgoTS],
-        ['type', 'video'],
-      ]),
-    }),
-    axios({
-      method: 'get',
-      url: `${URL_RESTFUL_SERVER}/youtube/search`,
-      params: new URLSearchParams([
-        ['channelId', 'UCYkldEK001GxR884OZMFnRw'],
-        ['part', 'snippet'],
-        ['order', 'date'],
-        ['maxResults', '4'],
-        ['type', 'video'],
-      ]),
-    }),
-    client.query({
-      query: fetchSectionWithCategory,
-      variables: {
-        where: {
-          slug: 'videohub',
-        },
-      },
-    }),
+    fetchYoutubeHighestViewCountInOneWeek(),
+    fetchYoutubeLatestVideos(),
+    fetchVideohubSection(),
   ])
 
   let handledResponses = responses.map((response) => {
     if (response.status === 'fulfilled') {
+      if ('data' in response.value) {
+        // retrieve data for simple axios and gql request
+        return response.value.data
+      }
       return response.value
     } else if (response.status === 'rejected') {
       const annotatingError = errors.helpers.wrap(
@@ -168,20 +149,17 @@ export async function getServerSideProps({ req }) {
     ? headerData.topicsData
     : []
 
-  let highestViewCountVideo =
-    handledResponses[1] && 'data' in handledResponses[1]
-      ? simplifyYoutubeSearchedVideo(handledResponses[1]?.data?.items)[0]
-      : {}
+  let highestViewCountVideo = handledResponses[1]?.items
+    ? simplifyYoutubeSearchedVideo(handledResponses[1]?.items)[0]
+    : {}
 
-  const latestVideos =
-    handledResponses[2] && 'data' in handledResponses[2]
-      ? simplifyYoutubeSearchedVideo(handledResponses[2]?.data?.items)
-      : []
+  const latestVideos = handledResponses[2]?.items
+    ? simplifyYoutubeSearchedVideo(handledResponses[2]?.items)
+    : []
 
-  const categories =
-    handledResponses[3] && 'data' in handledResponses[3]
-      ? handledResponses[3]?.data?.section.categories
-      : []
+  const categories = handledResponses[3]?.section?.categories
+    ? handledResponses[3]?.section?.categories
+    : []
 
   const channelIds = categories.map(
     (category) => VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING[category.slug]
@@ -191,36 +169,15 @@ export async function getServerSideProps({ req }) {
     // fetch highest view count with youtube/videos to get full snippet.description
     // cause in youtube/search we only receieve truncated one
     highestViewCountVideo.id
-      ? axios({
-          method: 'get',
-          url: `${URL_RESTFUL_SERVER}/youtube/videos`,
-          // use URLSearchParams to add two values for key 'part'
-          params: new URLSearchParams([
-            ['id', highestViewCountVideo.id],
-            ['part', 'snippet'],
-            ['part', 'status'],
-            ['maxResults', '1'],
-          ]),
-        })
+      ? fetcYoutubeVideoForFullDescription(highestViewCountVideo.id)
       : Promise.resolve({}),
     ...channelIds.map((channelId) =>
-      axios({
-        method: 'get',
-        url: `${URL_RESTFUL_SERVER}/youtube/playlistItems`,
-        // use URLSearchParams to add two values for key 'part'
-        params: new URLSearchParams([
-          ['playlistId', channelId],
-          ['part', 'snippet'],
-          ['part', 'status'],
-          ['maxResults', '10'],
-          ['pageToken', ''],
-        ]),
-      })
+      fetchYoutubePlaylistByChannelId(channelId)
     ),
   ])
   const handledPlaylistResponses = playlistResponses.map((response) => {
     if (response.status === 'fulfilled') {
-      return response.value
+      return response.value.data
     } else if (response.status === 'rejected') {
       const annotatingError = errors.helpers.wrap(
         response.reason,
@@ -247,27 +204,34 @@ export async function getServerSideProps({ req }) {
     }
   })
 
-  highestViewCountVideo =
-    handledPlaylistResponses[0] && 'data' in handledPlaylistResponses[0]
-      ? simplifyYoutubeVideo(handledPlaylistResponses[0]?.data?.items)[0]
-      : highestViewCountVideo
+  highestViewCountVideo = handledPlaylistResponses[0]?.items
+    ? simplifyYoutubeVideo(handledPlaylistResponses[0]?.items)[0]
+    : highestViewCountVideo
 
   const playlistsVideos = categories.map((category, index) => ({
     ...category,
     items: simplifyYoutubePlaylistVideo(
-      handledPlaylistResponses[index + 1]
-        ? handledPlaylistResponses[index + 1].data?.items
+      handledPlaylistResponses[index + 1]?.items
+        ? handledPlaylistResponses[index + 1].items
             ?.filter((item) => item.status.privacyStatus === 'public')
             .slice(0, 4)
         : []
     ),
   }))
 
-  const props = {
-    highestViewCountVideo,
-    latestVideos,
-    playlistsVideos,
-    headerData: { sectionsData, topicsData },
-  }
+  const props = mockError
+    ? {
+        highestViewCountVideo: {},
+        latestVideos: [],
+        playlistsVideos: [],
+        headerData: { sectionsData, topicsData },
+      }
+    : {
+        highestViewCountVideo,
+        latestVideos,
+        playlistsVideos,
+        headerData: { sectionsData, topicsData },
+      }
+
   return { props }
 }

@@ -61,7 +61,11 @@ export default function ButtonCopyLink({ width = 35, height = 35 }) {
         已複製連結
       </CopiedMessage>
 
-      <ClickButton onClick={handleCopyLink} on="tap:clipboard-example.copy">
+      <ClickButton
+        onClick={handleCopyLink}
+        // @ts-ignore
+        on="tap:clipboard-example.copy"
+      >
         <Image
           src={'/images/link-logo.svg'}
           width={width}
