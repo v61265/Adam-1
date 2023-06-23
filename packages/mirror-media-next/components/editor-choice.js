@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { Autoplay, Pagination, Navigation } from 'swiper'
-
+import CustomImage from '@readr-media/react-image'
 import styled from 'styled-components'
 
 // Import Swiper styles
@@ -142,13 +142,7 @@ const ListItem = styled.a`
   max-width: 320px;
   display: block;
   position: relative;
-  img {
-    margin: 0 auto;
-    width: 100%;
 
-    height: 200px;
-    object-fit: cover;
-  }
   .title {
     width: 100%;
     height: fit-content;
@@ -166,6 +160,10 @@ const ListItem = styled.a`
     position: absolute;
     top: 0;
     left: 0;
+  }
+  ${({ theme }) => theme.breakpoint.md} {
+    width: 460px;
+    max-width: 460px;
   }
 `
 
@@ -204,6 +202,30 @@ const EditorChoiceContainer = styled.section`
  */
 
 /**
+ *
+ * @param {EditorChoiceItem['heroImage']} heroImage
+ * @param {EditorChoiceItem['title']} title
+ * @returns {JSX.Element}
+ */
+const editorChoiceImageJsx = (heroImage, title) => {
+  return (
+    <CustomImage
+      images={heroImage?.resized}
+      defaultImage="/images/default-og-img.png"
+      loadingImage="/images/loading.gif"
+      rwd={{
+        mobile: '320px',
+        tablet: '460px',
+        desktop: '1024px',
+        default: '1024px',
+      }}
+      priority={true}
+      alt={title}
+    />
+  )
+}
+
+/**
  * @param {Object} props
  * @param {EditorChoice} props.editorChoice
  * @returns {React.ReactElement}
@@ -227,14 +249,7 @@ export default function EditorChoice({ editorChoice = [] }) {
                 <ListItemLabel sectionName={item.sectionTitle}>
                   {item.sectionName}
                 </ListItemLabel>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={
-                    item.heroImage.resized.original ||
-                    '/images/default-og-img.png'
-                  }
-                  alt={item.title}
-                ></img>
+                {editorChoiceImageJsx(item.heroImage, item.title)}
                 <p className="title">{item.title}</p>
               </ListItem>
             ))}
@@ -263,14 +278,7 @@ export default function EditorChoice({ editorChoice = [] }) {
                     target="_blank"
                     rel="noreferrer noopenner"
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={
-                        item.heroImage.resized.original ||
-                        '/images/default-og-img.png'
-                      }
-                      alt={item.title}
-                    ></img>
+                    {editorChoiceImageJsx(item.heroImage, item.title)}
                     <p className="title">{item.title}</p>
                   </a>
                 </SwiperSlide>
