@@ -99,8 +99,26 @@ const Title = styled.div`
 `
 
 /**
+ * @typedef {Object} FormattedArticle
+ * @property {string} articleHref
+ * @property {string} sectionTitle
+ * @property {string} sectionName
+ * /
+
+
+
+
+/**
+ * @typedef {Pick<import('../apollo/fragments/post').Post, 'slug' | 'title' | 'style'| 'publishedDate' | 'heroImage' |'sections' | 'categories'  |'redirect'> & { partner: import('../apollo/fragments/partner').Partner | string}} ArticleRawData
+ */
+
+/**
+ * @typedef {ArticleRawData &  FormattedArticle} Article
+ */
+
+/**
  * @param {Object} props
- * @param {import('../type/index').ArticleInfoCard} props.itemData
+ * @param {Article} props.itemData
  * @returns {React.ReactElement}
  */
 //TODOs: use @readr-media/react-images to render image of item
@@ -110,7 +128,7 @@ export default function LatestNewsItem({ itemData }) {
       <ItemWrapper>
         <ImageContainer>
           <CustomNextImage
-            src={itemData?.heroImage?.resized?.original}
+            src={itemData?.heroImage?.resized?.w800}
           ></CustomNextImage>
         </ImageContainer>
         <Detail>

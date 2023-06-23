@@ -47,6 +47,9 @@ const GPTAd = dynamic(() => import('../components/ads/gpt/gpt-ad'), {
 /**
  * @typedef {import('../components/editor-choice').EditorChoiceRawData[]} EditorChoicesRawData
  */
+/**
+ * @typedef {import('../components/latest-news').ArticleRawData[]} ArticlesRawData
+ */
 
 const IndexContainer = styled.main`
   background-color: rgba(255, 255, 255, 1);
@@ -103,7 +106,7 @@ const StyledGPTAd_MB_L1 = styled(GPTAd)`
  * @param {import('../type').Topic[]} props.topicsData
  * @param {FlashNewsData} props.flashNewsData
  * @param {EditorChoicesRawData} [props.editorChoicesData=[]]
- * @param {import('../type/raw-data.typedef').RawData[] } [props.latestNewsData=[]]
+ * @param {ArticlesRawData} [props.latestNewsData=[]]
  * @param {Object[] } props.sectionsData
  * @returns {React.ReactElement}
  */

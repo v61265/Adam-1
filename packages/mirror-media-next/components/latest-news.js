@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'
 import InfiniteScrollList from './infinite-scroll-list'
 import LoadingPage from '../public/images/loading_page.gif'
 import LatestNewsItem from './latest-news-item'
-import { transformRawDataToArticleInfo } from '../utils'
 import { URL_STATIC_POST_EXTERNAL } from '../config/index.mjs'
 import Image from 'next/legacy/image'
 import { needInsertMicroAdAfter, getMicroAdUnitId } from '../utils/ad'
@@ -81,11 +80,11 @@ const JSON_FILE_COUNT = 4
  */
 
 /**
- * @param {RawData[]} articleRawData
- * @returns {RawData[]}
+ * @param {Article[]} articles
+ * @returns {Article[]}
  */
-function removeArticleWithExternalLink(articleRawData) {
-  return articleRawData?.filter((item) => {
+function removeArticleWithExternalLink(articles) {
+  return articles?.filter((item) => {
     if (!item.redirect) {
       return item
     }
@@ -99,8 +98,15 @@ function removeArticleWithExternalLink(articleRawData) {
 }
 
 /**
- * @param {RawData[]} articleRawData
- * @returns {ArticleInfoCard[]}
+ * @typedef {import('./latest-news-item').ArticleRawData} ArticleRawData
+ */
+/**
+ * @typedef {import('./latest-news-item').Article} Article
+ */
+
+/**
+ * @param {ArticleRawData[]} articleRawData
+ * @returns {Article[]}
  */
 const transformRawDataContent = function (articleRawData) {
   const formateArticleData = articleRawData.map((item) => {
@@ -113,18 +119,18 @@ const transformRawDataContent = function (articleRawData) {
     removeArticleWithExternalLink(formateArticleData)
   return formateArticleDataWithoutExternalLink
 }
+
 /**
  * @param {Object} props
- * @param {RawData[]} [props.latestNewsData = []]
+ * @param {ArticleRawData[]} [props.latestNewsData = []]
  * @returns {JSX.Element}
  */
-
 export default function LatestNews(props) {
   /**
    * Fetch certain json file
    * @async
    * @param {Number} [serialNumber = 1]
-   * @returns {Promise<RawData[] | []> }
+   * @returns {Promise<ArticleRawData[] | []> }
    */
   async function fetchCertainLatestNews(serialNumber = 1) {
     try {
@@ -150,7 +156,7 @@ export default function LatestNews(props) {
    */
   async function fetchMoreLatestNews(page) {
     const latestNewsData = await fetchCertainLatestNews(page)
-    /** @type {ArticleInfoCard[]} */
+    /** @type {Article[]} */
     const latestNews = transformRawDataContent(latestNewsData)
     return latestNews
   }
