@@ -103,18 +103,20 @@ const Title = styled.div`
  * @param {import('../type/index').ArticleInfoCard} props.itemData
  * @returns {React.ReactElement}
  */
-
+//TODOs: use @readr-media/react-images to render image of item
 export default function LatestNewsItem({ itemData }) {
   return (
-    <a href={itemData.href} target="_blank" rel="noreferrer">
+    <a href={itemData.articleHref} target="_blank" rel="noreferrer">
       <ItemWrapper>
         <ImageContainer>
-          <CustomNextImage src={itemData.imgSrcMobile}></CustomNextImage>
+          <CustomNextImage
+            src={itemData?.heroImage?.resized?.original}
+          ></CustomNextImage>
         </ImageContainer>
         <Detail>
           {itemData.sectionTitle && (
-            <Label sectionName={itemData.sectionName}>
-              {itemData.sectionTitle}
+            <Label sectionName={itemData.sectionTitle}>
+              {itemData.sectionName}
             </Label>
           )}
           <Title>

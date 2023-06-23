@@ -12,6 +12,7 @@ import { needInsertMicroAdAfter, getMicroAdUnitId } from '../utils/ad'
 import useWindowDimensions from '../hooks/use-window-dimensions'
 import { mediaSize } from '../styles/media'
 import { useDisplayAd } from '../hooks/useDisplayAd'
+import { getSectionNameGql, getSectionTitleGql, getArticleHref } from '../utils'
 
 const StyledMicroAd = dynamic(
   () => import('../components/ads/micro-ad/micro-ad-with-label'),
@@ -102,9 +103,15 @@ function removeArticleWithExternalLink(articleRawData) {
  * @returns {ArticleInfoCard[]}
  */
 const transformRawDataContent = function (articleRawData) {
-  return transformRawDataToArticleInfo(
-    removeArticleWithExternalLink(articleRawData)
-  )
+  const formateArticleData = articleRawData.map((item) => {
+    const sectionName = getSectionNameGql(item.sections, item.partner)
+    const sectionTitle = getSectionTitleGql(item.sections, item.partner)
+    const articleHref = getArticleHref(item.slug, item.style, item.partner)
+    return { sectionName, sectionTitle, articleHref, ...item }
+  })
+  const formateArticleDataWithoutExternalLink =
+    removeArticleWithExternalLink(formateArticleData)
+  return formateArticleDataWithoutExternalLink
 }
 /**
  * @param {Object} props
