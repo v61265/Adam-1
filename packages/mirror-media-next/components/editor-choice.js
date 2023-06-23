@@ -190,6 +190,7 @@ const EditorChoiceContainer = styled.section`
  */
 export default function EditorChoice({ editorChoice = [] }) {
   const shouldShowEditorChoice = editorChoice.length !== 0
+
   return (
     <>
       {shouldShowEditorChoice ? (
@@ -199,16 +200,19 @@ export default function EditorChoice({ editorChoice = [] }) {
             {editorChoice.map((item) => (
               <ListItem
                 key={item.slug}
-                href={item.href}
+                href={item.articleHref}
                 target="_blank"
                 rel="noreferrer noopenner"
               >
-                <ListItemLabel sectionName={item.sectionName}>
-                  {item.sectionTitle}
+                <ListItemLabel sectionName={item.sectionTitle}>
+                  {item.sectionName}
                 </ListItemLabel>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={item.imgSrcTablet || '/images/default-og-img.png'}
+                  src={
+                    item.heroImage.resized.original ||
+                    '/images/default-og-img.png'
+                  }
                   alt={item.title}
                 ></img>
                 <p className="title">{item.title}</p>
@@ -235,15 +239,18 @@ export default function EditorChoice({ editorChoice = [] }) {
               {editorChoice.map((item) => (
                 <SwiperSlide key={item.slug}>
                   <a
-                    href={item.href}
+                    href={item.articleHref}
                     target="_blank"
                     rel="noreferrer noopenner"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={item.imgSrcTablet || '/images/default-og-img.png'}
+                      src={
+                        item.heroImage.resized.original ||
+                        '/images/default-og-img.png'
+                      }
                       alt={item.title}
-                    />
+                    ></img>
                     <p className="title">{item.title}</p>
                   </a>
                 </SwiperSlide>

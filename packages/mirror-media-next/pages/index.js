@@ -23,7 +23,7 @@ import {
   fetchHeaderDataInDefaultPageLayoutNoTopics,
   fetchHeaderDataInDefaultPageLayoutNoAllHeaderData,
 } from '../utils/api'
-import { transformRawDataToArticleInfo } from '../utils'
+import { getSectionNameGql, getSectionTitleGql, getArticleHref } from '../utils'
 
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
@@ -110,7 +110,12 @@ export default function Home({
   latestNewsData = [],
   sectionsData = [],
 }) {
-  const editorChoice = transformRawDataToArticleInfo(editorChoicesData)
+  const editorChoice = editorChoicesData.map((item) => {
+    const sectionName = getSectionNameGql(item.sections, undefined)
+    const sectionTitle = getSectionTitleGql(item.sections, undefined)
+    const articleHref = getArticleHref(item.slug, item.style, undefined)
+    return { sectionName, sectionTitle, articleHref, ...item }
+  })
 
   const shouldShowAd = useDisplayAd()
 
