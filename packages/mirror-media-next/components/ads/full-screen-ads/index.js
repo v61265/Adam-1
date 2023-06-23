@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 import FullScreenAd from './ad-item'
 import GPTAd from '../gpt/gpt-ad'
@@ -47,6 +47,16 @@ export default function FullScreenAdsContainer() {
   )
   const [isAdFirstClosedBtnVisible, setIsAdFirstClosedBtnVisible] =
     useState(false)
+  const timerForClosedBtn = useRef(null)
+  const setTimerForClosedBtn = useCallback(() => {
+    timerForClosedBtn.current = setTimeout(() => {
+      setIsAdFirstClosedBtnVisible(true)
+    }, 3000)
+  }, [])
+  const clearTimerForClosedBtn = useCallback(() => {
+    clearTimeout(timerForClosedBtn.current)
+  }, [])
+
   /**
    * 監聽 noad2 事件，如果觸發該事件，代表並沒有第三層(MB_AD2)廣告沒有內容。
    * 如果沒有內容，則設定目前應顯示的廣告為fourth，並且設置樣式為modified。
@@ -62,12 +72,7 @@ export default function FullScreenAdsContainer() {
       return () => window.removeEventListener('noad2', handleNoAD2)
     }
   }, [hasAdThird])
-  const setTimerForClosedBtn = useCallback(() => {
-    const timer = setTimeout(() => {
-      setIsAdFirstClosedBtnVisible(true)
-    }, 3000)
-    return () => clearTimeout(timer)
-  }, [])
+
   /**
    * 用於偵測第一層廣告(MB_FS)是否有內容。
    * 如果有內容的話，則設定目前顯示的廣告為first，並且設置樣式為default。
@@ -80,13 +85,12 @@ export default function FullScreenAdsContainer() {
         setDisplayedAd('first')
         setFullScreenAdStyle('default')
       } else {
-        const cleanup = setTimerForClosedBtn()
-        cleanup()
+        clearTimerForClosedBtn()
         setDisplayedAd('second')
         setFullScreenAdStyle('bottom')
       }
     },
-    [setTimerForClosedBtn]
+    [clearTimerForClosedBtn]
   )
   /**
    * 用於偵測第二層廣告(MB_BT)是否有內容。
@@ -100,13 +104,12 @@ export default function FullScreenAdsContainer() {
         setDisplayedAd('second')
         setFullScreenAdStyle('bottom')
       } else {
-        const cleanup = setTimerForClosedBtn()
-        cleanup()
+        clearTimerForClosedBtn()
         setDisplayedAd('third')
         setFullScreenAdStyle('modified')
       }
     },
-    [setTimerForClosedBtn]
+    [clearTimerForClosedBtn]
   )
   const disableModifiedStyle = useCallback(() => {
     setFullScreenAdStyle('unset')

@@ -118,6 +118,9 @@ export default function FullScreenAdItem({
   isAdFirstClosedBtnVisible = false,
   children,
 }) {
+  const shouldShowCloseButton =
+    isAdFirstClosedBtnVisible &&
+    (fullScreenAdStyle === 'default' || fullScreenAdStyle === 'bottom')
   const [isEnabled, setIsEnabled] = useState(true)
   const closeFullAd = () => {
     setIsEnabled(false)
@@ -128,7 +131,7 @@ export default function FullScreenAdItem({
         <Wrapper fullScreenAdStyle={fullScreenAdStyle}>
           <div className="ad-item">
             {children}
-            {isAdFirstClosedBtnVisible && <CloseButton onClick={closeFullAd} />}
+            {shouldShowCloseButton && <CloseButton onClick={closeFullAd} />}
           </div>
         </Wrapper>
       )}
