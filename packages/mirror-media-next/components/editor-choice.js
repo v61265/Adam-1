@@ -183,9 +183,29 @@ const EditorChoiceContainer = styled.section`
     }
   }
 `
+
+/**
+ * @typedef {Object} FormattedEditorChoiceItem
+ * @property {string} articleHref
+ * @property {string} sectionTitle
+ * @property {string} sectionName
+ * /
+
+
+/**
+ * @typedef {Pick<import('../apollo/fragments/post').Post, 'slug' | 'title' | 'style'| 'publishedDate' | 'sections'| 'heroImage' >} EditorChoiceRawData
+ */
+
+/**
+ * @typedef { EditorChoiceRawData & FormattedEditorChoiceItem } EditorChoiceItem
+ */
+/**
+ * @typedef { EditorChoiceItem[] } EditorChoice
+ */
+
 /**
  * @param {Object} props
- * @param {import('../type/index').ArticleInfoCard[]} props.editorChoice
+ * @param {EditorChoice} props.editorChoice
  * @returns {React.ReactElement}
  */
 export default function EditorChoice({ editorChoice = [] }) {
