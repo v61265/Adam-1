@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-// import Image from 'next/image'
-import CustomNextImage from './custom-next-image'
+
+import CustomImage from '@readr-media/react-image'
 
 /**
  * @typedef {import('../type/theme').Theme} Theme
@@ -121,15 +121,24 @@ const Title = styled.div`
  * @param {Article} props.itemData
  * @returns {React.ReactElement}
  */
-//TODOs: use @readr-media/react-images to render image of item
 export default function LatestNewsItem({ itemData }) {
   return (
     <a href={itemData.articleHref} target="_blank" rel="noreferrer">
       <ItemWrapper>
         <ImageContainer>
-          <CustomNextImage
-            src={itemData?.heroImage?.resized?.w800}
-          ></CustomNextImage>
+          <CustomImage
+            defaultImage="/images/default-og-img.png"
+            loadingImage="images/loading.gif"
+            images={itemData.heroImage?.resized ?? {}}
+            objectFit="cover"
+            rwd={{
+              mobile: '488px',
+              tablet: '488px',
+              desktop: '488px',
+              default: '488px',
+            }}
+            alt={itemData.title}
+          ></CustomImage>
         </ImageContainer>
         <Detail>
           {itemData.sectionTitle && (
