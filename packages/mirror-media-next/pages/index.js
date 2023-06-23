@@ -57,7 +57,6 @@ const IndexContainer = styled.main`
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 1024px;
-    height: 500vh;
   }
   margin: 0 auto;
 `
