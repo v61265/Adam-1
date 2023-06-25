@@ -1,4 +1,4 @@
-import { MICRO_AD_UNITS } from '../constants/ads'
+import { MICRO_AD_UNITS, POP_IN_IDS } from '../constants/ads'
 import { SECTION_IDS } from '../constants/index'
 
 /**
@@ -90,9 +90,54 @@ const getSectionGPTPageKey = (sectionSlug = '') => {
   }
 }
 
+/**
+ * Determining whether to insert a `PopIn` advertisement after a specific post index.
+ *
+ * @param {number} index
+ * @returns {boolean}
+ */
+const needInsertPopInAdAfter = (index = 0) => {
+  if (typeof index !== 'number') {
+    console.error(
+      `The value for 'index' is not of the correct data type 'number'. Please check the data type of the value being passed.`
+    )
+    return false
+  }
+
+  return index === 1 || index === 2
+}
+
+/**
+ *
+ * Determining which PopIn advertisement ID to take based on the `index`.
+ *
+ * @param {number} index
+ * @returns {string | null}
+ */
+const getPopInId = (index = 0) => {
+  let popInId = null
+
+  if (typeof index !== 'number') {
+    console.error(
+      `The value for 'index' is not of the correct data type 'number'. Please check the data type of the value being passed.`
+    )
+    return null
+  }
+
+  if (index === 1) {
+    return POP_IN_IDS.HOT[0]
+  } else if (index === 2) {
+    return POP_IN_IDS.HOT[1]
+  }
+
+  return popInId
+}
+
 export {
   needInsertMicroAdAfter,
   getMicroAdUnitId,
   getPageKeyByPartnerSlug,
   getSectionGPTPageKey,
+  needInsertPopInAdAfter,
+  getPopInId,
 }
