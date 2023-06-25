@@ -1,5 +1,7 @@
+import { Fragment } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import {
   getSectionNameGql,
@@ -7,7 +9,15 @@ import {
   getArticleHref,
 } from '../../../utils'
 import Image from '@readr-media/react-image'
-import PopInAdInHotList from '../../ads/pop-in/pop-in-ad-in-hot-list'
+import { useDisplayAd } from '../../../hooks/useDisplayAd'
+import { needInsertPopInAdAfter, getPopInId } from '../../../utils/ad'
+
+const PopInAdInHotList = dynamic(
+  () => import('../../../components/ads/pop-in/pop-in-ad-in-hot-list'),
+  {
+    ssr: false,
+  }
+)
 
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
@@ -24,6 +34,7 @@ const TestButton = styled.button`
 `
 const Wrapper = styled.section`
   margin: 20px auto 0;
+
   ${({ theme }) => theme.breakpoint.md} {
     width: 618px;
   }
@@ -79,6 +90,7 @@ const articleHeightMobile = 256 //px
 const articleHeightTablet = 177 //px
 const articleHeightDesktop = 80 //px
 const articleWrapperGap = 21 //px
+
 const ArticleWrapper = styled.ul`
   display: flex;
   flex-direction: column;
@@ -262,6 +274,8 @@ export default function AsideArticleList({
   fetchArticle,
   renderAmount = 6,
 }) {
+  const shouldShowAd = useDisplayAd()
+
   const wrapperRef = useRef(null)
   const [item, setItem] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
@@ -299,43 +313,68 @@ export default function AsideArticleList({
 
     return () => observer.disconnect()
   }, [isLoaded, handleLoadMore])
-  const newsJsx = item.map((item) => {
+
+  const newsJsx = item.map((item, index) => {
     const sectionName = getSectionNameGql(item.sections, undefined)
     const sectionTitle = getSectionTitleGql(item.sections, undefined)
     const articleHref = getArticleHref(item.slug, item.style, undefined)
+
+    /**
+     * Determines whether to show a pop-in ad at a given index.
+     * @param {number} index - The index to check for ad insertion.
+     * @returns {boolean} True if pop-in ad should be inserted.
+     */
+    const shouldShowPopInAd = (index) => {
+      return Boolean(
+        shouldShowAd && heading === '熱門文章' && needInsertPopInAdAfter(index)
+      )
+    }
+
     return (
-      <li key={item.id}>
-        {isLoaded ? (
-          <Article shouldReverseOrder={shouldReverseOrder}>
-            <Link href={articleHref} target="_blank" className="article-image">
-              <Image
-                images={item?.heroImage?.resized}
-                alt={item.title}
-                loadingImage={'/images/loading.gif'}
-                defaultImage={'/images/default-og-img.png'}
-                rwd={{ mobile: '276px', tablet: '266px', desktop: '120px' }}
-              />
-            </Link>
-
-            <FigureCaption>
-              <Label sectionTitle={sectionTitle}>{sectionName}</Label>
-              <Link href={articleHref} target="_blank">
-                <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
-                  {item.title}
-                </Title>
+      <Fragment key={`wrapper-${item.id}`}>
+        <li key={item.id}>
+          {isLoaded ? (
+            <Article shouldReverseOrder={shouldReverseOrder}>
+              <Link
+                href={articleHref}
+                target="_blank"
+                className="article-image"
+              >
+                <Image
+                  images={item?.heroImage?.resized}
+                  alt={item.title}
+                  loadingImage={'/images/loading.gif'}
+                  defaultImage={'/images/default-og-img.png'}
+                  rwd={{ mobile: '276px', tablet: '266px', desktop: '120px' }}
+                />
               </Link>
-            </FigureCaption>
-          </Article>
-        ) : (
-          <ArticleLoading shouldReverseOrder={shouldReverseOrder}>
-            <div className="article-image article-image__loading"></div>
 
-            <FigureCaption>
-              <TitleLoading />
-            </FigureCaption>
-          </ArticleLoading>
+              <FigureCaption>
+                <Label sectionTitle={sectionTitle}>{sectionName}</Label>
+                <Link href={articleHref} target="_blank">
+                  <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
+                    {item.title}
+                  </Title>
+                </Link>
+              </FigureCaption>
+            </Article>
+          ) : (
+            <ArticleLoading shouldReverseOrder={shouldReverseOrder}>
+              <div className="article-image article-image__loading"></div>
+
+              <FigureCaption>
+                <TitleLoading />
+              </FigureCaption>
+            </ArticleLoading>
+          )}
+        </li>
+
+        {shouldShowPopInAd(index) && (
+          <li key={`pop-in-${item.id}`}>
+            <PopInAdInHotList popInId={getPopInId(index)} />
+          </li>
         )}
-      </li>
+      </Fragment>
     )
   })
 
@@ -343,9 +382,6 @@ export default function AsideArticleList({
   const handleOnClick = () => {
     setIsLoaded((pre) => !pre)
   }
-
-  // sample code to use Pop In ad, need to deal with the order to insert
-  newsJsx.unshift(<PopInAdInHotList />)
 
   return (
     <>
