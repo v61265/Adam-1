@@ -279,7 +279,9 @@ const typeStory = css`
       background: none !important;
       ${({ theme }) => theme.breakpoint.md} {
         position: relative;
-        padding: 16px 0 0 25.75px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px 0 25.75px;
         &::before {
           position: absolute;
           content: '';
@@ -369,13 +371,15 @@ const typeStory = css`
             display: block;
             height: 100%;
             position: relative;
-            padding: 16px 20px 0 40px;
+            padding: 0 20px 0 40px;
             font-style: normal;
             //Since AD uses inline-style to set the font-weight, it is necessary to use !important.
             font-weight: 400 !important;
             font-size: 18px;
             line-height: 1.5;
             color: #808080;
+            display: flex;
+            align-items: center;
 
             > a {
               //Since AD uses inline-style to set the font-weight, it is necessary to use !important.
