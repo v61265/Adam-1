@@ -1,4 +1,5 @@
 import errors from '@twreporter/errors'
+import dynamic from 'next/dynamic'
 
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants'
@@ -20,6 +21,12 @@ import {
   fetchYoutubePlaylistByChannelId,
   fetcYoutubeVideoForFullDescription,
 } from '../../utils/api/section-videohub'
+import { Z_INDEX } from '../../constants/index'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
+
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 /**
  * @typedef {import('../../type/youtube.js').YoutubeRawPlaylistVideo} YoutubeRawPlaylistVideo
@@ -45,6 +52,74 @@ const Wrapper = styled.main`
   }
 `
 
+const StyledGPTAd_PC_HD = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    width: 100%;
+    height: auto;
+    margin: 20px auto 0px;
+    max-width: 970px;
+    max-height: 250px;
+    display: block;
+  }
+`
+
+const StyledGPTAd_MB_HD = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const StyledGPTAd_PC_FT = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    width: 100%;
+    height: auto;
+    margin: 20px auto 0px;
+    max-width: 970px;
+    max-height: 250px;
+    display: block;
+  }
+`
+
+const StyledGPTAd_MB_FT = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const StickyGPTAd_MB_ST = styled(GPTAd)`
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
 /**
  * @param {Object} props
  * @param {YoutubeVideo} props.highestViewCountVideo
@@ -61,6 +136,9 @@ export default function SectionVideohub({
 }) {
   const hasHVCVideo = Object.keys(highestViewCountVideo).length > 0
   const hasLatestVideo = latestVideos.length > 0
+
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `影音` }}
@@ -68,11 +146,14 @@ export default function SectionVideohub({
       footer={{ type: 'default' }}
     >
       <Wrapper>
+        {shouldShowAd && <StyledGPTAd_PC_HD pageKey="videohub" adKey="PC_HD" />}
         {hasHVCVideo && (
           <LeadingVideo video={highestViewCountVideo} title="熱門影片" />
         )}
+        {shouldShowAd && <StyledGPTAd_MB_HD pageKey="videohub" adKey="MB_HD" />}
         {hasLatestVideo && <VideoList videos={latestVideos} name="最新影片" />}
         <SubscribeChannels />
+        {shouldShowAd && <StyledGPTAd_MB_FT pageKey="videohub" adKey="MB_FT" />}
         {playlistsVideos.map((playlistsVideo) => (
           <VideoList
             key={playlistsVideo.slug}
@@ -81,6 +162,8 @@ export default function SectionVideohub({
             slug={playlistsVideo.slug}
           />
         ))}
+        {shouldShowAd && <StyledGPTAd_PC_FT pageKey="videohub" adKey="PC_FT" />}
+        {shouldShowAd && <StickyGPTAd_MB_ST pageKey="videohub" adKey="MB_ST" />}
       </Wrapper>
     </Layout>
   )
