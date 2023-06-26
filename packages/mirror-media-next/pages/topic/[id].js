@@ -12,6 +12,7 @@ import {
   sortArrayWithOtherArrayId,
 } from '../../utils/index'
 import { fetchTopicByTopicId } from '../../utils/api/topic'
+import GPTAd from '../../components/ads/gpt/gpt-ad'
 
 const RENDER_PAGE_SIZE = 12
 
@@ -32,11 +33,14 @@ export default function Topic({ topic, slideshowImages, headerData }) {
   switch (topic.type) {
     case 'list':
       topicJSX = (
-        <TopicList
-          topic={topic}
-          renderPageSize={RENDER_PAGE_SIZE}
-          slideshowImages={slideshowImages}
-        />
+        <>
+          <GPTAd adUnit="mirror_RWD_2022FIFA_970250-300250_FT" />
+          <TopicList
+            topic={topic}
+            renderPageSize={RENDER_PAGE_SIZE}
+            slideshowImages={slideshowImages}
+          />
+        </>
       )
       break
     case 'group':
