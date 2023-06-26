@@ -1,4 +1,5 @@
 import errors from '@twreporter/errors'
+import dynamic from 'next/dynamic'
 
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import CategoryVideos from '../../components/video_category/category-videos.js'
@@ -12,6 +13,12 @@ import {
   fetchVideoCategory,
   fetchYoutubePlaylistByPlaylistId,
 } from '../../utils/api/video-category.js'
+import { Z_INDEX } from '../../constants/index'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
+
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 const Wrapper = styled.div`
   width: 320px;
@@ -23,6 +30,62 @@ const Wrapper = styled.div`
   ${({ theme }) => theme.breakpoint.xl} {
     width: 1024px;
     padding: 0;
+  }
+`
+
+const StyledGPTAd_PC_HD = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    width: 100%;
+    height: auto;
+    margin: 20px auto 0px;
+    max-width: 970px;
+    max-height: 250px;
+    display: block;
+  }
+`
+
+const StyledGPTAd_MB_HD = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const StyledGPTAd_PC_FT = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    width: 100%;
+    height: auto;
+    margin: 20px auto 0px;
+    max-width: 970px;
+    max-height: 250px;
+    display: block;
+  }
+`
+
+const StickyGPTAd_MB_ST = styled(GPTAd)`
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
   }
 `
 
@@ -45,6 +108,9 @@ export default function VideoCategory({
   const firstVideo = videos[0]
   const remainingVideos = videos.slice(1)
   const categoryName = category.name || ''
+
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `${categoryName}影音` }}
@@ -52,11 +118,13 @@ export default function VideoCategory({
       footer={{ type: 'default' }}
     >
       <Wrapper>
+        {shouldShowAd && <StyledGPTAd_PC_HD pageKey="videohub" adKey="PC_HD" />}
         <LeadingVideo
           video={firstVideo}
           title={categoryName}
           slug={category.slug}
         />
+        {shouldShowAd && <StyledGPTAd_MB_HD pageKey="videohub" adKey="MB_HD" />}
         {hasMoreThanOneVideo && (
           <CategoryVideos
             videoItems={remainingVideos}
@@ -64,6 +132,8 @@ export default function VideoCategory({
             categorySlug={category.slug}
           />
         )}
+        {shouldShowAd && <StyledGPTAd_PC_FT pageKey="videohub" adKey="PC_FT" />}
+        {shouldShowAd && <StickyGPTAd_MB_ST pageKey="videohub" adKey="MB_ST" />}
       </Wrapper>
     </Layout>
   )
