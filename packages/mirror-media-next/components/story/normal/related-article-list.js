@@ -16,6 +16,13 @@ const StyledMicroAd = dynamic(
   }
 )
 
+const StyledPopInAdRelated = dynamic(
+  () => import('../../../components/ads/pop-in/pop-in-ad-in-related-list'),
+  {
+    ssr: false,
+  }
+)
+
 /**
  * @typedef {import('../../../apollo/fragments/post').HeroImage &
  * {
@@ -189,21 +196,22 @@ export default function RelatedArticleList({ relateds }) {
     </ArticleWrapper>
   ) : null
 
-  const microAdJsx = shouldShowAd
-    ? MICRO_AD_UNITS.STORY[device].map((unit) => (
+  const advertisementJsx = shouldShowAd ? (
+    <AdvertisementWrapper>
+      {/* micro ad */}
+      {MICRO_AD_UNITS.STORY[device].map((unit) => (
         <StyledMicroAd key={unit.name} unitId={unit.id} microAdType="STORY" />
-      ))
-    : null
+      ))}
+      {/* pop-in ad */}
+      <StyledPopInAdRelated />
+    </AdvertisementWrapper>
+  ) : null
 
   return (
     <Wrapper>
       <h2>延伸閱讀</h2>
       {relatedsArticleJsx}
-      <AdvertisementWrapper>
-        {/* micro ad */}
-        {microAdJsx}
-        {/* popin */}
-      </AdvertisementWrapper>
+      {advertisementJsx}
     </Wrapper>
   )
 }
