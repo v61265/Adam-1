@@ -29,6 +29,8 @@ const GPTAd = dynamic(() => import('../components/ads/gpt/gpt-ad'), {
   ssr: false,
 })
 
+const GA_UTM_EDITOR_CHOICES = 'utm_source=mmweb&utm_medium=editorchoice'
+
 /**
  * @typedef {import('../components/shared/share-header').HeaderData['flashNewsData']} FlashNewsData
  */
@@ -114,7 +116,14 @@ export default function Home({
   const editorChoice = editorChoicesData.map((item) => {
     const sectionName = getSectionNameGql(item.sections, undefined)
     const sectionTitle = getSectionTitleGql(item.sections, undefined)
-    const articleHref = getArticleHref(item.slug, item.style, undefined)
+    const articleHref =
+      item.style !== 'projects'
+        ? `${getArticleHref(
+            item.slug,
+            item.style,
+            undefined
+          )}?${GA_UTM_EDITOR_CHOICES}`
+        : getArticleHref(item.slug, item.style, undefined)
     return { sectionName, sectionTitle, articleHref, ...item }
   })
 
