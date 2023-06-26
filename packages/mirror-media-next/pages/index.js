@@ -71,14 +71,12 @@ const StyledGPTAd_HD = styled(GPTAd)`
 const StyledGPTAd_PC_B1 = styled(GPTAd)`
   width: 100%;
   height: auto;
-  max-width: 336px;
-  max-height: 280px;
   margin: 20px auto 0px;
   display: none;
 
   ${({ theme }) => theme.breakpoint.xl} {
-    max-width: 970px;
-    max-height: 250px;
+    max-width: 728px;
+    max-height: 90px;
     display: block;
   }
 `
@@ -91,8 +89,6 @@ const StyledGPTAd_MB_L1 = styled(GPTAd)`
   margin: 20px auto 0px;
 
   ${({ theme }) => theme.breakpoint.xl} {
-    max-width: 970px;
-    max-height: 250px;
     display: none;
   }
 `
