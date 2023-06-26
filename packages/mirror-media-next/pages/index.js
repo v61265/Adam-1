@@ -1,8 +1,3 @@
-//TODO: will fetch topic data twice (once in header, once in index),
-//should fetch only once by using Redux.
-//TODO: add typedef of editor choice data
-//TODO: add component to add html head dynamically, not jus write head in every pag
-//TODO: add jsDoc of `props.sectionsData`
 import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
@@ -23,7 +18,7 @@ import {
   fetchHeaderDataInDefaultPageLayoutNoTopics,
   fetchHeaderDataInDefaultPageLayoutNoAllHeaderData,
 } from '../utils/api'
-import { transformRawDataToArticleInfo } from '../utils'
+import { getSectionNameGql, getSectionTitleGql, getArticleHref } from '../utils'
 
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
@@ -44,13 +39,19 @@ const GPTAd = dynamic(() => import('../components/ads/gpt/gpt-ad'), {
  * @typedef {import('../components/shared/share-header').HeaderData['topicsData']} TopicsData
  */
 
+/**
+ * @typedef {import('../components/editor-choice').EditorChoiceRawData[]} EditorChoicesRawData
+ */
+/**
+ * @typedef {import('../components/latest-news').ArticleRawData[]} ArticlesRawData
+ */
+
 const IndexContainer = styled.main`
   background-color: rgba(255, 255, 255, 1);
   max-width: 596px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 1024px;
-    height: 500vh;
   }
   margin: 0 auto;
 `
@@ -98,8 +99,8 @@ const StyledGPTAd_MB_L1 = styled(GPTAd)`
  * @param {Object} props
  * @param {import('../type').Topic[]} props.topicsData
  * @param {FlashNewsData} props.flashNewsData
- * @param {import('../type/raw-data.typedef').RawData[] } [props.editorChoicesData=[]]
- * @param {import('../type/raw-data.typedef').RawData[] } [props.latestNewsData=[]]
+ * @param {EditorChoicesRawData} [props.editorChoicesData=[]]
+ * @param {ArticlesRawData} [props.latestNewsData=[]]
  * @param {Object[] } props.sectionsData
  * @returns {React.ReactElement}
  */
@@ -110,7 +111,12 @@ export default function Home({
   latestNewsData = [],
   sectionsData = [],
 }) {
-  const editorChoice = transformRawDataToArticleInfo(editorChoicesData)
+  const editorChoice = editorChoicesData.map((item) => {
+    const sectionName = getSectionNameGql(item.sections, undefined)
+    const sectionTitle = getSectionTitleGql(item.sections, undefined)
+    const articleHref = getArticleHref(item.slug, item.style, undefined)
+    return { sectionName, sectionTitle, articleHref, ...item }
+  })
 
   const shouldShowAd = useDisplayAd()
 

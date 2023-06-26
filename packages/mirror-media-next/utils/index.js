@@ -6,6 +6,10 @@ import utc from 'dayjs/plugin/utc'
  */
 
 /**
+ * @typedef {import('../apollo/fragments/section').Section[]} Sections
+ */
+
+/**
  * Get path of article base on different article style, and whether is external article.
  * @param {String} slug
  * @param {import('../type/raw-data.typedef').ArticleStyle} style
@@ -84,12 +88,10 @@ function getSectionTitle(sections = [], partner) {
 // - remove function for handling data from k3 server
 // - adjust typedef of Section
 
-//TODO: use typedef in `../apollo/fragments/section`
-// Should be done after fetch header data from new json file
 /**
  * Get section name based on different condition
  * Because data structure of keystone 6 response is different from keystone 3, we create this function to handle data from keystone 6 server.
- * @param {import('../type/raw-data.typedef').Section[]} sections
+ * @param {Sections} sections
  * @param {Object | ''} partner
  * @returns {String | undefined}
  */
@@ -107,7 +109,7 @@ function getSectionNameGql(sections = [], partner = '') {
 /**
  * Get section title based on different condition
  * Because data structure of keystone 6 response is different from keystone 3, we create this function to handle data from keystone 6 server.
- * @param {import('../type/raw-data.typedef').Section[]} sections
+ * @param {Sections} sections
  * @param {Object | ''} partner
  * @returns {String | undefined}
  */
