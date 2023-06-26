@@ -10,15 +10,6 @@ import Image from '@readr-media/react-image'
 
 /** @typedef {import('../../../apollo/fragments/post').AsideListingPost} ArticleData */
 
-const TestButton = styled.button`
-  position: fixed;
-
-  left: 0;
-  width: 100px;
-  height: 100px;
-  background-color: pink;
-`
-
 const Wrapper = styled.section`
   margin: 24px auto 0;
   width: 100%;
@@ -261,14 +252,12 @@ export default function AsideArticleList({
   const [item, setItem] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
   const handleLoadMore = useCallback(() => {
-    //Temporarily remove setIsLoaded for testing  style of loading component.
-
     fetchArticle().then((articles) => {
       if (articles.length && Array.isArray(articles)) {
         setItem(articles)
-        // setIsLoaded(true)
+        setIsLoaded(true)
       } else {
-        // setIsLoaded(true)
+        setIsLoaded(true)
       }
     })
   }, [fetchArticle])
@@ -336,21 +325,8 @@ export default function AsideArticleList({
     )
   })
 
-  //Temporarily add for testing  style of loading component.
-  const handleOnClick = () => {
-    setIsLoaded((pre) => !pre)
-  }
-
   return (
     <>
-      {/* TestButton is temporarily added for testing style of loading component. */}
-      <TestButton
-        onClick={handleOnClick}
-        style={{ top: heading === '熱門文章' ? '250px' : '100px' }}
-      >
-        {heading}目前狀態{isLoaded ? '載入完畢' : '載入中'}
-      </TestButton>
-
       <Wrapper>
         {isLoaded ? (
           <Heading color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
