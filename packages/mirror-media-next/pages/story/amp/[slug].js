@@ -11,7 +11,7 @@ import {
 } from '../../../utils'
 import { handleStoryPageRedirect } from '../../../utils/story'
 import { fetchPostBySlug } from '../../../apollo/query/posts'
-import { GCP_PROJECT_ID } from '../../../config/index.mjs'
+import { GCP_PROJECT_ID, GA_MEASUREMENT_ID } from '../../../config/index.mjs'
 import styled from 'styled-components'
 import AdultOnlyWarning from '../../../components/story/shared/adult-only-warning'
 import WineWarning from '../../../components/story/shared/wine-warning'
@@ -64,6 +64,31 @@ function StoryAmpPage({ postData }) {
       <Head>
         <title>{title}</title>
       </Head>
+      <amp-analytics
+        type="googleanalytics"
+        config="https://amp.analytics-debugger.com/ga4.json"
+        data-credentials="include"
+      >
+        <script
+          type="application/json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              vars: {
+                GA4_MEASUREMENT_ID: GA_MEASUREMENT_ID,
+                GA4_ENDPOINT_HOSTNAME: 'www.google-analytics.com',
+                GOOGLE_CONSENT_ENABLED: false,
+                WEBVITALS_TRACKING: false,
+                PERFORMANCE_TIMING_TRACKING: false,
+                DEFAULT_PAGEVIEW_ENABLED: true,
+                SEND_DOUBLECLICK_BEACON: false,
+                DISABLE_REGIONAL_DATA_COLLECTION: false,
+                ENHANCED_MEASUREMENT_SCROLL: false,
+              },
+            }),
+          }}
+        />
+      </amp-analytics>
+
       <AmpBody>
         <section
           id="amp-page"
