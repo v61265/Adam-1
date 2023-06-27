@@ -6,8 +6,12 @@ import { useState, useRef } from 'react'
 import Image from 'next/legacy/image'
 import styled from 'styled-components'
 import useClickOutside from '../hooks/useClickOutside'
+import { useRouter } from 'next/router'
+import { useMembership, logout } from '../context/membership'
 
-const MemberLoginButtonWrapper = styled.div``
+const MemberLoginButtonWrapper = styled.div`
+  cursor: pointer;
+`
 
 const LoginButton = styled.span`
   font-size: 13px;
@@ -44,7 +48,6 @@ const DropdownMenuItem = styled.a`
   padding: 24px 0;
   text-align: center;
   border-bottom: 1px solid #d8d8d8;
-  cursor: pointer;
 `
 
 const DesktopWrapper = styled.span`
@@ -74,19 +77,20 @@ const dropdownMenuItem = [
  * @returns {React.ReactElement}
  */
 export default function PremiumMemberLoginButton({ className }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [showSelectOptions, setShowSelectOptions] = useState(false)
   const selectWrapperRef = useRef(null)
   useClickOutside(selectWrapperRef, () => {
     setShowSelectOptions(false)
   })
+  const router = useRouter()
+  const { isLoggedIn } = useMembership()
 
   const handleLogOut = () => {
     setShowSelectOptions(false)
-    setIsLoggedIn((val) => !val)
+    logout()
   }
   const handleLogIn = () => {
-    setIsLoggedIn((val) => !val)
+    router.push(`/login?destination=${router.asPath || '/'}`)
   }
   let memberLoginButton
   if (isLoggedIn) {
