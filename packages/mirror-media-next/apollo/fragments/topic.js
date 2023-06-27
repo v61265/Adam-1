@@ -25,6 +25,7 @@ import { tag } from './tag'
  * @property {import('./photo').Photo} og_image
  * @property {import('./photo').SlideshowImage[]} slideshow_images
  * @property {manualOrderOfSlideshowImage[]} manualOrderOfSlideshowImages
+ * @property {string} dfp
  */
 
 export const simpleTopic = gql`
@@ -74,5 +75,6 @@ export const topic = gql`
       ...slideshowImage
     }
     manualOrderOfSlideshowImages
+    dfp
   }
 `
