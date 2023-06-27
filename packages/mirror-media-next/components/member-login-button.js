@@ -101,7 +101,7 @@ export default function MemberLoginButton() {
   } else {
     memberLoginButton = (
       <LoginButton>
-        <Link href={`/login?destination=${router.asPath && '/'}`}>登入</Link>
+        <Link href={`/login?destination=${router.asPath || '/'}`}>登入</Link>
       </LoginButton>
     )
   }
