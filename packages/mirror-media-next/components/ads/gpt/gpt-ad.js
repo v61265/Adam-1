@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react'
 
-import { getAdSlotParam, getAdWidth } from '../../../utils/gpt-ad.js'
+import {
+  getAdSlotParam,
+  getAdSlotParamByAdUnit,
+  getAdWidth,
+} from '../../../utils/gpt-ad.js'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -43,8 +47,9 @@ const Ad = styled.div`
  * @typedef {function(googletag.events.SlotRequestedEvent):void} GoogleTagEventHandler
  *
  * @param {Object} props
- * @param {string} props.pageKey - key to access GPT_UNITS first layer
- * @param {string} props.adKey - key to access GPT_UNITS second layer, might need to complete with device
+ * @param {string} [props.pageKey] - key to access GPT_UNITS first layer
+ * @param {string} [props.adKey] - key to access GPT_UNITS second layer, might need to complete with device
+ * @param {string} [props.adUnit]
  * @param {GoogleTagEventHandler} [props.onSlotRequested] - callback when slotRequested event occurs
  * @param {GoogleTagEventHandler} [props.onSlotRenderEnded] - callback when slotRenderEnded event occurs
  * @param {string} [props.className] - for styled-component method to add styles
@@ -53,6 +58,7 @@ const Ad = styled.div`
 export default function GPTAd({
   pageKey,
   adKey,
+  adUnit,
   onSlotRequested,
   onSlotRenderEnded,
   className,
@@ -64,28 +70,37 @@ export default function GPTAd({
   const adDivId = adUnitPath // Set the id of the ad `<div>` to be the same as the `adUnitPath`.
 
   useEffect(() => {
-    if (!(pageKey && adKey)) {
+    let newAdSize, newAdUnitPath, newAdWidth
+    if (pageKey && adKey) {
+      // built-in ad unit
+      const width = window.innerWidth
+      const adSlotParam = getAdSlotParam(pageKey, adKey, width)
+      if (!adSlotParam) {
+        return
+      }
+      const { adUnitPath, adSize } = adSlotParam
+      newAdSize = adSize
+      newAdUnitPath = adUnitPath
+      newAdWidth = getAdWidth(adSize)
+    } else if (adUnit) {
+      // custom ad unit string
+      const adSlotParam = getAdSlotParamByAdUnit(adUnit)
+      const { adUnitPath, adSize } = adSlotParam
+
+      newAdSize = adSize
+      newAdUnitPath = adUnitPath
+      newAdWidth = getAdWidth(adSize)
+    } else {
       console.error(
-        `GPTAd not receive necessary pageKey ${pageKey} or ${adKey}`
+        `GPTAd not receive necessary pageKey '${pageKey}' and adKey '${adKey}' or adUnit '${adUnit}'`
       )
       return
     }
 
-    const width = window.innerWidth
-    const adSlotParam = getAdSlotParam(pageKey, adKey, width)
-    if (!adSlotParam) {
-      return
-    }
-    const { adUnitPath, adSize } = adSlotParam
-
-    const newAdSize = adSize
-    const newAdUnitPath = adUnitPath
-    const newAdWidth = getAdWidth(adSize)
-
     setAdSize(newAdSize)
     setAdWidth(newAdWidth)
     setAdUnitPath(newAdUnitPath)
-  }, [adKey, pageKey])
+  }, [adKey, pageKey, adUnit])
 
   useEffect(() => {
     if (adDivId && adWidth) {
