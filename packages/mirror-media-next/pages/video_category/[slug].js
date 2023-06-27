@@ -58,19 +58,6 @@ const StyledGPTAd_MB_HD = styled(GPTAd)`
   }
 `
 
-const StyledGPTAd_PC_FT = styled(GPTAd)`
-  display: none;
-
-  ${({ theme }) => theme.breakpoint.xl} {
-    width: 100%;
-    height: auto;
-    margin: 20px auto 0px;
-    max-width: 970px;
-    max-height: 250px;
-    display: block;
-  }
-`
-
 const StickyGPTAd_MB_ST = styled(GPTAd)`
   display: block;
   position: fixed;
@@ -132,7 +119,6 @@ export default function VideoCategory({
             categorySlug={category.slug}
           />
         )}
-        {shouldShowAd && <StyledGPTAd_PC_FT pageKey="videohub" adKey="PC_FT" />}
         {shouldShowAd && <StickyGPTAd_MB_ST pageKey="videohub" adKey="MB_ST" />}
       </Wrapper>
     </Layout>
