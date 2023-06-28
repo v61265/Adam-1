@@ -50,13 +50,15 @@ const StyledGPTAd = styled(GPTAd)`
  * @param {Object} props
  * @param {Content} props.content
  * @param {string | undefined} props.sectionSlug
+ * @param {boolean} [props.hiddenAdvertised] - CMS Posts「google廣告違規」
  * @returns {JSX.Element}
  */
 export default function ArticleContent({
   content = { blocks: [], entityMap: {} },
   sectionSlug,
+  hiddenAdvertised = false,
 }) {
-  const shouldShowAd = useDisplayAd()
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
   const windowDimensions = useWindowDimensions()
 
   const blocksLength = getBlocksCount(content)

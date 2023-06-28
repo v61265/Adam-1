@@ -487,6 +487,7 @@ export default function StoryNormalStyle({
     brief = { blocks: [], entityMap: {} },
     relateds = [],
     manualOrderOfRelateds = [],
+    hiddenAdvertised = false,
   } = postData
 
   const sectionsWithOrdered =
@@ -559,7 +560,7 @@ export default function StoryNormalStyle({
   const publishedTaipeiTime = transformTimeDataIntoDotFormat(publishedDate)
   const updatedTaipeiTime = transformTimeDataIntoDotFormat(updatedAt)
 
-  const shouldShowAd = useDisplayAd()
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
 
   return (
     <>
@@ -604,6 +605,7 @@ export default function StoryNormalStyle({
           <ArticleContent
             content={postContent.data}
             sectionSlug={section?.slug}
+            hiddenAdvertised={hiddenAdvertised}
           />
           <DateUnderContent>
             <span>更新時間｜</span>
