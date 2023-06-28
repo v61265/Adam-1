@@ -4,7 +4,10 @@ import Image from 'next/legacy/image'
 import InfiniteScrollList from '../infinite-scroll-list'
 import ArticleList from '../shared/article-list'
 import PremiumArticleList from '../shared/premium-article-list'
-import { fetchPostsByCategorySlug } from '../../utils/api/category'
+import {
+  fetchPostsByCategorySlug,
+  fetchPremiumPostsByCategorySlug,
+} from '../../utils/api/category'
 import LoadingPage from '../../public/images/loading_page.gif'
 
 const Loading = styled.div`
@@ -50,7 +53,9 @@ export default function CategoryArticles({
     try {
       const take = fetchPageSize
       const skip = (page - 1) * take
-      const response = await fetchPostsByCategorySlug(category.slug, take, skip)
+      const response = isPremium
+        ? await fetchPremiumPostsByCategorySlug(category.slug, take, skip)
+        : await fetchPostsByCategorySlug(category.slug, take, skip)
       return response.data.posts
     } catch (error) {
       // [to-do]: use beacon api to log error on gcs

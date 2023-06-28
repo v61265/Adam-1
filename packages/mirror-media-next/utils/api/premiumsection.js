@@ -17,10 +17,8 @@ export function fetchPremiumPostsBySectionSlug(sectionSlug, take, skip) {
       orderBy: { publishedDate: 'desc' },
       filter: {
         state: { equals: 'published' },
-        AND: [
-          { sections: { some: { slug: { equals: sectionSlug } } } },
-          { sections: { some: { slug: { equals: 'member' } } } },
-        ],
+        sections: { some: { slug: { equals: sectionSlug } } },
+        isMember: { equals: true },
       },
     },
   })

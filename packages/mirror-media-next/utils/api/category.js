@@ -17,6 +17,22 @@ export function fetchPostsByCategorySlug(categorySlug, take, skip) {
   })
 }
 
+export function fetchPremiumPostsByCategorySlug(categorySlug, take, skip) {
+  return client.query({
+    query: fetchPosts,
+    variables: {
+      take,
+      skip,
+      orderBy: { publishedDate: 'desc' },
+      filter: {
+        state: { equals: 'published' },
+        categories: { some: { slug: { equals: categorySlug } } },
+        isMember: { equals: true },
+      },
+    },
+  })
+}
+
 export function fetchCategoryByCategorySlug(categorySlug) {
   return client.query({
     query: fetchCategorySections,
