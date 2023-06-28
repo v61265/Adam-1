@@ -245,11 +245,26 @@ export async function getServerSideProps({ params, req }) {
     if (!postData) {
       return { notFound: true }
     }
+    const { style } = postData
+    /**
+     * If post style is 'projects' or 'campaign', redirect to certain route.
+     *
+     * There is no `/projects` or `/campaign` pages in mirror-media-next, when user enter path `/projects/_slug` or `/campaign`,
+     * Load balancer hosted by Google Cloud Platform will help us to get page content of project or campaign page.
+     * The content of certain page is placed at Google Cloud Storage.
+     */
+    if (style === 'projects' || style === 'campaign') {
+      return {
+        redirect: {
+          destination: `/${style}/${slug} `,
+          permanent: false,
+        },
+      }
+    }
+
     // Check if the post data has content in the brief, trimmedContent, or content fields
     const shouldCheckHasContent =
-      postData.style === 'article' ||
-      postData.style === 'wide' ||
-      postData.style === 'photography'
+      style === 'article' || style === 'wide' || style === 'photography'
 
     if (shouldCheckHasContent) {
       const hasBrief = hasContentInRawContentBlock(postData.brief)
