@@ -1,5 +1,12 @@
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 import PremiumArticleListItem from './premium-article-list-item'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
+import { SECTION_IDS } from '../../constants/index'
+
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 const ItemContainer = styled.div`
   display: grid;
@@ -17,6 +24,20 @@ const ItemContainer = styled.div`
   }
 `
 
+const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+    margin: 35px auto;
+  }
+`
+
 /**
  * @typedef {import('./premium-article-list-item').Article} Article
  * @typedef {import('./premium-article-list-item').Section} Section
@@ -29,11 +50,28 @@ const ItemContainer = styled.div`
  * @returns {React.ReactElement}
  */
 export default function PremiumArticleList({ renderList, section }) {
+  const shouldShowAd = useDisplayAd()
+
+  const renderListBeforeAd = renderList.slice(0, 12)
+  const renderListAfterAd = renderList.slice(12)
+
   return (
-    <ItemContainer>
-      {renderList.map((item) => (
-        <PremiumArticleListItem key={item.id} item={item} section={section} />
-      ))}
-    </ItemContainer>
+    <>
+      <ItemContainer>
+        {renderListBeforeAd.map((item) => (
+          <PremiumArticleListItem key={item.id} item={item} section={section} />
+        ))}
+      </ItemContainer>
+
+      {shouldShowAd && (
+        <StyledGPTAd pageKey={SECTION_IDS['member']} adKey="FT" />
+      )}
+
+      <ItemContainer>
+        {renderListAfterAd.map((item) => (
+          <PremiumArticleListItem key={item.id} item={item} section={section} />
+        ))}
+      </ItemContainer>
+    </>
   )
 }
