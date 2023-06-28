@@ -6,7 +6,7 @@ import client from '../../apollo/apollo-client'
 import styled from 'styled-components'
 import Link from 'next/link'
 import axios from 'axios'
-import MockAdvertisement from '../../components/mock-advertisement'
+import dynamic from 'next/dynamic'
 import ExternalArticleInfo from '../../components/external/external-article-info'
 import ArticleBrief from '../../components/story/shared/brief'
 import AsideArticleList from '../../components/story/normal/aside-article-list'
@@ -14,6 +14,7 @@ import FbPagePlugin from '../../components/story/normal/fb-page-plugin'
 import SocialNetworkService from '../../components/story/normal/social-network-service'
 import SubscribeInviteBanner from '../../components/story/normal/subscribe-invite-banner'
 import DonateBanner from '../../components/story/shared/donate-banner'
+import RelatedArticleList from '../../components/story/normal/related-article-list'
 import MagazineInviteBanner from '../../components/story/shared/magazine-invite-banner'
 import ExternalArticleContent from '../../components/external/external-article-content'
 import ExternalHeroImage from '../../components/external/external-hero-image'
@@ -26,6 +27,17 @@ import {
   getExternalSectionTitle,
   getExternalPartnerColor,
 } from '../../utils/external'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
+import { Z_INDEX } from '../../constants/index'
+import { getPageKeyByPartnerSlug } from '../../utils/ad'
+
+const DableAd = dynamic(() => import('../ads/dable/dable-ad'), {
+  ssr: false,
+})
+
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -36,42 +48,6 @@ import {
 /**
  * @typedef {import('../../apollo/fragments/external').External} External
  */
-
-const PC_HD_Advertisement = styled(MockAdvertisement)`
-  display: none;
-  margin: 24px auto;
-  text-align: center;
-  ${({ theme }) => theme.breakpoint.xl} {
-    display: block;
-  }
-`
-const PC_R1_Advertisement = styled(MockAdvertisement)`
-  display: none;
-  margin: 0 auto;
-  text-align: center;
-  ${({ theme }) => theme.breakpoint.xl} {
-    display: block;
-  }
-`
-const PC_R2_Advertisement = styled(MockAdvertisement)`
-  display: none;
-  margin: 20px auto;
-  text-align: center;
-  ${({ theme }) => theme.breakpoint.xl} {
-    display: block;
-  }
-`
-const M_AT3_Advertisement = styled(MockAdvertisement)`
-  margin: 0 -20px;
-  width: 100vw;
-  max-width: 336px;
-  @media (min-width: 336px) {
-    margin: 0 auto;
-  }
-  ${({ theme }) => theme.breakpoint.xl} {
-    display: none;
-  }
-`
 
 const Title = styled.h1`
   margin: 0 auto;
@@ -276,24 +252,163 @@ const AsideFbPagePlugin = styled(FbPagePlugin)`
     display: block;
   }
 `
-const AdvertisementDable = styled.div`
-  text-align: center;
-  background-color: #eeeeee;
+
+const StyledGPTAd_HD = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+  }
 `
-const AdvertisementDableDesktop = styled(AdvertisementDable)`
+
+const StyledGPTAd_MB_AT3 = styled(GPTAd)`
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  max-width: 336px;
+  margin: 0 auto;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const StyledGPTAd_MB_E1 = styled(GPTAd)`
+  display: block;
+  margin: 24px auto;
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  max-width: 336px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const DableADContainer_Mobile = styled.div`
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  height: auto;
+  max-width: 640px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const GPTAdContainer = styled.div`
   display: none;
+
   ${({ theme }) => theme.breakpoint.xl} {
     display: block;
-    width: 640px;
+    margin: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+`
+const StyledGPTAd_PC_E1 = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    max-width: 300px;
+  }
+`
+
+const StyledGPTAd_PC_E2 = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    max-width: 300px;
+  }
+`
+
+const DableADContainer_Desktop = styled.div`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 640px;
     margin: 0 auto;
   }
 `
-const AdvertisementDableMobile = styled(AdvertisementDable)`
+
+const StyledGPTAd_PC_R1 = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    max-height: 600px;
+    margin: 0 auto;
+  }
+`
+
+const StyledGPTAd_PC_R2 = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    max-height: 600px;
+    margin: 20px auto;
+  }
+`
+
+const StyledGPTAd_FT = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+    margin: 35px auto;
+  }
+`
+
+const StickyGPTAd_MB_ST = styled(GPTAd)`
   display: block;
-  margin: 0 auto;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
+  z-index: ${Z_INDEX.top};
+
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
-    width: 640px;
   }
 `
 
@@ -386,13 +501,17 @@ export default function ExternalNormalStyle({ external }) {
     </DateUnderContent>
   ) : null
 
+  const shouldShowAd = useDisplayAd()
+
   return (
     <>
-      <PC_HD_Advertisement
-        width="970px"
-        height="250px"
-        text="PC_HD 970*250"
-      ></PC_HD_Advertisement>
+      {shouldShowAd && (
+        <StyledGPTAd_HD
+          pageKey={getPageKeyByPartnerSlug(partner.slug)}
+          adKey="HD"
+        />
+      )}
+
       <Main>
         <Article>
           <SectionAndDate>
@@ -424,25 +543,32 @@ export default function ExternalNormalStyle({ external }) {
           <SocialNetworkServiceSmall />
           <SubscribeInviteBanner />
 
-          <M_AT3_Advertisement
-            text="M_AT3 336*280"
-            width="336px"
-            height="280px"
-            className="ad"
-          />
+          <RelatedArticleList relateds={[]} />
+
+          {shouldShowAd && (
+            <StyledGPTAd_MB_AT3
+              pageKey={getPageKeyByPartnerSlug(partner.slug)}
+              adKey="MB_AT3"
+            />
+          )}
+
           <SocialNetworkServiceLarge
             shouldShowLargePagePlugin={true}
             flexDirection="column"
           />
-          <M_AT3_Advertisement
-            text="M_E1 336*280"
-            width="336px"
-            height="280px"
-            className="ad"
-          />
-          <AdvertisementDableMobile>
-            dable廣告(手機版)施工中......
-          </AdvertisementDableMobile>
+
+          {shouldShowAd && (
+            <StyledGPTAd_MB_E1
+              pageKey={getPageKeyByPartnerSlug(partner.slug)}
+              adKey="MB_E1"
+            />
+          )}
+
+          {shouldShowAd && (
+            <DableADContainer_Mobile>
+              <DableAd isDesktop={false} />
+            </DableADContainer_Mobile>
+          )}
 
           <StoryEndDesktop>
             <StoryMoreInfo>
@@ -461,39 +587,59 @@ export default function ExternalNormalStyle({ external }) {
               。
             </StoryMoreInfo>
             <MagazineInviteBanner />
-            <AdvertisementDableDesktop>
-              dable廣告 (桌機版) 施工中......
-            </AdvertisementDableDesktop>
+
+            {shouldShowAd && (
+              <GPTAdContainer>
+                <StyledGPTAd_PC_E1
+                  pageKey={getPageKeyByPartnerSlug(partner.slug)}
+                  adKey="PC_E1"
+                />
+                <StyledGPTAd_PC_E2
+                  pageKey={getPageKeyByPartnerSlug(partner.slug)}
+                  adKey="PC_E2"
+                />
+              </GPTAdContainer>
+            )}
+
+            {shouldShowAd && (
+              <DableADContainer_Desktop>
+                <DableAd isDesktop={true} />
+              </DableADContainer_Desktop>
+            )}
           </StoryEndDesktop>
         </Article>
         <Aside>
-          <PC_R1_Advertisement
-            text="PC_R1 300*600"
-            width="300px"
-            height="600px"
-            className="ad"
-          ></PC_R1_Advertisement>
+          {shouldShowAd && (
+            <StyledGPTAd_PC_R1
+              pageKey={getPageKeyByPartnerSlug(partner.slug)}
+              adKey="PC_R1"
+            />
+          )}
+
           <AsideArticleList
             heading="最新文章"
             fetchArticle={handleFetchLatestNews}
             shouldReverseOrder={false}
             renderAmount={6}
-          ></AsideArticleList>
+          />
 
-          <PC_R2_Advertisement
-            text="PC_R2 300*600"
-            width="300px"
-            height="600px"
-            className="ad"
-          ></PC_R2_Advertisement>
+          {shouldShowAd && (
+            <StyledGPTAd_PC_R2
+              pageKey={getPageKeyByPartnerSlug(partner.slug)}
+              adKey="PC_R2"
+            />
+          )}
+
           <Divider />
+
           <AsideArticleList
             heading="熱門文章"
             fetchArticle={handleFetchPopularNews}
             shouldReverseOrder={false}
             renderAmount={6}
-          ></AsideArticleList>
-          <AsideFbPagePlugin></AsideFbPagePlugin>
+          />
+
+          <AsideFbPagePlugin />
         </Aside>
       </Main>
       <StoryEndMobileTablet>
@@ -513,10 +659,26 @@ export default function ExternalNormalStyle({ external }) {
           。
         </StoryMoreInfo>
         <MagazineInviteBanner />
-        <AdvertisementDableDesktop>
-          dable廣告 (桌機版) 施工中......
-        </AdvertisementDableDesktop>
+
+        {shouldShowAd && (
+          <DableADContainer_Desktop>
+            <DableAd isDesktop={true} />
+          </DableADContainer_Desktop>
+        )}
       </StoryEndMobileTablet>
+
+      {shouldShowAd && (
+        <>
+          <StyledGPTAd_FT
+            pageKey={getPageKeyByPartnerSlug(partner.slug)}
+            adKey="FT"
+          />
+          <StickyGPTAd_MB_ST
+            pageKey={getPageKeyByPartnerSlug(partner.slug)}
+            adKey="MB_ST"
+          />
+        </>
+      )}
     </>
   )
 }

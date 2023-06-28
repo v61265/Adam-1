@@ -63,7 +63,7 @@ const getMicroAdUnitId = (
  */
 function getPageKeyByPartnerSlug(partnerSlug = '') {
   const validPartnerSlugs = ['ebc', 'healthnews', 'zuchi', '5678news']
-  return validPartnerSlugs.includes(partnerSlug) ? SECTION_IDS.news : 'other'
+  return validPartnerSlugs.includes(partnerSlug) ? SECTION_IDS['news'] : 'other'
 }
 
 /**
