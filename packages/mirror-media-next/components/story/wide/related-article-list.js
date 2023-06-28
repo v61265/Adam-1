@@ -136,15 +136,6 @@ const Article = styled.figure`
   }
 `
 
-const AdvertisementWrapper = styled.div`
-  height: 300px;
-  background-color: pink;
-  padding: 28px 0 10px;
-  ${({ theme }) => theme.breakpoint.md} {
-    padding: 20px 0 0;
-  }
-`
-
 /**
  *
  * @param {Object} props
@@ -192,11 +183,6 @@ export default function RelatedArticleList({ relateds }) {
     <Wrapper>
       <h2>延伸閱讀</h2>
       {relatedsArticleJsx}
-      <AdvertisementWrapper>
-        特企區塊施工中......
-        {/* micro ad */}
-        {/* popin */}
-      </AdvertisementWrapper>
     </Wrapper>
   )
 }
