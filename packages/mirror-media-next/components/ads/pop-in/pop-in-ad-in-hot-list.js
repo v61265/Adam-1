@@ -4,16 +4,123 @@ import styled from 'styled-components'
 const StyledPopInAd = styled(PopInAd)`
   #_popIn_hot {
     ._popIn_recommend_article {
-      flex-direction: row;
+      display: flex;
+      flex-direction: column;
+      max-width: 276px;
+      margin: 0 auto;
+      max-height: 256px;
+      padding: 0;
+      overflow: hidden;
+      border: unset;
+      position: unset;
+    }
+
+    ._popIn_recommend_art_img {
+      width: 100%;
+      min-height: 184px;
+      margin: 0;
+
+      a {
+        width: 100%;
+        height: 184px;
+      }
+    }
+
+    ._popIn_recommend_art_title {
+      padding: 0;
+      position: relative;
+
+      a {
+        margin-top: 16px;
+        overflow: hidden;
+        color: #054f77;
+        font-size: 18px;
+        line-height: 1.5;
+        font-weight: 400;
+        height: unset;
+      }
     }
 
     ._popIn_label {
-      padding: 0 8px !important;
-      line-height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'PingFang TC';
+      font-style: normal;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 1;
+      padding: 8px;
+      position: absolute;
+      bottom: unset;
+      top: -34px;
     }
+  }
 
-    ._popIn_recommend_art_title a {
-      margin-top: 8px !important;
+  ${({ theme }) => theme.breakpoint.md} {
+    #_popIn_hot {
+      ._popIn_recommend_article {
+        flex-direction: row;
+        width: 100%;
+        height: 177px;
+        max-width: none;
+        justify-content: space-between;
+        gap: 28px;
+        margin: 0 auto 0 0;
+        padding: 0 !important;
+        position: relative;
+      }
+
+      ._popIn_recommend_art_img {
+        height: unset;
+        width: 266px;
+        min-height: unset;
+      }
+
+      ._popIn_label {
+        padding: 0 8px !important;
+        line-height: 25px;
+        left: 0;
+        top: unset;
+        bottom: 0;
+      }
+
+      ._popIn_recommend_art_title {
+        padding: 0 !important;
+        position: unset;
+        a {
+          margin: 0 !important;
+        }
+      }
+    }
+  }
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    #_popIn_hot {
+      ._popIn_recommend_article {
+        height: 80px;
+        gap: 12px;
+        position: unset;
+      }
+
+      ._popIn_recommend_art_img {
+        width: 120px;
+        height: 80px;
+
+        a {
+          width: 120px;
+          height: 80px;
+        }
+      }
+
+      ._popIn_recommend_art_title {
+        ._popIn_label {
+          width: fit-content;
+          position: relative;
+          margin-bottom: 8px;
+          font-weight: 400;
+        }
+      }
     }
   }
 `
