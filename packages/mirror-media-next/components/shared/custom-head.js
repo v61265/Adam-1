@@ -1,7 +1,8 @@
 import Head from 'next/head'
 
-import { SITE_TITLE } from '../../constants'
+import { FB_APP_ID, FB_PAGE_ID, SITE_TITLE } from '../../constants'
 import { SITE_URL } from '../../config/index.mjs'
+import { useRouter } from 'next/router'
 
 /**
  * @typedef {Object} OGProperties
@@ -17,6 +18,8 @@ import { SITE_URL } from '../../config/index.mjs'
  * @property {string} image.width
  * @property {string} image.height
  * @property {string} card
+ * @property {string} fbAppId
+ * @property {string} fbPageId
  */
 
 /**
@@ -34,12 +37,15 @@ const OpenGraph = ({ properties }) => {
     description,
     image,
     card = 'summary_large_image',
+    fbAppId,
+    fbPageId,
   } = properties
 
   return (
     <>
       <meta property="og:locale" content={locale || 'zh_TW'} key="og:locale" />
       <meta property="og:title" content={title} key="og:title" />
+      <meta property="og:url" content={url} />
       <meta property="og:type" content={type} key="og:type" />
       <meta
         property="og:description"
@@ -73,6 +79,8 @@ const OpenGraph = ({ properties }) => {
           <meta name="twitter:image" content={image.url} key="twitter:image" />
         </>
       )}
+      <meta property="fb:app_id" content={fbAppId} />
+      <meta property="fb:pages" content={fbPageId} />
       <meta name="twitter:card" content={card} key="twitter:card" />
       <meta name="twitter:url" content={url} key="twitter:url" />
       <meta name="twitter:title" content={title} key="twitter:title" />
@@ -97,13 +105,14 @@ const OpenGraph = ({ properties }) => {
  * @returns
  */
 export default function CustomHead(props) {
+  const router = useRouter()
   const siteInformation = {
     title: props.title ? `${props.title} - ${SITE_TITLE}` : SITE_TITLE,
     description:
       props.description ??
       '鏡傳媒以台灣為基地，是一跨平台綜合媒體，包含《鏡週刊》以及下設五大分眾內容的《鏡傳媒》網站，刊載時事、財經、人物、國際、文化、娛樂、美食旅遊、精品鐘錶等深入報導及影音內容。我們以「鏡」為名，務求反映事實、時代與人性。',
     site_name: SITE_TITLE,
-    url: SITE_URL,
+    url: SITE_URL + router.asPath,
     type: 'website',
     image: {
       width: '1200',
@@ -112,6 +121,8 @@ export default function CustomHead(props) {
       url: props.imageUrl ?? `https://${SITE_URL}/images/default-og-img.png`,
     },
     card: 'summary_large_image',
+    fbAppId: FB_APP_ID,
+    fbPageId: FB_PAGE_ID,
   }
 
   return (
