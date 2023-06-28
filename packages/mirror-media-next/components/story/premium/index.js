@@ -228,6 +228,7 @@ export default function StoryPremiumStyle({
     relateds = [],
     slug = '',
     manualOrderOfRelateds = [],
+    hiddenAdvertised = false,
   } = postData
 
   const shouldShowArticleMask =
@@ -257,7 +258,7 @@ export default function StoryPremiumStyle({
     { extend_byline: extend_byline },
   ]
 
-  const shouldShowAd = useDisplayAd()
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
   const { memberInfo } = useMembership()
   const { memberType } = memberInfo
 
@@ -335,6 +336,7 @@ export default function StoryPremiumStyle({
             <PremiumArticleContent
               className="content"
               content={postContent.data}
+              hiddenAdvertised={hiddenAdvertised}
             />
 
             <CopyrightWarning />

@@ -36,14 +36,16 @@ const StyledGPTAd = styled(GPTAd)`
  *
  * @param {Object} props
  * @param {Content} props.content
- *  @param {string} [props.className]
+ * @param {string} [props.className]
+ * @param {boolean} [props.hiddenAdvertised] - CMS Posts「google廣告違規」
  * @returns {JSX.Element}
  */
 export default function PremiumArticleContent({
   content = { blocks: [], entityMap: {} },
   className = '',
+  hiddenAdvertised = false,
 }) {
-  const shouldShowAd = useDisplayAd()
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
   const windowDimensions = useWindowDimensions()
   const blocksLength = getBlocksCount(content)
 
