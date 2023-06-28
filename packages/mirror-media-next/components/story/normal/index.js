@@ -25,7 +25,6 @@ import {
   transformTimeDataIntoDotFormat,
   sortArrayWithOtherArrayId,
 } from '../../../utils'
-// import { fetchHeaderDataInDefaultPageLayout } from '../../../utils/api'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
@@ -561,6 +560,7 @@ export default function StoryNormalStyle({
   const updatedTaipeiTime = transformTimeDataIntoDotFormat(updatedAt)
 
   const shouldShowAd = useDisplayAd()
+
   return (
     <>
       <ShareHeader
@@ -601,7 +601,10 @@ export default function StoryNormalStyle({
           </InfoAndHero>
 
           <ArticleBrief sectionSlug={section?.slug} brief={brief} />
-          <ArticleContent content={postContent.data} />
+          <ArticleContent
+            content={postContent.data}
+            sectionSlug={section?.slug}
+          />
           <DateUnderContent>
             <span>更新時間｜</span>
             <span className="time">{updatedTaipeiTime} 臺北時間</span>
