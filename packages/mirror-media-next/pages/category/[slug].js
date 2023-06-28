@@ -13,6 +13,7 @@ import { Z_INDEX } from '../../constants/index'
 import {
   fetchCategoryByCategorySlug,
   fetchPostsByCategorySlug,
+  fetchPremiumPostsByCategorySlug,
 } from '../../utils/api/category'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
 import { getSectionGPTPageKey } from '../../utils/ad'
@@ -252,19 +253,76 @@ export async function getServerSideProps({ query, req }) {
     ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
   }
 
-  const responses = await Promise.allSettled([
-    fetchPostsByCategorySlug(
-      categorySlug,
-      RENDER_PAGE_SIZE * 2,
-      mockError ? NaN : 0
-    ),
-    fetchCategoryByCategorySlug(categorySlug),
-  ])
+  // default category, if request failed fallback to isMemberOnly = false
+  /** @type {Category} */
+  let category = {
+    id: '',
+    name: '',
+    sections: [],
+    slug: categorySlug,
+    isMemberOnly: false,
+  }
+  try {
+    const { data } = await fetchCategoryByCategorySlug(categorySlug)
+    category = data.category || category
+  } catch (error) {
+    const { graphQLErrors, clientErrors, networkError } = error
+    const annotatingError = errors.helpers.wrap(
+      error,
+      'UnhandledError',
+      'Error occurs while getting category page data'
+    )
+    console.log(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(
+          annotatingError,
+          {
+            withStack: true,
+            withPayload: true,
+          },
+          0,
+          0
+        ),
+        debugPayload: {
+          graphQLErrors,
+          clientErrors,
+          networkError,
+        },
+        ...globalLogFields,
+      })
+    )
+  }
+
+  const isPremium = category.isMemberOnly
+
+  const responses = await Promise.allSettled(
+    isPremium
+      ? [
+          fetchHeaderDataInPremiumPageLayout(),
+          fetchPremiumPostsByCategorySlug(
+            categorySlug,
+            RENDER_PAGE_SIZE * 2,
+            mockError ? NaN : 0
+          ),
+        ]
+      : [
+          fetchHeaderDataInDefaultPageLayout(),
+          fetchPostsByCategorySlug(
+            categorySlug,
+            RENDER_PAGE_SIZE * 2,
+            mockError ? NaN : 0
+          ),
+        ]
+  )
 
   const handledResponses = responses.map((response, index) => {
     if (response.status === 'fulfilled') {
-      // since only gql requests
-      return response.value.data
+      if ('data' in response.value) {
+        // handle gql response
+        return response.value.data
+      }
+      return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
       const annotatingError = errors.helpers.wrap(
@@ -294,7 +352,7 @@ export async function getServerSideProps({ query, req }) {
         })
       )
 
-      if (index === 0) {
+      if (index === 1) {
         // fetch key data (posts) failed, redirect to 500
         throw new Error('fetch category posts failed')
       }
@@ -302,8 +360,25 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
+  // handle header data
+  let sectionsData = []
+  let topicsData = []
+  const headerData = handledResponses[0]
+  if (isPremium) {
+    if (Array.isArray(headerData.sectionsData)) {
+      sectionsData = headerData.sectionsData
+    }
+  } else {
+    if (Array.isArray(headerData.sectionsData)) {
+      sectionsData = headerData.sectionsData
+    }
+    if (Array.isArray(headerData.topicsData)) {
+      topicsData = headerData.topicsData
+    }
+  }
+
   // handle fetch post data
-  if (handledResponses[0]?.posts?.length === 0) {
+  if (handledResponses[1]?.posts?.length === 0) {
     // fetchPost return empty array -> wrong authorId -> 404
     console.log(
       JSON.stringify({
@@ -315,47 +390,10 @@ export async function getServerSideProps({ query, req }) {
     return { notFound: true }
   }
   /** @type {number} postsCount */
-  const postsCount = handledResponses[0]?.postsCount || 0
+  const postsCount = handledResponses[1]?.postsCount || 0
   /** @type {Article[]} */
-  const posts = handledResponses[0]?.posts || []
-  /** @type {Category} */
+  const posts = handledResponses[1]?.posts || []
 
-  // handle detch category data, if request failed fallback to isMemberOnly = false
-  const category = handledResponses[1]?.category || {
-    slug: categorySlug,
-    isMemberOnly: false,
-  }
-  const isPremium = category.isMemberOnly
-  let sectionsData = []
-  let topicsData = []
-  try {
-    if (isPremium) {
-      const headerData = await fetchHeaderDataInPremiumPageLayout()
-      if (Array.isArray(headerData.sectionsData)) {
-        sectionsData = headerData.sectionsData
-      }
-    } else {
-      const headerData = await fetchHeaderDataInDefaultPageLayout()
-      if (Array.isArray(headerData.sectionsData)) {
-        sectionsData = headerData.sectionsData
-      }
-      if (Array.isArray(headerData.topicsData)) {
-        topicsData = headerData.topicsData
-      }
-    }
-  } catch (err) {
-    const annotatingAxiosError = errors.helpers.annotateAxiosError(err)
-    console.error(
-      JSON.stringify({
-        severity: 'ERROR',
-        message: errors.helpers.printAll(annotatingAxiosError, {
-          withStack: true,
-          withPayload: true,
-        }),
-        ...globalLogFields,
-      })
-    )
-  }
   const props = {
     postsCount,
     posts,

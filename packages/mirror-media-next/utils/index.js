@@ -292,13 +292,13 @@ const convertDraftToText = (rawContentBlock) => {
 
 /**
  * To get the URL link for `og-image`, sorted in ascending order based on file size.
+ * Skip w480 to prevent image size minimum 200 x 200.
  * @param {import('../apollo/fragments/photo').Resized | undefined | null} resized
  * @returns {string | undefined}
  */
 const getResizedUrl = (resized) => {
   if (resized) {
     return (
-      resized?.w480 ||
       resized?.w800 ||
       resized?.w1200 ||
       resized?.w1600 ||

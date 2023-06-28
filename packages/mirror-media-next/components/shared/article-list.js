@@ -108,7 +108,7 @@ export default function ArticleList({ renderList, section }) {
 
       <ItemContainer>
         {renderListWithoutAd.map((item) => (
-          <ArticleListItem key={item.id} item={item} />
+          <ArticleListItem key={item.id} item={item} section={section} />
         ))}
       </ItemContainer>
     </>
