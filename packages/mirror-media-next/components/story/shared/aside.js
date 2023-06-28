@@ -87,7 +87,7 @@ export default function Aside({
 
   return (
     <AsideWrapper>
-      <RelatedArticleList relateds={relateds}></RelatedArticleList>
+      {relateds.length > 0 && <RelatedArticleList relateds={relateds} />}
       <AsideArticleList
         heading="最新文章"
         fetchArticle={handleFetchLatestNews}
