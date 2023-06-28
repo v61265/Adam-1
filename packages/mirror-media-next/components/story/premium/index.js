@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
-import DraftRenderBlock from '../shared/draft-renderer-block'
 import ArticleBrief from '../shared/brief'
+import PremiumArticleContent from './article-content'
 import { sortArrayWithOtherArrayId } from '../../../utils'
 import TitleAndInfoAndHero from './title-and-info-and-hero'
 import CopyrightWarning from '../shared/copyright-warning'
@@ -331,12 +331,12 @@ export default function StoryPremiumStyle({
                 contentLayout="premium"
               />
             </section>
-            <section className="content">
-              <DraftRenderBlock
-                contentLayout="premium"
-                rawContentBlock={postContent.data}
-              />
-            </section>
+
+            <PremiumArticleContent
+              className="content"
+              content={postContent.data}
+            />
+
             <CopyrightWarning />
 
             {shouldShowArticleMask && <ArticleMask postId={id} />}
