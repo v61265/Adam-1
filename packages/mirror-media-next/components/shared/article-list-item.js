@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 import Image from '@readr-media/react-image'
 
+/**
+ * @typedef {import('../../type/theme').Theme} Theme
+ */
+
 const ItemWrapper = styled.a`
   display: block;
   position: relative;
@@ -117,7 +121,7 @@ export default function ArticleListItem({ item, section }) {
           alt={item.title}
           loadingImage="/images/loading.gif"
           defaultImage="/images/default-og-img.png"
-          rwd={{ tablet: '320px', desktop: '220px' }}
+          rwd={{ mobile: '400px', tablet: '400px', desktop: '400px' }}
         />
         {itemSection && (
           <ItemSection sectionName={itemSection?.slug}>
