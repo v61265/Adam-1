@@ -39,7 +39,6 @@ const bottomWrapperStyle = css`
   overflow: hidden;
   .ad-item {
     position: relative;
-
     height: 180px;
   }
 `
@@ -84,6 +83,16 @@ const CloseButton = styled.button`
 `
 
 const Wrapper = styled.div`
+  z-index: ${Z_INDEX.top};
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
   ${
     /**
      * @param {Object} param
