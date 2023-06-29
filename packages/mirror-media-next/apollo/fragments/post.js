@@ -48,6 +48,7 @@ export const listingPost = gql`
  * @property {string} slug
  * @property {string} title
  * @property {import('./section').Section[]} sections
+ * @property {import('./section').Section[]} sectionsInInputOrder
  * @property {import('./photo').Photo | null} heroImage
  */
 
@@ -59,6 +60,9 @@ export const asideListingPost = gql`
     slug
     title
     sections {
+      ...section
+    }
+    sectionsInInputOrder {
       ...section
     }
     heroImage {
