@@ -31,7 +31,14 @@ import { useDisplayAd } from '../../../hooks/useDisplayAd'
  * 第四層 Innity（AdFourth）:
  * 同 AD2 一樣為不額外帶有樣式的廣告，因此需要先設置修正用樣式
  */
-export default function FullScreenAdsContainer() {
+
+/**
+ *
+ * @param {Object} props
+ * @param {boolean} [props.hiddenAdvertised] - CMS Posts「google廣告違規」
+ * @returns {JSX.Element}
+ */
+export default function FullScreenAdsContainer({ hiddenAdvertised = false }) {
   const [displayedAd, setDisplayedAd] = useState('first')
   const hasAdFirst = displayedAd === 'first'
   const hasAdSecond = displayedAd === 'second'
@@ -39,7 +46,7 @@ export default function FullScreenAdsContainer() {
   const hasAdFourth = displayedAd === 'fourth'
 
   const hasAdThirdOrFourth = hasAdThird || hasAdFourth
-  const shouldShowAd = useDisplayAd()
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
   /** @type {[FullScreenAdStyle,import('react').Dispatch<FullScreenAdStyle>]} */
   const [fullScreenAdStyle, setFullScreenAdStyle] = useState(
     /** @type {FullScreenAdStyle} */

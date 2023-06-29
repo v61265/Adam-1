@@ -259,6 +259,7 @@ const TitleLoading = styled(Title)`
  * - If rejected, it will return an empty array
  * @param {number} [props.renderAmount]
  * - a number of article we want to render, it will determine the height of `ArticleWrapper` to prevent Cumulative Layout Shift (CLS) problem after article is loaded.
+ * @param {boolean} [props.hiddenAdvertised] - CMS Posts「google廣告違規」
  * @returns {JSX.Element}
  */
 export default function AsideArticleList({
@@ -266,8 +267,9 @@ export default function AsideArticleList({
   shouldReverseOrder = false,
   fetchArticle,
   renderAmount = 6,
+  hiddenAdvertised = false,
 }) {
-  const shouldShowAd = useDisplayAd()
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
 
   const wrapperRef = useRef(null)
   const [item, setItem] = useState([])

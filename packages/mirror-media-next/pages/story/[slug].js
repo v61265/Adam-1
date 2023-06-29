@@ -89,6 +89,7 @@ export default function Story({ postData, headerData, storyLayoutType }) {
     isMember = false,
     content = null,
     trimmedContent = null,
+    hiddenAdvertised = false,
   } = postData
 
   /**
@@ -213,7 +214,7 @@ export default function Story({ postData, headerData, storyLayoutType }) {
         {storyLayoutJsx}
         <WineWarning categories={categories} />
         <AdultOnlyWarning isAdult={isAdult} />
-        <FullScreenAds />
+        <FullScreenAds hiddenAdvertised={hiddenAdvertised} />
       </>
     </Layout>
   )

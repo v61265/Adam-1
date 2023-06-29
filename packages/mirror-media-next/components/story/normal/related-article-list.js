@@ -154,13 +154,17 @@ const AdvertisementWrapper = styled.div`
  *
  * @param {Object} props
  * @param {Relateds} props.relateds
+ * @param {boolean} [props.hiddenAdvertised] - CMS Posts「google廣告違規」
  * @returns {JSX.Element}
  */
-export default function RelatedArticleList({ relateds }) {
+export default function RelatedArticleList({
+  relateds,
+  hiddenAdvertised = false,
+}) {
   const { width } = useWindowDimensions()
   const device = width >= mediaSize.xl ? 'PC' : 'MB'
 
-  const shouldShowAd = useDisplayAd()
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
 
   const relatedsArticleJsx = relateds.length ? (
     <ArticleWrapper>

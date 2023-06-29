@@ -614,7 +614,11 @@ export default function StoryNormalStyle({
           <SupportMirrorMediaBanner />
           <SocialNetworkServiceSmall />
           <SubscribeInviteBanner />
-          <RelatedArticleList relateds={relatedsWithOrdered} />
+          <RelatedArticleList
+            relateds={relatedsWithOrdered}
+            hiddenAdvertised={hiddenAdvertised}
+          />
+
           {shouldShowAd && (
             <StyledGPTAd_MB_AT3
               pageKey={getSectionGPTPageKey(section?.slug)}
@@ -705,6 +709,7 @@ export default function StoryNormalStyle({
             fetchArticle={handleFetchPopularNews}
             shouldReverseOrder={false}
             renderAmount={6}
+            hiddenAdvertised={hiddenAdvertised}
           />
 
           <AsideFbPagePlugin />
