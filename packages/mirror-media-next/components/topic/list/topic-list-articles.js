@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 import InfiniteScrollList from '../../infinite-scroll-list'
 import Image from 'next/legacy/image'
+// @ts-ignore
 import LoadingPage from '../../../public/images/loading_page.gif'
 import ListArticles from './list-articles'
 import { fetchTopicByTopicId } from '../../../utils/api/topic'
@@ -28,6 +29,7 @@ const Loading = styled.div`
  * @param {Article[]} props.posts
  * @param {string} props.topicId
  * @param {number} props.renderPageSize
+ * @param {string} props.dfp
  * @returns {React.ReactElement}
  */
 export default function TopicListArticles({
@@ -35,6 +37,7 @@ export default function TopicListArticles({
   posts,
   topicId,
   renderPageSize,
+  dfp,
 }) {
   const fetchPageSize = renderPageSize
   async function fetchTopicPostsFromPage(page) {
@@ -67,7 +70,7 @@ export default function TopicListArticles({
       fetchListInPage={fetchTopicPostsFromPage}
       loader={loader}
     >
-      {(renderList) => <ListArticles renderList={renderList} />}
+      {(renderList) => <ListArticles renderList={renderList} dfp={dfp} />}
     </InfiniteScrollList>
   )
 }

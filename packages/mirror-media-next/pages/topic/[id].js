@@ -1,6 +1,4 @@
 import errors from '@twreporter/errors'
-import styled from 'styled-components'
-import dynamic from 'next/dynamic'
 
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import TopicList from '../../components/topic/list/topic-list'
@@ -14,20 +12,6 @@ import {
   sortArrayWithOtherArrayId,
 } from '../../utils/index'
 import { fetchTopicByTopicId } from '../../utils/api/topic'
-import { useDisplayAd } from '../../hooks/useDisplayAd'
-const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
-  ssr: false,
-})
-
-const StyledGPTAd = styled(GPTAd)`
-  width: 100%;
-  height: auto;
-  margin: 20px auto 0px;
-  ${({ theme }) => theme.breakpoint.xl} {
-    max-width: 970px;
-    max-height: 250px;
-  }
-`
 
 const RENDER_PAGE_SIZE = 12
 
@@ -44,7 +28,6 @@ const RENDER_PAGE_SIZE = 12
  * @returns
  */
 export default function Topic({ topic, slideshowImages, headerData }) {
-  const shouldShowAd = useDisplayAd()
   let topicJSX
 
   switch (topic.type) {
@@ -56,7 +39,6 @@ export default function Topic({ topic, slideshowImages, headerData }) {
             renderPageSize={RENDER_PAGE_SIZE}
             slideshowImages={slideshowImages}
           />
-          {shouldShowAd && topic.dfp && <StyledGPTAd adUnit={topic.dfp} />}
         </>
       )
       break
@@ -64,7 +46,6 @@ export default function Topic({ topic, slideshowImages, headerData }) {
       topicJSX = (
         <>
           <TopicGroup topic={topic} />
-          {shouldShowAd && topic.dfp && <StyledGPTAd adUnit={topic.dfp} />}
         </>
       )
       break
@@ -76,7 +57,6 @@ export default function Topic({ topic, slideshowImages, headerData }) {
             renderPageSize={RENDER_PAGE_SIZE}
             slideshowImages={slideshowImages}
           />
-          {shouldShowAd && topic.dfp && <StyledGPTAd adUnit={topic.dfp} />}
         </>
       )
   }
