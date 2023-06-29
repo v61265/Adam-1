@@ -51,7 +51,7 @@ const Topic = styled.div`
   }
   ${({ theme }) => theme.breakpoint.xl} {
     height: 600px;
-    padding-top 0;
+    padding-top: 0;
   }
 `
 const TopicTitle = styled.div`
@@ -233,6 +233,7 @@ export default function TopicList({ topic, renderPageSize, slideshowImages }) {
           posts={posts}
           postsCount={postsCount}
           renderPageSize={renderPageSize}
+          dfp={topic.dfp}
         />
       </Container>
     </>

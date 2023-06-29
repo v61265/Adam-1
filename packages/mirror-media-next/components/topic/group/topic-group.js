@@ -1,5 +1,11 @@
 import styled from 'styled-components'
 import TopicGroupArticles from './topic-group-articles'
+import dynamic from 'next/dynamic'
+
+import { useDisplayAd } from '../../../hooks/useDisplayAd'
+const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
@@ -49,6 +55,17 @@ const TopicGroups = styled.div`
   flex-direction: column;
 `
 
+const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  margin: 20px auto;
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+    margin: 35px auto;
+  }
+`
+
 /**
  * @typedef {import('../../../apollo/fragments/photo').Photo & {
  *  id: string;
@@ -87,7 +104,8 @@ const TopicGroups = styled.div`
  * @returns {React.ReactElement}
  */
 export default function TopicGroup({ topic }) {
-  const { style, posts, tags } = topic
+  const { style, posts, tags, dfp } = topic
+  const shouldShowAd = useDisplayAd()
 
   return (
     <>
@@ -103,6 +121,7 @@ export default function TopicGroup({ topic }) {
               )}
             />
           ))}
+          {shouldShowAd && dfp && <StyledGPTAd adUnit={dfp} />}
         </TopicGroups>
       </Container>
     </>
