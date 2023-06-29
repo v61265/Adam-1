@@ -126,7 +126,7 @@ switch (ENV) {
       'https://v3-statics-dev.mirrormedia.mg/files/json/header_posts.json'
     URL_STATIC_POST_EXTERNAL =
       'https://v3-statics-dev.mirrormedia.mg/files/json/post_external'
-    URL_RESTFUL_SERVER = 'https://rest-dev.mirrormedia.mg'
+    URL_RESTFUL_SERVER = 'http://api-dev.mirrormedia.mg:8080/' //'https://rest-dev.mirrormedia.mg'
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
@@ -161,7 +161,7 @@ switch (ENV) {
     URL_STATIC_TOPICS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_topics.json`
     URL_STATIC_POST_FLASH_NEWS = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/header_posts.json`
     URL_STATIC_POST_EXTERNAL = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}/json/post_external`
-    URL_RESTFUL_SERVER = 'https://rest-dev.mirrormedia.mg'
+    URL_RESTFUL_SERVER = 'http://api-dev.mirrormedia.mg:8080/'
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
