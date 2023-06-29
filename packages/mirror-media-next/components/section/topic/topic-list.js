@@ -71,11 +71,12 @@ export default function TopicList({ renderList }) {
       <ItemContainer>
         {renderListWithAd.map((item, index) => (
           <Fragment key={item.id}>
-            <TopicListItem item={item} />
+            <TopicListItem item={item} key={`topic-list-${item.id}`} />
             {shouldShowAd && needInsertMicroAdAfter(index) && (
               <StyledMicroAd
                 unitId={getMicroAdUnitId(index, 'LISTING', 'RWD')}
                 microAdType="LISTING"
+                key={`topic-ad-${item.id}`}
               />
             )}
           </Fragment>
