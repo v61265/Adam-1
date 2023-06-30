@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import client from '../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchSpecials, fetchWeeklys } from '../../apollo/query/magazines'
-import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
 
 import MagazinePlatforms from '../../components/magazine/magazine-platforms'
 import MagazineSpecials from '../../components/magazine/magazine-specials'
@@ -47,7 +47,6 @@ export default function Magazine({
   specials = [],
   weeklys = [],
   sectionsData = [],
-  topicsData = [],
 }) {
   // Sort the weekly magazines
   const sortedMagazines = weeklys?.length
@@ -73,8 +72,8 @@ export default function Magazine({
     <Layout
       head={{ title: `動態雜誌` }}
       header={{
-        type: 'default',
-        data: { sectionsData: sectionsData, topicsData },
+        type: 'premium',
+        data: { sectionsData: sectionsData },
       }}
       footer={{ type: 'default' }}
     >
@@ -169,15 +168,10 @@ export async function getServerSideProps({ req }) {
 
   // Fetch header data
   let sectionsData = []
-  let topicsData = []
+
   try {
-    const headerData = await fetchHeaderDataInDefaultPageLayout()
-    if (Array.isArray(headerData.sectionsData)) {
-      sectionsData = headerData.sectionsData
-    }
-    if (Array.isArray(headerData.topicsData)) {
-      topicsData = headerData.topicsData
-    }
+    const headerData = await fetchHeaderDataInPremiumPageLayout()
+    sectionsData = headerData.sectionsData
   } catch (err) {
     const annotatingAxiosError = errors.helpers.annotateAxiosError(err)
     console.error(
@@ -197,7 +191,6 @@ export async function getServerSideProps({ req }) {
       specials,
       weeklys,
       sectionsData,
-      topicsData,
     },
   }
 }
