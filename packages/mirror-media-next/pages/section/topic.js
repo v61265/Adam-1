@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 
 import SectionTopics from '../../components/section/topic/section-topics'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import { fetchTopicList } from '../../utils/api/section-topic'
 import { Z_INDEX } from '../../constants/index'
@@ -122,7 +123,12 @@ export default function Topics({ topics, topicsCount, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req, query, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const mockError = query.error === '500'
 
   const traceHeader = req.headers?.['x-cloud-trace-context']
