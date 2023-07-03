@@ -3,11 +3,12 @@ import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import {
   simplifyYoutubeSearchedVideo,
   simplifyYoutubeVideo,
 } from '../../utils/youtube'
+import { setPageCache } from '../../utils/cache-setting'
 import YoutubeIframe from '../../components/shared/youtube-iframe'
 import YoutubeArticle from '../../components/video/youtube-article'
 import VideoList from '../../components/video/video-list'
@@ -164,7 +165,12 @@ export default function Video({ video, latestVideos, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 900 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const videoId = Array.isArray(query.id) ? query.id[0] : query.id
   const mockError = query.error === '500'
 
