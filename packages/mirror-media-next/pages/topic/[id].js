@@ -1,9 +1,10 @@
 import errors from '@twreporter/errors'
 
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import TopicList from '../../components/topic/list/topic-list'
 import TopicGroup from '../../components/topic/group/topic-group'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import { parseUrl } from '../../utils/topic'
 import {
@@ -84,7 +85,12 @@ export default function Topic({ topic, slideshowImages, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 300 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const topicId = Array.isArray(query.id) ? query.id[0] : query.id
   const mockError = query.error === '500'
 
