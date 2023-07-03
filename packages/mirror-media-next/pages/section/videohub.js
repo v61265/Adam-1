@@ -1,9 +1,10 @@
 import errors from '@twreporter/errors'
 import dynamic from 'next/dynamic'
 
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api/index.js'
+import { setPageCache } from '../../utils/cache-setting'
 import styled from 'styled-components'
 import VideoList from '../../components/section/videohub/video-list.js'
 import SubscribeChannels from '../../components/section/videohub/subscribe-channels.js'
@@ -169,7 +170,12 @@ export default function SectionVideohub({
   )
 }
 
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 900 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const mockError = query.error === '500'
 
   const traceHeader = req.headers?.['x-cloud-trace-context']
