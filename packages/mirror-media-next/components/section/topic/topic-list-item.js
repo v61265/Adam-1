@@ -74,7 +74,7 @@ const ItemBrief = styled.div`
  */
 export default function TopicListItem({ item }) {
   return (
-    <ItemWrapper href={`/topic/${item.id}`} target="_blank">
+    <ItemWrapper href={`/topic/${item.slug}`} target="_blank">
       <ImageContainer>
         <Image
           images={item.heroImage?.resized}

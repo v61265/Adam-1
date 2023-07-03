@@ -10,6 +10,7 @@ import { tag } from './tag'
  *
  * @typedef {Object} Topic
  * @property {string} id
+ * @property {string} slug
  * @property {string} name
  * @property {import('../../type/draft-js').Draft} brief
  * @property {import('./photo').Photo} heroImage
@@ -32,6 +33,7 @@ export const simpleTopic = gql`
   ${heroImage}
   fragment simpleTopic on Topic {
     id
+    slug
     name
     brief
     heroImage {
