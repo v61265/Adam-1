@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 
@@ -19,6 +20,7 @@ const Section = styled.div`
   }
 `
 const Page = styled.div`
+  /* display: none; */
   background-color: #ffffff;
   & ${Section}:nth-child(even) {
     background-color: #f2f2f2;
@@ -43,11 +45,74 @@ const Title = styled.h2`
   }
 `
 
-export default function Magazine({
-  specials = [],
-  weeklys = [],
-  sectionsData = [],
-}) {
+export default function Magazine({ sectionsData = [] }) {
+  const [specials, setSpecials] = useState([])
+  const [weeklys, setWeeklys] = useState([])
+
+  let isMember = true
+
+  useEffect(() => {
+    const fetchMagazines = async () => {
+      if (isMember) {
+        try {
+          const responses = await Promise.allSettled([
+            client.query({
+              query: fetchSpecials,
+            }),
+            client.query({
+              query: fetchWeeklys,
+            }),
+          ])
+
+          const handledResponses = responses.map((response) => {
+            if (response.status === 'fulfilled') {
+              return response.value.data
+            } else if (response.status === 'rejected') {
+              const { graphQLErrors, clientErrors, networkError } =
+                response.reason
+              const annotatingError = errors.helpers.wrap(
+                response.reason,
+                'UnhandledError',
+                'Error occurs while getting magazine page data'
+              )
+
+              console.log(
+                JSON.stringify({
+                  severity: 'ERROR',
+                  message: errors.helpers.printAll(
+                    annotatingError,
+                    {
+                      withStack: true,
+                      withPayload: true,
+                    },
+                    0,
+                    0
+                  ),
+                  debugPayload: {
+                    graphQLErrors,
+                    clientErrors,
+                    networkError,
+                  },
+                })
+              )
+              return
+            }
+          })
+
+          const fetchedSpecials = handledResponses[0]?.magazines || []
+          const fetchedWeeklys = handledResponses[1]?.magazines || []
+
+          setSpecials(fetchedSpecials)
+          setWeeklys(fetchedWeeklys)
+        } catch (error) {
+          console.error(error)
+        }
+      }
+    }
+
+    fetchMagazines()
+  }, [isMember])
+
   // Sort the weekly magazines
   const sortedMagazines = weeklys?.length
     ? weeklys.sort((a, b) => {
@@ -119,53 +184,6 @@ export async function getServerSideProps({ req }) {
     ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
   }
 
-  const responses = await Promise.allSettled([
-    client.query({
-      query: fetchSpecials,
-    }),
-    client.query({
-      query: fetchWeeklys,
-    }),
-  ])
-
-  const handledResponses = responses.map((response) => {
-    if (response.status === 'fulfilled') {
-      return response.value.data
-    } else if (response.status === 'rejected') {
-      const { graphQLErrors, clientErrors, networkError } = response.reason
-      const annotatingError = errors.helpers.wrap(
-        response.reason,
-        'UnhandledError',
-        'Error occurs while getting magazine page data'
-      )
-
-      console.log(
-        JSON.stringify({
-          severity: 'ERROR',
-          message: errors.helpers.printAll(
-            annotatingError,
-            {
-              withStack: true,
-              withPayload: true,
-            },
-            0,
-            0
-          ),
-          debugPayload: {
-            graphQLErrors,
-            clientErrors,
-            networkError,
-          },
-          ...globalLogFields,
-        })
-      )
-      return
-    }
-  })
-
-  const specials = handledResponses[0]?.magazines || []
-  const weeklys = handledResponses[1]?.magazines || []
-
   // Fetch header data
   let sectionsData = []
 
@@ -188,8 +206,6 @@ export async function getServerSideProps({ req }) {
 
   return {
     props: {
-      specials,
-      weeklys,
       sectionsData,
     },
   }
