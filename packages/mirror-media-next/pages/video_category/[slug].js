@@ -1,12 +1,13 @@
 import errors from '@twreporter/errors'
 import dynamic from 'next/dynamic'
 
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import CategoryVideos from '../../components/video_category/category-videos.js'
 import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants/index.js'
 import styled from 'styled-components'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api/index.js'
 import { simplifyYoutubePlaylistVideo } from '../../utils/youtube.js'
+import { setPageCache } from '../../utils/cache-setting.js'
 import LeadingVideo from '../../components/shared/leading-video.js'
 import Layout from '../../components/shared/layout.js'
 import {
@@ -128,7 +129,12 @@ export default function VideoCategory({
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 900 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const videoCategorySlug = Array.isArray(query.slug)
     ? query.slug[0]
     : query.slug
