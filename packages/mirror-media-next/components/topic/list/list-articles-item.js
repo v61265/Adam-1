@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import Image from '@readr-media/react-image'
 
+/** @typedef {import('../../../type/theme').Theme} Theme */
+
 const ItemWrapper = styled.a`
   display: block;
   position: relative;
@@ -27,10 +29,11 @@ const ItemSection = styled.div`
   position: absolute;
   left: 0;
   bottom: 0;
-  padding: 8px;
+  padding: 14px 31px 12px;
+  line-height: 1.4;
   color: white;
-  font-size: 16px;
-  font-weight: 300;
+  font-size: 18px;
+  font-weight: 600;
   border-radius: 16px;
   background-color: ${
     /**
@@ -44,8 +47,6 @@ const ItemSection = styled.div`
         : theme.color.brandColor.lightBlue
   };
   ${({ theme }) => theme.breakpoint.md} {
-    font-size: 18px;
-    font-weight: 600;
     padding: 4px 20px;
   }
 `
