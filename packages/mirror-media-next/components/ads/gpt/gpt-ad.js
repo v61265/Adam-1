@@ -103,7 +103,12 @@ export default function GPTAd({
   }, [adKey, pageKey, adUnit])
 
   useEffect(() => {
-    if (adDivId && adWidth) {
+    /**
+     * Because some browser extension would block googletag service, so is need to check is googletag and pubAd services existed.
+     * @see https://developers.google.com/publisher-tag/common_implementation_mistakes
+     */
+    const isGptAdServiceExist = window.googletag && googletag.pubadsReady
+    if (adDivId && adWidth && isGptAdServiceExist) {
       /**
        * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
        */
