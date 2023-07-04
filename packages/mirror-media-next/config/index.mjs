@@ -7,7 +7,6 @@ const ENV = process.env.NEXT_PUBLIC_ENV || 'local'
 // The following variables are given values according to different `ENV`
 
 let SITE_URL = ''
-
 let API_TIMEOUT = 5000
 let API_PROTOCOL = 'http'
 let API_HOST = ''

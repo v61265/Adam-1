@@ -19,7 +19,7 @@ import {
   fetchHeaderDataInDefaultPageLayoutNoAllHeaderData,
 } from '../utils/api'
 import { getSectionNameGql, getSectionTitleGql, getArticleHref } from '../utils'
-
+import { setPageCache } from '../utils/cache-setting'
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
 import Layout from '../components/shared/layout'
@@ -178,9 +178,12 @@ export default function Home({
  * @type {import('next').GetServerSideProps}
  */
 export async function getServerSideProps({ res, req, query }) {
-  if (ENV === 'dev' || ENV === 'staging' || ENV === 'prod') {
-    res.setHeader('Cache-Control', 'public, max-age=180')
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 180 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
   }
+
   let post_external_url = URL_STATIC_POST_EXTERNAL
   let flash_news_url = URL_STATIC_POST_FLASH_NEWS
   let queryHeaderDataFunction = fetchHeaderDataInDefaultPageLayout

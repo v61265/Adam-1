@@ -3,8 +3,10 @@ import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 
 import AuthorArticles from '../../components/author/author-articles'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
+
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
 import {
@@ -12,7 +14,6 @@ import {
   fetchPostsByAuthorId,
 } from '../../utils/api/author'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
-
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
 })
@@ -119,7 +120,13 @@ export default function Author({ postsCount, posts, author, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
+
   const authorId = Array.isArray(query.id) ? query.id[0] : query.id
   const mockError = query.error === '500'
 

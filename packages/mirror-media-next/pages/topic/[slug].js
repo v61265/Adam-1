@@ -1,9 +1,10 @@
 import errors from '@twreporter/errors'
 
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import TopicList from '../../components/topic/list/topic-list'
 import TopicGroup from '../../components/topic/group/topic-group'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import { parseUrl } from '../../utils/topic'
 import {
@@ -11,7 +12,7 @@ import {
   getResizedUrl,
   sortArrayWithOtherArrayId,
 } from '../../utils/index'
-import { fetchTopicByTopicId } from '../../utils/api/topic'
+import { fetchTopicByTopicSlug } from '../../utils/api/topic'
 
 const RENDER_PAGE_SIZE = 12
 
@@ -84,8 +85,13 @@ export default function Topic({ topic, slideshowImages, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
-  const topicId = Array.isArray(query.id) ? query.id[0] : query.id
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 300 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
+  const topicSlug = Array.isArray(query.slug) ? query.slug[0] : query.slug
   const mockError = query.error === '500'
 
   const traceHeader = req.headers?.['x-cloud-trace-context']
@@ -99,7 +105,7 @@ export async function getServerSideProps({ query, req }) {
 
   const responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(),
-    fetchTopicByTopicId(topicId, RENDER_PAGE_SIZE, mockError ? NaN : 0),
+    fetchTopicByTopicSlug(topicSlug, RENDER_PAGE_SIZE, mockError ? NaN : 0),
   ])
 
   const handledResponses = responses.map((response, index) => {
@@ -158,19 +164,19 @@ export async function getServerSideProps({ query, req }) {
     : []
 
   // handle fetch topic data
-  if (handledResponses[1]?.topic === null) {
+  if (handledResponses[1]?.topics?.length === 0) {
     // fetchTopic return empty array -> wrong authorId -> 404
     console.log(
       JSON.stringify({
         severity: 'WARNING',
-        message: `fetch topic with topic id ${topicId} return null, redirect to 404`,
+        message: `fetch topic with topic slug ${topicSlug} return null, redirect to 404`,
         globalLogFields,
       })
     )
     return { notFound: true }
   }
   /** @type {Topic} */
-  const topic = handledResponses[1]?.topic || {}
+  const topic = handledResponses[1]?.topics?.[0] || {}
   /** @type {SlideshowImage[]} */
   let slideshowImages = []
   if (topic.leading === 'slideshow' && topic.slideshow_images) {
@@ -193,8 +199,8 @@ export async function getServerSideProps({ query, req }) {
     while (posts.length < topic.postsCount) {
       let moreTopicPosts
       try {
-        const topicData = await fetchTopicByTopicId(
-          topicId,
+        const topicData = await fetchTopicByTopicSlug(
+          topicSlug,
           RENDER_PAGE_SIZE * 2,
           posts.length
         )
@@ -203,7 +209,7 @@ export async function getServerSideProps({ query, req }) {
         const annotatingError = errors.helpers.wrap(
           error,
           'GQLError',
-          `Fetch more topic post with topicId ${topicId} for group type in getServerSideProps failed`
+          `Fetch more topic post with topicId ${topicSlug} for group type in getServerSideProps failed`
         )
         const { graphQLErrors, clientErrors, networkError } = error
 

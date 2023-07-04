@@ -9,6 +9,7 @@ import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 
 import { useCallback, useState } from 'react'
+import { parseUrl } from '../../../utils/topic'
 
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
@@ -46,13 +47,27 @@ const Topic = styled.div`
   padding-top: 66.66%;
   background-position: 50%;
   background-size: cover;
+  background-image: ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.backgroundUrl
+     */
+    ({ backgroundUrl }) =>
+      backgroundUrl ? `url(${backgroundUrl}) !important` : 'unset'
+  };
 
-  ${({ theme }) => theme.breakpoint.md} {
-  }
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.backgroundUrl
+     */
+    ({ theme }) => theme.breakpoint.xl
+  } {
     height: 600px;
     padding-top: 0;
-  }
+  }}
 `
 const TopicTitle = styled.div`
   background-repeat: no-repeat;
@@ -175,6 +190,9 @@ const CustomSwiperNext = styled.div`
 export default function TopicList({ topic, renderPageSize, slideshowImages }) {
   const [swiperRef, setSwiperRef] = useState(null)
   const { postsCount, posts, id, style } = topic
+  const backgroundUrl = parseUrl(topic.style)
+    ? ''
+    : topic.og_image?.resized?.original || topic.heroImage?.resized?.original
 
   const handlePrevious = useCallback(() => {
     swiperRef?.slidePrev()
@@ -187,7 +205,7 @@ export default function TopicList({ topic, renderPageSize, slideshowImages }) {
   return (
     <>
       <Container customCss={style}>
-        <Topic className="topic">
+        <Topic className="topic" backgroundUrl={backgroundUrl}>
           <TopicTitle className="topic-title" />
           <TopicLeading className="leading">
             {!!slideshowImages.length && (

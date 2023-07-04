@@ -10,8 +10,13 @@ import {
   getCategoryOfWineSlug,
 } from '../../../utils'
 import { handleStoryPageRedirect } from '../../../utils/story'
+import { setPageCache } from '../../../utils/cache-setting'
 import { fetchPostBySlug } from '../../../apollo/query/posts'
-import { GCP_PROJECT_ID, GA_MEASUREMENT_ID } from '../../../config/index.mjs'
+import {
+  GCP_PROJECT_ID,
+  ENV,
+  GA_MEASUREMENT_ID,
+} from '../../../config/index.mjs'
 import styled from 'styled-components'
 import AdultOnlyWarning from '../../../components/story/shared/adult-only-warning'
 import WineWarning from '../../../components/story/shared/wine-warning'
@@ -111,7 +116,12 @@ function StoryAmpPage({ postData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ params, req }) {
+export async function getServerSideProps({ params, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 300 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const { slug } = params
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}

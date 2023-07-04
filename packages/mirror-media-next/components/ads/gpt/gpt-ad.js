@@ -103,35 +103,59 @@ export default function GPTAd({
   }, [adKey, pageKey, adUnit])
 
   useEffect(() => {
-    if (adDivId && adWidth) {
+    /**
+     * Because some browser extension would block googletag service, so is need to check is googletag and pubAd services existed.
+     * @see https://developers.google.com/publisher-tag/common_implementation_mistakes
+     */
+    const isGptAdServiceExist = window.googletag && googletag.pubadsReady
+    if (adDivId && adWidth && isGptAdServiceExist) {
       /**
        * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
        */
       let adSlot
+      const pubads = window.googletag.pubads()
+
+      const handleOnSlotRequested = (event) => {
+        if (event.slot === adSlot) {
+          onSlotRequested(event)
+        }
+      }
+      const handleOnSlotRenderEnded = (event) => {
+        if (event.slot === adSlot) {
+          onSlotRenderEnded(event)
+        }
+      }
       window.googletag.cmd.push(() => {
         adSlot = window.googletag
           .defineSlot(adUnitPath, adSize, adDivId)
           .addService(window.googletag.pubads())
-      })
-
-      window.googletag.cmd.push(() => {
         window.googletag.display(adDivId)
-      })
 
-      // all events, check https://developers.google.com/publisher-tag/reference?hl=en#googletag.events.eventtypemap for all events
-      window.googletag.cmd.push(() => {
-        const pubads = window.googletag.pubads()
+        // all events, check https://developers.google.com/publisher-tag/reference?hl=en#googletag.events.eventtypemap for all events
         if (onSlotRequested) {
-          pubads.addEventListener('slotRequested', onSlotRequested)
+          /**
+           * add event listener  to respond only to certain adSlot
+           * @see https://developers.google.com/publisher-tag/reference?hl=zh-tw#googletag.Service_addEventListener
+           */
+          pubads.addEventListener('slotRequested', handleOnSlotRequested)
         }
         if (onSlotRenderEnded) {
-          pubads.addEventListener('slotRenderEnded', onSlotRenderEnded)
+          pubads.addEventListener('slotRenderEnded', handleOnSlotRenderEnded)
         }
       })
 
       return () => {
         window.googletag.cmd.push(() => {
           window.googletag.destroySlots([adSlot])
+          if (onSlotRenderEnded) {
+            pubads.removeEventListener('slotRequested', handleOnSlotRequested)
+          }
+          if (onSlotRenderEnded) {
+            pubads.removeEventListener(
+              'slotRenderEnded',
+              handleOnSlotRenderEnded
+            )
+          }
         })
       }
     }
