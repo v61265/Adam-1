@@ -3,6 +3,7 @@ import TopicGroupArticles from './topic-group-articles'
 import dynamic from 'next/dynamic'
 
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
+import { parseUrl } from '../../../utils/topic'
 const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
   ssr: false,
 })
@@ -43,7 +44,24 @@ const Topic = styled.div`
   background-position: 50%;
   background-size: cover;
 
-  ${({ theme }) => theme.breakpoint.xl} {
+  background-image: ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.backgroundUrl
+     */
+    ({ backgroundUrl }) =>
+      backgroundUrl ? `url(${backgroundUrl}) !important` : 'unset'
+  };
+
+  ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.backgroundUrl
+     */
+    ({ theme }) => theme.breakpoint.xl
+  } {
     height: 600px;
     padding-top: 0;
   }
@@ -85,17 +103,7 @@ const StyledGPTAd = styled(GPTAd)`
  * }} Photo
  * @typedef {import('./topic-group-articles').Tag} Tag
  * @typedef {import('./topic-group-articles').Article} Article
- * @typedef {import('../../../apollo/fragments/topic').Topic & {
- *  id: string;
- *  name: string;
- *  brief: import('../../../type/draft-js').Draft;
- *  heroImage: Photo;
- *  leading: string;
- *  type: string;
- *  style: string;
- *  posts: Article[];
- *  tags: Tag[]
- * }} Topic
+ * @typedef {import('../../../apollo/fragments/topic').Topic } Topic
  */
 
 /**
@@ -106,11 +114,14 @@ const StyledGPTAd = styled(GPTAd)`
 export default function TopicGroup({ topic }) {
   const { style, posts, tags, dfp } = topic
   const shouldShowAd = useDisplayAd()
+  const backgroundUrl = parseUrl(topic.style)
+    ? ''
+    : topic.og_image?.resized?.original || topic.heroImage?.resized?.original
 
   return (
     <>
       <Container customCss={style} className="topicContainer">
-        <Topic className="topic" />
+        <Topic className="topic" backgroundUrl={backgroundUrl} />
         <TopicGroups className="groupList">
           {tags.map((tag) => (
             <TopicGroupArticles

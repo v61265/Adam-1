@@ -111,17 +111,7 @@ const ItemBrief = styled.p`
  * }} HeroImage
  *
  * @typedef {import('../../../apollo/fragments/tag').Tag} Tag
- * @typedef {import('../../../apollo/fragments/post').Post & {
- *  id: string,
- *  slug: string,
- *  title: string,
- *  publishedDate: string,
- *  brief: import('../../../type/draft-js').Draft,
- *  categroies: Category[],
- *  sections: Section[],
- *  heroImage: HeroImage,
- *  tags: Tag[]
- * }} Article
+ * @typedef {import('../../../apollo/fragments/post').Post} Article
  */
 
 /**
