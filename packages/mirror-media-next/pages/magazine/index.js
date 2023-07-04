@@ -14,6 +14,7 @@ import MagazineSpecials from '../../components/magazine/magazine-specials'
 import MagazineWeeklys from '../../components/magazine/magazine-weeklys'
 import MagazineFeatures from '../../components/magazine/magazine-featured-weeklys'
 import Layout from '../../components/shared/layout'
+import JoinPremiumMember from './join-premium-member'
 
 const Section = styled.div`
   padding: 48px 0;
@@ -22,7 +23,6 @@ const Section = styled.div`
   }
 `
 const Page = styled.div`
-  min-height: 70vh;
   background-color: #ffffff;
   & ${Section}:nth-child(even) {
     background-color: #f2f2f2;
@@ -56,20 +56,17 @@ export default function Magazine({ sectionsData = [] }) {
   const { isLoggedIn, memberInfo } = useMembership()
   const { memberType } = memberInfo
 
-  // const isLoggedIn = true
-  // const memberType = 'premium-member'
-
   const isPremiumMember =
     memberType.includes('premium') || memberType.includes('staff')
 
-  // If the user is not logged in, redirect to /login
+  // Redirect to '/login' if the user is not logged in
   useEffect(() => {
     if (!isLoggedIn) {
       router.push('/login')
     }
   }, [isLoggedIn, router])
 
-  // Fetch MAgazines Data only for Premium Member
+  // Fetch Magazines Data only for Premium Member
   useEffect(() => {
     const fetchMagazines = async () => {
       if (isPremiumMember) {
@@ -134,7 +131,7 @@ export default function Magazine({ sectionsData = [] }) {
 
   // Sort the weekly magazines
   const sortedMagazines = weeklys?.length
-    ? weeklys.sort((a, b) => {
+    ? weeklys.slice().sort((a, b) => {
         const [aIssueNumber, aVersion] = a.slug.match(/(\d+)期-(\w)本/).slice(1)
         const [bIssueNumber, bVersion] = b.slug.match(/(\d+)期-(\w)本/).slice(1)
 
@@ -152,6 +149,7 @@ export default function Magazine({ sectionsData = [] }) {
       })
     : []
 
+  // Render different content based on the user's login status
   if (!isLoggedIn) {
     return null // Render nothing until the redirect happens
   }
@@ -192,9 +190,7 @@ export default function Magazine({ sectionsData = [] }) {
           </Section>
         </Page>
       ) : (
-        <Page>
-          <p>請加入會員</p>
-        </Page>
+        <JoinPremiumMember />
       )}
     </Layout>
   )
