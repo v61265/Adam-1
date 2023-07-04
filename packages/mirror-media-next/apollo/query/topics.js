@@ -19,13 +19,13 @@ const fetchTopics = gql`
 const fetchTopic = gql`
   ${topic}
   query (
-    $topicFilter: TopicWhereUniqueInput!
+    $topicFilter: TopicWhereInput!
     $postsFilter: PostWhereInput!
     $postsOrderBy: [PostOrderByInput!]!
     $postsTake: Int
     $postsSkip: Int!
   ) {
-    topic(where: $topicFilter) {
+    topics(where: $topicFilter) {
       ...topic
     }
   }

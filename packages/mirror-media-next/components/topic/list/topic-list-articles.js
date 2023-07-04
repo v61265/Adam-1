@@ -5,7 +5,7 @@ import Image from 'next/legacy/image'
 // @ts-ignore
 import LoadingPage from '../../../public/images/loading_page.gif'
 import ListArticles from './list-articles'
-import { fetchTopicByTopicId } from '../../../utils/api/topic'
+import { fetchTopicByTopicSlug } from '../../../utils/api/topic'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -47,7 +47,7 @@ export default function TopicListArticles({
     try {
       const take = fetchPageSize
       const skip = (page - 1) * take
-      const response = await fetchTopicByTopicId(topicId, take, skip)
+      const response = await fetchTopicByTopicSlug(topicId, take, skip)
       return response.data.topic.posts
     } catch (error) {
       // [to-do]: use beacon api to log error on gcs
