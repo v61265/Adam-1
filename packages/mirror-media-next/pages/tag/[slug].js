@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 
 import TagArticles from '../../components/tag/tag-articles'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
 import { fetchPostsByTagSlug, fetchTagByTagSlug } from '../../utils/api/tag'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
-
+import { setPageCache } from '../../utils/cache-setting'
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
 })
@@ -145,7 +145,12 @@ export default function Tag({ postsCount, posts, tag, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const tagSlug = Array.isArray(query.slug) ? query.slug[0] : query.slug
   const mockError = query.error === '500'
 

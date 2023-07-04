@@ -6,7 +6,7 @@ import client from '../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchSpecials, fetchWeeklys } from '../../apollo/query/magazines'
 import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
-
+import { setPageCache } from '../../utils/cache-setting'
 import MagazinePlatforms from '../../components/magazine/magazine-platforms'
 import MagazineSpecials from '../../components/magazine/magazine-specials'
 import MagazineWeeklys from '../../components/magazine/magazine-weeklys'
@@ -174,7 +174,9 @@ export default function Magazine({ sectionsData = [] }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
+  setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {

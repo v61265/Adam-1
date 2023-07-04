@@ -7,8 +7,10 @@ import {
   GCP_PROJECT_ID,
   API_TIMEOUT,
   URL_STATIC_EXTERNALS_WARMLIFE,
+  ENV,
 } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import axios from 'axios'
 import { Z_INDEX, SECTION_IDS } from '../../constants/index'
@@ -128,7 +130,12 @@ export default function WarmLife({ warmLifeData, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req, query, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const mockError = query.error === '500'
 
   const traceHeader = req.headers?.['x-cloud-trace-context']

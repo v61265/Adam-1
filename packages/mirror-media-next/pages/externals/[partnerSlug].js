@@ -4,8 +4,9 @@ import dynamic from 'next/dynamic'
 
 import client from '../../apollo/apollo-client'
 import ExternalArticles from '../../components/externals/partner-articles'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 
 import {
@@ -154,7 +155,12 @@ export default function ExternalPartner({
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ params, req }) {
+export async function getServerSideProps({ params, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const { partnerSlug } = params
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}

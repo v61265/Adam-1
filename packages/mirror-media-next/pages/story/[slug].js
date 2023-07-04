@@ -4,7 +4,7 @@ import client from '../../apollo/apollo-client'
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import WineWarning from '../../components/story/shared/wine-warning'
 import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 import { useMembership } from '../../context/membership'
@@ -20,6 +20,8 @@ import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
 import { sendGAEvent } from '../../utils/gtag'
+import { setPageCache } from '../../utils/cache-setting'
+
 import FullScreenAds from '../../components/ads/full-screen-ads'
 const { hasContentInRawContentBlock } = MirrorMedia
 
@@ -223,7 +225,13 @@ export default function Story({ postData, headerData, storyLayoutType }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ params, req }) {
+export async function getServerSideProps({ params, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 300 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
+
   const { slug } = params
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
