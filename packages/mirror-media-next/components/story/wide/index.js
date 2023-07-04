@@ -117,6 +117,7 @@ const DonateSubscribeWrapper = styled.div`
  */
 export default function StoryWideStyle({ postData, postContent }) {
   const {
+    id = '',
     title = '',
     heroImage = null,
     heroVideo = null,
@@ -217,7 +218,7 @@ export default function StoryWideStyle({ postData, postContent }) {
             </section>
             <MoreInfoAndTag tags={tags} />
 
-            {shouldShowArticleMask && <ArticleMask />}
+            {shouldShowArticleMask && <ArticleMask postId={id} />}
             <SupportMirrorMediaBanner />
           </ContentWrapper>
           <Aside
