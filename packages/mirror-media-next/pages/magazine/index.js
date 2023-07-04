@@ -54,7 +54,7 @@ export default function Magazine({ sectionsData = [] }) {
   const [specials, setSpecials] = useState([])
   const [weeklys, setWeeklys] = useState([])
 
-  const { isLoggedIn, memberInfo } = useMembership()
+  const { isLoggedIn, memberInfo, isLogInProcessFinished } = useMembership()
   const { memberType } = memberInfo
 
   const isPremiumMember =
@@ -62,10 +62,10 @@ export default function Magazine({ sectionsData = [] }) {
 
   // Redirect to '/login' if the user is not logged in
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (isLogInProcessFinished && !isLoggedIn) {
       router.push('/login')
     }
-  }, [isLoggedIn, router])
+  }, [isLogInProcessFinished, isLoggedIn, router])
 
   // Fetch Magazines Data only for Premium Member
   useEffect(() => {
