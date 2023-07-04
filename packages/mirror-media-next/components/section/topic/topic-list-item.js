@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import Image from '@readr-media/react-image'
+import { parseUrl } from '../../../utils/topic'
 
 const ItemWrapper = styled.a`
   display: block;
@@ -73,15 +74,20 @@ const ItemBrief = styled.div`
  * @returns {React.ReactElement}
  */
 export default function TopicListItem({ item }) {
+  const images =
+    item.og_image?.resized ||
+    (parseUrl(item.style) ? { original: parseUrl(item.style) } : null) ||
+    item.heroImage?.resized
+  console.log('images', images)
   return (
     <ItemWrapper href={`/topic/${item.slug}`} target="_blank">
       <ImageContainer>
         <Image
-          images={item.heroImage?.resized}
+          images={images}
           alt={item.name}
           loadingImage="/images/loading.gif"
           defaultImage="/images/default-og-img.png"
-          rwd={{ tablet: '320px', desktop: '220px' }}
+          rwd={{ tablet: '320px', desktop: '500px' }}
         />
       </ImageContainer>
       <ItemDetail>

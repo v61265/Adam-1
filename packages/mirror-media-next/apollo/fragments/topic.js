@@ -36,9 +36,13 @@ export const simpleTopic = gql`
     slug
     name
     brief
+    og_image {
+      ...heroImage
+    }
     heroImage {
       ...heroImage
     }
+    style
   }
 `
 
