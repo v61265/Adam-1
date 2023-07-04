@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
@@ -6,6 +7,7 @@ import client from '../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchSpecials, fetchWeeklys } from '../../apollo/query/magazines'
 import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
+import { useMembership } from '../../context/membership'
 
 import MagazinePlatforms from '../../components/magazine/magazine-platforms'
 import MagazineSpecials from '../../components/magazine/magazine-specials'
@@ -20,7 +22,7 @@ const Section = styled.div`
   }
 `
 const Page = styled.div`
-  /* display: none; */
+  min-height: 70vh;
   background-color: #ffffff;
   & ${Section}:nth-child(even) {
     background-color: #f2f2f2;
@@ -46,14 +48,31 @@ const Title = styled.h2`
 `
 
 export default function Magazine({ sectionsData = [] }) {
+  const router = useRouter()
+
   const [specials, setSpecials] = useState([])
   const [weeklys, setWeeklys] = useState([])
 
-  let isMember = true
+  const { isLoggedIn, memberInfo } = useMembership()
+  const { memberType } = memberInfo
 
+  // const isLoggedIn = true
+  // const memberType = 'premium-member'
+
+  const isPremiumMember =
+    memberType.includes('premium') || memberType.includes('staff')
+
+  // If the user is not logged in, redirect to /login
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push('/login')
+    }
+  }, [isLoggedIn, router])
+
+  // Fetch MAgazines Data only for Premium Member
   useEffect(() => {
     const fetchMagazines = async () => {
-      if (isMember) {
+      if (isPremiumMember) {
         try {
           const responses = await Promise.allSettled([
             client.query({
@@ -111,7 +130,7 @@ export default function Magazine({ sectionsData = [] }) {
     }
 
     fetchMagazines()
-  }, [isMember])
+  }, [isPremiumMember])
 
   // Sort the weekly magazines
   const sortedMagazines = weeklys?.length
@@ -133,6 +152,10 @@ export default function Magazine({ sectionsData = [] }) {
       })
     : []
 
+  if (!isLoggedIn) {
+    return null // Render nothing until the redirect happens
+  }
+
   return (
     <Layout
       head={{ title: `動態雜誌` }}
@@ -142,31 +165,37 @@ export default function Magazine({ sectionsData = [] }) {
       }}
       footer={{ type: 'default' }}
     >
-      <Page>
-        <Section>
-          <Title>
-            當期<span>動態雜誌</span>
-          </Title>
-          <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
-        </Section>
+      {isPremiumMember ? (
+        <Page>
+          <Section>
+            <Title>
+              當期<span>動態雜誌</span>
+            </Title>
+            <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
+          </Section>
 
-        <Section>
-          <Title>
-            近期<span>動態雜誌</span>
-          </Title>
-          <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
-        </Section>
+          <Section>
+            <Title>
+              近期<span>動態雜誌</span>
+            </Title>
+            <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
+          </Section>
 
-        <Section>
-          <Title>購買線上雜誌</Title>
-          <MagazinePlatforms />
-        </Section>
+          <Section>
+            <Title>購買線上雜誌</Title>
+            <MagazinePlatforms />
+          </Section>
 
-        <Section>
-          <Title>特刊</Title>
-          <MagazineSpecials specials={specials} />
-        </Section>
-      </Page>
+          <Section>
+            <Title>特刊</Title>
+            <MagazineSpecials specials={specials} />
+          </Section>
+        </Page>
+      ) : (
+        <Page>
+          <p>請加入會員</p>
+        </Page>
+      )}
     </Layout>
   )
 }
