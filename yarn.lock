@@ -1682,12 +1682,12 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@mirrormedia/lilith-draft-renderer@^1.2.0-alpha.31":
-  version "1.2.0-alpha.31"
-  resolved "https://registry.yarnpkg.com/@mirrormedia/lilith-draft-renderer/-/lilith-draft-renderer-1.2.0-alpha.31.tgz#89f4daf844630e7b66bd291cc65d4b646a6c70ad"
-  integrity sha512-dqPLgpTB6W2NP68mksbokbutfOB2s02/SzkpivFtjcV6YCmlWoXVV1DP3IF0nogF0YJU3E2juWeH9W2OGsLdiA==
+"@mirrormedia/lilith-draft-renderer@^1.2.0-alpha.32":
+  version "1.2.0-alpha.32"
+  resolved "https://registry.yarnpkg.com/@mirrormedia/lilith-draft-renderer/-/lilith-draft-renderer-1.2.0-alpha.32.tgz#7ca5960f0386c6d9d2b2e7911ef1e010099c8345"
+  integrity sha512-ESBN966aZgiUG3hMp4NCeaA9eeYV2mLOb3GvZ5GHoh/okisWsNwckh0qG3EWrTpnfe71NhMUMce5KWfyd4YUSw==
   dependencies:
-    "@readr-media/react-image" "^1.5.1"
+    "@readr-media/react-image" "1.6.0"
     body-scroll-lock "3.1.5"
     draft-js "^0.11.7"
     node-html-parser "^6.1.5"
@@ -1857,6 +1857,11 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
+
+"@readr-media/react-image@1.6.0", "@readr-media/react-image@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@readr-media/react-image/-/react-image-1.6.0.tgz#1bff81cdaa8b14f255c22b2504df1d09fc783223"
+  integrity sha512-k4FOxVlAdvsFY5zP7nczs11LrJ3mA2T6Y7rwoTjpA9GMhlf3wtLWD84/XwcsGXNvHg0gbxQtmOcNvKE1LsZxwg==
 
 "@readr-media/react-image@^1.5.1":
   version "1.5.1"
