@@ -1,6 +1,6 @@
 import errors from '@twreporter/errors'
 import client from '../../../apollo/apollo-client'
-import Head from 'next/head'
+import Layout from '../../../components/shared/layout'
 import AmpHeader from '../../../components/amp/amp-header'
 import AmpFooter from '../../../components/amp/amp-footer'
 import AmpRelated from '../../../components/amp/amp-related'
@@ -8,7 +8,10 @@ import AmpMain from '../../../components/amp/amp-main'
 import {
   sortArrayWithOtherArrayId,
   getCategoryOfWineSlug,
+  convertDraftToText,
+  getResizedUrl,
 } from '../../../utils'
+
 import { handleStoryPageRedirect } from '../../../utils/story'
 import { setPageCache } from '../../../utils/cache-setting'
 import { fetchPostBySlug } from '../../../apollo/query/posts'
@@ -65,52 +68,63 @@ function StoryAmpPage({ postData }) {
       ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
       : relateds
   return (
-    <div>
-      <Head>
-        <title>{title}</title>
-      </Head>
-      {/* @ts-ignore */}
-      <amp-analytics
-        type="googleanalytics"
-        config="https://amp.analytics-debugger.com/ga4.json"
-        data-credentials="include"
-      >
-        <script
-          type="application/json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              vars: {
-                GA4_MEASUREMENT_ID: GA_MEASUREMENT_ID,
-                GA4_ENDPOINT_HOSTNAME: 'www.google-analytics.com',
-                GOOGLE_CONSENT_ENABLED: false,
-                WEBVITALS_TRACKING: false,
-                PERFORMANCE_TIMING_TRACKING: false,
-                DEFAULT_PAGEVIEW_ENABLED: true,
-                SEND_DOUBLECLICK_BEACON: false,
-                DISABLE_REGIONAL_DATA_COLLECTION: false,
-                ENHANCED_MEASUREMENT_SCROLL: false,
-              },
-            }),
-          }}
-        />
+    <Layout
+      head={{
+        title: `${title}`,
+        description:
+          convertDraftToText(postData.brief) ||
+          convertDraftToText(postData.content),
+        imageUrl:
+          getResizedUrl(postData.og_image?.resized) ||
+          getResizedUrl(postData.heroImage?.resized),
+      }}
+      header={{ type: 'empty' }}
+      footer={{ type: 'empty' }}
+    >
+      <>
         {/* @ts-ignore */}
-      </amp-analytics>
-      <AmpBody>
-        <section
-          id="amp-page"
-          className={`${!!categoryOfWineSlug.length && 'is-wine'} ${
-            isAdult && 'disable-scroll'
-          }`}
+        <amp-analytics
+          type="googleanalytics"
+          config="https://amp.analytics-debugger.com/ga4.json"
+          data-credentials="include"
         >
-          <AmpHeader />
-          <AmpMain postData={postData} isMember={isMember} />
-          <AmpRelated relateds={relatedsWithOrdered} />
-          <AmpFooter />
-        </section>
-        <AdultOnlyWarning isAdult={isAdult} />
-        <WineWarning categories={categories} />
-      </AmpBody>
-    </div>
+          <script
+            type="application/json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                vars: {
+                  GA4_MEASUREMENT_ID: GA_MEASUREMENT_ID,
+                  GA4_ENDPOINT_HOSTNAME: 'www.google-analytics.com',
+                  GOOGLE_CONSENT_ENABLED: false,
+                  WEBVITALS_TRACKING: false,
+                  PERFORMANCE_TIMING_TRACKING: false,
+                  DEFAULT_PAGEVIEW_ENABLED: true,
+                  SEND_DOUBLECLICK_BEACON: false,
+                  DISABLE_REGIONAL_DATA_COLLECTION: false,
+                  ENHANCED_MEASUREMENT_SCROLL: false,
+                },
+              }),
+            }}
+          />
+          {/* @ts-ignore */}
+        </amp-analytics>
+        <AmpBody>
+          <section
+            id="amp-page"
+            className={`${!!categoryOfWineSlug.length && 'is-wine'} ${
+              isAdult && 'disable-scroll'
+            }`}
+          >
+            <AmpHeader />
+            <AmpMain postData={postData} isMember={isMember} />
+            <AmpRelated relateds={relatedsWithOrdered} />
+            <AmpFooter />
+          </section>
+          <AdultOnlyWarning isAdult={isAdult} />
+          <WineWarning categories={categories} />
+        </AmpBody>
+      </>
+    </Layout>
   )
 }
 
