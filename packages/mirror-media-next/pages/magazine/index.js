@@ -50,6 +50,7 @@ const Title = styled.h2`
 
 export default function Magazine({ sectionsData = [] }) {
   const router = useRouter()
+  const [redirectUrl, setRedirectUrl] = useState(null)
 
   const [specials, setSpecials] = useState([])
   const [weeklys, setWeeklys] = useState([])
@@ -63,9 +64,19 @@ export default function Magazine({ sectionsData = [] }) {
   // Redirect to '/login' if the user is not logged in
   useEffect(() => {
     if (isLogInProcessFinished && !isLoggedIn) {
+      // Store the current page URL in state
+      setRedirectUrl(router.asPath)
       router.push('/login')
     }
   }, [isLogInProcessFinished, isLoggedIn, router])
+
+  // Redirect the user back to the stored URL if available
+  useEffect(() => {
+    if (redirectUrl && isLoggedIn && isLogInProcessFinished) {
+      router.push(redirectUrl)
+      setRedirectUrl(null) // Clear the redirectUrl after redirecting
+    }
+  }, [redirectUrl, isLoggedIn, isLogInProcessFinished, router])
 
   // Fetch Magazines Data only for Premium Member
   useEffect(() => {
