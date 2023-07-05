@@ -69,6 +69,7 @@ function StoryAmpPage({ postData }) {
       <Head>
         <title>{title}</title>
       </Head>
+      {/* @ts-ignore */}
       <amp-analytics
         type="googleanalytics"
         config="https://amp.analytics-debugger.com/ga4.json"
@@ -92,8 +93,8 @@ function StoryAmpPage({ postData }) {
             }),
           }}
         />
+        {/* @ts-ignore */}
       </amp-analytics>
-
       <AmpBody>
         <section
           id="amp-page"

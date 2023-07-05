@@ -4,6 +4,14 @@ const { DraftRenderer, hasContentInRawContentBlock, removeEmptyContentBlock } =
   MirrorMedia
 
 /**
+ * @typedef { 'normal' | 'wide' | 'photography' | 'premium' | 'amp' } ContentLayout
+ */
+
+/**
+ * @typedef {import('../../../type/draft-js').Draft} RawContentBlock
+ */
+
+/**
  * @callback WrapperFunction
  * @param {JSX.Element} children - The React element to wrap.
  * @returns {JSX.Element} The wrapped React element.
@@ -13,8 +21,8 @@ const { DraftRenderer, hasContentInRawContentBlock, removeEmptyContentBlock } =
  * Component for render blocks of draft.js
  * We use package `@mirrormedia/draft-renderer` to render the block of draft.js
  * @param {Object} props
- * @param {import('../../../type/draft-js').Draft} props.rawContentBlock - The blocks of draft.js we want to render.
- * @param { 'normal' | 'wide' | 'photography' | 'premium' | 'amp' } [props.contentLayout]
+ * @param {RawContentBlock} props.rawContentBlock - The blocks of draft.js we want to render.
+ * @param { ContentLayout } [props.contentLayout]
  * - Which layout we want to render.
  * - Different layout will affect the style of blocks.
  * - Optional, default value is `normal`
@@ -28,10 +36,24 @@ export default function DraftRenderBlock({
   contentLayout = 'normal',
   wrapper = (children) => <>{children}</>,
 }) {
+  const isAmp = contentLayout === 'amp'
+  const jsx = isAmp
+    ? AmpRenderBlock(rawContentBlock, contentLayout)
+    : NormalRenderBlock(rawContentBlock, contentLayout)
+
+  return <>{wrapper(jsx)}</>
+}
+/**
+ *
+ * @param {RawContentBlock} rawContentBlock
+ * @param {ContentLayout} contentLayout
+ * @returns {JSX.Element}
+ */
+function NormalRenderBlock(rawContentBlock, contentLayout) {
+  const shouldRenderDraft = hasContentInRawContentBlock(rawContentBlock)
   const [draftRenderBlockJsx, setDraftRenderBlockJsx] = useState(null)
 
   useEffect(() => {
-    const shouldRenderDraft = hasContentInRawContentBlock(rawContentBlock)
     if (shouldRenderDraft) {
       const contentWithRemovedEmptyBlock =
         removeEmptyContentBlock(rawContentBlock)
@@ -47,7 +69,31 @@ export default function DraftRenderBlock({
       )
       setDraftRenderBlockJsx(jsx)
     }
-  }, [rawContentBlock, contentLayout])
+  }, [shouldRenderDraft, rawContentBlock, contentLayout])
 
-  return <>{wrapper(draftRenderBlockJsx)}</>
+  return draftRenderBlockJsx
+}
+/**
+ * There is no client-side rendering in amp page, so `useState`, `useEffect` is unable to used.
+ * Because the limitation mentioned above, it is needed to use `DraftRenderer` in server-side, which may cause issue of memory leak.
+ * @param {RawContentBlock} rawContentBlock
+ * @param {ContentLayout} contentLayout
+ * @returns {JSX.Element}
+ */
+function AmpRenderBlock(rawContentBlock, contentLayout) {
+  const shouldRenderDraft = hasContentInRawContentBlock(rawContentBlock)
+  let draftJsx = null
+
+  if (shouldRenderDraft) {
+    const contentWithRemovedEmptyBlock =
+      removeEmptyContentBlock(rawContentBlock)
+    draftJsx = (
+      <DraftRenderer
+        rawContentBlock={contentWithRemovedEmptyBlock}
+        contentLayout={contentLayout}
+      />
+    )
+  }
+
+  return draftJsx
 }
