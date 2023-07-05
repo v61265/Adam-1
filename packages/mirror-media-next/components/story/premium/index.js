@@ -203,7 +203,8 @@ export default function StoryPremiumStyle({
   postContent,
   headerData,
 }) {
-  const { isLoggedIn } = useMembership()
+  const { isLoggedIn, memberInfo } = useMembership()
+  const { memberType } = memberInfo
 
   const {
     id = '',
@@ -259,8 +260,6 @@ export default function StoryPremiumStyle({
   ]
 
   const shouldShowAd = useDisplayAd(hiddenAdvertised)
-  const { memberInfo } = useMembership()
-  const { memberType } = memberInfo
 
   let supportBanner
   if (postContent.type === 'fullContent') {
