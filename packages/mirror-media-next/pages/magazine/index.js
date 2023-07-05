@@ -65,7 +65,6 @@ export default function Magazine({ sectionsData = [] }) {
   useEffect(() => {
     if (isLogInProcessFinished && !isLoggedIn) {
       // Store the current page URL in state
-      alert(router.asPath)
       setRedirectUrl(router.asPath)
       router.push('/login')
     }
