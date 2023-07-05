@@ -9,7 +9,6 @@ const ENV = process.env.NEXT_PUBLIC_ENV || 'local'
 let SITE_URL = ''
 let API_TIMEOUT = 5000
 let API_PROTOCOL = 'http'
-let API_HOST = ''
 let RESTFUL_API_HOST = ''
 let API_PORT = ''
 let WEEKLY_API_SERVER_ORIGIN = ''
@@ -34,7 +33,6 @@ switch (ENV) {
   case 'prod':
     SITE_URL = 'www.mirrormedia.mg'
     API_TIMEOUT = 1500
-    API_HOST = '' //currently unset
     RESTFUL_API_HOST = '' //currently unset
     API_PORT = '' //currently unset
     WEEKLY_API_SERVER_ORIGIN = '' //currently unset
@@ -72,7 +70,6 @@ switch (ENV) {
   case 'staging':
     SITE_URL = 'staging-next.mirrormedia.mg'
     API_TIMEOUT = 1500
-    API_HOST = '' //currently unset
     RESTFUL_API_HOST = '' //currently unset
     API_PORT = '' //currently unset
     WEEKLY_API_SERVER_ORIGIN = '' //currently unset
@@ -110,7 +107,6 @@ switch (ENV) {
   case 'dev':
     SITE_URL = 'dev-next.mirrormedia.mg'
     API_TIMEOUT = 5000
-    API_HOST = 'mirror-cms-gql-dev-ufaummkd5q-de.a.run.app'
     RESTFUL_API_HOST = '104.199.190.189'
     API_PORT = '8080'
     WEEKLY_API_SERVER_ORIGIN =
@@ -151,7 +147,6 @@ switch (ENV) {
     API_TIMEOUT = 5000
     RESTFUL_API_HOST = 'localhost'
     API_PORT = '8080'
-    API_HOST = 'mirror-cms-gql-dev-ufaummkd5q-de.a.run.app'
     WEEKLY_API_SERVER_ORIGIN =
       'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
 
@@ -186,7 +181,6 @@ export {
   SITE_URL,
   GCP_PROJECT_ID,
   API_TIMEOUT,
-  API_HOST,
   WEEKLY_API_SERVER_ORIGIN,
   URL_STATIC_PREMIUM_SECTIONS,
   URL_STATIC_NORMAL_SECTIONS,
