@@ -19,7 +19,7 @@ import Date from '../shared/date'
 import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import Aside from '../shared/aside'
-import { useMembership } from '../../../context/membership'
+
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
  */
@@ -141,7 +141,7 @@ export default function StoryWideStyle({ postData, postContent }) {
     brief = null,
     tags = [],
   } = postData
-  const { isLoggedIn } = useMembership()
+
   const sectionsWithOrdered =
     manualOrderOfSections && manualOrderOfSections.length
       ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
@@ -169,8 +169,9 @@ export default function StoryWideStyle({ postData, postContent }) {
   ]
 
   const h2AndH3Block = getContentBlocksH2H3(postContent.data)
-  const shouldShowArticleMask =
-    !isLoggedIn || postContent.type === 'trimmedContent'
+
+  const shouldShowArticleMask = postContent.type === 'trimmedContent'
+
   return (
     <>
       <Header h2AndH3Block={h2AndH3Block} />
