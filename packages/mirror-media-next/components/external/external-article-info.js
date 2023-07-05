@@ -87,10 +87,20 @@ const ExternalCredit = styled.div`
   text-align: left;
   color: rgb(52, 73, 94);
   line-height: 1.5;
-
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  gap: 0px 16px;
+  justify-content: start;
+  align-items: center;
   a {
     color: #0b4fa2;
   }
+`
+const ExternalCreditTitle = styled.div`
+  padding: 4px 8px;
+  border: 1px solid rgb(52, 73, 94);
+  border-radius: 2px;
+  margin-bottom: auto;
 `
 
 /**
@@ -102,7 +112,10 @@ const ExternalCredit = styled.div`
  */
 export default function ArticleInfo({ updatedDate, publishedDate, credits }) {
   const creditJsx = credits.length > 0 && (
-    <ExternalCredit>文｜{getCreditsHtml(credits)} </ExternalCredit>
+    <ExternalCredit>
+      <ExternalCreditTitle>鏡週刊</ExternalCreditTitle>
+      <p>文｜{getCreditsHtml(credits)} </p>
+    </ExternalCredit>
   )
 
   return (
