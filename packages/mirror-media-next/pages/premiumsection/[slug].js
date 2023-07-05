@@ -1,6 +1,8 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 import SectionArticles from '../../components/shared/section-articles'
 import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
@@ -14,6 +16,7 @@ import {
 import { SECTION_IDS } from '../../constants/index'
 import { Z_INDEX } from '../../constants/index'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
+import { useMembership } from '../../context/membership'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -129,6 +132,24 @@ export default function Section({ postsCount, posts, section, headerData }) {
   const sectionName = section.name || ''
 
   const shouldShowAd = useDisplayAd()
+
+  const router = useRouter()
+  const { isLoggedIn, isLogInProcessFinished } = useMembership()
+
+  useEffect(() => {
+    const redirectUrl = localStorage.getItem('redirectUrl')
+    const currentUrl = router.asPath
+
+    if (
+      redirectUrl &&
+      isLoggedIn &&
+      isLogInProcessFinished &&
+      currentUrl === '/premiumsection/member'
+    ) {
+      localStorage.removeItem('redirectUrl')
+      router.push(redirectUrl)
+    }
+  }, [isLoggedIn, isLogInProcessFinished, router])
 
   return (
     <Layout
