@@ -5,6 +5,7 @@ import DraftRenderBlock from '../shared/draft-renderer-block'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { getContentBlocksH2H3 } = MirrorMedia
 import { sortArrayWithOtherArrayId } from '../../../utils'
+import { useMembership } from '../../../context/membership'
 
 import Header from './header'
 import ArticleMask from '../shared/article-mask'
@@ -13,6 +14,7 @@ import SubscribeLink from '../shared/subscribe-link'
 import HeroImageAndVideo from '../shared/hero-image-and-video'
 import Credits from '../shared/credits'
 import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
+import SupportSingleArticleBanner from '../shared/support-single-article-banner'
 import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
 import MoreInfoAndTag from '../shared/more-info-and-tag'
 import Date from '../shared/date'
@@ -172,6 +174,21 @@ export default function StoryWideStyle({ postData, postContent }) {
 
   const shouldShowArticleMask = postContent.type === 'trimmedContent'
 
+  const { memberInfo } = useMembership()
+  const { memberType } = memberInfo
+  const isPremiumMember =
+    memberType.includes('premium') || memberType.includes('staff')
+
+  let supportBanner
+
+  if (!shouldShowArticleMask) {
+    if (isPremiumMember) {
+      supportBanner = <SupportSingleArticleBanner />
+    } else {
+      supportBanner = <SupportMirrorMediaBanner />
+    }
+  }
+
   return (
     <>
       <Header h2AndH3Block={h2AndH3Block} />
@@ -220,7 +237,7 @@ export default function StoryWideStyle({ postData, postContent }) {
             <MoreInfoAndTag tags={tags} />
 
             {shouldShowArticleMask && <ArticleMask postId={id} />}
-            <SupportMirrorMediaBanner />
+            {supportBanner}
           </ContentWrapper>
           <Aside
             relateds={relatedsWithOrdered}
