@@ -8,7 +8,7 @@ const app = express()
 app.use(cors())
 
 app.get('/json/:filename', (req, res) => {
-  const filepath = path.resolve(__dirname, `./statics.mirrormedia.mg/json/${req.params.filename}`)
+  const filepath = path.resolve(__dirname, `./json/${req.params.filename}`)
   res.sendFile(filepath, {
     headers: {
       'Content-Type': 'application/json',
