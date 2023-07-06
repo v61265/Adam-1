@@ -25,6 +25,8 @@ const PopInAdInHotList = dynamic(
 
 /** @typedef {import('../../../apollo/fragments/post').AsideListingPost} ArticleData */
 
+/** @typedef {ArticleData & {sectionsWithOrdered: ArticleData["sectionsInInputOrder"]} } ArticleDataContainSectionsWithOrdered */
+
 const Wrapper = styled.section`
   margin: 20px auto 0;
 
@@ -253,7 +255,7 @@ const TitleLoading = styled(Title)`
  * - If is true, image of article should display at right, title and label should display at left.
  * - If is false, image of article should display at left, title and label should display at right.
  * optional, default value is `false`.
- * @param {()=>Promise<ArticleData[] | []>} props.fetchArticle
+ * @param {()=> Promise<ArticleDataContainSectionsWithOrdered[]> | Promise<[]>} props.fetchArticle
  * - A Promise base function for fetching article.
  * - If fulfilled, it will return a array of object, which item is a article.
  * - If rejected, it will return an empty array
@@ -308,8 +310,8 @@ export default function AsideArticleList({
   }, [isLoaded, handleLoadMore])
 
   const newsJsx = item.map((item, index) => {
-    const sectionName = getSectionNameGql(item.sections, undefined)
-    const sectionTitle = getSectionTitleGql(item.sections, undefined)
+    const sectionName = getSectionNameGql(item.sectionsWithOrdered, undefined)
+    const sectionTitle = getSectionTitleGql(item.sectionsWithOrdered, undefined)
     const articleHref = getArticleHref(item.slug, item.style, undefined)
 
     /**

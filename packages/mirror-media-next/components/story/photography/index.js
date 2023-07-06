@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { getContentTextBlocks } = MirrorMedia
-import { sortArrayWithOtherArrayId } from '../../../utils'
 import Credits from './potography-credits'
 import HeroSection from './hero-section'
 import Header from './photography-header'
@@ -150,7 +149,7 @@ export default function StoryPhotographyStyle({ postData, postContent }) {
     heroImage = null,
     heroCaption = '',
     writers = [],
-    manualOrderOfWriters = [],
+    writersInInputOrder = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -158,7 +157,7 @@ export default function StoryPhotographyStyle({ postData, postContent }) {
     vocals = [],
     extend_byline = '',
     relateds = [],
-    manualOrderOfRelateds = [],
+    relatedsInInputOrder = [],
 
     brief = null,
   } = postData
@@ -166,7 +165,7 @@ export default function StoryPhotographyStyle({ postData, postContent }) {
   const filteredBrief = getContentTextBlocks(brief)
 
   const credits = [
-    { writers: manualOrderOfWriters ? manualOrderOfWriters : writers },
+    { writers: writersInInputOrder ? writersInInputOrder : writers },
     { photographers: photographers },
     { camera_man: camera_man },
     { designers: designers },
@@ -176,8 +175,8 @@ export default function StoryPhotographyStyle({ postData, postContent }) {
   ]
 
   const relatedsWithOrdered =
-    manualOrderOfRelateds && manualOrderOfRelateds.length
-      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+    relatedsInInputOrder && relatedsInInputOrder.length
+      ? relatedsInInputOrder
       : relateds
 
   // Get images array from content.entityMap

@@ -1,5 +1,6 @@
 //TODO: adjust margin and padding of all margin and padding after implement advertisement.
 //TODO: refactor jsx structure, make it more readable.
+//TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
 import { useCallback } from 'react'
 import client from '../../apollo/apollo-client'
@@ -43,7 +44,8 @@ const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
  * @typedef {import('../../type/theme').Theme} Theme
  */
 /**
- * @typedef {import('../../components/story/normal/aside-article-list').ArticleData} AsideArticleData
+ * @typedef {import('../story/normal/aside-article-list').ArticleData} AsideArticleData
+ * @typedef {import('../story/normal/aside-article-list').ArticleDataContainSectionsWithOrdered} AsideArticleDataContainSectionsWithOrdered
  */
 /**
  * @typedef {import('../../apollo/fragments/external').External} External
@@ -453,7 +455,7 @@ export default function ExternalNormalStyle({ external }) {
   const partnerColor = getExternalPartnerColor(partner)
 
   /**
-   * @returns {Promise<AsideArticleData[] | []>}
+   * @returns {Promise<AsideArticleDataContainSectionsWithOrdered[] |[]>}
    */
   const handleFetchLatestNews = useCallback(async () => {
     try {
@@ -468,7 +470,13 @@ export default function ExternalNormalStyle({ external }) {
           storySlug: slug,
         },
       })
-      return res.data?.posts
+      return res.data?.posts.map((post) => {
+        const sectionsWithOrdered =
+          post.sectionsInInputOrder && post.sectionsInInputOrder.length
+            ? post.sectionsInInputOrder
+            : post.sections
+        return { sectionsWithOrdered, ...post }
+      })
     } catch (err) {
       console.error(err)
       return []
@@ -476,7 +484,7 @@ export default function ExternalNormalStyle({ external }) {
   }, [slug, EXTERNAL_DEFAULT_SECTION.slug])
 
   /**
-   * @returns {Promise<AsideArticleData[] | []>}
+   * @returns {Promise<AsideArticleDataContainSectionsWithOrdered[] |[]>}
    */
   const handleFetchPopularNews = async () => {
     try {
@@ -488,7 +496,17 @@ export default function ExternalNormalStyle({ external }) {
         url: URL_STATIC_POPULAR_NEWS,
         timeout: API_TIMEOUT,
       })
-      return data.filter((data) => data).slice(0.6)
+      const popularNews = data
+        .map((post) => {
+          const sectionsWithOrdered =
+            post.sectionsInInputOrder && post.sectionsInInputOrder.length
+              ? post.sectionsInInputOrder
+              : post.sections
+          return { sectionsWithOrdered, ...post }
+        })
+        .slice(0, 6)
+
+      return popularNews
     } catch (err) {
       return []
     }

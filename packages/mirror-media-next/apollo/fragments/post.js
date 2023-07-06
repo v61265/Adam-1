@@ -48,6 +48,7 @@ export const listingPost = gql`
  * @property {string} slug
  * @property {string} title
  * @property {import('./section').Section[]} sections
+ * @property {import('./section').Section[]} sectionsInInputOrder
  * @property {import('./photo').Photo | null} heroImage
  */
 
@@ -59,6 +60,9 @@ export const asideListingPost = gql`
     slug
     title
     sections {
+      ...section
+    }
+    sectionsInInputOrder {
       ...section
     }
     heroImage {
@@ -119,10 +123,10 @@ export const asideListingPost = gql`
  * @property {boolean} isMember - whether this post is a member article
  * @property {boolean} isAdult - whether this post only adults can read
  * @property {Section[] | null } sections - which sections does this post belong to
- * @property {Section[] | null} manualOrderOfSections - sections with adjusted order
+ * @property {Section[] | null} sectionsInInputOrder - sections with adjusted order
  * @property {Pick<Category, 'id' | 'name'  | 'slug'>[] } categories - which categories does this post belong to
  * @property {Contact[] | null} writers -  the field called '作者' in cms
- * @property {Contact[] | null} manualOrderOfWriters - writers with adjusted order
+ * @property {Contact[] | null} writersInInputOrder - writers with adjusted order
  * @property {Contact[] } photographers - the field called '攝影' in cms
  * @property {Contact[] } camera_man - the field called '影音' in cms
  * @property {Contact[] } designers - the field called '設計' in cms
@@ -137,7 +141,7 @@ export const asideListingPost = gql`
  * @property {Draft} content - post content
  * @property {Draft} trimmedContent - post trimmed content
  * @property {Related[] } relateds related articles selected by cms users
- * @property {Related[] | null} manualOrderOfRelateds related articles with adjusted order
+ * @property {Related[] } relatedsInInputOrder related articles with adjusted order
  * @property {boolean} isFeatured
  * @property {import('./tag').Tag[]} tags
  * @property {string} redirect - post redirect slug or external url
@@ -165,14 +169,19 @@ export const post = gql`
     sections {
       ...section
     }
+    sectionsInInputOrder {
+      ...section
+    }
     categories {
       ...category
     }
-    manualOrderOfSections
+
     writers {
       ...contact
     }
-    manualOrderOfWriters
+    writersInInputOrder {
+      ...contact
+    }
     photographers {
       ...contact
     }
@@ -200,7 +209,6 @@ export const post = gql`
     }
     heroCaption
     brief
-
     relateds {
       id
       slug
@@ -209,7 +217,14 @@ export const post = gql`
         ...heroImage
       }
     }
-    manualOrderOfRelateds
+    relatedsInInputOrder {
+      id
+      slug
+      title
+      heroImage {
+        ...heroImage
+      }
+    }
     redirect
     og_image {
       resized {

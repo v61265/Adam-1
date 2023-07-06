@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { getContentBlocksH2H3 } = MirrorMedia
-import { sortArrayWithOtherArrayId } from '../../../utils'
 import { useMembership } from '../../../context/membership'
 
 import Header from './header'
@@ -127,9 +126,9 @@ export default function StoryWideStyle({ postData, postContent }) {
     updatedAt = '',
     publishedDate = '',
     sections = [],
-    manualOrderOfSections = [],
+    sectionsInInputOrder = [],
     writers = [],
-    manualOrderOfWriters = [],
+    writersInInputOrder = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -138,26 +137,26 @@ export default function StoryWideStyle({ postData, postContent }) {
     extend_byline = '',
 
     relateds = [],
-    manualOrderOfRelateds = [],
+    relatedsInInputOrder = [],
     slug = '',
     brief = null,
     tags = [],
   } = postData
 
   const sectionsWithOrdered =
-    manualOrderOfSections && manualOrderOfSections.length
-      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+    sectionsInInputOrder && sectionsInInputOrder.length
+      ? sectionsInInputOrder
       : sections
   const [section] = sectionsWithOrdered
 
   const relatedsWithOrdered =
-    manualOrderOfRelateds && manualOrderOfRelateds.length
-      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+    relatedsInInputOrder && relatedsInInputOrder.length
+      ? relatedsInInputOrder
       : relateds
 
   const writersWithOrdered =
-    manualOrderOfWriters && manualOrderOfWriters.length
-      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+    writersInInputOrder && writersInInputOrder.length
+      ? writersInInputOrder
       : writers
 
   const credits = [

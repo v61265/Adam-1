@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 import ArticleBrief from '../shared/brief'
 import PremiumArticleContent from './article-content'
-import { sortArrayWithOtherArrayId } from '../../../utils'
 import TitleAndInfoAndHero from './title-and-info-and-hero'
 import CopyrightWarning from '../shared/copyright-warning'
 import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
@@ -211,9 +210,9 @@ export default function StoryPremiumStyle({
     title,
     brief = { blocks: [], entityMap: {} },
     sections = [],
-    manualOrderOfSections = [],
+    sectionsInInputOrder = [],
     writers = [],
-    manualOrderOfWriters = [],
+    writersInInputOrder = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -227,8 +226,8 @@ export default function StoryPremiumStyle({
     heroVideo = null,
     heroCaption = '',
     relateds = [],
+    relatedsInInputOrder = [],
     slug = '',
-    manualOrderOfRelateds = [],
     hiddenAdvertised = false,
   } = postData
 
@@ -236,18 +235,18 @@ export default function StoryPremiumStyle({
     !isLoggedIn || postContent.type === 'trimmedContent'
   const h2AndH3Block = getContentBlocksH2H3(postContent.data)
   const sectionsWithOrdered =
-    manualOrderOfSections && manualOrderOfSections.length
-      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+    sectionsInInputOrder && sectionsInInputOrder.length
+      ? sectionsInInputOrder
       : sections
   const [section] = sectionsWithOrdered
   const sectionLabelFirst = getSectionLabelFirst(sectionsWithOrdered)
   const writersWithOrdered =
-    manualOrderOfWriters && manualOrderOfWriters.length
-      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+    writersInInputOrder && writersInInputOrder.length
+      ? writersInInputOrder
       : writers
   const relatedsWithOrdered =
-    manualOrderOfRelateds && manualOrderOfRelateds.length
-      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+    relatedsInInputOrder && relatedsInInputOrder.length
+      ? relatedsInInputOrder
       : relateds
   const credits = [
     { writers: writersWithOrdered },
