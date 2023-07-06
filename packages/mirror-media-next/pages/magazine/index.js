@@ -24,6 +24,7 @@ const Section = styled.div`
   }
 `
 const Page = styled.div`
+  min-height: 65vh;
   background-color: #ffffff;
   & ${Section}:nth-child(even) {
     background-color: #f2f2f2;
@@ -75,6 +76,8 @@ export default function Magazine({ sectionsData = [] }) {
     const fetchMagazines = async () => {
       if (isPremiumMember) {
         try {
+          // Simulate an unsuccessful fetch by throwing an error
+          // throw new Error('Failed to fetch magazines')
           const responses = await Promise.allSettled([
             client.query({
               query: fetchSpecials,
@@ -169,29 +172,35 @@ export default function Magazine({ sectionsData = [] }) {
     >
       {isPremiumMember ? (
         <Page>
-          <Section>
-            <Title>
-              當期<span>動態雜誌</span>
-            </Title>
-            <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
-          </Section>
+          {weeklys.length > 0 && (
+            <>
+              <Section>
+                <Title>
+                  當期<span>動態雜誌</span>
+                </Title>
+                <MagazineFeatures features={sortedMagazines.slice(0, 2)} />
+              </Section>
 
-          <Section>
-            <Title>
-              近期<span>動態雜誌</span>
-            </Title>
-            <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
-          </Section>
+              <Section>
+                <Title>
+                  近期<span>動態雜誌</span>
+                </Title>
+                <MagazineWeeklys weeklys={sortedMagazines.slice(2)} />
+              </Section>
+            </>
+          )}
 
           <Section>
             <Title>購買線上雜誌</Title>
             <MagazinePlatforms />
           </Section>
 
-          <Section>
-            <Title>特刊</Title>
-            <MagazineSpecials specials={specials} />
-          </Section>
+          {specials.length > 0 && (
+            <Section>
+              <Title>特刊</Title>
+              <MagazineSpecials specials={specials} />
+            </Section>
+          )}
         </Page>
       ) : (
         <JoinPremiumMember />
