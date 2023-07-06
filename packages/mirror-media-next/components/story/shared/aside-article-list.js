@@ -10,6 +10,8 @@ import Image from '@readr-media/react-image'
 
 /** @typedef {import('../../../apollo/fragments/post').AsideListingPost} ArticleData */
 
+/** @typedef {ArticleData & {sectionsWithOrdered: ArticleData["sectionsInInputOrder"]} } ArticleDataContainSectionsWithOrdered */
+
 const Wrapper = styled.section`
   margin: 24px auto 0;
   width: 100%;
@@ -235,7 +237,7 @@ const TitleLoading = styled(Title)`
  *
  * @param {Object} props
  * @param {string} props.heading - heading of this components, showing user what kind of news is
- * @param {()=>Promise<ArticleData[] | []>} props.fetchArticle
+ * @param {()=>Promise<ArticleDataContainSectionsWithOrdered[] | []>} props.fetchArticle
  * - A Promise base function for fetching article.
  * - If fulfilled, it will return a array of object, which item is a article.
  * - If rejected, it will return an empty array

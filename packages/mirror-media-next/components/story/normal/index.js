@@ -1,5 +1,5 @@
-//TODO: adjust margin and padding of all margin and padding after implement advertisement.
 //TODO: refactor jsx structure, make it more readable.
+//TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
 import { useCallback } from 'react'
 import client from '../../../apollo/apollo-client'
@@ -42,6 +42,7 @@ const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
 
 /**
  * @typedef {import('../../../components/story/normal/aside-article-list').ArticleData} AsideArticleData
+ * @typedef {import('../../../components/story/normal/aside-article-list').ArticleDataContainSectionsWithOrdered} AsideArticleDataContainSectionsWithOrdered
  */
 
 /**
@@ -504,7 +505,7 @@ export default function StoryNormalStyle({
   const [section] = sectionsWithOrdered
 
   /**
-   * @returns {Promise<AsideArticleData[] | []>}
+   * @returns {Promise<AsideArticleDataContainSectionsWithOrdered[] | []>}
    */
   const handleFetchLatestNews = useCallback(async () => {
     try {
@@ -519,7 +520,13 @@ export default function StoryNormalStyle({
           storySlug: slug,
         },
       })
-      return res.data?.posts
+      return res.data?.posts.map((post) => {
+        const sectionsWithOrdered =
+          post.sectionsInInputOrder && post.sectionsInInputOrder.length
+            ? post.sectionsInInputOrder
+            : post.sections
+        return { sectionsWithOrdered, ...post }
+      })
     } catch (err) {
       console.error(err)
       return []
@@ -527,7 +534,7 @@ export default function StoryNormalStyle({
   }, [section, slug])
 
   /**
-   * @returns {Promise<AsideArticleData[] | []>}
+   * @returns {Promise<AsideArticleDataContainSectionsWithOrdered[] | []>}
    */
   const handleFetchPopularNews = async () => {
     try {
@@ -539,7 +546,18 @@ export default function StoryNormalStyle({
         url: URL_STATIC_POPULAR_NEWS,
         timeout: API_TIMEOUT,
       })
-      return data.filter((data) => data).slice(0.6)
+
+      const popularNews = data
+        .map((post) => {
+          const sectionsWithOrdered =
+            post.sectionsInInputOrder && post.sectionsInInputOrder.length
+              ? post.sectionsInInputOrder
+              : post.sections
+          return { sectionsWithOrdered, ...post }
+        })
+        .slice(0, 6)
+
+      return popularNews
     } catch (err) {
       return []
     }
