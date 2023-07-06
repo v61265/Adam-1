@@ -21,10 +21,7 @@ import HeroImageAndVideo from './hero-image-and-video'
 import Divider from '../shared/divider'
 import ShareHeader from '../../shared/share-header'
 import Footer from '../../shared/footer'
-import {
-  transformTimeDataIntoDotFormat,
-  sortArrayWithOtherArrayId,
-} from '../../../utils'
+import { transformTimeDataIntoDotFormat } from '../../../utils'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
@@ -469,14 +466,14 @@ export default function StoryNormalStyle({
     title = '',
     slug = '',
     sections = [],
-    manualOrderOfSections = [],
+    sectionsInInputOrder = [],
     heroImage = null,
     heroVideo = null,
     heroCaption = '',
     publishedDate = '',
     updatedAt = '',
     writers = [],
-    manualOrderOfWriters = [],
+    writersInInputOrder = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -486,22 +483,22 @@ export default function StoryNormalStyle({
     tags = [],
     brief = { blocks: [], entityMap: {} },
     relateds = [],
-    manualOrderOfRelateds = [],
+    relatedsInInputOrder = [],
     hiddenAdvertised = false,
   } = postData
 
   const sectionsWithOrdered =
-    manualOrderOfSections && manualOrderOfSections.length
-      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+    sectionsInInputOrder && sectionsInInputOrder.length
+      ? sectionsInInputOrder
       : sections
   const relatedsWithOrdered =
-    manualOrderOfRelateds && manualOrderOfRelateds.length
-      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+    relatedsInInputOrder && relatedsInInputOrder.length
+      ? relatedsInInputOrder
       : relateds
 
   const writersWithOrdered =
-    manualOrderOfWriters && manualOrderOfWriters.length
-      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+    writersInInputOrder && writersInInputOrder.length
+      ? writersInInputOrder
       : writers
 
   const [section] = sectionsWithOrdered
