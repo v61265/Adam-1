@@ -73,13 +73,13 @@ export default function VideoList({ videos }) {
   const renderPcVideoList = () => (
     <>
       <Wrapper>
-        {videos.slice(0, 16).map((video) => (
+        {videos.slice(0, 12).map((video) => (
           <VideoListItem key={video.id} video={video} />
         ))}
       </Wrapper>
       {shouldShowAd && <StyledGPTAd_PC_FT pageKey="videohub" adKey="PC_FT" />}
       <Wrapper>
-        {videos.slice(16).map((video) => (
+        {videos.slice(12).map((video) => (
           <VideoListItem key={video.id} video={video} />
         ))}
       </Wrapper>
