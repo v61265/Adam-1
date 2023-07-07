@@ -18,7 +18,7 @@ import {
 } from '../../utils/api/category'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
 import { getSectionGPTPageKey } from '../../utils/ad'
-
+import WineWarning from '../../components/shared/wine-warning'
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
 })
@@ -233,6 +233,7 @@ export default function Category({
         {shouldShowAd && (
           <StickyGPTAd pageKey={getSectionGPTPageKey(sectionSlug)} adKey="ST" />
         )}
+        <WineWarning categories={[category]} />
       </CategoryContainer>
     </Layout>
   )
