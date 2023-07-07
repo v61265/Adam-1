@@ -25,6 +25,7 @@ import AdultOnlyWarning from '../../../components/story/shared/adult-only-warnin
 import WineWarning from '../../../components/story/shared/wine-warning'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { hasContentInRawContentBlock } = MirrorMedia
+import Taboola from '../../../components/amp/amp-ads/taboola'
 
 export const config = { amp: true }
 
@@ -120,6 +121,7 @@ function StoryAmpPage({ postData }) {
             <AmpHeader />
             <AmpMain postData={postData} isMember={isMember} />
             <AmpRelated relateds={relatedsWithOrdered} />
+            <Taboola />
             <AmpFooter />
           </section>
           <AdultOnlyWarning isAdult={isAdult} />
