@@ -20,7 +20,7 @@ import Footer from '../../shared/footer'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
 import { Z_INDEX } from '../../../constants/index'
 import { SECTION_IDS } from '../../../constants/index'
-
+import { getCategoryOfWineSlug } from '../../../utils'
 const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
   ssr: false,
 })
@@ -210,6 +210,7 @@ export default function StoryPremiumStyle({
     title,
     brief = { blocks: [], entityMap: {} },
     sections = [],
+    categories = [],
     sectionsInInputOrder = [],
     writers = [],
     writersInInputOrder = [],
@@ -268,7 +269,9 @@ export default function StoryPremiumStyle({
       supportBanner = <SupportSingleArticleBanner />
     }
   }
-
+  console.log(categories)
+  //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
+  const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
   return (
     <>
       <ShareHeader
@@ -363,11 +366,11 @@ export default function StoryPremiumStyle({
       />
 
       {shouldShowAd && (
-        <>
-          <StyledGPTAd_FT pageKey={SECTION_IDS['member']} adKey="FT" />
-          <StickyGPTAd_MB_ST pageKey={SECTION_IDS['member']} adKey="MB_ST" />
-        </>
+        <StyledGPTAd_FT pageKey={SECTION_IDS['member']} adKey="FT" />
       )}
+      {shouldShowAd && noCategoryOfWineSlug ? (
+        <StickyGPTAd_MB_ST pageKey={SECTION_IDS['member']} adKey="MB_ST" />
+      ) : null}
 
       <Footer footerType="default" />
     </>

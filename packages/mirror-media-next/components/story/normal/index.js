@@ -21,7 +21,10 @@ import HeroImageAndVideo from './hero-image-and-video'
 import Divider from '../shared/divider'
 import ShareHeader from '../../shared/share-header'
 import Footer from '../../shared/footer'
-import { transformTimeDataIntoDotFormat } from '../../../utils'
+import {
+  transformTimeDataIntoDotFormat,
+  getCategoryOfWineSlug,
+} from '../../../utils'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
@@ -467,6 +470,7 @@ export default function StoryNormalStyle({
     title = '',
     slug = '',
     sections = [],
+    categories = [],
     sectionsInInputOrder = [],
     heroImage = null,
     heroVideo = null,
@@ -576,7 +580,8 @@ export default function StoryNormalStyle({
   const updatedTaipeiTime = transformTimeDataIntoDotFormat(updatedAt)
 
   const shouldShowAd = useDisplayAd(hiddenAdvertised)
-
+  //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
+  const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
   return (
     <>
       <ShareHeader
@@ -763,12 +768,12 @@ export default function StoryNormalStyle({
         />
       )}
 
-      {shouldShowAd && (
+      {shouldShowAd && noCategoryOfWineSlug ? (
         <StickyGPTAd_MB_ST
           pageKey={getSectionGPTPageKey(section?.slug)}
           adKey="MB_ST"
         />
-      )}
+      ) : null}
 
       <Footer footerType="default" />
     </>
