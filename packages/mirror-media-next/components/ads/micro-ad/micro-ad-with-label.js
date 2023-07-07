@@ -312,7 +312,10 @@ const typeStory = css`
       left: 0;
 
       ${({ theme }) => theme.breakpoint.md} {
-        font-weight: 600;
+        font-weight: 300;
+        font-size: 12px;
+        padding: 4px;
+        line-height: 14px;
       }
     }
 
@@ -355,14 +358,13 @@ const typeStory = css`
             color: #ffffff;
             position: absolute;
             bottom: 0;
-            right: 59px;
+            right: 103px;
             font-family: 'PingFang TC';
             font-style: normal;
-            font-weight: 600;
-            font-size: 18px;
-            line-height: 1.5;
-            padding: 8px;
-            padding: 4px 20px;
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 14px;
+            padding: 4px;
           }
 
           // Desktop: AD Title

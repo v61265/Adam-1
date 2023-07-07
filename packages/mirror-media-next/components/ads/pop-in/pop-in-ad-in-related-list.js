@@ -80,12 +80,10 @@ const StyledPopInAd = styled(PopInAd)`
         left: 0;
 
         ${({ theme }) => theme.breakpoint.md} {
-          font-weight: 600;
-        }
-
-        ${({ theme }) => theme.breakpoint.xl} {
-          padding: 4px 20px;
-          line-height: 1.5;
+          font-weight: 300;
+          font-size: 12px;
+          padding: 4px;
+          line-height: 14px;
         }
       }
     }
