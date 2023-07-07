@@ -15,7 +15,7 @@ import MagazineSpecials from '../../components/magazine/magazine-specials'
 import MagazineWeeklys from '../../components/magazine/magazine-weeklys'
 import MagazineFeatures from '../../components/magazine/magazine-featured-weeklys'
 import Layout from '../../components/shared/layout'
-import JoinPremiumMember from './join-premium-member'
+import JoinPremiumMember from '../../components/magazine/ui-join-premium-member'
 
 const Section = styled.div`
   padding: 48px 0;
