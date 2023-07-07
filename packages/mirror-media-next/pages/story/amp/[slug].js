@@ -22,7 +22,7 @@ import {
 } from '../../../config/index.mjs'
 import styled from 'styled-components'
 import AdultOnlyWarning from '../../../components/story/shared/adult-only-warning'
-import WineWarning from '../../../components/story/shared/wine-warning'
+import WineWarning from '../../../components/shared/wine-warning'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { hasContentInRawContentBlock } = MirrorMedia
 

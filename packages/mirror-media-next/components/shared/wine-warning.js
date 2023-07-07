@@ -1,8 +1,8 @@
 import Image from 'next/image'
 
 import styled from 'styled-components'
-import { Z_INDEX } from '../../../constants'
-import { getCategoryOfWineSlug } from '../../../utils/index'
+import { Z_INDEX } from '../../constants'
+import { getCategoryOfWineSlug } from '../../utils/index'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   }
 `
 /**
- * @typedef {import('../../../apollo/fragments/category').Category} Category - category information
+ * @typedef {import('../../apollo/fragments/category').Category} Category - category information
  */
 
 /**
@@ -38,7 +38,7 @@ const Wrapper = styled.div`
  */
 
 export default function WineWarning({ categories = [] }) {
-  let categoryOfWineSlug = getCategoryOfWineSlug(categories)
+  const categoryOfWineSlug = getCategoryOfWineSlug(categories)
 
   const wineWarningJsx =
     categoryOfWineSlug.length > 0 ? (
