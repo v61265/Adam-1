@@ -17,7 +17,7 @@ import CloseButton from './shared/close-button'
  * @typedef {Omit<Section, 'categories' > & {href: string, categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
  */
 /**
- * @typedef {Pick<import('../apollo/fragments/topic').Topic, 'id' | 'name'>[]} Topics
+ * @typedef {Pick<import('../apollo/fragments/topic').Topic, 'id' | 'slug' | 'name'>[]} Topics
  */
 
 /**
@@ -270,7 +270,7 @@ export default function MobileSidebar({
           />
           <Topics>
             {topics.map((topic) => (
-              <Topic href={`topic/${topic.id}`} key={topic.id}>
+              <Topic href={`topic/${topic.slug}`} key={topic.id}>
                 {topic.name}
               </Topic>
             ))}
