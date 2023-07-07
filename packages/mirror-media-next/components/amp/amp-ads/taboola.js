@@ -11,13 +11,16 @@ const Title = styled.h2`
 /**
  * Renders a Taboola component.
  *
+ * @param {Object} props - The component props.
+ * @param {string} props.title - The title to display.
  * @return {JSX.Element} The rendered Taboola component.
  */
-export default function Taboola() {
+
+export default function Taboola({ title }) {
   return (
     <>
       <div id="taboola">
-        <Title>你可能也喜歡這些文章</Title>
+        <Title>{title}</Title>
         <div>
           {/* @ts-ignore */}
           <amp-embed

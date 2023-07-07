@@ -121,7 +121,7 @@ function StoryAmpPage({ postData }) {
             <AmpHeader />
             <AmpMain postData={postData} isMember={isMember} />
             <AmpRelated relateds={relatedsWithOrdered} />
-            <Taboola />
+            <Taboola title="你可能也喜歡這些文章" />
             <AmpFooter />
           </section>
           <AdultOnlyWarning isAdult={isAdult} />
