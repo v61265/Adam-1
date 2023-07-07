@@ -38,7 +38,7 @@ const Wrapper = styled.div`
  */
 
 export default function WineWarning({ categories = [] }) {
-  let categoryOfWineSlug = getCategoryOfWineSlug(categories)
+  const categoryOfWineSlug = getCategoryOfWineSlug(categories)
 
   const wineWarningJsx =
     categoryOfWineSlug.length > 0 ? (
