@@ -14,7 +14,11 @@ import {
 } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
 import Layout from '../../components/shared/layout'
-import { convertDraftToText, getResizedUrl } from '../../utils/index'
+import {
+  convertDraftToText,
+  getResizedUrl,
+  getCategoryOfWineSlug,
+} from '../../utils'
 import { handleStoryPageRedirect } from '../../utils/story'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
@@ -93,7 +97,6 @@ export default function Story({ postData, headerData, storyLayoutType }) {
     trimmedContent = null,
     hiddenAdvertised = false,
   } = postData
-
   /**
    * The logic for rendering the article content:
    * We use the state `postContent` to manage the content should render in the story page.
@@ -192,6 +195,8 @@ export default function Story({ postData, headerData, storyLayoutType }) {
     }
   }
   const storyLayoutJsx = renderStoryLayout()
+  //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
+  const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
   return (
     <Layout
@@ -216,7 +221,9 @@ export default function Story({ postData, headerData, storyLayoutType }) {
         {storyLayoutJsx}
         <WineWarning categories={categories} />
         <AdultOnlyWarning isAdult={isAdult} />
-        <FullScreenAds hiddenAdvertised={hiddenAdvertised} />
+        {noCategoryOfWineSlug && (
+          <FullScreenAds hiddenAdvertised={hiddenAdvertised} />
+        )}
       </>
     </Layout>
   )
