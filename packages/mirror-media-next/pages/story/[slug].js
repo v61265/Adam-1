@@ -5,7 +5,7 @@ import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
-import WineWarning from '../../components/story/shared/wine-warning'
+import WineWarning from '../../components/shared/wine-warning'
 import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 import { useMembership } from '../../context/membership'
 import {
