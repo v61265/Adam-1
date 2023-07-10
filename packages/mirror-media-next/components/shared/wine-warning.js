@@ -6,7 +6,7 @@ import { getCategoryOfWineSlug } from '../../utils/index'
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 5vh;
+  height: 10vh;
   background: #000000;
   position: fixed;
   left: 0;
@@ -15,10 +15,6 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  ${({ theme }) => theme.breakpoint.sm} {
-    height: 10vh;
-  }
 
   .wine-warning-image {
     width: auto;
