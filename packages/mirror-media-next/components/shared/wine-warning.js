@@ -20,6 +20,18 @@ const Wrapper = styled.div`
     width: auto;
     height: auto;
     object-fit: contain;
+    &--desktop {
+      display: none;
+      ${({ theme }) => theme.breakpoint.sm} {
+        display: block;
+      }
+    }
+    &--mobile {
+      display: block;
+      ${({ theme }) => theme.breakpoint.sm} {
+        display: none;
+      }
+    }
   }
 `
 /**
@@ -40,8 +52,14 @@ export default function WineWarning({ categories = [] }) {
     categoryOfWineSlug.length > 0 ? (
       <Wrapper>
         <Image
-          className="wine-warning-image"
+          className="wine-warning-image wine-warning-image--desktop"
           src={'/images/wine-warning.jpg'}
+          fill={true}
+          alt="wine-warning"
+        />
+        <Image
+          className="wine-warning-image wine-warning-image--mobile"
+          src={'/images/wine-warning-mobile.png'}
           fill={true}
           alt="wine-warning"
         />
