@@ -17,6 +17,7 @@ import {
   fetchPremiumPostsByCategorySlug,
 } from '../../utils/api/category'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
+import { getCategoryOfWineSlug } from '../../utils'
 import { getSectionGPTPageKey } from '../../utils/ad'
 import WineWarning from '../../components/shared/wine-warning'
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
@@ -198,6 +199,9 @@ export default function Category({
   const categoryName = category.name || ''
   const shouldShowAd = useDisplayAd()
 
+  //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
+  const isNotWineCategory = getCategoryOfWineSlug([category]).length === 0
+
   //The type of GPT ad to display depends on which category the section belongs to.
   const sectionSlug = category?.sections?.[0]?.slug ?? ''
 
@@ -230,9 +234,9 @@ export default function Category({
           isPremium={isPremium}
         />
 
-        {shouldShowAd && (
+        {shouldShowAd && isNotWineCategory ? (
           <StickyGPTAd pageKey={getSectionGPTPageKey(sectionSlug)} adKey="ST" />
-        )}
+        ) : null}
         <WineWarning categories={[category]} />
       </CategoryContainer>
     </Layout>
