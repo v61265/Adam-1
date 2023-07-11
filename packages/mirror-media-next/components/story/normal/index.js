@@ -1,7 +1,7 @@
 //TODO: refactor jsx structure, make it more readable.
 //TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
-import { useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import client from '../../../apollo/apollo-client'
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
@@ -116,9 +116,9 @@ const Title = styled.h1`
 const Main = styled.main`
   margin: 20px auto 0;
   width: 100%;
-  height: auto;
   max-width: 1200px;
   padding: 0 20px;
+  position: relative;
   ${({ theme }) => theme.breakpoint.md} {
     padding: 0 64px;
   }
@@ -126,7 +126,7 @@ const Main = styled.main`
     margin: 24px auto 0;
     display: flex;
     flex-direction: row;
-    align-items: start;
+
     justify-content: space-between;
     padding: 0 40px 0 77px;
   }
@@ -278,6 +278,36 @@ const Aside = styled.aside`
   ${({ theme }) => theme.breakpoint.xl} {
     width: 365px;
   }
+`
+
+const TestContainer = styled.div`
+  ${({ theme }) => theme.breakpoint.xl} {
+    position: ${
+      /**
+       *
+       * @param {Object} param
+       * @param {boolean} param.shouldFixAside
+       */
+      ({ shouldFixAside }) => (shouldFixAside ? 'sticky' : 'initial')
+    };
+    width: 365px;
+    top: 0;
+    /* left: 0; */
+
+    right: auto;
+    /* right: calc((100% - 1200px) / 2 + 40px); */
+  }
+`
+
+const TestButton = styled.button`
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: pink;
+  color: black;
+  width: 100px;
+  height: 100px;
+  z-index: 9999999;
 `
 
 const AsideFbPagePlugin = styled(FbPagePlugin)`
@@ -466,6 +496,8 @@ export default function StoryNormalStyle({
   postContent,
   headerData,
 }) {
+  const [shouldFixAside, setShouldFixAside] = useState(true)
+
   const {
     title = '',
     slug = '',
@@ -582,6 +614,11 @@ export default function StoryNormalStyle({
   const shouldShowAd = useDisplayAd(hiddenAdvertised)
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
+
+  const handleChangeFixAside = () => {
+    setShouldFixAside((pre) => !pre)
+  }
+
   return (
     <>
       <ShareHeader
@@ -598,7 +635,9 @@ export default function StoryNormalStyle({
           adKey="HD"
         />
       )}
-
+      <TestButton onClick={handleChangeFixAside}>
+        目前側欄鎖定狀態為：{shouldFixAside ? '開啟' : '關閉'}
+      </TestButton>
       <Main>
         <Article>
           <SectionAndDate>
@@ -620,13 +659,14 @@ export default function StoryNormalStyle({
               tags={tags}
             />
           </InfoAndHero>
-
           <ArticleBrief sectionSlug={section?.slug} brief={brief} />
+
           <ArticleContent
             content={postContent.data}
             sectionSlug={section?.slug}
             hiddenAdvertised={hiddenAdvertised}
           />
+
           <DateUnderContent>
             <span>更新時間｜</span>
             <span className="time">{updatedTaipeiTime} 臺北時間</span>
@@ -634,6 +674,7 @@ export default function StoryNormalStyle({
           <SupportMirrorMediaBanner />
           <SocialNetworkServiceSmall />
           <SubscribeInviteBanner />
+
           <RelatedArticleList
             relateds={relatedsWithOrdered}
             hiddenAdvertised={hiddenAdvertised}
@@ -707,32 +748,31 @@ export default function StoryNormalStyle({
               adKey="PC_R1"
             />
           )}
-
           <AsideArticleList
             heading="最新文章"
             fetchArticle={handleFetchLatestNews}
             shouldReverseOrder={false}
             renderAmount={6}
           />
+          <TestContainer shouldFixAside={shouldFixAside}>
+            {/* <button onClick={handleGetHeight}>取得高度</button> */}
+            {shouldShowAd && (
+              <StyledGPTAd_PC_R2
+                pageKey={getSectionGPTPageKey(section?.slug)}
+                adKey="PC_R2"
+              />
+            )}
 
-          {shouldShowAd && (
-            <StyledGPTAd_PC_R2
-              pageKey={getSectionGPTPageKey(section?.slug)}
-              adKey="PC_R2"
+            <Divider />
+            <AsideArticleList
+              heading="熱門文章"
+              fetchArticle={handleFetchPopularNews}
+              shouldReverseOrder={false}
+              renderAmount={6}
+              hiddenAdvertised={hiddenAdvertised}
             />
-          )}
-
-          <Divider />
-
-          <AsideArticleList
-            heading="熱門文章"
-            fetchArticle={handleFetchPopularNews}
-            shouldReverseOrder={false}
-            renderAmount={6}
-            hiddenAdvertised={hiddenAdvertised}
-          />
-
-          <AsideFbPagePlugin />
+            <AsideFbPagePlugin />
+          </TestContainer>
         </Aside>
       </Main>
       <StoryEndMobileTablet>
