@@ -269,7 +269,7 @@ export default function StoryPremiumStyle({
       supportBanner = <SupportSingleArticleBanner />
     }
   }
-  console.log(categories)
+
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
   return (
