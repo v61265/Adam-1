@@ -10,7 +10,7 @@ const RelatedTitle = styled.h2`
   font-weight: 600;
   font-size: 21px;
   line-height: 150%;
-  color: ${({ theme }) => theme.color.brandColor.gray}}
+  color: ${({ theme }) => theme.color.brandColor.gray};
   margin: 24px 0;
   text-align: center;
 `
@@ -20,7 +20,7 @@ const RelatedItem = styled(Link)`
   font-weight: 400;
   font-size: 16px;
   line-height: 22px;
-  color: ${({ theme }) => theme.color.brandColor.darkBlue}}
+  color: ${({ theme }) => theme.color.brandColor.darkBlue};
   &:hover {
     color: #ffa011;
   }
