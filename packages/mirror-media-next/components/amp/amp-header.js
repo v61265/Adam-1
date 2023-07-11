@@ -11,7 +11,7 @@ const HeaderWrapper = styled.header`
 
 const HeaderLogo = styled(Link)`
   position: relative;
-  width: 49px;
+  width: 73.5px;
 `
 
 /**
@@ -23,8 +23,8 @@ export default function AmpHeader() {
       <HeaderLogo href="/">
         {/* @ts-ignore */}
         <amp-img
-          width="49"
-          height="20.72"
+          width="73.5"
+          height="31.08"
           src="/images/mirror-media-logo.svg"
           alt="mirrormedia"
           layout="responsive"
