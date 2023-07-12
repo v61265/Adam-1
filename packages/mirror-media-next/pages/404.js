@@ -5,8 +5,14 @@ import Link from 'next/link'
 import CustomImage from '@readr-media/react-image'
 import { URL_STATIC_POPULAR_NEWS } from '../config/index.mjs'
 import { API_TIMEOUT } from '../config/index.mjs'
-
+import Layout from '../components/shared/layout'
+import ShareHeader from '../components/shared/share-header'
+import { HeaderSkeleton } from '../components/header'
+import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
 /** @typedef {import('../apollo/fragments/post').AsideListingPost} ArticleData */
+/**
+ * @typedef {import('../components/shared/share-header').HeaderData} HeaderData
+ */
 
 const PageWrapper = styled.div`
   display: flex;
@@ -154,9 +160,19 @@ const PostWrapper = styled.div`
   align-items: center;
 `
 
+const TestButton = styled.button`
+  background-color: pink;
+  position: fixed;
+  top: 200px;
+  left: 20px;
+`
 export default function Custom404() {
   /** @type {[ArticleData[],import('react').Dispatch<ArticleData[]>]} */
   const [popularNews, setPopularNews] = useState([])
+
+  /** @type {[HeaderData,import('react').Dispatch<HeaderData>]} */
+  const [headerData, setHeaderData] = useState(null)
+  const [isHeaderDataLoaded, setIsHeaderDataLoaded] = useState(false)
 
   useEffect(() => {
     let ignore = false
@@ -194,6 +210,34 @@ export default function Custom404() {
       ignore = true
     }
   }, [])
+
+  useEffect(() => {
+    /**
+     * @returns {Promise<HeaderData>}
+     */
+    const fetchHeaderData = async () => {
+      try {
+        const data = await fetchHeaderDataInDefaultPageLayout()
+
+        return data
+      } catch (err) {
+        console.log(
+          JSON.stringify({
+            severity: 'WARNING',
+            message: `Unable fetch header data in 404 page`,
+          })
+        )
+        return {
+          sectionsData: [],
+          topicsData: [],
+        }
+      }
+    }
+    fetchHeaderData().then((res) => {
+      setHeaderData(res)
+      setIsHeaderDataLoaded(true)
+    })
+  }, [])
   const shouldShowPopularNews = popularNews && popularNews.length > 0
   const popularNewsJsx = shouldShowPopularNews ? (
     <>
@@ -229,14 +273,26 @@ export default function Custom404() {
     </>
   ) : null
   return (
-    <PageWrapper>
-      <MsgContainer>
-        <H1>404</H1>
-        <Text>抱歉！找不到這個網址</Text>
-      </MsgContainer>
-      <Title>熱門會員文章</Title>
-      <JoinMemberBtn>加入會員</JoinMemberBtn>
-      <PostsContainer>{popularNewsJsx}</PostsContainer>
-    </PageWrapper>
+    <Layout header={{ type: 'empty' }} footer={{ type: 'empty' }}>
+      <>
+        {isHeaderDataLoaded ? (
+          <ShareHeader pageLayoutType="default" headerData={headerData} />
+        ) : (
+          <HeaderSkeleton />
+        )}
+        <PageWrapper>
+          <MsgContainer>
+            <H1>404</H1>
+            <Text>抱歉！找不到這個網址</Text>
+          </MsgContainer>
+          <Title>熱門會員文章</Title>
+          <JoinMemberBtn>加入會員</JoinMemberBtn>
+          <PostsContainer>{popularNewsJsx}</PostsContainer>
+        </PageWrapper>
+        <TestButton onClick={() => setIsHeaderDataLoaded((val) => !val)}>
+          切換header
+        </TestButton>
+      </>
+    </Layout>
   )
 }
