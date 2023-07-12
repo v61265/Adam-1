@@ -286,7 +286,9 @@ export default function Custom404() {
             <Text>抱歉！找不到這個網址</Text>
           </MsgContainer>
           <Title>熱門會員文章</Title>
-          <JoinMemberBtn>加入會員</JoinMemberBtn>
+          <Link href="/subscribe">
+            <JoinMemberBtn>加入會員</JoinMemberBtn>
+          </Link>
           <PostsContainer>{popularNewsJsx}</PostsContainer>
         </PageWrapper>
         <TestButton onClick={() => setIsHeaderDataLoaded((val) => !val)}>
