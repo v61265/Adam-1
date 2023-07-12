@@ -16,21 +16,21 @@ const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
 
 const Wrapper = styled.section`
   margin-top: 32px;
-  display: grid;
-  gap: 32px;
 
   ${({ theme }) => theme.breakpoint.md} {
     margin-top: 20px;
   }
 `
-
+const ContentContainer = styled.section`
+  margin-top: 32px;
+  margin-bottom: 32px;
+`
 const StyledGPTAd = styled(GPTAd)`
   width: 100%;
   height: auto;
   max-width: 336px;
   max-height: 280px;
-  margin: auto;
-
+  margin: 32px auto;
   display: ${
     /**
      * @param {Object} props
@@ -70,6 +70,7 @@ export default function ArticleContent({
       <DraftRenderBlock
         rawContentBlock={copyAndSliceDraftBlock(content, 0, 1)}
         contentLayout="normal"
+        wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
       />
 
       {blocksLength > 1 && (
@@ -79,6 +80,9 @@ export default function ArticleContent({
           <DraftRenderBlock
             rawContentBlock={copyAndSliceDraftBlock(content, 1, 5)}
             contentLayout="normal"
+            wrapper={(children) => (
+              <ContentContainer>{children}</ContentContainer>
+            )}
           />
         </>
       )}
@@ -90,6 +94,9 @@ export default function ArticleContent({
           <DraftRenderBlock
             rawContentBlock={copyAndSliceDraftBlock(content, 5)}
             contentLayout="normal"
+            wrapper={(children) => (
+              <ContentContainer>{children}</ContentContainer>
+            )}
           />
         </>
       )}
@@ -102,6 +109,7 @@ export default function ArticleContent({
       <DraftRenderBlock
         rawContentBlock={copyAndSliceDraftBlock(content, 0, 3)}
         contentLayout="normal"
+        wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
       />
 
       {blocksLength > 3 && (
@@ -111,6 +119,9 @@ export default function ArticleContent({
           <DraftRenderBlock
             rawContentBlock={copyAndSliceDraftBlock(content, 3)}
             contentLayout="normal"
+            wrapper={(children) => (
+              <ContentContainer>{children}</ContentContainer>
+            )}
           />
         </>
       )}
