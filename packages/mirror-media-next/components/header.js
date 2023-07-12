@@ -561,3 +561,91 @@ export default function Header({
     </HeaderWrapper>
   )
 }
+const SkeletonHeaderTop = styled(HeaderTop)`
+  border-color: transparent;
+`
+const SkeletonBlock = styled.div`
+  background-color: rgba(239, 239, 239, 1);
+  width: ${
+    /**
+     *
+     * @param {Object} param
+     * @param {{width: string, height:string}} [param.mobile]
+     * @param {{width: string, height:string}} [param.tablet]
+     * @param {{width: string, height:string}} [param.desktop]
+     */
+    ({ mobile }) => (mobile.width ? mobile.width : '105px')
+  };
+  height: ${({ mobile }) => (mobile.height ? mobile.height : '32px')};
+  ${({ theme }) => theme.breakpoint.md} {
+    width: ${({ tablet }) => (tablet.width ? tablet.width : '105px')};
+    height: ${({ tablet }) => (tablet.height ? tablet.height : '32px')};
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    width: ${({ desktop }) => (desktop.width ? desktop.width : '105px')};
+    height: ${({ desktop }) => (desktop.height ? desktop.height : '32px')};
+  }
+`
+
+const SkeletonBottomUp = styled.div`
+  display: none;
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+`
+
+const SkeletonBlockBottomDown = styled(SkeletonBlock)`
+  margin-bottom: 18px;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-bottom: 18px;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-bottom: 0px;
+  }
+`
+const HeaderSkeleton = () => {
+  const elementInBottomUp = []
+  const numberOfElementsInBottomUp = 9
+
+  for (let i = 0; i < numberOfElementsInBottomUp; i++) {
+    elementInBottomUp.push(
+      <SkeletonBlock
+        key={i}
+        mobile={{ width: '105px', height: '32px' }}
+        tablet={{ width: '105px', height: '32px' }}
+        desktop={{ width: '105px', height: '32px' }}
+      />
+    )
+  }
+
+  return (
+    <HeaderWrapper>
+      <SkeletonHeaderTop>
+        <SkeletonBlock
+          mobile={{ width: '78px', height: '50px' }}
+          tablet={{ width: '94px', height: '50px' }}
+          desktop={{ width: '105px', height: '36px' }}
+        />
+        <SkeletonBlock
+          mobile={{ width: '94px', height: '24px' }}
+          tablet={{ width: '94px', height: '24px' }}
+          desktop={{ width: '435px', height: '26px' }}
+        />
+      </SkeletonHeaderTop>
+      <HeaderBottom>
+        <SkeletonBottomUp>{elementInBottomUp}</SkeletonBottomUp>
+        <SkeletonBlockBottomDown
+          mobile={{ width: '100%', height: '20px' }}
+          tablet={{ width: '100%', height: '20px' }}
+          desktop={{ width: '100%', height: '29px' }}
+        />
+      </HeaderBottom>
+    </HeaderWrapper>
+  )
+}
+
+export { HeaderSkeleton }
