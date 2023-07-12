@@ -14,22 +14,21 @@ const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
  * @typedef {import('../../../type/draft-js').Draft} Content
  */
 
-const Wrapper = styled.section`
-  display: grid;
-  gap: 32px;
-`
-
 const StyledGPTAd = styled(GPTAd)`
   width: 100%;
   height: auto;
   max-width: 336px;
   max-height: 280px;
-  margin: auto;
+  margin: 32px auto;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 640px;
     max-height: 390px;
   }
+`
+const ContentContainer = styled.section`
+  margin-top: 32px;
+  margin-bottom: 32px;
 `
 
 /**
@@ -51,10 +50,11 @@ export default function PremiumArticleContent({
 
   //The GPT advertisement for the `mobile` version includes `AT1`
   const MB_contentJsx = (
-    <Wrapper className={className}>
+    <section className={className}>
       <DraftRenderBlock
         rawContentBlock={copyAndSliceDraftBlock(content, 0, 1)}
         contentLayout="premium"
+        wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
       />
 
       {blocksLength > 1 && (
@@ -66,16 +66,23 @@ export default function PremiumArticleContent({
           <DraftRenderBlock
             rawContentBlock={copyAndSliceDraftBlock(content, 1)}
             contentLayout="premium"
+            wrapper={(children) => (
+              <ContentContainer>{children}</ContentContainer>
+            )}
           />
         </>
       )}
-    </Wrapper>
+    </section>
   )
 
   const PC_contentJsx = (
-    <Wrapper className={className}>
-      <DraftRenderBlock rawContentBlock={content} contentLayout="premium" />
-    </Wrapper>
+    <section className={className}>
+      <DraftRenderBlock
+        rawContentBlock={content}
+        contentLayout="premium"
+        wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
+      />
+    </section>
   )
 
   const contentJsx =
