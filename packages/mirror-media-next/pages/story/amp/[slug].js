@@ -25,7 +25,7 @@ import AdultOnlyWarning from '../../../components/story/shared/adult-only-warnin
 import WineWarning from '../../../components/shared/wine-warning'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { hasContentInRawContentBlock } = MirrorMedia
-import Taboola from '../../../components/amp/amp-ads/taboola'
+import Taboola from '../../../components/amp/amp-ads/taboola-ad'
 
 export const config = { amp: true }
 

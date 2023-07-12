@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import styled from 'styled-components'
+import AmpPopIn from '../amp/amp-ads/amp-popin-ad'
 
 const RelatedWrapper = styled.section`
   width: 100%;
@@ -54,6 +55,7 @@ export default function AmpHeader({ relateds }) {
           </RelatedItem>
         )
       })}
+      <AmpPopIn />
     </RelatedWrapper>
   )
 }
