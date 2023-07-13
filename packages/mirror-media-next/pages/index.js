@@ -99,7 +99,7 @@ const StyledGPTAd_MB_L1 = styled(GPTAd)`
 /**
  *
  * @param {Object} props
- * @param {import('../type').Topic[]} props.topicsData
+ * @param {TopicsData} props.topicsData
  * @param {FlashNewsData} props.flashNewsData
  * @param {EditorChoicesRawData} [props.editorChoicesData=[]]
  * @param {ArticlesRawData} [props.latestNewsData=[]]
