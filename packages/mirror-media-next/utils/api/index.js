@@ -28,12 +28,9 @@ const errorLogger = (errorMessage) => {
 
 /** @type {() => Promise<import('axios').AxiosResponse<{sections: Sections}>>} */
 const fetchNormalSections = createAxiosRequest(URL_STATIC_NORMAL_SECTIONS)
-const fetchNormalSectionsBreak = createAxiosRequest(
-  `${URL_STATIC_NORMAL_SECTIONS}fake`
-)
+
 /** @type {() => Promise<import('axios').AxiosResponse<{topics: Topics}>>} */
 const fetchTopics = createAxiosRequest(URL_STATIC_TOPICS)
-const fetchTopicsBreak = createAxiosRequest(`${URL_STATIC_TOPICS}fake`)
 
 const fetchPremiumSections = createAxiosRequest(URL_STATIC_PREMIUM_SECTIONS)
 
@@ -63,84 +60,7 @@ const fetchHeaderDataInDefaultPageLayout = async () => {
     errorLogger(err)
   }
 }
-const fetchHeaderDataInDefaultPageLayoutNoSections = async () => {
-  /** @type {Sections} */
-  let sectionsData = []
-  /** @type {Topics} */
-  let topicsData = []
-  try {
-    const responses = await Promise.allSettled([
-      fetchNormalSectionsBreak(),
-      fetchTopics(),
-    ])
 
-    const sectionsResponse = responses[0].status === 'fulfilled' && responses[0]
-    sectionsData = Array.isArray(sectionsResponse?.value?.data?.sections)
-      ? sectionsResponse?.value?.data?.sections
-      : []
-
-    const topicsResponse = responses[1].status === 'fulfilled' && responses[1]
-    topicsData = Array.isArray(topicsResponse?.value?.data?.topics)
-      ? topicsResponse?.value?.data?.topics
-      : []
-
-    return { sectionsData: sectionsData, topicsData }
-  } catch (err) {
-    errorLogger(err)
-  }
-}
-const fetchHeaderDataInDefaultPageLayoutNoTopics = async () => {
-  /** @type {Sections} */
-  let sectionsData = []
-  /** @type {Topics} */
-  let topicsData = []
-  try {
-    const responses = await Promise.allSettled([
-      fetchNormalSections(),
-      fetchTopicsBreak(),
-    ])
-
-    const sectionsResponse = responses[0].status === 'fulfilled' && responses[0]
-    sectionsData = Array.isArray(sectionsResponse?.value?.data?.sections)
-      ? sectionsResponse?.value?.data?.sections
-      : []
-
-    const topicsResponse = responses[1].status === 'fulfilled' && responses[1]
-    topicsData = Array.isArray(topicsResponse?.value?.data?.topics)
-      ? topicsResponse?.value?.data?.topics
-      : []
-
-    return { sectionsData: sectionsData, topicsData }
-  } catch (err) {
-    errorLogger(err)
-  }
-}
-const fetchHeaderDataInDefaultPageLayoutNoAllHeaderData = async () => {
-  /** @type {Sections} */
-  let sectionsData = []
-  /** @type {Topics} */
-  let topicsData = []
-  try {
-    const responses = await Promise.allSettled([
-      fetchNormalSectionsBreak(),
-      fetchTopicsBreak(),
-    ])
-
-    const sectionsResponse = responses[0].status === 'fulfilled' && responses[0]
-    sectionsData = Array.isArray(sectionsResponse?.value?.data?.sections)
-      ? sectionsResponse?.value?.data?.sections
-      : []
-
-    const topicsResponse = responses[1].status === 'fulfilled' && responses[1]
-    topicsData = Array.isArray(topicsResponse?.value?.data?.topics)
-      ? topicsResponse?.value?.data?.topics
-      : []
-
-    return { sectionsData: sectionsData, topicsData }
-  } catch (err) {
-    errorLogger(err)
-  }
-}
 const fetchHeaderDataInPremiumPageLayout = async () => {
   let sectionsData = []
   try {
@@ -156,7 +76,4 @@ const fetchHeaderDataInPremiumPageLayout = async () => {
 export {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
-  fetchHeaderDataInDefaultPageLayoutNoSections,
-  fetchHeaderDataInDefaultPageLayoutNoTopics,
-  fetchHeaderDataInDefaultPageLayoutNoAllHeaderData,
 }
