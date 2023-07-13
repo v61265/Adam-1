@@ -200,8 +200,9 @@ export async function getServerSideProps({ params, req, res }) {
 
     //redirect to specific slug or external url
     const redirect = postData?.redirect
-    handleStoryPageRedirect(redirect)
-
+    if (redirect) {
+      return handleStoryPageRedirect(redirect)
+    }
     return {
       props: {
         postData,

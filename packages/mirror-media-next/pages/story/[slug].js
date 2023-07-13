@@ -297,7 +297,9 @@ export async function getServerSideProps({ params, req, res }) {
     }
 
     const redirect = postData?.redirect
-    handleStoryPageRedirect(redirect)
+    if (redirect) {
+      return handleStoryPageRedirect(redirect)
+    }
     const storyLayoutType = getStoryLayoutType(
       postData?.style,
       postData?.isMember
