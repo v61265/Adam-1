@@ -25,6 +25,7 @@ import WineWarning from '../../../components/shared/wine-warning'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { hasContentInRawContentBlock } = MirrorMedia
 import Taboola from '../../../components/amp/amp-ads/taboola-ad'
+import AmpGptAd from '../../../components/amp/amp-ads/amp-gpt-ad'
 
 export const config = { amp: true }
 
@@ -121,6 +122,9 @@ function StoryAmpPage({ postData }) {
             <AmpMain postData={postData} isMember={isMember} />
             <AmpRelated relateds={relatedsWithOrdered} />
             <Taboola title="你可能也喜歡這些文章" />
+
+            <AmpGptAd />
+
             <AmpFooter />
           </section>
           <AdultOnlyWarning isAdult={isAdult} />
