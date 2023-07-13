@@ -1,7 +1,18 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import Image from 'next/image'
+import Link from 'next/link'
+import CustomImage from '@readr-media/react-image'
+import { URL_STATIC_POPULAR_NEWS } from '../config/index.mjs'
+import { API_TIMEOUT } from '../config/index.mjs'
+import Layout from '../components/shared/layout'
+import ShareHeader from '../components/shared/share-header'
+import { HeaderSkeleton } from '../components/header'
+import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
+/** @typedef {import('../apollo/fragments/post').AsideListingPost} ArticleData */
+/**
+ * @typedef {import('../components/shared/share-header').HeaderData} HeaderData
+ */
 
 const PageWrapper = styled.div`
   display: flex;
@@ -130,18 +141,18 @@ const PostTitle = styled.p`
   overflow: hidden;
   padding-top: 12px;
 `
-const PostBrief = styled.p`
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: #9b9b9b;
-  width: 272px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-  padding-top: 8px;
-`
+// const PostBrief = styled.p`
+//   font-weight: 400;
+//   font-size: 16px;
+//   line-height: 150%;
+//   color: #9b9b9b;
+//   width: 272px;
+//   display: -webkit-box;
+//   -webkit-box-orient: vertical;
+//   -webkit-line-clamp: 3;
+//   overflow: hidden;
+//   padding-top: 8px;
+// `
 
 const PostWrapper = styled.div`
   display: flex;
@@ -149,63 +160,141 @@ const PostWrapper = styled.div`
   align-items: center;
 `
 
+const TestButton = styled.button`
+  background-color: pink;
+  position: fixed;
+  top: 200px;
+  left: 20px;
+`
 export default function Custom404() {
-  //fetch mock data for UI development, not for production
-  const [posts, setPosts] = useState([])
+  /** @type {[ArticleData[],import('react').Dispatch<ArticleData[]>]} */
+  const [popularNews, setPopularNews] = useState([])
+
+  /** @type {[HeaderData,import('react').Dispatch<HeaderData>]} */
+  const [headerData, setHeaderData] = useState(null)
+  const [isHeaderDataLoaded, setIsHeaderDataLoaded] = useState(false)
 
   useEffect(() => {
-    const fetchPost = async () => {
+    let ignore = false
+
+    /**
+     *
+     * @returns {Promise<ArticleData[]>}
+     */
+    const fetchPopularNews = async () => {
       try {
-        const response = await axios(
-          'https://dev.mirrormedia.mg/json/popularlist.json'
-        )
-        setPosts(response?.data?.report)
+        const { data } = await axios({
+          method: 'get',
+          url: URL_STATIC_POPULAR_NEWS,
+          timeout: API_TIMEOUT,
+        })
+
+        return data
       } catch (err) {
-        console.error(err)
+        console.log(
+          JSON.stringify({
+            severity: 'WARNING',
+            message: `Unable fetch popular news in 404 page`,
+          })
+        )
+        return []
       }
     }
-    fetchPost()
+    fetchPopularNews().then((res) => {
+      const firstThreePosts = res.slice(0, 3)
+      if (!ignore) {
+        setPopularNews(firstThreePosts)
+      }
+    })
+    return () => {
+      ignore = true
+    }
   }, [])
 
-  const bullShitBrief =
-    '我以為我了解早餐，但我真的了解早餐嗎？仔細想想，我對早餐的理解只是皮毛而已。由於，每個人的一生中，幾乎可說碰到早餐這件事，是必然會發生的。早餐的出現，必將帶領人類走向更高的巔峰。當你搞懂後就會明白了。世界上若沒有早餐，對於人類的改變可想而知。'
+  useEffect(() => {
+    /**
+     * @returns {Promise<HeaderData>}
+     */
+    const fetchHeaderData = async () => {
+      try {
+        const data = await fetchHeaderDataInDefaultPageLayout()
 
+        return data
+      } catch (err) {
+        console.log(
+          JSON.stringify({
+            severity: 'WARNING',
+            message: `Unable fetch header data in 404 page`,
+          })
+        )
+        return {
+          sectionsData: [],
+          topicsData: [],
+        }
+      }
+    }
+    fetchHeaderData().then((res) => {
+      setHeaderData(res)
+      setIsHeaderDataLoaded(true)
+    })
+  }, [])
+  const shouldShowPopularNews = popularNews && popularNews.length > 0
+  const popularNewsJsx = shouldShowPopularNews ? (
+    <>
+      {popularNews.map((post) => {
+        return (
+          <PostCard key={post.id}>
+            <Link
+              href={`/story/${post.slug}`}
+              target="_blank"
+              rel="noreferrer noopenner"
+            >
+              <PostWrapper>
+                <HeroImgWrapper>
+                  <CustomImage
+                    loadingImage="/images/loading.gif"
+                    defaultImage="/images/default-og-img.png"
+                    images={post.heroImage?.resized}
+                    rwd={{
+                      mobile: '284px',
+                      tablet: '284px',
+                      desktop: '323px',
+                      default: '323px',
+                    }}
+                  />
+                </HeroImgWrapper>
+                <PostTitle className="post-title">{post.title}</PostTitle>
+                {/* <PostBrief>{}</PostBrief> */}
+              </PostWrapper>
+            </Link>
+          </PostCard>
+        )
+      })}
+    </>
+  ) : null
   return (
-    <PageWrapper>
-      <MsgContainer>
-        <H1>404</H1>
-        <Text>抱歉！找不到這個網址</Text>
-      </MsgContainer>
-      <Title>熱門會員文章</Title>
-      <JoinMemberBtn>加入會員</JoinMemberBtn>
-      <PostsContainer>
-        {posts?.slice(0, 3).map((post, index) => {
-          const imgUrl = post?.heroImage?.image?.resizedTargets?.desktop?.url
-          const defaultImg = '/images/default-og-img.png'
-          return (
-            <PostCard key={index}>
-              <a
-                href={`${post?.slug}`}
-                target="_blank"
-                rel="noreferrer noopenner"
-              >
-                <PostWrapper>
-                  <HeroImgWrapper>
-                    <Image
-                      src={imgUrl || defaultImg}
-                      alt={post?.heroImage?.description}
-                      width={323}
-                      height={159}
-                    />
-                  </HeroImgWrapper>
-                  <PostTitle className="post-title">{post?.title}</PostTitle>
-                  <PostBrief>{bullShitBrief}</PostBrief>
-                </PostWrapper>
-              </a>
-            </PostCard>
-          )
-        })}
-      </PostsContainer>
-    </PageWrapper>
+    <Layout header={{ type: 'empty' }} footer={{ type: 'empty' }}>
+      <>
+        {isHeaderDataLoaded ? (
+          <ShareHeader pageLayoutType="default" headerData={headerData} />
+        ) : (
+          <HeaderSkeleton />
+        )}
+        <PageWrapper>
+          <MsgContainer>
+            <H1>404</H1>
+            <Text>抱歉！找不到這個網址</Text>
+          </MsgContainer>
+          <Title>熱門會員文章</Title>
+          <Link href="/subscribe">
+            <JoinMemberBtn>加入會員</JoinMemberBtn>
+          </Link>
+          <PostsContainer>{popularNewsJsx}</PostsContainer>
+        </PageWrapper>
+        <TestButton onClick={() => setIsHeaderDataLoaded((val) => !val)}>
+          切換header
+        </TestButton>
+      </>
+    </Layout>
   )
 }

@@ -1,21 +1,27 @@
 //TODOs:
 //1. set login feature
-//2. set logout feature
 
 import { useState, useRef } from 'react'
 import Image from 'next/legacy/image'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import useClickOutside from '../hooks/useClickOutside'
+import Link from 'next/link'
+import { useMembership, logout } from '../context/membership'
 
 const MemberLoginButtonWrapper = styled.div`
   margin-left: 15px;
 `
-const LoginButton = styled.span`
+const LoginButton = styled.button`
   font-size: 13px;
   line-height: 150%;
   text-decoration: underline;
+  text-underline-offset: 2.5px;
   color: #000;
   padding-left: 1px;
+  &:focus {
+    outline: none;
+  }
 `
 const LoggedInWrapper = styled.div`
   position: relative;
@@ -54,7 +60,9 @@ const dropdownMenuItem = [
 ]
 
 export default function MemberLoginButton() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { isLoggedIn } = useMembership()
+  const router = useRouter()
+
   const [showSelectOptions, setShowSelectOptions] = useState(false)
   const selectWrapperRef = useRef(null)
   useClickOutside(selectWrapperRef, () => {
@@ -63,11 +71,9 @@ export default function MemberLoginButton() {
 
   const handleLogOut = () => {
     setShowSelectOptions(false)
-    setIsLoggedIn((val) => !val)
+    logout()
   }
-  const handleLogIn = () => {
-    setIsLoggedIn((val) => !val)
-  }
+
   let memberLoginButton
   if (isLoggedIn) {
     memberLoginButton = (
@@ -93,7 +99,11 @@ export default function MemberLoginButton() {
       </LoggedInWrapper>
     )
   } else {
-    memberLoginButton = <LoginButton onClick={handleLogIn}>登入</LoginButton>
+    memberLoginButton = (
+      <LoginButton>
+        <Link href={`/login?destination=${router.asPath || '/'}`}>登入</Link>
+      </LoginButton>
+    )
   }
   return (
     <MemberLoginButtonWrapper ref={selectWrapperRef}>
