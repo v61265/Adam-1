@@ -1,4 +1,3 @@
-// @ts-nocheck
 import styled from 'styled-components'
 
 // The AMP PopIn ads only appear on mobile screens. To prevent blank space, the component should not be displayed when the screen width is greater than 'md'.
@@ -16,6 +15,7 @@ const PopInWrapper = styled.div`
 export default function AmpPopIn() {
   return (
     <PopInWrapper>
+      {/* @ts-ignore */}
       <amp-ad
         type="popin"
         width={300}
