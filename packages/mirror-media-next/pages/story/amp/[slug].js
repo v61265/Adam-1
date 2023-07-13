@@ -119,11 +119,13 @@ function StoryAmpPage({ postData }) {
             }`}
           >
             <AmpHeader />
+            <AmpGptAd section="news" position="HD" />
+
             <AmpMain postData={postData} isMember={isMember} />
             <AmpRelated relateds={relatedsWithOrdered} />
             <Taboola title="你可能也喜歡這些文章" />
 
-            <AmpGptAd />
+            <AmpGptAd section="news" position="FT" />
 
             <AmpFooter />
           </section>

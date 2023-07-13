@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { GPT_AD_NETWORK } from '../../../constants/ads'
 
 const Wrapper = styled.div`
-  background-color: aqua;
   /**
  * 廣告有時會替換掉原本 <Ad> 元件裡頭的根元素 <div>
  * 因此不限定所指定的元素類型（*）
@@ -18,7 +17,7 @@ const Wrapper = styled.div`
   }
 `
 
-export default function AmpGptAd() {
+export default function AmpGptAd({ section, position }) {
   return (
     <Wrapper>
       {/* @ts-ignore */}
@@ -26,7 +25,7 @@ export default function AmpGptAd() {
         width="300"
         height="250"
         type="doubleclick"
-        data-slot={`/${GPT_AD_NETWORK}/mirror_AMP_news_300x250_FT`}
+        data-slot={`/${GPT_AD_NETWORK}/mirror_AMP_${section}_300x250_${position}`}
       />
     </Wrapper>
   )
