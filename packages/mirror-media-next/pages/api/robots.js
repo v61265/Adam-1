@@ -1,7 +1,7 @@
+import { ENV } from '../../config/index.mjs'
 export default function handler(req, res) {
-  const { host } = req.headers
   res.setHeader('Content-Type', 'text/plain')
-  if (host?.startsWith('www')) {
+  if (ENV === 'prod') {
     res.write(`User-agent: * 
 Allow: / `)
   } else {
