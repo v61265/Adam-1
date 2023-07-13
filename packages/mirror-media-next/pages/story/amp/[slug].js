@@ -6,7 +6,6 @@ import AmpFooter from '../../../components/amp/amp-footer'
 import AmpRelated from '../../../components/amp/amp-related'
 import AmpMain from '../../../components/amp/amp-main'
 import {
-  sortArrayWithOtherArrayId,
   getCategoryOfWineSlug,
   convertDraftToText,
   getResizedUrl,
@@ -58,7 +57,7 @@ function StoryAmpPage({ postData }) {
   const {
     title = '',
     relateds = [],
-    manualOrderOfRelateds = [],
+    relatedsInInputOrder = [],
     isMember = false,
     isAdult = false,
     categories = [],
@@ -67,8 +66,8 @@ function StoryAmpPage({ postData }) {
   const categoryOfWineSlug = getCategoryOfWineSlug(categories)
 
   const relatedsWithOrdered =
-    manualOrderOfRelateds && manualOrderOfRelateds.length
-      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+    relatedsInInputOrder && relatedsInInputOrder.length
+      ? relatedsInInputOrder
       : relateds
   return (
     <Layout
