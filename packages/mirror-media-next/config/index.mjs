@@ -23,6 +23,7 @@ let GA_MEASUREMENT_ID = ''
 let GTM_ID = ''
 let SEARCH_URL = 'search-url/search'
 let URL_STATIC_POPULAR_NEWS = ''
+let URL_STATIC_404_POPULAR_NEWS = ''
 let URL_RESTFUL_SERVER = ''
 let URL_STATIC_EXTERNALS_WARMLIFE = ''
 let GPT_MODE = ''
@@ -43,6 +44,7 @@ switch (ENV) {
     URL_STATIC_POST_FLASH_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_posts.json`
     URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
     URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
+    URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
     URL_STATIC_EXTERNALS_WARMLIFE = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/json/life_feed.json`
 
     URL_RESTFUL_SERVER = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}`
@@ -76,6 +78,7 @@ switch (ENV) {
     URL_STATIC_POST_FLASH_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_posts.json`
     URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
     URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
+    URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
     URL_STATIC_EXTERNALS_WARMLIFE = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/json/life_feed.json`
 
     URL_RESTFUL_SERVER = `${API_PROTOCOL}://${RESTFUL_API_HOST}:${API_PORT}`
@@ -110,6 +113,7 @@ switch (ENV) {
     URL_STATIC_POST_FLASH_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_posts.json`
     URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
     URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
+    URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
     URL_STATIC_EXTERNALS_WARMLIFE = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/json/life_feed.json`
 
     URL_RESTFUL_SERVER = `http://${RESTFUL_API_HOST}:${API_PORT}/` //'https://rest-dev.mirrormedia.mg'
@@ -145,6 +149,7 @@ switch (ENV) {
     URL_STATIC_POST_FLASH_NEWS = `http://localhost:${API_PORT}/json/header_posts.json`
     URL_STATIC_POST_EXTERNAL = `http://localhost:${API_PORT}/json/post_external`
     URL_STATIC_POPULAR_NEWS = `http://localhost:${API_PORT}/json/popular.json`
+    URL_STATIC_404_POPULAR_NEWS = `http://localhost:${API_PORT}/json/404_popular.json`
     URL_STATIC_EXTERNALS_WARMLIFE = `http://localhost:${API_PORT}/json/life_feed.json`
 
     URL_RESTFUL_SERVER = `http://${RESTFUL_API_HOST}:${API_PORT}/`
@@ -182,6 +187,7 @@ export {
   GTM_ID,
   SEARCH_URL,
   URL_STATIC_POPULAR_NEWS,
+  URL_STATIC_404_POPULAR_NEWS,
   URL_STATIC_EXTERNALS_WARMLIFE,
   GPT_MODE,
   FIREBASE_CONFIG,
