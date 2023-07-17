@@ -160,12 +160,6 @@ const PostWrapper = styled.div`
   align-items: center;
 `
 
-const TestButton = styled.button`
-  background-color: pink;
-  position: fixed;
-  top: 200px;
-  left: 20px;
-`
 export default function Custom404() {
   /** @type {[ArticleDataWithBrief[],import('react').Dispatch<ArticleDataWithBrief[]>]} */
   const [popularNews, setPopularNews] = useState([])
@@ -292,9 +286,6 @@ export default function Custom404() {
           </Link>
           <PostsContainer>{popularNewsJsx}</PostsContainer>
         </PageWrapper>
-        <TestButton onClick={() => setIsHeaderDataLoaded((val) => !val)}>
-          切換header
-        </TestButton>
       </>
     </Layout>
   )
