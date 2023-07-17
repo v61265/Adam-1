@@ -70,7 +70,8 @@ switch (ENV) {
     API_TIMEOUT = 1500
     RESTFUL_API_HOST = '' //currently unset
     API_PORT = '' //currently unset
-    WEEKLY_API_SERVER_ORIGIN = '' //currently unset
+    WEEKLY_API_SERVER_ORIGIN =
+      'adam-weekly-api-server-staging-ufaummkd5q-de.a.run.app'
 
     URL_STATIC_PREMIUM_SECTIONS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_member.json`
     URL_STATIC_NORMAL_SECTIONS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_sections.json`
