@@ -64,10 +64,8 @@ export default function Magazine({ sectionsData = [] }) {
   // Redirect to '/login' if the user is not logged in
   useEffect(() => {
     if (isLogInProcessFinished && !isLoggedIn) {
-      // Store the current page URL in localStorage
-      const redirectUrl = router.asPath
-      localStorage.setItem('redirectUrl', redirectUrl)
-      router.push('/login')
+      const destination = encodeURIComponent('/magazine')
+      router.push(`/login?destination=${destination}`)
     }
   }, [isLogInProcessFinished, isLoggedIn, router])
 
