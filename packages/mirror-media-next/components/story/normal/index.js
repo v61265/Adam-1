@@ -1,7 +1,7 @@
 //TODO: refactor jsx structure, make it more readable.
 //TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import client from '../../../apollo/apollo-client'
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
@@ -280,34 +280,13 @@ const Aside = styled.aside`
   }
 `
 
-const TestContainer = styled.div`
+const FixedContainer = styled.div`
   ${({ theme }) => theme.breakpoint.xl} {
-    position: ${
-      /**
-       *
-       * @param {Object} param
-       * @param {boolean} param.shouldFixAside
-       */
-      ({ shouldFixAside }) => (shouldFixAside ? 'sticky' : 'initial')
-    };
+    position: sticky;
     width: 365px;
-    top: 0;
-    /* left: 0; */
-
-    right: auto;
-    /* right: calc((100% - 1200px) / 2 + 40px); */
+    top: 32px;
+    right: 0;
   }
-`
-
-const TestButton = styled.button`
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background-color: pink;
-  color: black;
-  width: 100px;
-  height: 100px;
-  z-index: 9999999;
 `
 
 const AsideFbPagePlugin = styled(FbPagePlugin)`
@@ -496,8 +475,6 @@ export default function StoryNormalStyle({
   postContent,
   headerData,
 }) {
-  const [shouldFixAside, setShouldFixAside] = useState(true)
-
   const {
     title = '',
     slug = '',
@@ -615,10 +592,6 @@ export default function StoryNormalStyle({
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
-  const handleChangeFixAside = () => {
-    setShouldFixAside((pre) => !pre)
-  }
-
   return (
     <>
       <ShareHeader
@@ -635,9 +608,7 @@ export default function StoryNormalStyle({
           adKey="HD"
         />
       )}
-      <TestButton onClick={handleChangeFixAside}>
-        目前側欄鎖定狀態為：{shouldFixAside ? '開啟' : '關閉'}
-      </TestButton>
+
       <Main>
         <Article>
           <SectionAndDate>
@@ -754,8 +725,7 @@ export default function StoryNormalStyle({
             shouldReverseOrder={false}
             renderAmount={6}
           />
-          <TestContainer shouldFixAside={shouldFixAside}>
-            {/* <button onClick={handleGetHeight}>取得高度</button> */}
+          <FixedContainer>
             {shouldShowAd && (
               <StyledGPTAd_PC_R2
                 pageKey={getSectionGPTPageKey(section?.slug)}
@@ -772,7 +742,7 @@ export default function StoryNormalStyle({
               hiddenAdvertised={hiddenAdvertised}
             />
             <AsideFbPagePlugin />
-          </TestContainer>
+          </FixedContainer>
         </Aside>
       </Main>
       <StoryEndMobileTablet>
