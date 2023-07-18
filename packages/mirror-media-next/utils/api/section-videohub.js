@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { URL_RESTFUL_SERVER } from '../../config/index.mjs'
+import { WEEKLY_API_SERVER_YOUTUBE_ENDPOINT } from '../../config/index.mjs'
 import client from '../../apollo/apollo-client'
 import { fetchSectionWithCategory } from '../../apollo/query/sections'
 
@@ -21,7 +21,7 @@ export function fetchYoutubeHighestViewCountInOneWeek() {
 function fetchYoutubeHighestViewCountAfterTS(ts) {
   return axios({
     method: 'get',
-    url: `${URL_RESTFUL_SERVER}/youtube/search`,
+    url: `${WEEKLY_API_SERVER_YOUTUBE_ENDPOINT}/search`,
     params: new URLSearchParams([
       ['channelId', 'UCYkldEK001GxR884OZMFnRw'],
       ['part', 'snippet'],
@@ -40,7 +40,7 @@ function fetchYoutubeHighestViewCountAfterTS(ts) {
 export function fetcYoutubeVideoForFullDescription(videoId) {
   return axios({
     method: 'get',
-    url: `${URL_RESTFUL_SERVER}/youtube/videos`,
+    url: `${WEEKLY_API_SERVER_YOUTUBE_ENDPOINT}/videos`,
     // use URLSearchParams to add two values for key 'part'
     params: new URLSearchParams([
       ['id', videoId],
@@ -57,7 +57,7 @@ export function fetcYoutubeVideoForFullDescription(videoId) {
 export function fetchYoutubeLatestVideos() {
   return axios({
     method: 'get',
-    url: `${URL_RESTFUL_SERVER}/youtube/search`,
+    url: `${WEEKLY_API_SERVER_YOUTUBE_ENDPOINT}/search`,
     params: new URLSearchParams([
       ['channelId', 'UCYkldEK001GxR884OZMFnRw'],
       ['part', 'snippet'],
@@ -85,7 +85,7 @@ export function fetchVideohubSection() {
 export function fetchYoutubePlaylistByChannelId(channelId) {
   return axios({
     method: 'get',
-    url: `${URL_RESTFUL_SERVER}/youtube/playlistItems`,
+    url: `${WEEKLY_API_SERVER_YOUTUBE_ENDPOINT}/playlistItems`,
     // use URLSearchParams to add two values for key 'part'
     params: new URLSearchParams([
       ['playlistId', channelId],

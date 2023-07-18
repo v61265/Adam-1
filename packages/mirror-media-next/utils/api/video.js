@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { URL_RESTFUL_SERVER } from '../../config/index.mjs'
+import { WEEKLY_API_SERVER_YOUTUBE_ENDPOINT } from '../../config/index.mjs'
 
 /**
  * @param {string} videoId - youtube video id
@@ -7,7 +7,7 @@ import { URL_RESTFUL_SERVER } from '../../config/index.mjs'
 export function fetchYoutubeVideoByVideoId(videoId) {
   return axios({
     method: 'get',
-    url: `${URL_RESTFUL_SERVER}/youtube/videos`,
+    url: `${WEEKLY_API_SERVER_YOUTUBE_ENDPOINT}/videos`,
     // use URLSearchParams to add two values for key 'part'
     params: new URLSearchParams([
       ['id', videoId],
@@ -24,7 +24,7 @@ export function fetchYoutubeVideoByVideoId(videoId) {
 export function fetchYoutubeLatestVideosByChannelId(channelId) {
   return axios({
     method: 'get',
-    url: `${URL_RESTFUL_SERVER}/youtube/search`,
+    url: `${WEEKLY_API_SERVER_YOUTUBE_ENDPOINT}/search`,
     // use URLSearchParams to add two values for key 'part'
     params: new URLSearchParams([
       ['channelId', channelId],
