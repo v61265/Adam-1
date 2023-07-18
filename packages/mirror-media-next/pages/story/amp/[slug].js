@@ -68,7 +68,6 @@ function StoryAmpPage({ postData }) {
 
   const [section] = sections
   const sectionSlot = getAmpGptDataSlotSection(section)
-  console.log(sectionSlot)
 
   const categoryOfWineSlug = getCategoryOfWineSlug(categories)
 
