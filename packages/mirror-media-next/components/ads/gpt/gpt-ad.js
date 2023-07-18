@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import useFirstScrollDetector from '../../../hooks/useFirstScrollDetector.js'
 
 import {
   getAdSlotParam,
@@ -67,7 +68,13 @@ export default function GPTAd({
   const [adUnitPath, setAdUnitPath] = useState('')
   const [adWidth, setAdWidth] = useState('')
 
+  const hasScrolled = useFirstScrollDetector()
+  const shouldShowAtFirst = adKey !== 'MB_ST'
   const adDivId = adUnitPath // Set the id of the ad `<div>` to be the same as the `adUnitPath`.
+
+  const shouldShowComponent = useMemo(() => {
+    return shouldShowAtFirst || hasScrolled
+  }, [shouldShowAtFirst, hasScrolled])
 
   useEffect(() => {
     let newAdSize, newAdUnitPath, newAdWidth
@@ -162,7 +169,10 @@ export default function GPTAd({
   }, [adDivId, adSize, adUnitPath, adWidth, onSlotRenderEnded, onSlotRequested])
 
   return (
-    <Wrapper className={`${className} gpt-ad`}>
+    <Wrapper
+      className={`${className} gpt-ad`}
+      style={shouldShowComponent ? {} : { display: 'none' }}
+    >
       <Ad width={adWidth} id={adDivId} />
     </Wrapper>
   )
