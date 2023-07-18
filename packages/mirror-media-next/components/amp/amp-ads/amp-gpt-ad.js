@@ -22,8 +22,8 @@ export default function AmpGptAd({ section, position }) {
     <Wrapper>
       {/* @ts-ignore */}
       <amp-ad
-        width="336"
-        height="280"
+        width="300"
+        height="250"
         type="doubleclick"
         data-slot={`/${GPT_AD_NETWORK}/mirror_AMP_${section}_300x250_${position}`}
         data-multi-size="336x280,300x250"

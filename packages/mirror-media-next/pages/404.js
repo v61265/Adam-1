@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import axios from 'axios'
 import Link from 'next/link'
 import CustomImage from '@readr-media/react-image'
-import { URL_STATIC_POPULAR_NEWS } from '../config/index.mjs'
+import { URL_STATIC_404_POPULAR_NEWS } from '../config/index.mjs'
 import { API_TIMEOUT } from '../config/index.mjs'
 import Layout from '../components/shared/layout'
 import ShareHeader from '../components/shared/share-header'
 import { HeaderSkeleton } from '../components/header'
 import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
-/** @typedef {import('../apollo/fragments/post').AsideListingPost} ArticleData */
+/** @typedef {import('../apollo/fragments/post').AsideListingPost & {brief: import('../apollo/fragments/post').Post['brief']} } ArticleDataWithBrief */
 /**
  * @typedef {import('../components/shared/share-header').HeaderData} HeaderData
  */
@@ -141,18 +141,18 @@ const PostTitle = styled.p`
   overflow: hidden;
   padding-top: 12px;
 `
-// const PostBrief = styled.p`
-//   font-weight: 400;
-//   font-size: 16px;
-//   line-height: 150%;
-//   color: #9b9b9b;
-//   width: 272px;
-//   display: -webkit-box;
-//   -webkit-box-orient: vertical;
-//   -webkit-line-clamp: 3;
-//   overflow: hidden;
-//   padding-top: 8px;
-// `
+const PostBrief = styled.p`
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  color: #9b9b9b;
+  width: 272px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  padding-top: 8px;
+`
 
 const PostWrapper = styled.div`
   display: flex;
@@ -160,14 +160,8 @@ const PostWrapper = styled.div`
   align-items: center;
 `
 
-const TestButton = styled.button`
-  background-color: pink;
-  position: fixed;
-  top: 200px;
-  left: 20px;
-`
 export default function Custom404() {
-  /** @type {[ArticleData[],import('react').Dispatch<ArticleData[]>]} */
+  /** @type {[ArticleDataWithBrief[],import('react').Dispatch<ArticleDataWithBrief[]>]} */
   const [popularNews, setPopularNews] = useState([])
 
   /** @type {[HeaderData,import('react').Dispatch<HeaderData>]} */
@@ -179,13 +173,13 @@ export default function Custom404() {
 
     /**
      *
-     * @returns {Promise<ArticleData[]>}
+     * @returns {Promise<ArticleDataWithBrief[]>}
      */
     const fetchPopularNews = async () => {
       try {
         const { data } = await axios({
           method: 'get',
-          url: URL_STATIC_POPULAR_NEWS,
+          url: URL_STATIC_404_POPULAR_NEWS,
           timeout: API_TIMEOUT,
         })
 
@@ -242,6 +236,7 @@ export default function Custom404() {
   const popularNewsJsx = shouldShowPopularNews ? (
     <>
       {popularNews.map((post) => {
+        const brief = post?.brief?.blocks?.[0]?.text
         return (
           <PostCard key={post.id}>
             <Link
@@ -264,7 +259,7 @@ export default function Custom404() {
                   />
                 </HeroImgWrapper>
                 <PostTitle className="post-title">{post.title}</PostTitle>
-                {/* <PostBrief>{}</PostBrief> */}
+                <PostBrief>{brief}</PostBrief>
               </PostWrapper>
             </Link>
           </PostCard>
@@ -291,9 +286,6 @@ export default function Custom404() {
           </Link>
           <PostsContainer>{popularNewsJsx}</PostsContainer>
         </PageWrapper>
-        <TestButton onClick={() => setIsHeaderDataLoaded((val) => !val)}>
-          切換header
-        </TestButton>
       </>
     </Layout>
   )
