@@ -133,6 +133,40 @@ const getPopInId = (index = 0) => {
   return popInId
 }
 
+/**
+ * Retrieves the data slot section for a given section name.
+ *
+ * @param {Object} section - The section object containing a name property.
+ * @param {string} section.name - The name of the section.
+ * @return {string} The corresponding data slot section for the given section name.
+ */
+function getAmpGptDataSlotSection(section) {
+  const name = section.name
+
+  switch (true) {
+    case name.includes('時事'):
+      return 'news'
+    case name.includes('娛樂'):
+      return 'ent'
+    case name.includes('財經理財'):
+      return 'fin'
+    case name.includes('人物'):
+      return 'peo'
+    case name.includes('國際'):
+      return 'int'
+    case name.includes('瑪法達'):
+      return 'mafa'
+    case name.includes('文化'):
+      return 'cul'
+    case name.includes('汽車鐘錶'):
+      return 'wat'
+    case name.includes('美食旅遊'):
+      return 'tra'
+    default:
+      return 'oth'
+  }
+}
+
 export {
   needInsertMicroAdAfter,
   getMicroAdUnitId,
@@ -140,4 +174,5 @@ export {
   getSectionGPTPageKey,
   needInsertPopInAdAfter,
   getPopInId,
+  getAmpGptDataSlotSection,
 }

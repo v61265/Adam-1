@@ -26,6 +26,7 @@ import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { hasContentInRawContentBlock } = MirrorMedia
 import Taboola from '../../../components/amp/amp-ads/taboola-ad'
 import AmpGptAd from '../../../components/amp/amp-ads/amp-gpt-ad'
+import { getAmpGptDataSlotSection } from '../../../utils/ad'
 
 export const config = { amp: true }
 
@@ -62,7 +63,11 @@ function StoryAmpPage({ postData }) {
     isMember = false,
     isAdult = false,
     categories = [],
+    sections = [],
   } = postData
+
+  const [section] = sections
+  const sectionSlot = getAmpGptDataSlotSection(section)
 
   const categoryOfWineSlug = getCategoryOfWineSlug(categories)
 
@@ -119,13 +124,19 @@ function StoryAmpPage({ postData }) {
             }`}
           >
             <AmpHeader />
-            <AmpGptAd section="news" position="HD" />
+            <AmpGptAd section={sectionSlot} position="HD" />
+            <p style={{ textAlign: 'center', color: 'pink' }}>
+              顯示廣告分類：{sectionSlot}
+            </p>
 
             <AmpMain postData={postData} isMember={isMember} />
             <AmpRelated relateds={relatedsWithOrdered} />
             <Taboola title="你可能也喜歡這些文章" />
 
-            <AmpGptAd section="news" position="FT" />
+            <AmpGptAd section={sectionSlot} position="FT" />
+            <p style={{ textAlign: 'center', color: 'pink' }}>
+              顯示廣告分類：{sectionSlot}
+            </p>
 
             <AmpFooter />
           </section>
