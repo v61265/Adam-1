@@ -130,7 +130,7 @@ function StoryAmpPage({ postData }) {
             </p>
 
             <AmpMain postData={postData} isMember={isMember} />
-            <AmpRelated relateds={relatedsWithOrdered} />
+            <AmpRelated relateds={relatedsWithOrdered} section={sectionSlot} />
             <Taboola title="你可能也喜歡這些文章" />
 
             <AmpGptAd section={sectionSlot} position="FT" />

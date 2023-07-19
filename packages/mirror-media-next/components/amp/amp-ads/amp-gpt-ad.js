@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { GPT_AD_NETWORK } from '../../../constants/ads'
 
 const Wrapper = styled.div`
+  background-color: aqua;
   /**
  * 廣告有時會替換掉原本 <Ad> 元件裡頭的根元素 <div>
  * 因此不限定所指定的元素類型（*）
@@ -16,10 +17,16 @@ const Wrapper = styled.div`
     }
   }
 `
-
-export default function AmpGptAd({ section, position }) {
+/**
+ * @param {Object} props - The component props.
+ * @param {string} [props.className] - The class name for the component.
+ * @param {string} props.section - The section for the ad.
+ * @param {string} props.position - The position of the ad within the section.
+ * @return {JSX.Element} The rendered AMP GPT ad component.
+ */
+export default function AmpGptAd({ className, section, position }) {
   return (
-    <Wrapper>
+    <Wrapper className={className}>
       {/* @ts-ignore */}
       <amp-ad
         width="300"

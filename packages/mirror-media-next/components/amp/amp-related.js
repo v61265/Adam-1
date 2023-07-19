@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import styled from 'styled-components'
-import AmpPopIn from '../amp/amp-ads/amp-popin-ad'
+import AmpPopIn from './amp-ads/amp-popin-ad'
+import AmpGptAd from './amp-ads/amp-gpt-ad'
 
 const RelatedWrapper = styled.section`
   width: 100%;
@@ -30,6 +31,10 @@ const RelatedItem = styled(Link)`
   }
 `
 
+const StyledAmpGptAd = styled(AmpGptAd)`
+  margin-top: 20px;
+`
+
 /**
  * @typedef {(import('../../apollo/fragments/post').Related)[]} Relateds
  */
@@ -37,9 +42,13 @@ const RelatedItem = styled(Link)`
  *
  * @param {Object} props
  * @param {Relateds} props.relateds
+ * @param {string} props.section
  * @returns {JSX.Element}
  */
-export default function AmpHeader({ relateds }) {
+
+export default function AmpHeader({ relateds, section }) {
+  console.log(relateds.length, section)
+
   return (
     <RelatedWrapper>
       <RelatedTitle>相關文章</RelatedTitle>
@@ -55,6 +64,7 @@ export default function AmpHeader({ relateds }) {
           </RelatedItem>
         )
       })}
+      <StyledAmpGptAd section={section} position="E1" />
       <AmpPopIn />
     </RelatedWrapper>
   )
