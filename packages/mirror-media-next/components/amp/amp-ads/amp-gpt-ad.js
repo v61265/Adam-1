@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { GPT_AD_NETWORK } from '../../../constants/ads'
 
 const Wrapper = styled.div`
-  background-color: aqua;
   /**
  * 廣告有時會替換掉原本 <Ad> 元件裡頭的根元素 <div>
  * 因此不限定所指定的元素類型（*）

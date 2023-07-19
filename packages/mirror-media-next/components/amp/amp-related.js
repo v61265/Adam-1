@@ -32,7 +32,7 @@ const RelatedItem = styled(Link)`
 `
 
 const StyledAmpGptAd = styled(AmpGptAd)`
-  margin-top: 20px;
+  margin: 20px 0;
 `
 
 /**
@@ -46,26 +46,50 @@ const StyledAmpGptAd = styled(AmpGptAd)`
  * @returns {JSX.Element}
  */
 
-export default function AmpHeader({ relateds, section }) {
-  console.log(relateds.length, section)
+export default function AmpRelated({ relateds, section }) {
+  const relatedsBefordAd = relateds.slice(0, 5)
+  const relatedsAfterAd = relateds.slice(5)
 
   return (
     <RelatedWrapper>
       <RelatedTitle>相關文章</RelatedTitle>
-      {relateds.map((relatedItem, index) => {
-        return (
-          <RelatedItem
-            href={`/story/${relatedItem.slug}`}
-            target="_blank"
-            key={index}
-            rel="noreferrer"
-          >
-            {relatedItem.title}
-          </RelatedItem>
-        )
-      })}
-      <StyledAmpGptAd section={section} position="E1" />
-      <AmpPopIn />
+
+      {relatedsBefordAd.map((relatedItem, index) => (
+        <RelatedItem
+          href={`/story/${relatedItem.slug}`}
+          target="_blank"
+          key={index}
+          rel="noreferrer"
+        >
+          {relatedItem.title}
+        </RelatedItem>
+      ))}
+
+      {relateds.length >= 5 && (
+        <>
+          <StyledAmpGptAd section={section} position="E1" />
+          {relatedsAfterAd.map((relatedItem, index) => (
+            <RelatedItem
+              href={`/story/${relatedItem.slug}`}
+              target="_blank"
+              key={index}
+              rel="noreferrer"
+            >
+              {relatedItem.title}
+            </RelatedItem>
+          ))}
+          <AmpPopIn />
+        </>
+      )}
+
+      {relateds.length === 4 && (
+        <>
+          <AmpPopIn />
+          <StyledAmpGptAd section={section} position="E1" />
+        </>
+      )}
+
+      {relateds.length < 4 && <AmpPopIn />}
     </RelatedWrapper>
   )
 }
