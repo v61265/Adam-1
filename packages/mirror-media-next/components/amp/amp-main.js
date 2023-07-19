@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import styled from 'styled-components'
-import { sortArrayWithOtherArrayId } from '../../utils'
 import ButtonCopyLink from '../story/shared/button-copy-link'
 import ButtonSocialNetworkShare from '../story/shared/button-social-network-share'
 import AmpCredits from '../story/shared/credits'
@@ -119,14 +118,14 @@ export default function AmpMain({ postData, isMember }) {
   const {
     title = '',
     sections = [],
-    manualOrderOfSections = [],
+    sectionsInInputOrder = [],
     heroImage = null,
     heroVideo = null,
     heroCaption = '',
     publishedDate = '',
     updatedAt = '',
     writers = [],
-    manualOrderOfWriters = [],
+    writersInInputOrder = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -141,14 +140,14 @@ export default function AmpMain({ postData, isMember }) {
   const sharedUrl = useSharedUrl()
 
   const sectionsWithOrdered =
-    manualOrderOfSections && manualOrderOfSections.length
-      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+    sectionsInInputOrder && sectionsInInputOrder.length
+      ? sectionsInInputOrder
       : sections
   const [section] = sectionsWithOrdered
 
   const writersWithOrdered =
-    manualOrderOfWriters && manualOrderOfWriters.length
-      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+    writersInInputOrder && writersInInputOrder.length
+      ? writersInInputOrder
       : writers
 
   const credits = [
