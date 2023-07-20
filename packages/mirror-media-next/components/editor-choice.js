@@ -1,9 +1,11 @@
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
+
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { Autoplay, Pagination, Navigation } from 'swiper'
 import CustomImage from '@readr-media/react-image'
 import styled from 'styled-components'
-
+import Link from 'next/link'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -245,6 +247,7 @@ export default function EditorChoice({ editorChoice = [] }) {
                 href={item.articleHref}
                 target="_blank"
                 rel="noreferrer noopenner"
+                className="GTM-editorchoice-list"
               >
                 <ListItemLabel sectionName={item.sectionTitle}>
                   {item.sectionName}
@@ -273,14 +276,15 @@ export default function EditorChoice({ editorChoice = [] }) {
             >
               {editorChoice.map((item) => (
                 <SwiperSlide key={item.slug}>
-                  <a
+                  <Link
+                    className="GTM-editorchoice-list"
                     href={item.articleHref}
                     target="_blank"
                     rel="noreferrer noopenner"
                   >
                     {editorChoiceImageJsx(item.heroImage, item.title)}
                     <p className="title">{item.title}</p>
-                  </a>
+                  </Link>
                 </SwiperSlide>
               ))}
             </Swiper>
