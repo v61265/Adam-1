@@ -238,8 +238,6 @@ export default function AmpMain({ postData, isMember }) {
           </>
         )}
 
-        {/* <DraftRenderBlock rawContentBlock={content} contentLayout="amp" /> */}
-
         {isMember && (
           <Link href={sharedUrl.replace('/amp/', '/')}>
             【 加入鏡週刊會員，觀看全文 】
