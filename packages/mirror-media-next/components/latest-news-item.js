@@ -1,5 +1,7 @@
-import styled from 'styled-components'
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
 
+import styled from 'styled-components'
+import Link from 'next/link'
 import CustomImage from '@readr-media/react-image'
 
 /**
@@ -123,7 +125,12 @@ const Title = styled.div`
  */
 export default function LatestNewsItem({ itemData }) {
   return (
-    <a href={itemData.articleHref} target="_blank" rel="noreferrer">
+    <Link
+      href={itemData.articleHref}
+      target="_blank"
+      rel="noreferrer"
+      className="GTM-homepage-latest-list"
+    >
       <ItemWrapper>
         <ImageContainer>
           <CustomImage
@@ -151,6 +158,6 @@ export default function LatestNewsItem({ itemData }) {
           </Title>
         </Detail>
       </ItemWrapper>
-    </a>
+    </Link>
   )
 }
