@@ -1,9 +1,8 @@
-//TODO: replace <a> with <Link> from Nextjs for Single Page Application
-
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
-
+import Link from 'next/link'
 import {
   SUB_BRAND_LINKS,
   PROMOTION_LINKS,
@@ -498,10 +497,9 @@ export default function Header({
   return (
     <HeaderWrapper>
       <HeaderTop>
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/">
+        <Link href="/" className="GTM-header-logo">
           <HeaderLogo />
-        </a>
+        </Link>
         {shouldShowAd && <StyledGPTAd pageKey="global" adKey="RWD_LOGO" />}
         <ActionWrapper>
           <SubBrandList subBrands={SUB_BRAND_LINKS} />
