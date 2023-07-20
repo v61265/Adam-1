@@ -465,6 +465,26 @@ const StyledGPTAd_PC_E2 = styled(GPTAd)`
   }
 `
 
+const StyleGPTAdFloating = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    z-index: 2147483647;
+    position: fixed;
+    top: 175px;
+    right: 15px;
+    svg {
+      position: absolute;
+      top: -12.5px;
+      right: -12.5px;
+      width: 25px;
+      height: auto;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+`
+
 /**
  *
  * @param {{postData: PostData,postContent: PostContent, headerData: any}} param
@@ -770,6 +790,14 @@ export default function StoryNormalStyle({
           </DableADContainer_Desktop>
         )}
       </StoryEndMobileTablet>
+
+      {shouldShowAd && (
+        <StyleGPTAdFloating
+          pageKey={getSectionGPTPageKey(section?.slug)}
+          adKey="PC_FLOATING"
+        />
+        // <SvgCloseIcon @click="doesClickCloseAdPcFloating = true" />
+      )}
 
       {shouldShowAd && (
         <StyledGPTAd_FT

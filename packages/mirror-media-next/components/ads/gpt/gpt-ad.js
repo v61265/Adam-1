@@ -22,6 +22,14 @@ const Wrapper = styled.div`
       display: block;
     }
   }
+  ${
+    /**
+     * @param {Object} props
+     * @param {boolean} props.shouldHideComponent
+     * @returns
+     */
+    ({ shouldHideComponent }) => shouldHideComponent && 'display: none;'
+  };
 `
 
 const Ad = styled.div`
@@ -69,12 +77,12 @@ export default function GPTAd({
   const [adWidth, setAdWidth] = useState('')
 
   const hasScrolled = useFirstScrollDetector()
-  const shouldShowAtFirst = adKey !== 'MB_ST'
+  const shouldHideAtFirst = adKey === 'MB_ST'
   const adDivId = adUnitPath // Set the id of the ad `<div>` to be the same as the `adUnitPath`.
 
-  const shouldShowComponent = useMemo(() => {
-    return shouldShowAtFirst || hasScrolled
-  }, [shouldShowAtFirst, hasScrolled])
+  const shouldHideComponent = useMemo(() => {
+    return shouldHideAtFirst && !hasScrolled
+  }, [shouldHideAtFirst, hasScrolled])
 
   useEffect(() => {
     let newAdSize, newAdUnitPath, newAdWidth
@@ -171,7 +179,7 @@ export default function GPTAd({
   return (
     <Wrapper
       className={`${className} gpt-ad`}
-      style={shouldShowComponent ? {} : { display: 'none' }}
+      shouldHideComponent={shouldHideComponent}
     >
       <Ad width={adWidth} id={adDivId} />
     </Wrapper>
