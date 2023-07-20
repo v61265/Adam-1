@@ -64,9 +64,15 @@ function StoryAmpPage({ postData }) {
     isAdult = false,
     categories = [],
     sections = [],
+    sectionsInInputOrder = [],
   } = postData
 
-  const [section] = sections
+  const sectionsWithOrdered =
+    sectionsInInputOrder && sectionsInInputOrder.length
+      ? sectionsInInputOrder
+      : sections
+  const [section] = sectionsWithOrdered
+
   const sectionSlot = getAmpGptDataSlotSection(section)
 
   const categoryOfWineSlug = getCategoryOfWineSlug(categories)
