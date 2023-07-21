@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import useFirstScrollDetector from '../../../hooks/useFirstScrollDetector.js'
 
 import {
   getAdSlotParam,
@@ -21,6 +22,14 @@ const Wrapper = styled.div`
       display: block;
     }
   }
+  ${
+    /**
+     * @param {Object} props
+     * @param {boolean} props.shouldHideComponent
+     * @returns
+     */
+    ({ shouldHideComponent }) => shouldHideComponent && 'display: none;'
+  };
 `
 
 const Ad = styled.div`
@@ -67,7 +76,13 @@ export default function GPTAd({
   const [adUnitPath, setAdUnitPath] = useState('')
   const [adWidth, setAdWidth] = useState('')
 
+  const hasScrolled = useFirstScrollDetector()
+  const shouldHideAtFirst = adKey === 'MB_ST'
   const adDivId = adUnitPath // Set the id of the ad `<div>` to be the same as the `adUnitPath`.
+
+  const shouldHideComponent = useMemo(() => {
+    return shouldHideAtFirst && !hasScrolled
+  }, [shouldHideAtFirst, hasScrolled])
 
   useEffect(() => {
     let newAdSize, newAdUnitPath, newAdWidth
@@ -162,7 +177,10 @@ export default function GPTAd({
   }, [adDivId, adSize, adUnitPath, adWidth, onSlotRenderEnded, onSlotRequested])
 
   return (
-    <Wrapper className={`${className} gpt-ad`}>
+    <Wrapper
+      className={`${className} gpt-ad`}
+      shouldHideComponent={shouldHideComponent}
+    >
       <Ad width={adWidth} id={adDivId} />
     </Wrapper>
   )
