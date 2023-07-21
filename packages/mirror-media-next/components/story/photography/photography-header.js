@@ -127,8 +127,8 @@ export default function Header() {
             height={32}
           />
         </a>
-        <DonateLink className="donate-btn-pc" />
-        <SubscribeLink className="subscribe-btn" />
+        <DonateLink className="donate-btn-pc GTM-donate-link-top" />
+        <SubscribeLink className="subscribe-btn GTM-subscribe-link-top" />
         {/* <PhotosIndexButton>
           <Image
             src="/images/photos-index-icon.svg"

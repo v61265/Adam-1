@@ -61,12 +61,12 @@ const Container = styled.div`
  * @param {string} [props.className]
  * @returns {JSX.Element}
  */
-export default function SupportMirrorMediaBanner({ className }) {
+export default function SupportSingleArticleBanner({ className }) {
   return (
     <Container className={className}>
       <p className="title">小心意大意義，小額贊助鏡週刊！</p>
       {/* <p className="desc">目前已有 123,456 人贊助本文</p> */}
-      <DonateLink className="banner-button" />
+      <DonateLink className="banner-button GTM-donate-link-bottom" />
     </Container>
   )
 }
