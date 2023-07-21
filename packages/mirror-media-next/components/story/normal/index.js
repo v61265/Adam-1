@@ -1,7 +1,7 @@
 //TODO: refactor jsx structure, make it more readable.
 //TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import client from '../../../apollo/apollo-client'
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
@@ -21,6 +21,7 @@ import HeroImageAndVideo from './hero-image-and-video'
 import Divider from '../shared/divider'
 import ShareHeader from '../../shared/share-header'
 import Footer from '../../shared/footer'
+import SvgCloseIcon from '../../../public/images/close-black.svg'
 import {
   transformTimeDataIntoDotFormat,
   getCategoryOfWineSlug,
@@ -452,18 +453,31 @@ const StyledGPTAd_PC_E1 = styled(GPTAd)`
   }
 `
 
+const FloatingAdContainer = styled.div`
+  z-index: ${Z_INDEX.top};
+  position: fixed;
+  top: 175px;
+  right: 15px;
+  svg {
+    position: absolute;
+    top: -12.5px;
+    right: -12.5px;
+    width: 25px;
+    height: auto;
+    cursor: pointer;
+    user-select: none;
+  }
+`
+
 const StyledGPTAd_PC_E2 = styled(GPTAd)`
   display: none;
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: block;
-    margin: 0;
-    width: 100%;
-    height: auto;
-    max-height: 250px;
-    max-width: 300px;
   }
 `
+
+const StyledGPTAd_PC_FLOATING = styled(GPTAd)``
 
 /**
  *
@@ -516,6 +530,10 @@ export default function StoryNormalStyle({
       : writers
 
   const [section] = sectionsWithOrdered
+
+  const [shouldShowAdPcFloating, setShouldShowAdPcFloating] = useState(
+    section?.slug === 'carandwatch'
+  )
 
   // 廣編文章的 pageKey 是 other
   const pageKeyForGptAd = postData.isAdvertised
@@ -597,6 +615,12 @@ export default function StoryNormalStyle({
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
+  const handleRenderEndedAdPcFloating = ({ isEmpty }) => {
+    if (isEmpty) {
+      setShouldShowAdPcFloating(false)
+    }
+  }
+
   return (
     <>
       <ShareHeader
@@ -660,6 +684,17 @@ export default function StoryNormalStyle({
           />
           {shouldShowAd && (
             <StyledGPTAd_MB_E1 pageKey={pageKeyForGptAd} adKey="MB_E1" />
+          )}
+
+          {shouldShowAd && shouldShowAdPcFloating && (
+            <FloatingAdContainer>
+              <StyledGPTAd_PC_FLOATING
+                pageKey={pageKeyForGptAd}
+                adKey="PC_FLOATING"
+                onSlotRenderEnded={handleRenderEndedAdPcFloating}
+              />
+              <SvgCloseIcon onClick={() => setShouldShowAdPcFloating(false)} />
+            </FloatingAdContainer>
           )}
 
           {shouldShowAd && (
