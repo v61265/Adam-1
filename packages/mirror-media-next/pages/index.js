@@ -194,11 +194,12 @@ export async function getServerSideProps({ res, req }) {
   let editorChoicesData = []
   let latestNewsData = []
   let sectionsData = []
+  const apiTimeout = ENV === 'dev' ? 1500 : API_TIMEOUT
   try {
     const postResponse = await axios({
       method: 'get',
       url: `${URL_STATIC_POST_EXTERNAL}01.json`,
-      timeout: API_TIMEOUT,
+      timeout: apiTimeout,
     })
     editorChoicesData = Array.isArray(postResponse?.data?.choices)
       ? postResponse?.data?.choices
