@@ -249,7 +249,7 @@ const TitleLoading = styled(Title)`
 /**
  *
  * @param {Object} props
- * @param {string} props.heading - heading of this components, showing user what kind of news is
+ * @param {'latestNews' | 'popularNews'} props.listType - What kind of list is.
  * @param {boolean} props.shouldReverseOrder
  * - control the css layout of article.
  * - If is true, image of article should display at right, title and label should display at left.
@@ -265,7 +265,7 @@ const TitleLoading = styled(Title)`
  * @returns {JSX.Element}
  */
 export default function AsideArticleList({
-  heading = '',
+  listType = 'latestNews',
   shouldReverseOrder = false,
   fetchArticle,
   renderAmount = 6,
@@ -286,6 +286,9 @@ export default function AsideArticleList({
       }
     })
   }, [fetchArticle])
+
+  const heading = listType === 'latestNews' ? '最新文章' : '熱門文章'
+  const headingColor = listType === 'latestNews' ? 'gray' : 'darkBlue'
 
   useEffect(() => {
     let callback = (entries, observer) => {
@@ -321,7 +324,9 @@ export default function AsideArticleList({
      */
     const shouldShowPopInAd = (index) => {
       return Boolean(
-        shouldShowAd && heading === '熱門文章' && needInsertPopInAdAfter(index)
+        shouldShowAd &&
+          listType === 'popularNews' &&
+          needInsertPopInAdAfter(index)
       )
     }
 
@@ -347,9 +352,7 @@ export default function AsideArticleList({
               <FigureCaption>
                 <Label sectionTitle={sectionTitle}>{sectionName}</Label>
                 <Link href={articleHref} target="_blank">
-                  <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
-                    {item.title}
-                  </Title>
+                  <Title color={headingColor}>{item.title}</Title>
                 </Link>
               </FigureCaption>
             </Article>
@@ -377,7 +380,7 @@ export default function AsideArticleList({
     <>
       <Wrapper>
         {isLoaded ? (
-          <Heading color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
+          <Heading color={headingColor}>
             <h2>{heading}</h2>
           </Heading>
         ) : (
