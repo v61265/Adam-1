@@ -1,3 +1,5 @@
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
+
 import { useState } from 'react'
 
 import styled from 'styled-components'
@@ -77,6 +79,7 @@ export default function ButtonCopyLink({ width = 35, height = 35 }) {
           src={'/images/link-logo.svg'}
           width={width}
           height={height}
+          className="GTM-share-link"
           alt="copy link button"
         ></Image>
       </ClickButton>
