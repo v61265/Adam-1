@@ -29,7 +29,6 @@ import AmpGptAd from '../../../components/amp/amp-ads/amp-gpt-ad'
 import AmpGptStickyAd from '../../../components/amp/amp-ads/amp-gpt-sticky-ad'
 import { getAmpGptDataSlotSection } from '../../../utils/ad'
 import Head from 'next/head'
-import { Z_INDEX } from '../../../constants/index'
 
 export const config = { amp: true }
 
@@ -45,17 +44,6 @@ const AmpBody = styled.body`
       margin-bottom: 10vh;
     }
   }
-`
-
-const StyledAmpGptStickyAd = styled(AmpGptStickyAd)`
-  display: block;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: auto;
-  z-index: ${Z_INDEX.top};
 `
 
 /**
@@ -166,13 +154,13 @@ function StoryAmpPage({ postData }) {
               <AmpGptAd section={sectionSlot} position="FT" />
 
               <AmpFooter />
+              <AmpGptStickyAd />
             </section>
             <AdultOnlyWarning isAdult={isAdult} />
             <WineWarning categories={categories} />
           </AmpBody>
         </>
       </Layout>
-      <StyledAmpGptStickyAd />
     </>
   )
 }
