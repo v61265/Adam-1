@@ -1,4 +1,4 @@
-//TODO: insert real Advertisement, not just fake
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
 
 import styled from 'styled-components'
 import Image from '@readr-media/react-image'
@@ -174,7 +174,7 @@ export default function RelatedArticleList({
             <Link
               href={`/story/${related.slug}`}
               target="_blank"
-              className="article-image"
+              className="article-image GTM-story-related-list"
             >
               <Image
                 images={related.heroImage?.resized}
@@ -190,7 +190,11 @@ export default function RelatedArticleList({
             </Link>
 
             <figcaption className="article-title">
-              <Link href={`/story/${related.slug}`} target="_blank">
+              <Link
+                href={`/story/${related.slug}`}
+                className="GTM-story-related-list"
+                target="_blank"
+              >
                 {related.title}
               </Link>
             </figcaption>
