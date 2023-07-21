@@ -46,6 +46,21 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 Ref: [ECMAScript Modules | Node.js](https://nodejs.org/docs/latest-v13.x/api/esm.html#esm_enabling)
 
+### 請勿刪除前綴為 `GTM-` 的className
+
+如果有元件具有前綴為`GTM-` 的className，比如説：
+
+```
+<div className="GTM-some-component">
+  //...
+</div>
+```
+
+該className是用於Google Tag Manager 蒐集事件數據，除非為Google Tag Manager相關的改動，
+否則請勿隨意刪除該className，以避免無法正確蒐集數據等錯誤發生。
+
+該className僅用於協助Google Tag Manager蒐集數據，請勿使用該className切版。
+
 ## Environment Variables (環境變數)
 
 | 變數名稱            | 資料型態   | 初始值  | 變數說明                        |
