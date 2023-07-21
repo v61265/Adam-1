@@ -26,6 +26,7 @@ import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { hasContentInRawContentBlock } = MirrorMedia
 import Taboola from '../../../components/amp/amp-ads/taboola-ad'
 import AmpGptAd from '../../../components/amp/amp-ads/amp-gpt-ad'
+import AmpGptStickyAd from '../../../components/amp/amp-ads/amp-gpt-sticky-ad'
 import { getAmpGptDataSlotSection } from '../../../utils/ad'
 import Head from 'next/head'
 
@@ -165,7 +166,7 @@ function StoryAmpPage({ postData }) {
           </AmpBody>
         </>
       </Layout>
-      <p>Sticky AD</p>
+      <AmpGptStickyAd />
     </>
   )
 }
