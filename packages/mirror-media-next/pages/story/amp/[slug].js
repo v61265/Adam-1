@@ -155,9 +155,6 @@ function StoryAmpPage({ postData }) {
             >
               <AmpHeader />
               <AmpGptAd section={sectionSlot} position="HD" />
-              <p style={{ textAlign: 'center', color: 'pink' }}>
-                顯示廣告分類：{sectionSlot}
-              </p>
 
               <AmpMain postData={postData} isMember={isMember} />
               <AmpRelated
@@ -167,9 +164,6 @@ function StoryAmpPage({ postData }) {
               <Taboola title="你可能也喜歡這些文章" />
 
               <AmpGptAd section={sectionSlot} position="FT" />
-              <p style={{ textAlign: 'center', color: 'pink' }}>
-                顯示廣告分類：{sectionSlot}
-              </p>
 
               <AmpFooter />
             </section>
