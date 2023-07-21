@@ -236,7 +236,7 @@ const TitleLoading = styled(Title)`
 /**
  *
  * @param {Object} props
- * @param {string} props.heading - heading of this components, showing user what kind of news is
+ * @param {'latestNews' | 'popularNews'} props.listType - What kind of list is.
  * @param {()=>Promise<ArticleDataContainSectionsWithOrdered[] | []>} props.fetchArticle
  * - A Promise base function for fetching article.
  * - If fulfilled, it will return a array of object, which item is a article.
@@ -246,7 +246,7 @@ const TitleLoading = styled(Title)`
  * @returns {JSX.Element}
  */
 export default function AsideArticleList({
-  heading = '',
+  listType = 'latestNews',
   fetchArticle,
   renderAmount = 6,
 }) {
@@ -263,7 +263,8 @@ export default function AsideArticleList({
       }
     })
   }, [fetchArticle])
-
+  const heading = listType === 'latestNews' ? '最新文章' : '熱門文章'
+  const headingColor = listType === 'latestNews' ? 'gray' : 'darkBlue'
   useEffect(() => {
     let callback = (entries, observer) => {
       entries.forEach((entry) => {
@@ -303,9 +304,7 @@ export default function AsideArticleList({
 
             <FigureCaption>
               <Link href={articleHref} target="_blank">
-                <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
-                  {item.title}
-                </Title>
+                <Title color={headingColor}>{item.title}</Title>
               </Link>
             </FigureCaption>
           </Article>
@@ -314,9 +313,7 @@ export default function AsideArticleList({
             <div className="article-image article-image__loading"></div>
 
             <FigureCaption>
-              <TitleLoading
-                color={heading === '熱門文章' ? 'darkBlue' : 'gray'}
-              >
+              <TitleLoading color={headingColor}>
                 <div className="decoration-bar"></div>
                 <div className="decoration-bar"></div>
               </TitleLoading>
@@ -331,7 +328,7 @@ export default function AsideArticleList({
     <>
       <Wrapper>
         {isLoaded ? (
-          <Heading color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
+          <Heading color={headingColor}>
             <h2>{heading}</h2>
           </Heading>
         ) : (

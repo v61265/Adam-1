@@ -109,13 +109,13 @@ export default function Aside({
     <AsideWrapper>
       {relateds.length > 0 && <RelatedArticleList relateds={relateds} />}
       <AsideArticleList
-        heading="最新文章"
+        listType={'latestNews'}
         fetchArticle={handleFetchLatestNews}
         renderAmount={6}
       />
       <Divider />
       <AsideArticleList
-        heading="熱門文章"
+        listType={'popularNews'}
         fetchArticle={handleFetchPopularNews}
         renderAmount={6}
       />

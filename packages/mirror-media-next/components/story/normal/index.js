@@ -725,7 +725,7 @@ export default function StoryNormalStyle({
             <StyledGPTAd_PC_R1 pageKey={pageKeyForGptAd} adKey="PC_R1" />
           )}
           <AsideArticleList
-            heading="最新文章"
+            listType={'latestNews'}
             fetchArticle={handleFetchLatestNews}
             shouldReverseOrder={false}
             renderAmount={6}
@@ -737,7 +737,7 @@ export default function StoryNormalStyle({
 
             <Divider />
             <AsideArticleList
-              heading="熱門文章"
+              listType={'popularNews'}
               fetchArticle={handleFetchPopularNews}
               shouldReverseOrder={false}
               renderAmount={6}
