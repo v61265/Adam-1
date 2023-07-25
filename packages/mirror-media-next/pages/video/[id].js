@@ -139,14 +139,19 @@ export default function Video({ video, latestVideos, headerData }) {
       footer={{ type: 'default' }}
     >
       <Wrapper>
-        <YoutubeIframe videoId={video.id} />
+        <YoutubeIframe videoId={video.id} gtmClassName="GTM-video-yt-play" />
 
         {shouldShowAd && <StyledGPTAd_HD pageKey="videohub" adKey="HD" />}
 
         <ContentWrapper>
           <YoutubeArticle video={video} />
           {shouldShowAd && <StyledGPTAd_E1 pageKey="videohub" adKey="E1" />}
-          {latestVideos.length > 0 && <VideoList videos={latestVideos} />}
+          {latestVideos.length > 0 && (
+            <VideoList
+              videos={latestVideos}
+              gtmClassName="GTM-video-latest-list"
+            />
+          )}
         </ContentWrapper>
 
         <YoutubePolicy />
