@@ -218,13 +218,26 @@ const PlaylistTitle = styled.h2`
 `
 
 /**
+ * @typedef {Object} GtmClassName
+ * @property {string} title
+ * @property {import('./youtube-iframe').GtmYoutubeClassName} youtube
+ *
+ */
+
+/**
  * @param {Object} props
  * @param {import('../../type/youtube').YoutubeVideo} props.video
  * @param {string} [props.slug]
  * @param {string} [props.playlistTitle]
+ * @param {GtmClassName} [props.gtmClassName]
  * @returns {React.ReactElement}
  */
-export default function LeadingVideoItem({ video, slug, playlistTitle }) {
+export default function LeadingVideoItem({
+  video,
+  slug,
+  playlistTitle,
+  gtmClassName = { title: '', youtube: '' },
+}) {
   const hasSlug = !!slug
   return (
     <Wrapper hasSlug={hasSlug}>
@@ -232,13 +245,21 @@ export default function LeadingVideoItem({ video, slug, playlistTitle }) {
         <PlaylistTitle categorySlug={slug}>{playlistTitle}</PlaylistTitle>
       )}
       <Youtube hasSlug={hasSlug}>
-        <YoutubeIframe videoId={video.id} />
+        <YoutubeIframe
+          videoId={video.id}
+          gtmClassName={gtmClassName?.youtube}
+        />
         {hasSlug && <CategoryColorbox categorySlug={slug} />}
       </Youtube>
 
       <Title>
-        <a href={`/video/${video.id}`} target="_blank" rel="noreferrer">
-          {video.title}
+        <a
+          href={`/video/${video.id}`}
+          className={gtmClassName?.title}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span>{video.title}</span>
         </a>
       </Title>
 
