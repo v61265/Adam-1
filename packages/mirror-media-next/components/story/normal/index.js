@@ -454,10 +454,15 @@ const StyledGPTAd_PC_E1 = styled(GPTAd)`
 `
 
 const FloatingAdContainer = styled.div`
-  z-index: ${Z_INDEX.top};
-  position: fixed;
-  top: 175px;
-  right: 15px;
+  display: none;
+  ${({ theme }) => theme.breakpoint.xl} {
+    z-index: ${Z_INDEX.top};
+    display: block;
+    position: fixed;
+    top: 175px;
+    right: 15px;
+  }
+
   svg {
     position: absolute;
     top: -12.5px;
@@ -474,10 +479,13 @@ const StyledGPTAd_PC_E2 = styled(GPTAd)`
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: block;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    max-width: 300px;
   }
 `
-
-const StyledGPTAd_PC_FLOATING = styled(GPTAd)``
 
 /**
  *
@@ -688,7 +696,7 @@ export default function StoryNormalStyle({
 
           {shouldShowAd && shouldShowAdPcFloating && (
             <FloatingAdContainer>
-              <StyledGPTAd_PC_FLOATING
+              <GPTAd
                 pageKey={pageKeyForGptAd}
                 adKey="PC_FLOATING"
                 onSlotRenderEnded={handleRenderEndedAdPcFloating}
