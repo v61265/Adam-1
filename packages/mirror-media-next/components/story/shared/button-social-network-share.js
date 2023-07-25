@@ -1,3 +1,5 @@
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
+
 import Link from 'next/link'
 import Image from 'next/image'
 import useSharedUrl from '../../../hooks/use-shared-url'
@@ -19,7 +21,6 @@ export default function ButtonSocialNetworkShare({
   url = '',
 }) {
   const sharedUrl = useSharedUrl(url)
-
   const getSocialNetWorkInfo = (type) => {
     switch (type) {
       case 'facebook':
@@ -27,12 +28,14 @@ export default function ButtonSocialNetworkShare({
           imageSrc: '/images/fb-logo.svg',
           imageAlt: 'facebook-share',
           link: `${FACEBOOK_SHARED_URL}${sharedUrl}`,
+          gtmClassName: 'GTM-share-facebook',
         }
       case 'line':
         return {
           imageSrc: '/images/line-logo.svg',
           imageAlt: 'line-share',
           link: `${LINE_SHARED_URL}${sharedUrl}`,
+          gtmClassName: 'GTM-share-line',
         }
 
       default:
@@ -40,12 +43,17 @@ export default function ButtonSocialNetworkShare({
           imageSrc: '/images/line-logo.svg',
           imageAlt: 'line-share',
           link: `${FACEBOOK_SHARED_URL}${sharedUrl}`,
+          gtmClassName: 'GTM-share-line',
         }
     }
   }
   const imageInfo = getSocialNetWorkInfo(type)
   return (
-    <Link href={imageInfo.link} target="_blank">
+    <Link
+      href={imageInfo.link}
+      target="_blank"
+      className={imageInfo.gtmClassName}
+    >
       <Image
         src={imageInfo.imageSrc}
         width={width}

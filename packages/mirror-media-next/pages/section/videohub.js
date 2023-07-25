@@ -149,10 +149,23 @@ export default function SectionVideohub({
       <Wrapper>
         {shouldShowAd && <StyledGPTAd_PC_HD pageKey="videohub" adKey="PC_HD" />}
         {hasHVCVideo && (
-          <LeadingVideo video={highestViewCountVideo} title="熱門影片" />
+          <LeadingVideo
+            video={highestViewCountVideo}
+            title="熱門影片"
+            gtmClassName={{
+              title: 'GTM-video-homepage-popular-item',
+              youtube: 'GTM-video-homepage-popular-yt-play',
+            }}
+          />
         )}
         {shouldShowAd && <StyledGPTAd_MB_HD pageKey="videohub" adKey="MB_HD" />}
-        {hasLatestVideo && <VideoList videos={latestVideos} name="最新影片" />}
+        {hasLatestVideo && (
+          <VideoList
+            videos={latestVideos}
+            name="最新影片"
+            gtmClassName="GTM-video-homepage-latest-list"
+          />
+        )}
         <SubscribeChannels />
         {shouldShowAd && <StyledGPTAd_MB_FT pageKey="videohub" adKey="MB_FT" />}
         {playlistsVideos.map((playlistsVideo) => (

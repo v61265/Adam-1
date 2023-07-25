@@ -119,13 +119,18 @@ const VideoItemsWrapper = styled.div`
 `
 
 /**
+ * @typedef {import('../../shared/video-list-item').GtmClassName} GtmClassName
+ */
+
+/**
  * @param {Object} props
  * @param {import('../../../type/youtube').YoutubeVideo[]} props.videos
  * @param {string} props.name
  * @param {string} [props.slug]
+ * @param {GtmClassName} [props.gtmClassName]
  * @returns {React.ReactElement}
  */
-export default function VideoList({ videos, name, slug }) {
+export default function VideoList({ videos, name, slug, gtmClassName = '' }) {
   const hasSlug = !!slug
   return (
     <Wrapper hasSlug={hasSlug}>
@@ -141,7 +146,12 @@ export default function VideoList({ videos, name, slug }) {
 
       <VideoItemsWrapper>
         {videos.map((video) => (
-          <VideoListItem key={video.title} video={video} slug={slug} />
+          <VideoListItem
+            key={video.title}
+            video={video}
+            slug={slug}
+            gtmClassName={gtmClassName}
+          />
         ))}
       </VideoItemsWrapper>
     </Wrapper>

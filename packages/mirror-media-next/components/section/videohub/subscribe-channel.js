@@ -63,10 +63,25 @@ export default function SubscribeChannel({ channel }) {
 
   return (
     <Wrapper>
-      <Icon src={channel.icon} alt={channel.name} onClick={onOpenChannel} />
+      <Icon
+        src={channel.icon}
+        alt={channel.name}
+        onClick={onOpenChannel}
+        className={`GTM-video-homepage-subscribe-channel_${channel.title}`}
+      />
       <DetailWrapper>
-        <Title onClick={onOpenChannel}>{channel.title}</Title>
-        <Subscribe onClick={onSubscribeChannel}>訂閱</Subscribe>
+        <Title
+          onClick={onOpenChannel}
+          className={`GTM-video-homepage-subscribe-channel_${channel.title}`}
+        >
+          {channel.title}
+        </Title>
+        <Subscribe
+          onClick={onSubscribeChannel}
+          className={`GTM-video-homepage-subscribe-channel_${channel.title}`}
+        >
+          訂閱
+        </Subscribe>
       </DetailWrapper>
     </Wrapper>
   )

@@ -87,11 +87,11 @@ export default function SupportMirrorMediaBanner({ className }) {
       <InnerWrapper>
         <InnerBox>
           <p className="desc">小心意大意義，小額贊助鏡週刊！</p>
-          <DonateLink className="banner-button" />
+          <DonateLink className="banner-button GTM-donate-link-bottom" />
         </InnerBox>
         <InnerBox>
           <p className="desc">每月 $49 元全站看到飽，暢享無廣告閱讀體驗</p>
-          <SubscribeLink className="banner-button" />
+          <SubscribeLink className="banner-button GTM-subscribe-link-bottom" />
         </InnerBox>
       </InnerWrapper>
     </Container>

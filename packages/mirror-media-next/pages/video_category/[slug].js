@@ -111,6 +111,10 @@ export default function VideoCategory({
           video={firstVideo}
           title={categoryName}
           slug={category.slug}
+          gtmClassName={{
+            title: 'GTM-leading-video-item',
+            youtube: 'GTM-leading-video-yt-play',
+          }}
         />
         {shouldShowAd && <StyledGPTAd_MB_HD pageKey="videohub" adKey="MB_HD" />}
         {hasMoreThanOneVideo && (

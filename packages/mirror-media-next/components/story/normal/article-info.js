@@ -150,8 +150,8 @@ export default function ArticleInfo({
           <ButtonCopyLink />
         </SocialMedia>
         <DonateSubscribeWrapper>
-          <DonateLink />
-          <SubscribeLink className="subscribe-btn" />
+          <DonateLink className="GTM-donate-link-top" />
+          <SubscribeLink className="subscribe-btn GTM-subscribe-link-top" />
         </DonateSubscribeWrapper>
       </SocialMediaAndDonateLink>
       <StyledTags tags={tags} />

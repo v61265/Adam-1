@@ -1,3 +1,5 @@
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
+
 import { Fragment } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
@@ -289,7 +291,10 @@ export default function AsideArticleList({
 
   const heading = listType === 'latestNews' ? '最新文章' : '熱門文章'
   const headingColor = listType === 'latestNews' ? 'gray' : 'darkBlue'
-
+  const gtmClassName =
+    listType === 'latestNews'
+      ? 'GTM-story-latest-list'
+      : 'GTM-story-popular-list'
   useEffect(() => {
     let callback = (entries, observer) => {
       entries.forEach((entry) => {
@@ -338,7 +343,7 @@ export default function AsideArticleList({
               <Link
                 href={articleHref}
                 target="_blank"
-                className="article-image"
+                className={`article-image ${gtmClassName}`}
               >
                 <Image
                   images={item?.heroImage?.resized}
@@ -351,7 +356,11 @@ export default function AsideArticleList({
 
               <FigureCaption>
                 <Label sectionTitle={sectionTitle}>{sectionName}</Label>
-                <Link href={articleHref} target="_blank">
+                <Link
+                  href={articleHref}
+                  target="_blank"
+                  className={gtmClassName}
+                >
                   <Title color={headingColor}>{item.title}</Title>
                 </Link>
               </FigureCaption>
