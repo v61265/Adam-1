@@ -230,7 +230,7 @@ export default function StoryPremiumStyle({
     relatedsInInputOrder = [],
     slug = '',
     hiddenAdvertised = false,
-    isAdvertised = fasle,
+    isAdvertised = false,
   } = postData
 
   const shouldShowArticleMask =
