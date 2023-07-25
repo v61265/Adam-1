@@ -78,17 +78,27 @@ const Title = styled.p`
 `
 
 /**
+ * @typedef {string} GtmClassName
+ */
+
+/**
  * @param {Object} props
  * @param {import('../../type/youtube').YoutubeVideo} props.video
  * @param {string} [props.slug]
+ * @param {GtmClassName} [props.gtmClassName]
  * @returns {React.ReactElement}
  */
-export default function VideoListItem({ video, slug }) {
+export default function VideoListItem({ video, slug, gtmClassName = '' }) {
   const hasSlug = !!slug
   return (
     <Wrapper>
       {hasSlug && <CategoryColorbox categorySlug={slug} />}
-      <a href={`/video/${video.id}`} target="_blank" rel="noreferrer">
+      <a
+        href={`/video/${video.id}`}
+        target="_blank"
+        rel="noreferrer"
+        className={gtmClassName}
+      >
         <ImageWrapper>
           <Image
             images={{ original: video.thumbnail }}
@@ -99,7 +109,12 @@ export default function VideoListItem({ video, slug }) {
         </ImageWrapper>
       </a>
       <Title>
-        <a href={`/video/${video.id}`} target="_blank" rel="noreferrer">
+        <a
+          href={`/video/${video.id}`}
+          target="_blank"
+          rel="noreferrer"
+          className={gtmClassName}
+        >
           {video.title}
         </a>
       </Title>

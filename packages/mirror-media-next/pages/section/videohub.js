@@ -159,7 +159,13 @@ export default function SectionVideohub({
           />
         )}
         {shouldShowAd && <StyledGPTAd_MB_HD pageKey="videohub" adKey="MB_HD" />}
-        {hasLatestVideo && <VideoList videos={latestVideos} name="最新影片" />}
+        {hasLatestVideo && (
+          <VideoList
+            videos={latestVideos}
+            name="最新影片"
+            gtmClassName="GTM-video-homepage-latest-list"
+          />
+        )}
         <SubscribeChannels />
         {shouldShowAd && <StyledGPTAd_MB_FT pageKey="videohub" adKey="MB_FT" />}
         {playlistsVideos.map((playlistsVideo) => (
