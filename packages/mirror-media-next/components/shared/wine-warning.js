@@ -1,12 +1,12 @@
 import Image from 'next/image'
 
 import styled from 'styled-components'
-import { Z_INDEX } from '../../../constants'
-import { getCategoryOfWineSlug } from '../../../utils/index'
+import { Z_INDEX } from '../../constants'
+import { getCategoryOfWineSlug } from '../../utils/index'
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 5vh;
+  height: 10vh;
   background: #000000;
   position: fixed;
   left: 0;
@@ -16,18 +16,26 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
 
-  ${({ theme }) => theme.breakpoint.sm} {
-    height: 10vh;
-  }
-
   .wine-warning-image {
     width: auto;
     height: auto;
     object-fit: contain;
+    &--desktop {
+      display: none;
+      ${({ theme }) => theme.breakpoint.sm} {
+        display: block;
+      }
+    }
+    &--mobile {
+      display: block;
+      ${({ theme }) => theme.breakpoint.sm} {
+        display: none;
+      }
+    }
   }
 `
 /**
- * @typedef {import('../../../apollo/fragments/category').Category} Category - category information
+ * @typedef {import('../../apollo/fragments/category').Category} Category - category information
  */
 
 /**
@@ -38,14 +46,20 @@ const Wrapper = styled.div`
  */
 
 export default function WineWarning({ categories = [] }) {
-  let categoryOfWineSlug = getCategoryOfWineSlug(categories)
+  const categoryOfWineSlug = getCategoryOfWineSlug(categories)
 
   const wineWarningJsx =
     categoryOfWineSlug.length > 0 ? (
       <Wrapper>
         <Image
-          className="wine-warning-image"
+          className="wine-warning-image wine-warning-image--desktop"
           src={'/images/wine-warning.jpg'}
+          fill={true}
+          alt="wine-warning"
+        />
+        <Image
+          className="wine-warning-image wine-warning-image--mobile"
+          src={'/images/wine-warning-mobile.png'}
           fill={true}
           alt="wine-warning"
         />

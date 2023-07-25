@@ -4,8 +4,8 @@ import client from '../../apollo/apollo-client'
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
-import WineWarning from '../../components/story/shared/wine-warning'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
+import WineWarning from '../../components/shared/wine-warning'
 import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 import { useMembership } from '../../context/membership'
 import {
@@ -14,9 +14,19 @@ import {
 } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
 import Layout from '../../components/shared/layout'
-import { convertDraftToText, getResizedUrl } from '../../utils/index'
+import {
+  convertDraftToText,
+  getResizedUrl,
+  getCategoryOfWineSlug,
+} from '../../utils'
 import { handleStoryPageRedirect } from '../../utils/story'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
+import { sendGAEvent } from '../../utils/gtag'
+import { setPageCache } from '../../utils/cache-setting'
+
+import FullScreenAds from '../../components/ads/full-screen-ads'
 const { hasContentInRawContentBlock } = MirrorMedia
 
 const StoryWideStyle = dynamic(() => import('../../components/story/wide'))
@@ -36,6 +46,10 @@ import Skeleton from '../../public/images/skeleton.png'
  * @typedef {import('../../components/story/normal').PostContent} PostContent
  */
 
+/**
+ * @typedef {'style-normal' | 'style-photography' | 'style-wide' | 'style-premium'} StoryLayoutType
+ */
+
 const Loading = styled.div`
   width: 100%;
   height: 100%;
@@ -49,22 +63,40 @@ const Loading = styled.div`
 
 /**
  *
+ * @param {import('../../components/story/normal').PostData['style']} articleStyle
+ * @param {import('../../components/story/normal').PostData['isMember']} isMemberOnlyArticle
+ * @returns {StoryLayoutType }
+ */
+const getStoryLayoutType = (articleStyle, isMemberOnlyArticle) => {
+  if (articleStyle === 'wide') {
+    return 'style-wide'
+  } else if (articleStyle === 'photography') {
+    return 'style-photography'
+  } else if (articleStyle === 'article' && isMemberOnlyArticle === true) {
+    return 'style-premium'
+  }
+  return 'style-normal'
+}
+
+/**
+ *
  * @param {Object} props
  * @param {PostData} props.postData
+ * @param {any} props.headerData
+ * @param {StoryLayoutType} props.storyLayoutType
  * @returns {JSX.Element}
  */
-export default function Story({ postData }) {
+export default function Story({ postData, headerData, storyLayoutType }) {
   const {
     title = '',
     slug = '',
-    style = 'article',
-    isMember = false,
     isAdult = false,
     categories = [],
+    isMember = false,
     content = null,
     trimmedContent = null,
+    hiddenAdvertised = false,
   } = postData
-
   /**
    * The logic for rendering the article content:
    * We use the state `postContent` to manage the content should render in the story page.
@@ -115,21 +147,56 @@ export default function Story({ postData }) {
     }
   }, [isLoggedIn, content, accessToken, slug])
 
-  const renderStoryLayout = () => {
-    if (style === 'wide') {
-      return <StoryWideStyle postData={postData} postContent={postContent} />
-    } else if (style === 'photography') {
-      return (
-        <StoryPhotographyStyle postData={postData} postContent={postContent} />
-      )
-    } else if (style === 'article' && isMember === true) {
-      return <StoryPremiumStyle postData={postData} postContent={postContent} />
+  //Send custom event to Google Analytics
+  //Which event should be send is based on whether is member-only article.
+  useEffect(() => {
+    if (isMember) {
+      sendGAEvent('premium_page_view')
+    } else {
+      sendGAEvent('story_page_view')
     }
-    return <StoryNormalStyle postData={postData} postContent={postContent} />
-  }
-  const storyLayout = renderStoryLayout()
+  }, [isMember])
 
-  //mock for process of changing article type
+  const renderStoryLayout = () => {
+    switch (storyLayoutType) {
+      case 'style-normal':
+        return (
+          <StoryNormalStyle
+            postData={postData}
+            postContent={postContent}
+            headerData={headerData}
+          />
+        )
+      case 'style-premium':
+        return (
+          <StoryPremiumStyle
+            postData={postData}
+            postContent={postContent}
+            headerData={headerData}
+          />
+        )
+      case 'style-wide':
+        return <StoryWideStyle postData={postData} postContent={postContent} />
+      case 'style-photography':
+        return (
+          <StoryPhotographyStyle
+            postData={postData}
+            postContent={postContent}
+          />
+        )
+      default:
+        return (
+          <StoryNormalStyle
+            postData={postData}
+            postContent={postContent}
+            headerData={headerData}
+          />
+        )
+    }
+  }
+  const storyLayoutJsx = renderStoryLayout()
+  //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
+  const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
   return (
     <Layout
@@ -146,14 +213,17 @@ export default function Story({ postData }) {
       footer={{ type: 'empty' }}
     >
       <>
-        {!storyLayout && (
+        {!storyLayoutJsx && (
           <Loading>
             <Image src={Skeleton} alt="loading..."></Image>
           </Loading>
         )}
-        {storyLayout}
+        {storyLayoutJsx}
         <WineWarning categories={categories} />
         <AdultOnlyWarning isAdult={isAdult} />
+        {noCategoryOfWineSlug && (
+          <FullScreenAds hiddenAdvertised={hiddenAdvertised} />
+        )}
       </>
     </Layout>
   )
@@ -162,7 +232,13 @@ export default function Story({ postData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ params, req }) {
+export async function getServerSideProps({ params, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 300 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
+
   const { slug } = params
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
@@ -185,12 +261,26 @@ export async function getServerSideProps({ params, req }) {
     if (!postData) {
       return { notFound: true }
     }
+    const { style } = postData
+    /**
+     * If post style is 'projects' or 'campaign', redirect to certain route.
+     *
+     * There is no `/projects` or `/campaign` pages in mirror-media-next, when user enter path `/projects/_slug` or `/campaign`,
+     * Load balancer hosted by Google Cloud Platform will help us to get page content of project or campaign page.
+     * The content of certain page is placed at Google Cloud Storage.
+     */
+    if (style === 'projects' || style === 'campaign') {
+      return {
+        redirect: {
+          destination: `/${style}/${slug} `,
+          permanent: false,
+        },
+      }
+    }
 
     // Check if the post data has content in the brief, trimmedContent, or content fields
     const shouldCheckHasContent =
-      postData.style === 'article' ||
-      postData.style === 'wide' ||
-      postData.style === 'photography'
+      style === 'article' || style === 'wide' || style === 'photography'
 
     if (shouldCheckHasContent) {
       const hasBrief = hasContentInRawContentBlock(postData.brief)
@@ -207,11 +297,67 @@ export async function getServerSideProps({ params, req }) {
     }
 
     const redirect = postData?.redirect
-    handleStoryPageRedirect(redirect)
+    if (redirect) {
+      return handleStoryPageRedirect(redirect)
+    }
+    const storyLayoutType = getStoryLayoutType(
+      postData?.style,
+      postData?.isMember
+    )
+    let headerData = null
+    const shouldFetchDefaultHeaderData = storyLayoutType === 'style-normal'
+    const shouldFetchPremiumHeaderData = storyLayoutType === 'style-premium'
+    if (shouldFetchDefaultHeaderData) {
+      try {
+        headerData = await fetchHeaderDataInDefaultPageLayout()
+      } catch (err) {
+        headerData = { sectionsData: [], topicsData: [] }
+        const errorMessage = errors.helpers.printAll(
+          err,
+          {
+            withStack: true,
+            withPayload: false,
+          },
+          0,
+          0
+        )
+        console.log(
+          JSON.stringify({
+            severity: 'ERROR',
+            message: errorMessage,
+            ...globalLogFields,
+          })
+        )
+      }
+    } else if (shouldFetchPremiumHeaderData) {
+      try {
+        headerData = await fetchHeaderDataInPremiumPageLayout()
+      } catch (err) {
+        headerData = { sectionsData: [] }
+        const errorMessage = errors.helpers.printAll(
+          err,
+          {
+            withStack: true,
+            withPayload: false,
+          },
+          0,
+          0
+        )
+        console.log(
+          JSON.stringify({
+            severity: 'ERROR',
+            message: errorMessage,
+            ...globalLogFields,
+          })
+        )
+      }
+    }
 
     return {
       props: {
         postData,
+        headerData,
+        storyLayoutType,
       },
     }
   } catch (err) {

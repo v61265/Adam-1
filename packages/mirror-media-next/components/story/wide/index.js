@@ -4,20 +4,23 @@ import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { getContentBlocksH2H3 } = MirrorMedia
-import { sortArrayWithOtherArrayId } from '../../../utils'
+import { useMembership } from '../../../context/membership'
 
 import Header from './header'
+import ArticleMask from '../shared/article-mask'
 import DonateLink from '../shared/donate-link'
 import SubscribeLink from '../shared/subscribe-link'
 import HeroImageAndVideo from '../shared/hero-image-and-video'
 import Credits from '../shared/credits'
 import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
+import SupportSingleArticleBanner from '../shared/support-single-article-banner'
 import NavSubtitleNavigator from '../shared/nav-subtitle-navigator'
 import MoreInfoAndTag from '../shared/more-info-and-tag'
 import Date from '../shared/date'
 import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import Aside from '../shared/aside'
+
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
  */
@@ -115,6 +118,7 @@ const DonateSubscribeWrapper = styled.div`
  */
 export default function StoryWideStyle({ postData, postContent }) {
   const {
+    id = '',
     title = '',
     heroImage = null,
     heroVideo = null,
@@ -122,9 +126,9 @@ export default function StoryWideStyle({ postData, postContent }) {
     updatedAt = '',
     publishedDate = '',
     sections = [],
-    manualOrderOfSections = [],
+    sectionsInInputOrder = [],
     writers = [],
-    manualOrderOfWriters = [],
+    writersInInputOrder = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -133,25 +137,26 @@ export default function StoryWideStyle({ postData, postContent }) {
     extend_byline = '',
 
     relateds = [],
-    manualOrderOfRelateds = [],
+    relatedsInInputOrder = [],
     slug = '',
     brief = null,
     tags = [],
   } = postData
+
   const sectionsWithOrdered =
-    manualOrderOfSections && manualOrderOfSections.length
-      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+    sectionsInInputOrder && sectionsInInputOrder.length
+      ? sectionsInInputOrder
       : sections
   const [section] = sectionsWithOrdered
 
   const relatedsWithOrdered =
-    manualOrderOfRelateds && manualOrderOfRelateds.length
-      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+    relatedsInInputOrder && relatedsInInputOrder.length
+      ? relatedsInInputOrder
       : relateds
 
   const writersWithOrdered =
-    manualOrderOfWriters && manualOrderOfWriters.length
-      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+    writersInInputOrder && writersInInputOrder.length
+      ? writersInInputOrder
       : writers
 
   const credits = [
@@ -165,6 +170,23 @@ export default function StoryWideStyle({ postData, postContent }) {
   ]
 
   const h2AndH3Block = getContentBlocksH2H3(postContent.data)
+
+  const shouldShowArticleMask = postContent.type === 'trimmedContent'
+
+  const { memberInfo } = useMembership()
+  const { memberType } = memberInfo
+  const isPremiumMember =
+    memberType.includes('premium') || memberType.includes('staff')
+
+  let supportBanner
+
+  if (!shouldShowArticleMask) {
+    if (isPremiumMember) {
+      supportBanner = <SupportSingleArticleBanner />
+    } else {
+      supportBanner = <SupportMirrorMediaBanner />
+    }
+  }
 
   return (
     <>
@@ -212,7 +234,9 @@ export default function StoryWideStyle({ postData, postContent }) {
               />
             </section>
             <MoreInfoAndTag tags={tags} />
-            <SupportMirrorMediaBanner />
+
+            {shouldShowArticleMask && <ArticleMask postId={id} />}
+            {supportBanner}
           </ContentWrapper>
           <Aside
             relateds={relatedsWithOrdered}

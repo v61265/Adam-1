@@ -1,9 +1,11 @@
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
+
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { Autoplay, Pagination, Navigation } from 'swiper'
-
+import CustomImage from '@readr-media/react-image'
 import styled from 'styled-components'
-
+import Link from 'next/link'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -142,13 +144,7 @@ const ListItem = styled.a`
   max-width: 320px;
   display: block;
   position: relative;
-  img {
-    margin: 0 auto;
-    width: 100%;
 
-    height: 200px;
-    object-fit: cover;
-  }
   .title {
     width: 100%;
     height: fit-content;
@@ -167,6 +163,10 @@ const ListItem = styled.a`
     top: 0;
     left: 0;
   }
+  ${({ theme }) => theme.breakpoint.md} {
+    width: 460px;
+    max-width: 460px;
+  }
 `
 
 const EditorChoiceContainer = styled.section`
@@ -183,13 +183,58 @@ const EditorChoiceContainer = styled.section`
     }
   }
 `
+
+/**
+ * @typedef {Object} FormattedEditorChoiceItem
+ * @property {string} articleHref
+ * @property {string} sectionTitle
+ * @property {string} sectionName
+ * /
+
+
+/**
+ * @typedef {Pick<import('../apollo/fragments/post').Post, 'slug' | 'title' | 'style'| 'publishedDate' | 'sections'| 'heroImage' >} EditorChoiceRawData
+ */
+
+/**
+ * @typedef { EditorChoiceRawData & FormattedEditorChoiceItem } EditorChoiceItem
+ */
+/**
+ * @typedef { EditorChoiceItem[] } EditorChoice
+ */
+
+/**
+ *
+ * @param {EditorChoiceItem['heroImage']} heroImage
+ * @param {EditorChoiceItem['title']} title
+ * @returns {JSX.Element}
+ */
+const editorChoiceImageJsx = (heroImage, title) => {
+  return (
+    <CustomImage
+      images={heroImage?.resized}
+      defaultImage="/images/default-og-img.png"
+      loadingImage="/images/loading.gif"
+      rwd={{
+        mobile: '320px',
+        tablet: '460px',
+        desktop: '1024px',
+        default: '1024px',
+      }}
+      priority={true}
+      alt={title}
+    />
+  )
+}
+
 /**
  * @param {Object} props
- * @param {import('../type/index').ArticleInfoCard[]} props.editorChoice
+ * @param {EditorChoice} props.editorChoice
  * @returns {React.ReactElement}
  */
 export default function EditorChoice({ editorChoice = [] }) {
   const shouldShowEditorChoice = editorChoice.length !== 0
+
   return (
     <>
       {shouldShowEditorChoice ? (
@@ -199,18 +244,15 @@ export default function EditorChoice({ editorChoice = [] }) {
             {editorChoice.map((item) => (
               <ListItem
                 key={item.slug}
-                href={item.href}
+                href={item.articleHref}
                 target="_blank"
                 rel="noreferrer noopenner"
+                className="GTM-editorchoice-list"
               >
-                <ListItemLabel sectionName={item.sectionName}>
-                  {item.sectionTitle}
+                <ListItemLabel sectionName={item.sectionTitle}>
+                  {item.sectionName}
                 </ListItemLabel>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.imgSrcTablet || '/images/default-og-img.png'}
-                  alt={item.title}
-                ></img>
+                {editorChoiceImageJsx(item.heroImage, item.title)}
                 <p className="title">{item.title}</p>
               </ListItem>
             ))}
@@ -234,18 +276,15 @@ export default function EditorChoice({ editorChoice = [] }) {
             >
               {editorChoice.map((item) => (
                 <SwiperSlide key={item.slug}>
-                  <a
-                    href={item.href}
+                  <Link
+                    className="GTM-editorchoice-list"
+                    href={item.articleHref}
                     target="_blank"
                     rel="noreferrer noopenner"
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={item.imgSrcTablet || '/images/default-og-img.png'}
-                      alt={item.title}
-                    />
+                    {editorChoiceImageJsx(item.heroImage, item.title)}
                     <p className="title">{item.title}</p>
-                  </a>
+                  </Link>
                 </SwiperSlide>
               ))}
             </Swiper>

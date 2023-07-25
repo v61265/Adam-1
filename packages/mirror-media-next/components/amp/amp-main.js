@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import styled from 'styled-components'
-import { sortArrayWithOtherArrayId } from '../../utils'
 import ButtonCopyLink from '../story/shared/button-copy-link'
 import ButtonSocialNetworkShare from '../story/shared/button-social-network-share'
 import AmpCredits from '../story/shared/credits'
@@ -9,6 +8,9 @@ import AmpInfo from './amp-info'
 import ArticleBrief from '../story/shared/brief'
 import DraftRenderBlock from '../story/shared/draft-renderer-block'
 import useSharedUrl from '../../hooks/use-shared-url'
+import AmpGptAd from '../../components/amp/amp-ads/amp-gpt-ad'
+import { copyAndSliceDraftBlock, getBlocksCount } from '../../utils/story'
+import { getAmpGptDataSlotSection } from '../../utils/ad'
 
 const MainWrapper = styled.div`
   margin-top: 24px;
@@ -104,6 +106,10 @@ const AmpContentContainer = styled.section`
   margin-top: 36px;
 `
 
+const StyledAmpGptAd = styled(AmpGptAd)`
+  margin: 32px 0;
+`
+
 /**
  * @typedef {import('../../apollo/fragments/post').Post} PostData
  */
@@ -119,14 +125,14 @@ export default function AmpMain({ postData, isMember }) {
   const {
     title = '',
     sections = [],
-    manualOrderOfSections = [],
+    sectionsInInputOrder = [],
     heroImage = null,
     heroVideo = null,
     heroCaption = '',
     publishedDate = '',
     updatedAt = '',
     writers = [],
-    manualOrderOfWriters = [],
+    writersInInputOrder = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -141,14 +147,14 @@ export default function AmpMain({ postData, isMember }) {
   const sharedUrl = useSharedUrl()
 
   const sectionsWithOrdered =
-    manualOrderOfSections && manualOrderOfSections.length
-      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+    sectionsInInputOrder && sectionsInInputOrder.length
+      ? sectionsInInputOrder
       : sections
   const [section] = sectionsWithOrdered
 
   const writersWithOrdered =
-    manualOrderOfWriters && manualOrderOfWriters.length
-      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+    writersInInputOrder && writersInInputOrder.length
+      ? writersInInputOrder
       : writers
 
   const credits = [
@@ -160,6 +166,9 @@ export default function AmpMain({ postData, isMember }) {
     { vocals: vocals },
     { extend_byline: extend_byline },
   ]
+
+  const sectionSlot = getAmpGptDataSlotSection(section)
+  const blocksLength = getBlocksCount(content)
 
   return (
     <MainWrapper>
@@ -202,8 +211,33 @@ export default function AmpMain({ postData, isMember }) {
           contentLayout="amp"
         ></ArticleBrief>
       </AmpBriefContainer>
+
       <AmpContentContainer>
-        <DraftRenderBlock rawContentBlock={content} contentLayout="amp" />
+        <DraftRenderBlock
+          rawContentBlock={copyAndSliceDraftBlock(content, 0, 1)}
+          contentLayout="amp"
+        />
+
+        {blocksLength > 1 && (
+          <>
+            <StyledAmpGptAd section={sectionSlot} position="AT1" />
+            <DraftRenderBlock
+              rawContentBlock={copyAndSliceDraftBlock(content, 1, 5)}
+              contentLayout="amp"
+            />
+          </>
+        )}
+
+        {blocksLength > 5 && (
+          <>
+            <StyledAmpGptAd section={sectionSlot} position="AT2" />
+            <DraftRenderBlock
+              rawContentBlock={copyAndSliceDraftBlock(content, 5)}
+              contentLayout="amp"
+            />
+          </>
+        )}
+
         {isMember && (
           <Link href={sharedUrl.replace('/amp/', '/')}>
             【 加入鏡週刊會員，觀看全文 】

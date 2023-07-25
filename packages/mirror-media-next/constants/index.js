@@ -190,6 +190,9 @@ const SECTION_IDS = {
   carandwatch: '57dfe3b0ee85930e00cad4d7',
 }
 
+const FB_APP_ID = '175313259598308'
+const FB_PAGE_ID = '1855418728011324'
+
 export {
   SITE_TITLE,
   SOCIAL_MEDIA_LINKS,
@@ -208,4 +211,6 @@ export {
   EMAIL_LINK,
   FOOTER_PROMOTION_LINKS,
   SECTION_IDS,
+  FB_APP_ID,
+  FB_PAGE_ID,
 }

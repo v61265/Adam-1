@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import DraftRenderBlock from '../shared/draft-renderer-block'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { getContentTextBlocks } = MirrorMedia
-import { sortArrayWithOtherArrayId } from '../../../utils'
 import Credits from './potography-credits'
 import HeroSection from './hero-section'
 import Header from './photography-header'
@@ -11,6 +10,15 @@ import Slide from './slide'
 import RelatedPosts from './related-posts'
 import { ArrowDown } from './icons'
 import Footer from '../../shared/footer'
+
+/**
+ * Determines if the current browser is Safari.
+ *
+ * @return {boolean} Returns true if the browser is Safari, false otherwise.
+ */
+const isSafari = () => {
+  return /^((?!chrome|android|mobile).)*safari/i.test(navigator.userAgent)
+}
 
 const Main = styled.main`
   margin: auto;
@@ -37,7 +45,17 @@ const Main = styled.main`
 
   // Snap scrolling effect
   height: 100vh;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: ${({
+    // @ts-ignore
+    isSafari,
+  }) => (isSafari ? 'y proximity' : 'y mandatory')};
+  scroll-snap-type: ${({
+    // @ts-ignore
+    isSafari,
+  }) =>
+    isSafari
+      ? '-webkit-scroll-snap-type: y proximity'
+      : '-webkit-scroll-snap-type: y mandatory'};
   overflow: auto;
 
   // Hide the scroll bar
@@ -56,6 +74,8 @@ const Page = styled.div`
   // snap scrolling effect
   scroll-snap-align: start;
   scroll-snap-stop: always;
+  -webkit-scroll-snap-align: start;
+  -webkit-scroll-snap-stop: always;
 `
 
 const ContentContainer = styled.div`
@@ -129,7 +149,7 @@ export default function StoryPhotographyStyle({ postData, postContent }) {
     heroImage = null,
     heroCaption = '',
     writers = [],
-    manualOrderOfWriters = [],
+    writersInInputOrder = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -137,7 +157,7 @@ export default function StoryPhotographyStyle({ postData, postContent }) {
     vocals = [],
     extend_byline = '',
     relateds = [],
-    manualOrderOfRelateds = [],
+    relatedsInInputOrder = [],
 
     brief = null,
   } = postData
@@ -145,7 +165,7 @@ export default function StoryPhotographyStyle({ postData, postContent }) {
   const filteredBrief = getContentTextBlocks(brief)
 
   const credits = [
-    { writers: manualOrderOfWriters ? manualOrderOfWriters : writers },
+    { writers: writersInInputOrder ? writersInInputOrder : writers },
     { photographers: photographers },
     { camera_man: camera_man },
     { designers: designers },
@@ -155,8 +175,8 @@ export default function StoryPhotographyStyle({ postData, postContent }) {
   ]
 
   const relatedsWithOrdered =
-    manualOrderOfRelateds && manualOrderOfRelateds.length
-      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+    relatedsInInputOrder && relatedsInInputOrder.length
+      ? relatedsInInputOrder
       : relateds
 
   // Get images array from content.entityMap
@@ -215,8 +235,17 @@ export default function StoryPhotographyStyle({ postData, postContent }) {
     setIsTransparent((prevState) => !prevState)
   }
 
+  const [isSafariDevice, setIsSafariDevice] = useState(false)
+
+  useEffect(() => {
+    setIsSafariDevice(isSafari())
+  }, [])
+
   return (
-    <Main>
+    <Main
+      // @ts-ignore
+      isSafari={isSafariDevice}
+    >
       <Header />
       <Page>
         <HeroSection

@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import client from '../../../apollo/apollo-client'
 import { GCP_PROJECT_ID } from '../../../config/index.mjs'
+import { setPageCache } from '../../../utils/cache-setting'
 import { fetchWeeklys } from '../../../apollo/query/magazines'
 import Layout from '../../../components/shared/layout'
 
@@ -57,7 +58,9 @@ export default function BookBIssuePublish({ weeklys }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
+  setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {

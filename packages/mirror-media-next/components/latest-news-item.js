@@ -1,6 +1,8 @@
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
+
 import styled from 'styled-components'
-// import Image from 'next/image'
-import CustomNextImage from './custom-next-image'
+import Link from 'next/link'
+import CustomImage from '@readr-media/react-image'
 
 /**
  * @typedef {import('../type/theme').Theme} Theme
@@ -99,22 +101,56 @@ const Title = styled.div`
 `
 
 /**
- * @param {Object} props
- * @param {import('../type/index').ArticleInfoCard} props.itemData
- * @returns {React.ReactElement}
+ * @typedef {Object} FormattedArticle
+ * @property {string} articleHref
+ * @property {string} sectionTitle
+ * @property {string} sectionName
+ * /
+
+
+
+
+/**
+ * @typedef {Pick<import('../apollo/fragments/post').Post, 'slug' | 'title' | 'style'| 'publishedDate' | 'heroImage' |'sections' | 'categories'  |'redirect'> & { partner: import('../apollo/fragments/partner').Partner | string}} ArticleRawData
  */
 
+/**
+ * @typedef {ArticleRawData &  FormattedArticle} Article
+ */
+
+/**
+ * @param {Object} props
+ * @param {Article} props.itemData
+ * @returns {React.ReactElement}
+ */
 export default function LatestNewsItem({ itemData }) {
   return (
-    <a href={itemData.href} target="_blank" rel="noreferrer">
+    <Link
+      href={itemData.articleHref}
+      target="_blank"
+      rel="noreferrer"
+      className="GTM-homepage-latest-list"
+    >
       <ItemWrapper>
         <ImageContainer>
-          <CustomNextImage src={itemData.imgSrcMobile}></CustomNextImage>
+          <CustomImage
+            defaultImage="/images/default-og-img.png"
+            loadingImage="images/loading.gif"
+            images={itemData.heroImage?.resized ?? {}}
+            objectFit="cover"
+            rwd={{
+              mobile: '488px',
+              tablet: '488px',
+              desktop: '488px',
+              default: '488px',
+            }}
+            alt={itemData.title}
+          ></CustomImage>
         </ImageContainer>
         <Detail>
           {itemData.sectionTitle && (
-            <Label sectionName={itemData.sectionName}>
-              {itemData.sectionTitle}
+            <Label sectionName={itemData.sectionTitle}>
+              {itemData.sectionName}
             </Label>
           )}
           <Title>
@@ -122,6 +158,6 @@ export default function LatestNewsItem({ itemData }) {
           </Title>
         </Detail>
       </ItemWrapper>
-    </a>
+    </Link>
   )
 }

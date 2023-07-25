@@ -1,19 +1,40 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import TopicGroupArticles from './topic-group-articles'
+import dynamic from 'next/dynamic'
+
+import { useDisplayAd } from '../../../hooks/useDisplayAd'
+import { parseUrl } from '../../../utils/topic'
+const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
+
+/**
+ * @typedef {import('../../../type/theme').Theme} Theme
+ */
 
 const Container = styled.main`
   margin: 0 auto;
 
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.customCss
+     */
+    ({ theme }) => theme.breakpoint.xl
+  } {
     padding: 0;
   }
 
   // custom css from cms, mainly used class name .topic, .topic-title, .leading
-  ${({ customCss }) =>
-    customCss &&
-    css`
-      ${customCss}
-    `}
+  ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.customCss
+     */
+    ({ customCss }) => customCss
+  }
 `
 
 const Topic = styled.div`
@@ -23,7 +44,24 @@ const Topic = styled.div`
   background-position: 50%;
   background-size: cover;
 
-  ${({ theme }) => theme.breakpoint.xl} {
+  background-image: ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.backgroundUrl
+     */
+    ({ backgroundUrl }) =>
+      backgroundUrl ? `url(${backgroundUrl}) !important` : 'unset'
+  };
+
+  ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.backgroundUrl
+     */
+    ({ theme }) => theme.breakpoint.xl
+  } {
     height: 600px;
     padding-top: 0;
   }
@@ -33,6 +71,17 @@ const TopicGroups = styled.div`
   padding-bottom: 20px;
   display: flex;
   flex-direction: column;
+`
+
+const StyledGPTAd = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  margin: 20px auto;
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+    margin: 35px auto;
+  }
 `
 
 /**
@@ -54,17 +103,7 @@ const TopicGroups = styled.div`
  * }} Photo
  * @typedef {import('./topic-group-articles').Tag} Tag
  * @typedef {import('./topic-group-articles').Article} Article
- * @typedef {import('../../../apollo/fragments/topic').Topic & {
- *  id: string;
- *  name: string;
- *  brief: import('../../../type/draft-js').Draft;
- *  heroImage: Photo;
- *  leading: string;
- *  type: string;
- *  style: string;
- *  posts: Article[];
- *  tags: Tag[]
- * }} Topic
+ * @typedef {import('../../../apollo/fragments/topic').Topic } Topic
  */
 
 /**
@@ -73,12 +112,16 @@ const TopicGroups = styled.div`
  * @returns {React.ReactElement}
  */
 export default function TopicGroup({ topic }) {
-  const { style, posts, tags } = topic
+  const { style, posts, tags, dfp } = topic
+  const shouldShowAd = useDisplayAd()
+  const backgroundUrl = parseUrl(topic.style)
+    ? ''
+    : topic.og_image?.resized?.original || topic.heroImage?.resized?.original
 
   return (
     <>
       <Container customCss={style} className="topicContainer">
-        <Topic className="topic" />
+        <Topic className="topic" backgroundUrl={backgroundUrl} />
         <TopicGroups className="groupList">
           {tags.map((tag) => (
             <TopicGroupArticles
@@ -89,6 +132,7 @@ export default function TopicGroup({ topic }) {
               )}
             />
           ))}
+          {shouldShowAd && dfp && <StyledGPTAd adUnit={dfp} />}
         </TopicGroups>
       </Container>
     </>

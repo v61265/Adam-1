@@ -1,12 +1,8 @@
-//TODO: will fetch topic data twice (once in header, once in index),
-//should fetch only once by using Redux.
-//TODO: add typedef of editor choice data
-//TODO: add component to add html head dynamically, not jus write head in every pag
-//TODO: add jsDoc of `props.sectionsData`
 import React from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
+import dynamic from 'next/dynamic'
 
 import {
   ENV,
@@ -17,11 +13,18 @@ import {
 } from '../config/index.mjs'
 
 import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
-import { transformRawDataToArticleInfo } from '../utils'
-
+import { getSectionNameGql, getSectionTitleGql, getArticleHref } from '../utils'
+import { setPageCache } from '../utils/cache-setting'
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
 import Layout from '../components/shared/layout'
+import { useDisplayAd } from '../hooks/useDisplayAd'
+
+const GPTAd = dynamic(() => import('../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
+
+const GA_UTM_EDITOR_CHOICES = 'utm_source=mmweb&utm_medium=editorchoice'
 
 /**
  * @typedef {import('../components/shared/share-header').HeaderData['flashNewsData']} FlashNewsData
@@ -33,24 +36,68 @@ import Layout from '../components/shared/layout'
  * @typedef {import('../components/shared/share-header').HeaderData['topicsData']} TopicsData
  */
 
+/**
+ * @typedef {import('../components/editor-choice').EditorChoiceRawData[]} EditorChoicesRawData
+ */
+/**
+ * @typedef {import('../components/latest-news').ArticleRawData[]} ArticlesRawData
+ */
+
 const IndexContainer = styled.main`
   background-color: rgba(255, 255, 255, 1);
   max-width: 596px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 1024px;
-    height: 500vh;
   }
   margin: 0 auto;
+`
+
+const StyledGPTAd_HD = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+  }
+`
+
+const StyledGPTAd_PC_B1 = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  margin: 20px auto 0px;
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 728px;
+    max-height: 90px;
+    display: block;
+  }
+`
+
+const StyledGPTAd_MB_L1 = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
 `
 
 /**
  *
  * @param {Object} props
- * @param {import('../type').Topic[]} props.topicsData
+ * @param {TopicsData} props.topicsData
  * @param {FlashNewsData} props.flashNewsData
- * @param {import('../type/raw-data.typedef').RawData[] } [props.editorChoicesData=[]]
- * @param {import('../type/raw-data.typedef').RawData[] } [props.latestNewsData=[]]
+ * @param {EditorChoicesRawData} [props.editorChoicesData=[]]
+ * @param {ArticlesRawData} [props.latestNewsData=[]]
  * @param {Object[] } props.sectionsData
  * @returns {React.ReactElement}
  */
@@ -61,7 +108,21 @@ export default function Home({
   latestNewsData = [],
   sectionsData = [],
 }) {
-  const editorChoice = transformRawDataToArticleInfo(editorChoicesData)
+  const editorChoice = editorChoicesData.map((item) => {
+    const sectionName = getSectionNameGql(item.sections, undefined)
+    const sectionTitle = getSectionTitleGql(item.sections, undefined)
+    const articleHref =
+      item.style !== 'projects'
+        ? `${getArticleHref(
+            item.slug,
+            item.style,
+            undefined
+          )}?${GA_UTM_EDITOR_CHOICES}`
+        : getArticleHref(item.slug, item.style, undefined)
+    return { sectionName, sectionTitle, articleHref, ...item }
+  })
+
+  const shouldShowAd = useDisplayAd()
 
   return (
     <Layout
@@ -74,7 +135,10 @@ export default function Home({
       }}
     >
       <IndexContainer>
+        {shouldShowAd && <StyledGPTAd_HD pageKey="home" adKey="HD" />}
         <EditorChoice editorChoice={editorChoice}></EditorChoice>
+        {shouldShowAd && <StyledGPTAd_PC_B1 pageKey="home" adKey="PC_B1" />}
+        {shouldShowAd && <StyledGPTAd_MB_L1 pageKey="home" adKey="MB_L1" />}
         <LatestNews latestNewsData={latestNewsData} />
       </IndexContainer>
     </Layout>
@@ -109,8 +173,10 @@ export default function Home({
  * @type {import('next').GetServerSideProps}
  */
 export async function getServerSideProps({ res, req }) {
-  if (ENV === 'dev' || ENV === 'staging' || ENV === 'prod') {
-    res.setHeader('Cache-Control', 'public, max-age=180')
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 180 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
   }
 
   const headers = req?.headers
@@ -128,11 +194,12 @@ export async function getServerSideProps({ res, req }) {
   let editorChoicesData = []
   let latestNewsData = []
   let sectionsData = []
+  const apiTimeout = ENV === 'dev' ? 1500 : API_TIMEOUT
   try {
     const postResponse = await axios({
       method: 'get',
       url: `${URL_STATIC_POST_EXTERNAL}01.json`,
-      timeout: API_TIMEOUT,
+      timeout: apiTimeout,
     })
     editorChoicesData = Array.isArray(postResponse?.data?.choices)
       ? postResponse?.data?.choices
@@ -181,7 +248,6 @@ export async function getServerSideProps({ res, req }) {
             ...globalLogFields,
           })
         )
-        throw new Error(errorMessage)
       }
     })
 

@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 import Image from '@readr-media/react-image'
 
+/**
+ * @typedef {import('../../type/theme').Theme} Theme
+ */
+
 const ItemWrapper = styled.a`
   display: block;
   position: relative;
@@ -22,10 +26,10 @@ const ItemSection = styled.div`
   position: absolute;
   left: 0;
   bottom: 0;
-  padding: 8px;
   color: white;
-  font-size: 16px;
-  font-weight: 300;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 4px 20px;
   background-color: ${
     /**
      * @param {Object} props
@@ -37,11 +41,6 @@ const ItemSection = styled.div`
         ? theme.color.sectionsColor[sectionName]
         : theme.color.brandColor.lightBlue
   };
-  ${({ theme }) => theme.breakpoint.md} {
-    font-size: 18px;
-    font-weight: 600;
-    padding: 4px 20px;
-  }
 `
 
 const ItemDetail = styled.div`
@@ -117,7 +116,7 @@ export default function ArticleListItem({ item, section }) {
           alt={item.title}
           loadingImage="/images/loading.gif"
           defaultImage="/images/default-og-img.png"
-          rwd={{ tablet: '320px', desktop: '220px' }}
+          rwd={{ mobile: '400px', tablet: '400px', desktop: '400px' }}
         />
         {itemSection && (
           <ItemSection sectionName={itemSection?.slug}>

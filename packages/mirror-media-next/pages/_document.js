@@ -73,6 +73,10 @@ export default class MyDocument extends Document {
             key="msapplication-TileColor"
           />
           <meta name="theme-color" content="#ffffff" key="theme-color" />
+          <meta
+            name="google-site-verification"
+            content="8tUjQvQoBEANJ6nRE9fMnsw2qODvbAgqDjSkLj-Mdw0"
+          />
         </Head>
         <body>
           <Main />

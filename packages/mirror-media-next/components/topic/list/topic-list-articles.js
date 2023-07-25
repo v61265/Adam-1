@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import client from '../../../apollo/apollo-client'
 
 import InfiniteScrollList from '../../infinite-scroll-list'
 import Image from 'next/legacy/image'
+// @ts-ignore
 import LoadingPage from '../../../public/images/loading_page.gif'
-import { fetchTopic } from '../../../apollo/query/topics'
 import ListArticles from './list-articles'
+import { fetchTopicByTopicSlug } from '../../../utils/api/topic'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -29,6 +29,7 @@ const Loading = styled.div`
  * @param {Article[]} props.posts
  * @param {string} props.topicId
  * @param {number} props.renderPageSize
+ * @param {string} props.dfp
  * @returns {React.ReactElement}
  */
 export default function TopicListArticles({
@@ -36,21 +37,20 @@ export default function TopicListArticles({
   posts,
   topicId,
   renderPageSize,
+  dfp,
 }) {
+  const fetchPageSize = renderPageSize
   async function fetchTopicPostsFromPage(page) {
+    if (!topicId) {
+      return
+    }
     try {
-      const response = await client.query({
-        query: fetchTopic,
-        variables: {
-          topicFilter: { id: topicId },
-          postsFilter: { state: { equals: 'published' } },
-          postsOrderBy: [{ isFeatured: 'desc' }, { publishedDate: 'desc' }],
-          postsTake: renderPageSize,
-          postsSkip: (page - 1) * renderPageSize,
-        },
-      })
+      const take = fetchPageSize
+      const skip = (page - 1) * take
+      const response = await fetchTopicByTopicSlug(topicId, take, skip)
       return response.data.topic.posts
     } catch (error) {
+      // [to-do]: use beacon api to log error on gcs
       console.error(error)
     }
     return
@@ -66,11 +66,11 @@ export default function TopicListArticles({
     <InfiniteScrollList
       initialList={posts}
       renderAmount={renderPageSize}
-      fetchCount={Math.ceil(postsCount / renderPageSize)}
+      fetchCount={Math.ceil(postsCount / fetchPageSize)}
       fetchListInPage={fetchTopicPostsFromPage}
       loader={loader}
     >
-      {(renderList) => <ListArticles renderList={renderList} />}
+      {(renderList) => <ListArticles renderList={renderList} dfp={dfp} />}
     </InfiniteScrollList>
   )
 }

@@ -1,3 +1,5 @@
+//TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
+
 import styled from 'styled-components'
 import RelatedArticleList from '../wide/related-article-list'
 import AsideArticleList from './aside-article-list'
@@ -12,6 +14,7 @@ import { fetchAsidePosts } from '../../../apollo/query/posts'
  */
 /**
  * @typedef {import('./aside-article-list').ArticleData} AsideArticleData
+ * @typedef {import('./aside-article-list').ArticleDataContainSectionsWithOrdered} ArticleDataContainSectionsWithOrdered
  */
 
 /**
@@ -44,7 +47,7 @@ export default function Aside({
   storySlug = '',
 }) {
   /**
-   * @returns {Promise<AsideArticleData[] | []>}
+   * @returns {Promise<ArticleDataContainSectionsWithOrdered[] | []>}
    */
   const handleFetchLatestNews = async () => {
     try {
@@ -59,7 +62,13 @@ export default function Aside({
           storySlug: storySlug,
         },
       })
-      return res.data?.posts
+      return res.data?.posts.map((post) => {
+        const sectionsWithOrdered =
+          post.sectionsInInputOrder && post.sectionsInInputOrder.length
+            ? post.sectionsInInputOrder
+            : post.sections
+        return { sectionsWithOrdered, ...post }
+      })
     } catch (err) {
       console.error(err)
       return []
@@ -67,7 +76,7 @@ export default function Aside({
   }
 
   /**
-   * @returns {Promise<AsideArticleData[] | []>}
+   * @returns {Promise<ArticleDataContainSectionsWithOrdered[] | []>}
    */
   const handleFetchPopularNews = async () => {
     try {
@@ -79,7 +88,18 @@ export default function Aside({
         url: URL_STATIC_POPULAR_NEWS,
         timeout: API_TIMEOUT,
       })
-      return data.filter((data) => data).slice(0, 6)
+
+      const popularNews = data
+        .map((post) => {
+          const sectionsWithOrdered =
+            post.sectionsInInputOrder && post.sectionsInInputOrder.length
+              ? post.sectionsInInputOrder
+              : post.sections
+          return { sectionsWithOrdered, ...post }
+        })
+        .slice(0, 6)
+
+      return popularNews
     } catch (err) {
       return []
     }
@@ -87,15 +107,15 @@ export default function Aside({
 
   return (
     <AsideWrapper>
-      <RelatedArticleList relateds={relateds}></RelatedArticleList>
+      {relateds.length > 0 && <RelatedArticleList relateds={relateds} />}
       <AsideArticleList
-        heading="最新文章"
+        listType={'latestNews'}
         fetchArticle={handleFetchLatestNews}
         renderAmount={6}
       />
       <Divider />
       <AsideArticleList
-        heading="熱門文章"
+        listType={'popularNews'}
         fetchArticle={handleFetchPopularNews}
         renderAmount={6}
       />

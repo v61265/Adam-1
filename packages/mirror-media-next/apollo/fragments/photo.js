@@ -24,6 +24,13 @@ import { gql } from '@apollo/client'
  * @property {Resized} resized
  */
 
+/**
+ * @typedef {Object} SlideshowImage
+ * @property {string} id
+ * @property {Resized} resized
+ * @property {string} name
+ */
+
 export const heroImage = gql`
   fragment heroImage on Photo {
     imageFile {
@@ -38,5 +45,20 @@ export const heroImage = gql`
       w1600
       w2400
     }
+  }
+`
+
+export const slideshowImage = gql`
+  fragment slideshowImage on Photo {
+    id
+    resized {
+      original
+      w480
+      w800
+      w1200
+      w1600
+      w2400
+    }
+    name
   }
 `

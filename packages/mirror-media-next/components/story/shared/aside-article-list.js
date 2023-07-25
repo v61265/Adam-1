@@ -10,14 +10,7 @@ import Image from '@readr-media/react-image'
 
 /** @typedef {import('../../../apollo/fragments/post').AsideListingPost} ArticleData */
 
-const TestButton = styled.button`
-  position: fixed;
-
-  left: 0;
-  width: 100px;
-  height: 100px;
-  background-color: pink;
-`
+/** @typedef {ArticleData & {sectionsWithOrdered: ArticleData["sectionsInInputOrder"]} } ArticleDataContainSectionsWithOrdered */
 
 const Wrapper = styled.section`
   margin: 24px auto 0;
@@ -243,8 +236,8 @@ const TitleLoading = styled(Title)`
 /**
  *
  * @param {Object} props
- * @param {string} props.heading - heading of this components, showing user what kind of news is
- * @param {()=>Promise<ArticleData[] | []>} props.fetchArticle
+ * @param {'latestNews' | 'popularNews'} props.listType - What kind of list is.
+ * @param {()=>Promise<ArticleDataContainSectionsWithOrdered[] | []>} props.fetchArticle
  * - A Promise base function for fetching article.
  * - If fulfilled, it will return a array of object, which item is a article.
  * - If rejected, it will return an empty array
@@ -253,7 +246,7 @@ const TitleLoading = styled(Title)`
  * @returns {JSX.Element}
  */
 export default function AsideArticleList({
-  heading = '',
+  listType = 'latestNews',
   fetchArticle,
   renderAmount = 6,
 }) {
@@ -261,18 +254,17 @@ export default function AsideArticleList({
   const [item, setItem] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
   const handleLoadMore = useCallback(() => {
-    //Temporarily remove setIsLoaded for testing  style of loading component.
-
     fetchArticle().then((articles) => {
       if (articles.length && Array.isArray(articles)) {
         setItem(articles)
-        // setIsLoaded(true)
+        setIsLoaded(true)
       } else {
-        // setIsLoaded(true)
+        setIsLoaded(true)
       }
     })
   }, [fetchArticle])
-
+  const heading = listType === 'latestNews' ? '最新文章' : '熱門文章'
+  const headingColor = listType === 'latestNews' ? 'gray' : 'darkBlue'
   useEffect(() => {
     let callback = (entries, observer) => {
       entries.forEach((entry) => {
@@ -312,9 +304,7 @@ export default function AsideArticleList({
 
             <FigureCaption>
               <Link href={articleHref} target="_blank">
-                <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
-                  {item.title}
-                </Title>
+                <Title color={headingColor}>{item.title}</Title>
               </Link>
             </FigureCaption>
           </Article>
@@ -323,9 +313,7 @@ export default function AsideArticleList({
             <div className="article-image article-image__loading"></div>
 
             <FigureCaption>
-              <TitleLoading
-                color={heading === '熱門文章' ? 'darkBlue' : 'gray'}
-              >
+              <TitleLoading color={headingColor}>
                 <div className="decoration-bar"></div>
                 <div className="decoration-bar"></div>
               </TitleLoading>
@@ -336,24 +324,11 @@ export default function AsideArticleList({
     )
   })
 
-  //Temporarily add for testing  style of loading component.
-  const handleOnClick = () => {
-    setIsLoaded((pre) => !pre)
-  }
-
   return (
     <>
-      {/* TestButton is temporarily added for testing style of loading component. */}
-      <TestButton
-        onClick={handleOnClick}
-        style={{ top: heading === '熱門文章' ? '250px' : '100px' }}
-      >
-        {heading}目前狀態{isLoaded ? '載入完畢' : '載入中'}
-      </TestButton>
-
       <Wrapper>
         {isLoaded ? (
-          <Heading color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
+          <Heading color={headingColor}>
             <h2>{heading}</h2>
           </Heading>
         ) : (

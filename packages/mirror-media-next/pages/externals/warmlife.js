@@ -7,20 +7,23 @@ import {
   GCP_PROJECT_ID,
   API_TIMEOUT,
   URL_STATIC_EXTERNALS_WARMLIFE,
+  ENV,
 } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import axios from 'axios'
 import { Z_INDEX, SECTION_IDS } from '../../constants/index'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
 })
 
 const RENDER_PAGE_SIZE = 12
-const WARMLIFE_DEFAULT_TITLE = `生活暖流`
+const WARMLIFE_DEFAULT_TITLE = '生活暖流'
 const WARMLIFE_DEFAULT_COLOR = 'lightBlue'
-const WARMLIFE_GPT_SECTION_IDS = SECTION_IDS.news // The default section of `warmlife` page is `時事`
+const WARMLIFE_GPT_SECTION_IDS = SECTION_IDS.news // the default section of `warmlife` page is `時事`
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -60,26 +63,27 @@ const WarmLifeTitle = styled.h1`
 
 const StyledGPTAd = styled(GPTAd)`
   width: 100%;
+  height: auto;
   max-width: 336px;
-  margin: auto;
-  height: 280px;
-  margin-top: 20px;
+  max-height: 280px;
+  margin: 20px auto 0px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 970px;
-    height: 250px;
+    max-height: 250px;
   }
 `
 
 const StickyGPTAd = styled(GPTAd)`
   position: fixed;
-  width: 100%;
-  max-width: 320px;
-  margin: auto;
-  height: 50px;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
   z-index: ${Z_INDEX.top};
 
   ${({ theme }) => theme.breakpoint.xl} {
@@ -98,6 +102,8 @@ const StickyGPTAd = styled(GPTAd)`
  * @returns {React.ReactElement}
  */
 export default function WarmLife({ warmLifeData, headerData }) {
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `${WARMLIFE_DEFAULT_TITLE}相關報導` }}
@@ -105,14 +111,17 @@ export default function WarmLife({ warmLifeData, headerData }) {
       footer={{ type: 'default' }}
     >
       <WarmLifeContainer>
-        <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="HD" />
+        {shouldShowAd && (
+          <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="HD" />
+        )}
         <WarmLifeTitle>{WARMLIFE_DEFAULT_TITLE}</WarmLifeTitle>
         <WarmLifeArticles
           warmLifeExternals={warmLifeData}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-        <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="FT" />
-        <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="ST" />
+        {shouldShowAd && (
+          <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="ST" />
+        )}
       </WarmLifeContainer>
     </Layout>
   )
@@ -121,7 +130,12 @@ export default function WarmLife({ warmLifeData, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req, query, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const mockError = query.error === '500'
 
   const traceHeader = req.headers?.['x-cloud-trace-context']

@@ -1,14 +1,23 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 
 import SectionArticles from '../../components/shared/section-articles'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import {
   fetchPremiumPostsBySectionSlug,
   fetchSectionBySectionSlug,
 } from '../../utils/api/premiumsection'
+import { SECTION_IDS } from '../../constants/index'
+import { Z_INDEX } from '../../constants/index'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
+
+const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme
@@ -71,6 +80,35 @@ const SectionTitle = styled.h1`
   }
 `
 
+const StyledGPTAd_HD = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+  }
+`
+
+const StickyGPTAd_MB_ST = styled(GPTAd)`
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
+  z-index: ${Z_INDEX.top};
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
 const RENDER_PAGE_SIZE = 12
 
 /**
@@ -89,6 +127,9 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Section({ postsCount, posts, section, headerData }) {
   const sectionName = section.name || ''
+
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `${sectionName}分類報導` }}
@@ -96,6 +137,9 @@ export default function Section({ postsCount, posts, section, headerData }) {
       footer={{ type: 'default' }}
     >
       <SectionContainer>
+        {shouldShowAd && (
+          <StyledGPTAd_HD pageKey={SECTION_IDS['member']} adKey="HD" />
+        )}
         {sectionName && (
           <SectionTitle sectionName={section.slug}>{sectionName}</SectionTitle>
         )}
@@ -106,6 +150,9 @@ export default function Section({ postsCount, posts, section, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
           isPremium={true}
         />
+        {shouldShowAd && (
+          <StickyGPTAd_MB_ST pageKey={SECTION_IDS['member']} adKey="MB_ST" />
+        )}
       </SectionContainer>
     </Layout>
   )
@@ -114,7 +161,12 @@ export default function Section({ postsCount, posts, section, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const sectionSlug = Array.isArray(query.slug) ? query.slug[0] : query.slug
   const mockError = query.error === '500'
 

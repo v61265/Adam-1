@@ -15,8 +15,8 @@ import { mediaSize } from '../styles/media'
  * @returns {string}
  */
 export function getAdWidth(adSize) {
-  const widthMax = adSize.reduce((acc, curr) => Math.max(curr[0], acc), 0)
-  return `${widthMax}px`
+  const widthMax = adSize?.reduce((acc, curr) => Math.max(curr[0], acc), 0)
+  return widthMax ? `${widthMax}px` : '0px'
 }
 
 /**
@@ -84,5 +84,50 @@ export function getAdSlotParam(pageKey, adKey, width) {
   }
   const { adUnit, adSize } = adData
   const adUnitPath = getAdUnitPath(adUnit)
+  return { adUnitPath, adSize }
+}
+
+/**
+ * Create adSize array with size string like '970250'.
+ * @param {string} sizeString - size string
+ * @returns {googletag.SingleSizeArray}
+ */
+function createAdSize(sizeString) {
+  return [
+    parseInt(sizeString.substring(0, 3)),
+    parseInt(sizeString.substring(3)),
+  ]
+}
+
+/**
+ * Create adSize with special adUnit string like 'mirror_RWD_2022FIFA_970250-300250_FT'.
+ * @param {string} adUnit - special adUnit string for topic page
+ * @returns {googletag.SingleSizeArray[]}
+ */
+function getAdSize(adUnit) {
+  const adUnitSlices = adUnit.split('_')
+  let hasNan = false
+  const adSize = adUnitSlices[adUnitSlices.length - 2]
+    ?.split('-')
+    .map((sizeString) => {
+      const singleAdSize = createAdSize(sizeString)
+      if (isNaN(singleAdSize[0]) || isNaN(singleAdSize[1])) {
+        hasNan = true
+      }
+      return singleAdSize
+    })
+
+  return hasNan ? undefined : adSize
+}
+
+/**
+ * Generate adSlot params for googletag.defineSlot.
+ * Especially for custom adUnit in cms like topic DFP field.
+ * @param {string} adUnit
+ * @returns {GPTAdSlotParam}
+ */
+export function getAdSlotParamByAdUnit(adUnit) {
+  const adUnitPath = getAdUnitPath(adUnit)
+  const adSize = getAdSize(adUnit)
   return { adUnitPath, adSize }
 }

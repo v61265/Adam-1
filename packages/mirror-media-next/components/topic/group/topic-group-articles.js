@@ -68,6 +68,9 @@ const GroupArticles = styled.div`
  * @returns {React.ReactElement}
  */
 export default function TopicGroupArticles({ tag, posts }) {
+  if (posts.length === 0) {
+    return null
+  }
   return (
     <Container className={`groupListBlockContainer tag-${tag.slug}`}>
       <GroupTitle>{tag.name}</GroupTitle>

@@ -3,15 +3,17 @@ import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 
 import AuthorArticles from '../../components/author/author-articles'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
+
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
 import {
   fetchAuthorByAuthorId,
   fetchPostsByAuthorId,
 } from '../../utils/api/author'
-
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
 })
@@ -48,26 +50,27 @@ const AuthorTitle = styled.h1`
 
 const StyledGPTAd = styled(GPTAd)`
   width: 100%;
+  height: auto;
   max-width: 336px;
-  margin: auto;
-  height: 280px;
-  margin-top: 20px;
+  max-height: 280px;
+  margin: 20px auto 0px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 970px;
-    height: 250px;
+    max-height: 250px;
   }
 `
 
 const StickyGPTAd = styled(GPTAd)`
   position: fixed;
-  width: 100%;
-  max-width: 320px;
-  margin: auto;
-  height: 50px;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
   z-index: ${Z_INDEX.top};
 
   ${({ theme }) => theme.breakpoint.xl} {
@@ -92,6 +95,7 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Author({ postsCount, posts, author, headerData }) {
   const authorName = author.name || ''
+  const shouldShowAd = useDisplayAd()
   return (
     <Layout
       head={{ title: `${authorName}相關報導` }}
@@ -99,7 +103,7 @@ export default function Author({ postsCount, posts, author, headerData }) {
       footer={{ type: 'default' }}
     >
       <AuthorContainer>
-        <StyledGPTAd pageKey="other" adKey="HD" />
+        {shouldShowAd && <StyledGPTAd pageKey="other" adKey="HD" />}
         {authorName && <AuthorTitle>{authorName}</AuthorTitle>}
         <AuthorArticles
           postsCount={postsCount}
@@ -107,8 +111,7 @@ export default function Author({ postsCount, posts, author, headerData }) {
           authorId={author.id}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-        <StyledGPTAd pageKey="other" adKey="FT" />
-        <StickyGPTAd pageKey="other" adKey="ST" />
+        {shouldShowAd && <StickyGPTAd pageKey="other" adKey="ST" />}
       </AuthorContainer>
     </Layout>
   )
@@ -117,7 +120,13 @@ export default function Author({ postsCount, posts, author, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
+
   const authorId = Array.isArray(query.id) ? query.id[0] : query.id
   const mockError = query.error === '500'
 

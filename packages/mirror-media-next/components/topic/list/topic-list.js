@@ -7,23 +7,38 @@ import TopicListArticles from './topic-list-articles'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
-import css from 'styled-jsx/css'
+
 import { useCallback, useState } from 'react'
+import { parseUrl } from '../../../utils/topic'
+
+/**
+ * @typedef {import('../../../type/theme').Theme} Theme
+ */
 
 const Container = styled.main`
   margin: 0 auto;
   background: #eee;
 
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.customCss
+     */
+    ({ theme }) => theme.breakpoint.xl
+  } {
     padding: 0;
   }
 
   // custom css from cms, mainly used class name .topic, .topic-title, .leading
-  ${({ customCss }) =>
-    customCss &&
-    css`
-      ${customCss}
-    `}
+  ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.customCss
+     */
+    ({ customCss }) => customCss
+  }
 `
 
 const Topic = styled.div`
@@ -32,13 +47,27 @@ const Topic = styled.div`
   padding-top: 66.66%;
   background-position: 50%;
   background-size: cover;
+  background-image: ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.backgroundUrl
+     */
+    ({ backgroundUrl }) =>
+      backgroundUrl ? `url(${backgroundUrl}) !important` : 'unset'
+  };
 
-  ${({ theme }) => theme.breakpoint.md} {
-  }
-  ${({ theme }) => theme.breakpoint.xl} {
+  ${
+    /**
+     * @param {Object} props
+     * @param {Theme} props.theme
+     * @param {string} props.backgroundUrl
+     */
+    ({ theme }) => theme.breakpoint.xl
+  } {
     height: 600px;
-    padding-top 0;
-  }
+    padding-top: 0;
+  }}
 `
 const TopicTitle = styled.div`
   background-repeat: no-repeat;
@@ -147,50 +176,23 @@ const CustomSwiperNext = styled.div`
  *  style: string;
  *  posts: Article[];
  * }} Topic
- * an mm 2.0 data from example http://104.199.190.189:8080/images?where=%7B%22topics%22%3A%7B%22%24in%22%3A%5B%225a30e6ae4be59110005c5e6b%22%5D%7D%7D&max_results=25
- * @typedef {{
- *  _id: string,
- *  description: string
- *  createTime: string
- *  image: {
- *    filename: string
- *    resizedTargets: {
- *      tiny: {
- *        height: number
- *        width: number
- *        url: string
- *      }
- *      mobile: {
- *        height: number
- *        width: number
- *        url: string
- *      }
- *      tablet: {
- *        height: number
- *        width: number
- *        url: string
- *      }
- *      desktop: {
- *        height: number
- *        width: number
- *        url: string
- *      }
- *    }
- *    keywords: string
- *  }
- * }} SlideshowItem
+ *
+ * @typedef {import('../../../apollo/fragments/photo').SlideshowImage} SlideshowImage
  */
 
 /**
  * @param {Object} props
  * @param {Topic} props.topic
  * @param {number} props.renderPageSize
- * @param {SlideshowItem[]} props.slideshowData
+ * @param {SlideshowImage[]} props.slideshowImages
  * @returns {React.ReactElement}
  */
-export default function TopicList({ topic, renderPageSize, slideshowData }) {
+export default function TopicList({ topic, renderPageSize, slideshowImages }) {
   const [swiperRef, setSwiperRef] = useState(null)
   const { postsCount, posts, id, style } = topic
+  const backgroundUrl = parseUrl(topic.style)
+    ? ''
+    : topic.og_image?.resized?.original || topic.heroImage?.resized?.original
 
   const handlePrevious = useCallback(() => {
     swiperRef?.slidePrev()
@@ -203,10 +205,10 @@ export default function TopicList({ topic, renderPageSize, slideshowData }) {
   return (
     <>
       <Container customCss={style}>
-        <Topic className="topic">
+        <Topic className="topic" backgroundUrl={backgroundUrl}>
           <TopicTitle className="topic-title" />
           <TopicLeading className="leading">
-            {!!slideshowData.length && (
+            {!!slideshowImages.length && (
               <>
                 <CustomSwiperPrev onClick={handlePrevious} />
                 <CustomSwiperNext onClick={handleNext} />
@@ -226,12 +228,16 @@ export default function TopicList({ topic, renderPageSize, slideshowData }) {
                   navigation={true}
                   modules={[Autoplay, Navigation]}
                 >
-                  {slideshowData.map((item) => (
-                    <SwiperSlide key={item._id}>
+                  {slideshowImages.map((item) => (
+                    <SwiperSlide key={item.id}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={item.image?.resizedTargets?.tablet?.url}
-                        alt={item.description}
+                        src={
+                          item.resized.w800 ||
+                          item.resized.w1200 ||
+                          item.resized.original
+                        }
+                        alt={item.name}
                       />
                     </SwiperSlide>
                   ))}
@@ -245,6 +251,7 @@ export default function TopicList({ topic, renderPageSize, slideshowData }) {
           posts={posts}
           postsCount={postsCount}
           renderPageSize={renderPageSize}
+          dfp={topic.dfp}
         />
       </Container>
     </>

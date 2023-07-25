@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import MicroAd from './micro-ad'
-
-import { useMembership } from '../../../context/membership'
 
 const typeListing = css`
   display: block;
@@ -282,7 +279,9 @@ const typeStory = css`
       background: none !important;
       ${({ theme }) => theme.breakpoint.md} {
         position: relative;
-        padding: 16px 0 0 25.75px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px 0 25.75px;
         &::before {
           position: absolute;
           content: '';
@@ -313,7 +312,10 @@ const typeStory = css`
       left: 0;
 
       ${({ theme }) => theme.breakpoint.md} {
-        font-weight: 600;
+        font-weight: 300;
+        font-size: 12px;
+        padding: 4px;
+        line-height: 14px;
       }
     }
 
@@ -356,14 +358,13 @@ const typeStory = css`
             color: #ffffff;
             position: absolute;
             bottom: 0;
-            right: 59px;
+            right: 103px;
             font-family: 'PingFang TC';
             font-style: normal;
-            font-weight: 600;
-            font-size: 18px;
-            line-height: 1.5;
-            padding: 8px;
-            padding: 4px 20px;
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 14px;
+            padding: 4px;
           }
 
           // Desktop: AD Title
@@ -372,13 +373,15 @@ const typeStory = css`
             display: block;
             height: 100%;
             position: relative;
-            padding: 16px 20px 0 40px;
+            padding: 0 20px 0 40px;
             font-style: normal;
             //Since AD uses inline-style to set the font-weight, it is necessary to use !important.
             font-weight: 400 !important;
             font-size: 18px;
             line-height: 1.5;
             color: #808080;
+            display: flex;
+            align-items: center;
 
             > a {
               //Since AD uses inline-style to set the font-weight, it is necessary to use !important.
@@ -430,26 +433,5 @@ const StyledMicroAd = styled(MicroAd)`
  * @returns {JSX.Element}
  */
 export default function MicroAdWithLabel({ unitId, microAdType }) {
-  const { memberInfo, isLogInProcessFinished } = useMembership()
-  const { memberType } = memberInfo
-
-  const [microAdJsx, setMicroAdJsx] = useState(null)
-
-  //When the user's member type is 'not-member', 'one-time-member', or 'basic-member', the AD should be displayed.
-
-  // Since the member type needs to be determined on the client-side, the rendering of `microAdJsx` should be done on the client-side.
-
-  useEffect(() => {
-    const invalidMemberType = ['not-member', 'one-time-member', 'basic-member']
-
-    if (isLogInProcessFinished) {
-      if (invalidMemberType.includes(memberType)) {
-        setMicroAdJsx(<StyledMicroAd unitId={unitId} type={microAdType} />)
-      } else {
-        return
-      }
-    }
-  }, [isLogInProcessFinished, memberType, microAdType, unitId])
-
-  return <>{microAdJsx}</>
+  return <StyledMicroAd unitId={unitId} type={microAdType} />
 }

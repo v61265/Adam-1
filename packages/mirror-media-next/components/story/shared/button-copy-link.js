@@ -47,13 +47,20 @@ export default function ButtonCopyLink({ width = 35, height = 35 }) {
   const [shouldShowMessage, setShouldShowMessage] = useState(false)
   const sharedUrl = useSharedUrl()
   const handleCopyLink = () => {
-    window.navigator.clipboard.writeText(sharedUrl)
+    if (window.navigator.clipboard) {
+      /**
+       * Since `window.navigator.clipboard` is only available in https protocol,
+       * we add optional chaining to hide error when developing in http protocol, such as `http://localhost:3000`
+       * Must to know that this is a work-around solution, not solved problem of unable copy in http protocol.
+       */
+      window.navigator?.clipboard?.writeText(sharedUrl)
 
-    setShouldShowMessage(true)
-    const timeout = setTimeout(() => {
-      clearTimeout(timeout)
-      setShouldShowMessage(false)
-    }, 3000)
+      setShouldShowMessage(true)
+      const timeout = setTimeout(() => {
+        clearTimeout(timeout)
+        setShouldShowMessage(false)
+      }, 3000)
+    }
   }
   return (
     <>
@@ -61,7 +68,11 @@ export default function ButtonCopyLink({ width = 35, height = 35 }) {
         已複製連結
       </CopiedMessage>
 
-      <ClickButton onClick={handleCopyLink} on="tap:clipboard-example.copy">
+      <ClickButton
+        onClick={handleCopyLink}
+        // @ts-ignore
+        on="tap:clipboard-example.copy"
+      >
         <Image
           src={'/images/link-logo.svg'}
           width={width}

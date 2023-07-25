@@ -75,8 +75,10 @@ const Title = styled.h2`
 export default function LeadingVideo({ video, title, slug }) {
   return (
     <Wrapper>
-      <Title categorySlug={slug}>{title}</Title>
-      <LeadingVideoItem video={video} slug={slug} playlistTitle={title} />
+      {title && <Title categorySlug={slug}>{title}</Title>}
+      {video && (
+        <LeadingVideoItem video={video} slug={slug} playlistTitle={title} />
+      )}
       <YoutubePolicy />
     </Wrapper>
   )

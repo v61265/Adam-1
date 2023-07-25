@@ -1,13 +1,12 @@
-//TODO: adjust margin and padding of all margin and padding after implement advertisement.
 //TODO: refactor jsx structure, make it more readable.
+//TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback } from 'react'
 import client from '../../../apollo/apollo-client'
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
 import axios from 'axios'
-import errors from '@twreporter/errors'
-import MockAdvertisement from '../../../components/mock-advertisement'
+import dynamic from 'next/dynamic'
 import ArticleInfo from '../../../components/story/normal/article-info'
 import ArticleBrief from '../shared/brief'
 import AsideArticleList from '../../../components/story/normal/aside-article-list'
@@ -21,20 +20,32 @@ import ArticleContent from './article-content'
 import HeroImageAndVideo from './hero-image-and-video'
 import Divider from '../shared/divider'
 import ShareHeader from '../../shared/share-header'
+import Footer from '../../shared/footer'
 import {
   transformTimeDataIntoDotFormat,
-  sortArrayWithOtherArrayId,
+  getCategoryOfWineSlug,
 } from '../../../utils'
-import { fetchHeaderDataInDefaultPageLayout } from '../../../utils/api'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
-import DableAd from '../../ads/dable/dable-ad'
+import { useDisplayAd } from '../../../hooks/useDisplayAd'
+import { Z_INDEX } from '../../../constants/index'
+import { getSectionGPTPageKey } from '../../../utils/ad'
+
+const DableAd = dynamic(() => import('../../ads/dable/dable-ad'), {
+  ssr: false,
+})
+
+const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
+
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
 
 /**
  * @typedef {import('../../../components/story/normal/aside-article-list').ArticleData} AsideArticleData
+ * @typedef {import('../../../components/story/normal/aside-article-list').ArticleDataContainSectionsWithOrdered} AsideArticleDataContainSectionsWithOrdered
  */
 
 /**
@@ -88,42 +99,6 @@ const sectionColor = css`
   };
 `
 
-const PC_HD_Advertisement = styled(MockAdvertisement)`
-  display: none;
-  margin: 24px auto;
-  text-align: center;
-  ${({ theme }) => theme.breakpoint.xl} {
-    display: block;
-  }
-`
-const PC_R1_Advertisement = styled(MockAdvertisement)`
-  display: none;
-  margin: 0 auto;
-  text-align: center;
-  ${({ theme }) => theme.breakpoint.xl} {
-    display: block;
-  }
-`
-const PC_R2_Advertisement = styled(MockAdvertisement)`
-  display: none;
-  margin: 20px auto;
-  text-align: center;
-  ${({ theme }) => theme.breakpoint.xl} {
-    display: block;
-  }
-`
-const M_AT3_Advertisement = styled(MockAdvertisement)`
-  margin: 0 -20px;
-  width: 100vw;
-  max-width: 336px;
-  @media (min-width: 336px) {
-    margin: 0 auto;
-  }
-  ${({ theme }) => theme.breakpoint.xl} {
-    display: none;
-  }
-`
-
 const Title = styled.h1`
   margin: 0 auto;
   width: 100%;
@@ -141,9 +116,9 @@ const Title = styled.h1`
 const Main = styled.main`
   margin: 20px auto 0;
   width: 100%;
-  height: auto;
   max-width: 1200px;
   padding: 0 20px;
+  position: relative;
   ${({ theme }) => theme.breakpoint.md} {
     padding: 0 64px;
   }
@@ -151,7 +126,7 @@ const Main = styled.main`
     margin: 24px auto 0;
     display: flex;
     flex-direction: row;
-    align-items: start;
+
     justify-content: space-between;
     padding: 0 40px 0 77px;
   }
@@ -305,6 +280,15 @@ const Aside = styled.aside`
   }
 `
 
+const FixedContainer = styled.div`
+  ${({ theme }) => theme.breakpoint.xl} {
+    position: sticky;
+    width: 365px;
+    top: 32px;
+    right: 0;
+  }
+`
+
 const AsideFbPagePlugin = styled(FbPagePlugin)`
   display: none;
   text-align: center;
@@ -320,52 +304,210 @@ const AsideFbPagePlugin = styled(FbPagePlugin)`
     display: block;
   }
 `
-const AdvertisementDable = styled.div`
-  text-align: center;
-  background-color: #eeeeee;
-`
-const AdvertisementDableDesktop = styled(AdvertisementDable)`
+const DableADContainer_Desktop = styled.div`
   display: none;
+
   ${({ theme }) => theme.breakpoint.xl} {
     display: block;
-    width: 640px;
+    width: 100%;
+    height: auto;
+    max-width: 640px;
     margin: 0 auto;
   }
 `
-const AdvertisementDableMobile = styled(AdvertisementDable)`
+const DableADContainer_Mobile = styled.div`
   display: block;
   margin: 0 auto;
+  width: 100%;
+  height: auto;
+  max-width: 640px;
+
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
-    width: 640px;
   }
 `
-const HeaderPlaceHolder = styled.header`
-  background-color: transparent;
-  height: 175px;
+
+const StyledGPTAd_HD = styled(GPTAd)`
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+  }
+`
+
+const StyledGPTAd_MB_AT3 = styled(GPTAd)`
+  display: block;
+  margin: 0 -20px;
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  max-width: 336px;
+
+  @media (min-width: 336px) {
+    margin: 0 auto;
+  }
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const StyledGPTAd_MB_E1 = styled(GPTAd)`
+  display: block;
+  margin: 24px auto;
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  max-width: 336px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const StyledGPTAd_PC_R1 = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    max-height: 600px;
+    margin: 0 auto;
+  }
+`
+const StyledGPTAd_PC_R2 = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    max-height: 600px;
+    margin: 20px auto;
+  }
+`
+
+const StyledGPTAd_FT = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+    margin: 35px auto;
+  }
+`
+
+const StickyGPTAd_MB_ST = styled(GPTAd)`
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const GPTAdContainer = styled.div`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    margin: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+`
+const StyledGPTAd_PC_E1 = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    max-width: 300px;
+  }
+`
+
+const StyledGPTAd_PC_E2 = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    max-width: 300px;
+  }
+`
+
+const StyleGPTAdFloating = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    z-index: 2147483647;
+    position: fixed;
+    top: 175px;
+    right: 15px;
+    svg {
+      position: absolute;
+      top: -12.5px;
+      right: -12.5px;
+      width: 25px;
+      height: auto;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
 `
 
 /**
  *
- * @param {{postData: PostData,postContent: PostContent}} param
+ * @param {{postData: PostData,postContent: PostContent, headerData: any}} param
  * @returns {JSX.Element}
  */
-export default function StoryNormalStyle({ postData, postContent }) {
+export default function StoryNormalStyle({
+  postData,
+  postContent,
+  headerData,
+}) {
   const {
     title = '',
     slug = '',
     sections = [],
-    manualOrderOfSections = [],
+    categories = [],
+    sectionsInInputOrder = [],
     heroImage = null,
     heroVideo = null,
     heroCaption = '',
     publishedDate = '',
     updatedAt = '',
     writers = [],
-    manualOrderOfWriters = [],
+    writersInInputOrder = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -375,32 +517,33 @@ export default function StoryNormalStyle({ postData, postContent }) {
     tags = [],
     brief = { blocks: [], entityMap: {} },
     relateds = [],
-    manualOrderOfRelateds = [],
+    relatedsInInputOrder = [],
+    hiddenAdvertised = false,
   } = postData
 
-  const [headerData, setHeaderData] = useState({
-    sectionsData: [],
-    topicsData: [],
-  })
-  const [isHeaderDataLoaded, setIsHeaderDataLoaded] = useState(false)
   const sectionsWithOrdered =
-    manualOrderOfSections && manualOrderOfSections.length
-      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+    sectionsInInputOrder && sectionsInInputOrder.length
+      ? sectionsInInputOrder
       : sections
   const relatedsWithOrdered =
-    manualOrderOfRelateds && manualOrderOfRelateds.length
-      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+    relatedsInInputOrder && relatedsInInputOrder.length
+      ? relatedsInInputOrder
       : relateds
 
   const writersWithOrdered =
-    manualOrderOfWriters && manualOrderOfWriters.length
-      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+    writersInInputOrder && writersInInputOrder.length
+      ? writersInInputOrder
       : writers
 
   const [section] = sectionsWithOrdered
 
+  // 廣編文章的 pageKey 是 other
+  const pageKeyForGptAd = postData.isAdvertised
+    ? 'other'
+    : getSectionGPTPageKey(section?.slug)
+
   /**
-   * @returns {Promise<AsideArticleData[] | []>}
+   * @returns {Promise<AsideArticleDataContainSectionsWithOrdered[] | []>}
    */
   const handleFetchLatestNews = useCallback(async () => {
     try {
@@ -415,7 +558,13 @@ export default function StoryNormalStyle({ postData, postContent }) {
           storySlug: slug,
         },
       })
-      return res.data?.posts
+      return res.data?.posts.map((post) => {
+        const sectionsWithOrdered =
+          post.sectionsInInputOrder && post.sectionsInInputOrder.length
+            ? post.sectionsInInputOrder
+            : post.sections
+        return { sectionsWithOrdered, ...post }
+      })
     } catch (err) {
       console.error(err)
       return []
@@ -423,7 +572,7 @@ export default function StoryNormalStyle({ postData, postContent }) {
   }, [section, slug])
 
   /**
-   * @returns {Promise<AsideArticleData[] | []>}
+   * @returns {Promise<AsideArticleDataContainSectionsWithOrdered[] | []>}
    */
   const handleFetchPopularNews = async () => {
     try {
@@ -435,7 +584,18 @@ export default function StoryNormalStyle({ postData, postContent }) {
         url: URL_STATIC_POPULAR_NEWS,
         timeout: API_TIMEOUT,
       })
-      return data.filter((data) => data).slice(0.6)
+
+      const popularNews = data
+        .map((post) => {
+          const sectionsWithOrdered =
+            post.sectionsInInputOrder && post.sectionsInInputOrder.length
+              ? post.sectionsInInputOrder
+              : post.sections
+          return { sectionsWithOrdered, ...post }
+        })
+        .slice(0, 6)
+
+      return popularNews
     } catch (err) {
       return []
     }
@@ -452,56 +612,23 @@ export default function StoryNormalStyle({ postData, postContent }) {
 
   const publishedTaipeiTime = transformTimeDataIntoDotFormat(publishedDate)
   const updatedTaipeiTime = transformTimeDataIntoDotFormat(updatedAt)
-  useEffect(() => {
-    let ignore = false
-    fetchHeaderDataInDefaultPageLayout()
-      .then((res) => {
-        if (!ignore && !isHeaderDataLoaded) {
-          const { sectionsData, topicsData } = res
-          setHeaderData({ sectionsData, topicsData })
-          setIsHeaderDataLoaded(true)
-        }
-      })
-      .catch((error) => {
-        if (!ignore && !isHeaderDataLoaded) {
-          console.log(
-            errors.helpers.printAll(
-              error,
-              {
-                withStack: true,
-                withPayload: true,
-              },
-              0,
-              0
-            )
-          )
-          setIsHeaderDataLoaded(true)
-        }
-      })
 
-    return () => {
-      ignore = true
-    }
-  }, [isHeaderDataLoaded])
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
+  //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
+  const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
+
   return (
     <>
-      {isHeaderDataLoaded ? (
-        <ShareHeader
-          pageLayoutType="default"
-          headerData={{
-            sectionsData: headerData.sectionsData,
-            topicsData: headerData.topicsData,
-          }}
-        ></ShareHeader>
-      ) : (
-        <HeaderPlaceHolder />
-      )}
+      <ShareHeader
+        pageLayoutType="default"
+        headerData={{
+          sectionsData: headerData?.sectionsData,
+          topicsData: headerData?.topicsData,
+        }}
+      />
 
-      <PC_HD_Advertisement
-        width="970px"
-        height="250px"
-        text="PC_HD 970*250"
-      ></PC_HD_Advertisement>
+      {shouldShowAd && <StyledGPTAd_HD pageKey={pageKeyForGptAd} adKey="HD" />}
+
       <Main>
         <Article>
           <SectionAndDate>
@@ -521,14 +648,16 @@ export default function StoryNormalStyle({ postData, postContent }) {
               publishedDate={publishedTaipeiTime}
               credits={credits}
               tags={tags}
-            ></ArticleInfo>
+            />
           </InfoAndHero>
+          <ArticleBrief sectionSlug={section?.slug} brief={brief} />
 
-          <ArticleBrief
-            sectionSlug={section?.slug}
-            brief={brief}
-          ></ArticleBrief>
-          <ArticleContent content={postContent.data} />
+          <ArticleContent
+            content={postContent.data}
+            hiddenAdvertised={hiddenAdvertised}
+            pageKeyForGptAd={pageKeyForGptAd}
+          />
+
           <DateUnderContent>
             <span>更新時間｜</span>
             <span className="time">{updatedTaipeiTime} 臺北時間</span>
@@ -536,27 +665,29 @@ export default function StoryNormalStyle({ postData, postContent }) {
           <SupportMirrorMediaBanner />
           <SocialNetworkServiceSmall />
           <SubscribeInviteBanner />
-          <RelatedArticleList relateds={relatedsWithOrdered} />
-          <M_AT3_Advertisement
-            text="M_AT3 336*280"
-            width="336px"
-            height="280px"
-            className="ad"
+
+          <RelatedArticleList
+            relateds={relatedsWithOrdered}
+            hiddenAdvertised={hiddenAdvertised}
           />
+
+          {shouldShowAd && (
+            <StyledGPTAd_MB_AT3 pageKey={pageKeyForGptAd} adKey="MB_AT3" />
+          )}
           <SocialNetworkServiceLarge
             shouldShowLargePagePlugin={true}
             flexDirection="column"
           />
-          <M_AT3_Advertisement
-            text="M_E1 336*280"
-            width="336px"
-            height="280px"
-            className="ad"
-          />
-          <AdvertisementDableMobile>
-            dable廣告(手機版)施工中......
-            <DableAd isDesktop={false} />
-          </AdvertisementDableMobile>
+          {shouldShowAd && (
+            <StyledGPTAd_MB_E1 pageKey={pageKeyForGptAd} adKey="MB_E1" />
+          )}
+
+          {shouldShowAd && (
+            <DableADContainer_Mobile>
+              <DableAd isDesktop={false} />
+            </DableADContainer_Mobile>
+          )}
+
           <StoryEndDesktop>
             <StoryMoreInfo>
               更多內容，歡迎&nbsp;
@@ -574,40 +705,46 @@ export default function StoryNormalStyle({ postData, postContent }) {
               。
             </StoryMoreInfo>
             <MagazineInviteBanner />
-            <AdvertisementDableDesktop>
-              dable廣告 (桌機版) 施工中......
-              <DableAd isDesktop={true} />
-            </AdvertisementDableDesktop>
+
+            {shouldShowAd && (
+              <GPTAdContainer>
+                <StyledGPTAd_PC_E1 pageKey={pageKeyForGptAd} adKey="PC_E1" />
+                <StyledGPTAd_PC_E2 pageKey={pageKeyForGptAd} adKey="PC_E2" />
+              </GPTAdContainer>
+            )}
+
+            {shouldShowAd && (
+              <DableADContainer_Desktop>
+                <DableAd isDesktop={true} />
+              </DableADContainer_Desktop>
+            )}
           </StoryEndDesktop>
         </Article>
         <Aside>
-          <PC_R1_Advertisement
-            text="PC_R1 300*600"
-            width="300px"
-            height="600px"
-            className="ad"
-          ></PC_R1_Advertisement>
+          {shouldShowAd && (
+            <StyledGPTAd_PC_R1 pageKey={pageKeyForGptAd} adKey="PC_R1" />
+          )}
           <AsideArticleList
-            heading="最新文章"
+            listType={'latestNews'}
             fetchArticle={handleFetchLatestNews}
             shouldReverseOrder={false}
             renderAmount={6}
-          ></AsideArticleList>
+          />
+          <FixedContainer>
+            {shouldShowAd && (
+              <StyledGPTAd_PC_R2 pageKey={pageKeyForGptAd} adKey="PC_R2" />
+            )}
 
-          <PC_R2_Advertisement
-            text="PC_R2 300*600"
-            width="300px"
-            height="600px"
-            className="ad"
-          ></PC_R2_Advertisement>
-          <Divider />
-          <AsideArticleList
-            heading="熱門文章"
-            fetchArticle={handleFetchPopularNews}
-            shouldReverseOrder={false}
-            renderAmount={6}
-          ></AsideArticleList>
-          <AsideFbPagePlugin></AsideFbPagePlugin>
+            <Divider />
+            <AsideArticleList
+              listType={'popularNews'}
+              fetchArticle={handleFetchPopularNews}
+              shouldReverseOrder={false}
+              renderAmount={6}
+              hiddenAdvertised={hiddenAdvertised}
+            />
+            <AsideFbPagePlugin />
+          </FixedContainer>
         </Aside>
       </Main>
       <StoryEndMobileTablet>
@@ -626,11 +763,23 @@ export default function StoryNormalStyle({ postData, postContent }) {
           </Link>
           。
         </StoryMoreInfo>
+
         <MagazineInviteBanner />
-        <AdvertisementDableDesktop>
-          dable廣告 (桌機版) 施工中......
-        </AdvertisementDableDesktop>
+
+        {shouldShowAd && (
+          <DableADContainer_Desktop>
+            <DableAd isDesktop={true} />
+          </DableADContainer_Desktop>
+        )}
       </StoryEndMobileTablet>
+
+      {shouldShowAd && <StyledGPTAd_FT pageKey={pageKeyForGptAd} adKey="FT" />}
+
+      {shouldShowAd && noCategoryOfWineSlug ? (
+        <StickyGPTAd_MB_ST pageKey={pageKeyForGptAd} adKey="MB_ST" />
+      ) : null}
+
+      <Footer footerType="default" />
     </>
   )
 }

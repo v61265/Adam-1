@@ -3,6 +3,10 @@ import { transformTimeDataIntoSlashFormat } from '../../utils'
 
 import Image from '@readr-media/react-image'
 
+/**
+ * @typedef {import('../../type/theme').Theme} Theme
+ */
+
 const ItemWrapper = styled.a`
   display: block;
   position: relative;
@@ -25,10 +29,10 @@ const ItemSection = styled.div`
   position: absolute;
   left: 0;
   bottom: 0;
-  padding: 8px;
   color: white;
-  font-size: 16px;
-  font-weight: 300;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 4px 20px;
   background-color: ${
     /**
      * @param {Object} props
@@ -40,11 +44,6 @@ const ItemSection = styled.div`
         ? theme.color.sectionsColor[sectionName]
         : theme.color.brandColor.lightBlue
   };
-  ${({ theme }) => theme.breakpoint.md} {
-    font-size: 18px;
-    font-weight: 600;
-    padding: 4px 20px;
-  }
 `
 
 const ItemDetail = styled.div`

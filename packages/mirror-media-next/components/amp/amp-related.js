@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import styled from 'styled-components'
+import AmpPopIn from './amp-ads/amp-popin-ad'
+import AmpGptAd from './amp-ads/amp-gpt-ad'
 
 const RelatedWrapper = styled.section`
   width: 100%;
@@ -10,7 +12,7 @@ const RelatedTitle = styled.h2`
   font-weight: 600;
   font-size: 21px;
   line-height: 150%;
-  color: ${({ theme }) => theme.color.brandColor.gray}}
+  color: ${({ theme }) => theme.color.brandColor.gray};
   margin: 24px 0;
   text-align: center;
 `
@@ -20,13 +22,17 @@ const RelatedItem = styled(Link)`
   font-weight: 400;
   font-size: 16px;
   line-height: 22px;
-  color: ${({ theme }) => theme.color.brandColor.darkBlue}}
+  color: ${({ theme }) => theme.color.brandColor.darkBlue};
   &:hover {
     color: #ffa011;
   }
   & + & {
     margin-top: 20px;
   }
+`
+
+const StyledAmpGptAd = styled(AmpGptAd)`
+  margin: 20px 0;
 `
 
 /**
@@ -36,24 +42,54 @@ const RelatedItem = styled(Link)`
  *
  * @param {Object} props
  * @param {Relateds} props.relateds
+ * @param {string} props.section
  * @returns {JSX.Element}
  */
-export default function AmpHeader({ relateds }) {
+
+export default function AmpRelated({ relateds, section }) {
+  const relatedsBefordAd = relateds.slice(0, 5)
+  const relatedsAfterAd = relateds.slice(5)
+
   return (
     <RelatedWrapper>
       <RelatedTitle>相關文章</RelatedTitle>
-      {relateds.map((relatedItem, index) => {
-        return (
-          <RelatedItem
-            href={`/story/${relatedItem.slug}`}
-            target="_blank"
-            key={index}
-            rel="noreferrer"
-          >
-            {relatedItem.title}
-          </RelatedItem>
-        )
-      })}
+
+      {relatedsBefordAd.map((relatedItem, index) => (
+        <RelatedItem
+          href={`/story/${relatedItem.slug}`}
+          target="_blank"
+          key={index}
+          rel="noreferrer"
+        >
+          {relatedItem.title}
+        </RelatedItem>
+      ))}
+
+      {relateds.length >= 5 && (
+        <>
+          <StyledAmpGptAd section={section} position="E1" />
+          {relatedsAfterAd.map((relatedItem, index) => (
+            <RelatedItem
+              href={`/story/${relatedItem.slug}`}
+              target="_blank"
+              key={index}
+              rel="noreferrer"
+            >
+              {relatedItem.title}
+            </RelatedItem>
+          ))}
+          <AmpPopIn />
+        </>
+      )}
+
+      {relateds.length === 4 && (
+        <>
+          <AmpPopIn />
+          <StyledAmpGptAd section={section} position="E1" />
+        </>
+      )}
+
+      {relateds.length < 4 && <AmpPopIn />}
     </RelatedWrapper>
   )
 }

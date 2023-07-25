@@ -3,15 +3,17 @@ import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 
 import SectionArticles from '../../components/shared/section-articles'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
-import { SECTION_IDS } from '../../constants/index'
 import {
   fetchPostsBySectionSlug,
   fetchSectionBySectionSlug,
 } from '../../utils/api/section'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
+import { getSectionGPTPageKey } from '../../utils/ad'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -62,26 +64,27 @@ const SectionTitle = styled.h1`
 
 const StyledGPTAd = styled(GPTAd)`
   width: 100%;
+  height: auto;
   max-width: 336px;
-  margin: auto;
-  height: 280px;
-  margin-top: 20px;
+  max-height: 280px;
+  margin: 20px auto 0px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 970px;
-    height: 250px;
+    max-height: 250px;
   }
 `
 
 const StickyGPTAd = styled(GPTAd)`
   position: fixed;
-  width: 100%;
-  max-width: 320px;
-  margin: auto;
-  height: 50px;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
   z-index: ${Z_INDEX.top};
 
   ${({ theme }) => theme.breakpoint.xl} {
@@ -106,11 +109,7 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Section({ postsCount, posts, section, headerData }) {
   const sectionName = section.name || ''
-  //When the section is `論壇`, use the `culture` AD unit.
-  const GPT_PAGE_KEY =
-    section.slug === 'mirrorcolumn'
-      ? SECTION_IDS['culture']
-      : SECTION_IDS[section.slug]
+  const shouldShowAd = useDisplayAd()
 
   return (
     <Layout
@@ -119,18 +118,30 @@ export default function Section({ postsCount, posts, section, headerData }) {
       footer={{ type: 'default' }}
     >
       <SectionContainer>
-        <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="HD" />
+        {shouldShowAd && (
+          <StyledGPTAd
+            pageKey={getSectionGPTPageKey(section.slug)}
+            adKey="HD"
+          />
+        )}
+
         {sectionName && (
           <SectionTitle sectionName={section.slug}>{sectionName}</SectionTitle>
         )}
+
         <SectionArticles
           postsCount={postsCount}
           posts={posts}
           section={section}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-        <StyledGPTAd pageKey={GPT_PAGE_KEY} adKey="FT" />
-        <StickyGPTAd pageKey={GPT_PAGE_KEY} adKey="ST" />
+
+        {shouldShowAd && (
+          <StickyGPTAd
+            pageKey={getSectionGPTPageKey(section.slug)}
+            adKey="ST"
+          />
+        )}
       </SectionContainer>
     </Layout>
   )
@@ -139,7 +150,12 @@ export default function Section({ postsCount, posts, section, headerData }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const sectionSlug = Array.isArray(query.slug) ? query.slug[0] : query.slug
   const mockError = query.error === '500'
 

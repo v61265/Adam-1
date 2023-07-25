@@ -3,18 +3,23 @@ import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 
 import CategoryArticles from '../../components/category/category-articles'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
 } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
 import {
   fetchCategoryByCategorySlug,
   fetchPostsByCategorySlug,
+  fetchPremiumPostsByCategorySlug,
 } from '../../utils/api/category'
-
+import { useDisplayAd } from '../../hooks/useDisplayAd'
+import { getCategoryOfWineSlug } from '../../utils'
+import { getSectionGPTPageKey } from '../../utils/ad'
+import WineWarning from '../../components/shared/wine-warning'
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
 })
@@ -76,7 +81,7 @@ const CategoryTitle = styled.h1`
   color: ${
     /**
      * @param {Object} props
-     * @param {string } props.sectionName
+     * @param {string} props.sectionName
      * @param {Theme} [props.theme]
      */
     ({ sectionName, theme }) =>
@@ -103,7 +108,7 @@ const PremiumCategoryTitle = styled.h1`
   color: ${
     /**
      * @param {Object} props
-     * @param {String } props.sectionName
+     * @param {string} props.sectionName
      * @param {Theme} [props.theme]
      */
     ({ sectionName, theme }) =>
@@ -140,26 +145,27 @@ const PremiumCategoryTitle = styled.h1`
 
 const StyledGPTAd = styled(GPTAd)`
   width: 100%;
+  height: auto;
   max-width: 336px;
-  margin: auto;
-  height: 280px;
-  margin-top: 20px;
+  max-height: 280px;
+  margin: 20px auto 0px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 970px;
-    height: 250px;
+    max-height: 250px;
   }
 `
 
 const StickyGPTAd = styled(GPTAd)`
   position: fixed;
-  width: 100%;
-  max-width: 320px;
-  margin: auto;
-  height: 50px;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
   z-index: ${Z_INDEX.top};
 
   ${({ theme }) => theme.breakpoint.xl} {
@@ -190,24 +196,36 @@ export default function Category({
   isPremium,
   headerData,
 }) {
-  const categroyName = category.name || ''
+  const categoryName = category.name || ''
+  const shouldShowAd = useDisplayAd()
+
+  //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
+  const isNotWineCategory = getCategoryOfWineSlug([category]).length === 0
+
+  //The type of GPT ad to display depends on which category the section belongs to.
+  const sectionSlug = category?.sections?.[0]?.slug ?? ''
+
   return (
     <Layout
-      head={{ title: `${categroyName}分類報導` }}
+      head={{ title: `${categoryName}分類報導` }}
       header={{ type: isPremium ? 'premium' : 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
       <CategoryContainer isPremium={isPremium}>
-        <StyledGPTAd pageKey="other" adKey="HD" />
+        {shouldShowAd && (
+          <StyledGPTAd pageKey={getSectionGPTPageKey(sectionSlug)} adKey="HD" />
+        )}
+
         {isPremium ? (
-          <PremiumCategoryTitle sectionName={category?.sections?.[0].slug}>
-            {categroyName}
+          <PremiumCategoryTitle sectionName={sectionSlug}>
+            {categoryName}
           </PremiumCategoryTitle>
         ) : (
-          <CategoryTitle sectionName={category?.sections?.[0].slug}>
-            {categroyName}
+          <CategoryTitle sectionName={sectionSlug}>
+            {categoryName}
           </CategoryTitle>
         )}
+
         <CategoryArticles
           postsCount={postsCount}
           posts={posts}
@@ -216,8 +234,10 @@ export default function Category({
           isPremium={isPremium}
         />
 
-        <StyledGPTAd pageKey="other" adKey="FT" />
-        <StickyGPTAd pageKey="other" adKey="ST" />
+        {shouldShowAd && isNotWineCategory ? (
+          <StickyGPTAd pageKey={getSectionGPTPageKey(sectionSlug)} adKey="ST" />
+        ) : null}
+        <WineWarning categories={[category]} />
       </CategoryContainer>
     </Layout>
   )
@@ -226,7 +246,12 @@ export default function Category({
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const categorySlug = Array.isArray(query.slug) ? query.slug[0] : query.slug
   const mockError = query.error === '500'
 
@@ -239,19 +264,76 @@ export async function getServerSideProps({ query, req }) {
     ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
   }
 
-  const responses = await Promise.allSettled([
-    fetchPostsByCategorySlug(
-      categorySlug,
-      RENDER_PAGE_SIZE * 2,
-      mockError ? NaN : 0
-    ),
-    fetchCategoryByCategorySlug(categorySlug),
-  ])
+  // default category, if request failed fallback to isMemberOnly = false
+  /** @type {Category} */
+  let category = {
+    id: '',
+    name: '',
+    sections: [],
+    slug: categorySlug,
+    isMemberOnly: false,
+  }
+  try {
+    const { data } = await fetchCategoryByCategorySlug(categorySlug)
+    category = data.category || category
+  } catch (error) {
+    const { graphQLErrors, clientErrors, networkError } = error
+    const annotatingError = errors.helpers.wrap(
+      error,
+      'UnhandledError',
+      'Error occurs while getting category page data'
+    )
+    console.log(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(
+          annotatingError,
+          {
+            withStack: true,
+            withPayload: true,
+          },
+          0,
+          0
+        ),
+        debugPayload: {
+          graphQLErrors,
+          clientErrors,
+          networkError,
+        },
+        ...globalLogFields,
+      })
+    )
+  }
+
+  const isPremium = category.isMemberOnly
+
+  const responses = await Promise.allSettled(
+    isPremium
+      ? [
+          fetchHeaderDataInPremiumPageLayout(),
+          fetchPremiumPostsByCategorySlug(
+            categorySlug,
+            RENDER_PAGE_SIZE * 2,
+            mockError ? NaN : 0
+          ),
+        ]
+      : [
+          fetchHeaderDataInDefaultPageLayout(),
+          fetchPostsByCategorySlug(
+            categorySlug,
+            RENDER_PAGE_SIZE * 2,
+            mockError ? NaN : 0
+          ),
+        ]
+  )
 
   const handledResponses = responses.map((response, index) => {
     if (response.status === 'fulfilled') {
-      // since only gql requests
-      return response.value.data
+      if ('data' in response.value) {
+        // handle gql response
+        return response.value.data
+      }
+      return response.value
     } else if (response.status === 'rejected') {
       const { graphQLErrors, clientErrors, networkError } = response.reason
       const annotatingError = errors.helpers.wrap(
@@ -281,7 +363,7 @@ export async function getServerSideProps({ query, req }) {
         })
       )
 
-      if (index === 0) {
+      if (index === 1) {
         // fetch key data (posts) failed, redirect to 500
         throw new Error('fetch category posts failed')
       }
@@ -289,8 +371,25 @@ export async function getServerSideProps({ query, req }) {
     }
   })
 
+  // handle header data
+  let sectionsData = []
+  let topicsData = []
+  const headerData = handledResponses[0]
+  if (isPremium) {
+    if (Array.isArray(headerData.sectionsData)) {
+      sectionsData = headerData.sectionsData
+    }
+  } else {
+    if (Array.isArray(headerData.sectionsData)) {
+      sectionsData = headerData.sectionsData
+    }
+    if (Array.isArray(headerData.topicsData)) {
+      topicsData = headerData.topicsData
+    }
+  }
+
   // handle fetch post data
-  if (handledResponses[0]?.posts?.length === 0) {
+  if (handledResponses[1]?.posts?.length === 0) {
     // fetchPost return empty array -> wrong authorId -> 404
     console.log(
       JSON.stringify({
@@ -302,47 +401,10 @@ export async function getServerSideProps({ query, req }) {
     return { notFound: true }
   }
   /** @type {number} postsCount */
-  const postsCount = handledResponses[0]?.postsCount || 0
+  const postsCount = handledResponses[1]?.postsCount || 0
   /** @type {Article[]} */
-  const posts = handledResponses[0]?.posts || []
-  /** @type {Category} */
+  const posts = handledResponses[1]?.posts || []
 
-  // handle detch category data, if request failed fallback to isMemberOnly = false
-  const category = handledResponses[1]?.category || {
-    slug: categorySlug,
-    isMemberOnly: false,
-  }
-  const isPremium = category.isMemberOnly
-  let sectionsData = []
-  let topicsData = []
-  try {
-    if (isPremium) {
-      const headerData = await fetchHeaderDataInPremiumPageLayout()
-      if (Array.isArray(headerData.sectionsData)) {
-        sectionsData = headerData.sectionsData
-      }
-    } else {
-      const headerData = await fetchHeaderDataInDefaultPageLayout()
-      if (Array.isArray(headerData.sectionsData)) {
-        sectionsData = headerData.sectionsData
-      }
-      if (Array.isArray(headerData.topicsData)) {
-        topicsData = headerData.topicsData
-      }
-    }
-  } catch (err) {
-    const annotatingAxiosError = errors.helpers.annotateAxiosError(err)
-    console.error(
-      JSON.stringify({
-        severity: 'ERROR',
-        message: errors.helpers.printAll(annotatingAxiosError, {
-          withStack: true,
-          withPayload: true,
-        }),
-        ...globalLogFields,
-      })
-    )
-  }
   const props = {
     postsCount,
     posts,

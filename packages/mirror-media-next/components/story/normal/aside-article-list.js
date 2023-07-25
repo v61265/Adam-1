@@ -1,5 +1,7 @@
+import { Fragment } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import {
   getSectionNameGql,
@@ -7,23 +9,27 @@ import {
   getArticleHref,
 } from '../../../utils'
 import Image from '@readr-media/react-image'
-import PopInAdInHotList from '../../ads/pop-in/pop-in-ad-in-hot-list'
+import { useDisplayAd } from '../../../hooks/useDisplayAd'
+import { needInsertPopInAdAfter, getPopInId } from '../../../utils/ad'
+
+const PopInAdInHotList = dynamic(
+  () => import('../../../components/ads/pop-in/pop-in-ad-in-hot-list'),
+  {
+    ssr: false,
+  }
+)
 
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
 
 /** @typedef {import('../../../apollo/fragments/post').AsideListingPost} ArticleData */
-const TestButton = styled.button`
-  position: fixed;
 
-  left: 0;
-  width: 100px;
-  height: 100px;
-  background-color: pink;
-`
+/** @typedef {ArticleData & {sectionsWithOrdered: ArticleData["sectionsInInputOrder"]} } ArticleDataContainSectionsWithOrdered */
+
 const Wrapper = styled.section`
   margin: 20px auto 0;
+
   ${({ theme }) => theme.breakpoint.md} {
     width: 618px;
   }
@@ -79,6 +85,7 @@ const articleHeightMobile = 256 //px
 const articleHeightTablet = 177 //px
 const articleHeightDesktop = 80 //px
 const articleWrapperGap = 21 //px
+
 const ArticleWrapper = styled.ul`
   display: flex;
   flex-direction: column;
@@ -242,41 +249,46 @@ const TitleLoading = styled(Title)`
 /**
  *
  * @param {Object} props
- * @param {string} props.heading - heading of this components, showing user what kind of news is
+ * @param {'latestNews' | 'popularNews'} props.listType - What kind of list is.
  * @param {boolean} props.shouldReverseOrder
  * - control the css layout of article.
  * - If is true, image of article should display at right, title and label should display at left.
  * - If is false, image of article should display at left, title and label should display at right.
  * optional, default value is `false`.
- * @param {()=>Promise<ArticleData[] | []>} props.fetchArticle
+ * @param {()=> Promise<ArticleDataContainSectionsWithOrdered[]> | Promise<[]>} props.fetchArticle
  * - A Promise base function for fetching article.
  * - If fulfilled, it will return a array of object, which item is a article.
  * - If rejected, it will return an empty array
  * @param {number} [props.renderAmount]
  * - a number of article we want to render, it will determine the height of `ArticleWrapper` to prevent Cumulative Layout Shift (CLS) problem after article is loaded.
+ * @param {boolean} [props.hiddenAdvertised] - CMS Posts「google廣告違規」
  * @returns {JSX.Element}
  */
 export default function AsideArticleList({
-  heading = '',
+  listType = 'latestNews',
   shouldReverseOrder = false,
   fetchArticle,
   renderAmount = 6,
+  hiddenAdvertised = false,
 }) {
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
+
   const wrapperRef = useRef(null)
   const [item, setItem] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
   const handleLoadMore = useCallback(() => {
-    //Temporarily remove setIsLoaded for testing  style of loading component.
-
     fetchArticle().then((articles) => {
       if (articles.length && Array.isArray(articles)) {
         setItem(articles)
-        // setIsLoaded(true)
+        setIsLoaded(true)
       } else {
-        // setIsLoaded(true)
+        setIsLoaded(true)
       }
     })
   }, [fetchArticle])
+
+  const heading = listType === 'latestNews' ? '最新文章' : '熱門文章'
+  const headingColor = listType === 'latestNews' ? 'gray' : 'darkBlue'
 
   useEffect(() => {
     let callback = (entries, observer) => {
@@ -299,66 +311,76 @@ export default function AsideArticleList({
 
     return () => observer.disconnect()
   }, [isLoaded, handleLoadMore])
-  const newsJsx = item.map((item) => {
-    const sectionName = getSectionNameGql(item.sections, undefined)
-    const sectionTitle = getSectionTitleGql(item.sections, undefined)
+
+  const newsJsx = item.map((item, index) => {
+    const sectionName = getSectionNameGql(item.sectionsWithOrdered, undefined)
+    const sectionTitle = getSectionTitleGql(item.sectionsWithOrdered, undefined)
     const articleHref = getArticleHref(item.slug, item.style, undefined)
+
+    /**
+     * Determines whether to show a pop-in ad at a given index.
+     * @param {number} index - The index to check for ad insertion.
+     * @returns {boolean} True if pop-in ad should be inserted.
+     */
+    const shouldShowPopInAd = (index) => {
+      return Boolean(
+        shouldShowAd &&
+          listType === 'popularNews' &&
+          needInsertPopInAdAfter(index)
+      )
+    }
+
     return (
-      <li key={item.id}>
-        {isLoaded ? (
-          <Article shouldReverseOrder={shouldReverseOrder}>
-            <Link href={articleHref} target="_blank" className="article-image">
-              <Image
-                images={item?.heroImage?.resized}
-                alt={item.title}
-                loadingImage={'/images/loading.gif'}
-                defaultImage={'/images/default-og-img.png'}
-                rwd={{ mobile: '276px', tablet: '266px', desktop: '120px' }}
-              />
-            </Link>
-
-            <FigureCaption>
-              <Label sectionTitle={sectionTitle}>{sectionName}</Label>
-              <Link href={articleHref} target="_blank">
-                <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
-                  {item.title}
-                </Title>
+      <Fragment key={`wrapper-${item.id}`}>
+        <li key={item.id}>
+          {isLoaded ? (
+            <Article shouldReverseOrder={shouldReverseOrder}>
+              <Link
+                href={articleHref}
+                target="_blank"
+                className="article-image"
+              >
+                <Image
+                  images={item?.heroImage?.resized}
+                  alt={item.title}
+                  loadingImage={'/images/loading.gif'}
+                  defaultImage={'/images/default-og-img.png'}
+                  rwd={{ mobile: '276px', tablet: '266px', desktop: '120px' }}
+                />
               </Link>
-            </FigureCaption>
-          </Article>
-        ) : (
-          <ArticleLoading shouldReverseOrder={shouldReverseOrder}>
-            <div className="article-image article-image__loading"></div>
 
-            <FigureCaption>
-              <TitleLoading />
-            </FigureCaption>
-          </ArticleLoading>
+              <FigureCaption>
+                <Label sectionTitle={sectionTitle}>{sectionName}</Label>
+                <Link href={articleHref} target="_blank">
+                  <Title color={headingColor}>{item.title}</Title>
+                </Link>
+              </FigureCaption>
+            </Article>
+          ) : (
+            <ArticleLoading shouldReverseOrder={shouldReverseOrder}>
+              <div className="article-image article-image__loading"></div>
+
+              <FigureCaption>
+                <TitleLoading />
+              </FigureCaption>
+            </ArticleLoading>
+          )}
+        </li>
+
+        {shouldShowPopInAd(index) && (
+          <li key={`pop-in-${item.id}`}>
+            <PopInAdInHotList popInId={getPopInId(index)} />
+          </li>
         )}
-      </li>
+      </Fragment>
     )
   })
 
-  //Temporarily add for testing  style of loading component.
-  const handleOnClick = () => {
-    setIsLoaded((pre) => !pre)
-  }
-
-  // sample code to use Pop In ad, need to deal with the order to insert
-  newsJsx.unshift(<PopInAdInHotList />)
-
   return (
     <>
-      {/* TestButton is temporarily added for testing style of loading component. */}
-      <TestButton
-        onClick={handleOnClick}
-        style={{ top: heading === '熱門文章' ? '250px' : '100px' }}
-      >
-        {heading}目前狀態{isLoaded ? '載入完畢' : '載入中'}
-      </TestButton>
       <Wrapper>
         {isLoaded ? (
-          <Heading color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
+          <Heading color={headingColor}>
             <h2>{heading}</h2>
           </Heading>
         ) : (

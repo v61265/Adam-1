@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import VideoListItem from '../shared/video-list-item'
 import GPTAd from '../../components/ads/gpt/gpt-ad'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const Wrapper = styled.div`
   margin-top: 20px;
@@ -55,8 +56,10 @@ const StyledGPTAd_R1 = styled(GPTAd)`
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: block;
-    width: 300px;
-    height: 600px;
+    width: 100%;
+    height: auto;
+    max-width: 300px;
+    max-height: 600px;
     margin: 0px auto 28px;
   }
 `
@@ -67,9 +70,12 @@ const StyledGPTAd_R1 = styled(GPTAd)`
  * @returns {React.ReactElement}
  */
 export default function VideoList({ videos }) {
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Wrapper>
-      <StyledGPTAd_R1 pageKey="videohub" adKey="R1" />
+      {shouldShowAd && <StyledGPTAd_R1 pageKey="videohub" adKey="R1" />}
+
       <Title>最新影音</Title>
       <Videos>
         {videos.map((video) => (

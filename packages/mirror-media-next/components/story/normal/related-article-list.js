@@ -7,9 +7,17 @@ import dynamic from 'next/dynamic'
 import useWindowDimensions from '../../../hooks/use-window-dimensions'
 import { mediaSize } from '../../../styles/media'
 import { MICRO_AD_UNITS } from '../../../constants/ads'
+import { useDisplayAd } from '../../../hooks/useDisplayAd'
 
 const StyledMicroAd = dynamic(
   () => import('../../../components/ads/micro-ad/micro-ad-with-label'),
+  {
+    ssr: false,
+  }
+)
+
+const StyledPopInAdRelated = dynamic(
+  () => import('../../../components/ads/pop-in/pop-in-ad-in-related-list'),
   {
     ssr: false,
   }
@@ -146,11 +154,17 @@ const AdvertisementWrapper = styled.div`
  *
  * @param {Object} props
  * @param {Relateds} props.relateds
+ * @param {boolean} [props.hiddenAdvertised] - CMS Posts「google廣告違規」
  * @returns {JSX.Element}
  */
-export default function RelatedArticleList({ relateds }) {
+export default function RelatedArticleList({
+  relateds,
+  hiddenAdvertised = false,
+}) {
   const { width } = useWindowDimensions()
   const device = width >= mediaSize.xl ? 'PC' : 'MB'
+
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
 
   const relatedsArticleJsx = relateds.length ? (
     <ArticleWrapper>
@@ -186,19 +200,22 @@ export default function RelatedArticleList({ relateds }) {
     </ArticleWrapper>
   ) : null
 
-  const microAdJsx = MICRO_AD_UNITS.STORY[device].map((unit) => (
-    <StyledMicroAd key={unit.name} unitId={unit.id} microAdType="STORY" />
-  ))
+  const advertisementJsx = shouldShowAd ? (
+    <AdvertisementWrapper>
+      {/* micro ad */}
+      {MICRO_AD_UNITS.STORY[device].map((unit) => (
+        <StyledMicroAd key={unit.name} unitId={unit.id} microAdType="STORY" />
+      ))}
+      {/* pop-in ad */}
+      <StyledPopInAdRelated />
+    </AdvertisementWrapper>
+  ) : null
 
   return (
     <Wrapper>
       <h2>延伸閱讀</h2>
       {relatedsArticleJsx}
-      <AdvertisementWrapper>
-        {/* micro ad */}
-        {microAdJsx}
-        {/* popin */}
-      </AdvertisementWrapper>
+      {advertisementJsx}
     </Wrapper>
   )
 }

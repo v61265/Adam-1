@@ -28,6 +28,7 @@ const errorLogger = (errorMessage) => {
 
 /** @type {() => Promise<import('axios').AxiosResponse<{sections: Sections}>>} */
 const fetchNormalSections = createAxiosRequest(URL_STATIC_NORMAL_SECTIONS)
+
 /** @type {() => Promise<import('axios').AxiosResponse<{topics: Topics}>>} */
 const fetchTopics = createAxiosRequest(URL_STATIC_TOPICS)
 
@@ -39,32 +40,22 @@ const fetchHeaderDataInDefaultPageLayout = async () => {
   /** @type {Topics} */
   let topicsData = []
   try {
-    const responses = await Promise.all([fetchNormalSections(), fetchTopics()])
-    if (responses[0]?.data?.sections) {
-      sectionsData = responses[0]?.data?.sections
-    }
-    const sectionsDataContainMagazine = sectionsData.map((section) => {
-      if (section.slug === 'member') {
-        return {
-          ...section,
-          categories: [
-            {
-              id: '7a7482edb739242537f11e24760d2c79', //hash for ensure it is unique from other category, no other usage.
-              slug: 'magazine',
-              name: '動態雜誌',
-              isMemberOnly: false,
-            },
-            ...section.categories,
-          ],
-        }
-      }
-      return { ...section }
-    })
+    const responses = await Promise.allSettled([
+      fetchNormalSections(),
+      fetchTopics(),
+    ])
 
-    if (responses[1]?.data?.topics) {
-      topicsData = responses[1].data.topics
-    }
-    return { sectionsData: sectionsDataContainMagazine, topicsData }
+    const sectionsResponse = responses[0].status === 'fulfilled' && responses[0]
+    sectionsData = Array.isArray(sectionsResponse?.value?.data?.sections)
+      ? sectionsResponse?.value?.data?.sections
+      : []
+
+    const topicsResponse = responses[1].status === 'fulfilled' && responses[1]
+    topicsData = Array.isArray(topicsResponse?.value?.data?.topics)
+      ? topicsResponse?.value?.data?.topics
+      : []
+
+    return { sectionsData: sectionsData, topicsData }
   } catch (err) {
     errorLogger(err)
   }

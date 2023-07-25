@@ -4,8 +4,9 @@ import dynamic from 'next/dynamic'
 
 import client from '../../apollo/apollo-client'
 import ExternalArticles from '../../components/externals/partner-articles'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 
 import {
@@ -13,11 +14,11 @@ import {
   fetchExternalCounts,
 } from '../../apollo/query/externals'
 import { fetchPartnerBySlug } from '../../apollo/query/partner'
-import {
-  getExternalPartnerColor,
-  getPageKeyByPartnerSlug,
-} from '../../utils/external'
+import { getExternalPartnerColor } from '../../utils/external'
+
+import { getPageKeyByPartnerSlug } from '../../utils/ad'
 import { Z_INDEX } from '../../constants/index'
+import { useDisplayAd } from '../../hooks/useDisplayAd'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -64,29 +65,29 @@ const PartnerTitle = styled.h1`
     font-size: 28px;
   }
 `
-
 const StyledGPTAd = styled(GPTAd)`
   width: 100%;
+  height: auto;
   max-width: 336px;
-  margin: auto;
-  height: 280px;
-  margin-top: 20px;
+  max-height: 280px;
+  margin: 20px auto 0px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 970px;
-    height: 250px;
+    max-height: 250px;
   }
 `
 
 const StickyGPTAd = styled(GPTAd)`
   position: fixed;
-  width: 100%;
-  max-width: 320px;
-  margin: auto;
-  height: 50px;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
   z-index: ${Z_INDEX.top};
 
   ${({ theme }) => theme.breakpoint.xl} {
@@ -116,6 +117,8 @@ export default function ExternalPartner({
   partner,
   headerData,
 }) {
+  const shouldShowAd = useDisplayAd()
+
   return (
     <Layout
       head={{ title: `${partner?.name}相關報導` }}
@@ -123,10 +126,12 @@ export default function ExternalPartner({
       footer={{ type: 'default' }}
     >
       <PartnerContainer>
-        <StyledGPTAd
-          pageKey={getPageKeyByPartnerSlug(partner.slug)}
-          adKey="HD"
-        />
+        {shouldShowAd && (
+          <StyledGPTAd
+            pageKey={getPageKeyByPartnerSlug(partner.slug)}
+            adKey="HD"
+          />
+        )}
         <PartnerTitle partnerColor={getExternalPartnerColor(partner)}>
           {partner?.name}
         </PartnerTitle>
@@ -136,14 +141,12 @@ export default function ExternalPartner({
           partner={partner}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-        <StyledGPTAd
-          pageKey={getPageKeyByPartnerSlug(partner.slug)}
-          adKey="FT"
-        />
-        <StickyGPTAd
-          pageKey={getPageKeyByPartnerSlug(partner.slug)}
-          adKey="ST"
-        />
+        {shouldShowAd && (
+          <StickyGPTAd
+            pageKey={getPageKeyByPartnerSlug(partner.slug)}
+            adKey="ST"
+          />
+        )}
       </PartnerContainer>
     </Layout>
   )
@@ -152,7 +155,12 @@ export default function ExternalPartner({
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ params, req }) {
+export async function getServerSideProps({ params, req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
   const { partnerSlug } = params
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}

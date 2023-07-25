@@ -1,10 +1,7 @@
-import { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import DraftRenderBlock from '../shared/draft-renderer-block'
+import dynamic from 'next/dynamic'
 import ArticleBrief from '../shared/brief'
-import { fetchHeaderDataInPremiumPageLayout } from '../../../utils/api'
-import { sortArrayWithOtherArrayId } from '../../../utils'
-import errors from '@twreporter/errors'
+import PremiumArticleContent from './article-content'
 import TitleAndInfoAndHero from './title-and-info-and-hero'
 import CopyrightWarning from '../shared/copyright-warning'
 import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
@@ -16,9 +13,18 @@ import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import DonateLink from '../shared/donate-link'
 import SubscribeLink from '../shared/subscribe-link'
-import PremiumHeader from '../../premium-header'
-import ArticleMask from './article-mask'
+import ArticleMask from '../shared/article-mask'
 import { useMembership } from '../../../context/membership'
+import ShareHeader from '../../shared/share-header'
+import Footer from '../../shared/footer'
+import { useDisplayAd } from '../../../hooks/useDisplayAd'
+import { Z_INDEX } from '../../../constants/index'
+import { SECTION_IDS } from '../../../constants/index'
+import { getCategoryOfWineSlug } from '../../../utils'
+const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
+  ssr: false,
+})
+
 const { getContentBlocksH2H3 } = MirrorMedia
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
@@ -33,17 +39,6 @@ const { getContentBlocksH2H3 } = MirrorMedia
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
-
-const HeaderPlaceHolder = styled.header`
-  background-color: transparent;
-  height: 101px;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  ${({ theme }) => theme.breakpoint.md} {
-    height: 115px;
-  }
-`
 
 const Main = styled.main`
   width: 100%;
@@ -83,6 +78,94 @@ const SocialMedia = styled.li`
   }
 `
 
+const StyledGPTAd_HD = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+  }
+`
+
+const StyledGPTAd_FT = styled(GPTAd)`
+  width: 100%;
+  height: auto;
+  max-width: 336px;
+  max-height: 280px;
+  margin: 20px auto;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    max-width: 970px;
+    max-height: 250px;
+    margin: 35px auto;
+  }
+`
+
+const StickyGPTAd_MB_ST = styled(GPTAd)`
+  display: block;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  max-width: 320px;
+  max-height: 50px;
+  margin: auto;
+  z-index: ${Z_INDEX.top};
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: none;
+  }
+`
+
+const GPTAdContainer = styled.div`
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  margin: 24px auto 0px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin: 52px auto 0px;
+    max-height: 250px;
+  }
+`
+
+const StyledGPTAd_E1 = styled(GPTAd)`
+  display: block;
+  margin: 0px auto;
+  width: 100%;
+  height: auto;
+  max-height: 250px;
+  max-width: 300px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin: 0;
+  }
+`
+
+const StyledGPTAd_PC_E2 = styled(GPTAd)`
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    display: block;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    max-width: 300px;
+  }
+`
+
 /**
  * In premium article, we have to select one element in array `sections` and render it's name.
  * The logic of select title for render is :
@@ -111,22 +194,26 @@ function getSectionLabelFirst(sections) {
  * @param {Object} props
  * @param {PostData} props.postData
  * @param {PostContent} props.postContent
+ * @param {any} props.headerData
  * @returns {JSX.Element}
  */
-export default function StoryPremiumStyle({ postData, postContent }) {
-  const [headerData, setHeaderData] = useState({
-    sectionsData: [],
-  })
-  const { isLoggedIn } = useMembership()
-  const [isHeaderDataLoaded, setIsHeaderDataLoaded] = useState(false)
+export default function StoryPremiumStyle({
+  postData,
+  postContent,
+  headerData,
+}) {
+  const { isLoggedIn, memberInfo } = useMembership()
+  const { memberType } = memberInfo
+
   const {
     id = '',
     title,
     brief = { blocks: [], entityMap: {} },
     sections = [],
-    manualOrderOfSections = [],
+    categories = [],
+    sectionsInInputOrder = [],
     writers = [],
-    manualOrderOfWriters = [],
+    writersInInputOrder = [],
     photographers = [],
     camera_man = [],
     designers = [],
@@ -140,26 +227,28 @@ export default function StoryPremiumStyle({ postData, postContent }) {
     heroVideo = null,
     heroCaption = '',
     relateds = [],
+    relatedsInInputOrder = [],
     slug = '',
-    manualOrderOfRelateds = [],
+    hiddenAdvertised = false,
+    isAdvertised = false,
   } = postData
 
   const shouldShowArticleMask =
     !isLoggedIn || postContent.type === 'trimmedContent'
   const h2AndH3Block = getContentBlocksH2H3(postContent.data)
   const sectionsWithOrdered =
-    manualOrderOfSections && manualOrderOfSections.length
-      ? sortArrayWithOtherArrayId(sections, manualOrderOfSections)
+    sectionsInInputOrder && sectionsInInputOrder.length
+      ? sectionsInInputOrder
       : sections
   const [section] = sectionsWithOrdered
   const sectionLabelFirst = getSectionLabelFirst(sectionsWithOrdered)
   const writersWithOrdered =
-    manualOrderOfWriters && manualOrderOfWriters.length
-      ? sortArrayWithOtherArrayId(writers, manualOrderOfWriters)
+    writersInInputOrder && writersInInputOrder.length
+      ? writersInInputOrder
       : writers
   const relatedsWithOrdered =
-    manualOrderOfRelateds && manualOrderOfRelateds.length
-      ? sortArrayWithOtherArrayId(relateds, manualOrderOfRelateds)
+    relatedsInInputOrder && relatedsInInputOrder.length
+      ? relatedsInInputOrder
       : relateds
   const credits = [
     { writers: writersWithOrdered },
@@ -170,55 +259,32 @@ export default function StoryPremiumStyle({ postData, postContent }) {
     { vocals: vocals },
     { extend_byline: extend_byline },
   ]
+  const pageKeyForGptAd = isAdvertised ? 'other' : SECTION_IDS['member']
 
-  useEffect(() => {
-    let ignore = false
-    fetchHeaderDataInPremiumPageLayout()
-      .then((res) => {
-        if (!ignore && !isHeaderDataLoaded) {
-          const { sectionsData } = res
-          setHeaderData({ sectionsData })
-          setIsHeaderDataLoaded(true)
-        }
-      })
-      .catch((error) => {
-        if (!ignore && !isHeaderDataLoaded) {
-          console.log(
-            errors.helpers.printAll(
-              error,
-              {
-                withStack: true,
-                withPayload: true,
-              },
-              0,
-              0
-            )
-          )
-          setIsHeaderDataLoaded(true)
-        }
-      })
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
 
-    return () => {
-      ignore = true
+  let supportBanner
+  if (postContent.type === 'fullContent') {
+    if (memberType === 'one-time-member') {
+      supportBanner = <SupportMirrorMediaBanner />
+    } else {
+      supportBanner = <SupportSingleArticleBanner />
     }
-  }, [isHeaderDataLoaded])
+  }
 
-  const { memberInfo } = useMembership()
-  const { memberType } = memberInfo
-
+  //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
+  const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
   return (
     <>
-      {isHeaderDataLoaded ? (
-        <PremiumHeader
-          premiumHeaderData={{
-            sections: headerData.sectionsData,
-          }}
-          h2AndH3Block={h2AndH3Block}
-          shouldShowSubtitleNavigator={true}
-        ></PremiumHeader>
-      ) : (
-        <HeaderPlaceHolder />
-      )}
+      <ShareHeader
+        pageLayoutType="premium"
+        headerData={{
+          sectionsData: headerData?.sectionsData,
+          h2AndH3Block: h2AndH3Block,
+        }}
+      />
+
+      {shouldShowAd && <StyledGPTAd_HD pageKey={pageKeyForGptAd} adKey="HD" />}
 
       <Main>
         <article>
@@ -265,35 +331,39 @@ export default function StoryPremiumStyle({ postData, postContent }) {
                 sectionSlug="member"
                 brief={brief}
                 contentLayout="premium"
-              ></ArticleBrief>
+              />
             </section>
-            <section className="content">
-              <DraftRenderBlock
-                contentLayout="premium"
-                rawContentBlock={postContent.data}
-              ></DraftRenderBlock>
-            </section>
+            <PremiumArticleContent
+              className="content"
+              content={postContent.data}
+              hiddenAdvertised={hiddenAdvertised}
+              pageKeyForGptAd={pageKeyForGptAd}
+            />
             <CopyrightWarning />
             {shouldShowArticleMask && <ArticleMask postId={id} />}
-            {!(
-              memberType === 'not-member' || memberType === 'basic-member'
-            ) && (
-              <div>
-                {memberType === 'one-time-member' ? (
-                  <SupportMirrorMediaBanner />
-                ) : (
-                  <SupportSingleArticleBanner />
-                )}
-              </div>
+            {supportBanner}
+            {shouldShowAd && (
+              <GPTAdContainer>
+                <StyledGPTAd_E1 pageKey={pageKeyForGptAd} adKey="E1" />
+                <StyledGPTAd_PC_E2 pageKey={pageKeyForGptAd} adKey="PC_E2" />
+              </GPTAdContainer>
             )}
           </ContentWrapper>
         </article>
       </Main>
+
       <Aside
         relateds={relatedsWithOrdered}
         sectionSlug={section?.slug || 'news'}
         storySlug={slug}
-      ></Aside>
+      />
+
+      {shouldShowAd && <StyledGPTAd_FT pageKey={pageKeyForGptAd} adKey="FT" />}
+      {shouldShowAd && noCategoryOfWineSlug ? (
+        <StickyGPTAd_MB_ST pageKey={pageKeyForGptAd} adKey="MB_ST" />
+      ) : null}
+
+      <Footer footerType="default" />
     </>
   )
 }

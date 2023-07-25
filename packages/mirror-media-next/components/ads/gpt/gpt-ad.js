@@ -1,8 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+import useFirstScrollDetector from '../../../hooks/useFirstScrollDetector.js'
 
-import { getAdSlotParam, getAdWidth } from '../../../utils/gpt-ad.js'
+import {
+  getAdSlotParam,
+  getAdSlotParamByAdUnit,
+  getAdWidth,
+} from '../../../utils/gpt-ad.js'
 import styled from 'styled-components'
-import { useMembership } from '../../../context/membership'
 
 const Wrapper = styled.div`
   /**
@@ -18,6 +22,14 @@ const Wrapper = styled.div`
       display: block;
     }
   }
+  ${
+    /**
+     * @param {Object} props
+     * @param {boolean} props.shouldHideComponent
+     * @returns
+     */
+    ({ shouldHideComponent }) => shouldHideComponent && 'display: none;'
+  };
 `
 
 const Ad = styled.div`
@@ -44,8 +56,9 @@ const Ad = styled.div`
  * @typedef {function(googletag.events.SlotRequestedEvent):void} GoogleTagEventHandler
  *
  * @param {Object} props
- * @param {string} props.pageKey - key to access GPT_UNITS first layer
- * @param {string} props.adKey - key to access GPT_UNITS second layer, might need to complete with device
+ * @param {string} [props.pageKey] - key to access GPT_UNITS first layer
+ * @param {string} [props.adKey] - key to access GPT_UNITS second layer, might need to complete with device
+ * @param {string} [props.adUnit]
  * @param {GoogleTagEventHandler} [props.onSlotRequested] - callback when slotRequested event occurs
  * @param {GoogleTagEventHandler} [props.onSlotRenderEnded] - callback when slotRenderEnded event occurs
  * @param {string} [props.className] - for styled-component method to add styles
@@ -54,86 +67,121 @@ const Ad = styled.div`
 export default function GPTAd({
   pageKey,
   adKey,
+  adUnit,
   onSlotRequested,
   onSlotRenderEnded,
   className,
 }) {
-  const { memberInfo, isLogInProcessFinished } = useMembership()
-  const { memberType } = memberInfo
-
+  const [adSize, setAdSize] = useState([])
+  const [adUnitPath, setAdUnitPath] = useState('')
   const [adWidth, setAdWidth] = useState('')
-  const [adDivId, setAdDivId] = useState('')
-  const [gptAdJsx, setGptAdJsx] = useState(null)
+
+  const hasScrolled = useFirstScrollDetector()
+  const shouldHideAtFirst = adKey === 'MB_ST'
+  const adDivId = adUnitPath // Set the id of the ad `<div>` to be the same as the `adUnitPath`.
+
+  const shouldHideComponent = useMemo(() => {
+    return shouldHideAtFirst && !hasScrolled
+  }, [shouldHideAtFirst, hasScrolled])
 
   useEffect(() => {
-    if (!(pageKey && adKey)) {
+    let newAdSize, newAdUnitPath, newAdWidth
+    if (pageKey && adKey) {
+      // built-in ad unit
+      const width = window.innerWidth
+      const adSlotParam = getAdSlotParam(pageKey, adKey, width)
+      if (!adSlotParam) {
+        return
+      }
+      const { adUnitPath, adSize } = adSlotParam
+      newAdSize = adSize
+      newAdUnitPath = adUnitPath
+      newAdWidth = getAdWidth(adSize)
+    } else if (adUnit) {
+      // custom ad unit string
+      const adSlotParam = getAdSlotParamByAdUnit(adUnit)
+      const { adUnitPath, adSize } = adSlotParam
+
+      newAdSize = adSize
+      newAdUnitPath = adUnitPath
+      newAdWidth = getAdWidth(adSize)
+    } else {
       console.error(
-        `GPTAd not receive necessary pageKey ${pageKey} or ${adKey}`
+        `GPTAd not receive necessary pageKey '${pageKey}' and adKey '${adKey}' or adUnit '${adUnit}'`
       )
       return
     }
-    const width = window.innerWidth
-    const adSlotParam = getAdSlotParam(pageKey, adKey, width)
-    if (!adSlotParam) {
-      return
-    }
-    const { adUnitPath, adSize } = adSlotParam
-    const adDivId = adUnitPath
-    const adWidth = getAdWidth(adSize)
-    setAdWidth(adWidth)
-    setAdDivId(adDivId)
 
-    /**
-     * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
-     */
-    let adSlot
-    window.googletag.cmd.push(() => {
-      adSlot = window.googletag
-        .defineSlot(adUnitPath, adSize, adDivId)
-        .addService(window.googletag.pubads())
-    })
-
-    window.googletag.cmd.push(() => {
-      window.googletag.display(adDivId)
-    })
-
-    // all events, check https://developers.google.com/publisher-tag/reference?hl=en#googletag.events.eventtypemap for all events
-    window.googletag.cmd.push(() => {
-      const pubads = window.googletag.pubads()
-      if (onSlotRequested) {
-        pubads.addEventListener('slotRequested', onSlotRequested)
-      }
-      if (onSlotRenderEnded) {
-        pubads.addEventListener('slotRenderEnded', onSlotRenderEnded)
-      }
-    })
-
-    return () => {
-      window.googletag.cmd.push(() => {
-        window.googletag.destroySlots([adSlot])
-      })
-    }
-  }, [adKey, pageKey, onSlotRequested, onSlotRenderEnded])
-
-  //When the user's member type is 'not-member', 'one-time-member', or 'basic-member', the AD should be displayed.
-
-  // Since the member type needs to be determined on the client-side, the rendering of `gptAdJsx` should be done on the client-side.
+    setAdSize(newAdSize)
+    setAdWidth(newAdWidth)
+    setAdUnitPath(newAdUnitPath)
+  }, [adKey, pageKey, adUnit])
 
   useEffect(() => {
-    const invalidMemberType = ['not-member', 'one-time-member', 'basic-member']
+    /**
+     * Because some browser extension would block googletag service, so is need to check is googletag and pubAd services existed.
+     * @see https://developers.google.com/publisher-tag/common_implementation_mistakes
+     */
+    const isGptAdServiceExist = window.googletag && googletag.pubadsReady
+    if (adDivId && adWidth && isGptAdServiceExist) {
+      /**
+       * Check https://developers.google.com/publisher-tag/guides/get-started?hl=en for the tutorial of the flow.
+       */
+      let adSlot
+      const pubads = window.googletag.pubads()
 
-    if (isLogInProcessFinished) {
-      if (invalidMemberType.includes(memberType)) {
-        setGptAdJsx(
-          <Wrapper className={`${className} gpt-ad`}>
-            <Ad width={adWidth} id={adDivId} />
-          </Wrapper>
-        )
-      } else {
-        return
+      const handleOnSlotRequested = (event) => {
+        if (event.slot === adSlot) {
+          onSlotRequested(event)
+        }
+      }
+      const handleOnSlotRenderEnded = (event) => {
+        if (event.slot === adSlot) {
+          onSlotRenderEnded(event)
+        }
+      }
+      window.googletag.cmd.push(() => {
+        adSlot = window.googletag
+          .defineSlot(adUnitPath, adSize, adDivId)
+          .addService(window.googletag.pubads())
+        window.googletag.display(adDivId)
+
+        // all events, check https://developers.google.com/publisher-tag/reference?hl=en#googletag.events.eventtypemap for all events
+        if (onSlotRequested) {
+          /**
+           * add event listener  to respond only to certain adSlot
+           * @see https://developers.google.com/publisher-tag/reference?hl=zh-tw#googletag.Service_addEventListener
+           */
+          pubads.addEventListener('slotRequested', handleOnSlotRequested)
+        }
+        if (onSlotRenderEnded) {
+          pubads.addEventListener('slotRenderEnded', handleOnSlotRenderEnded)
+        }
+      })
+
+      return () => {
+        window.googletag.cmd.push(() => {
+          window.googletag.destroySlots([adSlot])
+          if (onSlotRenderEnded) {
+            pubads.removeEventListener('slotRequested', handleOnSlotRequested)
+          }
+          if (onSlotRenderEnded) {
+            pubads.removeEventListener(
+              'slotRenderEnded',
+              handleOnSlotRenderEnded
+            )
+          }
+        })
       }
     }
-  }, [adDivId, adWidth, className, isLogInProcessFinished, memberType])
+  }, [adDivId, adSize, adUnitPath, adWidth, onSlotRenderEnded, onSlotRequested])
 
-  return <>{gptAdJsx}</>
+  return (
+    <Wrapper
+      className={`${className} gpt-ad`}
+      shouldHideComponent={shouldHideComponent}
+    >
+      <Ad width={adWidth} id={adDivId} />
+    </Wrapper>
+  )
 }
