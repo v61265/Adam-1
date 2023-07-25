@@ -52,23 +52,27 @@ const Step = styled.li`
     padding: 24px 0;
   }
 
-  ${(props) =>
-    // @ts-ignore
-    props.isActive &&
-    css`
-      ${Text} {
-        color: #054f77;
-      }
+  ${
+    /**
+     * @param {{isActive: boolean}} param
+     */
+    ({ isActive }) =>
+      isActive &&
+      css`
+        ${Text} {
+          color: #054f77;
+        }
 
-      ${Number} {
-        background-color: #054f77;
-        color: #fff;
-      }
+        ${Number} {
+          background-color: #054f77;
+          color: #fff;
+        }
 
-      &:not(:first-child)::before {
-        background-color: #054f77;
-      }
-    `}
+        &:not(:first-child)::before {
+          background-color: #054f77;
+        }
+      `
+  }
 `
 
 const Number = styled.div`
@@ -108,28 +112,18 @@ const Text = styled.span`
  *                                  // ^-- Hint: Should be a number between 1 and 3.
  * @returns {JSX.Element}
  */
-
-function Steps({ activeStep }) {
+function Steps({ activeStep = 1 }) {
   return (
     <StepsWrapper>
-      <Step
-        // @ts-ignore
-        isActive={activeStep >= 1}
-      >
+      <Step isActive={activeStep >= 1}>
         <Number>1</Number>
         <Text>方案選擇</Text>
       </Step>
-      <Step
-        // @ts-ignore
-        isActive={activeStep >= 2}
-      >
+      <Step isActive={activeStep >= 2}>
         <Number>2</Number>
         <Text>確認訂購</Text>
       </Step>
-      <Step
-        // @ts-ignore
-        isActive={activeStep >= 3}
-      >
+      <Step isActive={activeStep >= 3}>
         <Number>3</Number>
         <Text>訂單完成</Text>
       </Step>
