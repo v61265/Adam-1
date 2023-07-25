@@ -4,12 +4,10 @@ import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
+import Steps from '../../components/papermag/steps'
 
 const Page = styled.div`
   min-height: 65vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `
 /**
  * @param {Object} props
@@ -27,7 +25,10 @@ function OneYearSubscription({ sectionsData = [], topicsData = [] }) {
       }}
       footer={{ type: 'default' }}
     >
-      <Page>訂閱一年</Page>
+      <Page>
+        <Steps activeStep={2} />
+        <p style={{ textAlign: 'center' }}>訂閱一年</p>
+      </Page>
     </Layout>
   )
 }

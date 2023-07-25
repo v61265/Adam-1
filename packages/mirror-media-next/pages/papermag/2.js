@@ -4,12 +4,10 @@ import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
+import Steps from '../../components/papermag/steps'
 
 const Page = styled.div`
   min-height: 65vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `
 /**
  * @param {Object} props
@@ -17,7 +15,7 @@ const Page = styled.div`
  * @param {Object[]} props.topicsData
  * @return {JSX.Element}
  */
-function TwoYearSubscription({ sectionsData = [], topicsData = [] }) {
+function TwoYearsSubscription({ sectionsData = [], topicsData = [] }) {
   return (
     <Layout
       head={{ title: `訂閱二年方案` }}
@@ -27,12 +25,15 @@ function TwoYearSubscription({ sectionsData = [], topicsData = [] }) {
       }}
       footer={{ type: 'default' }}
     >
-      <Page>訂閱二年</Page>
+      <Page>
+        <Steps activeStep={2} />
+        <p style={{ textAlign: 'center' }}>訂閱二年</p>
+      </Page>
     </Layout>
   )
 }
 
-export default TwoYearSubscription
+export default TwoYearsSubscription
 
 /**
  * @type {import('next').GetServerSideProps}

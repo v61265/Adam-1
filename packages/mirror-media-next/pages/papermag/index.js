@@ -4,12 +4,10 @@ import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
+import Steps from '../../components/papermag/steps'
 
 const Page = styled.div`
   min-height: 65vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `
 /**
  * @param {Object} props
@@ -28,7 +26,7 @@ function PaperMag({ sectionsData = [], topicsData = [] }) {
       footer={{ type: 'default' }}
     >
       <Page>
-        <p>紙本雜誌訂閱 方案選擇頁</p>
+        <Steps activeStep={1} />
       </Page>
     </Layout>
   )
