@@ -235,7 +235,10 @@ export default function Category({
         />
 
         {shouldShowAd && isNotWineCategory ? (
-          <StickyGPTAd pageKey={getSectionGPTPageKey(sectionSlug)} adKey="ST" />
+          <StickyGPTAd
+            pageKey={getSectionGPTPageKey(sectionSlug)}
+            adKey="MB_ST"
+          />
         ) : null}
         <WineWarning categories={[category]} />
       </CategoryContainer>

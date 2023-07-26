@@ -159,7 +159,7 @@ export default function Video({ video, latestVideos, headerData }) {
         {shouldShowAd && (
           <>
             <StyledGPTAd_FT pageKey="videohub" adKey="FT" />
-            <StickyGPTAd pageKey="videohub" adKey="ST" />
+            <StickyGPTAd pageKey="videohub" adKey="MB_ST" />
           </>
         )}
       </Wrapper>

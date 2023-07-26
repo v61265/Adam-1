@@ -114,7 +114,7 @@ export default function Topics({ topics, topicsCount, headerData }) {
           topics={topics}
           renderPageSize={RENDER_PAGE_SIZE}
         />
-        {shouldShowAd && <StickyGPTAd pageKey="other" adKey="ST" />}
+        {shouldShowAd && <StickyGPTAd pageKey="other" adKey="MB_ST" />}
       </TopicsContainer>
     </Layout>
   )

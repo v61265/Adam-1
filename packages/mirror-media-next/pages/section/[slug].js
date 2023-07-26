@@ -139,7 +139,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
         {shouldShowAd && (
           <StickyGPTAd
             pageKey={getSectionGPTPageKey(section.slug)}
-            adKey="ST"
+            adKey="MB_ST"
           />
         )}
       </SectionContainer>
