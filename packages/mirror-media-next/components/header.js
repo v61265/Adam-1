@@ -222,7 +222,7 @@ const GPTAd = dynamic(() => import('../components/ads/gpt/gpt-ad'), {
  * @typedef {import('./nav-topics').Topics} Topics
  */
 
-const HeaderWrapper = styled.div`
+const HeaderWrapper = styled.header`
   background-color: rgba(255, 255, 255, 1);
   margin: 0 auto;
 `

@@ -63,7 +63,7 @@ const DEFAULT_PREMIUM_SECTIONS_DATA = [
 /**
  * @typedef {import('./premium-mobile-sidebar').H2AndH3Block} H2AndH3Block
  */
-const HeaderWrapper = styled.div`
+const HeaderWrapper = styled.header`
   background-color: rgba(255, 255, 255, 1);
   margin: 0 auto;
   ${
