@@ -136,7 +136,7 @@ export default function Tag({ postsCount, posts, tag, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
 
-        {shouldShowAd && <StickyGPTAd pageKey="other" adKey="ST" />}
+        {shouldShowAd && <StickyGPTAd pageKey="other" adKey="MB_ST" />}
       </TagContainer>
     </Layout>
   )

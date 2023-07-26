@@ -144,7 +144,7 @@ export default function ExternalPartner({
         {shouldShowAd && (
           <StickyGPTAd
             pageKey={getPageKeyByPartnerSlug(partner.slug)}
-            adKey="ST"
+            adKey="MB_ST"
           />
         )}
       </PartnerContainer>

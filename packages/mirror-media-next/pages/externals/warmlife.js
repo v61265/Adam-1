@@ -120,7 +120,7 @@ export default function WarmLife({ warmLifeData, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
         {shouldShowAd && (
-          <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="ST" />
+          <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="MB_ST" />
         )}
       </WarmLifeContainer>
     </Layout>
