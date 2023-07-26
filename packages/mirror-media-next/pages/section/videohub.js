@@ -174,6 +174,7 @@ export default function SectionVideohub({
             videos={playlistsVideo.items}
             name={playlistsVideo.name}
             slug={playlistsVideo.slug}
+            gtmClassName={`GTM-video-homepage-categorylist_${playlistsVideo.name}`}
           />
         ))}
         {shouldShowAd && <StyledGPTAd_PC_FT pageKey="videohub" adKey="PC_FT" />}
