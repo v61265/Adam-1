@@ -5,8 +5,10 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import Steps from '../../components/papermag/steps'
+import Plan from '../../components/papermag/plan-selection'
+import Notice from '../../components/papermag/notice'
 
-const Page = styled.div`
+const Page = styled.main`
   min-height: 65vh;
 `
 /**
@@ -27,6 +29,8 @@ function PaperMag({ sectionsData = [], topicsData = [] }) {
     >
       <Page>
         <Steps activeStep={1} />
+        <Plan />
+        <Notice />
       </Page>
     </Layout>
   )
