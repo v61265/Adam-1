@@ -5,7 +5,7 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import Steps from '../../components/papermag/steps'
-import Plan from '../../components/papermag/plan-selection'
+import Plan from '../../components/papermag/plan-selections'
 import Notice from '../../components/papermag/notice'
 
 const Page = styled.main`
