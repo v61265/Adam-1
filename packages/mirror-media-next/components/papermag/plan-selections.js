@@ -127,7 +127,7 @@ function Plan() {
           <Hr />
           <PlanContent>訂購紙本鏡週刊 52 期，加贈 5 期</PlanContent>
           <OriginalPrice>原價 3,900</OriginalPrice>
-          <SpecialPrice>特價 2,900</SpecialPrice>
+          <SpecialPrice>特價 2,880</SpecialPrice>
           <SubscribePaperMagBtn
             title="訂購一年方案"
             bgColor="#1D9FB8"
