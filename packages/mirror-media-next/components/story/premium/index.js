@@ -317,11 +317,11 @@ export default function StoryPremiumStyle({
                   <ButtonCopyLink width={28} height={28} />
                 </SocialMedia>
                 <li>
-                  <DonateLink />
+                  <DonateLink className="GTM-donate-link-side" />
                   {(memberType === 'not-member' ||
                     memberType === 'basic-member' ||
                     memberType === 'one-time-member') && (
-                    <SubscribeLink className="subscribe-btn" />
+                    <SubscribeLink className="subscribe-btn GTM-subscribe-link-side" />
                   )}
                 </li>
               </SocialMediaAndDonateLink>

@@ -151,7 +151,7 @@ export default function RelatedArticleList({ relateds }) {
             <Link
               href={`/story/${related.slug}`}
               target="_blank"
-              className="article-image"
+              className="article-image GTM-story-related-list"
             >
               <Image
                 images={related.heroImage?.resized}
@@ -168,7 +168,7 @@ export default function RelatedArticleList({ relateds }) {
               />
             </Link>
 
-            <figcaption className="article-title">
+            <figcaption className="article-title GTM-story-related-list">
               <Link href={`/story/${related.slug}`} target="_blank">
                 {related.title}
               </Link>
