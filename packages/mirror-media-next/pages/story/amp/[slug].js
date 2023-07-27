@@ -154,7 +154,8 @@ function StoryAmpPage({ postData }) {
               <AmpGptAd section={sectionSlot} position="FT" />
 
               <AmpFooter />
-              <AmpGptStickyAd />
+              {/* If there are wine categories (length greater than 0), AmpGptStickyAd will not be shown. */}
+              {categoryOfWineSlug.length === 0 && <AmpGptStickyAd />}
             </section>
             <AdultOnlyWarning isAdult={isAdult} />
             <WineWarning categories={categories} />
