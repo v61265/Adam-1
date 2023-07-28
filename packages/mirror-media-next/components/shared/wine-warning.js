@@ -53,13 +53,13 @@ export default function WineWarning({ categories = [] }) {
       <Wrapper>
         <Image
           className="wine-warning-image wine-warning-image--desktop"
-          src={'/images/wine-warning.jpg'}
+          src={'/images/wine-warning-new.png'}
           fill={true}
           alt="wine-warning"
         />
         <Image
           className="wine-warning-image wine-warning-image--mobile"
-          src={'/images/wine-warning-mobile.png'}
+          src={'/images/wine-warning-mobile-new.png'}
           fill={true}
           alt="wine-warning"
         />
