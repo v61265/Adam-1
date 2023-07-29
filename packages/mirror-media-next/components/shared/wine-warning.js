@@ -5,32 +5,50 @@ import { Z_INDEX } from '../../constants'
 import { getCategoryOfWineSlug } from '../../utils/index'
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   height: 10vh;
-  background: #000000;
+  background: #000;
   position: fixed;
   left: 0;
   bottom: 0;
   z-index: ${Z_INDEX.coverContent};
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #fff;
+  font-weight: 300;
+  line-height: 50px;
+  font-size: 20px;
+  padding: 0 6px;
+  letter-spacing: -2px;
+
+  @media only screen and (min-device-width: 320px) {
+    font-size: 25px;
+    padding: 0 14px;
+  }
+
+  ${({ theme }) => theme.breakpoint.sm} {
+    font-size: 40px;
+    padding: 0 20px;
+  }
+
+  ${({ theme }) => theme.breakpoint.md} {
+    padding: 0 40px;
+    font-size: 40px;
+  }
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    padding: 0 90px;
+    font-size: 50px;
+  }
 
   .wine-warning-image {
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    &--desktop {
-      display: none;
-      ${({ theme }) => theme.breakpoint.sm} {
-        display: block;
-      }
-    }
-    &--mobile {
-      display: block;
-      ${({ theme }) => theme.breakpoint.sm} {
-        display: none;
-      }
+    width: 27.78px;
+    height: 27.78px;
+    ${({ theme }) => theme.breakpoint.sm} {
+      width: 50px;
+      height: 50px;
     }
   }
 `
@@ -51,18 +69,26 @@ export default function WineWarning({ categories = [] }) {
   const wineWarningJsx =
     categoryOfWineSlug.length > 0 ? (
       <Wrapper>
+        <span>禁</span>
+        <span>止</span>
+        <span>酒</span>
+        <span>駕</span>
         <Image
-          className="wine-warning-image wine-warning-image--desktop"
-          src={'/images/wine-warning-new.png'}
-          fill={true}
-          alt="wine-warning"
+          className="wine-warning-image"
+          src={'/images/wine-warning-icon.png'}
+          width={50}
+          height={50}
+          alt="wine-warning-icon"
         />
-        <Image
-          className="wine-warning-image wine-warning-image--mobile"
-          src={'/images/wine-warning-mobile-new.png'}
-          fill={true}
-          alt="wine-warning"
-        />
+        <span>未</span>
+        <span>滿</span>
+        <span>十</span>
+        <span>八</span>
+        <span>歲</span>
+        <span>禁</span>
+        <span>止</span>
+        <span>飲</span>
+        <span>酒</span>
       </Wrapper>
     ) : null
 
