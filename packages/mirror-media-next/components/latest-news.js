@@ -11,7 +11,7 @@ import { needInsertMicroAdAfter, getMicroAdUnitId } from '../utils/ad'
 import useWindowDimensions from '../hooks/use-window-dimensions'
 import { mediaSize } from '../styles/media'
 import { useDisplayAd } from '../hooks/useDisplayAd'
-import { getSectionNameGql, getSectionTitleGql, getArticleHref } from '../utils'
+import { getSectionNameGql, getSectionSlugGql, getArticleHref } from '../utils'
 
 const StyledMicroAd = dynamic(
   () => import('../components/ads/micro-ad/micro-ad-with-label'),
@@ -110,10 +110,10 @@ function removeArticleWithExternalLink(articles) {
  */
 const transformRawDataContent = function (articleRawData) {
   const formateArticleData = articleRawData.map((item) => {
+    const sectionSlug = getSectionSlugGql(item.sections, item.partner)
     const sectionName = getSectionNameGql(item.sections, item.partner)
-    const sectionTitle = getSectionTitleGql(item.sections, item.partner)
     const articleHref = getArticleHref(item.slug, item.style, item.partner)
-    return { sectionName, sectionTitle, articleHref, ...item }
+    return { sectionName, sectionSlug, articleHref, ...item }
   })
   const formateArticleDataWithoutExternalLink =
     removeArticleWithExternalLink(formateArticleData)
@@ -139,7 +139,7 @@ export default function LatestNews(props) {
         url: `${URL_STATIC_POST_EXTERNAL}0${serialNumber}.json`,
         timeout: 5000, //since size of json file is large, we assign timeout as 5000ms to prevent content lost in poor network condition
       })
-      /** @type {import('../type/raw-data.typedef').RawData[]} */
+      /** @type {ArticleRawData[]} */
       if (Array.isArray(data.latest)) {
         return data.latest
       }

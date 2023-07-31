@@ -125,12 +125,12 @@ const ListItemLabel = styled.div`
   background-color: ${
     /**
      * @param {Object} props
-     * @param {String } props.sectionName
+     * @param {String} props.sectionSlug
      * @param {Theme} [props.theme]
      */
-    ({ sectionName, theme }) =>
-      sectionName && theme.color.sectionsColor[sectionName]
-        ? theme.color.sectionsColor[sectionName]
+    ({ sectionSlug, theme }) =>
+      sectionSlug && theme.color.sectionsColor[sectionSlug]
+        ? theme.color.sectionsColor[sectionSlug]
         : theme.color.brandColor.darkBlue
   };
   color: #fff;
@@ -187,7 +187,7 @@ const EditorChoiceContainer = styled.section`
 /**
  * @typedef {Object} FormattedEditorChoiceItem
  * @property {string} articleHref
- * @property {string} sectionTitle
+ * @property {string} sectionSlug
  * @property {string} sectionName
  * /
 
@@ -249,7 +249,7 @@ export default function EditorChoice({ editorChoice = [] }) {
                 rel="noreferrer noopenner"
                 className="GTM-editorchoice-list"
               >
-                <ListItemLabel sectionName={item.sectionTitle}>
+                <ListItemLabel sectionSlug={item.sectionSlug}>
                   {item.sectionName}
                 </ListItemLabel>
                 {editorChoiceImageJsx(item.heroImage, item.title)}
