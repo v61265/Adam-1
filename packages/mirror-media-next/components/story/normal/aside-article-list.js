@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import {
   getSectionNameGql,
-  getSectionTitleGql,
+  getSectionSlugGql,
   getArticleHref,
 } from '../../../utils'
 import Image from '@readr-media/react-image'
@@ -176,7 +176,7 @@ const Label = styled.div`
     display: block;
     width: fit-content;
     height: 25px;
-    padding: ${({ sectionTitle }) => (sectionTitle ? '0 8px' : '0')};
+    padding: ${({ sectionSlug }) => (sectionSlug ? '0 8px' : '0')};
     text-align: center;
     color: white;
     font-size: 14px;
@@ -185,12 +185,12 @@ const Label = styled.div`
     background-color: ${
       /**
        * @param {Object} props
-       * @param {string} props.sectionTitle
+       * @param {string} props.sectionSlug
        * @param {Theme} [props.theme]
        */
-      ({ sectionTitle, theme }) =>
-        sectionTitle && theme.color.sectionsColor[sectionTitle]
-          ? theme.color.sectionsColor[sectionTitle]
+      ({ sectionSlug, theme }) =>
+        sectionSlug && theme.color.sectionsColor[sectionSlug]
+          ? theme.color.sectionsColor[sectionSlug]
           : theme.color.brandColor.lightBlue
     };
   }
@@ -318,8 +318,8 @@ export default function AsideArticleList({
   }, [isLoaded, handleLoadMore])
 
   const newsJsx = item.map((item, index) => {
+    const sectionSlug = getSectionSlugGql(item.sectionsWithOrdered, undefined)
     const sectionName = getSectionNameGql(item.sectionsWithOrdered, undefined)
-    const sectionTitle = getSectionTitleGql(item.sectionsWithOrdered, undefined)
     const articleHref = getArticleHref(item.slug, item.style, undefined)
 
     /**
@@ -355,7 +355,7 @@ export default function AsideArticleList({
               </Link>
 
               <FigureCaption>
-                <Label sectionTitle={sectionTitle}>{sectionName}</Label>
+                <Label sectionSlug={sectionSlug}>{sectionName}</Label>
                 <Link
                   href={articleHref}
                   target="_blank"
