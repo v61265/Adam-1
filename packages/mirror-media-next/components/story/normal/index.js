@@ -463,7 +463,7 @@ const FloatingAdContainer = styled.div`
     right: 15px;
   }
 
-  svg {
+  .close-button {
     position: absolute;
     top: -12.5px;
     right: -12.5px;
@@ -484,26 +484,6 @@ const StyledGPTAd_PC_E2 = styled(GPTAd)`
     height: auto;
     max-height: 250px;
     max-width: 300px;
-  }
-`
-
-const StyleGPTAdFloating = styled(GPTAd)`
-  display: none;
-
-  ${({ theme }) => theme.breakpoint.xl} {
-    z-index: 2147483647;
-    position: fixed;
-    top: 175px;
-    right: 15px;
-    svg {
-      position: absolute;
-      top: -12.5px;
-      right: -12.5px;
-      width: 25px;
-      height: auto;
-      cursor: pointer;
-      user-select: none;
-    }
   }
 `
 
@@ -643,7 +623,8 @@ export default function StoryNormalStyle({
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
-  const handleRenderEndedAdPcFloating = ({ isEmpty }) => {
+  const handleRenderEndedAdPcFloating = (event) => {
+    const isEmpty = event?.isEmpty
     if (isEmpty) {
       setShouldShowAdPcFloating(false)
     }
@@ -721,7 +702,12 @@ export default function StoryNormalStyle({
                 adKey="PC_FLOATING"
                 onSlotRenderEnded={handleRenderEndedAdPcFloating}
               />
-              <SvgCloseIcon onClick={() => setShouldShowAdPcFloating(false)} />
+              <button
+                className="close-button"
+                onClick={() => setShouldShowAdPcFloating(false)}
+              >
+                <SvgCloseIcon />
+              </button>
             </FloatingAdContainer>
           )}
 
