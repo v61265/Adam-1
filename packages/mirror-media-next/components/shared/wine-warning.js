@@ -23,7 +23,7 @@ const Wrapper = styled.div`
   padding: 0 6px;
   letter-spacing: -2px;
 
-  @media only screen and (min-device-width: 320px) {
+  @media screen and (min-width: 320px) {
     font-size: 25px;
     padding: 0 14px;
   }
