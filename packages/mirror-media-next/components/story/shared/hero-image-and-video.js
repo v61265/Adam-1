@@ -162,7 +162,9 @@ export default function HeroImageAndVideo({
           preload="metadata"
           controlsList="nodownload"
           playsInline={true}
-          controls={true}
+          autoPlay={true}
+          muted={true}
+          loop={true}
           poster={heroVideo?.heroImage?.resized?.original}
           src={heroVideo.urlOriginal}
         />
