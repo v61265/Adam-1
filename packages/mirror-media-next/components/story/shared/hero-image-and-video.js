@@ -120,6 +120,11 @@ const HeroCaption = styled.figcaption`
     font-size: 14px;
   }
 `
+const Video = styled.video`
+  object-fit: cover;
+  height: 100vh;
+  width: 100%;
+`
 
 /**
  * Component for rending hero image of hero video.
@@ -153,11 +158,13 @@ export default function HeroImageAndVideo({
   const getHeroJsx = () => {
     if (shouldShowHeroVideo) {
       return (
-        <video
+        <Video
           preload="metadata"
           controlsList="nodownload"
           playsInline={true}
-          controls={true}
+          autoPlay={true}
+          muted={true}
+          loop={true}
           poster={heroVideo?.heroImage?.resized?.original}
           src={heroVideo.urlOriginal}
         />
