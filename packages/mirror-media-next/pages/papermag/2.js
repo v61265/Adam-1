@@ -10,6 +10,12 @@ import SubscribePaperMagForm from '../../components/papermag/subscribe-papermag-
 const Page = styled.main`
   min-height: 65vh;
 `
+const Hr = styled.hr`
+  margin-bottom: 8px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-bottom: 48px;
+  }
+`
 /**
  * @param {Object} props
  * @param {Object[] } props.sectionsData
@@ -28,6 +34,7 @@ function TwoYearsSubscription({ sectionsData = [], topicsData = [] }) {
     >
       <Page>
         <Steps activeStep={2} />
+        <Hr />
         <SubscribePaperMagForm />
       </Page>
     </Layout>
