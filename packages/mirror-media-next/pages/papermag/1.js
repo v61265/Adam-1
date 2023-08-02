@@ -5,6 +5,7 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import Steps from '../../components/papermag/steps'
+import SubscribePaperMagForm from '../../components/papermag/subscribe-papermag-form'
 
 const Page = styled.main`
   min-height: 65vh;
@@ -27,7 +28,7 @@ function OneYearSubscription({ sectionsData = [], topicsData = [] }) {
     >
       <Page>
         <Steps activeStep={2} />
-        <p style={{ textAlign: 'center' }}>訂閱一年</p>
+        <SubscribePaperMagForm />
       </Page>
     </Layout>
   )
