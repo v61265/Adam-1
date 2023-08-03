@@ -54,11 +54,21 @@ const CountButton = styled.button`
   font-size: 24px;
   font-weight: 300;
   position: relative;
+  :focus {
+    outline: none;
+  }
 
   span {
     position: absolute;
     top: -5px;
     left: 8px;
+  }
+
+  /* Add additional style for disabled state */
+  &[disabled] {
+    color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    cursor: default;
   }
 `
 
@@ -68,7 +78,21 @@ const ButtonsWrapper = styled.div`
   align-items: center;
 `
 
-export default function MerchandiseItem() {
+export default function MerchandiseItem({ count, setCount, plan }) {
+  const handleIncrement = (e) => {
+    e.preventDefault()
+    setCount(count + 1)
+  }
+
+  // Function to handle decrementing the count
+  const handleDecrement = (e) => {
+    e.preventDefault()
+
+    if (count > 1) {
+      setCount(count - 1)
+    }
+  }
+
   return (
     <Wrapper>
       <Title>訂購項目</Title>
@@ -83,16 +107,16 @@ export default function MerchandiseItem() {
             <Td className="item-name">一年鏡週刊 52 期</Td>
             <Td className="quantity buttons-wrapper">
               <ButtonsWrapper>
-                <CountButton>
+                <CountButton onClick={handleDecrement} disabled={count === 1}>
                   <span>-</span>
                 </CountButton>
-                <p>99</p>
-                <CountButton>
+                <p>{count}</p>
+                <CountButton onClick={handleIncrement}>
                   <span>+</span>
                 </CountButton>
               </ButtonsWrapper>
             </Td>
-            <Td className="price">NT$ 5280</Td>
+            <Td className="price">NT$ {plan === 1 ? 2880 : 5280}</Td>
           </Tr>
         </tbody>
       </Table>
