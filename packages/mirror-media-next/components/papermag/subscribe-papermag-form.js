@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import MerchandiseItem from './form-detail/merchandise-item'
 import ApplyDiscount from './form-detail/apply-discount'
@@ -13,7 +14,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column-reverse;
   justify-content: center;
-  background-color: lightyellow;
+  /* background-color: lightyellow; */
   padding: 0 8px;
 
   ${({ theme }) => theme.breakpoint.md} {
@@ -22,7 +23,7 @@ const Form = styled.form`
 `
 
 const LeftWrapper = styled.div`
-  background: lightcyan;
+  /* background: lightcyan; */
   width: 100%;
 
   ${({ theme }) => theme.breakpoint.md} {
@@ -35,7 +36,7 @@ const LeftWrapper = styled.div`
   }
 `
 const RightWrapper = styled.div`
-  background: lightpink;
+  /* background: lightpink; */
   width: 100%;
 
   ${({ theme }) => theme.breakpoint.md} {
@@ -44,10 +45,12 @@ const RightWrapper = styled.div`
 `
 
 export default function SubscribePaperMagForm() {
+  const [count, setCount] = useState(1)
+
   return (
     <Form>
       <LeftWrapper>
-        <MerchandiseItem />
+        <MerchandiseItem count={count} setCount={setCount} />
         <ApplyDiscount />
         <Orderer />
         <Recipient />
