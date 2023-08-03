@@ -85,7 +85,6 @@ export default function MerchandiseItem({ count, setCount, plan }) {
     setCount(count + 1)
   }
 
-  // Function to handle decrementing the count
   const handleDecrement = (e) => {
     e.preventDefault()
 
@@ -120,8 +119,8 @@ export default function MerchandiseItem({ count, setCount, plan }) {
             <Td className="price">
               NT${' '}
               {plan === 1
-                ? getNumberWithCommas(2880)
-                : getNumberWithCommas(5280)}
+                ? getNumberWithCommas(2880 * count)
+                : getNumberWithCommas(5280 * count)}
             </Td>
           </Tr>
         </tbody>
