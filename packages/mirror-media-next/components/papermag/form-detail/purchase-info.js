@@ -1,15 +1,10 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  width: 95%;
   margin: auto;
   border-radius: 12px;
   background: #f2f2f2;
   padding: 16px;
-
-  ${({ theme }) => theme.breakpoint.md} {
-    width: 100%;
-  }
 `
 
 const Title = styled.h2`
@@ -30,6 +25,7 @@ const Item = styled.div`
   color: rgba(0, 0, 0, 0.5);
   font-size: 18px;
   font-weight: 400;
+  margin-right: 16px;
 `
 
 const Price = styled.div`

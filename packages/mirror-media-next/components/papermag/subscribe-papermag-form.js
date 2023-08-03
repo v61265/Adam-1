@@ -12,6 +12,8 @@ const Form = styled.form`
   display: flex;
   flex-direction: column-reverse;
   justify-content: center;
+  background-color: lightyellow;
+  padding: 0 8px;
 
   ${({ theme }) => theme.breakpoint.md} {
     flex-direction: row;
