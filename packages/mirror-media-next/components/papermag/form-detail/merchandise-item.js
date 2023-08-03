@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { getNumberWithCommas } from '../../../utils'
 
 const Wrapper = styled.div`
   margin: auto;
@@ -116,7 +117,12 @@ export default function MerchandiseItem({ count, setCount, plan }) {
                 </CountButton>
               </ButtonsWrapper>
             </Td>
-            <Td className="price">NT$ {plan === 1 ? 2880 : 5280}</Td>
+            <Td className="price">
+              NT${' '}
+              {plan === 1
+                ? getNumberWithCommas(2880)
+                : getNumberWithCommas(5280)}
+            </Td>
           </Tr>
         </tbody>
       </Table>
