@@ -78,7 +78,7 @@ const ButtonsWrapper = styled.div`
   align-items: center;
 `
 
-export default function MerchandiseItem({ count, setCount }) {
+export default function MerchandiseItem({ count, setCount, plan }) {
   const handleIncrement = (e) => {
     e.preventDefault()
     setCount(count + 1)
@@ -116,7 +116,7 @@ export default function MerchandiseItem({ count, setCount }) {
                 </CountButton>
               </ButtonsWrapper>
             </Td>
-            <Td className="price">NT$ 5280</Td>
+            <Td className="price">NT$ {plan === 1 ? 2880 : 5280}</Td>
           </Tr>
         </tbody>
       </Table>

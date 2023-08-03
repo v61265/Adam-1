@@ -35,7 +35,7 @@ function TwoYearsSubscription({ sectionsData = [], topicsData = [] }) {
       <Page>
         <Steps activeStep={2} />
         <Hr />
-        <SubscribePaperMagForm />
+        <SubscribePaperMagForm plan={2} />
       </Page>
     </Layout>
   )

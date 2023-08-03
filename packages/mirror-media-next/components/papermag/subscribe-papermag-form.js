@@ -44,13 +44,14 @@ const RightWrapper = styled.div`
   }
 `
 
-export default function SubscribePaperMagForm() {
+export default function SubscribePaperMagForm({ plan }) {
   const [count, setCount] = useState(1)
+  console.log({ plan })
 
   return (
     <Form>
       <LeftWrapper>
-        <MerchandiseItem count={count} setCount={setCount} />
+        <MerchandiseItem count={count} setCount={setCount} plan={plan} />
         <ApplyDiscount />
         <Orderer />
         <Recipient />
