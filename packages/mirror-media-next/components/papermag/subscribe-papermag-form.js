@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import MerchandiseItem from './form-detail/merchandise-item'
+import ApplyDiscount from './form-detail/apply-discount'
 import PurchaseInfo from './form-detail/purchase-info'
 import Orderer from './form-detail/orderer'
 import Recipient from './form-detail/recipient'
@@ -47,6 +48,7 @@ export default function SubscribePaperMagForm() {
     <Form>
       <LeftWrapper>
         <MerchandiseItem />
+        <ApplyDiscount />
         <Orderer />
         <Recipient />
         <Shipping />

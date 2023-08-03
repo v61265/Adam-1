@@ -2,11 +2,9 @@ import styled from 'styled-components'
 
 const Wrapper = styled.div`
   margin: auto;
-  margin-bottom: 48px;
   margin-top: 24px;
 
   ${({ theme }) => theme.breakpoint.md} {
-    margin-bottom: 60px;
     margin-top: 0px;
   }
 `
@@ -37,6 +35,7 @@ const Tr = styled.tr`
   .item-name {
     color: rgba(0, 0, 0, 0.5);
     max-width: 194px;
+    min-width: 65px;
   }
   .quantity {
     width: 128px;
