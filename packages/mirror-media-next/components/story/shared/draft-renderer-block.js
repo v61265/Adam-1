@@ -37,11 +37,13 @@ export default function DraftRenderBlock({
   wrapper = (children) => <>{children}</>,
 }) {
   const isAmp = contentLayout === 'amp'
+  const shouldRenderDraft = hasContentInRawContentBlock(rawContentBlock)
+
   const jsx = isAmp
     ? AmpRenderBlock(rawContentBlock, contentLayout)
     : NormalRenderBlock(rawContentBlock, contentLayout)
 
-  return <>{wrapper(jsx)}</>
+  return <>{shouldRenderDraft && wrapper(jsx)}</>
 }
 /**
  *
