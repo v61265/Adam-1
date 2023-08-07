@@ -46,7 +46,6 @@ const RightWrapper = styled.div`
 
 export default function SubscribePaperMagForm({ plan }) {
   const [count, setCount] = useState(1)
-  console.log({ plan })
 
   return (
     <Form>

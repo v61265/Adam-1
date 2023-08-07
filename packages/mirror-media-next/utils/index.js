@@ -306,6 +306,16 @@ const getResizedUrl = (resized) => {
   }
 }
 
+/**
+ * Returns a string representation of a number with commas as thousand separators.
+ *
+ * @param {number} num - The number to convert to a string with commas.
+ * @return {string} The string representation of the number with commas.
+ */
+const getNumberWithCommas = (num) => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
 export {
   transformRawDataToArticleInfo,
   transformTimeDataIntoDotFormat,
@@ -318,4 +328,5 @@ export {
   getCategoryOfWineSlug,
   convertDraftToText,
   getResizedUrl,
+  getNumberWithCommas,
 }
