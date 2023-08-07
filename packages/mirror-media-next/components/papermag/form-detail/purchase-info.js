@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { getNumberWithCommas } from '../../../utils'
 
 const Wrapper = styled.div`
   border-radius: 12px;
@@ -48,23 +49,27 @@ const DiscountMsg = styled.div`
   justify-content: space-between;
 `
 
-export default function PurchaseInfo() {
+export default function PurchaseInfo({ count, plan }) {
+  const freight = plan === 1 ? 1040 * count : 2080 * count
+  const price = plan === 1 ? 2880 * count : 5280 * count
+  const total = price + freight
+
   return (
     <>
       <Wrapper>
         <Title>訂單資訊</Title>
         <ItemWrapper>
-          <Item>鏡週刊紙本雜誌 52 期</Item>
-          <Price>NT$ 2,880</Price>
+          <Item>商品總計</Item>
+          <Price>NT$ {getNumberWithCommas(price)}</Price>
         </ItemWrapper>
         <ItemWrapper>
           <Item>運費</Item>
-          <Price>NT$ 0</Price>
+          <Price>NT$ {getNumberWithCommas(freight)}</Price>
         </ItemWrapper>
         <Hr />
         <ItemWrapper>
           <Item>費用總計</Item>
-          <Price>NT$ 8,160</Price>
+          <Price>NT$ {getNumberWithCommas(total)}</Price>
         </ItemWrapper>
       </Wrapper>
       <DiscountMsg>

@@ -60,7 +60,7 @@ export default function SubscribePaperMagForm({ plan }) {
         <OrderBtn />
       </LeftWrapper>
       <RightWrapper>
-        <PurchaseInfo />
+        <PurchaseInfo count={count} plan={plan} />
       </RightWrapper>
     </Form>
   )
