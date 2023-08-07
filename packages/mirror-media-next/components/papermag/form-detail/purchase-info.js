@@ -73,8 +73,8 @@ export default function PurchaseInfo({ count, plan }) {
         </ItemWrapper>
       </Wrapper>
       <DiscountMsg>
-        <span>符合一年方案優惠</span>
-        <span>贈送 5 期</span>
+        <span>符合{plan === 1 ? '一' : '二'}年方案優惠</span>
+        <span>贈送 {plan === 1 ? '5' : '10'} 期</span>
       </DiscountMsg>
     </>
   )
