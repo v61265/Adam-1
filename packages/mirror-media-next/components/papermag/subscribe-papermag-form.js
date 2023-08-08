@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import MerchandiseItem from './form-detail/merchandise-item'
 import ApplyDiscount from './form-detail/apply-discount'
@@ -46,12 +46,18 @@ const RightWrapper = styled.div`
 
 export default function SubscribePaperMagForm({ plan }) {
   const [count, setCount] = useState(1)
+  const [couponApplied, setCouponApplied] = useState(false)
+
+  console.log({ couponApplied })
 
   return (
     <Form>
       <LeftWrapper>
         <MerchandiseItem count={count} setCount={setCount} plan={plan} />
-        <ApplyDiscount />
+        <ApplyDiscount
+          setCouponApplied={setCouponApplied}
+          couponApplied={couponApplied}
+        />
         <Orderer />
         <Recipient />
         <Shipping />
