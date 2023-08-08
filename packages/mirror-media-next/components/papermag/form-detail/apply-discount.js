@@ -40,9 +40,9 @@ const InputWrapper = styled.div`
   }
   ${({
     // @ts-ignore
-    couponApplied,
+    renewCouponApplied,
   }) =>
-    couponApplied &&
+    renewCouponApplied &&
     css`
       border: 1px solid rgba(0, 0, 0, 0.1);
       background: #e3e3e3;
@@ -143,7 +143,10 @@ const RemoveButton = styled.button`
   transition: all 0.25s ease;
 `
 
-export default function ApplyDiscount({ couponApplied, setCouponApplied }) {
+export default function ApplyDiscount({
+  renewCouponApplied,
+  setRenewCouponApplied,
+}) {
   const [inputValue, setInputValue] = useState('')
 
   const handleInputChange = (event) => {
@@ -158,12 +161,12 @@ export default function ApplyDiscount({ couponApplied, setCouponApplied }) {
   const handleConfirmClick = (e) => {
     e.preventDefault()
     if (isInputValid) {
-      setCouponApplied(true)
+      setRenewCouponApplied(true)
     }
   }
 
   const handleRemoveClick = () => {
-    setCouponApplied(false)
+    setRenewCouponApplied(false)
     setInputValue('')
   }
 
@@ -174,17 +177,17 @@ export default function ApplyDiscount({ couponApplied, setCouponApplied }) {
       <InputButtonWrapper>
         <InputWrapper
           // @ts-ignore
-          couponApplied={couponApplied}
+          renewCouponApplied={renewCouponApplied}
         >
           <label>MR</label>
           <input
             placeholder="12345678"
             value={inputValue}
             onChange={handleInputChange}
-            disabled={couponApplied}
+            disabled={renewCouponApplied}
           />
         </InputWrapper>
-        {couponApplied ? (
+        {renewCouponApplied ? (
           <RemoveButton onClick={handleRemoveClick}>移除</RemoveButton>
         ) : (
           <ConfirmButton disabled={!isInputValid} onClick={handleConfirmClick}>
@@ -192,7 +195,7 @@ export default function ApplyDiscount({ couponApplied, setCouponApplied }) {
           </ConfirmButton>
         )}
       </InputButtonWrapper>
-      {couponApplied && <AppliedMsg>已套用訂戶代號</AppliedMsg>}
+      {renewCouponApplied && <AppliedMsg>已套用訂戶代號</AppliedMsg>}
       <TextBox>
         續訂戶資格為實際訂閱紙本鏡週刊滿 1 年 (52 期)
         並已有訂戶代號，如不清楚訂戶代號或是否符合續訂戶資格，請來電02-6633-3882

@@ -26,12 +26,20 @@ const Item = styled.div`
   font-size: 18px;
   font-weight: 400;
   margin-right: 16px;
+
+  &.renew {
+    color: #054f77;
+  }
 `
 
 const Price = styled.div`
   color: rgba(0, 0, 0, 0.87);
   font-size: 18px;
   font-weight: 400;
+
+  &.renew {
+    color: #054f77;
+  }
 `
 
 const Hr = styled.hr`
@@ -47,12 +55,17 @@ const DiscountMsg = styled.div`
   font-weight: 400;
   display: flex;
   justify-content: space-between;
+
+  &.renew {
+    color: #e51731;
+  }
 `
 
-export default function PurchaseInfo({ count, plan }) {
+export default function PurchaseInfo({ count, plan, renewCouponApplied }) {
   const freight = plan === 1 ? 1040 * count : 2080 * count
   const price = plan === 1 ? 2880 * count : 5280 * count
-  const total = price + freight
+  const renewDiscount = renewCouponApplied ? 80 * count : 0
+  const total = price + freight - renewDiscount
 
   return (
     <>
@@ -66,6 +79,16 @@ export default function PurchaseInfo({ count, plan }) {
           <Item>運費</Item>
           <Price>NT$ {getNumberWithCommas(freight)}</Price>
         </ItemWrapper>
+
+        {renewCouponApplied && (
+          <ItemWrapper>
+            <Item className="renew">續訂戶折扣</Item>
+            <Price className="renew">
+              -NT$ {getNumberWithCommas(renewDiscount)}
+            </Price>
+          </ItemWrapper>
+        )}
+
         <Hr />
         <ItemWrapper>
           <Item>費用總計</Item>
@@ -76,6 +99,12 @@ export default function PurchaseInfo({ count, plan }) {
         <span>符合{plan === 1 ? '一' : '二'}年方案優惠</span>
         <span>贈送 {plan === 1 ? '5' : '10'} 期</span>
       </DiscountMsg>
+      {renewCouponApplied && (
+        <DiscountMsg className="renew">
+          <span>符合續訂優惠</span>
+          <span>贈送 {plan === 1 ? '1' : '2'} 期</span>
+        </DiscountMsg>
+      )}
     </>
   )
 }

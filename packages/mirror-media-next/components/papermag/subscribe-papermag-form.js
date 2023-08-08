@@ -46,17 +46,15 @@ const RightWrapper = styled.div`
 
 export default function SubscribePaperMagForm({ plan }) {
   const [count, setCount] = useState(1)
-  const [couponApplied, setCouponApplied] = useState(false)
-
-  console.log({ couponApplied })
+  const [renewCouponApplied, setRenewCouponApplied] = useState(false)
 
   return (
     <Form>
       <LeftWrapper>
         <MerchandiseItem count={count} setCount={setCount} plan={plan} />
         <ApplyDiscount
-          setCouponApplied={setCouponApplied}
-          couponApplied={couponApplied}
+          setRenewCouponApplied={setRenewCouponApplied}
+          renewCouponApplied={renewCouponApplied}
         />
         <Orderer />
         <Recipient />
@@ -66,7 +64,11 @@ export default function SubscribePaperMagForm({ plan }) {
         <OrderBtn />
       </LeftWrapper>
       <RightWrapper>
-        <PurchaseInfo count={count} plan={plan} />
+        <PurchaseInfo
+          count={count}
+          plan={plan}
+          renewCouponApplied={renewCouponApplied}
+        />
       </RightWrapper>
     </Form>
   )
