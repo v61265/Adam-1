@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -34,6 +35,9 @@ const InputWrapper = styled.div`
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   margin-right: 8px;
+  :focus-within {
+    border-color: rgba(0, 0, 0, 0.87);
+  }
 
   ${({ theme }) => theme.breakpoint.md} {
     max-width: 200px;
@@ -55,11 +59,26 @@ const ConfirmButton = styled.button`
   height: 48px;
   padding: 12px 16px;
   border-radius: 8px;
-  background: #e3e3e3;
-  color: rgba(0, 0, 0, 0.3);
   text-align: center;
   font-size: 18px;
   font-weight: 500;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.07);
+  background: #054f77;
+  color: #fff;
+  :focus {
+    outline: none;
+  }
+
+  :hover {
+    background: #9cb7c6;
+    color: #000;
+  }
+
+  &[disabled] {
+    background: #e3e3e3;
+    color: rgba(0, 0, 0, 0.3);
+    cursor: default;
+  }
 `
 
 const InputButtonWrapper = styled.div`
@@ -74,6 +93,17 @@ const TextBox = styled.p`
 `
 
 export default function ApplyDiscount() {
+  const [inputValue, setInputValue] = useState('')
+
+  const handleInputChange = (event) => {
+    const value = event.target.value
+    if (/^[0-9]*$/.test(value) && value.length <= 8) {
+      setInputValue(value)
+    }
+  }
+
+  const isInputValid = inputValue.length === 8
+
   return (
     <Wrapper>
       <h3>續訂戶請輸入訂戶代號</h3>
@@ -81,9 +111,13 @@ export default function ApplyDiscount() {
       <InputButtonWrapper>
         <InputWrapper>
           <label>MR</label>
-          <input placeholder="12345678" />
+          <input
+            placeholder="12345678"
+            value={inputValue}
+            onChange={handleInputChange}
+          />
         </InputWrapper>
-        <ConfirmButton>確認</ConfirmButton>
+        <ConfirmButton disabled={!isInputValid}>確認</ConfirmButton>
       </InputButtonWrapper>
       <TextBox>
         續訂戶資格為實際訂閱紙本鏡週刊滿 1 年 (52 期)
