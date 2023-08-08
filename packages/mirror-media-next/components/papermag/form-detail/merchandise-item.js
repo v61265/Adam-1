@@ -43,7 +43,7 @@ const Tr = styled.tr`
     text-align: center;
   }
   .price {
-    min-width: 110px;
+    width: 125px;
   }
 `
 const CountButton = styled.button`
@@ -58,6 +58,11 @@ const CountButton = styled.button`
   :focus {
     outline: none;
   }
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
 
   span {
     position: absolute;
@@ -65,7 +70,6 @@ const CountButton = styled.button`
     left: 8px;
   }
 
-  /* Add additional style for disabled state */
   &[disabled] {
     color: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(0, 0, 0, 0.3);
@@ -104,7 +108,9 @@ export default function MerchandiseItem({ count, setCount, plan }) {
             <Td className="price">單價</Td>
           </Tr>
           <Tr style={{ height: '72px' }}>
-            <Td className="item-name">一年鏡週刊 52 期</Td>
+            <Td className="item-name">
+              {plan === 1 ? '一年鏡週刊 52 期' : '二年鏡週刊 104 期'}
+            </Td>
             <Td className="quantity buttons-wrapper">
               <ButtonsWrapper>
                 <CountButton onClick={handleDecrement} disabled={count === 1}>
