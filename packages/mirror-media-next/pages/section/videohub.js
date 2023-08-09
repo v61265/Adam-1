@@ -114,7 +114,7 @@ const StickyGPTAd_MB_ST = styled(GPTAd)`
   max-width: 320px;
   max-height: 50px;
   margin: auto;
-  z-index: ${Z_INDEX.top};
+  z-index: ${Z_INDEX.coverHeader};
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
@@ -149,10 +149,23 @@ export default function SectionVideohub({
       <Wrapper>
         {shouldShowAd && <StyledGPTAd_PC_HD pageKey="videohub" adKey="PC_HD" />}
         {hasHVCVideo && (
-          <LeadingVideo video={highestViewCountVideo} title="熱門影片" />
+          <LeadingVideo
+            video={highestViewCountVideo}
+            title="熱門影片"
+            gtmClassName={{
+              title: 'GTM-video-homepage-popular-item',
+              youtube: 'GTM-video-homepage-popular-yt-play',
+            }}
+          />
         )}
         {shouldShowAd && <StyledGPTAd_MB_HD pageKey="videohub" adKey="MB_HD" />}
-        {hasLatestVideo && <VideoList videos={latestVideos} name="最新影片" />}
+        {hasLatestVideo && (
+          <VideoList
+            videos={latestVideos}
+            name="最新影片"
+            gtmClassName="GTM-video-homepage-latest-list"
+          />
+        )}
         <SubscribeChannels />
         {shouldShowAd && <StyledGPTAd_MB_FT pageKey="videohub" adKey="MB_FT" />}
         {playlistsVideos.map((playlistsVideo) => (
@@ -161,6 +174,7 @@ export default function SectionVideohub({
             videos={playlistsVideo.items}
             name={playlistsVideo.name}
             slug={playlistsVideo.slug}
+            gtmClassName={`GTM-video-homepage-categorylist_${playlistsVideo.name}`}
           />
         ))}
         {shouldShowAd && <StyledGPTAd_PC_FT pageKey="videohub" adKey="PC_FT" />}

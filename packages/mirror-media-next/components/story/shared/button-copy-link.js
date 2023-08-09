@@ -1,3 +1,5 @@
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
+
 import { useState } from 'react'
 
 import styled from 'styled-components'
@@ -47,13 +49,20 @@ export default function ButtonCopyLink({ width = 35, height = 35 }) {
   const [shouldShowMessage, setShouldShowMessage] = useState(false)
   const sharedUrl = useSharedUrl()
   const handleCopyLink = () => {
-    window.navigator.clipboard.writeText(sharedUrl)
+    if (window.navigator.clipboard) {
+      /**
+       * Since `window.navigator.clipboard` is only available in https protocol,
+       * we add optional chaining to hide error when developing in http protocol, such as `http://localhost:3000`
+       * Must to know that this is a work-around solution, not solved problem of unable copy in http protocol.
+       */
+      window.navigator?.clipboard?.writeText(sharedUrl)
 
-    setShouldShowMessage(true)
-    const timeout = setTimeout(() => {
-      clearTimeout(timeout)
-      setShouldShowMessage(false)
-    }, 3000)
+      setShouldShowMessage(true)
+      const timeout = setTimeout(() => {
+        clearTimeout(timeout)
+        setShouldShowMessage(false)
+      }, 3000)
+    }
   }
   return (
     <>
@@ -70,6 +79,7 @@ export default function ButtonCopyLink({ width = 35, height = 35 }) {
           src={'/images/link-logo.svg'}
           width={width}
           height={height}
+          className="GTM-share-link"
           alt="copy link button"
         ></Image>
       </ClickButton>

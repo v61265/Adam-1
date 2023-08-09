@@ -1,5 +1,4 @@
-//TODOs:
-//1. set login feature
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
 
 import { useState, useRef } from 'react'
 import Image from 'next/legacy/image'
@@ -83,6 +82,7 @@ export default function MemberLoginButton() {
           alt="member-icon-logged-in"
           width={25.67}
           height={30.81}
+          className="GTM-header-login"
           onClick={() => setShowSelectOptions((val) => !val)}
         ></Image>
 
@@ -101,7 +101,12 @@ export default function MemberLoginButton() {
   } else {
     memberLoginButton = (
       <LoginButton>
-        <Link href={`/login?destination=${router.asPath || '/'}`}>登入</Link>
+        <Link
+          href={`/login?destination=${router.asPath || '/'}`}
+          className="GTM-header-login"
+        >
+          <span>登入</span>
+        </Link>
       </LoginButton>
     )
   }

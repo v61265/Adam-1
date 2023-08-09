@@ -1,9 +1,11 @@
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
+
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { Autoplay, Pagination, Navigation } from 'swiper'
 import CustomImage from '@readr-media/react-image'
 import styled from 'styled-components'
-
+import Link from 'next/link'
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -123,12 +125,12 @@ const ListItemLabel = styled.div`
   background-color: ${
     /**
      * @param {Object} props
-     * @param {String } props.sectionName
+     * @param {String} props.sectionSlug
      * @param {Theme} [props.theme]
      */
-    ({ sectionName, theme }) =>
-      sectionName && theme.color.sectionsColor[sectionName]
-        ? theme.color.sectionsColor[sectionName]
+    ({ sectionSlug, theme }) =>
+      sectionSlug && theme.color.sectionsColor[sectionSlug]
+        ? theme.color.sectionsColor[sectionSlug]
         : theme.color.brandColor.darkBlue
   };
   color: #fff;
@@ -185,7 +187,7 @@ const EditorChoiceContainer = styled.section`
 /**
  * @typedef {Object} FormattedEditorChoiceItem
  * @property {string} articleHref
- * @property {string} sectionTitle
+ * @property {string} sectionSlug
  * @property {string} sectionName
  * /
 
@@ -245,8 +247,9 @@ export default function EditorChoice({ editorChoice = [] }) {
                 href={item.articleHref}
                 target="_blank"
                 rel="noreferrer noopenner"
+                className="GTM-editorchoice-list"
               >
-                <ListItemLabel sectionName={item.sectionTitle}>
+                <ListItemLabel sectionSlug={item.sectionSlug}>
                   {item.sectionName}
                 </ListItemLabel>
                 {editorChoiceImageJsx(item.heroImage, item.title)}
@@ -273,14 +276,15 @@ export default function EditorChoice({ editorChoice = [] }) {
             >
               {editorChoice.map((item) => (
                 <SwiperSlide key={item.slug}>
-                  <a
+                  <Link
+                    className="GTM-editorchoice-list"
                     href={item.articleHref}
                     target="_blank"
                     rel="noreferrer noopenner"
                   >
                     {editorChoiceImageJsx(item.heroImage, item.title)}
                     <p className="title">{item.title}</p>
-                  </a>
+                  </Link>
                 </SwiperSlide>
               ))}
             </Swiper>

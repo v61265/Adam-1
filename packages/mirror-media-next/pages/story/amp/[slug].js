@@ -26,7 +26,9 @@ import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 const { hasContentInRawContentBlock } = MirrorMedia
 import Taboola from '../../../components/amp/amp-ads/taboola-ad'
 import AmpGptAd from '../../../components/amp/amp-ads/amp-gpt-ad'
+import AmpGptStickyAd from '../../../components/amp/amp-ads/amp-gpt-sticky-ad'
 import { getAmpGptDataSlotSection } from '../../../utils/ad'
+import Head from 'next/head'
 
 export const config = { amp: true }
 
@@ -64,9 +66,15 @@ function StoryAmpPage({ postData }) {
     isAdult = false,
     categories = [],
     sections = [],
+    sectionsInInputOrder = [],
   } = postData
 
-  const [section] = sections
+  const sectionsWithOrdered =
+    sectionsInInputOrder && sectionsInInputOrder.length
+      ? sectionsInInputOrder
+      : sections
+  const [section] = sectionsWithOrdered
+
   const sectionSlot = getAmpGptDataSlotSection(section)
 
   const categoryOfWineSlug = getCategoryOfWineSlug(categories)
@@ -76,75 +84,85 @@ function StoryAmpPage({ postData }) {
       ? relatedsInInputOrder
       : relateds
   return (
-    <Layout
-      head={{
-        title: `${title}`,
-        description:
-          convertDraftToText(postData.brief) ||
-          convertDraftToText(postData.content),
-        imageUrl:
-          getResizedUrl(postData.og_image?.resized) ||
-          getResizedUrl(postData.heroImage?.resized),
-      }}
-      header={{ type: 'empty' }}
-      footer={{ type: 'empty' }}
-    >
-      <>
-        {/* @ts-ignore */}
-        <amp-analytics
-          type="googleanalytics"
-          config="https://amp.analytics-debugger.com/ga4.json"
-          data-credentials="include"
-        >
-          <script
-            type="application/json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                vars: {
-                  GA4_MEASUREMENT_ID: GA_MEASUREMENT_ID,
-                  GA4_ENDPOINT_HOSTNAME: 'www.google-analytics.com',
-                  GOOGLE_CONSENT_ENABLED: false,
-                  WEBVITALS_TRACKING: false,
-                  PERFORMANCE_TIMING_TRACKING: false,
-                  DEFAULT_PAGEVIEW_ENABLED: true,
-                  SEND_DOUBLECLICK_BEACON: false,
-                  DISABLE_REGIONAL_DATA_COLLECTION: false,
-                  ENHANCED_MEASUREMENT_SCROLL: false,
-                },
-              }),
-            }}
-          />
+    <>
+      <Head>
+        {/* Add the script for amp-sticky-ad */}
+        <script
+          async
+          // eslint-disable-next-line react/no-unknown-property
+          custom-element="amp-sticky-ad"
+          src="https://cdn.ampproject.org/v0/amp-sticky-ad-1.0.js"
+        />
+      </Head>
+      <Layout
+        head={{
+          title: `${title}`,
+          description:
+            convertDraftToText(postData.brief) ||
+            convertDraftToText(postData.content),
+          imageUrl:
+            getResizedUrl(postData.og_image?.resized) ||
+            getResizedUrl(postData.heroImage?.resized),
+        }}
+        header={{ type: 'empty' }}
+        footer={{ type: 'empty' }}
+      >
+        <>
           {/* @ts-ignore */}
-        </amp-analytics>
-        <AmpBody>
-          <section
-            id="amp-page"
-            className={`${!!categoryOfWineSlug.length && 'is-wine'} ${
-              isAdult && 'disable-scroll'
-            }`}
+          <amp-analytics
+            type="googleanalytics"
+            config="https://amp.analytics-debugger.com/ga4.json"
+            data-credentials="include"
           >
-            <AmpHeader />
-            <AmpGptAd section={sectionSlot} position="HD" />
-            <p style={{ textAlign: 'center', color: 'pink' }}>
-              顯示廣告分類：{sectionSlot}
-            </p>
+            <script
+              type="application/json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  vars: {
+                    GA4_MEASUREMENT_ID: GA_MEASUREMENT_ID,
+                    GA4_ENDPOINT_HOSTNAME: 'www.google-analytics.com',
+                    GOOGLE_CONSENT_ENABLED: false,
+                    WEBVITALS_TRACKING: false,
+                    PERFORMANCE_TIMING_TRACKING: false,
+                    DEFAULT_PAGEVIEW_ENABLED: true,
+                    SEND_DOUBLECLICK_BEACON: false,
+                    DISABLE_REGIONAL_DATA_COLLECTION: false,
+                    ENHANCED_MEASUREMENT_SCROLL: false,
+                  },
+                }),
+              }}
+            />
+            {/* @ts-ignore */}
+          </amp-analytics>
+          <AmpBody>
+            <section
+              id="amp-page"
+              className={`${!!categoryOfWineSlug.length && 'is-wine'} ${
+                isAdult && 'disable-scroll'
+              }`}
+            >
+              <AmpHeader />
+              <AmpGptAd section={sectionSlot} position="HD" />
 
-            <AmpMain postData={postData} isMember={isMember} />
-            <AmpRelated relateds={relatedsWithOrdered} />
-            <Taboola title="你可能也喜歡這些文章" />
+              <AmpMain postData={postData} isMember={isMember} />
+              <AmpRelated
+                relateds={relatedsWithOrdered}
+                section={sectionSlot}
+              />
+              <Taboola title="你可能也喜歡這些文章" />
 
-            <AmpGptAd section={sectionSlot} position="FT" />
-            <p style={{ textAlign: 'center', color: 'pink' }}>
-              顯示廣告分類：{sectionSlot}
-            </p>
+              <AmpGptAd section={sectionSlot} position="FT" />
 
-            <AmpFooter />
-          </section>
-          <AdultOnlyWarning isAdult={isAdult} />
-          <WineWarning categories={categories} />
-        </AmpBody>
-      </>
-    </Layout>
+              <AmpFooter />
+              {/* If there are wine categories (length greater than 0), AmpGptStickyAd will not be shown. */}
+              {categoryOfWineSlug.length === 0 && <AmpGptStickyAd />}
+            </section>
+            <AdultOnlyWarning isAdult={isAdult} />
+            <WineWarning categories={categories} />
+          </AmpBody>
+        </>
+      </Layout>
+    </>
   )
 }
 

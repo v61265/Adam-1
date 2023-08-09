@@ -89,35 +89,31 @@ function getSectionTitle(sections = [], partner) {
 // - adjust typedef of Section
 
 /**
- * Get section name based on different condition
- * Because data structure of keystone 6 response is different from keystone 3, we create this function to handle data from keystone 6 server.
+ * Get section slug based on different condition
  * @param {Sections} sections
  * @param {Object | ''} partner
  * @returns {String | undefined}
  */
-function getSectionNameGql(sections = [], partner = '') {
+function getSectionSlugGql(sections = [], partner = '') {
   if (partner) {
     return 'external'
-  } else if (sections?.some((section) => section.name === 'member')) {
+  } else if (sections?.some((section) => section.slug === 'member')) {
     return 'member'
   }
-  return sections[0]?.name
+  return sections[0]?.slug
 }
 
-// TODO: use typedef in `../apollo/fragments/section`
-// Should be done after fetch header data from new json file
 /**
- * Get section title based on different condition
- * Because data structure of keystone 6 response is different from keystone 3, we create this function to handle data from keystone 6 server.
+ * Get section name based on different condition
  * @param {Sections} sections
  * @param {Object | ''} partner
  * @returns {String | undefined}
  */
-function getSectionTitleGql(sections = [], partner) {
+function getSectionNameGql(sections = [], partner) {
   if (partner) {
-    if (partner.name === 'healthnews') {
+    if (partner.slug === 'healthnews') {
       return '生活'
-    } else if (partner.name === 'ebc') {
+    } else if (partner.slug === 'ebc') {
       return '時事'
     } else {
       return '時事'
@@ -125,10 +121,10 @@ function getSectionTitleGql(sections = [], partner) {
   }
 
   if (sections.length > 0) {
-    if (sections.some((section) => section.name === 'member')) {
+    if (sections.some((section) => section.slug === 'member')) {
       return '會員專區'
     } else {
-      return sections[0]?.slug
+      return sections[0]?.name
     }
   }
   return undefined
@@ -310,16 +306,27 @@ const getResizedUrl = (resized) => {
   }
 }
 
+/**
+ * Returns a string representation of a number with commas as thousand separators.
+ *
+ * @param {number} num - The number to convert to a string with commas.
+ * @return {string} The string representation of the number with commas.
+ */
+const getNumberWithCommas = (num) => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
 export {
   transformRawDataToArticleInfo,
   transformTimeDataIntoDotFormat,
   transformTimeDataIntoSlashFormat,
   getSectionNameGql,
-  getSectionTitleGql,
+  getSectionSlugGql,
   getArticleHref,
   sortArrayWithOtherArrayId,
   getMagazineHrefFromSlug,
   getCategoryOfWineSlug,
   convertDraftToText,
   getResizedUrl,
+  getNumberWithCommas,
 }

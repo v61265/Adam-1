@@ -1,7 +1,7 @@
 //TODO: refactor jsx structure, make it more readable.
 //TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import client from '../../../apollo/apollo-client'
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
@@ -21,6 +21,7 @@ import HeroImageAndVideo from './hero-image-and-video'
 import Divider from '../shared/divider'
 import ShareHeader from '../../shared/share-header'
 import Footer from '../../shared/footer'
+import SvgCloseIcon from '../../../public/images/close-black.svg'
 import {
   transformTimeDataIntoDotFormat,
   getCategoryOfWineSlug,
@@ -420,7 +421,7 @@ const StickyGPTAd_MB_ST = styled(GPTAd)`
   max-width: 320px;
   max-height: 50px;
   margin: auto;
-  z-index: ${Z_INDEX.top};
+  z-index: ${Z_INDEX.coverHeader};
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
@@ -449,6 +450,27 @@ const StyledGPTAd_PC_E1 = styled(GPTAd)`
     height: auto;
     max-height: 250px;
     max-width: 300px;
+  }
+`
+
+const FloatingAdContainer = styled.div`
+  display: none;
+  ${({ theme }) => theme.breakpoint.xl} {
+    z-index: ${Z_INDEX.top};
+    display: block;
+    position: fixed;
+    top: 175px;
+    right: 15px;
+  }
+
+  .close-button {
+    position: absolute;
+    top: -12.5px;
+    right: -12.5px;
+    width: 25px;
+    height: auto;
+    cursor: pointer;
+    user-select: none;
   }
 `
 
@@ -516,6 +538,15 @@ export default function StoryNormalStyle({
       : writers
 
   const [section] = sectionsWithOrdered
+
+  const [shouldShowAdPcFloating, setShouldShowAdPcFloating] = useState(
+    section?.slug === 'carandwatch'
+  )
+
+  // 廣編文章的 pageKey 是 other
+  const pageKeyForGptAd = postData.isAdvertised
+    ? 'other'
+    : getSectionGPTPageKey(section?.slug)
 
   /**
    * @returns {Promise<AsideArticleDataContainSectionsWithOrdered[] | []>}
@@ -592,6 +623,13 @@ export default function StoryNormalStyle({
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
+  const handleRenderEndedAdPcFloating = (event) => {
+    const isEmpty = event?.isEmpty
+    if (isEmpty) {
+      setShouldShowAdPcFloating(false)
+    }
+  }
+
   return (
     <>
       <ShareHeader
@@ -602,12 +640,7 @@ export default function StoryNormalStyle({
         }}
       />
 
-      {shouldShowAd && (
-        <StyledGPTAd_HD
-          pageKey={getSectionGPTPageKey(section?.slug)}
-          adKey="HD"
-        />
-      )}
+      {shouldShowAd && <StyledGPTAd_HD pageKey={pageKeyForGptAd} adKey="HD" />}
 
       <Main>
         <Article>
@@ -634,8 +667,8 @@ export default function StoryNormalStyle({
 
           <ArticleContent
             content={postContent.data}
-            sectionSlug={section?.slug}
             hiddenAdvertised={hiddenAdvertised}
+            pageKeyForGptAd={pageKeyForGptAd}
           />
 
           <DateUnderContent>
@@ -652,20 +685,30 @@ export default function StoryNormalStyle({
           />
 
           {shouldShowAd && (
-            <StyledGPTAd_MB_AT3
-              pageKey={getSectionGPTPageKey(section?.slug)}
-              adKey="MB_AT3"
-            />
+            <StyledGPTAd_MB_AT3 pageKey={pageKeyForGptAd} adKey="MB_AT3" />
           )}
           <SocialNetworkServiceLarge
             shouldShowLargePagePlugin={true}
             flexDirection="column"
           />
           {shouldShowAd && (
-            <StyledGPTAd_MB_E1
-              pageKey={getSectionGPTPageKey(section?.slug)}
-              adKey="MB_E1"
-            />
+            <StyledGPTAd_MB_E1 pageKey={pageKeyForGptAd} adKey="MB_E1" />
+          )}
+
+          {shouldShowAd && shouldShowAdPcFloating && (
+            <FloatingAdContainer>
+              <GPTAd
+                pageKey={pageKeyForGptAd}
+                adKey="PC_FLOATING"
+                onSlotRenderEnded={handleRenderEndedAdPcFloating}
+              />
+              <button
+                className="close-button"
+                onClick={() => setShouldShowAdPcFloating(false)}
+              >
+                <SvgCloseIcon />
+              </button>
+            </FloatingAdContainer>
           )}
 
           {shouldShowAd && (
@@ -694,14 +737,8 @@ export default function StoryNormalStyle({
 
             {shouldShowAd && (
               <GPTAdContainer>
-                <StyledGPTAd_PC_E1
-                  pageKey={getSectionGPTPageKey(section?.slug)}
-                  adKey="PC_E1"
-                />
-                <StyledGPTAd_PC_E2
-                  pageKey={getSectionGPTPageKey(section?.slug)}
-                  adKey="PC_E2"
-                />
+                <StyledGPTAd_PC_E1 pageKey={pageKeyForGptAd} adKey="PC_E1" />
+                <StyledGPTAd_PC_E2 pageKey={pageKeyForGptAd} adKey="PC_E2" />
               </GPTAdContainer>
             )}
 
@@ -714,28 +751,22 @@ export default function StoryNormalStyle({
         </Article>
         <Aside>
           {shouldShowAd && (
-            <StyledGPTAd_PC_R1
-              pageKey={getSectionGPTPageKey(section?.slug)}
-              adKey="PC_R1"
-            />
+            <StyledGPTAd_PC_R1 pageKey={pageKeyForGptAd} adKey="PC_R1" />
           )}
           <AsideArticleList
-            heading="最新文章"
+            listType={'latestNews'}
             fetchArticle={handleFetchLatestNews}
             shouldReverseOrder={false}
             renderAmount={6}
           />
           <FixedContainer>
             {shouldShowAd && (
-              <StyledGPTAd_PC_R2
-                pageKey={getSectionGPTPageKey(section?.slug)}
-                adKey="PC_R2"
-              />
+              <StyledGPTAd_PC_R2 pageKey={pageKeyForGptAd} adKey="PC_R2" />
             )}
 
             <Divider />
             <AsideArticleList
-              heading="熱門文章"
+              listType={'popularNews'}
               fetchArticle={handleFetchPopularNews}
               shouldReverseOrder={false}
               renderAmount={6}
@@ -771,18 +802,10 @@ export default function StoryNormalStyle({
         )}
       </StoryEndMobileTablet>
 
-      {shouldShowAd && (
-        <StyledGPTAd_FT
-          pageKey={getSectionGPTPageKey(section?.slug)}
-          adKey="FT"
-        />
-      )}
+      {shouldShowAd && <StyledGPTAd_FT pageKey={pageKeyForGptAd} adKey="FT" />}
 
       {shouldShowAd && noCategoryOfWineSlug ? (
-        <StickyGPTAd_MB_ST
-          pageKey={getSectionGPTPageKey(section?.slug)}
-          adKey="MB_ST"
-        />
+        <StickyGPTAd_MB_ST pageKey={pageKeyForGptAd} adKey="MB_ST" />
       ) : null}
 
       <Footer footerType="default" />

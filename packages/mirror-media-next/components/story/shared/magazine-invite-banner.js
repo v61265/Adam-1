@@ -45,7 +45,7 @@ export default function MagazineInviteBanner({ className }) {
   return (
     <Wrapper className={className}>
       <p>月費、年費會員免費線上閱讀動態雜誌</p>
-      <Link href="/magazine" target="_blank">
+      <Link href="/magazine" className="GTM-story-magazine-box" target="_blank">
         線上閱讀
       </Link>
     </Wrapper>

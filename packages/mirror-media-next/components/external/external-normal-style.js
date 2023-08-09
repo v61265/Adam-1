@@ -407,7 +407,7 @@ const StickyGPTAd_MB_ST = styled(GPTAd)`
   max-width: 320px;
   max-height: 50px;
   margin: auto;
-  z-index: ${Z_INDEX.top};
+  z-index: ${Z_INDEX.coverHeader};
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
@@ -635,7 +635,7 @@ export default function ExternalNormalStyle({ external }) {
           )}
 
           <AsideArticleList
-            heading="最新文章"
+            listType={'latestNews'}
             fetchArticle={handleFetchLatestNews}
             shouldReverseOrder={false}
             renderAmount={6}
@@ -651,7 +651,7 @@ export default function ExternalNormalStyle({ external }) {
           <Divider />
 
           <AsideArticleList
-            heading="熱門文章"
+            listType={'popularNews'}
             fetchArticle={handleFetchPopularNews}
             shouldReverseOrder={false}
             renderAmount={6}

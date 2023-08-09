@@ -223,8 +223,8 @@ export default function StoryWideStyle({ postData, postContent }) {
               <StyledDate timeData={updatedAt} timeType="updatedDate" />
             </DateWrapper>
             <DonateSubscribeWrapper>
-              <DonateLink />
-              <SubscribeLink className="subscribe-btn" />
+              <DonateLink className="GTM-donate-link-top" />
+              <SubscribeLink className="subscribe-btn GTM-subscribe-link-top" />
             </DonateSubscribeWrapper>
             <section className="content">
               <DraftRenderBlock rawContentBlock={brief} contentLayout="wide" />

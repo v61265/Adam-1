@@ -70,7 +70,7 @@ const StickyGPTAd_MB_ST = styled(GPTAd)`
   max-width: 320px;
   max-height: 50px;
   margin: auto;
-  z-index: ${Z_INDEX.top};
+  z-index: ${Z_INDEX.coverHeader};
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
@@ -111,6 +111,10 @@ export default function VideoCategory({
           video={firstVideo}
           title={categoryName}
           slug={category.slug}
+          gtmClassName={{
+            title: 'GTM-leading-video-item',
+            youtube: 'GTM-leading-video-yt-play',
+          }}
         />
         {shouldShowAd && <StyledGPTAd_MB_HD pageKey="videohub" adKey="MB_HD" />}
         {hasMoreThanOneVideo && (

@@ -74,13 +74,21 @@ export default function VideoList({ videos }) {
     <>
       <Wrapper>
         {videos.slice(0, 12).map((video) => (
-          <VideoListItem key={video.id} video={video} />
+          <VideoListItem
+            key={video.id}
+            video={video}
+            gtmClassName="GTM-video-section-list"
+          />
         ))}
       </Wrapper>
       {shouldShowAd && <StyledGPTAd_PC_FT pageKey="videohub" adKey="PC_FT" />}
       <Wrapper>
         {videos.slice(12).map((video) => (
-          <VideoListItem key={video.id} video={video} />
+          <VideoListItem
+            key={video.id}
+            video={video}
+            gtmClassName="GTM-video-section-list"
+          />
         ))}
       </Wrapper>
     </>
@@ -96,13 +104,21 @@ export default function VideoList({ videos }) {
     <>
       <Wrapper>
         {videos.slice(0, 6).map((video) => (
-          <VideoListItem key={video.id} video={video} />
+          <VideoListItem
+            key={video.id}
+            video={video}
+            gtmClassName="GTM-video-section-list"
+          />
         ))}
       </Wrapper>
       {shouldShowAd && <StyledGPTAd_MB_FT pageKey="videohub" adKey="MB_FT" />}
       <Wrapper>
         {videos.slice(6).map((video) => (
-          <VideoListItem key={video.id} video={video} />
+          <VideoListItem
+            key={video.id}
+            video={video}
+            gtmClassName="GTM-video-section-list"
+          />
         ))}
       </Wrapper>
     </>

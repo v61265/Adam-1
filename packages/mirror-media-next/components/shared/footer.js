@@ -23,7 +23,7 @@ const DESKTOP_PROMOTION_LISTS = [
 
 const MOBILE_PROMOTION_LISTS = [PAPER_MAGAZINE_LINK, AD_LINK, AUTH_LINK]
 
-const FooterWrapper = styled.div`
+const FooterWrapper = styled.footer`
   background: #ffffff;
   padding: 12px 0px;
   width: 100%;

@@ -85,7 +85,7 @@ const StickyGPTAd = styled(GPTAd)`
   max-width: 320px;
   max-height: 50px;
   margin: auto;
-  z-index: ${Z_INDEX.top};
+  z-index: ${Z_INDEX.coverHeader};
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
@@ -139,7 +139,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
         {shouldShowAd && (
           <StickyGPTAd
             pageKey={getSectionGPTPageKey(section.slug)}
-            adKey="ST"
+            adKey="MB_ST"
           />
         )}
       </SectionContainer>

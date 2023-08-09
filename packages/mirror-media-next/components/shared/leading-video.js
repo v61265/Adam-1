@@ -66,18 +66,33 @@ const Title = styled.h2`
 `
 
 /**
+ * @typedef {import('./leading-video-item').GtmClassName} GtmClassName
+ */
+
+/**
  * @param {Object} props
  * @param {import('../../type/youtube').YoutubeVideo} props.video
  * @param {string} props.title
  * @param {string} [props.slug]
+ * @param {GtmClassName} [props.gtmClassName]
  * @returns {React.ReactElement}
  */
-export default function LeadingVideo({ video, title, slug }) {
+export default function LeadingVideo({
+  video,
+  title,
+  slug,
+  gtmClassName = { title: '', youtube: '' },
+}) {
   return (
     <Wrapper>
       {title && <Title categorySlug={slug}>{title}</Title>}
       {video && (
-        <LeadingVideoItem video={video} slug={slug} playlistTitle={title} />
+        <LeadingVideoItem
+          video={video}
+          slug={slug}
+          playlistTitle={title}
+          gtmClassName={gtmClassName}
+        />
       )}
       <YoutubePolicy />
     </Wrapper>

@@ -84,7 +84,7 @@ const StickyGPTAd = styled(GPTAd)`
   max-width: 320px;
   max-height: 50px;
   margin: auto;
-  z-index: ${Z_INDEX.top};
+  z-index: ${Z_INDEX.coverHeader};
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
@@ -120,7 +120,7 @@ export default function WarmLife({ warmLifeData, headerData }) {
           renderPageSize={RENDER_PAGE_SIZE}
         />
         {shouldShowAd && (
-          <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="ST" />
+          <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="MB_ST" />
         )}
       </WarmLifeContainer>
     </Layout>

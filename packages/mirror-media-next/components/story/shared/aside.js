@@ -1,7 +1,7 @@
 //TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
 import styled from 'styled-components'
-import RelatedArticleList from '../wide/related-article-list'
+import RelatedArticleList from './related-article-list'
 import AsideArticleList from './aside-article-list'
 import Divider from './divider'
 import axios from 'axios'
@@ -10,7 +10,7 @@ import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
 
 /**
- * @typedef {import('../wide/related-article-list').Relateds} Relateds
+ * @typedef {import('./related-article-list').Relateds} Relateds
  */
 /**
  * @typedef {import('./aside-article-list').ArticleData} AsideArticleData
@@ -109,13 +109,13 @@ export default function Aside({
     <AsideWrapper>
       {relateds.length > 0 && <RelatedArticleList relateds={relateds} />}
       <AsideArticleList
-        heading="最新文章"
+        listType={'latestNews'}
         fetchArticle={handleFetchLatestNews}
         renderAmount={6}
       />
       <Divider />
       <AsideArticleList
-        heading="熱門文章"
+        listType={'popularNews'}
         fetchArticle={handleFetchPopularNews}
         renderAmount={6}
       />

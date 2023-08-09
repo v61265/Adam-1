@@ -1,5 +1,7 @@
-import styled from 'styled-components'
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
 
+import styled from 'styled-components'
+import Link from 'next/link'
 import CustomImage from '@readr-media/react-image'
 
 /**
@@ -55,13 +57,17 @@ const Label = styled.div`
   background-color: ${
     /**
      * @param {Object} props
-     * @param {String } props.sectionName
+     * @param {String} props.sectionSlug
      * @param {Theme} [props.theme]
      */
-    ({ sectionName, theme }) =>
-      sectionName && theme.color.sectionsColor[sectionName]
-        ? theme.color.sectionsColor[sectionName]
+    ({ sectionSlug, theme }) => {
+      if (sectionSlug === 'external') {
+        return theme.color.sectionsColor['news']
+      }
+      return sectionSlug && theme.color.sectionsColor[sectionSlug]
+        ? theme.color.sectionsColor[sectionSlug]
         : theme.color.brandColor.lightBlue
+    }
   };
 
   ${({ theme }) => theme.breakpoint.md} {
@@ -101,7 +107,7 @@ const Title = styled.div`
 /**
  * @typedef {Object} FormattedArticle
  * @property {string} articleHref
- * @property {string} sectionTitle
+ * @property {string} sectionSlug
  * @property {string} sectionName
  * /
 
@@ -123,7 +129,12 @@ const Title = styled.div`
  */
 export default function LatestNewsItem({ itemData }) {
   return (
-    <a href={itemData.articleHref} target="_blank" rel="noreferrer">
+    <Link
+      href={itemData.articleHref}
+      target="_blank"
+      rel="noreferrer"
+      className="GTM-homepage-latest-list"
+    >
       <ItemWrapper>
         <ImageContainer>
           <CustomImage
@@ -141,8 +152,8 @@ export default function LatestNewsItem({ itemData }) {
           ></CustomImage>
         </ImageContainer>
         <Detail>
-          {itemData.sectionTitle && (
-            <Label sectionName={itemData.sectionTitle}>
+          {itemData.sectionSlug && (
+            <Label sectionSlug={itemData.sectionSlug}>
               {itemData.sectionName}
             </Label>
           )}
@@ -151,6 +162,6 @@ export default function LatestNewsItem({ itemData }) {
           </Title>
         </Detail>
       </ItemWrapper>
-    </a>
+    </Link>
   )
 }

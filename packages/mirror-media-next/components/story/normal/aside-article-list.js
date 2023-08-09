@@ -1,3 +1,5 @@
+//REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
+
 import { Fragment } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
@@ -5,7 +7,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState, useRef, useCallback } from 'react'
 import {
   getSectionNameGql,
-  getSectionTitleGql,
+  getSectionSlugGql,
   getArticleHref,
 } from '../../../utils'
 import Image from '@readr-media/react-image'
@@ -174,7 +176,7 @@ const Label = styled.div`
     display: block;
     width: fit-content;
     height: 25px;
-    padding: ${({ sectionTitle }) => (sectionTitle ? '0 8px' : '0')};
+    padding: ${({ sectionSlug }) => (sectionSlug ? '0 8px' : '0')};
     text-align: center;
     color: white;
     font-size: 14px;
@@ -183,12 +185,12 @@ const Label = styled.div`
     background-color: ${
       /**
        * @param {Object} props
-       * @param {string} props.sectionTitle
+       * @param {string} props.sectionSlug
        * @param {Theme} [props.theme]
        */
-      ({ sectionTitle, theme }) =>
-        sectionTitle && theme.color.sectionsColor[sectionTitle]
-          ? theme.color.sectionsColor[sectionTitle]
+      ({ sectionSlug, theme }) =>
+        sectionSlug && theme.color.sectionsColor[sectionSlug]
+          ? theme.color.sectionsColor[sectionSlug]
           : theme.color.brandColor.lightBlue
     };
   }
@@ -249,7 +251,7 @@ const TitleLoading = styled(Title)`
 /**
  *
  * @param {Object} props
- * @param {string} props.heading - heading of this components, showing user what kind of news is
+ * @param {'latestNews' | 'popularNews'} props.listType - What kind of list is.
  * @param {boolean} props.shouldReverseOrder
  * - control the css layout of article.
  * - If is true, image of article should display at right, title and label should display at left.
@@ -265,7 +267,7 @@ const TitleLoading = styled(Title)`
  * @returns {JSX.Element}
  */
 export default function AsideArticleList({
-  heading = '',
+  listType = 'latestNews',
   shouldReverseOrder = false,
   fetchArticle,
   renderAmount = 6,
@@ -287,6 +289,12 @@ export default function AsideArticleList({
     })
   }, [fetchArticle])
 
+  const heading = listType === 'latestNews' ? '最新文章' : '熱門文章'
+  const headingColor = listType === 'latestNews' ? 'gray' : 'darkBlue'
+  const gtmClassName =
+    listType === 'latestNews'
+      ? 'GTM-story-latest-list'
+      : 'GTM-story-popular-list'
   useEffect(() => {
     let callback = (entries, observer) => {
       entries.forEach((entry) => {
@@ -310,8 +318,8 @@ export default function AsideArticleList({
   }, [isLoaded, handleLoadMore])
 
   const newsJsx = item.map((item, index) => {
+    const sectionSlug = getSectionSlugGql(item.sectionsWithOrdered, undefined)
     const sectionName = getSectionNameGql(item.sectionsWithOrdered, undefined)
-    const sectionTitle = getSectionTitleGql(item.sectionsWithOrdered, undefined)
     const articleHref = getArticleHref(item.slug, item.style, undefined)
 
     /**
@@ -321,7 +329,9 @@ export default function AsideArticleList({
      */
     const shouldShowPopInAd = (index) => {
       return Boolean(
-        shouldShowAd && heading === '熱門文章' && needInsertPopInAdAfter(index)
+        shouldShowAd &&
+          listType === 'popularNews' &&
+          needInsertPopInAdAfter(index)
       )
     }
 
@@ -333,7 +343,7 @@ export default function AsideArticleList({
               <Link
                 href={articleHref}
                 target="_blank"
-                className="article-image"
+                className={`article-image ${gtmClassName}`}
               >
                 <Image
                   images={item?.heroImage?.resized}
@@ -345,11 +355,13 @@ export default function AsideArticleList({
               </Link>
 
               <FigureCaption>
-                <Label sectionTitle={sectionTitle}>{sectionName}</Label>
-                <Link href={articleHref} target="_blank">
-                  <Title color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
-                    {item.title}
-                  </Title>
+                <Label sectionSlug={sectionSlug}>{sectionName}</Label>
+                <Link
+                  href={articleHref}
+                  target="_blank"
+                  className={gtmClassName}
+                >
+                  <Title color={headingColor}>{item.title}</Title>
                 </Link>
               </FigureCaption>
             </Article>
@@ -377,7 +389,7 @@ export default function AsideArticleList({
     <>
       <Wrapper>
         {isLoaded ? (
-          <Heading color={heading === '熱門文章' ? 'darkBlue' : 'gray'}>
+          <Heading color={headingColor}>
             <h2>{heading}</h2>
           </Heading>
         ) : (

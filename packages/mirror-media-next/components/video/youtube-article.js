@@ -1,9 +1,7 @@
 import styled from 'styled-components'
 import { transformTimeDataIntoSlashFormat } from '../../utils'
-import { useShareFbUrl } from '../../hooks/useShareFbUrl'
-import { useShareLineUrl } from '../../hooks/useShareLineUrl'
 import ButtonCopyLink from '../story/shared/button-copy-link'
-
+import ButtonSocialNetworkShare from '../story/shared/button-social-network-share'
 const Wrapper = styled.div`
   padding: 0 16px;
   ${({ theme }) => theme.breakpoint.md} {
@@ -62,9 +60,6 @@ const ShareIcons = styled.div`
     margin-top: 28px;
   }
 `
-const Icon = styled.img`
-  cursor: pointer;
-`
 
 /**
  * @param {Object} props
@@ -72,8 +67,6 @@ const Icon = styled.img`
  * @returns
  */
 export default function YoutubeArticle({ video }) {
-  const shareFbUrl = useShareFbUrl()
-  const shareLineUrl = useShareLineUrl()
   const description = video.description
     ?.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1">$1</a>')
     .replace(/↵|\n/g, '<br>')
@@ -89,12 +82,8 @@ export default function YoutubeArticle({ video }) {
         <Description dangerouslySetInnerHTML={{ __html: description }} />
       )}
       <ShareIcons>
-        <a href={shareFbUrl} target="_blank" rel="noreferrer">
-          <Icon src="/images/video-share-fb.svg" alt="share to facebook" />
-        </a>
-        <a href={shareLineUrl} target="_blank" rel="noreferrer">
-          <Icon src="/images/video-share-line.svg" alt="share to facebook" />
-        </a>
+        <ButtonSocialNetworkShare width={40} height={40} type="facebook" />
+        <ButtonSocialNetworkShare width={40} height={40} type="line" />
         <ButtonCopyLink width={40} height={40} />
       </ShareIcons>
     </Wrapper>

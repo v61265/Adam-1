@@ -116,7 +116,7 @@ const StickyGPTAd_MB_ST = styled(GPTAd)`
   max-width: 320px;
   max-height: 50px;
   margin: auto;
-  z-index: ${Z_INDEX.top};
+  z-index: ${Z_INDEX.coverHeader};
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;
@@ -230,6 +230,7 @@ export default function StoryPremiumStyle({
     relatedsInInputOrder = [],
     slug = '',
     hiddenAdvertised = false,
+    isAdvertised = false,
   } = postData
 
   const shouldShowArticleMask =
@@ -258,6 +259,7 @@ export default function StoryPremiumStyle({
     { vocals: vocals },
     { extend_byline: extend_byline },
   ]
+  const pageKeyForGptAd = isAdvertised ? 'other' : SECTION_IDS['member']
 
   const shouldShowAd = useDisplayAd(hiddenAdvertised)
 
@@ -282,9 +284,7 @@ export default function StoryPremiumStyle({
         }}
       />
 
-      {shouldShowAd && (
-        <StyledGPTAd_HD pageKey={SECTION_IDS['member']} adKey="HD" />
-      )}
+      {shouldShowAd && <StyledGPTAd_HD pageKey={pageKeyForGptAd} adKey="HD" />}
 
       <Main>
         <article>
@@ -317,11 +317,11 @@ export default function StoryPremiumStyle({
                   <ButtonCopyLink width={28} height={28} />
                 </SocialMedia>
                 <li>
-                  <DonateLink />
+                  <DonateLink className="GTM-donate-link-side" />
                   {(memberType === 'not-member' ||
                     memberType === 'basic-member' ||
                     memberType === 'one-time-member') && (
-                    <SubscribeLink className="subscribe-btn" />
+                    <SubscribeLink className="subscribe-btn GTM-subscribe-link-side" />
                   )}
                 </li>
               </SocialMediaAndDonateLink>
@@ -333,26 +333,19 @@ export default function StoryPremiumStyle({
                 contentLayout="premium"
               />
             </section>
-
             <PremiumArticleContent
               className="content"
               content={postContent.data}
               hiddenAdvertised={hiddenAdvertised}
+              pageKeyForGptAd={pageKeyForGptAd}
             />
-
             <CopyrightWarning />
-
             {shouldShowArticleMask && <ArticleMask postId={id} />}
-
             {supportBanner}
-
             {shouldShowAd && (
               <GPTAdContainer>
-                <StyledGPTAd_E1 pageKey={SECTION_IDS['member']} adKey="E1" />
-                <StyledGPTAd_PC_E2
-                  pageKey={SECTION_IDS['member']}
-                  adKey="PC_E2"
-                />
+                <StyledGPTAd_E1 pageKey={pageKeyForGptAd} adKey="E1" />
+                <StyledGPTAd_PC_E2 pageKey={pageKeyForGptAd} adKey="PC_E2" />
               </GPTAdContainer>
             )}
           </ContentWrapper>
@@ -365,11 +358,9 @@ export default function StoryPremiumStyle({
         storySlug={slug}
       />
 
-      {shouldShowAd && (
-        <StyledGPTAd_FT pageKey={SECTION_IDS['member']} adKey="FT" />
-      )}
+      {shouldShowAd && <StyledGPTAd_FT pageKey={pageKeyForGptAd} adKey="FT" />}
       {shouldShowAd && noCategoryOfWineSlug ? (
-        <StickyGPTAd_MB_ST pageKey={SECTION_IDS['member']} adKey="MB_ST" />
+        <StickyGPTAd_MB_ST pageKey={pageKeyForGptAd} adKey="MB_ST" />
       ) : null}
 
       <Footer footerType="default" />

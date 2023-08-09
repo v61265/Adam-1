@@ -19,14 +19,10 @@ import CustomImage from '@readr-media/react-image'
  * @typedef {import('../../../apollo/fragments/video').HeroVideo } HeroVideo
  */
 const heroCssWide = css`
-  width: 100%;
-  height: 100vh;
   object-position: center center;
 `
 const heroCssPremium = css`
-  width: 100%;
   margin: 0 auto;
-  height: 66.67vw;
   max-width: 1200px;
   max-height: 800px;
   object-position: center center;
@@ -124,6 +120,11 @@ const HeroCaption = styled.figcaption`
     font-size: 14px;
   }
 `
+const Video = styled.video`
+  object-fit: cover;
+  height: 100vh;
+  width: 100%;
+`
 
 /**
  * Component for rending hero image of hero video.
@@ -154,14 +155,16 @@ export default function HeroImageAndVideo({
   const shouldShowHeroVideo = Boolean(heroVideo)
   const shouldShowHeroImage = Boolean(!shouldShowHeroVideo && heroImage)
 
-  const heroJsx = () => {
+  const getHeroJsx = () => {
     if (shouldShowHeroVideo) {
       return (
-        <video
+        <Video
           preload="metadata"
           controlsList="nodownload"
           playsInline={true}
-          controls={true}
+          autoPlay={true}
+          muted={true}
+          loop={true}
           poster={heroVideo?.heroImage?.resized?.original}
           src={heroVideo.urlOriginal}
         />
@@ -174,8 +177,8 @@ export default function HeroImageAndVideo({
           defaultImage={'/images/default-og-img.png'}
           alt={heroCaption ? heroCaption : title}
           objectFit={'cover'}
-          width={''}
-          height={''}
+          width={'100%'}
+          height={style === 'wide' ? '100vh' : '66.67vw'}
           rwd={{ mobile: '100vw', default: '100vw' }}
           priority={true}
         />
@@ -183,12 +186,12 @@ export default function HeroImageAndVideo({
     }
     return null
   }
-
+  const heroJsx = getHeroJsx()
   return (
     <>
       {shouldShowHeroImage || shouldShowHeroVideo ? (
         <Figure isStyleWide={style === 'wide'}>
-          {heroJsx()}
+          {heroJsx}
           {heroCaption ? <HeroCaption>{heroCaption}</HeroCaption> : null}
         </Figure>
       ) : (

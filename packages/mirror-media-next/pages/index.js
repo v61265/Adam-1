@@ -13,7 +13,7 @@ import {
 } from '../config/index.mjs'
 
 import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
-import { getSectionNameGql, getSectionTitleGql, getArticleHref } from '../utils'
+import { getSectionNameGql, getSectionSlugGql, getArticleHref } from '../utils'
 import { setPageCache } from '../utils/cache-setting'
 import EditorChoice from '../components/editor-choice'
 import LatestNews from '../components/latest-news'
@@ -109,8 +109,8 @@ export default function Home({
   sectionsData = [],
 }) {
   const editorChoice = editorChoicesData.map((item) => {
+    const sectionSlug = getSectionSlugGql(item.sections, undefined)
     const sectionName = getSectionNameGql(item.sections, undefined)
-    const sectionTitle = getSectionTitleGql(item.sections, undefined)
     const articleHref =
       item.style !== 'projects'
         ? `${getArticleHref(
@@ -119,7 +119,7 @@ export default function Home({
             undefined
           )}?${GA_UTM_EDITOR_CHOICES}`
         : getArticleHref(item.slug, item.style, undefined)
-    return { sectionName, sectionTitle, articleHref, ...item }
+    return { sectionName, sectionSlug, articleHref, ...item }
   })
 
   const shouldShowAd = useDisplayAd()
@@ -198,7 +198,7 @@ export async function getServerSideProps({ res, req }) {
     const postResponse = await axios({
       method: 'get',
       url: `${URL_STATIC_POST_EXTERNAL}01.json`,
-      timeout: API_TIMEOUT,
+      timeout: 5000, //since size of json file is large, we assign timeout as 5000ms to prevent content lost in poor network condition
     })
     editorChoicesData = Array.isArray(postResponse?.data?.choices)
       ? postResponse?.data?.choices

@@ -100,7 +100,7 @@ const InviteMemberCard = ({ postId = '' }) => {
             限時優惠每月$49元 <br></br>全站看到飽
           </p>
 
-          <Link href="/subscribe" className="link">
+          <Link href="/subscribe" className="link GTM-subscribe-premium">
             加入premium會員
           </Link>
         </InviteMemberOption>
@@ -115,7 +115,7 @@ const InviteMemberCard = ({ postId = '' }) => {
                 ? `/subscribe/info?plan=${Frequency.OneTimeHyphen}&one-time-post-id=${postId}`
                 : '/subscribe'
             }
-            className="link"
+            className="link GTM-subscribe-one-time"
           >
             解鎖單篇報導
           </Link>
@@ -125,7 +125,7 @@ const InviteMemberCard = ({ postId = '' }) => {
         {isLoggedIn ? null : (
           <>
             已經是會員？
-            <Link href="/login" className="login">
+            <Link href="/login" className="login GTM-login">
               立即登入
             </Link>
           </>

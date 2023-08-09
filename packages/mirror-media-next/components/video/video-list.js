@@ -67,9 +67,10 @@ const StyledGPTAd_R1 = styled(GPTAd)`
 /**
  * @param {Object} props
  * @param {import('../../type/youtube').YoutubeVideo[]} props.videos
+ * @param {string} [props.gtmClassName]
  * @returns {React.ReactElement}
  */
-export default function VideoList({ videos }) {
+export default function VideoList({ videos, gtmClassName = '' }) {
   const shouldShowAd = useDisplayAd()
 
   return (
@@ -79,7 +80,11 @@ export default function VideoList({ videos }) {
       <Title>最新影音</Title>
       <Videos>
         {videos.map((video) => (
-          <VideoListItem key={video.id} video={video} />
+          <VideoListItem
+            key={video.id}
+            video={video}
+            gtmClassName={gtmClassName}
+          />
         ))}
       </Videos>
     </Wrapper>
