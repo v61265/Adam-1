@@ -62,6 +62,8 @@ export default function SubscribePaperMagForm({ plan }) {
     address: '',
   })
 
+  const [sameAsOrderer, setSameAsOrderer] = useState(false)
+
   console.log({ ordererValues }, { recipientValues })
 
   return (
@@ -79,6 +81,9 @@ export default function SubscribePaperMagForm({ plan }) {
         <Recipient
           recipientValues={recipientValues}
           setRecipientValues={setRecipientValues}
+          sameAsOrderer={sameAsOrderer}
+          setSameAsOrderer={setSameAsOrderer}
+          ordererValues={ordererValues}
         />
         <Shipping />
         <Receipt />
