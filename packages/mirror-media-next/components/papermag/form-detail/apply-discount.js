@@ -53,10 +53,18 @@ const InputWrapper = styled.div`
     max-width: 200px;
   }
   label {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 18px;
+    font-weight: 500;
     padding-right: 8px;
   }
 
   input {
+    ::placeholder {
+      color: rgba(0, 0, 0, 0.1);
+      font-size: 18px;
+      font-weight: 500;
+    }
     width: 100%;
     :focus {
       outline: none;
