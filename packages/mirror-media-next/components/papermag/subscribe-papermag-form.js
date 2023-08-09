@@ -3,18 +3,17 @@ import styled from 'styled-components'
 import MerchandiseItem from './form-detail/merchandise-item'
 import ApplyDiscount from './form-detail/apply-discount'
 import PurchaseInfo from './form-detail/purchase-info'
-import Orderer from './form-detail/orderer'
-import Recipient from './form-detail/recipient'
 import Shipping from './form-detail/shipping'
 import Receipt from './form-detail/receipt'
 import AcceptingTermsAndConditions from './form-detail/accepting-terms-and-conditions'
 import OrderBtn from './form-detail/order-btn'
+import Orderer from './form-detail/orderer'
+import Recipient from './form-detail/recipient'
 
 const Form = styled.form`
   display: flex;
   flex-direction: column-reverse;
   justify-content: center;
-  /* background-color: lightyellow; */
   padding: 0 8px;
 
   ${({ theme }) => theme.breakpoint.md} {
@@ -23,7 +22,6 @@ const Form = styled.form`
 `
 
 const LeftWrapper = styled.div`
-  /* background: lightcyan; */
   width: 100%;
 
   ${({ theme }) => theme.breakpoint.md} {
@@ -36,7 +34,6 @@ const LeftWrapper = styled.div`
   }
 `
 const RightWrapper = styled.div`
-  /* background: lightpink; */
   width: 100%;
 
   ${({ theme }) => theme.breakpoint.md} {
@@ -48,6 +45,25 @@ export default function SubscribePaperMagForm({ plan }) {
   const [count, setCount] = useState(1)
   const [renewCouponApplied, setRenewCouponApplied] = useState(false)
 
+  const [ordererValues, setOrdererValues] = useState({
+    username: '',
+    cellphone: '',
+    phone: '',
+    phoneExt: '',
+    address: '',
+    email: '',
+  })
+
+  const [recipientValues, setRecipientValues] = useState({
+    username: '',
+    cellphone: '',
+    phone: '',
+    phoneExt: '',
+    address: '',
+  })
+
+  console.log({ ordererValues }, { recipientValues })
+
   return (
     <Form>
       <LeftWrapper>
@@ -56,8 +72,14 @@ export default function SubscribePaperMagForm({ plan }) {
           setRenewCouponApplied={setRenewCouponApplied}
           renewCouponApplied={renewCouponApplied}
         />
-        <Orderer />
-        <Recipient />
+        <Orderer
+          ordererValues={ordererValues}
+          setOrdererValues={setOrdererValues}
+        />
+        <Recipient
+          recipientValues={recipientValues}
+          setRecipientValues={setRecipientValues}
+        />
         <Shipping />
         <Receipt />
         <AcceptingTermsAndConditions />
