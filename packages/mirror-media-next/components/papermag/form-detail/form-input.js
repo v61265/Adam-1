@@ -32,6 +32,10 @@ const InputWrapper = styled.div`
     :focus {
       outline: none;
       border: 1px solid rgba(0, 0, 0, 0.87);
+
+      ::placeholder {
+        font-size: 16px;
+      }
     }
 
     ::placeholder {
@@ -43,7 +47,7 @@ const InputWrapper = styled.div`
     &[disabled] {
       background: #e3e3e3;
       border: 1px solid rgba(0, 0, 0, 0.1);
-      color: rgba(0, 0, 0, 0.3);
+      color: rgba(0, 0, 0, 0.5);
       ::placeholder {
         color: #e3e3e3;
       }
