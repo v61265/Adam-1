@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled, { keyframes } from 'styled-components'
 
 const shakeAnimation = keyframes`
@@ -88,8 +88,14 @@ const InputWrapper = styled.div`
 
 export default function FormInput(props) {
   const [focused, setFocused] = useState(false)
-  const { label, errorMessage, onChange, ...inputProps } = props
+  const { label, errorMessage, onChange, sameAsOrderer, ...inputProps } = props
 
+  // Set focused to true if sameAsOrderer is true
+  useEffect(() => {
+    if (sameAsOrderer) {
+      setFocused(true)
+    }
+  }, [sameAsOrderer])
   const handleFocus = () => {
     setFocused(true)
   }
