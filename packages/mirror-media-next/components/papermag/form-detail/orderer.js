@@ -40,7 +40,7 @@ const PhoneExtInputWrapper = styled.div`
     font-size: 18px;
     font-weight: 400;
     margin: 0 12px;
-    padding-top: 56px;
+    margin-top: 56px;
   }
 `
 
@@ -64,6 +64,8 @@ export default function Orderer({ ordererValues, setOrdererValues }) {
           placeholder="訂購人姓名"
           value={ordererValues.username}
           onChange={handleChange}
+          errorMessage="訂購人姓名不可空白"
+          required
         />
         <FormInput
           name="cellphone"
@@ -72,6 +74,9 @@ export default function Orderer({ ordererValues, setOrdererValues }) {
           placeholder="0912345678"
           value={ordererValues.cellphone}
           onChange={handleChange}
+          errorMessage="請輸入有效的聯絡電話"
+          required
+          pattern="09[0-9]{8}" // Match "09" followed by exactly 8 more digits
         />
       </FormInputsWrapper>
       <PhoneExtInputWrapper>
@@ -101,14 +106,18 @@ export default function Orderer({ ordererValues, setOrdererValues }) {
         placeholder="訂購人通訊地址"
         value={ordererValues.address}
         onChange={handleChange}
+        errorMessage="地址不可空白"
+        required
       />
       <FormInput
         name="email"
-        type="text"
+        type="email"
         label="電子信箱"
         placeholder="訂購人電子信箱"
         value={ordererValues.email}
         onChange={handleChange}
+        errorMessage="請輸入有效的 Email 地址"
+        required
       />
     </Wrapper>
   )

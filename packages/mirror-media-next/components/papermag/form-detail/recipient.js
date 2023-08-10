@@ -42,7 +42,7 @@ const PhoneExtInputWrapper = styled.div`
     font-size: 18px;
     font-weight: 400;
     margin: 0 12px;
-    padding-top: 56px;
+    margin-top: 56px;
   }
 `
 const CheckBoxWapper = styled.div`
@@ -120,6 +120,8 @@ export default function Recipient({
           value={formValues.username}
           onChange={handleChange}
           disabled={sameAsOrderer}
+          errorMessage="收件人姓名不可空白"
+          required
         />
         <FormInput
           name="cellphone"
@@ -129,6 +131,9 @@ export default function Recipient({
           value={formValues.cellphone}
           onChange={handleChange}
           disabled={sameAsOrderer}
+          errorMessage="請輸入有效的聯絡電話"
+          required
+          pattern="09[0-9]{8}" // Match "09" followed by exactly 8 more digits
         />
       </FormInputsWrapper>
       <PhoneExtInputWrapper>
@@ -161,6 +166,8 @@ export default function Recipient({
         value={formValues.address}
         onChange={handleChange}
         disabled={sameAsOrderer}
+        errorMessage="收件地址不可空白"
+        required
       />
     </Wrapper>
   )

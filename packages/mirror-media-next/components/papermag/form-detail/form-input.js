@@ -35,6 +35,19 @@ const InputWrapper = styled.div`
         color: #e3e3e3;
       }
     }
+
+    :invalid ~ span {
+      display: block;
+    }
+  }
+
+  span {
+    color: #e51731;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 8px;
+    margin-bottom: -16px;
+    display: none;
   }
 
   label {
@@ -52,7 +65,7 @@ const InputWrapper = styled.div`
 `
 
 export default function FormInput(props) {
-  const { label, onChange, ...inputProps } = props
+  const { label, errorMessage, onChange, ...inputProps } = props
 
   return (
     <InputWrapper>
@@ -64,6 +77,7 @@ export default function FormInput(props) {
         </p>
       )}
       <input {...inputProps} onChange={onChange} />
+      <span>{errorMessage}</span>
     </InputWrapper>
   )
 }
