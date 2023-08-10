@@ -122,6 +122,7 @@ export default function Recipient({
           disabled={sameAsOrderer}
           errorMessage="收件人姓名不可空白"
           required
+          sameAsOrderer={sameAsOrderer}
         />
         <FormInput
           name="cellphone"
@@ -134,6 +135,7 @@ export default function Recipient({
           errorMessage="請輸入有效的聯絡電話"
           required
           pattern="09[0-9]{8}" // Match "09" followed by exactly 8 more digits
+          sameAsOrderer={sameAsOrderer}
         />
       </FormInputsWrapper>
       <PhoneExtInputWrapper>
@@ -168,6 +170,7 @@ export default function Recipient({
         disabled={sameAsOrderer}
         errorMessage="收件地址不可空白"
         required
+        sameAsOrderer={sameAsOrderer}
       />
     </Wrapper>
   )

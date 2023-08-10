@@ -44,7 +44,9 @@ const RightWrapper = styled.div`
 export default function SubscribePaperMagForm({ plan }) {
   const [count, setCount] = useState(1)
   const [renewCouponApplied, setRenewCouponApplied] = useState(false)
+  const [shouldCountFreight, setShouldCountFreight] = useState(false)
 
+  console.log(shouldCountFreight)
   const [ordererValues, setOrdererValues] = useState({
     username: '',
     cellphone: '',
@@ -63,8 +65,6 @@ export default function SubscribePaperMagForm({ plan }) {
   })
 
   const [sameAsOrderer, setSameAsOrderer] = useState(false)
-
-  console.log({ ordererValues }, { recipientValues })
 
   return (
     <Form>
@@ -85,7 +85,10 @@ export default function SubscribePaperMagForm({ plan }) {
           setSameAsOrderer={setSameAsOrderer}
           ordererValues={ordererValues}
         />
-        <Shipping />
+        <Shipping
+          shouldCountFreight={shouldCountFreight}
+          setShouldCountFreight={setShouldCountFreight}
+        />
         <Receipt />
         <AcceptingTermsAndConditions />
         <OrderBtn />
@@ -95,6 +98,7 @@ export default function SubscribePaperMagForm({ plan }) {
           count={count}
           plan={plan}
           renewCouponApplied={renewCouponApplied}
+          shouldCountFreight={shouldCountFreight}
         />
       </RightWrapper>
     </Form>
