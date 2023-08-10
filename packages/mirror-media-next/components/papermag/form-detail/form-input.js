@@ -1,23 +1,71 @@
-import styled from 'styled-components'
+import { useState } from 'react'
+import styled, { keyframes } from 'styled-components'
+
+const shakeAnimation = keyframes`
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-6px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(6px);
+  }
+`
 
 const InputWrapper = styled.div`
-  margin: 24px 0;
+  margin-top: 24px;
   input {
     display: flex;
     height: 48px;
     width: 100%;
     padding: 12px;
     align-items: center;
-    margin: 8px 0;
+    margin-top: 8px;
     border-radius: 8px;
-    border: 1px solid var(--black-30, rgba(0, 0, 0, 0.3));
-    background: var(--white, #fff);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: #fff;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 18px;
+    font-weight: 400;
+
+    :focus {
+      outline: none;
+      border: 1px solid rgba(0, 0, 0, 0.87);
+    }
 
     ::placeholder {
       color: rgba(0, 0, 0, 0.3);
       font-size: 18px;
       font-weight: 400;
     }
+
+    &[disabled] {
+      background: #e3e3e3;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: rgba(0, 0, 0, 0.3);
+      ::placeholder {
+        color: #e3e3e3;
+      }
+    }
+
+    :invalid[focused='true'] ~ span {
+      display: block;
+    }
+
+    :invalid[focused='true'] {
+      border: 1px solid #e51731;
+      animation: ${shakeAnimation} 0.3s ease-in-out;
+    }
+  }
+
+  span {
+    color: #e51731;
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 8px;
+    margin-bottom: -16px;
+    display: none;
   }
 
   label {
@@ -35,7 +83,12 @@ const InputWrapper = styled.div`
 `
 
 export default function FormInput(props) {
-  const { label, onChange, ...inputProps } = props
+  const [focused, setFocused] = useState(false)
+  const { label, errorMessage, onChange, ...inputProps } = props
+
+  const handleFocus = () => {
+    setFocused(true)
+  }
 
   return (
     <InputWrapper>
@@ -46,7 +99,14 @@ export default function FormInput(props) {
           樓
         </p>
       )}
-      <input {...inputProps} onChange={onChange} />
+      <input
+        {...inputProps}
+        onChange={onChange}
+        onBlur={handleFocus}
+        // eslint-disable-next-line react/no-unknown-property
+        focused={focused.toString()}
+      />
+      <span>{errorMessage}</span>
     </InputWrapper>
   )
 }
