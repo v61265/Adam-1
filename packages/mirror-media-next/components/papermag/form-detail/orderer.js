@@ -3,13 +3,13 @@ import FormInput from './form-input'
 
 const Wrapper = styled.div`
   width: 100%;
-
-  p {
-    color: rgba(0, 0, 0, 0.5);
-    font-size: 14px;
-    font-weight: 400;
-    margin-top: 8px;
-  }
+`
+const Note = styled.p`
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 8px;
+  margin-bottom: -16px;
 `
 const Title = styled.h2`
   color: rgba(0, 0, 0, 0.87);
@@ -19,11 +19,11 @@ const Title = styled.h2`
 const FormInputsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px; /* Safari 12+ */
-  grid-gap: 16px; /* Safari 10-11 */
 
   ${({ theme }) => theme.breakpoint.md} {
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px; /* Safari 12+ */
+    grid-gap: 16px; /* Safari 10-11 */
   }
 `
 const PhoneExtInputWrapper = styled.div`
@@ -31,8 +31,8 @@ const PhoneExtInputWrapper = styled.div`
   grid-template-columns: 1fr auto 80px; /* Divide the space: phone - dash - phoneExt */
   align-items: center;
 
-  ${({ theme }) => theme.breakpoint.md} {
-    display: flex;
+  ${({ theme }) => theme.breakpoint.lg} {
+    padding-right: 142px;
   }
 
   span {
@@ -40,7 +40,7 @@ const PhoneExtInputWrapper = styled.div`
     font-size: 18px;
     font-weight: 400;
     margin: 0 12px;
-    padding-top: 24px;
+    padding-top: 56px;
   }
 `
 
@@ -54,7 +54,7 @@ export default function Orderer({ ordererValues, setOrdererValues }) {
   return (
     <Wrapper>
       <Title>訂購人</Title>
-      <p>目前無提供國外海外地區的紙本雜誌訂閱及寄送服務。</p>
+      <Note>目前無提供國外海外地區的紙本雜誌訂閱及寄送服務。</Note>
 
       <FormInputsWrapper>
         <FormInput

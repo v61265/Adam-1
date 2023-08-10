@@ -4,14 +4,14 @@ import FormInput from './form-input'
 const Wrapper = styled.div`
   margin-top: 48px;
   width: 100%;
-
-  p {
-    color: rgba(0, 0, 0, 0.5);
-    font-size: 14px;
-    font-weight: 400;
-    margin-top: 8px;
-  }
 `
+const Note = styled.p`
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 8px;
+`
+
 const Title = styled.h2`
   color: rgba(0, 0, 0, 0.87);
   font-size: 24px;
@@ -21,11 +21,11 @@ const Title = styled.h2`
 const FormInputsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  gap: 16px; /* Safari 12+ */
-  grid-gap: 16px; /* Safari 10-11 */
 
   ${({ theme }) => theme.breakpoint.md} {
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px; /* Safari 12+ */
+    grid-gap: 16px; /* Safari 10-11 */
   }
 `
 const PhoneExtInputWrapper = styled.div`
@@ -33,8 +33,8 @@ const PhoneExtInputWrapper = styled.div`
   grid-template-columns: 1fr auto 80px; /* Divide the space: phone - dash - phoneExt */
   align-items: center;
 
-  ${({ theme }) => theme.breakpoint.md} {
-    display: flex;
+  ${({ theme }) => theme.breakpoint.lg} {
+    padding-right: 142px;
   }
 
   span {
@@ -42,13 +42,14 @@ const PhoneExtInputWrapper = styled.div`
     font-size: 18px;
     font-weight: 400;
     margin: 0 12px;
-    padding-top: 24px;
+    padding-top: 56px;
   }
 `
 const CheckBoxWapper = styled.div`
   margin-top: 16px;
   display: flex;
   align-items: center;
+  margin-bottom: -8px;
 
   input {
     width: 20px;
@@ -99,7 +100,7 @@ export default function Recipient({
   return (
     <Wrapper>
       <Title>收件人</Title>
-      <p>資料請務必正確填寫，以利雜誌寄送。</p>
+      <Note>資料請務必正確填寫，以利雜誌寄送。</Note>
 
       <CheckBoxWapper>
         <input

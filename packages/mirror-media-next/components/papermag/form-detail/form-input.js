@@ -1,22 +1,39 @@
 import styled from 'styled-components'
 
 const InputWrapper = styled.div`
-  margin: 24px 0;
+  margin-top: 24px;
   input {
     display: flex;
     height: 48px;
     width: 100%;
     padding: 12px;
     align-items: center;
-    margin: 8px 0;
+    margin-top: 8px;
     border-radius: 8px;
-    border: 1px solid var(--black-30, rgba(0, 0, 0, 0.3));
-    background: var(--white, #fff);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: #fff;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 18px;
+    font-weight: 400;
+
+    :focus {
+      outline: none;
+      border: 1px solid rgba(0, 0, 0, 0.87);
+    }
 
     ::placeholder {
       color: rgba(0, 0, 0, 0.3);
       font-size: 18px;
       font-weight: 400;
+    }
+
+    &[disabled] {
+      background: #e3e3e3;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: rgba(0, 0, 0, 0.3);
+      ::placeholder {
+        color: #e3e3e3;
+      }
     }
   }
 
