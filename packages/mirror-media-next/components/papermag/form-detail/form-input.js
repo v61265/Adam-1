@@ -1,4 +1,17 @@
-import styled from 'styled-components'
+import { useState } from 'react'
+import styled, { keyframes } from 'styled-components'
+
+const shakeAnimation = keyframes`
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-6px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(6px);
+  }
+`
 
 const InputWrapper = styled.div`
   margin-top: 24px;
@@ -36,8 +49,13 @@ const InputWrapper = styled.div`
       }
     }
 
-    :invalid ~ span {
+    :invalid[focused='true'] ~ span {
       display: block;
+    }
+
+    :invalid[focused='true'] {
+      border: 1px solid #e51731;
+      animation: ${shakeAnimation} 0.3s ease-in-out;
     }
   }
 
@@ -65,7 +83,12 @@ const InputWrapper = styled.div`
 `
 
 export default function FormInput(props) {
+  const [focused, setFocused] = useState(false)
   const { label, errorMessage, onChange, ...inputProps } = props
+
+  const handleFocus = () => {
+    setFocused(true)
+  }
 
   return (
     <InputWrapper>
@@ -76,7 +99,13 @@ export default function FormInput(props) {
           樓
         </p>
       )}
-      <input {...inputProps} onChange={onChange} />
+      <input
+        {...inputProps}
+        onChange={onChange}
+        onBlur={handleFocus}
+        // eslint-disable-next-line react/no-unknown-property
+        focused={focused.toString()}
+      />
       <span>{errorMessage}</span>
     </InputWrapper>
   )
