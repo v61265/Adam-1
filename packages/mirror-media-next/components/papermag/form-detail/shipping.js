@@ -44,8 +44,11 @@ const RadioInput = styled.div`
     border-radius: 50%;
     background-color: transparent;
     cursor: pointer;
+    transition: border 0.3s, box-shadow 0.3s;
+
     :hover {
       border: 2px solid rgba(0, 0, 0, 0.87);
+      box-shadow: 0px 0px 0px 10px rgba(80, 80, 115, 0.05); /* Halo effect */
     }
 
     &:checked::before {
