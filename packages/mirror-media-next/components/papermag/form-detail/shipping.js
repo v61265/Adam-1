@@ -33,6 +33,40 @@ const RadioInput = styled.div`
     width: 20px;
     height: 20px;
     margin-right: 8px;
+
+    /* Hide the default radio appearance */
+    appearance: none;
+    -webkit-appearance: none;
+
+    /* Custom radio styles */
+    position: relative;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    :hover {
+      border: 2px solid rgba(0, 0, 0, 0.87);
+    }
+
+    &:checked::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background-image: url('/images/radio-active.svg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      /* Change the fill color when checked and hovered */
+      filter: brightness(1.1);
+    }
+    /* Change the fill color when hovered */
+    &:hover::before {
+      filter: brightness(1.5);
+    }
   }
 
   label {
