@@ -46,7 +46,6 @@ export default function SubscribePaperMagForm({ plan }) {
   const [renewCouponApplied, setRenewCouponApplied] = useState(false)
   const [shouldCountFreight, setShouldCountFreight] = useState(false)
 
-  console.log(shouldCountFreight)
   const [ordererValues, setOrdererValues] = useState({
     username: '',
     cellphone: '',

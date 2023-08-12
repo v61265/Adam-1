@@ -58,6 +58,40 @@ const CheckBoxWapper = styled.div`
     font-size: 20px;
     font-weight: 400;
     margin-right: 8px;
+
+    /* Hide the default checkbox appearance */
+    appearance: none;
+    -webkit-appearance: none;
+
+    /* Custom checkbox styles */
+    position: relative;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    background-color: transparent;
+    cursor: pointer;
+    :hover {
+      border: 2px solid rgba(0, 0, 0, 0.87);
+    }
+
+    &:checked::before {
+      content: '';
+      display: inline-block;
+      width: 26px;
+      height: 26px;
+      background-image: url('/images/checkbox-active.svg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      /* Change the fill color when checked and hovered */
+      filter: brightness(1.1);
+    }
+    /* Change the fill color when hovered */
+    &:hover::before {
+      filter: brightness(1.5);
+    }
   }
 
   label {
