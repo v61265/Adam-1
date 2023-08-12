@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -72,22 +73,58 @@ const RadioInput = styled.div`
 `
 
 export default function Receipt() {
+  const [selectedOption, setSelectedOption] = useState(null)
+  const [showDetails, setShowDetails] = useState(false)
+
+  const handleRadioChange = (option) => {
+    setSelectedOption(option)
+    setShowDetails(true)
+  }
+
   return (
     <Wrapper>
       <Title>電子發票</Title>
       <Note>發票將於付款成功後 7 個工作天內寄達。</Note>
       <RadioInput>
-        <input type="radio" value="regular"></input>
+        <input
+          type="radio"
+          value="donate"
+          checked={selectedOption === 'donate'}
+          onChange={() => handleRadioChange('donate')}
+        />
         <label>捐贈</label>
       </RadioInput>
+      {showDetails && (
+        <div>{selectedOption === 'donate' && <p>捐贈詳細資訊</p>}</div>
+      )}
       <RadioInput>
-        <input type="radio" value="regular"></input>
+        <input
+          type="radio"
+          value="invoiceWithCarrier"
+          checked={selectedOption === 'invoiceWithCarrier'}
+          onChange={() => handleRadioChange('invoiceWithCarrier')}
+        />
         <label>二聯式發票（含載具）</label>
       </RadioInput>
+      {showDetails && (
+        <div>
+          {selectedOption === 'invoiceWithCarrier' && <p>二聯式發票詳細資訊</p>}
+        </div>
+      )}
       <RadioInput>
-        <input type="radio" value="regular"></input>
+        <input
+          type="radio"
+          value="tripleInvoice"
+          checked={selectedOption === 'tripleInvoice'}
+          onChange={() => handleRadioChange('tripleInvoice')}
+        />
         <label>三聯式發票</label>
       </RadioInput>
+      {showDetails && (
+        <div>
+          {selectedOption === 'tripleInvoice' && <p>三聯式發票詳細資訊</p>}
+        </div>
+      )}
     </Wrapper>
   )
 }
