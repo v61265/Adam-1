@@ -69,8 +69,11 @@ const CheckBoxWrapper = styled.div`
     border-radius: 4px;
     background-color: transparent;
     cursor: pointer;
+    transition: border 0.3s, box-shadow 0.3s;
+
     :hover {
       border: 2px solid rgba(0, 0, 0, 0.87);
+      box-shadow: 0px 0px 0px 10px rgba(80, 80, 200, 0.07); /* Halo effect */
     }
 
     &:checked::before {
