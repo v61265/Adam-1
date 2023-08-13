@@ -1,6 +1,18 @@
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import RadioInput from './radio-input'
+
+const shakeAnimation = keyframes`
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-6px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(6px);
+  }
+`
 
 const Wrapper = styled.div`
   margin-top: 48px;
@@ -22,6 +34,7 @@ const Warning = styled.p`
   color: #e51731;
   font-size: 14px;
   font-weight: 400;
+  animation: ${shakeAnimation} 0.3s ease-in-out;
 `
 
 export default function Receipt({
