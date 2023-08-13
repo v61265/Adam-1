@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import RadioInput from './radio-input'
+import CustomDropdown from './custom-dropdown'
 
 const shakeAnimation = keyframes`
   0%, 100% {
@@ -49,6 +50,14 @@ export default function Receipt({
     setShowDetails(true)
   }
 
+  const donateOptions = [
+    '財團法人台灣兒童暨家庭扶助基金會',
+    '財團法人創世社會福利基金會',
+    '財團法人台灣癌症基金會',
+    '財團法人伊甸社會福利基金會',
+    '財團法人門諾社會福利慈善事業基金會',
+  ]
+
   return (
     <Wrapper>
       <Title>電子發票</Title>
@@ -62,7 +71,11 @@ export default function Receipt({
         捐贈
       </RadioInput>
       {showDetails && (
-        <div>{receiptOption === 'donate' && <p>捐贈詳細資訊</p>}</div>
+        <div>
+          {receiptOption === 'donate' && (
+            <CustomDropdown options={donateOptions} />
+          )}
+        </div>
       )}
       <RadioInput
         value="invoiceWithCarrier"
