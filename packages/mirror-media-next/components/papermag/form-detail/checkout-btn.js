@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   margin-bottom: 48px;
 `
 
-const StyledOrderBtn = styled.button`
+const StyledCheckoutBtn = styled.button`
   width: 100%;
   height: 48px;
   max-width: 420px;
@@ -27,7 +27,7 @@ const StyledOrderBtn = styled.button`
 
   :hover {
     background: #9cb7c6;
-    color: #000;
+    color: rgba(0, 0, 0, 0.87);
   }
 
   transition: all 0.25s ease;
@@ -39,10 +39,13 @@ const StyledOrderBtn = styled.button`
   }
 `
 
-export default function OrderBtn({ isAcceptedConditions }) {
+export default function CheckoutBtn({ isAcceptedConditions, receiptOption }) {
+  const isButtonDisabled = !isAcceptedConditions || receiptOption === null
   return (
     <Wrapper>
-      <StyledOrderBtn disabled={!isAcceptedConditions}>開始結帳</StyledOrderBtn>
+      <StyledCheckoutBtn disabled={isButtonDisabled}>
+        開始結帳
+      </StyledCheckoutBtn>
     </Wrapper>
   )
 }

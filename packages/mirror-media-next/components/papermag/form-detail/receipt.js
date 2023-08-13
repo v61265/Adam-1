@@ -18,12 +18,11 @@ const Note = styled.p`
   margin-top: 8px;
 `
 
-export default function Receipt() {
-  const [selectedOption, setSelectedOption] = useState(null)
+export default function Receipt({ receiptOption, setReceiptOption }) {
   const [showDetails, setShowDetails] = useState(false)
 
   const handleRadioChange = (option) => {
-    setSelectedOption(option)
+    setReceiptOption(option)
     setShowDetails(true)
   }
 
@@ -33,36 +32,36 @@ export default function Receipt() {
       <Note>發票將於付款成功後 7 個工作天內寄達。</Note>
       <RadioInput
         value="donate"
-        checked={selectedOption === 'donate'}
+        checked={receiptOption === 'donate'}
         onChange={() => handleRadioChange('donate')}
       >
         捐贈
       </RadioInput>
       {showDetails && (
-        <div>{selectedOption === 'donate' && <p>捐贈詳細資訊</p>}</div>
+        <div>{receiptOption === 'donate' && <p>捐贈詳細資訊</p>}</div>
       )}
       <RadioInput
         value="invoiceWithCarrier"
-        checked={selectedOption === 'invoiceWithCarrier'}
+        checked={receiptOption === 'invoiceWithCarrier'}
         onChange={() => handleRadioChange('invoiceWithCarrier')}
       >
         二聯式發票（含載具）
       </RadioInput>
       {showDetails && (
         <div>
-          {selectedOption === 'invoiceWithCarrier' && <p>二聯式發票詳細資訊</p>}
+          {receiptOption === 'invoiceWithCarrier' && <p>二聯式發票詳細資訊</p>}
         </div>
       )}
       <RadioInput
         value="tripleInvoice"
-        checked={selectedOption === 'tripleInvoice'}
+        checked={receiptOption === 'tripleInvoice'}
         onChange={() => handleRadioChange('tripleInvoice')}
       >
         三聯式發票
       </RadioInput>
       {showDetails && (
         <div>
-          {selectedOption === 'tripleInvoice' && <p>三聯式發票詳細資訊</p>}
+          {receiptOption === 'tripleInvoice' && <p>三聯式發票詳細資訊</p>}
         </div>
       )}
     </Wrapper>

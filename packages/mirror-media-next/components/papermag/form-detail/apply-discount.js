@@ -93,7 +93,7 @@ const ConfirmButton = styled.button`
 
   :hover {
     background: #9cb7c6;
-    color: #000;
+    color: rgba(0, 0, 0, 0.87);
   }
 
   transition: all 0.25s ease;

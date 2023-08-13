@@ -6,7 +6,7 @@ import PurchaseInfo from './form-detail/purchase-info'
 import Shipping from './form-detail/shipping'
 import Receipt from './form-detail/receipt'
 import AcceptingTermsAndConditions from './form-detail/accepting-terms-and-conditions'
-import OrderBtn from './form-detail/order-btn'
+import OrderBtn from './form-detail/checkout-btn'
 import Orderer from './form-detail/orderer'
 import Recipient from './form-detail/recipient'
 
@@ -66,7 +66,10 @@ export default function SubscribePaperMagForm({ plan }) {
   })
 
   const [sameAsOrderer, setSameAsOrderer] = useState(false)
-  const [isAcceptedConditions, setIsAcceptedConditions] = useState(true)
+  const [isAcceptedConditions, setIsAcceptedConditions] = useState(false)
+  const [receiptOption, setReceiptOption] = useState(null)
+
+  console.log(receiptOption)
 
   return (
     <Form>
@@ -91,12 +94,18 @@ export default function SubscribePaperMagForm({ plan }) {
           shouldCountFreight={shouldCountFreight}
           setShouldCountFreight={setShouldCountFreight}
         />
-        <Receipt />
+        <Receipt
+          receiptOption={receiptOption}
+          setReceiptOption={setReceiptOption}
+        />
         <AcceptingTermsAndConditions
           isAcceptedConditions={isAcceptedConditions}
           setIsAcceptedConditions={setIsAcceptedConditions}
         />
-        <OrderBtn isAcceptedConditions={isAcceptedConditions} />
+        <OrderBtn
+          isAcceptedConditions={isAcceptedConditions}
+          receiptOption={receiptOption}
+        />
       </LeftWrapper>
       <RightWrapper>
         <PurchaseInfo
