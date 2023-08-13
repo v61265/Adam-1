@@ -1,7 +1,48 @@
 import styled from 'styled-components'
 
-const StyledOrderBtn = styled.button``
+const Wrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 48px;
+`
 
-export default function OrderBtn() {
-  return <StyledOrderBtn>order-btn</StyledOrderBtn>
+const StyledOrderBtn = styled.button`
+  width: 100%;
+  height: 48px;
+  max-width: 420px;
+  min-height: 48px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 100%;
+  font-weight: 500;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.07);
+  background: #054f77;
+  color: #fff;
+  :focus {
+    outline: none;
+  }
+
+  :hover {
+    background: #9cb7c6;
+    color: #000;
+  }
+
+  transition: all 0.25s ease;
+
+  &[disabled] {
+    background: #e3e3e3;
+    color: rgba(0, 0, 0, 0.3);
+    cursor: default;
+  }
+`
+
+export default function OrderBtn({ isAcceptedConditions }) {
+  return (
+    <Wrapper>
+      <StyledOrderBtn disabled={!isAcceptedConditions}>開始結帳</StyledOrderBtn>
+    </Wrapper>
+  )
 }

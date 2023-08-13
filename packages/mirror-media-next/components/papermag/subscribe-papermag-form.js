@@ -96,7 +96,7 @@ export default function SubscribePaperMagForm({ plan }) {
           isAcceptedConditions={isAcceptedConditions}
           setIsAcceptedConditions={setIsAcceptedConditions}
         />
-        <OrderBtn />
+        <OrderBtn isAcceptedConditions={isAcceptedConditions} />
       </LeftWrapper>
       <RightWrapper>
         <PurchaseInfo

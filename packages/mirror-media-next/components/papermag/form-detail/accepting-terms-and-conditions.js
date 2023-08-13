@@ -82,7 +82,6 @@ export default function AcceptingTermsAndConditions({
 }) {
   const handleAcceptingConditions = () => {
     setIsAcceptedConditions(!isAcceptedConditions)
-    console.log('Accepted terms and conditions:', !isAcceptedConditions)
   }
 
   return (
