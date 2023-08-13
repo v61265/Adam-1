@@ -18,7 +18,17 @@ const Note = styled.p`
   margin-top: 8px;
 `
 
-export default function Receipt({ receiptOption, setReceiptOption }) {
+const Warning = styled.p`
+  color: #e51731;
+  font-size: 14px;
+  font-weight: 400;
+`
+
+export default function Receipt({
+  receiptOption,
+  setReceiptOption,
+  showWarning,
+}) {
   const [showDetails, setShowDetails] = useState(false)
 
   const handleRadioChange = (option) => {
@@ -29,6 +39,7 @@ export default function Receipt({ receiptOption, setReceiptOption }) {
   return (
     <Wrapper>
       <Title>電子發票</Title>
+      {showWarning && <Warning>尚未選擇發票</Warning>}
       <Note>發票將於付款成功後 7 個工作天內寄達。</Note>
       <RadioInput
         value="donate"

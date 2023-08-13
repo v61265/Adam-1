@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import MerchandiseItem from './form-detail/merchandise-item'
 import ApplyDiscount from './form-detail/apply-discount'
@@ -69,7 +69,15 @@ export default function SubscribePaperMagForm({ plan }) {
   const [isAcceptedConditions, setIsAcceptedConditions] = useState(false)
   const [receiptOption, setReceiptOption] = useState(null)
 
-  console.log(receiptOption)
+  //show a warning message if the isAcceptedConditions is true but the receiptOption is null
+  const [showWarning, setShowWarning] = useState(false)
+  useEffect(() => {
+    if (isAcceptedConditions && receiptOption === null) {
+      setShowWarning(true)
+    } else {
+      setShowWarning(false)
+    }
+  }, [isAcceptedConditions, receiptOption])
 
   return (
     <Form>
@@ -97,6 +105,7 @@ export default function SubscribePaperMagForm({ plan }) {
         <Receipt
           receiptOption={receiptOption}
           setReceiptOption={setReceiptOption}
+          showWarning={showWarning}
         />
         <AcceptingTermsAndConditions
           isAcceptedConditions={isAcceptedConditions}
