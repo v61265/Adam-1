@@ -5,7 +5,7 @@ const Wrapper = styled.div`
   border-radius: 8px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 16px;
-  margin-bottom: 48px;
+  margin: 24px 0 48px;
 
   ${({ theme }) => theme.breakpoint.md} {
     margin-bottom: 60px;

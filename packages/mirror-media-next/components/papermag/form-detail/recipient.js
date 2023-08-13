@@ -45,7 +45,7 @@ const PhoneExtInputWrapper = styled.div`
     margin-top: 56px;
   }
 `
-const CheckBoxWapper = styled.div`
+const CheckBoxWrapper = styled.div`
   margin-top: 16px;
   display: flex;
   align-items: center;
@@ -136,14 +136,14 @@ export default function Recipient({
       <Title>收件人</Title>
       <Note>資料請務必正確填寫，以利雜誌寄送。</Note>
 
-      <CheckBoxWapper>
+      <CheckBoxWrapper>
         <input
           type="checkbox"
           checked={sameAsOrderer}
           onChange={handleCheckboxChange}
         />
         <label>同訂購人資訊</label>
-      </CheckBoxWapper>
+      </CheckBoxWrapper>
 
       <FormInputsWrapper>
         <FormInput

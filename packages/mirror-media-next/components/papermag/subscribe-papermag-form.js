@@ -23,6 +23,7 @@ const Form = styled.form`
 
 const LeftWrapper = styled.div`
   width: 100%;
+  padding: 0 16px;
 
   ${({ theme }) => theme.breakpoint.md} {
     max-width: 500px;
@@ -31,6 +32,7 @@ const LeftWrapper = styled.div`
 
   ${({ theme }) => theme.breakpoint.lg} {
     margin-right: 60px;
+    padding: 0;
   }
 `
 const RightWrapper = styled.div`
@@ -64,6 +66,7 @@ export default function SubscribePaperMagForm({ plan }) {
   })
 
   const [sameAsOrderer, setSameAsOrderer] = useState(false)
+  const [isAcceptedConditions, setIsAcceptedConditions] = useState(true)
 
   return (
     <Form>
@@ -89,7 +92,10 @@ export default function SubscribePaperMagForm({ plan }) {
           setShouldCountFreight={setShouldCountFreight}
         />
         <Receipt />
-        <AcceptingTermsAndConditions />
+        <AcceptingTermsAndConditions
+          isAcceptedConditions={isAcceptedConditions}
+          setIsAcceptedConditions={setIsAcceptedConditions}
+        />
         <OrderBtn />
       </LeftWrapper>
       <RightWrapper>
