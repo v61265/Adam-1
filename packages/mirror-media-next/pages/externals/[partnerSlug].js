@@ -9,12 +9,10 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 
-import {
-  fetchExternalsByPartnerSlug,
-  fetchExternalCounts,
-} from '../../apollo/query/externals'
+import { fetchExternalCounts } from '../../apollo/query/externals'
 import { fetchPartnerBySlug } from '../../apollo/query/partner'
 import { getExternalPartnerColor } from '../../utils/external'
+import { fetchExternalsForExternalPage } from '../../utils/api/externals'
 
 import { getPageKeyByPartnerSlug } from '../../utils/ad'
 import { Z_INDEX } from '../../constants/index'
@@ -138,8 +136,9 @@ export default function ExternalPartner({
         <ExternalArticles
           externalsCount={externalsCount}
           externals={externals}
-          partner={partner}
+          fetchExternalsFunction={fetchExternalsForExternalPage}
           renderPageSize={RENDER_PAGE_SIZE}
+          partnerSlug={partner.slug}
         />
         {shouldShowAd && (
           <StickyGPTAd
@@ -162,6 +161,7 @@ export async function getServerSideProps({ params, req, res }) {
     setPageCache(res, { cachePolicy: 'no-store' }, req.url)
   }
   const { partnerSlug } = params
+
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
@@ -173,18 +173,7 @@ export async function getServerSideProps({ params, req, res }) {
 
   const responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(), //fetch header data
-    client.query({
-      query: fetchExternalsByPartnerSlug,
-      variables: {
-        take: RENDER_PAGE_SIZE * 2,
-        skip: 0,
-        orderBy: { publishedDate: 'desc' },
-        filter: {
-          state: { equals: 'published' },
-          partner: { slug: { equals: partnerSlug } },
-        },
-      },
-    }),
+    fetchExternalsForExternalPage(1, RENDER_PAGE_SIZE, partnerSlug),
     client.query({
       query: fetchExternalCounts,
       variables: {
@@ -250,10 +239,9 @@ export async function getServerSideProps({ params, req, res }) {
     : []
 
   /** @type {ListingExternal[]} */
-  const externals =
-    'data' in handledResponses[1]
-      ? handledResponses[1]?.data?.externals || []
-      : []
+  const externals = Array.isArray(handledResponses[1])
+    ? handledResponses[1]
+    : []
 
   /** @type {number} */
   const externalsCount =
