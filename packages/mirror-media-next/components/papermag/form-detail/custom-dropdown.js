@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 
 const CustomDropdownContainer = styled.div`
@@ -81,6 +81,8 @@ export default function CustomDropdown({ options, defaultText = '請選擇' }) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState(null)
 
+  const containerRef = useRef(null)
+
   const toggleDropdown = (e) => {
     e.preventDefault()
     setIsOpen(!isOpen)
@@ -91,8 +93,21 @@ export default function CustomDropdown({ options, defaultText = '請選擇' }) {
     setIsOpen(false)
   }
 
+  const handleOutsideClick = (event) => {
+    if (containerRef.current && !containerRef.current.contains(event.target)) {
+      setIsOpen(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleOutsideClick)
+    return () => {
+      document.removeEventListener('click', handleOutsideClick)
+    }
+  }, [])
+
   return (
-    <CustomDropdownContainer>
+    <CustomDropdownContainer ref={containerRef}>
       <DropdownButton
         // @ts-ignore
         isOpen={isOpen}
