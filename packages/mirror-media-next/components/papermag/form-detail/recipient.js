@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import FormInput from './form-input'
+import Checkbox from './checkbox-input'
 
 const Wrapper = styled.div`
   margin-top: 48px;
@@ -45,27 +46,6 @@ const PhoneExtInputWrapper = styled.div`
     margin-top: 56px;
   }
 `
-const CheckBoxWapper = styled.div`
-  margin-top: 16px;
-  display: flex;
-  align-items: center;
-  margin-bottom: -8px;
-
-  input {
-    width: 20px;
-    height: 20px;
-    color: rgba(0, 0, 0, 0.3);
-    font-size: 20px;
-    font-weight: 400;
-    margin-right: 8px;
-  }
-
-  label {
-    color: rgba(0, 0, 0, 0.87);
-    font-size: 18px;
-    font-weight: 400;
-  }
-`
 
 export default function Recipient({
   recipientValues,
@@ -102,14 +82,11 @@ export default function Recipient({
       <Title>收件人</Title>
       <Note>資料請務必正確填寫，以利雜誌寄送。</Note>
 
-      <CheckBoxWapper>
-        <input
-          type="checkbox"
-          checked={sameAsOrderer}
-          onChange={handleCheckboxChange}
-        />
-        <label>同訂購人資訊</label>
-      </CheckBoxWapper>
+      <Checkbox
+        checked={sameAsOrderer}
+        onChange={handleCheckboxChange}
+        label="同訂購人資訊"
+      />
 
       <FormInputsWrapper>
         <FormInput

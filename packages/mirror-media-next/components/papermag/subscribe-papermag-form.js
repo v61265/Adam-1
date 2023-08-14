@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import MerchandiseItem from './form-detail/merchandise-item'
 import ApplyDiscount from './form-detail/apply-discount'
@@ -6,7 +6,7 @@ import PurchaseInfo from './form-detail/purchase-info'
 import Shipping from './form-detail/shipping'
 import Receipt from './form-detail/receipt'
 import AcceptingTermsAndConditions from './form-detail/accepting-terms-and-conditions'
-import OrderBtn from './form-detail/order-btn'
+import OrderBtn from './form-detail/checkout-btn'
 import Orderer from './form-detail/orderer'
 import Recipient from './form-detail/recipient'
 
@@ -23,6 +23,7 @@ const Form = styled.form`
 
 const LeftWrapper = styled.div`
   width: 100%;
+  padding: 0 16px;
 
   ${({ theme }) => theme.breakpoint.md} {
     max-width: 500px;
@@ -31,6 +32,7 @@ const LeftWrapper = styled.div`
 
   ${({ theme }) => theme.breakpoint.lg} {
     margin-right: 60px;
+    padding: 0;
   }
 `
 const RightWrapper = styled.div`
@@ -46,7 +48,6 @@ export default function SubscribePaperMagForm({ plan }) {
   const [renewCouponApplied, setRenewCouponApplied] = useState(false)
   const [shouldCountFreight, setShouldCountFreight] = useState(false)
 
-  console.log(shouldCountFreight)
   const [ordererValues, setOrdererValues] = useState({
     username: '',
     cellphone: '',
@@ -65,6 +66,18 @@ export default function SubscribePaperMagForm({ plan }) {
   })
 
   const [sameAsOrderer, setSameAsOrderer] = useState(false)
+  const [isAcceptedConditions, setIsAcceptedConditions] = useState(false)
+  const [receiptOption, setReceiptOption] = useState(null)
+
+  //show a warning message if the isAcceptedConditions is true but the receiptOption is null
+  const [showWarning, setShowWarning] = useState(false)
+  useEffect(() => {
+    if (isAcceptedConditions && receiptOption === null) {
+      setShowWarning(true)
+    } else {
+      setShowWarning(false)
+    }
+  }, [isAcceptedConditions, receiptOption])
 
   return (
     <Form>
@@ -89,9 +102,19 @@ export default function SubscribePaperMagForm({ plan }) {
           shouldCountFreight={shouldCountFreight}
           setShouldCountFreight={setShouldCountFreight}
         />
-        <Receipt />
-        <AcceptingTermsAndConditions />
-        <OrderBtn />
+        <Receipt
+          receiptOption={receiptOption}
+          setReceiptOption={setReceiptOption}
+          showWarning={showWarning}
+        />
+        <AcceptingTermsAndConditions
+          isAcceptedConditions={isAcceptedConditions}
+          setIsAcceptedConditions={setIsAcceptedConditions}
+        />
+        <OrderBtn
+          isAcceptedConditions={isAcceptedConditions}
+          receiptOption={receiptOption}
+        />
       </LeftWrapper>
       <RightWrapper>
         <PurchaseInfo

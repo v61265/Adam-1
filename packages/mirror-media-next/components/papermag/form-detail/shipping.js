@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import RadioInput from './radio-input'
 
 const Wrapper = styled.div`
   margin-top: 48px;
@@ -24,24 +25,6 @@ const Note = styled.p`
   margin-top: 8px;
 `
 
-const RadioInput = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 12px;
-
-  input {
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
-  }
-
-  label {
-    color: rgba(0, 0, 0, 0.87);
-    font-size: 18px;
-    font-weight: 400;
-  }
-`
-
 export default function Shipping({
   shouldCountFreight,
   setShouldCountFreight,
@@ -56,23 +39,19 @@ export default function Shipping({
       <Note>
         因週刊派送屬一般投遞投遞非簽收件，如需簽收建議選擇以掛號寄送。
       </Note>
-      <RadioInput>
-        <input
-          type="radio"
-          value="regular"
-          checked={!shouldCountFreight}
-          onChange={handleRadioChange}
-        ></input>
-        <label>一般配送 NT$ 0 / 期</label>
+      <RadioInput
+        value="regular"
+        checked={!shouldCountFreight}
+        onChange={handleRadioChange}
+      >
+        一般配送 NT$ 0 / 期
       </RadioInput>
-      <RadioInput>
-        <input
-          type="radio"
-          value="registered"
-          checked={shouldCountFreight}
-          onChange={handleRadioChange}
-        ></input>
-        <label>郵寄掛號 NT$ 20 / 期</label>
+      <RadioInput
+        value="registered"
+        checked={shouldCountFreight}
+        onChange={handleRadioChange}
+      >
+        郵寄掛號 NT$ 20 / 期
       </RadioInput>
       <ul>
         <li>一年期加收 NT$ 1,040</li>

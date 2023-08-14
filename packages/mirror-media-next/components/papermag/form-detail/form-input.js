@@ -47,7 +47,7 @@ const InputWrapper = styled.div`
     &[disabled] {
       background: #e3e3e3;
       border: 1px solid rgba(0, 0, 0, 0.1);
-      color: rgba(0, 0, 0, 0.5);
+      color: rgba(0, 0, 0, 0.6);
       ::placeholder {
         color: #e3e3e3;
       }
