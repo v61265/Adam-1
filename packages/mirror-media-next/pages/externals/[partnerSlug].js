@@ -12,7 +12,7 @@ import Layout from '../../components/shared/layout'
 import { fetchExternalCounts } from '../../apollo/query/externals'
 import { fetchPartnerBySlug } from '../../apollo/query/partner'
 import { getExternalPartnerColor } from '../../utils/external'
-import { fetchExternalsForExternalPage } from '../../utils/api/externals'
+import { fetchExternalsByPartnerSlug } from '../../utils/api/externals'
 
 import { getPageKeyByPartnerSlug } from '../../utils/ad'
 import { Z_INDEX } from '../../constants/index'
@@ -136,7 +136,7 @@ export default function ExternalPartner({
         <ExternalArticles
           externalsCount={externalsCount}
           externals={externals}
-          fetchExternalsFunction={fetchExternalsForExternalPage}
+          fetchExternalsFunction={fetchExternalsByPartnerSlug}
           renderPageSize={RENDER_PAGE_SIZE}
           partnerSlug={partner.slug}
         />
@@ -173,7 +173,7 @@ export async function getServerSideProps({ params, req, res }) {
 
   const responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(), //fetch header data
-    fetchExternalsForExternalPage(1, RENDER_PAGE_SIZE, partnerSlug),
+    fetchExternalsByPartnerSlug(1, RENDER_PAGE_SIZE, partnerSlug),
     client.query({
       query: fetchExternalCounts,
       variables: {

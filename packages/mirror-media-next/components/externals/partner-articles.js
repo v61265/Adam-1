@@ -22,7 +22,10 @@ const Loading = styled.div`
  */
 
 /**
- * @typedef {import('../../utils/api/externals').FetchExternalsForExternalPage} FetchExternalsForExternalPage
+ * @typedef {import('../../utils/api/externals').FetchExternalsByPartnerSlug} FetchExternalsByPartnerSlug
+ */
+/**
+ * @typedef {import('../../utils/api/externals').FetchExternalsWhichPartnerIsNotShowOnIndex} FetchExternalsWhichPartnerIsNotShowOnIndex
  */
 
 /**
@@ -30,8 +33,8 @@ const Loading = styled.div`
  * @param {Object} props
  * @param {number} props.externalsCount
  * @param {ListingExternal[]} props.externals
- * @param {FetchExternalsForExternalPage} props.fetchExternalsFunction
- * @param {string} props.partnerSlug
+ * @param {FetchExternalsByPartnerSlug | FetchExternalsWhichPartnerIsNotShowOnIndex} props.fetchExternalsFunction
+ * @param {string} [props.partnerSlug]
  * @param {number} props.renderPageSize
  * @returns {React.ReactElement}
  */
