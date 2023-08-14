@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import RadioInput from './radio-input'
 import CustomDropdown from './custom-dropdown'
+import FormInput from './form-input'
 
 const shakeAnimation = keyframes`
   0%, 100% {
@@ -58,6 +59,8 @@ export default function Receipt({
     '財團法人門諾社會福利慈善事業基金會',
   ]
 
+  const invoiceWithCarrierOptions = ['電子發票載具', '手機條碼', '自然人憑證']
+
   return (
     <Wrapper>
       <Title>電子發票</Title>
@@ -86,7 +89,29 @@ export default function Receipt({
       </RadioInput>
       {showDetails && (
         <div>
-          {receiptOption === 'invoiceWithCarrier' && <p>二聯式發票詳細資訊</p>}
+          {receiptOption === 'invoiceWithCarrier' && (
+            <>
+              <CustomDropdown options={invoiceWithCarrierOptions} />
+              <FormInput
+                name="mobile-barcode"
+                type="text"
+                placeholder="斜線字元 /，後接 7 個大寫英數字或特殊符號"
+                value=""
+                onChange=""
+                errorMessage="請輸入有效的手機條碼"
+                required
+              />
+              <FormInput
+                name="certificate"
+                type="text"
+                placeholder="2 個大寫英文字元，後接 14 個數字"
+                value=""
+                onChange=""
+                errorMessage="請輸入有效的自然人憑證"
+                required
+              />
+            </>
+          )}
         </div>
       )}
       <RadioInput

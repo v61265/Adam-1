@@ -6,7 +6,7 @@ import PurchaseInfo from './form-detail/purchase-info'
 import Shipping from './form-detail/shipping'
 import Receipt from './form-detail/receipt'
 import AcceptingTermsAndConditions from './form-detail/accepting-terms-and-conditions'
-import OrderBtn from './form-detail/checkout-btn'
+import CheckoutBtn from './form-detail/checkout-btn'
 import Orderer from './form-detail/orderer'
 import Recipient from './form-detail/recipient'
 
@@ -111,7 +111,7 @@ export default function SubscribePaperMagForm({ plan }) {
           isAcceptedConditions={isAcceptedConditions}
           setIsAcceptedConditions={setIsAcceptedConditions}
         />
-        <OrderBtn
+        <CheckoutBtn
           isAcceptedConditions={isAcceptedConditions}
           receiptOption={receiptOption}
         />

@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import { Z_INDEX } from '../../../constants'
 
 const CustomDropdownContainer = styled.div`
   width: 100%;
   position: relative;
-  display: flex;
-  margin: 12px 0;
+  margin-top: 12px;
 `
 
 const DropdownButton = styled.button`
@@ -65,7 +65,7 @@ const OptionsList = styled.ul`
   border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
-  z-index: 999; /* Ensure the options list appears above other content */
+  z-index: ${Z_INDEX.coverContent}; /* Ensure the options list appears above other content */
 `
 
 const Option = styled.li`
