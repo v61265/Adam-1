@@ -77,7 +77,11 @@ const Option = styled.li`
   }
 `
 
-export default function CustomDropdown({ options, defaultText = '請選擇' }) {
+export default function CustomDropdown({
+  options,
+  defaultText = '請選擇',
+  onSelect,
+}) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState(null)
 
@@ -91,6 +95,11 @@ export default function CustomDropdown({ options, defaultText = '請選擇' }) {
   const selectOption = (option) => {
     setSelectedOption(option)
     setIsOpen(false)
+
+    // Call the callback with the selected option
+    if (onSelect) {
+      onSelect(option)
+    }
   }
 
   const handleOutsideClick = (event) => {

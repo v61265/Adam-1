@@ -44,9 +44,10 @@ export default function Receipt({
   setReceiptOption,
   showWarning,
 }) {
-  const [showDetails, setShowDetails] = useState(false)
-
   const handleRadioChange = (option) => {
+    if (option !== 'donate') {
+      setSelectedDonateOption(null) // Reset selectedDonateOption when option is not "donate"
+    }
     setReceiptOption(option)
     setShowDetails(true)
   }
@@ -60,6 +61,39 @@ export default function Receipt({
   ]
 
   const invoiceWithCarrierOptions = ['電子發票載具', '手機條碼', '自然人憑證']
+
+  const [showDetails, setShowDetails] = useState(false)
+
+  const [selectedDonateOption, setSelectedDonateOption] = useState(null)
+  const [selectedInvoiceCarrierOption, setSelectedInvoiceCarrierOption] =
+    useState(null)
+
+  const [barcodeValue, setBarcodeValue] = useState('')
+  const [certificateValue, setCertificateValue] = useState('')
+
+  const handleDonateOptionSelect = (option) => {
+    setSelectedDonateOption(option)
+  }
+
+  const handleInvoiceCarrierOptionSelect = (option) => {
+    setSelectedInvoiceCarrierOption(option)
+  }
+
+  const handleBarcodeChange = (event) => {
+    setBarcodeValue(event.target.value)
+  }
+
+  const handleCertificateChange = (event) => {
+    setCertificateValue(event.target.value)
+  }
+
+  console.log(
+    receiptOption,
+    selectedDonateOption,
+    selectedInvoiceCarrierOption,
+    barcodeValue,
+    certificateValue
+  )
 
   return (
     <Wrapper>
@@ -76,7 +110,10 @@ export default function Receipt({
       {showDetails && (
         <div>
           {receiptOption === 'donate' && (
-            <CustomDropdown options={donateOptions} />
+            <CustomDropdown
+              options={donateOptions}
+              onSelect={handleDonateOptionSelect}
+            />
           )}
         </div>
       )}
@@ -91,25 +128,34 @@ export default function Receipt({
         <div>
           {receiptOption === 'invoiceWithCarrier' && (
             <>
-              <CustomDropdown options={invoiceWithCarrierOptions} />
-              <FormInput
-                name="mobile-barcode"
-                type="text"
-                placeholder="斜線字元 /，後接 7 個大寫英數字或特殊符號"
-                value=""
-                onChange=""
-                errorMessage="請輸入有效的手機條碼"
-                required
+              <CustomDropdown
+                options={invoiceWithCarrierOptions}
+                onSelect={handleInvoiceCarrierOptionSelect}
               />
-              <FormInput
-                name="certificate"
-                type="text"
-                placeholder="2 個大寫英文字元，後接 14 個數字"
-                value=""
-                onChange=""
-                errorMessage="請輸入有效的自然人憑證"
-                required
-              />
+              {selectedInvoiceCarrierOption === '手機條碼' && (
+                <FormInput
+                  name="barcode"
+                  type="text"
+                  placeholder="斜線字元 /，後接 7 個大寫英數字或特殊符號"
+                  value={barcodeValue}
+                  onChange={handleBarcodeChange}
+                  errorMessage="請輸入有效的手機條碼"
+                  required
+                  style={{ marginTop: '-16px' }}
+                />
+              )}
+              {selectedInvoiceCarrierOption === '自然人憑證' && (
+                <FormInput
+                  name="certificate"
+                  type="text"
+                  placeholder="2 個大寫英文字元，後接 14 個數字"
+                  value={certificateValue}
+                  onChange={handleCertificateChange}
+                  errorMessage="請輸入有效的自然人憑證"
+                  required
+                  style={{ marginTop: '-16px' }}
+                />
+              )}
             </>
           )}
         </div>
