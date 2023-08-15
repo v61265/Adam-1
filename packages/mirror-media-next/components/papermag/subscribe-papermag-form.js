@@ -79,6 +79,11 @@ export default function SubscribePaperMagForm({ plan }) {
     }
   }, [isAcceptedConditions, receiptOption])
 
+  // update the receiptData state
+  const [receiptData, setReceiptData] = useState({})
+
+  console.log(receiptData)
+
   return (
     <Form>
       <LeftWrapper>
@@ -106,6 +111,7 @@ export default function SubscribePaperMagForm({ plan }) {
           receiptOption={receiptOption}
           setReceiptOption={setReceiptOption}
           showWarning={showWarning}
+          onReceiptDataChange={setReceiptData}
         />
         <AcceptingTermsAndConditions
           isAcceptedConditions={isAcceptedConditions}

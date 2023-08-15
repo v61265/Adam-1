@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import styled, { keyframes } from 'styled-components'
 import RadioInput from './radio-input'
 import CustomDropdown from './custom-dropdown'
@@ -43,11 +43,9 @@ export default function Receipt({
   receiptOption,
   setReceiptOption,
   showWarning,
+  onReceiptDataChange,
 }) {
   const handleRadioChange = (option) => {
-    if (option !== 'donate') {
-      setSelectedDonateOption(null) // Reset selectedDonateOption when option is not "donate"
-    }
     setReceiptOption(option)
     setShowDetails(true)
   }
@@ -98,15 +96,55 @@ export default function Receipt({
     setTaxIdNumberValue(event.target.value)
   }
 
-  console.log(
+  // Initialize the receipt data object using useMemo
+  const receiptData = useMemo(() => {
+    let data = {}
+    if (receiptOption === 'donate') {
+      data = {
+        name: '捐贈發票',
+        value: selectedDonateOption,
+      }
+    } else if (receiptOption === 'invoiceWithCarrier') {
+      if (selectedInvoiceCarrierOption === '電子發票載具') {
+        data = {
+          name: '二聯式發票（含載具）- 電子發票載具',
+          value: selectedInvoiceCarrierOption,
+        }
+      } else if (selectedInvoiceCarrierOption === '手機條碼') {
+        data = {
+          name: '二聯式發票（含載具）- 手機條碼',
+          value: barcodeValue,
+        }
+      } else if (selectedInvoiceCarrierOption === '自然人憑證') {
+        data = {
+          name: '二聯式發票（含載具）- 自然人憑證',
+          value: certificateValue,
+        }
+      }
+    } else if (receiptOption === 'tripleInvoice') {
+      data = {
+        name: '三聯式發票',
+        value: {
+          抬頭: entityNameValue,
+          統一編號: taxIdNumberValue,
+        },
+      }
+    }
+    return data
+  }, [
     receiptOption,
     selectedDonateOption,
     selectedInvoiceCarrierOption,
     barcodeValue,
     certificateValue,
     entityNameValue,
-    taxIdNumberValue
-  )
+    taxIdNumberValue,
+  ])
+
+  // Call onReceiptDataChange when receiptData changes
+  useEffect(() => {
+    onReceiptDataChange(receiptData)
+  }, [receiptData, onReceiptDataChange])
 
   return (
     <Wrapper>
