@@ -23,7 +23,7 @@ const Form = styled.form`
 
 const LeftWrapper = styled.div`
   width: 100%;
-  padding: 0 16px;
+  padding: 0 10px;
 
   ${({ theme }) => theme.breakpoint.md} {
     max-width: 500px;

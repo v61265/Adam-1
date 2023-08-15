@@ -71,6 +71,9 @@ export default function Receipt({
   const [barcodeValue, setBarcodeValue] = useState('')
   const [certificateValue, setCertificateValue] = useState('')
 
+  const [entityNameValue, setEntityNameValue] = useState('')
+  const [taxIdNumberValue, setTaxIdNumberValue] = useState('')
+
   const handleDonateOptionSelect = (option) => {
     setSelectedDonateOption(option)
   }
@@ -87,12 +90,22 @@ export default function Receipt({
     setCertificateValue(event.target.value)
   }
 
+  const handleEntityNameChange = (event) => {
+    setEntityNameValue(event.target.value)
+  }
+
+  const handleTaxIdNumberChange = (event) => {
+    setTaxIdNumberValue(event.target.value)
+  }
+
   console.log(
     receiptOption,
     selectedDonateOption,
     selectedInvoiceCarrierOption,
     barcodeValue,
-    certificateValue
+    certificateValue,
+    entityNameValue,
+    taxIdNumberValue
   )
 
   return (
@@ -171,7 +184,31 @@ export default function Receipt({
       </RadioInput>
       {showDetails && (
         <div>
-          {receiptOption === 'tripleInvoice' && <p>三聯式發票詳細資訊</p>}
+          {receiptOption === 'tripleInvoice' && (
+            <>
+              <FormInput
+                name="entity name"
+                type="text"
+                placeholder="抬頭"
+                value={entityNameValue}
+                onChange={handleEntityNameChange}
+                errorMessage="抬頭不可空白"
+                required
+                style={{ marginTop: '-16px' }}
+              />
+              <FormInput
+                name="Tax ID number"
+                type="text"
+                placeholder="統一編號"
+                value={taxIdNumberValue}
+                onChange={handleTaxIdNumberChange}
+                errorMessage="請輸入正確的統一編號"
+                required
+                pattern="\d{8}" //8 numbers
+                style={{ marginTop: '-16px' }}
+              />
+            </>
+          )}
         </div>
       )}
     </Wrapper>
