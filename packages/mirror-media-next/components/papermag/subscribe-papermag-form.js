@@ -84,8 +84,16 @@ export default function SubscribePaperMagForm({ plan }) {
 
   console.log(receiptData)
 
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    // Check for form validity
+
+    // If everything is valid, proceed with submitting the form data
+    // Make an API request or update the state here
+  }
+
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <LeftWrapper>
         <MerchandiseItem count={count} setCount={setCount} plan={plan} />
         <ApplyDiscount

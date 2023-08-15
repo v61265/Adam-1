@@ -100,6 +100,11 @@ export default function FormInput(props) {
     setFocused(true)
   }
 
+  const handleInvalid = (event) => {
+    event.preventDefault()
+    setFocused(true) // Ensure the input is marked as focused to apply the invalid styling
+  }
+
   return (
     <InputWrapper>
       <label>{label}</label>
@@ -115,6 +120,7 @@ export default function FormInput(props) {
         onBlur={handleFocus}
         // eslint-disable-next-line react/no-unknown-property
         focused={focused.toString()}
+        onInvalid={handleInvalid}
       />
       <span>{errorMessage}</span>
     </InputWrapper>
