@@ -6,7 +6,7 @@ import PurchaseInfo from './form-detail/purchase-info'
 import Shipping from './form-detail/shipping'
 import Receipt from './form-detail/receipt'
 import AcceptingTermsAndConditions from './form-detail/accepting-terms-and-conditions'
-import OrderBtn from './form-detail/checkout-btn'
+import CheckoutBtn from './form-detail/checkout-btn'
 import Orderer from './form-detail/orderer'
 import Recipient from './form-detail/recipient'
 
@@ -23,7 +23,7 @@ const Form = styled.form`
 
 const LeftWrapper = styled.div`
   width: 100%;
-  padding: 0 16px;
+  padding: 0 10px;
 
   ${({ theme }) => theme.breakpoint.md} {
     max-width: 500px;
@@ -79,6 +79,11 @@ export default function SubscribePaperMagForm({ plan }) {
     }
   }, [isAcceptedConditions, receiptOption])
 
+  // update the receiptData state
+  const [receiptData, setReceiptData] = useState({})
+
+  console.log(receiptData)
+
   return (
     <Form>
       <LeftWrapper>
@@ -106,12 +111,13 @@ export default function SubscribePaperMagForm({ plan }) {
           receiptOption={receiptOption}
           setReceiptOption={setReceiptOption}
           showWarning={showWarning}
+          onReceiptDataChange={setReceiptData}
         />
         <AcceptingTermsAndConditions
           isAcceptedConditions={isAcceptedConditions}
           setIsAcceptedConditions={setIsAcceptedConditions}
         />
-        <OrderBtn
+        <CheckoutBtn
           isAcceptedConditions={isAcceptedConditions}
           receiptOption={receiptOption}
         />
