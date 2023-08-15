@@ -141,6 +141,7 @@ export default function Receipt({
                   onChange={handleBarcodeChange}
                   errorMessage="請輸入有效的手機條碼"
                   required
+                  pattern="/[0-9A-Z.\-+]{7}" //start with "/" followed by exactly 7 characters from 0-9 A-Z . - +
                   style={{ marginTop: '-16px' }}
                 />
               )}
@@ -153,6 +154,7 @@ export default function Receipt({
                   onChange={handleCertificateChange}
                   errorMessage="請輸入有效的自然人憑證"
                   required
+                  pattern="[A-Z]{2}\d{14}" //2 uppercase English letters followed by 14 digits
                   style={{ marginTop: '-16px' }}
                 />
               )}
