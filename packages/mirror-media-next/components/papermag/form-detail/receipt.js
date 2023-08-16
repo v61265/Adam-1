@@ -46,6 +46,15 @@ export default function Receipt({
   onReceiptDataChange,
 }) {
   const handleRadioChange = (option) => {
+    if (receiptOption === 'donate' || receiptOption === 'tripleInvoice') {
+      setSelectedInvoiceCarrierOption(null)
+    }
+    if (
+      receiptOption === 'invoiceWithCarrier' ||
+      receiptOption === 'tripleInvoice'
+    ) {
+      setSelectedDonateOption(null)
+    }
     setReceiptOption(option)
     setShowDetails(true)
   }
