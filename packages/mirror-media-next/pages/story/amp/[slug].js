@@ -83,6 +83,7 @@ function StoryAmpPage({ postData }) {
     relatedsInInputOrder && relatedsInInputOrder.length
       ? relatedsInInputOrder
       : relateds
+
   return (
     <>
       <Head>
