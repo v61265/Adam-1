@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import styled from 'styled-components'
 import errors from '@twreporter/errors'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
@@ -5,7 +6,7 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import Steps from '../../components/papermag/steps'
-// import Succeeded from '../../components/papermag/succeeded'
+import Succeeded from '../../components/papermag/succeeded'
 import Failed from '../../components/papermag/failed'
 
 const Wrapper = styled.main`
@@ -30,6 +31,11 @@ const Wrapper = styled.main`
  * @return {JSX.Element}
  */
 export default function Return({ sectionsData = [], topicsData = [] }) {
+  const [isSucceeded, setIsSucceeded] = useState(true) // Initial state: Succeeded
+
+  const toggleResult = () => {
+    setIsSucceeded(!isSucceeded)
+  }
   return (
     <Layout
       head={{ title: `紙本雜誌訂閱結果` }}
@@ -43,8 +49,13 @@ export default function Return({ sectionsData = [], topicsData = [] }) {
         <Steps activeStep={3} />
         <hr />
         <Wrapper>
-          {/* <Succeeded /> */}
-          <Failed />
+          <button
+            style={{ border: '1px solid red', background: 'aqua' }}
+            onClick={toggleResult}
+          >
+            {isSucceeded ? 'Toggle Failed' : 'Toggle Succeeded'}
+          </button>
+          {isSucceeded ? <Succeeded /> : <Failed />}
         </Wrapper>
       </>
     </Layout>
