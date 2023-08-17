@@ -6,10 +6,21 @@ import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import Steps from '../../components/papermag/steps'
 import Succeeded from '../../components/papermag/succeeded'
-import Failed from '../../components/papermag/failed'
+// import Failed from '../../components/papermag/failed'
 
-const Page = styled.main`
+const Wrapper = styled.main`
   min-height: 65vh;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 8px;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    padding: 20;
+  }
+
+  ${({ theme }) => theme.breakpoint.lg} {
+    padding: 0;
+  }
 `
 
 /**
@@ -28,11 +39,14 @@ export default function Return({ sectionsData = [], topicsData = [] }) {
       }}
       footer={{ type: 'default' }}
     >
-      <Page>
+      <>
         <Steps activeStep={3} />
-        <Succeeded />
-        <Failed />
-      </Page>
+        <hr />
+        <Wrapper>
+          <Succeeded />
+          {/* <Failed /> */}
+        </Wrapper>
+      </>
     </Layout>
   )
 }

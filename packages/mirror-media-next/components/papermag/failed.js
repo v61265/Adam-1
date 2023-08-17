@@ -1,7 +1,16 @@
 import styled from 'styled-components'
 
-const Wrapper = styled.div``
+const GrayBox = styled.div`
+  border-radius: 12px;
+  background: #f2f2f2;
+  padding: 16px;
+  margin-top: 8px;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 48px;
+  }
+`
 
 export default function Failed() {
-  return <Wrapper>Failed</Wrapper>
+  return <GrayBox>Failed</GrayBox>
 }
