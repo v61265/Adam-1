@@ -194,10 +194,10 @@ export async function getServerSideProps({ params, req, res }) {
      * @type {PostData}
      */
     const postData = result?.data?.post
-    if (!postData) {
+    const { style, isAdvertised } = postData
+    if (!postData || isAdvertised) {
       return { notFound: true }
     }
-    const { style } = postData
     /**
      * If post style is 'projects' or 'campaign', redirect to certain route.
      *
