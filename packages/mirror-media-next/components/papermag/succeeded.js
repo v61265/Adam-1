@@ -133,6 +133,7 @@ const DetailWrapper = styled.div`
   flex-direction: column;
 `
 const Hr = styled.hr`
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
   margin: 16px 0;
 `
 const CustomerTitle = styled.p`

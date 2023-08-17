@@ -5,11 +5,11 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import Steps from '../../components/papermag/steps'
-import Succeeded from '../../components/papermag/succeeded'
-// import Failed from '../../components/papermag/failed'
+// import Succeeded from '../../components/papermag/succeeded'
+import Failed from '../../components/papermag/failed'
 
 const Wrapper = styled.main`
-  min-height: 65vh;
+  min-height: 50vh;
   max-width: 960px;
   margin: 0 auto;
   padding: 0 8px;
@@ -43,8 +43,8 @@ export default function Return({ sectionsData = [], topicsData = [] }) {
         <Steps activeStep={3} />
         <hr />
         <Wrapper>
-          <Succeeded />
-          {/* <Failed /> */}
+          {/* <Succeeded /> */}
+          <Failed />
         </Wrapper>
       </>
     </Layout>
