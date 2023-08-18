@@ -301,7 +301,7 @@ const typeStory = css`
       justify-content: center;
       font-family: 'PingFang TC';
       font-style: normal;
-      font-weight: 300;
+      font-weight: 600;
       font-size: 18px;
       line-height: 1;
       padding: 8px;
@@ -361,7 +361,7 @@ const typeStory = css`
             right: 103px;
             font-family: 'PingFang TC';
             font-style: normal;
-            font-weight: 300;
+            font-weight: 600;
             font-size: 12px;
             line-height: 14px;
             padding: 4px;
