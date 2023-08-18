@@ -36,7 +36,7 @@ const typeListing = css`
         background-color: #bcbcbc;
         font-family: 'PingFang TC';
         font-style: normal;
-        font-weight: 300;
+        font-weight: 600;
         font-size: 18px;
         line-height: 1;
 

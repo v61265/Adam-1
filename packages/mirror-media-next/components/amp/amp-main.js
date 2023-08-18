@@ -142,7 +142,10 @@ export default function AmpMain({ postData, isMember }) {
     tags = [],
     brief = { blocks: [], entityMap: {} },
     content = { blocks: [], entityMap: {} },
+    trimmedContent = { blocks: [], entityMap: {} },
   } = postData
+
+  const postContent = content ?? trimmedContent
 
   const sharedUrl = useSharedUrl()
 
@@ -168,7 +171,7 @@ export default function AmpMain({ postData, isMember }) {
   ]
 
   const sectionSlot = getAmpGptDataSlotSection(section)
-  const blocksLength = getBlocksCount(content)
+  const blocksLength = getBlocksCount(postContent)
 
   return (
     <MainWrapper>
@@ -214,7 +217,7 @@ export default function AmpMain({ postData, isMember }) {
 
       <AmpContentContainer>
         <DraftRenderBlock
-          rawContentBlock={copyAndSliceDraftBlock(content, 0, 1)}
+          rawContentBlock={copyAndSliceDraftBlock(postContent, 0, 1)}
           contentLayout="amp"
         />
 
@@ -222,7 +225,7 @@ export default function AmpMain({ postData, isMember }) {
           <>
             <StyledAmpGptAd section={sectionSlot} position="AT1" />
             <DraftRenderBlock
-              rawContentBlock={copyAndSliceDraftBlock(content, 1, 5)}
+              rawContentBlock={copyAndSliceDraftBlock(postContent, 1, 5)}
               contentLayout="amp"
             />
           </>
@@ -232,7 +235,7 @@ export default function AmpMain({ postData, isMember }) {
           <>
             <StyledAmpGptAd section={sectionSlot} position="AT2" />
             <DraftRenderBlock
-              rawContentBlock={copyAndSliceDraftBlock(content, 5)}
+              rawContentBlock={copyAndSliceDraftBlock(postContent, 5)}
               contentLayout="amp"
             />
           </>

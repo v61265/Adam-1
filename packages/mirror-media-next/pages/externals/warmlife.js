@@ -10,8 +10,12 @@ import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX, SECTION_IDS } from '../../constants/index'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
+
 import { fetchExternalCounts } from '../../apollo/query/externals'
 import { fetchExternalsWhichPartnerIsNotShowOnIndex } from '../../utils/api/externals'
+
+import FullScreenAds from '../../components/ads/full-screen-ads'
+
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
 })
@@ -125,6 +129,7 @@ export default function WarmLife({
         {shouldShowAd && (
           <StickyGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="MB_ST" />
         )}
+        {shouldShowAd && <FullScreenAds />}
       </WarmLifeContainer>
     </Layout>
   )
