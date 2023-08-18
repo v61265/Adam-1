@@ -73,10 +73,16 @@ export default function AmpHero({
         <HeroWrapper>
           {/** @ts-ignore */}
           <amp-img
-            src={heroImage?.resized?.original ?? '/images/default-og-img.png'}
+            src={heroImage?.resized?.original}
             alt={heroCaption ?? title}
             layout="fill"
-          />
+          >
+            <amp-img
+              src={'/images/default-og-img.png'}
+              alt={heroCaption ?? title}
+              layout="fill"
+            ></amp-img>
+          </amp-img>
         </HeroWrapper>
       )}
       {shouldShowHeroVideo && (
