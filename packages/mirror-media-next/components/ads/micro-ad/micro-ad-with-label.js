@@ -147,7 +147,7 @@ const typeHome = css`
       color: white;
       font-size: 18px;
       line-height: 20px;
-      font-weight: 400;
+      font-weight: 600;
     }
 
     // AD Title
@@ -218,7 +218,7 @@ const typeHome = css`
         color: white;
         font-size: 18px;
         line-height: 20px;
-        font-weight: 300;
+        font-weight: 600;
         position: absolute;
         bottom: 0;
         left: 0;
