@@ -23,7 +23,6 @@ let SEARCH_URL = 'search-url/search'
 let URL_STATIC_POPULAR_NEWS = ''
 let URL_STATIC_404_POPULAR_NEWS = ''
 
-let URL_STATIC_EXTERNALS_WARMLIFE = ''
 let GPT_MODE = ''
 // It is safe to expose the configuration of Firebase.
 // See: https://firebase.google.com/docs/projects/api-keys
@@ -43,7 +42,6 @@ switch (ENV) {
     URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
     URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
     URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
-    URL_STATIC_EXTERNALS_WARMLIFE = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/json/life_feed.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-341XFN0675'
@@ -77,7 +75,6 @@ switch (ENV) {
     URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
     URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
     URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
-    URL_STATIC_EXTERNALS_WARMLIFE = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/json/life_feed.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
@@ -110,7 +107,6 @@ switch (ENV) {
     URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
     URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
     URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
-    URL_STATIC_EXTERNALS_WARMLIFE = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/json/life_feed.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
@@ -145,7 +141,6 @@ switch (ENV) {
     URL_STATIC_POST_EXTERNAL = `http://localhost:8080/json/post_external`
     URL_STATIC_POPULAR_NEWS = `http://localhost:8080/json/popular.json`
     URL_STATIC_404_POPULAR_NEWS = `http://localhost:8080/json/404_popular.json`
-    URL_STATIC_EXTERNALS_WARMLIFE = `http://localhost:8080/json/life_feed.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
@@ -182,7 +177,6 @@ export {
   SEARCH_URL,
   URL_STATIC_POPULAR_NEWS,
   URL_STATIC_404_POPULAR_NEWS,
-  URL_STATIC_EXTERNALS_WARMLIFE,
   GPT_MODE,
   FIREBASE_CONFIG,
 }
