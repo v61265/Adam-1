@@ -170,7 +170,6 @@ export async function getServerSideProps({ req, res }) {
       return response.value
     } else if (response.status === 'rejected') {
       const statusCode = response.reason.response?.status
-      console.log(statusCode, typeof statusCode)
 
       const annotatingError = errors.helpers.wrap(
         response.reason,
@@ -228,7 +227,7 @@ export async function getServerSideProps({ req, res }) {
   const warmLifeData = Array.isArray(handledResponses[1])
     ? handledResponses[1]
     : []
-  console.log(warmLifeData)
+
   const warmLifeDataCount =
     'data' in handledResponses[2]
       ? handledResponses[2]?.data?.externalsCount || 0
