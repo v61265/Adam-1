@@ -180,9 +180,9 @@ export default function RelatedArticleList({
                 images={related.heroImage?.resized}
                 alt={related.title}
                 rwd={{
-                  mobile: '280px',
-                  tablet: '87px',
-                  laptop: '135px',
+                  mobile: '500px',
+                  tablet: '500px',
+                  laptop: '500px',
                 }}
                 defaultImage={'/images/default-og-img.png'}
                 loadingImage={'/images/loading.gif'}

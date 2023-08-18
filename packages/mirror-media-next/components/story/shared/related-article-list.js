@@ -157,9 +157,9 @@ export default function RelatedArticleList({ relateds }) {
                 images={related.heroImage?.resized}
                 alt={related.title}
                 rwd={{
-                  mobile: '280px',
-                  tablet: '87px',
-                  laptop: '276px',
+                  mobile: '500px',
+                  tablet: '500px',
+                  laptop: '500px',
                 }}
                 width={'100%'}
                 height={'100%'}
