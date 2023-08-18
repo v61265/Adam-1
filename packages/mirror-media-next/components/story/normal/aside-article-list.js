@@ -181,7 +181,7 @@ const Label = styled.div`
     color: white;
     font-size: 14px;
     line-height: 25px;
-    font-weight: 400;
+    font-weight: 600;
     background-color: ${
       /**
        * @param {Object} props
