@@ -53,7 +53,7 @@ const Label = styled.div`
   color: white;
   font-size: 18px;
   line-height: 20px;
-  font-weight: 400;
+  font-weight: 600;
   background-color: ${
     /**
      * @param {Object} props
@@ -69,10 +69,6 @@ const Label = styled.div`
         : theme.color.brandColor.lightBlue
     }
   };
-
-  ${({ theme }) => theme.breakpoint.md} {
-    font-weight: 300;
-  }
 `
 const Title = styled.div`
   text-align: left;
