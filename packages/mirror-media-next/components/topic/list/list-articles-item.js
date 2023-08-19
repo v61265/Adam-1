@@ -141,7 +141,7 @@ export default function ListArticlesItem({ item }) {
           alt={item.title}
           loadingImage="/images/loading.gif"
           defaultImage="/images/default-og-img.png"
-          rwd={{ tablet: '500px', desktop: '500px' }}
+          rwd={{ mobile: '500px', tablet: '500px', desktop: '500px' }}
         />
         {itemSection && (
           <ItemSection sectionName={itemSection?.slug}>
