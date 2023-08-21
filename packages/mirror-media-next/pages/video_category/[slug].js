@@ -144,7 +144,6 @@ export async function getServerSideProps({ query, req, res }) {
   const videoCategorySlug = Array.isArray(query.slug)
     ? query.slug[0]
     : query.slug
-  const mockError = query.error === '500'
 
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
@@ -241,21 +240,26 @@ export async function getServerSideProps({ query, req, res }) {
     : []
   const ytNextPageToken = handledResponses[1]?.nextPageToken || ''
 
-  const category = handledResponses[2]?.category || { slug: videoCategorySlug }
+  // handle category state, if `inactive` -> redirect to 404
+  if (handledResponses[2]?.category.state === 'inactive') {
+    console.log(
+      JSON.stringify({
+        severity: 'WARNING',
+        message: `categorySlug '${videoCategorySlug}' is inactive, redirect to 404`,
+        globalLogFields,
+      })
+    )
+    return { notFound: true }
+  }
 
-  const props = mockError
-    ? {
-        videos: [],
-        ytNextPageToken: '',
-        headerData: { sectionsData, topicsData },
-        category: { slug: videoCategorySlug },
-      }
-    : {
-        videos,
-        ytNextPageToken,
-        headerData: { sectionsData, topicsData },
-        category,
-      }
+  const category = handledResponses[2]?.category
+
+  const props = {
+    videos,
+    ytNextPageToken,
+    headerData: { sectionsData, topicsData },
+    category,
+  }
 
   return { props }
 }
