@@ -16,6 +16,29 @@ import CloseButton from './shared/close-button'
 /**
  * @typedef {Omit<Section, 'categories' > & {href: string, categories: Array.<SectionWithCategory & { href: string }> }} SectionWithHrefTemp
  */
+
+/**
+ * @typedef {import('../utils/api/index').HeadersDataSection} HeadersDataSection
+ */
+/**
+ * @typedef {import('../utils/api/index').CategoryInHeadersDataSection} CategoryInHeadersDataSection
+ */
+
+/**
+ * @typedef {import('../utils/api/index').HeadersDataCategory} HeadersDataCategory
+ */
+
+/**
+ * @typedef {Omit<HeadersDataSection, 'categories' > & {href: string, categories: Array.<CategoryInHeadersDataSection & { href: string }> }}HeadersDataSectionWithHref
+ */
+/**
+ * @typedef {HeadersDataCategory & {href: string }} HeadersDataCategoryWithHref
+ */
+
+/**
+ * @typedef { (HeadersDataCategoryWithHref | HeadersDataSectionWithHref )[]} SectionsAndCategoriesWithHref
+ */
+
 /**
  * @typedef {Pick<import('../apollo/fragments/topic').Topic, 'id' | 'slug' | 'name'>[]} Topics
  */
@@ -237,20 +260,18 @@ const SocialMediaList = styled.div`
  * Should be done after fetch header data from new json file
  * @param {Object} props
  * @param {Topics} props.topics
- * @param {SectionWithHrefTemp[]} props.sections
+ * @param {SectionsAndCategoriesWithHref} props.sectionsAndCategories
  * @param {import('../type').SubBrand[]} props.subBrands
  * @param {import('../type').Promotion[]} props.promotions
  * @param {import('../type').SocialMedia[]} props.socialMedia
- * @param {{name: string, href:string}[]} props.displayedPartners
  * @returns {React.ReactElement}
  */
 export default function MobileSidebar({
   topics,
-  sections = [],
+  sectionsAndCategories = [],
   subBrands,
   promotions,
   socialMedia,
-  displayedPartners = [],
 }) {
   const [openSidebar, setOpenSidebar] = useState(false)
   const [openSection, setOpenSection] = useState('')
@@ -259,6 +280,47 @@ export default function MobileSidebar({
     setOpenSidebar(false)
   })
 
+  const sectionsAndCategoriesJsx = sectionsAndCategories.map((item) => {
+    switch (item.type) {
+      case 'section':
+        return (
+          <Fragment key={item.order}>
+            <Section sectionSlug={item.slug}>
+              <a style={{ width: '50%' }} href={item.href}>
+                <h3>{item.name}</h3>
+              </a>
+              <SectionToggle
+                onClick={() => setOpenSection(item.slug)}
+                shouldOpen={item.slug === openSection}
+              ></SectionToggle>
+            </Section>
+
+            <Categories
+              shouldShowCategories={item.slug === openSection}
+              sectionSlug={item.slug}
+            >
+              {item.categories.map((category) => (
+                <a key={category.id} href={category.href}>
+                  {category.name}
+                </a>
+              ))}
+            </Categories>
+          </Fragment>
+        )
+      case 'category':
+        const renderSectionSlug = item.sections?.[0]
+
+        return (
+          <Section key={item.order} sectionSlug={renderSectionSlug}>
+            <a style={{ width: '100%' }} href={item.href}>
+              <h3>{item.name}</h3>
+            </a>
+          </Section>
+        )
+      default:
+        break
+    }
+  })
   return (
     <>
       <HamburgerButton handleOnClick={() => setOpenSidebar((val) => !val)} />
@@ -276,36 +338,7 @@ export default function MobileSidebar({
             ))}
             <Topic href={`/section/topic`}>更多</Topic>
           </Topics>
-          {sections.map(({ id, slug, categories, name, href }) => (
-            <Fragment key={id}>
-              <Section sectionSlug={slug}>
-                <Link style={{ width: '50%' }} href={href}>
-                  <h3>{name}</h3>
-                </Link>
-                <SectionToggle
-                  onClick={() => setOpenSection(slug)}
-                  shouldOpen={slug === openSection}
-                ></SectionToggle>
-              </Section>
-              <Categories
-                shouldShowCategories={slug === openSection}
-                sectionSlug={slug}
-              >
-                {categories.map((category) => (
-                  <a key={category.id} href={category.href}>
-                    {category.name}
-                  </a>
-                ))}
-              </Categories>
-            </Fragment>
-          ))}
-          {displayedPartners.map(({ name, href }) => (
-            <Section key={name}>
-              <Link style={{ width: '50%' }} href={href}>
-                <h3>{name}</h3>
-              </Link>
-            </Section>
-          ))}
+          {sectionsAndCategoriesJsx}
         </SideBarTop>
         <SideBarBottom>
           <SubBrandList>
