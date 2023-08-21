@@ -10,6 +10,10 @@ import { useMembership, logout } from '../context/membership'
 
 const MemberLoginButtonWrapper = styled.div`
   margin-left: 23px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-left: 16px;
+  }
 `
 const LoginButton = styled.button`
   font-size: 14px;
