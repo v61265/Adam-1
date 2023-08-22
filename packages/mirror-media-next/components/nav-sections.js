@@ -76,7 +76,7 @@ const Sections = styled.ul`
     justify-content: space-between;
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    height: auto;
+    height: 55px;
     overflow: visible;
   }
 `

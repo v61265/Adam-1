@@ -321,9 +321,12 @@ const SearchInputWrapper = styled.div`
 `
 
 const TopicsAndFlashNews = styled.section`
-  margin-top: 2px;
   ${({ theme }) => theme.breakpoint.md} {
     margin-top: 10px;
+  }
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-top: 0px;
   }
 `
 const TopicsAndSubscribe = styled.section`
