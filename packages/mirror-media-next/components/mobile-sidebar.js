@@ -166,7 +166,7 @@ const Categories = styled.div`
   margin: ${({ shouldShowCategories }) =>
     shouldShowCategories ? '12px 0' : '0px'};
   gap: ${({ shouldShowCategories }) =>
-    shouldShowCategories ? '4px 12px' : '0px'};
+    shouldShowCategories ? '4px 20px' : '0px'};
   transition: all 0.5s ease-in-out;
 
   a {
