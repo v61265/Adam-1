@@ -57,6 +57,7 @@ const Sections = styled.ul`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -126,8 +127,8 @@ const SectionLink = styled.a`
 `
 
 const LogoIcon = styled(Logo)`
-  width: 49px;
-  height: 20.72px;
+  width: 68px;
+  height: 29px;
   ${({ theme }) => theme.breakpoint.md} {
     display: none;
   }
@@ -135,7 +136,7 @@ const LogoIcon = styled(Logo)`
 const SectionLogo = styled.div`
   background-color: #fff;
 
-  padding: 4px 0 4px 8px;
+  padding: 4px 0 10px 8px;
   ${({ theme }) => theme.breakpoint.md} {
     display: none;
   }

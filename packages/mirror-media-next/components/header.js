@@ -256,8 +256,8 @@ const HeaderLogo = styled(Logo)`
   display: none;
   ${({ theme }) => theme.breakpoint.md} {
     display: block;
-    width: 49px;
-    height: 20.72px;
+    width: 68px;
+    height: 29px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
     display: block;
@@ -321,7 +321,10 @@ const SearchInputWrapper = styled.div`
 `
 
 const TopicsAndFlashNews = styled.section`
-  margin-top: 10px;
+  margin-top: 2px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 10px;
+  }
 `
 const TopicsAndSubscribe = styled.section`
   display: flex;
