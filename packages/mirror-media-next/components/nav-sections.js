@@ -81,13 +81,21 @@ const Sections = styled.ul`
 `
 const Section = styled.li`
   flex: 0 0 auto;
+  :not(:last-child) {
+    padding-right: 8px;
+  }
   position: relative;
   cursor: pointer;
   user-select: none;
   line-height: 1.15;
   color: rgba(0, 0, 0, 0.87);
+  font-size: 16px;
+  font-weight: 600;
 
   ${({ theme }) => theme.breakpoint.xl} {
+    :not(:last-child) {
+      padding-right: 0;
+    }
     line-height: 150%;
     flex-shrink: 1;
     width: 100%;
