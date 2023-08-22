@@ -230,13 +230,13 @@ const HeaderTop = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 21px 8px 20px;
+  padding: 21px 15px 20px 8px;
   max-width: 596px;
   margin: 0 auto;
   height: 75px;
 
   ${({ theme }) => theme.breakpoint.md} {
-    padding: 21px 8px 20px;
+    padding: 21px 0px 20px 0;
     height: 69.24px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
