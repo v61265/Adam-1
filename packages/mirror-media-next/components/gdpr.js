@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { Z_INDEX } from '../constants'
 
@@ -54,7 +54,7 @@ const Wrapper = styled.div`
           width: 83px;
           height: 33px;
           font-size: 14px;
-          padding: 4px 20px;
+          padding: 4px 0;
           margin-left: 0;
           margin-top: 18px;
           :hover {
@@ -92,10 +92,19 @@ const Wrapper = styled.div`
 `
 
 export default function GDPRNotification() {
-  const [showNotification, setShowNotification] = useState(true)
+  const [showNotification, setShowNotification] = useState(false)
+
+  useEffect(() => {
+    const gdprSeen = localStorage.getItem('gdprSeen')
+
+    if (!gdprSeen) {
+      setShowNotification(true)
+    }
+  }, [])
 
   const handleAgree = () => {
     setShowNotification(false)
+    localStorage.setItem('gdprSeen', 'true')
   }
 
   return (
