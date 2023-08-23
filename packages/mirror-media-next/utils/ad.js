@@ -77,16 +77,18 @@ const getSectionGPTPageKey = (sectionSlug) => {
     return
   }
 
-  let GptPageKey = 'other'
+  let GptPageKey
 
   //if sectionSlug is `論壇(mirrorcolumn)` or `新聞深探(timesquare)`, use the `culture` ad unit.
   const invalidSections = ['mirrorcolumn', 'timesquare']
 
   if (invalidSections.includes(sectionSlug)) {
     GptPageKey = SECTION_IDS['culture']
+  } else if (SECTION_IDS.hasOwnProperty(sectionSlug)) {
+    GptPageKey = SECTION_IDS[sectionSlug]
   } else {
     //if SECTION_IDS doesn't include `sectionSlug` ad units, use `other` ad units
-    GptPageKey = SECTION_IDS[sectionSlug] ?? 'other'
+    GptPageKey = 'other'
   }
 
   return GptPageKey
