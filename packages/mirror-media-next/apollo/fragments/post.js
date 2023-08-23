@@ -29,7 +29,7 @@ export const listingPost = gql`
     brief
     publishedDate
     state
-    sections {
+    sections(where: { state: { equals: "active" } }) {
       ...section
     }
     categories {
@@ -59,7 +59,7 @@ export const asideListingPost = gql`
     id
     slug
     title
-    sections {
+    sections(where: { state: { equals: "active" } }) {
       ...section
     }
     sectionsInInputOrder {
@@ -167,7 +167,7 @@ export const post = gql`
     isAdult
     publishedDate
     updatedAt
-    sections {
+    sections(where: { state: { equals: "active" } }) {
       ...section
     }
     sectionsInInputOrder {
