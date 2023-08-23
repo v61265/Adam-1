@@ -93,7 +93,6 @@ export default function VideoCategory({
   headerData,
   category,
 }) {
-  console.log('category', category)
   const hasMoreThanOneVideo = videos.length > 1
   const firstVideo = videos[0]
   const remainingVideos = videos.slice(1)
