@@ -34,7 +34,7 @@ const Wrapper = styled.div`
 
           ${({ theme }) => theme.breakpoint.md} {
             font-size: 16px;
-            padding: 20px 24px 20px 36px;
+            padding: 20px 36px;
             flex-direction: row;
           }
           ${({ theme }) => theme.breakpoint.xl} {
@@ -81,6 +81,12 @@ const Wrapper = styled.div`
           text-decoration: underline 0.7px;
           text-underline-offset: 3.5px;
         }
+
+        .text {
+          ${({ theme }) => theme.breakpoint.md} {
+            width: 90%;
+          }
+        }
       `
   };
 `
@@ -96,7 +102,7 @@ export default function GDPRNotification() {
     <Wrapper showNotification={showNotification}>
       {showNotification && (
         <div className="gdpr-notification">
-          <p>
+          <div className="text">
             本網站使用相關技術提供更好的閱讀體驗，同時尊重使用者隱私，若您瀏覽此網站，即代表您同意我們使用第三方
             Cookie。若欲了解更多相關資訊，點這裡瞭解
             <a
@@ -107,7 +113,7 @@ export default function GDPRNotification() {
               隱私權聲明
             </a>
             。
-          </p>
+          </div>
           <button onClick={handleAgree}>我同意</button>
         </div>
       )}
