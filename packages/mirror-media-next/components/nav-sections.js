@@ -57,6 +57,7 @@ const Sections = styled.ul`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -75,19 +76,27 @@ const Sections = styled.ul`
     justify-content: space-between;
   }
   ${({ theme }) => theme.breakpoint.xl} {
-    height: auto;
+    height: 55px;
     overflow: visible;
   }
 `
 const Section = styled.li`
   flex: 0 0 auto;
+  :not(:last-child) {
+    padding-right: 8px;
+  }
   position: relative;
   cursor: pointer;
   user-select: none;
   line-height: 1.15;
   color: rgba(0, 0, 0, 0.87);
+  font-size: 16px;
+  font-weight: 600;
 
   ${({ theme }) => theme.breakpoint.xl} {
+    :not(:last-child) {
+      padding-right: 0;
+    }
     line-height: 150%;
     flex-shrink: 1;
     width: 100%;
@@ -118,8 +127,8 @@ const SectionLink = styled.a`
 `
 
 const LogoIcon = styled(Logo)`
-  width: 49px;
-  height: 20.72px;
+  width: 68px;
+  height: 29px;
   ${({ theme }) => theme.breakpoint.md} {
     display: none;
   }
@@ -127,7 +136,7 @@ const LogoIcon = styled(Logo)`
 const SectionLogo = styled.div`
   background-color: #fff;
 
-  padding: 4px 0 4px 8px;
+  padding: 4px 0 10px 8px;
   ${({ theme }) => theme.breakpoint.md} {
     display: none;
   }

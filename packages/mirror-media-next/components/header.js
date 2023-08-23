@@ -230,13 +230,13 @@ const HeaderTop = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 21px 8px 20px;
+  padding: 21px 15px 20px 8px;
   max-width: 596px;
   margin: 0 auto;
   height: 75px;
 
   ${({ theme }) => theme.breakpoint.md} {
-    padding: 21px 8px 20px;
+    padding: 21px 0px 20px 0;
     height: 69.24px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
@@ -256,8 +256,8 @@ const HeaderLogo = styled(Logo)`
   display: none;
   ${({ theme }) => theme.breakpoint.md} {
     display: block;
-    width: 49px;
-    height: 20.72px;
+    width: 68px;
+    height: 29px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
     display: block;
@@ -321,7 +321,13 @@ const SearchInputWrapper = styled.div`
 `
 
 const TopicsAndFlashNews = styled.section`
-  margin-top: 10px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 10px;
+  }
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-top: 0px;
+  }
 `
 const TopicsAndSubscribe = styled.section`
   display: flex;

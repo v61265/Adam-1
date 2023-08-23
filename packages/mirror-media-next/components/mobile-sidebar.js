@@ -75,12 +75,16 @@ const Topics = styled.div`
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  padding-right: 19px;
+  width: 90%;
+  margin-bottom: 30px;
 `
 const Topic = styled.a`
   font-weight: 500;
+  font-family: var(--notosansTC-font);
   color: #fff;
   text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 0.7px;
 `
 const Section = styled.div`
   display: flex;
@@ -159,10 +163,10 @@ const Categories = styled.div`
     ({ sectionSlug }) => (sectionSlug ? colorCss : '#fff')
   };
 
-  margin-top: ${({ shouldShowCategories }) =>
-    shouldShowCategories ? '12px' : '0px'};
+  margin: ${({ shouldShowCategories }) =>
+    shouldShowCategories ? '12px 0' : '0px'};
   gap: ${({ shouldShowCategories }) =>
-    shouldShowCategories ? '4px 12px' : '0px'};
+    shouldShowCategories ? '4px 20px' : '0px'};
   transition: all 0.5s ease-in-out;
 
   a {
