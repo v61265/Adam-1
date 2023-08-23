@@ -808,15 +808,15 @@ const SkeletonBlockBottomDown = styled(SkeletonBlock)`
 `
 const HeaderSkeleton = () => {
   const elementInBottomUp = []
-  const numberOfElementsInBottomUp = 9
+  const numberOfElementsInBottomUp = 10
 
   for (let i = 0; i < numberOfElementsInBottomUp; i++) {
     elementInBottomUp.push(
       <SkeletonBlock
         key={i}
-        mobile={{ width: '105px', height: '32px' }}
-        tablet={{ width: '105px', height: '32px' }}
-        desktop={{ width: '105px', height: '32px' }}
+        mobile={{ width: '90px', height: '32px' }}
+        tablet={{ width: '90px', height: '32px' }}
+        desktop={{ width: '90px', height: '32px' }}
       />
     )
   }
