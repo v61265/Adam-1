@@ -38,7 +38,6 @@ const Wrapper = styled.div`
             flex-direction: row;
           }
           ${({ theme }) => theme.breakpoint.xl} {
-            font-size: 20px;
             padding: 28px 48px;
           }
         }
