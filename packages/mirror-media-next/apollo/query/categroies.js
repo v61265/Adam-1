@@ -4,7 +4,7 @@ import { category, categoryWithSection } from '../fragments/category'
 const fetchCategorySections = gql`
   ${categoryWithSection}
   query ($categorySlug: String) {
-    category(where: { slug: $categorySlug }) {
+    category(where: { slug: $categorySlug, state: { equals: "active" } }) {
       ...categoryWithSection
     }
   }
@@ -13,7 +13,7 @@ const fetchCategorySections = gql`
 const fetchCategory = gql`
   ${category}
   query ($categorySlug: String) {
-    category(where: { slug: $categorySlug }) {
+    category(where: { slug: $categorySlug, state: { equals: "active" } }) {
       ...category
     }
   }
