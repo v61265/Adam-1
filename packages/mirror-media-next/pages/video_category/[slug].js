@@ -93,6 +93,7 @@ export default function VideoCategory({
   headerData,
   category,
 }) {
+  console.log('category', category)
   const hasMoreThanOneVideo = videos.length > 1
   const firstVideo = videos[0]
   const remainingVideos = videos.slice(1)
@@ -144,6 +145,7 @@ export async function getServerSideProps({ query, req, res }) {
   const videoCategorySlug = Array.isArray(query.slug)
     ? query.slug[0]
     : query.slug
+  const mockError = query.error === '500'
 
   const traceHeader = req.headers?.['x-cloud-trace-context']
   let globalLogFields = {}
@@ -224,7 +226,6 @@ export async function getServerSideProps({ query, req, res }) {
     : []
 
   // handle fetch videos and get nextPageToken for infinite scroll
-
   if (handledResponses[1]?.items?.length === 0) {
   }
   const videos = handledResponses[1]?.items
@@ -241,7 +242,7 @@ export async function getServerSideProps({ query, req, res }) {
   const ytNextPageToken = handledResponses[1]?.nextPageToken || ''
 
   // handle category state, if `inactive` -> redirect to 404
-  if (handledResponses[2]?.category.state === 'inactive') {
+  if (handledResponses[2]?.category?.state === 'inactive') {
     console.log(
       JSON.stringify({
         severity: 'WARNING',
@@ -252,14 +253,21 @@ export async function getServerSideProps({ query, req, res }) {
     return { notFound: true }
   }
 
-  const category = handledResponses[2]?.category
+  const category = handledResponses[2]?.category || { slug: videoCategorySlug }
 
-  const props = {
-    videos,
-    ytNextPageToken,
-    headerData: { sectionsData, topicsData },
-    category,
-  }
+  const props = mockError
+    ? {
+        videos: [],
+        ytNextPageToken: '',
+        headerData: { sectionsData, topicsData },
+        category: { slug: videoCategorySlug },
+      }
+    : {
+        videos,
+        ytNextPageToken,
+        headerData: { sectionsData, topicsData },
+        category,
+      }
 
   return { props }
 }
