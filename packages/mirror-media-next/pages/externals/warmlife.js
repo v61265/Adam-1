@@ -21,7 +21,7 @@ const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
 })
 
 const RENDER_PAGE_SIZE = 12
-const WARMLIFE_DEFAULT_TITLE = '生活暖流'
+const WARMLIFE_DEFAULT_TITLE = '暖流'
 const WARMLIFE_DEFAULT_COLOR = 'lightBlue'
 const WARMLIFE_GPT_SECTION_IDS = SECTION_IDS.news // the default section of `warmlife` page is `時事`
 
