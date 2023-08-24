@@ -274,6 +274,7 @@ export async function getServerSideProps({ query, req, res }) {
     sections: [],
     slug: categorySlug,
     isMemberOnly: false,
+    state: 'inactive',
   }
   try {
     const { data } = await fetchCategoryByCategorySlug(categorySlug)
@@ -305,6 +306,18 @@ export async function getServerSideProps({ query, req, res }) {
         ...globalLogFields,
       })
     )
+  }
+
+  // handle category state, if `inactive` -> redirect to 404
+  if (category.state === 'inactive') {
+    console.log(
+      JSON.stringify({
+        severity: 'WARNING',
+        message: `categorySlug '${categorySlug}' is inactive, redirect to 404`,
+        globalLogFields,
+      })
+    )
+    return { notFound: true }
   }
 
   const isPremium = category.isMemberOnly

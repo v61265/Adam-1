@@ -31,7 +31,7 @@ export const sectionWithCategory = gql`
     id
     name
     slug
-    categories {
+    categories(where: { state: { equals: "active" } }) {
       name
       slug
     }
