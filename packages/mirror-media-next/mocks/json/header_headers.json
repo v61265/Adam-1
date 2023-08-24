@@ -7,6 +7,54 @@
             "name": "會員專區",
             "categories": [
                 {
+                    "id": "49",
+                    "slug": "somebody",
+                    "name": "一鏡到底",
+                    "isMemberOnly": true
+                },
+                {
+                    "id": "51",
+                    "slug": "truth",
+                    "name": "心內話",
+                    "isMemberOnly": true
+                },
+                {
+                    "id": "50",
+                    "slug": "world",
+                    "name": "鏡相人間",
+                    "isMemberOnly": true
+                },
+                {
+                    "id": "52",
+                    "slug": "mogul",
+                    "name": "財經人物",
+                    "isMemberOnly": true
+                },
+                {
+                    "id": "19",
+                    "slug": "money",
+                    "name": "理財",
+                    "isMemberOnly": true
+                },
+                {
+                    "id": "94",
+                    "slug": "timesquare",
+                    "name": "時代現場",
+                    "isMemberOnly": true
+                },
+                {
+                    "id": "25",
+                    "slug": "celebrity",
+                    "name": "鏡大咖",
+                    "isMemberOnly": true
+                },
+                {
+                    "id": "27",
+                    "slug": "column",
+                    "name": "影劇專欄",
+                    "isMemberOnly": true
+                },
+                {
                     "id": "1",
                     "slug": "food",
                     "name": "美食焦點",
@@ -31,70 +79,16 @@
                     "isMemberOnly": true
                 },
                 {
-                    "id": "19",
-                    "slug": "money",
-                    "name": "理財",
-                    "isMemberOnly": true
-                },
-                {
-                    "id": "25",
-                    "slug": "celebrity",
-                    "name": "鏡大咖",
-                    "isMemberOnly": true
-                },
-                {
-                    "id": "27",
-                    "slug": "column",
-                    "name": "影劇專欄",
-                    "isMemberOnly": true
-                },
-                {
                     "id": "35",
                     "slug": "wine",
                     "name": "好酒情報",
                     "isMemberOnly": true
                 },
                 {
-                    "id": "49",
-                    "slug": "somebody",
-                    "name": "一鏡到底",
-                    "isMemberOnly": true
-                },
-                {
-                    "id": "50",
-                    "slug": "world",
-                    "name": "鏡相人間",
-                    "isMemberOnly": true
-                },
-                {
-                    "id": "51",
-                    "slug": "truth",
-                    "name": "心內話",
-                    "isMemberOnly": true
-                },
-                {
-                    "id": "52",
-                    "slug": "mogul",
-                    "name": "財經人物",
-                    "isMemberOnly": true
-                },
-                {
-                    "id": "94",
-                    "slug": "timesquare",
-                    "name": "時代現場",
-                    "isMemberOnly": true
-                },
-                {
                     "id": "112",
-                    "slug": "mg",
+                    "slug": "dig",
                     "name": "完整全文",
                     "isMemberOnly": false
-                },
-                {
-                    "id": "113",
-                    "slug": "dig",
-                    "name": "新聞深探",
-                    "isMemberOnly": true
                 }
             ]
         },
@@ -121,18 +115,6 @@
                     "isMemberOnly": false
                 },
                 {
-                    "id": "36",
-                    "slug": "insight",
-                    "name": "娛樂透視",
-                    "isMemberOnly": false
-                },
-                {
-                    "id": "48",
-                    "slug": "comic",
-                    "name": "動漫遊戲",
-                    "isMemberOnly": false
-                },
-                {
                     "id": "61",
                     "slug": "rookie",
                     "name": "試鏡間",
@@ -154,6 +136,18 @@
                     "id": "64",
                     "slug": "superstar",
                     "name": "我眼中的大明星",
+                    "isMemberOnly": false
+                },
+                {
+                    "id": "36",
+                    "slug": "insight",
+                    "name": "娛樂透視",
+                    "isMemberOnly": false
+                },
+                {
+                    "id": "48",
+                    "slug": "comic",
+                    "name": "動漫遊戲",
                     "isMemberOnly": false
                 }
             ]
@@ -189,56 +183,6 @@
             ]
         },
         {
-            "order": 7,
-            "type": "section",
-            "slug": "life",
-            "name": "生活",
-            "categories": [
-                {
-                    "id": "46",
-                    "slug": "life",
-                    "name": "萬象",
-                    "isMemberOnly": false
-                },
-                {
-                    "id": "74",
-                    "slug": "knowledgeprogram",
-                    "name": "知識好好玩",
-                    "isMemberOnly": false
-                },
-                {
-                    "id": "75",
-                    "slug": "bookreview",
-                    "name": "書評",
-                    "isMemberOnly": false
-                },
-                {
-                    "id": "76",
-                    "slug": "culture-column",
-                    "name": "專欄",
-                    "isMemberOnly": false
-                },
-                {
-                    "id": "77",
-                    "slug": "poem",
-                    "name": "詩",
-                    "isMemberOnly": false
-                },
-                {
-                    "id": "95",
-                    "slug": "booksummary",
-                    "name": "鏡書摘",
-                    "isMemberOnly": false
-                },
-                {
-                    "id": "109",
-                    "slug": "vioce",
-                    "name": "好聽人物",
-                    "isMemberOnly": false
-                }
-            ]
-        },
-        {
             "order": 8,
             "type": "category",
             "slug": "global",
@@ -255,24 +199,6 @@
             "slug": "carandwatch",
             "name": "汽車鐘錶",
             "categories": [
-                {
-                    "id": "11",
-                    "slug": "watchfocus",
-                    "name": "錶壇焦點",
-                    "isMemberOnly": false
-                },
-                {
-                    "id": "12",
-                    "slug": "watchfeature",
-                    "name": "鐘錶專題",
-                    "isMemberOnly": false
-                },
-                {
-                    "id": "15",
-                    "slug": "blog",
-                    "name": "編輯幕後",
-                    "isMemberOnly": false
-                },
                 {
                     "id": "56",
                     "slug": "car_focus",
@@ -295,6 +221,24 @@
                     "id": "59",
                     "slug": "pit_zone",
                     "name": "鏡車經",
+                    "isMemberOnly": false
+                },
+                {
+                    "id": "11",
+                    "slug": "watchfocus",
+                    "name": "錶壇焦點",
+                    "isMemberOnly": false
+                },
+                {
+                    "id": "12",
+                    "slug": "watchfeature",
+                    "name": "鐘錶專題",
+                    "isMemberOnly": false
+                },
+                {
+                    "id": "15",
+                    "slug": "blog",
+                    "name": "編輯幕後",
                     "isMemberOnly": false
                 },
                 {
@@ -325,11 +269,10 @@
         },
         {
             "order": 10,
-            "type": "category",
-            "slug": "mafalda-1",
+            "type": "section",
+            "slug": "mafalda",
             "name": "瑪法達",
-            "isMemberOnly": false,
-            "sections": []
+            "categories": []
         }
     ]
 }
