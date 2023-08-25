@@ -94,7 +94,7 @@ export default function GDPRNotification() {
   const [showNotification, setShowNotification] = useState(false)
 
   useEffect(() => {
-    const gdprSeen = localStorage.getItem('gdprSeen')
+    const gdprSeen = localStorage.getItem('mirrormedia-gdprSeen')
 
     if (!gdprSeen) {
       setShowNotification(true)
@@ -103,7 +103,7 @@ export default function GDPRNotification() {
 
   const handleAgree = () => {
     setShowNotification(false)
-    localStorage.setItem('gdprSeen', 'true')
+    localStorage.setItem('mirrormedia-gdprSeen', 'true')
   }
 
   return (
