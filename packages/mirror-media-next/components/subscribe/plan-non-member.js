@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import PremiumCard from './premium-card'
 
 const Page = styled.section`
   background-color: rgba(0, 0, 0, 0.05);
@@ -22,10 +23,12 @@ const PlansWrapper = styled.ul`
   }
 `
 
-export default function PlanNonMember() {
+export default function PlansForNonMember() {
   return (
     <Page>
-      <PlansWrapper></PlansWrapper>
+      <PlansWrapper>
+        <PremiumCard />
+      </PlansWrapper>
     </Page>
   )
 }

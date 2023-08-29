@@ -5,7 +5,7 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import Steps from '../../components/subscribe-steps'
-import PlanNonMember from '../../components/subscribe/plan-non-member'
+import PlansForNonMember from '../../components/subscribe/plan-non-member'
 
 const Page = styled.main`
   min-height: 65vh;
@@ -29,7 +29,7 @@ function Subscribe({ sectionsData = [], topicsData = [] }) {
     >
       <Page>
         <Steps activeStep={1} />
-        <PlanNonMember />
+        <PlansForNonMember />
       </Page>
     </Layout>
   )

@@ -31,14 +31,10 @@ const StyledSubscribeBtn = styled.button`
 
     .text,
     .title {
-      color: ${
-        /**
-         * @param {{bgColor: string}} param
-         */ ({
-          // @ts-ignore
-          hoverText,
-        }) => hoverText
-      };
+      color: ${({
+        // @ts-ignore
+        hoverText,
+      }) => hoverText};
     }
   }
 
