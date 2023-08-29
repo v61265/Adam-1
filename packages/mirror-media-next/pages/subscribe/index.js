@@ -4,11 +4,13 @@ import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
-import Steps from '../../components/papermag/steps'
+import Steps from '../../components/subscribe-steps'
+import PlanNonMember from '../../components/subscribe/plan-non-member'
 
 const Page = styled.main`
   min-height: 65vh;
 `
+
 /**
  * @param {Object} props
  * @param {Object[] } props.sectionsData
@@ -27,6 +29,7 @@ function Subscribe({ sectionsData = [], topicsData = [] }) {
     >
       <Page>
         <Steps activeStep={1} />
+        <PlanNonMember />
       </Page>
     </Layout>
   )

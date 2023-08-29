@@ -31,10 +31,14 @@ const StyledSubscribeBtn = styled.button`
 
     .text,
     .title {
-      color: ${({
-        // @ts-ignore
-        hoverText,
-      }) => hoverText};
+      color: ${
+        /**
+         * @param {{bgColor: string}} param
+         */ ({
+          // @ts-ignore
+          hoverText,
+        }) => hoverText
+      };
     }
   }
 
@@ -57,13 +61,21 @@ const StyledSubscribeBtn = styled.button`
 /**
  * @param {Object} props
  * @param {string} props.title
+ * @param {string} props.subtitle
  * @param {string} props.bgColor
  * @param {string} props.hoverColor
  * @param {string} props.hoverText
  * @param {string} props.href
  * @return {JSX.Element}
  */
-function SubscribePaperMagBtn({ title, bgColor, hoverColor, hoverText, href }) {
+export default function SubscribePlanBtn({
+  title,
+  subtitle,
+  bgColor,
+  hoverColor,
+  hoverText,
+  href,
+}) {
   return (
     <Link href={href}>
       <StyledSubscribeBtn
@@ -73,10 +85,8 @@ function SubscribePaperMagBtn({ title, bgColor, hoverColor, hoverText, href }) {
         hoverText={hoverText}
       >
         <p className="title">{title}</p>
-        <p className="text">續訂另有優惠</p>
+        <p className="text">{subtitle}</p>
       </StyledSubscribeBtn>
     </Link>
   )
 }
-
-export default SubscribePaperMagBtn
