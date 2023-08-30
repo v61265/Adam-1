@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import { BASIC_FEATURES } from './subscribe-constants'
+import { BASIC_FEATURES } from '../../constants/subscribe-constants'
 import Check from './check-icon'
-import SecondaryBlueBtn from './ secondary-blue-btn'
+import SecondaryBlueBtn from './secondary-blue-btn'
 
 const PlanCard = styled.div`
   display: flex;

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import PremiumCard from './premium-card'
 import BasicCard from './basic-card'
+import Notification from './subscribe-notification'
 
 const Page = styled.section`
   background-color: rgba(0, 0, 0, 0.05);
@@ -46,14 +47,17 @@ const CardsWrapper = styled.div`
 
 export default function PlansForNonMember() {
   return (
-    <Page>
-      <PlanWrapper>
-        <SectionTitle>方案選擇</SectionTitle>
-        <CardsWrapper>
-          <PremiumCard />
-          <BasicCard />
-        </CardsWrapper>
-      </PlanWrapper>
-    </Page>
+    <>
+      <Page>
+        <PlanWrapper>
+          <SectionTitle>方案選擇</SectionTitle>
+          <CardsWrapper>
+            <PremiumCard />
+            <BasicCard />
+          </CardsWrapper>
+        </PlanWrapper>
+      </Page>
+      <Notification />
+    </>
   )
 }
