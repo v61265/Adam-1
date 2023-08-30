@@ -291,6 +291,17 @@ export async function getServerSideProps({ params, req, res }) {
     if (!postData) {
       return { notFound: true }
     }
+
+    /**
+     * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
+     * but `sectionsInInputOrder` doesn't have `where`.
+     *
+     * Need to filter state of `sectionsInInputOrder` to match the results of sections.
+     */
+    const activeSectionsOrder = postData?.sectionsInInputOrder.filter(
+      (section) => section.state === 'active'
+    )
+
     const { style } = postData
     /**
      * If post style is 'projects' or 'campaign', redirect to certain route.
@@ -385,7 +396,7 @@ export async function getServerSideProps({ params, req, res }) {
 
     return {
       props: {
-        postData,
+        postData: { ...postData, sectionsInInputOrder: activeSectionsOrder },
         headerData,
         storyLayoutType,
       },
