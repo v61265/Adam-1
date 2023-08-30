@@ -14,7 +14,8 @@ const BASIC_FEATURES = [
   '$5 元可享單篇好文 14 天無限瀏覽',
 ]
 
-const DISCOUNT_MESSAGE =
-  '優惠年訂閱團體折扣，請洽會員專屬客服信箱：MM-onlineservice@mirrormedia.mg'
+const DISCOUNT_MESSAGE = '優惠年訂閱團體折扣，請洽會員專屬客服信箱：'
 
-export { BASIC_FEATURES, PREMIUM_FEATURES, DISCOUNT_MESSAGE }
+const SERVICE_EMAIL = 'MM-onlineservice@mirrormedia.mg'
+
+export { BASIC_FEATURES, PREMIUM_FEATURES, DISCOUNT_MESSAGE, SERVICE_EMAIL }
