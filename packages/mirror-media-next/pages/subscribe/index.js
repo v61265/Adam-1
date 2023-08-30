@@ -5,27 +5,22 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import Steps from '../../components/subscribe-steps'
-import SubscribePaperMagForm from '../../components/papermag/subscribe-papermag-form'
+import PlansForNonMember from '../../components/subscribe/plan-non-member'
 
 const Page = styled.main`
   min-height: 65vh;
 `
-const Hr = styled.hr`
-  margin-bottom: 8px;
-  ${({ theme }) => theme.breakpoint.md} {
-    margin-bottom: 48px;
-  }
-`
+
 /**
  * @param {Object} props
  * @param {Object[] } props.sectionsData
  * @param {Object[]} props.topicsData
  * @return {JSX.Element}
  */
-function OneYearSubscription({ sectionsData = [], topicsData = [] }) {
+function Subscribe({ sectionsData = [], topicsData = [] }) {
   return (
     <Layout
-      head={{ title: `訂閱一年方案` }}
+      head={{ title: `加入會員方案` }}
       header={{
         type: 'default',
         data: { sectionsData: sectionsData, topicsData },
@@ -33,15 +28,14 @@ function OneYearSubscription({ sectionsData = [], topicsData = [] }) {
       footer={{ type: 'default' }}
     >
       <Page>
-        <Steps activeStep={2} />
-        <Hr />
-        <SubscribePaperMagForm plan={1} />
+        <Steps activeStep={1} />
+        <PlansForNonMember />
       </Page>
     </Layout>
   )
 }
 
-export default OneYearSubscription
+export default Subscribe
 
 /**
  * @type {import('next').GetServerSideProps}
