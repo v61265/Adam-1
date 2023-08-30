@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import PremiumCard from './premium-card'
+import BasicCard from './basic-card'
 
 const Page = styled.section`
   background-color: rgba(0, 0, 0, 0.05);
@@ -50,7 +51,7 @@ export default function PlansForNonMember() {
         <SectionTitle>方案選擇</SectionTitle>
         <CardsWrapper>
           <PremiumCard />
-          <PremiumCard />
+          <BasicCard />
         </CardsWrapper>
       </PlanWrapper>
     </Page>
