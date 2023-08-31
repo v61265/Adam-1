@@ -10,16 +10,13 @@ import Check from './check-icon'
 
 const PlanCard = styled.div`
   position: relative;
+  max-width: 468px;
   padding: 24px 16px 16px;
   border-radius: 24px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: #fff;
   box-shadow: 0px 4px 28px 0px rgba(0, 0, 0, 0.06),
     0px 2px 12px 0px rgba(0, 0, 0, 0.08);
-
-  ${({ theme }) => theme.breakpoint.md} {
-    /* padding: 24px 24px; */
-  }
 
   ${({ theme }) => theme.breakpoint.xl} {
     padding: 24px;
@@ -32,8 +29,8 @@ const BadgeWrapper = styled.div`
   border-radius: 0 24px 0 0;
   overflow: hidden;
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: -1px;
+  right: -1px;
 `
 
 const PlanTitle = styled.h3`
