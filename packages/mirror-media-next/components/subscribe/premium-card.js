@@ -69,13 +69,22 @@ const DiscountMsg = styled.div`
   font-size: 14px;
 `
 
-export default function PremiumCard() {
+/**
+ * @param {Object} props
+ * @param {string} [props.planTitle='Premium 會員'] - The title of the subscription plan.
+ * @param {boolean} [props.shouldHideMonthlyButton=false] - Whether to hide the monthly subscription button.
+ * @returns {JSX.Element}
+ */
+export default function PremiumCard({
+  planTitle = 'Premium 會員',
+  shouldHideMonthlyButton = false,
+}) {
   return (
     <PlanCard>
       <BadgeWrapper>
         <Badge />
       </BadgeWrapper>
-      <PlanTitle>Premium 會員</PlanTitle>
+      <PlanTitle>{planTitle}</PlanTitle>
       <FeaturesList>
         {PREMIUM_FEATURES.map((feature) => (
           <>
@@ -102,14 +111,16 @@ export default function PremiumCard() {
           hoverText="#000"
           href="/subscribe/info?plan=yearly"
         />
-        <SubscribePlanBtn
-          title="訂購月方案"
-          subtitle="優惠 $49 元"
-          bgColor="#1D9FB8"
-          hoverColor="#054F77"
-          hoverText="#fff"
-          href="/subscribe/info?plan=monthly"
-        />
+        {!shouldHideMonthlyButton && (
+          <SubscribePlanBtn
+            title="訂購月方案"
+            subtitle="優惠 $49 元"
+            bgColor="#1D9FB8"
+            hoverColor="#054F77"
+            hoverText="#fff"
+            href="/subscribe/info?plan=monthly"
+          />
+        )}
       </BtnWrapper>
     </PlanCard>
   )
