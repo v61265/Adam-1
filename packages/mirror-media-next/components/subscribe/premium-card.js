@@ -86,14 +86,14 @@ export default function PremiumCard({
       </BadgeWrapper>
       <PlanTitle>{planTitle}</PlanTitle>
       <FeaturesList>
-        {PREMIUM_FEATURES.map((feature) => (
-          <>
-            <Feature key={feature}>
+        {PREMIUM_FEATURES.map((feature, index) => (
+          <div key={index}>
+            <Feature>
               <Check />
               <p>{feature}</p>
             </Feature>
             <Hr />
-          </>
+          </div>
         ))}
       </FeaturesList>
 
