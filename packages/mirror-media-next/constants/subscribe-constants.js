@@ -36,12 +36,12 @@ const NOTIFICATIONS = [
   },
   {
     id: 3,
-    text: '訂閱相關問題請 email 至會員專屬客服信箱 <a href = "mailto: MM-onlineservice@mirrormedia.mg" class="membership-subscribe__blue">MM-onlineservice@mirrormedia.mg</a>，我們會盡快為您協助處理。',
+    text: '訂閱相關問題請 email 至會員專屬客服信箱<a href = "mailto: MM-onlineservice@mirrormedia.mg">MM-onlineservice@mirrormedia.mg</a>，我們會盡快為您協助處理。',
     style: 'normal',
   },
   {
     id: 4,
-    text: '更多詳細內容，請至<a href = "/story/service-rule/" class="membership-subscribe__blue">服務條款</a>。',
+    text: '更多詳細內容，請至<a href = "/story/service-rule/">服務條款</a>。',
     style: 'normal',
   },
 ]

@@ -3,18 +3,17 @@ import { NOTIFICATIONS } from '../../constants/subscribe-constants'
 
 const NoticeWrapper = styled.section`
   line-height: 150%;
-  margin: 24px auto;
-  width: 90%;
+  margin: 24px 20px;
   min-height: 100px;
   background-color: #fff;
 
   ${({ theme }) => theme.breakpoint.md} {
-    margin: 48px auto;
-    width: 85%;
+    margin: 48px;
   }
 
   ${({ theme }) => theme.breakpoint.xl} {
     width: 960px;
+    margin: 48px auto;
   }
 `
 
@@ -30,9 +29,19 @@ const Ul = styled.ul`
   list-style: disc;
 `
 const Li = styled.li`
-  color: rgba(0, 0, 0, 0.5);
+  color: ${
+    /**
+     * @param {{isWarning: boolean}} param
+     */
+    ({ isWarning }) => (isWarning ? '#e51731' : 'rgba(0, 0, 0, 0.5)')
+  };
   font-size: 14px;
   font-weight: 400;
+
+  a {
+    color: #1d9fb8;
+    margin-left: 4px;
+  }
 `
 
 export default function Notification() {
@@ -43,7 +52,7 @@ export default function Notification() {
         {NOTIFICATIONS.map((notification) => (
           <Li
             key={notification.id}
-            className={notification.style === 'warning' ? 'warning-style' : ''}
+            isWarning={notification.style === 'warning'}
             dangerouslySetInnerHTML={{ __html: notification.text }}
           />
         ))}
