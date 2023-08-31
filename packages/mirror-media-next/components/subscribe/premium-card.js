@@ -4,7 +4,7 @@ import {
   PREMIUM_FEATURES,
   DISCOUNT_MESSAGE,
   SERVICE_EMAIL,
-} from './subscribe-constants'
+} from '../../constants/subscribe-constants'
 import Badge from './badge-icon'
 import Check from './check-icon'
 
