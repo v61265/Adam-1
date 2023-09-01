@@ -17,10 +17,6 @@ const PlanCard = styled.div`
   box-shadow: 0px 4px 28px 0px rgba(0, 0, 0, 0.06),
     0px 2px 12px 0px rgba(0, 0, 0, 0.08);
 
-  ${({ theme }) => theme.breakpoint.md} {
-    /* padding: 24px 24px; */
-  }
-
   ${({ theme }) => theme.breakpoint.xl} {
     padding: 24px;
     width: 468px;
@@ -32,8 +28,8 @@ const BadgeWrapper = styled.div`
   border-radius: 0 24px 0 0;
   overflow: hidden;
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: -1px;
+  right: -1px;
 `
 
 const PlanTitle = styled.h3`
@@ -72,22 +68,31 @@ const DiscountMsg = styled.div`
   font-size: 14px;
 `
 
-export default function PremiumCard() {
+/**
+ * @param {Object} props
+ * @param {string} [props.planTitle='Premium 會員'] - The title of the subscription plan.
+ * @param {boolean} [props.shouldHideMonthlyButton=false] - Whether to hide the monthly subscription button.
+ * @returns {JSX.Element}
+ */
+export default function PremiumCard({
+  planTitle = 'Premium 會員',
+  shouldHideMonthlyButton = false,
+}) {
   return (
     <PlanCard>
       <BadgeWrapper>
         <Badge />
       </BadgeWrapper>
-      <PlanTitle>Premium 會員</PlanTitle>
+      <PlanTitle>{planTitle}</PlanTitle>
       <FeaturesList>
-        {PREMIUM_FEATURES.map((feature) => (
-          <>
-            <Feature key={feature}>
+        {PREMIUM_FEATURES.map((feature, index) => (
+          <div key={index}>
+            <Feature>
               <Check />
               <p>{feature}</p>
             </Feature>
             <Hr />
-          </>
+          </div>
         ))}
       </FeaturesList>
 
@@ -105,14 +110,16 @@ export default function PremiumCard() {
           hoverText="#000"
           href="/subscribe/info?plan=yearly"
         />
-        <SubscribePlanBtn
-          title="訂購月方案"
-          subtitle="優惠 $49 元"
-          bgColor="#1D9FB8"
-          hoverColor="#054F77"
-          hoverText="#fff"
-          href="/subscribe/info?plan=monthly"
-        />
+        {!shouldHideMonthlyButton && (
+          <SubscribePlanBtn
+            title="訂購月方案"
+            subtitle="優惠 $49 元"
+            bgColor="#1D9FB8"
+            hoverColor="#054F77"
+            hoverText="#fff"
+            href="/subscribe/info?plan=monthly"
+          />
+        )}
       </BtnWrapper>
     </PlanCard>
   )

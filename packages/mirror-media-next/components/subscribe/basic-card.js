@@ -59,14 +59,14 @@ export default function BasicCard() {
       <PlanTitle>Basic 會員</PlanTitle>
 
       <FeaturesList>
-        {BASIC_FEATURES.map((feature) => (
-          <>
-            <Feature key={feature}>
+        {BASIC_FEATURES.map((feature, index) => (
+          <div key={index}>
+            <Feature>
               <Check />
               <p>{feature}</p>
             </Feature>
             <Hr />
-          </>
+          </div>
         ))}
       </FeaturesList>
       <BtnWrapper>
