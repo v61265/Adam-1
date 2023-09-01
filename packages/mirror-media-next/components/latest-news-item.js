@@ -122,6 +122,16 @@ const Title = styled.div`
  */
 
 /**
+ * @typedef {string|MyObject} MyType
+ */
+
+/**
+ * @typedef {Object} MyObject
+ * @property {string} resized - The resized property description.
+ * @property {string} resizedWebp - The resizedWebp property description.
+ */
+
+/**
  * @param {Object} props
  * @param {Article} props.itemData
  * @returns {React.ReactElement}
@@ -130,17 +140,26 @@ export default function LatestNewsItem({ itemData }) {
   /**
    * If latest news is an external article, `itemData.heroImage` would be a url,
    * such as 'https://www-somewebsite.com/some-image.jpeg'.
-   * @returns {{} | Article['heroImage']['resized']}
+   * @param {string | Article['heroImage']} heroImage
+   * @returns {any}
    */
-  const getRenderImages = () => {
-    if (itemData.heroImage?.resized) {
-      return itemData.heroImage?.resized
-    } else if (typeof itemData.heroImage === 'string') {
-      return { original: itemData.heroImage }
+  const getRenderImages = (heroImage) => {
+    /**
+     * @type {string | { original:string }}
+     */
+    let images = { original: '' }
+    let imagesWebp = null
+    if (typeof heroImage === 'string') {
+      images = { original: heroImage }
+      imagesWebp = null
+    } else if (heroImage?.resized) {
+      images = heroImage.resized
+    } else if (heroImage?.resizedWebp) {
+      imagesWebp = heroImage?.resizedWebp
     }
-    return {}
+    return { images, imagesWebp }
   }
-  const renderImages = getRenderImages()
+  const { images, imagesWebP } = getRenderImages(itemData.heroImage)
   return (
     <Link
       href={itemData.articleHref}
@@ -153,7 +172,8 @@ export default function LatestNewsItem({ itemData }) {
           <CustomImage
             defaultImage="/images/default-og-img.png"
             loadingImage="images/loading.gif"
-            images={renderImages}
+            images={images}
+            imagesWebP={imagesWebP}
             objectFit="cover"
             rwd={{
               mobile: '488px',

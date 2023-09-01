@@ -1858,7 +1858,7 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
 
-"@readr-media/react-image@1.6.0", "@readr-media/react-image@^1.6.0":
+"@readr-media/react-image@1.6.0":
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@readr-media/react-image/-/react-image-1.6.0.tgz#1bff81cdaa8b14f255c22b2504df1d09fc783223"
   integrity sha512-k4FOxVlAdvsFY5zP7nczs11LrJ3mA2T6Y7rwoTjpA9GMhlf3wtLWD84/XwcsGXNvHg0gbxQtmOcNvKE1LsZxwg==
@@ -1867,6 +1867,11 @@
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/@readr-media/react-image/-/react-image-1.5.1.tgz#d04b809416be6a1432a0a3154f2641292d7b6b8d"
   integrity sha512-BExGQWO158vtfox2mkwjT8khZp00KOwAObnZsQVzO4JNO4RlTog/5u7ccw7WuBd1OR07rlh/jKm4ts+qt78saw==
+
+"@readr-media/react-image@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@readr-media/react-image/-/react-image-2.1.2.tgz#b479e0a5668ca7ab13d0d6326e6832899700c9f4"
+  integrity sha512-nE/+uLupLIfwUi96RxM1WzLGIrdvEMVxGAUKdimFdIT+ChsymZaxlkDHrC7sUQqJ7FqYGbUF5PNaF2nDNj07vw==
 
 "@readr-media/share-button@^1.0.3":
   version "1.0.3"

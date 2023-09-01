@@ -24,18 +24,7 @@ const StyledPopInAdRelated = dynamic(
 )
 
 /**
- * @typedef {import('../../../apollo/fragments/post').HeroImage &
- * {
- *  id: string,
- *  resized: {
- *    original: string,
- *    w480: string,
- *    w800: string,
- *    w1200: string,
- *    w1600: string,
- *    w2400: string
- *  }
- * } } HeroImage
+ * @typedef {Pick<import('../../../apollo/fragments/post').HeroImage ,'id' | 'resized' | 'resizedWebp'>} HeroImage
  */
 
 /**
@@ -178,6 +167,8 @@ export default function RelatedArticleList({
             >
               <Image
                 images={related.heroImage?.resized}
+                imagesWebP={related.heroImage?.resizedWebp}
+                debugMode={true}
                 alt={related.title}
                 rwd={{
                   mobile: '500px',
