@@ -53,7 +53,8 @@ function Subscribe({ sectionsData = [], topicsData = [] }) {
       footer={{ type: 'default' }}
     >
       <Page>
-        <Steps activeStep={1} />
+        {/* Conditionally render the Steps component */}
+        {memberType !== 'yearlyMember' && <Steps activeStep={1} />}
 
         {/* Render the appropriate plan based on the membership type */}
         {memberType === 'nonMember' && <PlansForNonMember />}

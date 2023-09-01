@@ -10,7 +10,6 @@ import Check from './check-icon'
 
 const PlanCard = styled.div`
   position: relative;
-  max-width: 468px;
   padding: 24px 16px 16px;
   border-radius: 24px;
   border: 1px solid rgba(0, 0, 0, 0.1);
