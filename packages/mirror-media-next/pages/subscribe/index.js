@@ -13,13 +13,17 @@ import PlanForMonthlyMember from '../../components/subscribe/plan-monthly-member
 import PlanForYearlyMember from '../../components/subscribe/plan-yearly-member'
 
 const Page = styled.main`
-  min-height: 65vh;
+  min-height: 70vh;
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-bottom: -32px;
+  }
 `
 
 const TestBtnWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  background-color: lightsteelblue;
 
   button {
     background-color: lemonchiffon;
@@ -52,7 +56,7 @@ function Subscribe({ sectionsData = [], topicsData = [] }) {
 
   return (
     <Layout
-      head={{ title: `加入會員方案` }}
+      head={{ title: `會員方案選擇` }}
       header={{
         type: 'default',
         data: { sectionsData: sectionsData, topicsData },

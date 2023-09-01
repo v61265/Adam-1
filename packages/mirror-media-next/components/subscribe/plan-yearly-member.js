@@ -3,7 +3,7 @@ import BlankCard from './blank-card'
 import PrimaryBlueBtn from './primary-blue-btn'
 
 const PageWrapper = styled.section`
-  min-height: 65vh;
+  min-height: 70vh;
   padding: 40px 20px;
 
   ${({ theme }) => theme.breakpoint.md} {

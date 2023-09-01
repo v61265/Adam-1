@@ -8,12 +8,16 @@ import BlankCard from '../../components/subscribe/blank-card'
 import PrimaryBlueBtn from '../../components/subscribe/primary-blue-btn'
 
 const PageWrapper = styled.section`
-  min-height: 65vh;
+  min-height: 70vh;
   padding: 40px 20px;
 
   ${({ theme }) => theme.breakpoint.md} {
     padding: 48px;
     background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-bottom: -32px;
   }
 `
 const Title = styled.h2`
