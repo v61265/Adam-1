@@ -347,6 +347,7 @@ export default function AsideArticleList({
               >
                 <Image
                   images={item?.heroImage?.resized}
+                  imagesWebP={item?.heroImage?.resizedWebp}
                   alt={item.title}
                   loadingImage={'/images/loading.gif'}
                   defaultImage={'/images/default-og-img.png'}
