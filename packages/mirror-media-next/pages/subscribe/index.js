@@ -55,7 +55,7 @@ function Subscribe({ sectionsData = [], topicsData = [] }) {
       <Page>
         <Steps activeStep={1} />
 
-        {/*Render the selected plan */}
+        {/* Render the appropriate plan based on the membership type */}
         {memberType === 'nonMember' && <PlansForNonMember />}
         {memberType === 'basicMember' && <PlanForBasicMember />}
         {memberType === 'monthlyMember' && <PlanForMonthlyMember />}
