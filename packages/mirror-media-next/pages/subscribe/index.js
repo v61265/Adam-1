@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import errors from '@twreporter/errors'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
@@ -39,8 +40,14 @@ const TestBtnWrapper = styled.div`
  */
 function Subscribe({ sectionsData = [], topicsData = [] }) {
   const [memberType, setMemberType] = useState('nonMember') // Default to non-member plan
+  const router = useRouter()
+
   const handleMemberTypeToggle = (type) => {
     setMemberType(type)
+  }
+
+  const handleMarketingClick = () => {
+    router.push('/marketing') // Redirect to the /marketing page
   }
 
   return (
@@ -76,7 +83,7 @@ function Subscribe({ sectionsData = [], topicsData = [] }) {
           <button onClick={() => handleMemberTypeToggle('yearlyMember')}>
             Yearly Member
           </button>
-          <button>Marketing VIP</button>
+          <button onClick={handleMarketingClick}>Marketing VIP</button>
         </TestBtnWrapper>
       </Page>
     </Layout>
