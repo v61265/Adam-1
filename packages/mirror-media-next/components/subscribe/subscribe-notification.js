@@ -37,6 +37,9 @@ const Li = styled.li`
   };
   font-size: 14px;
   font-weight: 400;
+  ::marker {
+    color: rgba(0, 0, 0, 0.5);
+  }
 
   a {
     color: #1d9fb8;
