@@ -4,44 +4,70 @@ import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
-import Steps from '../../components/subscribe-steps'
-import SubscribePaperMagForm from '../../components/papermag/subscribe-papermag-form'
+import BlankCard from '../../components/subscribe/blank-card'
+import PrimaryBlueBtn from '../../components/subscribe/primary-blue-btn'
 
-const Page = styled.main`
-  min-height: 65vh;
-`
-const Hr = styled.hr`
-  margin-bottom: 8px;
+const PageWrapper = styled.section`
+  min-height: 70vh;
+  padding: 40px 20px;
+
   ${({ theme }) => theme.breakpoint.md} {
-    margin-bottom: 48px;
+    padding: 48px;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-bottom: -32px;
   }
 `
+const Title = styled.h2`
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 12px;
+`
+const Text = styled.div`
+  margin-bottom: 24px;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 18px;
+  font-weight: 400;
+  span {
+    color: #054f77;
+  }
+`
+
 /**
  * @param {Object} props
  * @param {Object[] } props.sectionsData
  * @param {Object[]} props.topicsData
  * @return {JSX.Element}
  */
-function OneYearSubscription({ sectionsData = [], topicsData = [] }) {
+function Subscribe({ sectionsData = [], topicsData = [] }) {
   return (
     <Layout
-      head={{ title: `訂閱一年方案` }}
+      head={{ title: `VIP或團體訂購` }}
       header={{
         type: 'default',
         data: { sectionsData: sectionsData, topicsData },
       }}
       footer={{ type: 'default' }}
     >
-      <Page>
-        <Steps activeStep={2} />
-        <Hr />
-        <SubscribePaperMagForm plan={1} />
-      </Page>
+      <PageWrapper>
+        <BlankCard>
+          <Title>此頁面為個人會員訂閱頁面</Title>
+          <Text>
+            由於您為鏡週刊的 VIP 或團體訂購，VIP
+            及團體訂購期間不須付款即享會員專區文章暢讀。
+            若您有意願付費支持，請於期間後再付款。
+          </Text>
+          <PrimaryBlueBtn title="回會員專區" href="/premiumsection/member" />
+        </BlankCard>
+      </PageWrapper>
     </Layout>
   )
 }
 
-export default OneYearSubscription
+export default Subscribe
 
 /**
  * @type {import('next').GetServerSideProps}

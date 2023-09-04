@@ -16,6 +16,7 @@ let URL_STATIC_NORMAL_SECTIONS = ''
 let URL_STATIC_TOPICS = ''
 let URL_STATIC_POST_FLASH_NEWS = ''
 let URL_STATIC_POST_EXTERNAL = ''
+let URL_STATIC_HEADER_HEADERS = ''
 let DONATION_PAGE_URL = ''
 let GA_MEASUREMENT_ID = ''
 let GTM_ID = ''
@@ -42,6 +43,7 @@ switch (ENV) {
     URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
     URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
     URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
+    URL_STATIC_HEADER_HEADERS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_headers.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-341XFN0675'
@@ -75,6 +77,7 @@ switch (ENV) {
     URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
     URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
     URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
+    URL_STATIC_HEADER_HEADERS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_headers.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
@@ -107,6 +110,7 @@ switch (ENV) {
     URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
     URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
     URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
+    URL_STATIC_HEADER_HEADERS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_headers.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
@@ -141,7 +145,7 @@ switch (ENV) {
     URL_STATIC_POST_EXTERNAL = `http://localhost:8080/json/post_external`
     URL_STATIC_POPULAR_NEWS = `http://localhost:8080/json/popular.json`
     URL_STATIC_404_POPULAR_NEWS = `http://localhost:8080/json/404_popular.json`
-
+    URL_STATIC_HEADER_HEADERS = `http://localhost:8080/json/header_headers.json`
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
@@ -179,4 +183,5 @@ export {
   URL_STATIC_404_POPULAR_NEWS,
   GPT_MODE,
   FIREBASE_CONFIG,
+  URL_STATIC_HEADER_HEADERS,
 }
