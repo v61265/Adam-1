@@ -324,32 +324,31 @@ const getNumberWithCommas = (num) => {
  * @return {Sections}
  */
 const getActiveOrderSection = (sections, sectionsInInputOrder) => {
-  if (!Array.isArray(sections) || !Array.isArray(sectionsInInputOrder)) {
-    return []
-  }
-
   /**
    * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
    * but `sectionsInInputOrder` doesn't have `where`.
    *
    * Need to filter state of `sectionsInInputOrder` to match the results of sections.
    */
-  const activeSectionsOrder = sectionsInInputOrder.filter(
-    (section) => section.state === 'active'
-  )
+  const activeSectionsOrder = Array.isArray(sectionsInInputOrder)
+    ? sectionsInInputOrder.filter((section) => section.state === 'active')
+    : []
+
   /**
    * Although `sections` already filter `state` at GraphQL ,
    * for the sake of maintaining same logic between `sectionsInInputOrder` and `sections`,
    * filter `state` status of `sections` again.
    * */
-  const activeSections = sections.filter(
-    (section) => section.state === 'active'
-  )
+  const activeSections = Array.isArray(sections)
+    ? sections.filter((section) => section.state === 'active')
+    : []
 
-  if (activeSectionsOrder && activeSectionsOrder.length > 0) {
+  if (activeSectionsOrder.length > 0) {
     return activeSectionsOrder
-  } else {
+  } else if (activeSections.length > 0) {
     return activeSections
+  } else {
+    return []
   }
 }
 
