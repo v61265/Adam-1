@@ -31,6 +31,7 @@ import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
 import { Z_INDEX } from '../../../constants/index'
 import { getSectionGPTPageKey } from '../../../utils/ad'
+import { getActiveOrderSection } from '../../../utils'
 
 const DableAd = dynamic(() => import('../../ads/dable/dable-ad'), {
   ssr: false,
@@ -524,10 +525,11 @@ export default function StoryNormalStyle({
     hiddenAdvertised = false,
   } = postData
 
-  const sectionsWithOrdered =
-    sectionsInInputOrder && sectionsInInputOrder.length
-      ? sectionsInInputOrder
-      : sections
+  const sectionsWithOrdered = getActiveOrderSection(
+    sections,
+    sectionsInInputOrder
+  )
+
   const relatedsWithOrdered =
     relatedsInInputOrder && relatedsInInputOrder.length
       ? relatedsInInputOrder
@@ -566,10 +568,10 @@ export default function StoryNormalStyle({
         },
       })
       return res.data?.posts.map((post) => {
-        const sectionsWithOrdered =
-          post.sectionsInInputOrder && post.sectionsInInputOrder.length
-            ? post.sectionsInInputOrder
-            : post.sections
+        const sectionsWithOrdered = getActiveOrderSection(
+          post.sections,
+          post.sectionsInInputOrder
+        )
         return { sectionsWithOrdered, ...post }
       })
     } catch (err) {
@@ -594,10 +596,10 @@ export default function StoryNormalStyle({
 
       const popularNews = data
         .map((post) => {
-          const sectionsWithOrdered =
-            post.sectionsInInputOrder && post.sectionsInInputOrder.length
-              ? post.sectionsInInputOrder
-              : post.sections
+          const sectionsWithOrdered = getActiveOrderSection(
+            post.sections,
+            post.sectionsInInputOrder
+          )
           return { sectionsWithOrdered, ...post }
         })
         .slice(0, 6)

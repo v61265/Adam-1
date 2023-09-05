@@ -8,6 +8,7 @@ import axios from 'axios'
 import client from '../../../apollo/apollo-client'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
+import { getActiveOrderSection } from '../../../utils'
 
 /**
  * @typedef {import('./related-article-list').Relateds} Relateds
@@ -63,10 +64,11 @@ export default function Aside({
         },
       })
       return res.data?.posts.map((post) => {
-        const sectionsWithOrdered =
-          post.sectionsInInputOrder && post.sectionsInInputOrder.length
-            ? post.sectionsInInputOrder
-            : post.sections
+        const sectionsWithOrdered = getActiveOrderSection(
+          post.sections,
+          post.sectionsInInputOrder
+        )
+
         return { sectionsWithOrdered, ...post }
       })
     } catch (err) {
@@ -91,10 +93,10 @@ export default function Aside({
 
       const popularNews = data
         .map((post) => {
-          const sectionsWithOrdered =
-            post.sectionsInInputOrder && post.sectionsInInputOrder.length
-              ? post.sectionsInInputOrder
-              : post.sections
+          const sectionsWithOrdered = getActiveOrderSection(
+            post.sections,
+            post.sectionsInInputOrder
+          )
           return { sectionsWithOrdered, ...post }
         })
         .slice(0, 6)

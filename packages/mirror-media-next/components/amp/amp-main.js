@@ -11,6 +11,7 @@ import useSharedUrl from '../../hooks/use-shared-url'
 import AmpGptAd from '../../components/amp/amp-ads/amp-gpt-ad'
 import { copyAndSliceDraftBlock, getBlocksCount } from '../../utils/story'
 import { getAmpGptDataSlotSection } from '../../utils/ad'
+import { getActiveOrderSection } from '../../utils'
 
 const MainWrapper = styled.div`
   margin-top: 24px;
@@ -149,10 +150,10 @@ export default function AmpMain({ postData, isMember }) {
 
   const sharedUrl = useSharedUrl()
 
-  const sectionsWithOrdered =
-    sectionsInInputOrder && sectionsInInputOrder.length
-      ? sectionsInInputOrder
-      : sections
+  const sectionsWithOrdered = getActiveOrderSection(
+    sections,
+    sectionsInInputOrder
+  )
   const [section] = sectionsWithOrdered
 
   const writersWithOrdered =

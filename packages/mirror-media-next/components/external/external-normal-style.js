@@ -20,7 +20,10 @@ import MagazineInviteBanner from '../../components/story/shared/magazine-invite-
 import ExternalArticleContent from '../../components/external/external-article-content'
 import ExternalHeroImage from '../../components/external/external-hero-image'
 import Divider from '../../components/story/shared/divider'
-import { transformTimeDataIntoDotFormat } from '../../utils'
+import {
+  transformTimeDataIntoDotFormat,
+  getActiveOrderSection,
+} from '../../utils'
 import { fetchAsidePosts } from '../../apollo/query/posts'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../config/index.mjs'
 import {
@@ -471,10 +474,10 @@ export default function ExternalNormalStyle({ external }) {
         },
       })
       return res.data?.posts.map((post) => {
-        const sectionsWithOrdered =
-          post.sectionsInInputOrder && post.sectionsInInputOrder.length
-            ? post.sectionsInInputOrder
-            : post.sections
+        const sectionsWithOrdered = getActiveOrderSection(
+          post.sections,
+          post.sectionsInInputOrder
+        )
         return { sectionsWithOrdered, ...post }
       })
     } catch (err) {
@@ -498,10 +501,10 @@ export default function ExternalNormalStyle({ external }) {
       })
       const popularNews = data
         .map((post) => {
-          const sectionsWithOrdered =
-            post.sectionsInInputOrder && post.sectionsInInputOrder.length
-              ? post.sectionsInInputOrder
-              : post.sections
+          const sectionsWithOrdered = getActiveOrderSection(
+            post.sections,
+            post.sectionsInInputOrder
+          )
           return { sectionsWithOrdered, ...post }
         })
         .slice(0, 6)
