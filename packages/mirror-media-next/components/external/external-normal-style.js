@@ -20,7 +20,10 @@ import MagazineInviteBanner from '../../components/story/shared/magazine-invite-
 import ExternalArticleContent from '../../components/external/external-article-content'
 import ExternalHeroImage from '../../components/external/external-hero-image'
 import Divider from '../../components/story/shared/divider'
-import { transformTimeDataIntoDotFormat } from '../../utils'
+import {
+  transformTimeDataIntoDotFormat,
+  getActiveOrderSection,
+} from '../../utils'
 import { fetchAsidePosts } from '../../apollo/query/posts'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../config/index.mjs'
 import {
@@ -471,19 +474,10 @@ export default function ExternalNormalStyle({ external }) {
         },
       })
       return res.data?.posts.map((post) => {
-        /**
-         * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
-         * but `sectionsInInputOrder` doesn't have `where`.
-         *
-         * Need to filter state of `sectionsInInputOrder` to match the results of sections.
-         */
-        const activeSectionsOrder = post.sectionsInInputOrder?.filter(
-          (section) => section.state === 'active'
+        const sectionsWithOrdered = getActiveOrderSection(
+          post.sections,
+          post.sectionsInInputOrder
         )
-        const sectionsWithOrdered =
-          activeSectionsOrder && activeSectionsOrder.length
-            ? activeSectionsOrder
-            : post.sections
         return { sectionsWithOrdered, ...post }
       })
     } catch (err) {
@@ -507,19 +501,10 @@ export default function ExternalNormalStyle({ external }) {
       })
       const popularNews = data
         .map((post) => {
-          /**
-           * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
-           * but `sectionsInInputOrder` doesn't have `where`.
-           *
-           * Need to filter state of `sectionsInInputOrder` to match the results of sections.
-           */
-          const activeSectionsOrder = post.sectionsInInputOrder?.filter(
-            (section) => section.state === 'active'
+          const sectionsWithOrdered = getActiveOrderSection(
+            post.sections,
+            post.sectionsInInputOrder
           )
-          const sectionsWithOrdered =
-            activeSectionsOrder && activeSectionsOrder.length
-              ? activeSectionsOrder
-              : post.sections
           return { sectionsWithOrdered, ...post }
         })
         .slice(0, 6)

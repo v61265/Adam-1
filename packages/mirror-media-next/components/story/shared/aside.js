@@ -8,6 +8,7 @@ import axios from 'axios'
 import client from '../../../apollo/apollo-client'
 import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 import { fetchAsidePosts } from '../../../apollo/query/posts'
+import { getActiveOrderSection } from '../../../utils'
 
 /**
  * @typedef {import('./related-article-list').Relateds} Relateds
@@ -63,19 +64,10 @@ export default function Aside({
         },
       })
       return res.data?.posts.map((post) => {
-        /**
-         * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
-         * but `sectionsInInputOrder` doesn't have `where`.
-         *
-         * Need to filter state of `sectionsInInputOrder` to match the results of sections.
-         */
-        const activeSectionsOrder = post.sectionsInInputOrder?.filter(
-          (section) => section.state === 'active'
+        const sectionsWithOrdered = getActiveOrderSection(
+          post.sections,
+          post.sectionsInInputOrder
         )
-        const sectionsWithOrdered =
-          activeSectionsOrder && activeSectionsOrder.length
-            ? activeSectionsOrder
-            : post.sections
 
         return { sectionsWithOrdered, ...post }
       })
@@ -101,19 +93,10 @@ export default function Aside({
 
       const popularNews = data
         .map((post) => {
-          /**
-           * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
-           * but `sectionsInInputOrder` doesn't have `where`.
-           *
-           * Need to filter state of `sectionsInInputOrder` to match the results of sections.
-           */
-          const activeSectionsOrder = post.sectionsInInputOrder?.filter(
-            (section) => section.state === 'active'
+          const sectionsWithOrdered = getActiveOrderSection(
+            post.sections,
+            post.sectionsInInputOrder
           )
-          const sectionsWithOrdered =
-            activeSectionsOrder && activeSectionsOrder.length
-              ? activeSectionsOrder
-              : post.sections
           return { sectionsWithOrdered, ...post }
         })
         .slice(0, 6)

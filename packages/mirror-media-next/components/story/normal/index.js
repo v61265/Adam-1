@@ -31,6 +31,7 @@ import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
 import { Z_INDEX } from '../../../constants/index'
 import { getSectionGPTPageKey } from '../../../utils/ad'
+import { getActiveOrderSection } from '../../../utils'
 
 const DableAd = dynamic(() => import('../../ads/dable/dable-ad'), {
   ssr: false,
@@ -524,19 +525,10 @@ export default function StoryNormalStyle({
     hiddenAdvertised = false,
   } = postData
 
-  /**
-   * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
-   * but `sectionsInInputOrder` doesn't have `where`.
-   *
-   * Need to filter state of `sectionsInInputOrder` to match the results of sections.
-   */
-  const activeSectionsOrder = sectionsInInputOrder?.filter(
-    (section) => section.state === 'active'
+  const sectionsWithOrdered = getActiveOrderSection(
+    sections,
+    sectionsInInputOrder
   )
-  const sectionsWithOrdered =
-    activeSectionsOrder && activeSectionsOrder.length
-      ? activeSectionsOrder
-      : sections
 
   const relatedsWithOrdered =
     relatedsInInputOrder && relatedsInInputOrder.length
@@ -576,19 +568,10 @@ export default function StoryNormalStyle({
         },
       })
       return res.data?.posts.map((post) => {
-        /**
-         * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
-         * but `sectionsInInputOrder` doesn't have `where`.
-         *
-         * Need to filter state of `sectionsInInputOrder` to match the results of sections.
-         */
-        const activeSectionsOrder = post.sectionsInInputOrder?.filter(
-          (section) => section.state === 'active'
+        const sectionsWithOrdered = getActiveOrderSection(
+          post.sections,
+          post.sectionsInInputOrder
         )
-        const sectionsWithOrdered =
-          activeSectionsOrder && activeSectionsOrder.length
-            ? activeSectionsOrder
-            : post.sections
         return { sectionsWithOrdered, ...post }
       })
     } catch (err) {
@@ -613,19 +596,10 @@ export default function StoryNormalStyle({
 
       const popularNews = data
         .map((post) => {
-          /**
-           * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
-           * but `sectionsInInputOrder` doesn't have `where`.
-           *
-           * Need to filter state of `sectionsInInputOrder` to match the results of sections.
-           */
-          const activeSectionsOrder = post.sectionsInInputOrder?.filter(
-            (section) => section.state === 'active'
+          const sectionsWithOrdered = getActiveOrderSection(
+            post.sections,
+            post.sectionsInInputOrder
           )
-          const sectionsWithOrdered =
-            activeSectionsOrder && activeSectionsOrder.length
-              ? activeSectionsOrder
-              : post.sections
           return { sectionsWithOrdered, ...post }
         })
         .slice(0, 6)

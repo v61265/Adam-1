@@ -11,6 +11,7 @@ import useSharedUrl from '../../hooks/use-shared-url'
 import AmpGptAd from '../../components/amp/amp-ads/amp-gpt-ad'
 import { copyAndSliceDraftBlock, getBlocksCount } from '../../utils/story'
 import { getAmpGptDataSlotSection } from '../../utils/ad'
+import { getActiveOrderSection } from '../../utils'
 
 const MainWrapper = styled.div`
   margin-top: 24px;
@@ -149,20 +150,10 @@ export default function AmpMain({ postData, isMember }) {
 
   const sharedUrl = useSharedUrl()
 
-  /**
-   * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
-   * but `sectionsInInputOrder` doesn't have `where`.
-   *
-   * Need to filter state of `sectionsInInputOrder` to match the results of sections.
-   */
-  const activeSectionsOrder = sectionsInInputOrder?.filter(
-    (section) => section.state === 'active'
+  const sectionsWithOrdered = getActiveOrderSection(
+    sections,
+    sectionsInInputOrder
   )
-  const sectionsWithOrdered =
-    activeSectionsOrder && activeSectionsOrder.length
-      ? activeSectionsOrder
-      : sections
-
   const [section] = sectionsWithOrdered
 
   const writersWithOrdered =
