@@ -471,9 +471,18 @@ export default function ExternalNormalStyle({ external }) {
         },
       })
       return res.data?.posts.map((post) => {
+        /**
+         * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
+         * but `sectionsInInputOrder` doesn't have `where`.
+         *
+         * Need to filter state of `sectionsInInputOrder` to match the results of sections.
+         */
+        const activeSectionsOrder = post.sectionsInInputOrder?.filter(
+          (section) => section.state === 'active'
+        )
         const sectionsWithOrdered =
-          post.sectionsInInputOrder && post.sectionsInInputOrder.length
-            ? post.sectionsInInputOrder
+          activeSectionsOrder && activeSectionsOrder.length
+            ? activeSectionsOrder
             : post.sections
         return { sectionsWithOrdered, ...post }
       })
@@ -498,9 +507,18 @@ export default function ExternalNormalStyle({ external }) {
       })
       const popularNews = data
         .map((post) => {
+          /**
+           * Because `sections` can be filtered by `where` in GraphQL based on whether `state` is active,
+           * but `sectionsInInputOrder` doesn't have `where`.
+           *
+           * Need to filter state of `sectionsInInputOrder` to match the results of sections.
+           */
+          const activeSectionsOrder = post.sectionsInInputOrder?.filter(
+            (section) => section.state === 'active'
+          )
           const sectionsWithOrdered =
-            post.sectionsInInputOrder && post.sectionsInInputOrder.length
-              ? post.sectionsInInputOrder
+            activeSectionsOrder && activeSectionsOrder.length
+              ? activeSectionsOrder
               : post.sections
           return { sectionsWithOrdered, ...post }
         })
