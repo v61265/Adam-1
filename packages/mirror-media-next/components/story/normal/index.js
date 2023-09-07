@@ -2,7 +2,7 @@
 //TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
 import { useCallback, useState } from 'react'
-import client from '../../../apollo/apollo-client'
+
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
 import axios from 'axios'
@@ -26,8 +26,12 @@ import {
   transformTimeDataIntoDotFormat,
   getCategoryOfWineSlug,
 } from '../../../utils'
-import { fetchAsidePosts } from '../../../apollo/query/posts'
-import { URL_STATIC_POPULAR_NEWS, API_TIMEOUT } from '../../../config/index.mjs'
+
+import {
+  URL_STATIC_POPULAR_NEWS,
+  API_TIMEOUT,
+  URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION,
+} from '../../../config/index.mjs'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
 import { Z_INDEX } from '../../../constants/index'
 import { getSectionGPTPageKey } from '../../../utils/ad'
@@ -559,26 +563,28 @@ export default function StoryNormalStyle({
       /**
        * @type {import('@apollo/client').ApolloQueryResult<{posts: AsideArticleData[]}>}
        */
-      const res = await client.query({
-        query: fetchAsidePosts,
-        variables: {
-          take: 6,
-          sectionSlug: section?.slug || 'news',
-          storySlug: slug,
-        },
+      const res = await await axios({
+        method: 'get',
+        url: `${URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION}/section_${
+          section?.slug || 'news'
+        }.json`,
+        timeout: API_TIMEOUT,
       })
-      return res.data?.posts.map((post) => {
-        const sectionsWithOrdered = getActiveOrderSection(
-          post.sections,
-          post.sectionsInInputOrder
-        )
-        return { sectionsWithOrdered, ...post }
-      })
+      return res.data?.posts
+        .filter((post) => post.slug !== slug)
+        .slice(0, 6)
+        .map((post) => {
+          const sectionsWithOrdered = getActiveOrderSection(
+            post.sections,
+            post.sectionsInInputOrder
+          )
+          return { sectionsWithOrdered, ...post }
+        })
     } catch (err) {
       console.error(err)
       return []
     }
-  }, [section, slug])
+  }, [slug, section.slug])
 
   /**
    * @returns {Promise<AsideArticleDataContainSectionsWithOrdered[] | []>}
