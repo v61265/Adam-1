@@ -10,6 +10,7 @@ let SITE_URL = ''
 let API_TIMEOUT = 5000
 let WEEKLY_API_SERVER_ORIGIN = ''
 let WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = ''
+let STATIC_FILE_DOMAIN = ''
 
 let URL_STATIC_PREMIUM_SECTIONS = ''
 let URL_STATIC_NORMAL_SECTIONS = ''
@@ -35,15 +36,16 @@ switch (ENV) {
 
     WEEKLY_API_SERVER_ORIGIN =
       'adam-weekly-api-server-prod-ufaummkd5q-de.a.run.app'
+    STATIC_FILE_DOMAIN = 'v3-statics.mirrormedia.mg'
     WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${WEEKLY_API_SERVER_ORIGIN}/youtube`
-    URL_STATIC_PREMIUM_SECTIONS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_member.json`
-    URL_STATIC_NORMAL_SECTIONS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_sections.json`
-    URL_STATIC_TOPICS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_topics.json`
-    URL_STATIC_POST_FLASH_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_posts.json`
-    URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
-    URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
-    URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
-    URL_STATIC_HEADER_HEADERS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_headers.json`
+    URL_STATIC_PREMIUM_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_member.json`
+    URL_STATIC_NORMAL_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_sections.json`
+    URL_STATIC_TOPICS = `https://${STATIC_FILE_DOMAIN}/files/json/header_topics.json`
+    URL_STATIC_POST_FLASH_NEWS = `https://${STATIC_FILE_DOMAIN}/files/json/header_posts.json`
+    URL_STATIC_POST_EXTERNAL = `https://${STATIC_FILE_DOMAIN}/files/json/post_external`
+    URL_STATIC_POPULAR_NEWS = `https://${STATIC_FILE_DOMAIN}/files/json/popular.json`
+    URL_STATIC_404_POPULAR_NEWS = `https://${STATIC_FILE_DOMAIN}/files/json/404_popular.json`
+    URL_STATIC_HEADER_HEADERS = `https://${STATIC_FILE_DOMAIN}/files/json/header_headers.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-341XFN0675'
@@ -69,15 +71,16 @@ switch (ENV) {
     WEEKLY_API_SERVER_ORIGIN =
       'adam-weekly-api-server-staging-ufaummkd5q-de.a.run.app'
     WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${WEEKLY_API_SERVER_ORIGIN}/youtube`
+    STATIC_FILE_DOMAIN = 'v3-statics-staging.mirrormedia.mg'
 
-    URL_STATIC_PREMIUM_SECTIONS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_member.json`
-    URL_STATIC_NORMAL_SECTIONS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_sections.json`
-    URL_STATIC_TOPICS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_topics.json`
-    URL_STATIC_POST_FLASH_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_posts.json`
-    URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
-    URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
-    URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
-    URL_STATIC_HEADER_HEADERS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_headers.json`
+    URL_STATIC_PREMIUM_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_member.json`
+    URL_STATIC_NORMAL_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_sections.json`
+    URL_STATIC_TOPICS = `https://${STATIC_FILE_DOMAIN}/files/json/header_topics.json`
+    URL_STATIC_POST_FLASH_NEWS = `https://${STATIC_FILE_DOMAIN}/files/json/header_posts.json`
+    URL_STATIC_POST_EXTERNAL = `https://${STATIC_FILE_DOMAIN}/files/json/post_external`
+    URL_STATIC_POPULAR_NEWS = `https://${STATIC_FILE_DOMAIN}/files/json/popular.json`
+    URL_STATIC_404_POPULAR_NEWS = `https://${STATIC_FILE_DOMAIN}/files/json/404_popular.json`
+    URL_STATIC_HEADER_HEADERS = `https://${STATIC_FILE_DOMAIN}/files/json/header_headers.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
@@ -102,15 +105,15 @@ switch (ENV) {
     WEEKLY_API_SERVER_ORIGIN =
       'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
     WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${WEEKLY_API_SERVER_ORIGIN}/youtube`
-
-    URL_STATIC_PREMIUM_SECTIONS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_member.json`
-    URL_STATIC_NORMAL_SECTIONS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_sections.json`
-    URL_STATIC_TOPICS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_topics.json`
-    URL_STATIC_POST_FLASH_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_posts.json`
-    URL_STATIC_POST_EXTERNAL = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/post_external`
-    URL_STATIC_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/popular.json`
-    URL_STATIC_404_POPULAR_NEWS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/404_popular.json`
-    URL_STATIC_HEADER_HEADERS = `https://${WEEKLY_API_SERVER_ORIGIN}/gcs/files/json/header_headers.json`
+    STATIC_FILE_DOMAIN = 'v3-statics-dev.mirrormedia.mg'
+    URL_STATIC_PREMIUM_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_member.json`
+    URL_STATIC_NORMAL_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_sections.json`
+    URL_STATIC_TOPICS = `https://${STATIC_FILE_DOMAIN}/files/json/header_topics.json`
+    URL_STATIC_POST_FLASH_NEWS = `https://${STATIC_FILE_DOMAIN}/files/json/header_posts.json`
+    URL_STATIC_POST_EXTERNAL = `https://${STATIC_FILE_DOMAIN}/files/json/post_external`
+    URL_STATIC_POPULAR_NEWS = `https://${STATIC_FILE_DOMAIN}/files/json/popular.json`
+    URL_STATIC_404_POPULAR_NEWS = `https://${STATIC_FILE_DOMAIN}/files/json/404_popular.json`
+    URL_STATIC_HEADER_HEADERS = `https://${STATIC_FILE_DOMAIN}/files/json/header_headers.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
