@@ -3,6 +3,10 @@ const GCP_PROJECT_ID = 'mirrormedia-1470651750304'
 // The following variables are from environment variables
 
 const ENV = process.env.NEXT_PUBLIC_ENV || 'local'
+const NEWEBPAY_PAPERMAG_KEY =
+  process.env.NEWEBPAY_PAPERMAG_KEY || 'newebpay-papermag-key'
+const NEWEBPAY_PAPERMAG_IV =
+  process.env.NEWEBPAY_PAPERMAG_IV || 'newebpay-papermag-iv'
 
 // The following variables are given values according to different `ENV`
 
@@ -24,6 +28,7 @@ let GTM_ID = ''
 let SEARCH_URL = 'search-url/search'
 let URL_STATIC_POPULAR_NEWS = ''
 let URL_STATIC_404_POPULAR_NEWS = ''
+let NEWEBPAY_PAPERMAG_API_URL = ''
 let URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION = ''
 let GPT_MODE = ''
 // It is safe to expose the configuration of Firebase.
@@ -47,6 +52,10 @@ switch (ENV) {
     URL_STATIC_404_POPULAR_NEWS = `https://${STATIC_FILE_DOMAIN}/files/json/404_popular.json`
     URL_STATIC_HEADER_HEADERS = `https://${STATIC_FILE_DOMAIN}/files/json/header_headers.json`
     URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION = `https://${STATIC_FILE_DOMAIN}/files/json/sections`
+
+    NEWEBPAY_PAPERMAG_API_URL =
+      process.env.NEWEBPAY_PAPERMAG_API_URL ||
+      'https://core.newebpay.com/MPG/mpg_gateway'
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-341XFN0675'
@@ -84,6 +93,10 @@ switch (ENV) {
     URL_STATIC_HEADER_HEADERS = `https://${STATIC_FILE_DOMAIN}/files/json/header_headers.json`
     URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION = `https://${STATIC_FILE_DOMAIN}/files/json/sections`
 
+    NEWEBPAY_PAPERMAG_API_URL =
+      process.env.NEWEBPAY_PAPERMAG_API_URL ||
+      'https://ccore.newebpay.com/MPG/mpg_gateway'
+
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
     GTM_ID = 'GTM-KVDZ27K'
@@ -118,6 +131,10 @@ switch (ENV) {
     URL_STATIC_HEADER_HEADERS = `https://${STATIC_FILE_DOMAIN}/files/json/header_headers.json`
     URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION = `https://${STATIC_FILE_DOMAIN}/files/json/sections`
 
+    NEWEBPAY_PAPERMAG_API_URL =
+      process.env.NEWEBPAY_PAPERMAG_API_URL ||
+      'https://ccore.newebpay.com/MPG/mpg_gateway'
+
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
@@ -143,6 +160,10 @@ switch (ENV) {
     WEEKLY_API_SERVER_ORIGIN =
       'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
     WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${WEEKLY_API_SERVER_ORIGIN}/youtube`
+
+    NEWEBPAY_PAPERMAG_API_URL =
+      process.env.NEWEBPAY_PAPERMAG_API_URL ||
+      'https://ccore.newebpay.com/MPG/mpg_gateway'
 
     URL_STATIC_PREMIUM_SECTIONS = `http://localhost:8080/json/header_member.json`
     URL_STATIC_NORMAL_SECTIONS = `http://localhost:8080/json/header_sections.json`
@@ -193,4 +214,7 @@ export {
   GPT_MODE,
   FIREBASE_CONFIG,
   URL_STATIC_HEADER_HEADERS,
+  NEWEBPAY_PAPERMAG_API_URL,
+  NEWEBPAY_PAPERMAG_KEY,
+  NEWEBPAY_PAPERMAG_IV,
 }
