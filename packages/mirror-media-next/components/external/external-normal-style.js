@@ -469,7 +469,7 @@ export default function ExternalNormalStyle({ external }) {
       /**
        * @type {import('@apollo/client').ApolloQueryResult<{posts: AsideArticleData[]}>}
        */
-      const res = await await axios({
+      const res = await axios({
         method: 'get',
         url: `${URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION}/section_${EXTERNAL_DEFAULT_SECTION.slug}.json`,
         timeout: API_TIMEOUT,
