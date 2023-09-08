@@ -4,13 +4,20 @@ import {
   NEWEBPAY_PAPERMAG_IV,
 } from '../../config/index.mjs'
 
+function getRandomMerchantOrderNo() {
+  const min = 1000000000
+  const max = 9999999999
+  const randomTenDigitNumber = Math.floor(Math.random() * (max - min + 1)) + min
+  return 'P' + randomTenDigitNumber
+}
+
 async function getPaymentDataOfPapermagSubscription(gateWayPayload) {
   const data = {
     MerchantID: 'MS323443601',
     RespondType: 'JSON',
     TimeStamp: '1694018103',
     Version: '1.6',
-    MerchantOrderNo: 'P2309070697',
+    MerchantOrderNo: getRandomMerchantOrderNo(),
     Amt: 7280,
     ItemDesc: '一年鏡週刊 52 期加掛號運費',
     LoginType: 0,

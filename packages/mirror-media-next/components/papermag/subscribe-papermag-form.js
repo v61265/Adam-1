@@ -14,7 +14,6 @@ import NewebpayForm from './form-detail/newebpay-form'
 
 import { NEWEBPAY_PAPERMAG_API_URL } from '../../config/index.mjs'
 import { useRouter } from 'next/router'
-import { nextTick } from 'process'
 
 const Form = styled.form`
   display: flex;
