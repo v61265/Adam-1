@@ -14,6 +14,7 @@ import NewebpayForm from './form-detail/newebpay-form'
 
 import { NEWEBPAY_PAPERMAG_API_URL } from '../../config/index.mjs'
 import { useRouter } from 'next/router'
+import { nextTick } from 'process'
 
 const Form = styled.form`
   display: flex;
@@ -125,6 +126,7 @@ export default function SubscribePaperMagForm({ plan }) {
         receiveMobile: recipientValues.cellphone,
         loveCode,
         carrierType: receiptData,
+        returnUrl: `${window.location.origin}/papermag/return`,
       },
     }
 
@@ -139,13 +141,12 @@ export default function SubscribePaperMagForm({ plan }) {
     }
 
     setPaymentPlayload(data.data)
+    // 為了確保資料先填入 form 中而使用 setTimeout
+    setTimeout(() => {
+      const formDOM = document.forms.newebpay
+      formDOM.submit()
+    }, 0)
   }
-
-  useEffect(() => {
-    if (!paymentPayload.MerchantID) return
-    const formDOM = document.forms.newebpay
-    formDOM.submit()
-  }, [paymentPayload])
 
   return (
     <>

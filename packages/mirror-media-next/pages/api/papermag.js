@@ -4,7 +4,7 @@ import {
   NEWEBPAY_PAPERMAG_IV,
 } from '../../config/index.mjs'
 
-async function getPaymentDataOfPapermagSubscription(gateWayPayload, origin) {
+async function getPaymentDataOfPapermagSubscription(gateWayPayload) {
   const data = {
     MerchantID: 'MS323443601',
     RespondType: 'JSON',
@@ -19,17 +19,14 @@ async function getPaymentDataOfPapermagSubscription(gateWayPayload, origin) {
     NotifyURL:
       'https://mm-subscription-webhooks-publishers-dev-ufaummkd5q-de.a.run.app/newebpay/magazine',
   }
-  data.ReturnURL = `${origin}/papermag/return`
   return data
 }
 
 export default async function EncryptInfo(req, res) {
   const tradeInfo = req.body
-  const { origin } = req.headers
   try {
     const infoForNewebpay = await getPaymentDataOfPapermagSubscription(
-      tradeInfo,
-      origin
+      tradeInfo
     )
 
     const newebpay = new NewebPay(NEWEBPAY_PAPERMAG_KEY, NEWEBPAY_PAPERMAG_IV)
