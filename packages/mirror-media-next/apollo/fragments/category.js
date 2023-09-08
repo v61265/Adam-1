@@ -28,7 +28,7 @@ export const categoryWithSection = gql`
     slug
     state
     isMemberOnly
-    sections {
+    sections(where: { state: { equals: "active" } }) {
       ...section
     }
   }
