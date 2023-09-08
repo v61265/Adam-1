@@ -9,6 +9,7 @@ import {
   getCategoryOfWineSlug,
   convertDraftToText,
   getResizedUrl,
+  getActiveOrderSection,
 } from '../../../utils'
 
 import { handleStoryPageRedirect } from '../../../utils/story'
@@ -69,10 +70,10 @@ function StoryAmpPage({ postData }) {
     sectionsInInputOrder = [],
   } = postData
 
-  const sectionsWithOrdered =
-    sectionsInInputOrder && sectionsInInputOrder.length
-      ? sectionsInInputOrder
-      : sections
+  const sectionsWithOrdered = getActiveOrderSection(
+    sections,
+    sectionsInInputOrder
+  )
   const [section] = sectionsWithOrdered
 
   const sectionSlot = getAmpGptDataSlotSection(section)

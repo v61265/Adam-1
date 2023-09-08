@@ -13,6 +13,7 @@ import { gql } from '@apollo/client'
  * @property {string} id
  * @property {string} name
  * @property {string} slug
+ * @property {"active" | "inactive"} state
  * @property {SectionWithCategory[]} categories
  */
 
@@ -21,6 +22,7 @@ export const section = gql`
     id
     name
     slug
+    state
   }
 `
 

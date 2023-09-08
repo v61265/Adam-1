@@ -259,6 +259,18 @@ export async function getServerSideProps({ query, req, res }) {
   /** @type {Section} */
   const section = handledResponses[2]?.section || { slug: sectionSlug }
 
+  // handle section state, if `inactive` -> redirect to 404
+  if (section.state !== 'active') {
+    console.log(
+      JSON.stringify({
+        severity: 'WARNING',
+        message: `sectionSlug '${sectionSlug}' is inactive, redirect to 404`,
+        globalLogFields,
+      })
+    )
+    return { notFound: true }
+  }
+
   const props = {
     postsCount,
     posts,
