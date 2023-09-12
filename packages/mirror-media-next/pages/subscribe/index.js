@@ -112,9 +112,7 @@ export async function getServerSideProps({ req, res }) {
     ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
   }
 
-  const domain = req.headers.host
-
-  if (ACCESS_SUBSCRIBE_FEATURE_TOGGLE !== 'on' && domain.includes('www-')) {
+  if (ACCESS_SUBSCRIBE_FEATURE_TOGGLE !== 'on') {
     return {
       redirect: {
         destination: '/',
