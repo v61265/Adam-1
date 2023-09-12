@@ -16,6 +16,7 @@ let WEEKLY_API_SERVER_ORIGIN = ''
 let WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = ''
 let STATIC_FILE_DOMAIN = ''
 let ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
+let ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
 
 let URL_STATIC_PREMIUM_SECTIONS = ''
 let URL_STATIC_NORMAL_SECTIONS = ''
@@ -58,6 +59,7 @@ switch (ENV) {
       process.env.NEWEBPAY_PAPERMAG_API_URL ||
       'https://core.newebpay.com/MPG/mpg_gateway'
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
+    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-341XFN0675'
@@ -100,6 +102,7 @@ switch (ENV) {
       'https://ccore.newebpay.com/MPG/mpg_gateway'
 
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
+    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
@@ -145,6 +148,7 @@ switch (ENV) {
     SEARCH_URL = 'https://adam-mirror-media-search-dev-ufaummkd5q-de.a.run.app'
 
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
+    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
 
     GPT_MODE = 'dev'
     FIREBASE_CONFIG = {
@@ -171,6 +175,7 @@ switch (ENV) {
       process.env.NEWEBPAY_PAPERMAG_API_URL ||
       'https://ccore.newebpay.com/MPG/mpg_gateway'
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'on'
+    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
 
     URL_STATIC_PREMIUM_SECTIONS = `http://localhost:8080/json/header_member.json`
     URL_STATIC_NORMAL_SECTIONS = `http://localhost:8080/json/header_sections.json`
@@ -225,4 +230,5 @@ export {
   NEWEBPAY_PAPERMAG_KEY,
   NEWEBPAY_PAPERMAG_IV,
   ACCESS_SUBSCRIBE_FEATURE_TOGGLE,
+  ACCESS_PAPERMAG_FEATURE_TOGGLE,
 }
