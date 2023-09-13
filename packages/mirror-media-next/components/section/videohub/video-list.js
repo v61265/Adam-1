@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import VideoListItem from '../../shared/video-list-item'
-
+import Link from 'next/link'
 /**
  * @typedef {import('../../../type/theme').Theme} Theme
  */
@@ -136,9 +136,9 @@ export default function VideoList({ videos, name, slug, gtmClassName = '' }) {
     <Wrapper hasSlug={hasSlug}>
       <Title categorySlug={slug}>
         {hasSlug ? (
-          <a href={`/video_category/${slug}`} target="_blank" rel="noreferrer">
+          <Link href={`/video_category/${slug}`} rel="noreferrer">
             {name}
-          </a>
+          </Link>
         ) : (
           <>{name}</>
         )}

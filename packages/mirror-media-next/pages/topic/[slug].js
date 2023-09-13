@@ -13,6 +13,7 @@ import {
   sortArrayWithOtherArrayId,
 } from '../../utils/index'
 import { fetchTopicByTopicSlug } from '../../utils/api/topic'
+import { Fragment } from 'react'
 
 const RENDER_PAGE_SIZE = 12
 
@@ -61,7 +62,13 @@ export default function Topic({ topic, slideshowImages, headerData }) {
         </>
       )
   }
-
+  /**
+   * The reason why component `<Fragment>` need to add `key`:
+   * When we use client-side navigation (such as `<Link>` from 'next/link', `router.push` from next/router),
+   * we need to use key to tell React "this is an another page components".
+   * Otherwise, page will not render correct data in components.
+   * See [React docs](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key) to get more information about how does key works.
+   */
   return (
     <Layout
       head={{
@@ -77,7 +84,7 @@ export default function Topic({ topic, slideshowImages, headerData }) {
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
-      {topicJSX}
+      <Fragment key={topic.id}>{topicJSX}</Fragment>
     </Layout>
   )
 }
