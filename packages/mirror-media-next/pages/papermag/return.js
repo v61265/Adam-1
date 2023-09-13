@@ -8,6 +8,14 @@ import Layout from '../../components/shared/layout'
 import Steps from '../../components/subscribe-steps'
 import Succeeded from '../../components/papermag/succeeded'
 import Failed from '../../components/papermag/failed'
+import NewebPay from '@mirrormedia/newebpay-node'
+import {
+  NEWEBPAY_PAPERMAG_KEY,
+  NEWEBPAY_PAPERMAG_IV,
+} from '../../config/index.mjs'
+import { parseBody } from 'next/dist/server/api-utils/node'
+
+import { merchandiseWithoutShippingFee } from '../../utils/papermag'
 
 import { ACCESS_PAPERMAG_FEATURE_TOGGLE } from '../../config/index.mjs'
 
@@ -30,10 +38,17 @@ const Wrapper = styled.main`
  * @param {Object} props
  * @param {Object[] } props.sectionsData
  * @param {Object[]} props.topicsData
+ * @param {string} props.orderStatus
+ * @param {Object} props.orderData
  * @return {JSX.Element}
  */
-export default function Return({ sectionsData = [], topicsData = [] }) {
-  const [isSucceeded, setIsSucceeded] = useState(true) // Initial state: Succeeded
+export default function Return({
+  sectionsData = [],
+  topicsData = [],
+  orderData,
+  orderStatus = 'fail',
+}) {
+  const [isSucceeded, setIsSucceeded] = useState(orderStatus === 'SUCCESS') // Initial state: Succeeded
 
   const toggleResult = () => {
     setIsSucceeded(!isSucceeded)
@@ -57,7 +72,7 @@ export default function Return({ sectionsData = [], topicsData = [] }) {
           >
             {isSucceeded ? 'Toggle Failed' : 'Toggle Succeeded'}
           </button>
-          {isSucceeded ? <Succeeded /> : <Failed />}
+          {isSucceeded ? <Succeeded orderData={orderData} /> : <Failed />}
         </Wrapper>
       </>
     </Layout>
@@ -67,7 +82,7 @@ export default function Return({ sectionsData = [], topicsData = [] }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ query, req, res }) {
   setPageCache(res, { cachePolicy: 'no-store' }, req.url)
 
   const traceHeader = req.headers?.['x-cloud-trace-context']
@@ -114,10 +129,125 @@ export async function getServerSideProps({ req, res }) {
     )
   }
 
+  let orderData = {}
+  let orderStatus = 'fail'
+
+  if (query && Object.prototype.hasOwnProperty.call(query, 'order-fail')) {
+    return {
+      props: { sectionsData, topicsData, orderStatus, orderData },
+    }
+  } else if (req.method !== 'POST') {
+    return {
+      redirect: {
+        destination: '/papermag',
+        permanent: false,
+      },
+    }
+  }
+
+  try {
+    const infoData = await parseBody(req, '1mb')
+    if (infoData.Status !== 'SUCCESS') {
+      return {
+        props: { sectionsData, topicsData, orderStatus, orderData },
+      }
+    }
+
+    const newebpay = new NewebPay(NEWEBPAY_PAPERMAG_KEY, NEWEBPAY_PAPERMAG_IV)
+    const decryptedTradeInfo = await newebpay.getDecryptedTradeInfo(
+      infoData.TradeInfo
+    )
+
+    const MerchantOrderNo =
+      decryptedTradeInfo.Result?.MerchantOrderNo ||
+      JSON.parse(Object.keys(decryptedTradeInfo)[0]).Result.MerchantOrderNo
+
+    // TODO: fetch DB
+    const mockDate = '2023-09-01'
+    const result = {
+      data: {
+        allMagazineOrders: [
+          {
+            id: '703',
+            orderNumber: MerchantOrderNo,
+            purchaseDatetime: mockDate,
+            merchandise: {
+              name: '鏡週刊紙本雜誌 52 期',
+              code: 'magazine_one_year',
+              price: 5280,
+            },
+            itemCount: 1,
+            totalAmount: 5200,
+            purchaseName: '購買者',
+            purchaseEmail: 'readr@gmail.com',
+            purchaseMobile: '0911111111',
+            purchaseAddress: '台南市新營區林口街119號6樓之5',
+            receiveName: '訂購者',
+            receiveMobile: '0911111111',
+            receiveAddress: '台南市新營區林口街119號6樓之5',
+            createdAt: mockDate,
+            promoteCode: 'MJ00012345',
+          },
+        ],
+      },
+    }
+    if (result.errors) console.log(result.errors[0].message)
+    const decryptInfoData = result?.data?.allMagazineOrders[0]
+    if (!decryptInfoData) {
+      return {
+        props: { sectionsData, topicsData, orderStatus, orderData },
+      }
+    }
+
+    const { name, shippingFeePerCount } = merchandiseWithoutShippingFee(
+      decryptInfoData?.merchandise?.code
+    )
+
+    const shippingCost = shippingFeePerCount * decryptInfoData.itemCount
+
+    const orderInfoPurchasedList = [
+      {
+        text: name,
+        count: decryptInfoData.itemCount,
+        price:
+          decryptInfoData.itemCount * decryptInfoData.merchandise.price -
+          shippingCost,
+      },
+      { text: '運費', price: shippingCost },
+      {
+        text: '折扣',
+        price: decryptInfoData.promoteCode ? 80 * decryptInfoData.itemCount : 0,
+      },
+      {
+        text: '付款金額',
+        price: decryptInfoData.totalAmount,
+      },
+    ]
+
+    orderData = {
+      orderId: decryptInfoData.orderNumber,
+      date: decryptInfoData.createdAt,
+      discountCode: decryptInfoData.promoteCode,
+      orderInfoPurchasedList,
+      purchaseName: decryptInfoData.purchaseName,
+      purchaseEmail: decryptInfoData.purchaseEmail,
+      purchaseMobile: decryptInfoData.purchaseMobile,
+      purchaseAddress: decryptInfoData.purchaseAddress,
+      receiveName: decryptInfoData.receiveName,
+      receiveMobile: decryptInfoData.receiveMobile,
+      receiveAddress: decryptInfoData.receiveAddress,
+    }
+    orderStatus = infoData.Status
+  } catch (e) {
+    console.log(e)
+  }
+
   return {
     props: {
       sectionsData,
       topicsData,
+      orderData,
+      orderStatus,
     },
   }
 }

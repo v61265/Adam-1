@@ -95,7 +95,6 @@ export default function SubscribePaperMagForm({ plan }) {
 
   // update the receiptData state
   const [receiptData, setReceiptData] = useState({})
-
   const handleSubmit = async (event) => {
     event.preventDefault()
     // Check for form validity
@@ -133,7 +132,6 @@ export default function SubscribePaperMagForm({ plan }) {
       `${window.location.origin}/api/papermag`,
       requestBody
     )
-
     if (data?.status !== 'success') {
       console.error(data.message)
       router.push(`/papermag/return?order-fail=true`)

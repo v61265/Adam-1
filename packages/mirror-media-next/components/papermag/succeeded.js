@@ -163,7 +163,32 @@ const CustomerItem = styled.div`
   }
 `
 
-export default function Succeeded() {
+/**
+ * @param {Object} props
+ * @param {Object} props.orderData
+ * @return {JSX.Element}
+ */
+
+export default function Succeeded({ orderData }) {
+  const {
+    orderId,
+    date,
+    discountCode,
+    orderInfoPurchasedList,
+    purchaseName,
+    purchaseEmail,
+    purchaseMobile,
+    receiveName,
+    receiveMobile,
+    receiveAddress,
+  } = orderData
+
+  function addCommas(number) {
+    let numberStr = number.toString()
+    numberStr = numberStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    return numberStr
+  }
+
   return (
     <>
       <Message>您已完成付款，以下為本次訂購資訊。</Message>
@@ -175,16 +200,18 @@ export default function Succeeded() {
         <Title>訂單資訊</Title>
         <ItemWrapper>
           <Item>訂單編號</Item>
-          <Info>2020122133</Info>
+          <Info>{orderId}</Info>
         </ItemWrapper>
         <ItemWrapper>
           <Item>訂單日期</Item>
-          <Info>2019-12-25</Info>
+          <Info>{date}</Info>
         </ItemWrapper>
-        <ItemWrapper>
-          <Item>優惠折扣碼</Item>
-          <Info>MJ00012345</Info>
-        </ItemWrapper>
+        {discountCode && (
+          <ItemWrapper>
+            <Item>優惠折扣碼</Item>
+            <Info>{discountCode}</Info>
+          </ItemWrapper>
+        )}
 
         {/* 訂單內容 */}
         <ContentWrapper>
@@ -192,24 +219,30 @@ export default function Succeeded() {
           <DetailWrapper>
             <Detail>
               <DetailItem>
-                <span>鏡週刊紙本雜誌 52 期</span>
                 <span>
-                  共<span className="number">99</span>份
+                  {orderInfoPurchasedList?.[0]?.text || '鏡週刊紙本雜誌 52 期'}
+                </span>
+                <span>
+                  共
+                  <span className="number">
+                    {orderInfoPurchasedList?.[0]?.count || 1}
+                  </span>
+                  份
                 </span>
               </DetailItem>
-              <Price>NT$ 2,880</Price>
+              <Price>NT$ {addCommas(orderInfoPurchasedList?.[0]?.price)}</Price>
             </Detail>
 
             <Detail>
               <Item>運費</Item>
-              <Price>NT$ 0</Price>
+              <Price>NT$ {addCommas(orderInfoPurchasedList?.[1]?.price)}</Price>
             </Detail>
 
             <Hr />
 
             <Detail style={{ marginTop: '0' }}>
               <Item>付款金額</Item>
-              <Price>NT$ 2,880</Price>
+              <Price>NT$ {addCommas(orderInfoPurchasedList?.[3]?.price)}</Price>
             </Detail>
           </DetailWrapper>
         </ContentWrapper>
@@ -219,29 +252,29 @@ export default function Succeeded() {
         <CustomerTitle style={{ marginTop: '16px' }}>訂購人</CustomerTitle>
         <CustomerItem style={{ marginTop: '12px' }}>
           <p className="name">姓名</p>
-          <p className="value">陳芳明</p>
+          <p className="value">{purchaseName}</p>
         </CustomerItem>
         <CustomerItem>
           <p className="name">電子信箱</p>
-          <p className="value">readr@gmail.com</p>
+          <p className="value">{purchaseEmail}</p>
         </CustomerItem>
         <CustomerItem>
           <p className="name">聯絡電話</p>
-          <p className="value">0977229955</p>
+          <p className="value">{purchaseMobile}</p>
         </CustomerItem>
 
         <CustomerTitle>收件人</CustomerTitle>
         <CustomerItem style={{ marginTop: '12px' }}>
           <p className="name">姓名</p>
-          <p className="value">陳芳明</p>
+          <p className="value">{receiveName}</p>
         </CustomerItem>
         <CustomerItem>
           <p className="name">聯絡電話</p>
-          <p className="value">0977229955</p>
+          <p className="value">{receiveMobile}</p>
         </CustomerItem>
         <CustomerItem>
           <p className="name">通訊地址</p>
-          <p className="value">台南市新營區林口街119號6樓之5</p>
+          <p className="value">{receiveAddress}</p>
         </CustomerItem>
         <CustomerItem>
           <p className="name">派送備註</p>
