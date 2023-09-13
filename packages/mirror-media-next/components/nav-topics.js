@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-
+import Link from 'next/link'
 /**
  * @typedef {Pick<import('../apollo/fragments/topic').Topic, 'id' | 'slug' | 'name'>[]} Topics
  */
@@ -16,7 +16,7 @@ const TopicsWrapper = styled.section`
   }
 `
 
-const Topic = styled.a`
+const Topic = styled(Link)`
   font-size: 16px;
   line-height: 29px;
   height: 100%;

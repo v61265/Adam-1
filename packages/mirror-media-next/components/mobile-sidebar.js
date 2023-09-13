@@ -4,7 +4,7 @@ import useClickOutside from '../hooks/useClickOutside'
 import Link from 'next/link'
 import HamburgerButton from './shared/hamburger-button'
 import CloseButton from './shared/close-button'
-
+import { useRouter } from 'next/router'
 /**
  * @typedef {import('../apollo/fragments/section').Section} Section
  */
@@ -277,22 +277,32 @@ export default function MobileSidebar({
   promotions,
   socialMedia,
 }) {
+  const router = useRouter()
+
   const [openSidebar, setOpenSidebar] = useState(false)
   const [openSection, setOpenSection] = useState('')
   const sideBarRef = useRef(null)
   useClickOutside(sideBarRef, () => {
     setOpenSidebar(false)
   })
-
+  const handleOnClick = (e, href) => {
+    e.preventDefault()
+    setOpenSidebar(false)
+    router.push(href)
+  }
   const sectionsAndCategoriesJsx = sectionsAndCategories.map((item) => {
     switch (item.type) {
       case 'section':
         return (
           <Fragment key={item.order}>
             <Section sectionSlug={item.slug}>
-              <a style={{ width: '50%' }} href={item.href}>
+              <Link
+                style={{ width: '50%' }}
+                href={item.href}
+                onClick={(e) => handleOnClick(e, item.href)}
+              >
                 <h3>{item.name}</h3>
-              </a>
+              </Link>
               <SectionToggle
                 onClick={() => setOpenSection(item.slug)}
                 shouldOpen={item.slug === openSection}
@@ -304,9 +314,13 @@ export default function MobileSidebar({
               sectionSlug={item.slug}
             >
               {item.categories.map((category) => (
-                <a key={category.id} href={category.href}>
+                <Link
+                  key={category.id}
+                  href={category.href}
+                  onClick={(e) => handleOnClick(e, category.href)}
+                >
                   {category.name}
-                </a>
+                </Link>
               ))}
             </Categories>
           </Fragment>
@@ -316,9 +330,13 @@ export default function MobileSidebar({
 
         return (
           <Section key={item.order} sectionSlug={renderSectionSlug}>
-            <a style={{ width: '100%' }} href={item.href}>
+            <Link
+              style={{ width: '100%' }}
+              href={item.href}
+              onClick={(e) => handleOnClick(e, item.href)}
+            >
               <h3>{item.name}</h3>
-            </a>
+            </Link>
           </Section>
         )
       default:
@@ -348,7 +366,7 @@ export default function MobileSidebar({
           <SubBrandList>
             {subBrands.map((brand) => (
               <li key={brand.name}>
-                <a
+                <Link
                   href={brand.href}
                   target="_blank"
                   rel="noopener noreferer noreferrer"
@@ -358,7 +376,7 @@ export default function MobileSidebar({
                     src={`/images/${brand.name}-colorless.png`}
                     alt={brand.title}
                   />
-                </a>
+                </Link>
               </li>
             ))}
           </SubBrandList>
@@ -374,7 +392,7 @@ export default function MobileSidebar({
         </SideBarBottom>
         <SocialMediaList>
           {socialMedia.map(({ name, href }) => (
-            <a
+            <Link
               key={name}
               href={href}
               target="_blank"
@@ -386,7 +404,7 @@ export default function MobileSidebar({
                 src="/images/transperent.png"
                 alt={name}
               ></img>
-            </a>
+            </Link>
           ))}
         </SocialMediaList>
       </SideBar>
