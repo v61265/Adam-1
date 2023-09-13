@@ -1,7 +1,7 @@
 //TODO: When user at certain section, at category which belongs to certain section, at story which belongs to certain section
 //component <Section> will change color of title to section color defined at /styles/sections-color.
+//TODO: Replace <a> to <Link> for Single Page Application
 import styled, { css } from 'styled-components'
-import Link from 'next/link'
 /**
  * @typedef {import('../type/theme').Theme} Theme
  */
@@ -112,7 +112,7 @@ const Section = styled.li`
   }
 `
 
-const SectionLink = styled(Link)`
+const SectionLink = styled.a`
   display: block;
   width: 100%;
   font-weight: 700;
@@ -138,7 +138,7 @@ const SectionDropDown = styled.div`
     }
   }
 `
-const CategoryLink = styled(Link)`
+const CategoryLink = styled.a`
   display: block;
   &:hover {
     color: ${({ sectionSlug }) => (sectionSlug ? colorCss : ' #fff')};
