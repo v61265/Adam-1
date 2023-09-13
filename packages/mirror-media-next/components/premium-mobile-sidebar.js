@@ -2,7 +2,8 @@ import styled, { css } from 'styled-components'
 import React, { Fragment, useState, useRef } from 'react'
 import useClickOutside from '../hooks/useClickOutside'
 import NavSubtitleNavigator from './story/shared/nav-subtitle-navigator'
-
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 /**
  * @typedef {import('../type/theme').Theme} Theme
  */
@@ -235,13 +236,18 @@ export default function PremiumMobileSidebar({
   shouldShowSubtitleNavigator = false,
   h2AndH3Block = [],
 }) {
+  const router = useRouter()
   const [openSidebar, setOpenSidebar] = useState(false)
   const [openSection, setOpenSection] = useState('')
   const sideBarRef = useRef(null)
   useClickOutside(sideBarRef, () => {
     setOpenSidebar(false)
   })
-
+  const handleOnClick = (e, href) => {
+    e.preventDefault()
+    setOpenSidebar(false)
+    router.push(href)
+  }
   return (
     <>
       <SideBarButton onClick={() => setOpenSidebar((val) => !val)}>
@@ -266,9 +272,13 @@ export default function PremiumMobileSidebar({
           {sections.map(({ id, name, categories, slug }) => (
             <Fragment key={id}>
               <Section>
-                <a style={{ width: '50%' }} href={`/premiumsection/${slug}`}>
+                <Link
+                  style={{ width: '50%' }}
+                  href={`/premiumsection/${slug}`}
+                  onClick={(e) => handleOnClick(e, `/premiumsection/${slug}`)}
+                >
                   <h3>{name}</h3>
-                </a>
+                </Link>
                 <SectionToggle
                   onClick={() => setOpenSection(slug)}
                   shouldOpen={slug === openSection}
@@ -280,9 +290,15 @@ export default function PremiumMobileSidebar({
                 sectionSlug={slug}
               >
                 {categories.map((category) => (
-                  <a key={category.id} href={`/category/${category.slug}`}>
+                  <Link
+                    key={category.id}
+                    href={`/category/${category.slug}`}
+                    onClick={(e) =>
+                      handleOnClick(e, `/category/${category.slug}`)
+                    }
+                  >
                     {category.name}
-                  </a>
+                  </Link>
                 ))}
               </Categories>
             </Fragment>
