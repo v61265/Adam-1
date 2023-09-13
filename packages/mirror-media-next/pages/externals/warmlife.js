@@ -108,20 +108,14 @@ export default function WarmLife({
   headerData,
 }) {
   const shouldShowAd = useDisplayAd()
-  /**
-   * The reason why component `<WarmLifeContainer>` need to add `key`:
-   * When we use client-side navigation (such as `<Link>` from 'next/link', `router.push` from next/router),
-   * we need to use key to tell React "this is an another page components".
-   * Otherwise, page will not render correct data in components.
-   * See [React docs](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key) to get more information about how does key works.
-   */
+
   return (
     <Layout
       head={{ title: `${WARMLIFE_DEFAULT_TITLE}相關報導` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
-      <WarmLifeContainer key={'externals/warmlife'}>
+      <WarmLifeContainer>
         {shouldShowAd && (
           <StyledGPTAd pageKey={WARMLIFE_GPT_SECTION_IDS} adKey="HD" />
         )}

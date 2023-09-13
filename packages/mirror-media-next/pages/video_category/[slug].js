@@ -1,6 +1,6 @@
 import errors from '@twreporter/errors'
 import dynamic from 'next/dynamic'
-import Link from 'next/link'
+
 import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import CategoryVideos from '../../components/video_category/category-videos.js'
 import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants/index.js'
@@ -99,20 +99,14 @@ export default function VideoCategory({
   const categoryName = category.name || ''
 
   const shouldShowAd = useDisplayAd()
-  /**
-   * The reason why component `<Wrapper>` need to add `key`:
-   * When we use client-side navigation (such as `<Link>` from 'next/link', `router.push` from next/router),
-   * we need to use key to tell React "this is an another page components".
-   * Otherwise, page will not render correct data in components.
-   * See [React docs](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key) to get more information about how does key works.
-   */
+
   return (
     <Layout
       head={{ title: `${categoryName}影音` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
-      <Wrapper key={category.id}>
+      <Wrapper>
         {shouldShowAd && <StyledGPTAd_PC_HD pageKey="videohub" adKey="PC_HD" />}
         <LeadingVideo
           video={firstVideo}

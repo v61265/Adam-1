@@ -207,20 +207,14 @@ export default function Category({
   //If category not have related-section, use `other` ad units
   const sectionSlug = category?.sections?.[0]?.slug ?? ''
   const GptPageKey = getSectionGPTPageKey(sectionSlug) ?? 'other'
-  /**
-   * The reason why component `<CategoryContainer>` need to add `key`:
-   * When we use client-side navigation (such as `<Link>` from 'next/link', `router.push` from next/router),
-   * we need to use key to tell React "this is an another page components".
-   * Otherwise, page will not render correct data in components.
-   * See [React docs](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key) to get more information about how does key works.
-   */
+
   return (
     <Layout
       head={{ title: `${categoryName}分類報導` }}
       header={{ type: isPremium ? 'premium' : 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
-      <CategoryContainer key={category.id} isPremium={isPremium}>
+      <CategoryContainer isPremium={isPremium}>
         {shouldShowAd && <StyledGPTAd pageKey={GptPageKey} adKey="HD" />}
 
         {isPremium ? (

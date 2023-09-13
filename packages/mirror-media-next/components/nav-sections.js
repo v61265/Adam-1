@@ -126,7 +126,7 @@ const Section = styled.li`
     }
   }
 `
-const SectionLink = styled(Link)`
+const SectionLink = styled.a`
   display: block;
   width: 100%;
   font-weight: 700;
@@ -168,7 +168,7 @@ const SectionDropDown = styled.div`
     }
   }
 `
-const CategoryLink = styled(Link)`
+const CategoryLink = styled.a`
   display: block;
   &:hover {
     ${
