@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-
+import Link from 'next/link'
 import SearchBarDesktop from './search-bar-desktop'
 import { Z_INDEX } from '../constants'
 import { DEFAULT_PREMIUM_SECTIONS_DATA } from '../constants/header'
@@ -230,10 +230,9 @@ export default function PremiumHeader({
   return (
     <HeaderWrapper shouldSticky={shouldShowSubtitleNavigator}>
       <HeaderTop>
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/">
+        <Link href="/">
           <HeaderLogo />
-        </a>
+        </Link>
         <ActionWrapper>
           <SearchBarDesktop
             searchTerms={searchTerms}
