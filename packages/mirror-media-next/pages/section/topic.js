@@ -92,8 +92,6 @@ const RENDER_PAGE_SIZE = 12
  */
 
 /**
- *
- *
  * @param {Object} props
  * @param {Topic[]} props.topics
  * @param {number} props.topicsCount
@@ -102,20 +100,14 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Topics({ topics, topicsCount, headerData }) {
   const shouldShowAd = useDisplayAd()
-  /**
-   * The reason why component `<TopicsContainer>` need to add `key`:
-   * When we use client-side navigation (such as `<Link>` from 'next/link', `router.push` from next/router),
-   * we need to use key to tell React "this is an another page components".
-   * Otherwise, page will not render correct data in components.
-   * See [React docs](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key) to get more information about how does key works.
-   */
+
   return (
     <Layout
       head={{ title: `精選專區` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
-      <TopicsContainer key={'topics'}>
+      <TopicsContainer>
         {shouldShowAd && <StyledGPTAd pageKey="other" adKey="HD" />}
         <TopicsTitle>精選專區</TopicsTitle>
         <SectionTopics
