@@ -190,7 +190,7 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
-    SEARCH_URL = 'https://adam-mirror-media-search-dev-ufaummkd5q-de.a.run.app'
+    SEARCH_URL = 'https://search-dev.mirrormedia.mg'
     GPT_MODE = 'dev'
     FIREBASE_CONFIG = {
       apiKey: 'AIzaSyAavk46-8OQ4B2cv0TOqxOMjd5Fe4tIauc',

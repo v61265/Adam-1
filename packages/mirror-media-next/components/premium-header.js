@@ -222,7 +222,7 @@ export default function PremiumHeader({
       .replace(/\s+/g, ',')
 
     if (trimedSearchTerms === '') return setSearchTerms('')
-    location.assign(`${SEARCH_URL}/search/${trimedSearchTerms}`)
+    location.assign(`${SEARCH_URL}/search/v3/${trimedSearchTerms}`)
   }
 
   const sections = getSections()
