@@ -28,7 +28,7 @@ const ContentContainer = styled.section`
   margin-bottom: 32px;
 
   .readr-media-react-image {
-    background-color: transparent;
+    background-color: transparent !important;
   }
 `
 const StyledGPTAd = styled(GPTAd)`
