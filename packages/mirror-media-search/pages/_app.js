@@ -1,13 +1,18 @@
 import Head from 'next/head'
 import { GlobalStyles } from '../styles/global-styles'
 import Script from 'next/script'
+import { GA_TRACKING_ID, GTM_ID, URL_MIRROR_MEDIA } from '../config'
 import { useEffect } from 'react'
 import { RedirectUrlContext } from '../context/redirectUrl'
 import { ThemeProvider } from 'styled-components'
 import { theme } from '../styles/theme'
+import gtag from '../utils/programmable-search/gtag'
+import TagManager from 'react-gtm-module'
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {}, [])
+  gtag.init()
+  TagManager.initialize({ gtmId: GTM_ID })
 
   const getLayout = Component.getLayout || ((page) => page)
   const { redirectUrl } = pageProps
