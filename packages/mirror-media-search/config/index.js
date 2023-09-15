@@ -26,7 +26,6 @@ const PROGRAMABLE_SEARCH_ENGINE_ID =
   process.env.PROGRAMABLE_SEARCH_ENGINE_ID || 'SEARCH_ENGINE_ID'
 const PROGRAMABLE_SEARCH_API_KEY =
   process.env.PROGRAMABLE_SEARCH_API_KEY || 'API_KEY'
-let GA_TRACKING_ID
 
 // The following variables are given values according to different `ENV`
 let API_TIMEOUT = 3000
@@ -34,19 +33,15 @@ let API_TIMEOUT = 3000
 switch (ENV) {
   case 'prod':
     API_TIMEOUT = 1500
-    GA_TRACKING_ID = process.env.GOOGLE_ANALYTICS_TRACKING_ID ?? 'UA-83609754-1'
     break
   case 'staging':
     API_TIMEOUT = 1500
-    GA_TRACKING_ID = process.env.GOOGLE_ANALYTICS_TRACKING_ID ?? 'UA-83609754-1'
     break
   case 'dev':
     API_TIMEOUT = 5000
-    GA_TRACKING_ID = process.env.GOOGLE_ANALYTICS_TRACKING_ID ?? 'UA-83609754-2'
     break
   default:
     API_TIMEOUT = 5000
-    GA_TRACKING_ID = process.env.GOOGLE_ANALYTICS_TRACKING_ID ?? 'UA-83609754-2'
 }
 
 export {
@@ -66,5 +61,4 @@ export {
   PROGRAMABLE_SEARCH_ENGINE_ID,
   PROGRAMABLE_SEARCH_API_KEY,
   CORS_ORIGINS,
-  GA_TRACKING_ID,
 }
