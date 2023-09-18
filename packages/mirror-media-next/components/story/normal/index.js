@@ -20,7 +20,7 @@ import HeroImageAndVideo from './hero-image-and-video'
 import Divider from '../shared/divider'
 import ShareHeader from '../../shared/share-header'
 import Footer from '../../shared/footer'
-import SvgCloseIcon from '../../../public/images/close-black.svg'
+import SvgCloseIcon from '../../../public/images-next/close-black.svg'
 import {
   transformTimeDataIntoDotFormat,
   getCategoryOfWineSlug,
