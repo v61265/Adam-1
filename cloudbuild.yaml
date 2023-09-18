@@ -81,4 +81,4 @@ substitutions:
   _TARGET_PACKAGE: '' # default value
   _IMAGE_NAME: '' # default value
   _CLOUD_RUN_SERVICE_NAMES: '' # default value
-  _IS_PREVIEW_MODE: false  # default value
+  _IS_PREVIEW_MODE: 'false'  # default value
