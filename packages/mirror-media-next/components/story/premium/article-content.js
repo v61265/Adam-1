@@ -7,7 +7,6 @@ import {
 } from '../../../utils/story'
 import useWindowDimensions from '../../../hooks/use-window-dimensions'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
-import { SECTION_IDS } from '../../../constants'
 
 const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
   ssr: false,
