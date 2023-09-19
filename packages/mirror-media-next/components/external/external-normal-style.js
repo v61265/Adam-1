@@ -265,14 +265,7 @@ const AsideFbPagePlugin = styled(FbPagePlugin)`
 const StyledGPTAd_HD = styled(GPTAd)`
   width: 100%;
   height: auto;
-  max-width: 336px;
-  max-height: 280px;
   margin: 20px auto 0px;
-
-  ${({ theme }) => theme.breakpoint.xl} {
-    max-width: 970px;
-    max-height: 250px;
-  }
 `
 
 //Because AT1, AT2, AT3 contain full-screen size ads content, should not set max-width and max-height
@@ -331,8 +324,6 @@ const StyledGPTAd_PC_E1 = styled(GPTAd)`
     margin: 0;
     width: 100%;
     height: auto;
-    max-height: 250px;
-    max-width: 300px;
   }
 `
 
@@ -366,8 +357,6 @@ const StyledGPTAd_PC_R1 = styled(GPTAd)`
     display: block;
     width: 100%;
     height: auto;
-    max-width: 300px;
-    max-height: 600px;
     margin: 0 auto;
   }
 `
@@ -379,8 +368,6 @@ const StyledGPTAd_PC_R2 = styled(GPTAd)`
     display: block;
     width: 100%;
     height: auto;
-    max-width: 300px;
-    max-height: 600px;
     margin: 20px auto;
   }
 `
@@ -388,13 +375,9 @@ const StyledGPTAd_PC_R2 = styled(GPTAd)`
 const StyledGPTAd_FT = styled(GPTAd)`
   width: 100%;
   height: auto;
-  max-width: 336px;
-  max-height: 280px;
   margin: 20px auto;
 
   ${({ theme }) => theme.breakpoint.xl} {
-    max-width: 970px;
-    max-height: 250px;
     margin: 35px auto;
   }
 `
@@ -407,8 +390,6 @@ const StickyGPTAd_MB_ST = styled(GPTAd)`
   bottom: 0;
   width: 100%;
   height: auto;
-  max-width: 320px;
-  max-height: 50px;
   margin: auto;
   z-index: ${Z_INDEX.coverHeader};
 
