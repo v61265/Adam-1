@@ -14,7 +14,7 @@ import { fetchPartnerBySlug } from '../../apollo/query/partner'
 import { getExternalPartnerColor } from '../../utils/external'
 import { fetchExternalsByPartnerSlug } from '../../utils/api/externals'
 
-import { getPageKeyByPartnerSlug } from '../../utils/ad'
+import { getPageKeyByPartnerShowOnIndex } from '../../utils/ad'
 import { Z_INDEX } from '../../constants/index'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
 
@@ -128,7 +128,7 @@ export default function ExternalPartner({
       <PartnerContainer>
         {shouldShowAd && (
           <StyledGPTAd
-            pageKey={getPageKeyByPartnerSlug(partner.slug)}
+            pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
             adKey="HD"
           />
         )}
@@ -144,7 +144,7 @@ export default function ExternalPartner({
         />
         {shouldShowAd && (
           <StickyGPTAd
-            pageKey={getPageKeyByPartnerSlug(partner.slug)}
+            pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
             adKey="MB_ST"
           />
         )}

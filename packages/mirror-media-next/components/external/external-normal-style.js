@@ -37,7 +37,7 @@ import {
 } from '../../utils/external'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
 import { Z_INDEX } from '../../constants/index'
-import { getPageKeyByPartnerSlug } from '../../utils/ad'
+import { getPageKeyByPartnerShowOnIndex } from '../../utils/ad'
 
 const DableAd = dynamic(() => import('../ads/dable/dable-ad'), {
   ssr: false,
@@ -529,7 +529,7 @@ export default function ExternalNormalStyle({ external }) {
     <>
       {shouldShowAd && (
         <StyledGPTAd_HD
-          pageKey={getPageKeyByPartnerSlug(partner.slug)}
+          pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
           adKey="HD"
         />
       )}
@@ -569,7 +569,7 @@ export default function ExternalNormalStyle({ external }) {
 
           {shouldShowAd && (
             <StyledGPTAd_MB_AT3
-              pageKey={getPageKeyByPartnerSlug(partner.slug)}
+              pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
               adKey="MB_AT3"
             />
           )}
@@ -581,7 +581,7 @@ export default function ExternalNormalStyle({ external }) {
 
           {shouldShowAd && (
             <StyledGPTAd_MB_E1
-              pageKey={getPageKeyByPartnerSlug(partner.slug)}
+              pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
               adKey="MB_E1"
             />
           )}
@@ -613,11 +613,11 @@ export default function ExternalNormalStyle({ external }) {
             {shouldShowAd && (
               <GPTAdContainer>
                 <StyledGPTAd_PC_E1
-                  pageKey={getPageKeyByPartnerSlug(partner.slug)}
+                  pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
                   adKey="PC_E1"
                 />
                 <StyledGPTAd_PC_E2
-                  pageKey={getPageKeyByPartnerSlug(partner.slug)}
+                  pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
                   adKey="PC_E2"
                 />
               </GPTAdContainer>
@@ -633,7 +633,7 @@ export default function ExternalNormalStyle({ external }) {
         <Aside>
           {shouldShowAd && (
             <StyledGPTAd_PC_R1
-              pageKey={getPageKeyByPartnerSlug(partner.slug)}
+              pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
               adKey="PC_R1"
             />
           )}
@@ -647,7 +647,7 @@ export default function ExternalNormalStyle({ external }) {
 
           {shouldShowAd && (
             <StyledGPTAd_PC_R2
-              pageKey={getPageKeyByPartnerSlug(partner.slug)}
+              pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
               adKey="PC_R2"
             />
           )}
@@ -692,11 +692,11 @@ export default function ExternalNormalStyle({ external }) {
       {shouldShowAd && (
         <>
           <StyledGPTAd_FT
-            pageKey={getPageKeyByPartnerSlug(partner.slug)}
+            pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
             adKey="FT"
           />
           <StickyGPTAd_MB_ST
-            pageKey={getPageKeyByPartnerSlug(partner.slug)}
+            pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
             adKey="MB_ST"
           />
         </>
