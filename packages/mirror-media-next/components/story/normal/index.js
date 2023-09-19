@@ -1,7 +1,7 @@
 //TODO: refactor jsx structure, make it more readable.
 //TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
@@ -542,6 +542,7 @@ export default function StoryNormalStyle({
   const [shouldShowAdPcFloating, setShouldShowAdPcFloating] = useState(
     section?.slug === 'carandwatch'
   )
+  const [showBtn, setShowBtn] = useState(false)
 
   // 廣編文章的 pageKey 是 other
   const pageKeyForGptAd = postData.isAdvertised
@@ -625,12 +626,14 @@ export default function StoryNormalStyle({
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
-  const handleRenderEndedAdPcFloating = (event) => {
+  const handleRenderEndedAdPcFloating = useCallback((event) => {
     const isEmpty = event?.isEmpty
     if (isEmpty) {
       setShouldShowAdPcFloating(false)
+    } else {
+      setShowBtn(true)
     }
-  }
+  }, [])
 
   return (
     <>
@@ -696,19 +699,23 @@ export default function StoryNormalStyle({
             <StyledGPTAd_MB_E1 pageKey={pageKeyForGptAd} adKey="MB_E1" />
           )}
 
-          {shouldShowAd && shouldShowAdPcFloating && (
+          {shouldShowAd && (
             <FloatingAdContainer>
-              <GPTAd
-                pageKey={pageKeyForGptAd}
-                adKey="PC_FLOATING"
-                onSlotRenderEnded={handleRenderEndedAdPcFloating}
-              />
-              <button
-                className="close-button"
-                onClick={() => setShouldShowAdPcFloating(false)}
-              >
-                <SvgCloseIcon />
-              </button>
+              {shouldShowAdPcFloating && (
+                <GPTAd
+                  pageKey={pageKeyForGptAd}
+                  adKey="PC_FLOATING"
+                  onSlotRenderEnded={handleRenderEndedAdPcFloating}
+                />
+              )}
+              {showBtn && (
+                <button
+                  className="close-button"
+                  onClick={() => setShouldShowAdPcFloating(false)}
+                >
+                  <SvgCloseIcon />
+                </button>
+              )}
             </FloatingAdContainer>
           )}
 
