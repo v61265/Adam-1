@@ -1,52 +1,38 @@
 const shippingFeePerYear = 1040
 const PLAN_LIST = [
   {
-    origin: {
-      name: '一年鏡週刊 52 期',
-      code: 'magazine_one_year',
-    },
-    withShippingFee: {
-      name: '一年鏡週刊 52 期加掛號運費',
-      code: 'magazine_one_year_with_shipping_fee',
-    },
-    shippingFeePerCount: shippingFeePerYear,
+    code: 'magazine_one_year',
+    title: '一年鏡週刊 52 期',
+    name: '一年鏡週刊 52 期',
+    hasShippingFee: false,
+    shippingFee: 0,
   },
   {
-    origin: {
-      name: '二年鏡週刊 104 期',
-      code: 'magazine_two_year',
-    },
-    withShippingFee: {
-      name: '一年鏡週刊 52 期加掛號運費',
-      code: 'magazine_two_year_with_shipping_fee',
-    },
-    shippingFeePerCount: shippingFeePerYear * 2,
+    code: 'magazine_one_year_with_shipping_fee',
+    title: '一年鏡週刊 52 期加掛號運費',
+    name: '一年鏡週刊 52 期',
+    hasShippingFee: true,
+    shippingFee: shippingFeePerYear,
+  },
+  {
+    code: 'magazine_two_year',
+    title: '兩年鏡週刊 104 期',
+    name: '兩年鏡週刊 104 期',
+    hasShippingFee: false,
+    shippingFee: 0,
+  },
+  {
+    code: 'magazine_two_year_with_shipping_fee',
+    title: '兩年鏡週刊 104 期加掛號運費',
+    name: '兩年鏡週刊 104 期',
+    hasShippingFee: true,
+    shippingFee: shippingFeePerYear * 2,
   },
 ]
 
-function merchandiseWithShippingFee(merchandise) {
-  const plan = PLAN_LIST.filter((item) => {
-    return item.origin.code === merchandise.code
-  })
-  return plan[0]?.withShippingFee || merchandise
-}
-
-function merchandiseWithoutShippingFee(merchandiseCode) {
-  let plan = {}
-  PLAN_LIST.forEach((item) => {
-    if (item.origin.code === merchandiseCode) {
-      plan = {
-        ...item.origin,
-        shippingFeePerCount: 0,
-      }
-    } else if (item.withShippingFee.code === merchandiseCode) {
-      plan = {
-        ...item.origin,
-        shippingFeePerCount: item.shippingFeePerCount,
-      }
-    }
-  })
+function getMerchandiseAndShippingFeeInfo(merchandiseCode) {
+  const plan = PLAN_LIST.find((plan) => plan.code === merchandiseCode)
   return plan
 }
 
-export { merchandiseWithShippingFee, merchandiseWithoutShippingFee }
+export { getMerchandiseAndShippingFeeInfo }

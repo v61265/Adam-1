@@ -14,7 +14,7 @@ import {
 } from '../../config/index.mjs'
 import { parseBody } from 'next/dist/server/api-utils/node'
 
-import { merchandiseWithoutShippingFee } from '../../utils/papermag'
+import { getMerchandiseAndShippingFeeInfo } from '../../utils/papermag'
 
 import { ACCESS_PAPERMAG_FEATURE_TOGGLE } from '../../config/index.mjs'
 
@@ -164,10 +164,10 @@ export async function getServerSideProps({ query, req, res }) {
             merchandise: {
               name: '鏡週刊紙本雜誌 52 期',
               code: 'magazine_one_year',
-              price: 5280,
+              price: 2880,
             },
             itemCount: 1,
-            totalAmount: 5200,
+            totalAmount: 2800,
             purchaseName: '購買者',
             purchaseEmail: 'readr@gmail.com',
             purchaseMobile: '0911111111',
@@ -189,30 +189,23 @@ export async function getServerSideProps({ query, req, res }) {
       }
     }
 
-    const { name, shippingFeePerCount } = merchandiseWithoutShippingFee(
+    const { itemCount, promoteCode, totalAmount } = decryptInfoData
+
+    const { name, shippingFee } = getMerchandiseAndShippingFeeInfo(
       decryptInfoData?.merchandise?.code
     )
 
-    const shippingCost = shippingFeePerCount * decryptInfoData.itemCount
+    const discount = promoteCode ? 80 * itemCount : 0
+    const shippingCost = shippingFee * itemCount
 
-    const orderInfoPurchasedList = [
-      {
-        text: name,
-        count: decryptInfoData.itemCount,
-        price:
-          decryptInfoData.itemCount * decryptInfoData.merchandise.price -
-          shippingCost,
-      },
-      { text: '運費', price: shippingCost },
-      {
-        text: '折扣',
-        price: decryptInfoData.promoteCode ? 80 * decryptInfoData.itemCount : 0,
-      },
-      {
-        text: '付款金額',
-        price: decryptInfoData.totalAmount,
-      },
-    ]
+    const orderInfoPurchasedList = {
+      name,
+      itemCount,
+      costWithoutShipping: totalAmount - shippingCost - discount,
+      shippingCost,
+      discount,
+      total: totalAmount,
+    }
 
     orderData = {
       orderId: decryptInfoData.orderNumber,

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import Notice from './notice'
+import { getNumberWithCommas } from '../../utils'
 
 const Message = styled.h2`
   color: rgba(0, 0, 0, 0.87);
@@ -174,7 +175,14 @@ export default function Succeeded({ orderData }) {
     orderId,
     date,
     discountCode,
-    orderInfoPurchasedList,
+    orderInfoPurchasedList: {
+      name: itemName,
+      itemCount,
+      shippingCost,
+      costWithoutShipping,
+      discount,
+      total,
+    },
     purchaseName,
     purchaseEmail,
     purchaseMobile,
@@ -182,12 +190,6 @@ export default function Succeeded({ orderData }) {
     receiveMobile,
     receiveAddress,
   } = orderData
-
-  function addCommas(number) {
-    let numberStr = number.toString()
-    numberStr = numberStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    return numberStr
-  }
 
   return (
     <>
@@ -219,30 +221,29 @@ export default function Succeeded({ orderData }) {
           <DetailWrapper>
             <Detail>
               <DetailItem>
+                <span>{itemName || '鏡週刊紙本雜誌 52 期'}</span>
                 <span>
-                  {orderInfoPurchasedList?.[0]?.text || '鏡週刊紙本雜誌 52 期'}
-                </span>
-                <span>
-                  共
-                  <span className="number">
-                    {orderInfoPurchasedList?.[0]?.count || 1}
-                  </span>
-                  份
+                  共<span className="number">{itemCount || 1}</span>份
                 </span>
               </DetailItem>
-              <Price>NT$ {addCommas(orderInfoPurchasedList?.[0]?.price)}</Price>
+              <Price>NT$ {getNumberWithCommas(costWithoutShipping)}</Price>
             </Detail>
 
             <Detail>
               <Item>運費</Item>
-              <Price>NT$ {addCommas(orderInfoPurchasedList?.[1]?.price)}</Price>
+              <Price>NT$ {getNumberWithCommas(shippingCost)}</Price>
+            </Detail>
+
+            <Detail>
+              <Item>折扣</Item>
+              <Price>-NT$ {getNumberWithCommas(discount)}</Price>
             </Detail>
 
             <Hr />
 
             <Detail style={{ marginTop: '0' }}>
               <Item>付款金額</Item>
-              <Price>NT$ {addCommas(orderInfoPurchasedList?.[3]?.price)}</Price>
+              <Price>NT$ {getNumberWithCommas(total)}</Price>
             </Detail>
           </DetailWrapper>
         </ContentWrapper>
