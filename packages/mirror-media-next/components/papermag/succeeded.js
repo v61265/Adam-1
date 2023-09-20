@@ -3,7 +3,7 @@ import Notice from './notice'
 import { getNumberWithCommas } from '../../utils'
 
 const Message = styled.h2`
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.66);
   font-size: 18px;
   font-weight: 400;
   margin-top: 24px;
@@ -37,7 +37,7 @@ const GrayBox = styled.div`
 `
 
 const Title = styled.h2`
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.66);
   font-size: 24px;
   font-weight: 500;
   margin-bottom: 8px;
@@ -59,7 +59,7 @@ const Item = styled.div`
   }
 `
 const Info = styled.div`
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.66);
   font-size: 18px;
   font-weight: 400;
 `
@@ -70,7 +70,7 @@ const ContentWrapper = styled.div`
   flex-direction: column;
   ${({ theme }) => theme.breakpoint.lg} {
     flex-direction: row;
-    margin: 24px 0;
+    margin: 16px 0 10px 0;
   }
 `
 const OrderContent = styled.div`
@@ -95,10 +95,14 @@ const Detail = styled.div`
   ${({ theme }) => theme.breakpoint.lg} {
     width: 664px;
   }
+
+  .discount {
+    color: #054f77;
+  }
 `
 
 const DetailItem = styled.div`
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.66);
   font-size: 18px;
   font-weight: 400;
   display: flex;
@@ -118,7 +122,7 @@ const DetailItem = styled.div`
   }
 `
 const Price = styled.div`
-  color: var(--black-87, rgba(0, 0, 0, 0.87));
+  color: var(--black-87, rgba(0, 0, 0, 0.66));
   text-align: right;
   /* Body_150% */
   font-family: PingFang TC;
@@ -138,7 +142,7 @@ const Hr = styled.hr`
   margin: 16px 0;
 `
 const CustomerTitle = styled.p`
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.66);
   font-size: 18px;
   font-weight: 500;
   margin-top: 24px;
@@ -157,7 +161,7 @@ const CustomerItem = styled.div`
   }
 
   .value {
-    color: rgba(0, 0, 0, 0.87);
+    color: rgba(0, 0, 0, 0.66);
     font-size: 18px;
     font-weight: 400;
     width: 90%;
@@ -230,19 +234,23 @@ export default function Succeeded({ orderData }) {
             </Detail>
 
             <Detail>
-              <Item>運費</Item>
+              <DetailItem>運費</DetailItem>
               <Price>NT$ {getNumberWithCommas(shippingCost)}</Price>
             </Detail>
 
-            <Detail>
-              <Item>折扣</Item>
-              <Price>-NT$ {getNumberWithCommas(discount)}</Price>
-            </Detail>
+            {discount ? (
+              <Detail>
+                <DetailItem className="discount">折扣</DetailItem>
+                <Price className="discount">
+                  -NT$ {getNumberWithCommas(discount)}
+                </Price>
+              </Detail>
+            ) : null}
 
             <Hr />
 
             <Detail style={{ marginTop: '0' }}>
-              <Item>付款金額</Item>
+              <DetailItem>付款金額</DetailItem>
               <Price>NT$ {getNumberWithCommas(total)}</Price>
             </Detail>
           </DetailWrapper>
