@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import styled from 'styled-components'
 import errors from '@twreporter/errors'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
@@ -48,11 +47,8 @@ export default function Return({
   orderData,
   orderStatus = 'fail',
 }) {
-  const [isSucceeded, setIsSucceeded] = useState(orderStatus === 'SUCCESS') // Initial state: Succeeded
+  const isSucceeded = orderStatus === 'SUCCESS'
 
-  const toggleResult = () => {
-    setIsSucceeded(!isSucceeded)
-  }
   return (
     <Layout
       head={{ title: `紙本雜誌訂閱結果` }}
@@ -66,12 +62,6 @@ export default function Return({
         <Steps activeStep={3} />
         <hr />
         <Wrapper>
-          <button
-            style={{ border: '1px solid red', background: 'aqua' }}
-            onClick={toggleResult}
-          >
-            {isSucceeded ? 'Toggle Failed' : 'Toggle Succeeded'}
-          </button>
           {isSucceeded ? <Succeeded orderData={orderData} /> : <Failed />}
         </Wrapper>
       </>
