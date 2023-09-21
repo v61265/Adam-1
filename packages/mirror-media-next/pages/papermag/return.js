@@ -136,6 +136,7 @@ export async function getServerSideProps({ query, req, res }) {
   }
 
   try {
+    // 資料來源：https://github.com/vercel/next.js/discussions/14979
     const infoData = await parseBody(req, '1mb')
     if (infoData.Status !== 'SUCCESS') {
       return {
@@ -221,8 +222,18 @@ export async function getServerSideProps({ query, req, res }) {
       receiveAddress: decryptInfoData.receiveAddress,
     }
     orderStatus = infoData.Status
-  } catch (e) {
-    console.log(e)
+  } catch (err) {
+    const annotatingAxiosError = errors.helpers.annotateAxiosError(err)
+    console.error(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(annotatingAxiosError, {
+          withStack: true,
+          withPayload: true,
+        }),
+        ...globalLogFields,
+      })
+    )
   }
 
   return {
