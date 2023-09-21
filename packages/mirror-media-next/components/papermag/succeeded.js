@@ -99,10 +99,6 @@ const Detail = styled.div`
   .discount {
     color: #054f77;
   }
-
-  .light-grey {
-    color: rgba(0, 0, 0, 0.5);
-  }
 `
 
 const DetailItem = styled.div`
@@ -238,7 +234,7 @@ export default function Succeeded({ orderData }) {
             </Detail>
 
             <Detail>
-              <DetailItem className="light-grey">運費</DetailItem>
+              <Item>運費</Item>
               <Price>NT$ {getNumberWithCommas(shippingCost)}</Price>
             </Detail>
 
@@ -254,7 +250,7 @@ export default function Succeeded({ orderData }) {
             <Hr />
 
             <Detail style={{ marginTop: '0' }}>
-              <DetailItem className="light-grey">付款金額</DetailItem>
+              <Item>付款金額</Item>
               <Price>NT$ {getNumberWithCommas(total)}</Price>
             </Detail>
           </DetailWrapper>
