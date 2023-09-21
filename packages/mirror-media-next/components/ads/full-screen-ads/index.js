@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import FullScreenAd from './ad-item'
 import GPTAd from '../gpt/gpt-ad'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
-import useWindowDimensions from '../../../hooks/use-window-dimensions'
+
 /**
  * @typedef {'default' | 'bottom' | 'modified'| 'unset'} FullScreenAdStyle
  */
@@ -40,18 +40,13 @@ import useWindowDimensions from '../../../hooks/use-window-dimensions'
  */
 export default function FullScreenAdsContainer({ hiddenAdvertised = false }) {
   const [displayedAd, setDisplayedAd] = useState('first')
-  const windowDimensions = useWindowDimensions()
   const hasAdFirst = displayedAd === 'first'
   const hasAdSecond = displayedAd === 'second'
   const hasAdThird = displayedAd === 'third'
   const hasAdFourth = displayedAd === 'fourth'
+
   const hasAdThirdOrFourth = hasAdThird || hasAdFourth
-
-  //Why we need `windowDimensions` to decide should show ad or not, not just using css `@media-query`?
-  //Because MB_AD2 is not render in the component `<FullScreenAd>`, the media-query write in component `<FullScreenAd>` is not working.
-  const shouldShowAd =
-    useDisplayAd(hiddenAdvertised) && windowDimensions.width < 1200
-
+  const shouldShowAd = useDisplayAd(hiddenAdvertised)
   /** @type {[FullScreenAdStyle,import('react').Dispatch<FullScreenAdStyle>]} */
   const [fullScreenAdStyle, setFullScreenAdStyle] = useState(
     /** @type {FullScreenAdStyle} */
