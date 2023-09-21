@@ -182,7 +182,9 @@ export async function getServerSideProps({ query, req, res }) {
         ],
       },
     }
-    if (result.errors) console.log(result.errors[0].message)
+    if (result.errors) {
+      throw new Error(result.errors)
+    }
     const decryptInfoData = result?.data?.allMagazineOrders[0]
     if (!decryptInfoData) {
       return {
