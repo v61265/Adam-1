@@ -202,7 +202,7 @@ export async function getServerSideProps({ query, req, res }) {
     const orderInfoPurchasedList = {
       name,
       itemCount,
-      costWithoutShipping: totalAmount - shippingCost - discount,
+      costWithoutShipping: totalAmount - shippingCost + discount,
       shippingCost,
       discount,
       total: totalAmount,
