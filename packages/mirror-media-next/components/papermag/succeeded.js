@@ -3,7 +3,7 @@ import Notice from './notice'
 import { getNumberWithCommas } from '../../utils'
 
 const Message = styled.h2`
-  color: rgba(0, 0, 0, 0.66);
+  color: rgba(0, 0, 0, 0.87);
   font-size: 18px;
   font-weight: 400;
   margin-top: 24px;
@@ -59,7 +59,7 @@ const Item = styled.div`
   }
 `
 const Info = styled.div`
-  color: rgba(0, 0, 0, 0.66);
+  color: rgba(0, 0, 0, 0.87);
   font-size: 18px;
   font-weight: 400;
 `
@@ -99,10 +99,14 @@ const Detail = styled.div`
   .discount {
     color: #054f77;
   }
+
+  .light-grey {
+    color: rgba(0, 0, 0, 0.5);
+  }
 `
 
 const DetailItem = styled.div`
-  color: rgba(0, 0, 0, 0.66);
+  color: rgba(0, 0, 0, 0.87);
   font-size: 18px;
   font-weight: 400;
   display: flex;
@@ -122,7 +126,7 @@ const DetailItem = styled.div`
   }
 `
 const Price = styled.div`
-  color: var(--black-87, rgba(0, 0, 0, 0.66));
+  color: var(--black-87, rgba(0, 0, 0, 0.87));
   text-align: right;
   /* Body_150% */
   font-family: PingFang TC;
@@ -142,7 +146,7 @@ const Hr = styled.hr`
   margin: 16px 0;
 `
 const CustomerTitle = styled.p`
-  color: rgba(0, 0, 0, 0.66);
+  color: rgba(0, 0, 0, 0.87);
   font-size: 18px;
   font-weight: 500;
   margin-top: 24px;
@@ -161,7 +165,7 @@ const CustomerItem = styled.div`
   }
 
   .value {
-    color: rgba(0, 0, 0, 0.66);
+    color: rgba(0, 0, 0, 0.87);
     font-size: 18px;
     font-weight: 400;
     width: 90%;
@@ -234,7 +238,7 @@ export default function Succeeded({ orderData }) {
             </Detail>
 
             <Detail>
-              <DetailItem>運費</DetailItem>
+              <DetailItem className="light-grey">運費</DetailItem>
               <Price>NT$ {getNumberWithCommas(shippingCost)}</Price>
             </Detail>
 
@@ -250,7 +254,7 @@ export default function Succeeded({ orderData }) {
             <Hr />
 
             <Detail style={{ marginTop: '0' }}>
-              <DetailItem>付款金額</DetailItem>
+              <DetailItem className="light-grey">付款金額</DetailItem>
               <Price>NT$ {getNumberWithCommas(total)}</Price>
             </Detail>
           </DetailWrapper>
