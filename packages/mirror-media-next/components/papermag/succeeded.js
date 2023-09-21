@@ -225,9 +225,9 @@ export default function Succeeded({ orderData }) {
           <DetailWrapper>
             <Detail>
               <DetailItem>
-                <span>{itemName || '鏡週刊紙本雜誌 52 期'}</span>
+                <span>{itemName}</span>
                 <span>
-                  共<span className="number">{itemCount || 1}</span>份
+                  共<span className="number">{itemCount}</span>份
                 </span>
               </DetailItem>
               <Price>NT$ {getNumberWithCommas(costWithoutShipping)}</Price>
