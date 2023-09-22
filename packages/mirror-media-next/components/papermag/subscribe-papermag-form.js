@@ -104,13 +104,17 @@ export default function SubscribePaperMagForm({ plan }) {
     // Make an API request or update the state here
     // carry encrypted paymentPayload and submit to newebpay
 
+    const code = `magazine_${plan === 2 ? 'two' : 'one'}_year${
+      shouldCountFreight ? '_with_shipping_fee' : ''
+    }`
+
     const requestBody = {
       data: {
         desc: 'mock_desc',
         comment: 'mock_comment',
         merchandise: {
           connect: {
-            code: `magazine_${plan === 2 ? 'two' : 'one'}_year`,
+            code,
           },
         },
         itemCount: count,
