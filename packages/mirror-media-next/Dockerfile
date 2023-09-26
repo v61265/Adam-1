@@ -4,13 +4,13 @@ FROM node:${NODE_VERSION} AS build
 
 WORKDIR /build
 
-RUN echo "NEXT_PUBLIC_ENV: $NEXT_PUBLIC_ENV"
-
 COPY package.json yarn.lock /build/
 
 RUN yarn install
 
 COPY . /build/
+
+RUN test -e .env.local && cat .env.local
 
 RUN yarn build
 
