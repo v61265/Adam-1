@@ -13,7 +13,7 @@ import {
   copyAndSliceDraftBlock,
   getSlicedIndexAndUnstyledBlocksCount,
 } from '../../utils/story'
-import { getAmpGptDataSlotSection } from '../../utils/ad'
+
 import { getActiveOrderSection } from '../../utils'
 
 const MainWrapper = styled.div`
@@ -123,10 +123,10 @@ const StyledAmpGptAd = styled(AmpGptAd)`
  *
  * @param {Object} props
  * @param {PostData} props.postData
- * @param {boolean} props.isMember
+ * @param {string} props.gptSlotSection
  * @returns {JSX.Element}
  */
-export default function AmpMain({ postData, isMember }) {
+export default function AmpMain({ postData, gptSlotSection }) {
   const {
     title = '',
     sections = [],
@@ -148,6 +148,7 @@ export default function AmpMain({ postData, isMember }) {
     brief = { blocks: [], entityMap: {} },
     content = { blocks: [], entityMap: {} },
     trimmedContent = { blocks: [], entityMap: {} },
+    isMember = false,
   } = postData
 
   const postContent = content ?? trimmedContent
@@ -175,7 +176,6 @@ export default function AmpMain({ postData, isMember }) {
     { extend_byline: extend_byline },
   ]
 
-  const sectionSlot = getAmpGptDataSlotSection(section)
   const { slicedIndex, unstyledBlocksCount } =
     getSlicedIndexAndUnstyledBlocksCount(postContent)
 
@@ -232,9 +232,7 @@ export default function AmpMain({ postData, isMember }) {
         />
 
         {unstyledBlocksCount > 1 && (
-          <>
-            <StyledAmpGptAd section={sectionSlot} position="AT1" />
-          </>
+          <StyledAmpGptAd section={gptSlotSection} position="AT1" />
         )}
         <DraftRenderBlock
           rawContentBlock={copyAndSliceDraftBlock(
@@ -247,7 +245,9 @@ export default function AmpMain({ postData, isMember }) {
 
         {unstyledBlocksCount > 5 && (
           <>
-            <StyledAmpGptAd section={sectionSlot} position="AT2" />
+            {!isMember && (
+              <StyledAmpGptAd section={gptSlotSection} position="AT2" />
+            )}
             <DraftRenderBlock
               rawContentBlock={copyAndSliceDraftBlock(
                 postContent,
