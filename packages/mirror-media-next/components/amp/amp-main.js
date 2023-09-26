@@ -7,7 +7,7 @@ import AmpHero from './amp-hero'
 import AmpInfo from './amp-info'
 import ArticleBrief from '../story/shared/brief'
 import DraftRenderBlock from '../story/shared/draft-renderer-block'
-import useSharedUrl from '../../hooks/use-shared-url'
+import useAmpSharedUrl from '../../hooks/use-amp-shared-url'
 import AmpGptAd from '../../components/amp/amp-ads/amp-gpt-ad'
 import {
   copyAndSliceDraftBlock,
@@ -129,6 +129,7 @@ const StyledAmpGptAd = styled(AmpGptAd)`
 export default function AmpMain({ postData, gptSlotSection }) {
   const {
     title = '',
+    slug = '',
     sections = [],
     sectionsInInputOrder = [],
     heroImage = null,
@@ -152,8 +153,6 @@ export default function AmpMain({ postData, gptSlotSection }) {
   } = postData
 
   const postContent = content ?? trimmedContent
-
-  const sharedUrl = useSharedUrl()
 
   const sectionsWithOrdered = getActiveOrderSection(
     sections,
@@ -188,8 +187,14 @@ export default function AmpMain({ postData, gptSlotSection }) {
         updatedAt={updatedAt}
       />
       <SharesWrapper>
-        <ButtonSocialNetworkShare type="facebook" />
-        <ButtonSocialNetworkShare type="line" />
+        <ButtonSocialNetworkShare
+          type="facebook"
+          handleGetShareUrl={useAmpSharedUrl}
+        />
+        <ButtonSocialNetworkShare
+          type="line"
+          handleGetShareUrl={useAmpSharedUrl}
+        />
         <ButtonCopyLink />
       </SharesWrapper>
       <AmpHero
@@ -230,7 +235,6 @@ export default function AmpMain({ postData, gptSlotSection }) {
           )}
           contentLayout="amp"
         />
-
         {unstyledBlocksCount > 1 && (
           <StyledAmpGptAd section={gptSlotSection} position="AT1" />
         )}
@@ -242,11 +246,9 @@ export default function AmpMain({ postData, gptSlotSection }) {
           )}
           contentLayout="amp"
         />
-
         {unstyledBlocksCount > 5 && !isMember ? (
           <StyledAmpGptAd section={gptSlotSection} position="AT2" />
         ) : null}
-
         <DraftRenderBlock
           rawContentBlock={copyAndSliceDraftBlock(
             postContent,
@@ -255,9 +257,7 @@ export default function AmpMain({ postData, gptSlotSection }) {
           contentLayout="amp"
         />
         {isMember && (
-          <Link href={sharedUrl.replace('/amp/', '/')}>
-            【 加入鏡週刊會員，觀看全文 】
-          </Link>
+          <Link href={`/story/${slug}`}>【 加入鏡週刊會員，觀看全文 】</Link>
         )}
       </AmpContentContainer>
     </MainWrapper>
