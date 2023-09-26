@@ -4,14 +4,12 @@ const useFirstScrollDetector = () => {
   const [hasScrolled, setHasScrolled] = useState(false)
 
   useEffect(() => {
-    console.log('useEffect in custom hook useFirstScrollDetector')
     const handleScroll = () => {
-      console.log('handleScroll in custom hook useFirstScrollDetector')
       setHasScrolled(true)
       window.removeEventListener('scroll', handleScroll)
     }
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
