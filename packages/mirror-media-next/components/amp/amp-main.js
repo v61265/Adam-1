@@ -243,21 +243,17 @@ export default function AmpMain({ postData, gptSlotSection }) {
           contentLayout="amp"
         />
 
-        {unstyledBlocksCount > 5 && (
-          <>
-            {!isMember && (
-              <StyledAmpGptAd section={gptSlotSection} position="AT2" />
-            )}
-            <DraftRenderBlock
-              rawContentBlock={copyAndSliceDraftBlock(
-                postContent,
-                slicedIndex.mb[1]
-              )}
-              contentLayout="amp"
-            />
-          </>
-        )}
+        {unstyledBlocksCount > 5 && !isMember ? (
+          <StyledAmpGptAd section={gptSlotSection} position="AT2" />
+        ) : null}
 
+        <DraftRenderBlock
+          rawContentBlock={copyAndSliceDraftBlock(
+            postContent,
+            slicedIndex.mb[1]
+          )}
+          contentLayout="amp"
+        />
         {isMember && (
           <Link href={sharedUrl.replace('/amp/', '/')}>
             【 加入鏡週刊會員，觀看全文 】
