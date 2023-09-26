@@ -9,6 +9,9 @@ const NEWEBPAY_PAPERMAG_KEY =
 const NEWEBPAY_PAPERMAG_IV =
   process.env.NEWEBPAY_PAPERMAG_IV || 'newebpay-papermag-iv'
 
+// should be applied in preview mode
+const SITE_BASE_PATH = IS_PREVIEW_MODE ? '/preview-server' : ''
+
 // The following variables are given values according to different `ENV`
 
 let SITE_URL = ''
@@ -218,6 +221,7 @@ export {
   IS_PREVIEW_MODE,
   PREVIEW_SERVER_ORIGIN,
   SITE_URL,
+  SITE_BASE_PATH,
   GCP_PROJECT_ID,
   API_TIMEOUT,
   API_TIMEOUT_GRAPHQL,
