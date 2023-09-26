@@ -13,6 +13,7 @@ import { WEEKLY_API_SERVER_ORIGIN, API_TIMEOUT } from '../config/index.mjs'
  * @typedef {Object} Membership
  * @property {boolean} isLoggedIn
  * @property {string} accessToken
+ * @property {string} userEmail
  * @property {MemberInfo} memberInfo
  * @property {boolean} isLogInProcessFinished
  */
@@ -23,6 +24,7 @@ import { WEEKLY_API_SERVER_ORIGIN, API_TIMEOUT } from '../config/index.mjs'
  * @property {Object} [payload]
  * @property {Membership["accessToken"]} [payload.accessToken]
  * @property {MemberInfo} [payload.memberInfo]
+ * @property {string} [payload.userEmail]
  */
 
 /**
@@ -36,6 +38,7 @@ import { WEEKLY_API_SERVER_ORIGIN, API_TIMEOUT } from '../config/index.mjs'
 const initialMembership = {
   isLoggedIn: false,
   accessToken: '',
+  userEmail: '',
   memberInfo: { memberType: 'not-member' },
   isLogInProcessFinished: false,
 }
@@ -63,10 +66,12 @@ const membershipReducer = (membership, action) => {
       const {
         memberInfo: { memberType = 'not-member' } = {},
         accessToken = '',
+        userEmail = '',
       } = action?.payload
       return {
         isLoggedIn: true,
         accessToken: accessToken,
+        userEmail,
         memberInfo: {
           ...memberInfo,
           memberType: memberType,
@@ -77,6 +82,7 @@ const membershipReducer = (membership, action) => {
       return {
         isLoggedIn: false,
         accessToken: '',
+        userEmail: '',
         memberInfo: {
           memberType: 'not-member',
         },
@@ -186,7 +192,11 @@ const MembershipProvider = ({ children }) => {
           if (accessToken) {
             dispatch({
               type: 'LOGIN',
-              payload: { accessToken, memberInfo: { memberType } },
+              payload: {
+                accessToken,
+                memberInfo: { memberType },
+                userEmail: user.email,
+              },
             })
             console.log('Has access token, hurray!')
           }
