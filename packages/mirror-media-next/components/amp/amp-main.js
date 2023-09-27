@@ -110,9 +110,19 @@ const AmpContentContainer = styled.section`
   margin-top: 36px;
 `
 
-//Because AT1, AT2 contain full-screen size ads content, should not set max-width and max-height
 const StyledAmpGptAd = styled(AmpGptAd)`
   margin: 32px 0;
+`
+
+const LinkToMemberStoryPage = styled.a`
+  width: fit-content;
+  display: block;
+  margin-top: 24px;
+  color: ${({ theme }) => theme.color.brandColor.darkBlue};
+
+  &:hover {
+    color: #ffa011;
+  }
 `
 
 /**
@@ -257,7 +267,9 @@ export default function AmpMain({ postData, gptSlotSection }) {
           contentLayout="amp"
         />
         {isMember && (
-          <Link href={`/story/${slug}`}>【 加入鏡週刊會員，觀看全文 】</Link>
+          <LinkToMemberStoryPage href={`/story/${slug}`}>
+            【 加入鏡週刊會員，觀看全文 】
+          </LinkToMemberStoryPage>
         )}
       </AmpContentContainer>
     </MainWrapper>
