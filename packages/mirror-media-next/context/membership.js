@@ -195,8 +195,6 @@ const MembershipProvider = ({ children }) => {
 
           const memberType = getMemberType(accessToken)
 
-          console.log({ user })
-
           if (accessToken) {
             dispatch({
               type: 'LOGIN',
