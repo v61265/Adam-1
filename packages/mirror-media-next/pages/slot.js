@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import errors from '@twreporter/errors'
 import { GCP_PROJECT_ID, ENV } from '../config/index.mjs'
 import { useMembership } from '../context/membership'
@@ -7,6 +7,28 @@ import axios from 'axios'
 
 import { setPageCache } from '../utils/cache-setting'
 import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
+import styled from 'styled-components'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+
+const SlotContainer = styled.div`
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 20px;
+`
+
+const Banner = styled.div`
+  width: 100%;
+  height: 0;
+  padding-top: 25.85%;
+  position: relative;
+`
+
+const BannerLink = styled(Banner)`
+  &:hover {
+    cursor: pointer;
+  }
+`
 
 /**
  *
@@ -15,8 +37,9 @@ import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
  * @returns {JSX.Element}
  */
 export default function Slot({ headerData = {} }) {
-  const { isLoggedIn, userEmail } = useMembership()
+  const { isLoggedIn, userEmail, firebaseId } = useMembership()
   const { sectionsData = [], topicsData = [] } = headerData
+  const router = useRouter()
 
   const [status, setStatus] = useState({
     loading: true,
@@ -30,10 +53,10 @@ export default function Slot({ headerData = {} }) {
   })
   const [winPrize, setWinPrize] = useState(null)
 
-  const getSlotSheetDataByUserEmail = async (userEmail) => {
+  const getSlotSheetDataByUserEmail = async (userFirebaseId) => {
     const { data: sheetData } = await axios.post(
       `${window.location.origin}/api/slot-sheet`,
-      { dispatch: 'LOAD_SHEET', userEmail }
+      { dispatch: 'LOAD_SHEET', userFirebaseId }
     )
     console.log({ sheetData })
     if (sheetData.status !== 'success') {
@@ -67,7 +90,7 @@ export default function Slot({ headerData = {} }) {
   useEffect(() => {
     if (!isLoggedIn) return setStatus({ ...status, loading: false })
     // fetch data
-    getSlotSheetDataByUserEmail(userEmail)
+    getSlotSheetDataByUserEmail(firebaseId)
   }, [isLoggedIn])
 
   useEffect(() => {
@@ -76,8 +99,60 @@ export default function Slot({ headerData = {} }) {
       dispatch: 'WRITE_NEW_LINE',
       userEmail,
       prize: winPrize,
+      userFirebaseId: firebaseId,
     })
   }, [winPrize])
+
+  const slotComponent = useCallback(() => {
+    if (status.loading) return null
+    if (!firebaseId) {
+      return (
+        <BannerLink onClick={() => router.push('/login')}>
+          <Image
+            src="https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/not-login.jpg"
+            alt="請登入"
+            fill={true}
+          />
+        </BannerLink>
+      )
+    } else if (status.hasPlayed) {
+      return (
+        <Banner>
+          <Image
+            src="https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/has-played.jpg"
+            alt="明天再試"
+            fill={true}
+          />
+        </Banner>
+      )
+    } else if (!winPrize) {
+      return (
+        <BannerLink onClick={handleClickSlot}>
+          <Image
+            src="https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/default.jpg"
+            alt="抽獎"
+            fill={true}
+          />
+        </BannerLink>
+      )
+    }
+    switch (winPrize) {
+      case '0': {
+        return (
+          <BannerLink onClick={handleClickSlot}>
+            <Image
+              src="https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/has-played.jpg"
+              alt="明天再試"
+              fill={true}
+            />
+          </BannerLink>
+        )
+      }
+      case '50': {
+        return <>恭喜你中了 {winPrize} 元！</>
+      }
+    }
+  }, [status, winPrize, isLoggedIn, router])
 
   return (
     <Layout
@@ -88,20 +163,7 @@ export default function Slot({ headerData = {} }) {
       }}
       footer={{ type: 'default' }}
     >
-      <>
-        {status.loading && <>載入中...</>}
-        {status.hasError && <>有錯誤，請重新整理或找工程師</>}
-        {status.hasPlayed && <>今天已經玩過囉！</>}
-        {!status.loading &&
-          !status.hasError &&
-          !status.hasPlayed &&
-          !winPrize && <button onClick={handleClickSlot}>遊玩！</button>}
-        {!winPrize ? null : winPrize === '0' ? (
-          <>可惜沒中</>
-        ) : (
-          <>恭喜你中了 {winPrize} 元！</>
-        )}
-      </>
+      <SlotContainer>{slotComponent()}</SlotContainer>
     </Layout>
   )
 }

@@ -7,7 +7,7 @@ import {
   GOOGLE_SHEET_SLOT_ID,
 } from '../../config/index.mjs'
 
-function getHasPlayed(sheetData, userEmail) {
+function getHasPlayed(sheetData, userFirebaseId) {
   const today = new Date().toLocaleDateString('zh-TW', {
     year: 'numeric',
     month: '2-digit',
@@ -15,8 +15,8 @@ function getHasPlayed(sheetData, userEmail) {
   })
 
   for (const item of sheetData) {
-    const [dateString, email] = item
-    if (dateString.startsWith(today) && email === userEmail) {
+    const [dateString, _, firebaseId] = item
+    if (dateString.startsWith(today) && userFirebaseId === firebaseId) {
       return true
     }
   }
@@ -52,7 +52,7 @@ function calculateWinningProbabilities(inputArray) {
 
 export default async function handler(req, res) {
   res.setHeader('Content-Type', 'text/plain')
-  const { userEmail, dispatch, prize } = req.body
+  const { userEmail, dispatch, prize, userFirebaseId } = req.body
   const auth = new google.auth.GoogleAuth({
     credentials: {
       client_email: GOOGLE_SHEETS_CLIENT_EMAIL,
@@ -81,12 +81,11 @@ export default async function handler(req, res) {
         second: '2-digit',
       })
 
-      // 构建要附加到表格的数据
       const dataToAppend = [
         [
           now,
           userEmail,
-          '',
+          userFirebaseId,
           prize === 100 ? '1' : '0',
           prize === 50 ? '1' : '0',
           prize === '0' ? '1' : '0',
@@ -126,7 +125,7 @@ export default async function handler(req, res) {
         throw new Error('cannot fetch google sheets')
       }
       // 判斷使用者今日是否玩過
-      const hasPlayed = getHasPlayed(values, userEmail)
+      const hasPlayed = getHasPlayed(values, userFirebaseId)
       if (hasPlayed) {
         res.send({
           status: 'success',

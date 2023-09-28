@@ -14,6 +14,7 @@ import { WEEKLY_API_SERVER_ORIGIN, API_TIMEOUT } from '../config/index.mjs'
  * @property {boolean} isLoggedIn
  * @property {string} accessToken
  * @property {string} userEmail
+ * @property {string} firebaseId
  * @property {MemberInfo} memberInfo
  * @property {boolean} isLogInProcessFinished
  */
@@ -25,6 +26,7 @@ import { WEEKLY_API_SERVER_ORIGIN, API_TIMEOUT } from '../config/index.mjs'
  * @property {Membership["accessToken"]} [payload.accessToken]
  * @property {MemberInfo} [payload.memberInfo]
  * @property {string} [payload.userEmail]
+ * @property {string} [payload.firebaseId]
  */
 
 /**
@@ -41,6 +43,7 @@ const initialMembership = {
   userEmail: '',
   memberInfo: { memberType: 'not-member' },
   isLogInProcessFinished: false,
+  firebaseId: '',
 }
 
 /**
@@ -67,6 +70,7 @@ const membershipReducer = (membership, action) => {
         memberInfo: { memberType = 'not-member' } = {},
         accessToken = '',
         userEmail = '',
+        firebaseId = '',
       } = action?.payload
       return {
         isLoggedIn: true,
@@ -77,6 +81,7 @@ const membershipReducer = (membership, action) => {
           memberType: memberType,
         },
         isLogInProcessFinished,
+        firebaseId,
       }
     case 'LOGOUT':
       return {
@@ -87,6 +92,7 @@ const membershipReducer = (membership, action) => {
           memberType: 'not-member',
         },
         isLogInProcessFinished,
+        firebaseId: '',
       }
 
     default: {
@@ -189,6 +195,8 @@ const MembershipProvider = ({ children }) => {
 
           const memberType = getMemberType(accessToken)
 
+          console.log({ user })
+
           if (accessToken) {
             dispatch({
               type: 'LOGIN',
@@ -196,6 +204,7 @@ const MembershipProvider = ({ children }) => {
                 accessToken,
                 memberInfo: { memberType },
                 userEmail: user.email,
+                firebaseId: user.uid,
               },
             })
             console.log('Has access token, hurray!')
