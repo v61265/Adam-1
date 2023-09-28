@@ -172,7 +172,7 @@ export default function Slot({ headerData = {} }) {
  * @type {import('next').GetServerSideProps}
  */
 export async function getServerSideProps({ req, res }) {
-  if (ENV === 'prod') {
+  if (ENV === 'prod' || ENV === 'staging') {
     return {
       notFound: true,
     }
