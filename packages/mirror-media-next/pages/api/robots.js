@@ -1,4 +1,4 @@
-// import { ENV } from '../../config/index.mjs'
+import { ENV } from '../../config/index.mjs'
 //Temporarily disallowed in all environment
 export default function handler(req, res) {
   res.setHeader('Content-Type', 'text/plain')
