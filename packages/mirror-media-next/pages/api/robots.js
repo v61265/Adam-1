@@ -10,5 +10,6 @@ export default function handler(req, res) {
     res.write(`User-agent: *
      Disallow: /`)
   }
+
   res.end()
 }
