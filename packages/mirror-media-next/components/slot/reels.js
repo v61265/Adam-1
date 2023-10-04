@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Image from 'next/image'
 
-const Container = styled.div``
+const Container = styled.div`
+  overflow: hidden;
+`
 
 const Slot = styled.div`
-  height: 235px;
-  width: 422px;
-  padding: 50px 50px;
+  height: 135px;
+  width: 322px;
+  margin: 50px;
   z-index: 2;
   position: relative;
   display: flex;
+  overflow: hidden;
   &:before {
     content: ''
     width: 90%
@@ -26,6 +28,7 @@ const Reel = styled.div`
   width: 70px;
   height: 190px;
   margin-top: -40px;
+  overflow: hidden;
   background-image: url('https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/reel.jpg');
   background-size: cover;
   position: relative;
@@ -47,19 +50,11 @@ const Reel = styled.div`
   }
 `
 
-const SlotImage = styled.div`
-  height: 235px;
-  width: 422px;
-  background: url('https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/machine.gif');
-  position: absolute;
-  top: 0;
-  left: 0;
-`
-
 /**
+
  * @returns {React.ReactElement}
  */
-export default function Mechine() {
+export default function Reels() {
   const reels = [0, 1, 2]
 
   return (
@@ -68,7 +63,6 @@ export default function Mechine() {
         {reels.map((reel, index) => (
           <Reel key={index} className="reel"></Reel>
         ))}
-        <SlotImage />
       </Slot>
     </Container>
   )

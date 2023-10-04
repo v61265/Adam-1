@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import errors from '@twreporter/errors'
 import { ENV } from '../../config/index.mjs'
 import { useMembership } from '../../context/membership'
 import axios from 'axios'
@@ -8,11 +7,12 @@ import styled from 'styled-components'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import useWindowDimensions from '../../hooks/use-window-dimensions'
-import Machine from './machine'
+import Reels from './reels'
 
 const SlotContainer = styled.div`
   margin: 0 auto;
   padding: 20px;
+  position: relative;
 `
 
 const Banner = styled.div`
@@ -21,6 +21,7 @@ const Banner = styled.div`
   max-width: 970px;
   height: 0;
   padding-top: 25.77%;
+  max-height: 250px;
   position: relative;
 `
 
@@ -46,6 +47,45 @@ const MachineContainer = styled.div`
   }
 `
 
+const SlotImage = styled.div`
+  height: 235px;
+  width: 422px;
+  background-image: url('https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/machine-3.gif');
+  background-image: url('https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/machine-2.gif');
+  background-image: url('https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/machine.gif');
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% + 10px), calc(-50% + 42px)) scale(0.6);
+  ${({ theme }) => theme.breakpoint.xl} {
+    transform: translate(calc(-50% + 15px), calc(-50% + 0px)) scale(1);
+  }
+
+  ${({ isPlaying }) => {
+    if (isPlaying)
+      return `
+    @keyframes backgroundAnimation {
+      0% {
+        background-image: url('https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/machine.gif');
+      }
+      33.33% {
+        background-image: url('https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/machine-2.gif');
+      }
+      66.67% {
+        background-image: url('https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/machine-3.gif');
+      }
+      100% {
+        background-image: url('https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/machine.gif');
+      }
+    }
+    animation: backgroundAnimation 3s infinite;
+    `
+  }}
+`
+
 /**
  *
  * @returns {JSX.Element}
@@ -61,8 +101,6 @@ export default function Slot() {
   const [isHover, setIsHover] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
 
-  const [result, setResult] = useState([0, 0, 0])
-
   const [status, setStatus] = useState({
     loading: true,
     hasError: false,
@@ -74,6 +112,7 @@ export default function Slot() {
     prize50: 0,
   })
   const [winPrize, setWinPrize] = useState(null)
+  const [isPlaying, setIsPlaying] = useState(false)
 
   const getSlotSheetDataByUserEmail = async (userFirebaseId) => {
     const { data: sheetData } = await axios.post(
@@ -149,18 +188,16 @@ export default function Slot() {
     })
   }
 
-  function rollAll() {
+  async function rollAll() {
+    if (isPlaying) return
+    setIsPlaying(true)
     const reelsList = document.querySelectorAll('.slots > .reel')
 
-    Promise
+    const deltas = await Promise
       // Activate each reel, must convert NodeList to Array for this with spread operator
       .all([...reelsList].map((reel, i) => roll(reel, i)))
-      // When all reels done animating (all promises solve)
-      .then((deltas) => {
-        // add up indexes
-        setResult(deltas)
-        console.log({ deltas })
-      })
+    setIsPlaying(false)
+    return deltas
   }
 
   useEffect(() => {
@@ -180,13 +217,17 @@ export default function Slot() {
     })
   }, [winPrize])
 
-  const SlotMachine = useCallback(() => {
+  const ReelsComponent = useCallback(() => {
     return (
       <MachineContainer>
-        <Machine />
+        <Reels />
       </MachineContainer>
     )
   }, [])
+
+  const SlotImageComponent = useCallback(() => {
+    return <SlotImage isPlaying={isPlaying} />
+  }, [isPlaying])
 
   const slotComponent = useCallback(() => {
     if (status.loading || !hasMounted) return null
@@ -227,7 +268,8 @@ export default function Slot() {
             alt="抽獎"
             fill={true}
           />
-          <SlotMachine />
+          <ReelsComponent />
+          <SlotImageComponent />
         </BannerLink>
       )
     }
@@ -240,7 +282,8 @@ export default function Slot() {
               alt="明天再試"
               fill={true}
             />
-            <SlotMachine />
+            <ReelsComponent />
+            <SlotImageComponent />
           </Banner>
         )
       }
@@ -263,14 +306,15 @@ export default function Slot() {
               alt="抽獎"
               fill={true}
             />
-            <SlotMachine />
+            <ReelsComponent />
+            <SlotImageComponent />
           </BannerLink>
         )
       }
     }
-  }, [status, winPrize, isLoggedIn, router, width, SlotMachine])
+  }, [status, winPrize, isLoggedIn, router, width])
 
   if (ENV === 'prod' || ENV === 'staging') return null
 
-  return <SlotContainer>{slotComponent()}</SlotContainer>
+  return <SlotContainer onClick={rollAll}>{slotComponent()}</SlotContainer>
 }
