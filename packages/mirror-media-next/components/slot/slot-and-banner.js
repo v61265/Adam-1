@@ -280,7 +280,7 @@ export default function Slot() {
           />
         </Banner>
       )
-    } else if (!winPrize) {
+    } else if (!winPrize || isPlaying) {
       return (
         <BannerLink>
           <Image
@@ -293,7 +293,6 @@ export default function Slot() {
         </BannerLink>
       )
     }
-    console.log({ winPrize })
     switch (winPrize) {
       case '0': {
         return (
@@ -338,7 +337,7 @@ export default function Slot() {
   return (
     <SlotContainer onClick={canPlay ? null : handleClickSlot}>
       {slotComponent()}
-      {firebaseId && winPrize !== '0' && !status.hasPlayed && (
+      {firebaseId && !status.hasPlayed && (
         <>
           <ReelsComponent />
           <SlotImageComponent />
