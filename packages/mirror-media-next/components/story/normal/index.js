@@ -501,10 +501,7 @@ export default function StoryNormalStyle({
 
   const [section] = sectionsWithOrdered
 
-  // 廣編文章的 pageKey 是 other
-  const pageKeyForGptAd = postData.isAdvertised
-    ? 'other'
-    : getSectionGPTPageKey(section?.slug)
+  const pageKeyForGptAd = getSectionGPTPageKey(section?.slug)
 
   /**
    * @returns {Promise<AsideArticleDataContainSectionsWithOrdered[] | []>}

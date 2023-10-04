@@ -213,7 +213,6 @@ export default function StoryPremiumStyle({
     relatedsInInputOrder = [],
     slug = '',
     hiddenAdvertised = false,
-    isAdvertised = false,
   } = postData
 
   const shouldShowArticleMask =
@@ -243,7 +242,7 @@ export default function StoryPremiumStyle({
     { vocals: vocals },
     { extend_byline: extend_byline },
   ]
-  const pageKeyForGptAd = isAdvertised ? 'other' : SECTION_IDS['member']
+  const pageKeyForGptAd = SECTION_IDS['member']
 
   const shouldShowAd = useDisplayAd(hiddenAdvertised)
 
