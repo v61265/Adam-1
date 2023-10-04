@@ -332,6 +332,10 @@ export default function Slot() {
     }
   }, [status, winPrize, isLoggedIn, router, width])
 
+  useEffect(() => {
+    console.log({ winPrize })
+  }, [winPrize])
+
   if (ENV === 'prod' || ENV === 'staging') return null
 
   return (
