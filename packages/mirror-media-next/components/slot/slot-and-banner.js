@@ -40,21 +40,28 @@ const MachineContainer = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(calc(-50% + 15px), -50%);
+  transform: translate(calc(-50% + 10px), calc(-50% + 42px)) scale(0.6);
+  ${({ theme }) => theme.breakpoint.xl} {
+    transform: translate(calc(-50% + 15px), calc(-50% + 0px)) scale(1);
+  }
 `
 
 /**
  *
- * @param {Object} props
  * @returns {JSX.Element}
  */
 export default function Slot() {
+  const num_icons = 12
+  const icon_height = (70 / 171) * 178
+  const time_per_icon = 200
   const { isLoggedIn, userEmail, firebaseId } = useMembership()
   const router = useRouter()
   const { width } = useWindowDimensions()
   const isMobile = useMemo(() => width < 1200, [width])
   const [isHover, setIsHover] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
+
+  const [result, setResult] = useState([0, 0, 0])
 
   const [status, setStatus] = useState({
     loading: true,
@@ -90,8 +97,9 @@ export default function Slot() {
     setProbabilities({ ...probabilities })
   }
 
-  const handleClickSlot = (e) => {
+  const handleClickSlot = async (e) => {
     e.preventDefault()
+    await rollAll()
     const randomValue = Math.random()
     if (randomValue < probabilities.prize100) {
       setWinPrize(100)
@@ -100,6 +108,59 @@ export default function Slot() {
     } else {
       setWinPrize('0')
     }
+  }
+
+  const roll = (reel, offset = 0) => {
+    // Minimum of 2 + the reel offset rounds
+    const delta =
+      (offset + 2) * num_icons + Math.round(Math.random() * num_icons)
+
+    // Return promise so we can wait for all reels to finish
+    return new Promise((resolve, reject) => {
+      const style = getComputedStyle(reel),
+        // Current background position
+        backgroundPositionY = parseFloat(style['background-position-y']),
+        // Target background position
+        targetBackgroundPositionY = backgroundPositionY + delta * icon_height,
+        // Normalized background position, for reset
+        normTargetBackgroundPositionY =
+          targetBackgroundPositionY % (num_icons * icon_height)
+
+      // Delay animation with timeout, for some reason a delay in the animation property causes stutter
+      setTimeout(() => {
+        // Set transition properties ==> https://cubic-bezier.com/#.41,-0.01,.63,1.09
+        reel.style.transition = `background-position-y ${
+          (8 + 1 * delta) * time_per_icon
+        }ms cubic-bezier(.41,-0.01,.63,1.09)`
+        // Set background position
+        reel.style.backgroundPositionY = `${
+          backgroundPositionY + delta * icon_height
+        }px`
+      }, offset * 150)
+
+      // After animation
+      setTimeout(() => {
+        // Reset position, so that it doesn't get higher without limit
+        reel.style.transition = `none`
+        reel.style.backgroundPositionY = `${normTargetBackgroundPositionY}px`
+        // Resolve this promise
+        resolve(delta % num_icons)
+      }, (8 + 1 * delta) * time_per_icon + offset * 150)
+    })
+  }
+
+  function rollAll() {
+    const reelsList = document.querySelectorAll('.slots > .reel')
+
+    Promise
+      // Activate each reel, must convert NodeList to Array for this with spread operator
+      .all([...reelsList].map((reel, i) => roll(reel, i)))
+      // When all reels done animating (all promises solve)
+      .then((deltas) => {
+        // add up indexes
+        setResult(deltas)
+        console.log({ deltas })
+      })
   }
 
   useEffect(() => {
@@ -143,6 +204,7 @@ export default function Slot() {
             alt="請登入"
             fill={true}
           />
+          {/* <SlotMachine /> */}
         </BannerLink>
       )
     } else if (status.hasPlayed) {
@@ -165,7 +227,7 @@ export default function Slot() {
             alt="抽獎"
             fill={true}
           />
-          {SlotMachine()}
+          <SlotMachine />
         </BannerLink>
       )
     }
@@ -178,7 +240,7 @@ export default function Slot() {
               alt="明天再試"
               fill={true}
             />
-            {SlotMachine()}
+            <SlotMachine />
           </Banner>
         )
       }
@@ -201,7 +263,7 @@ export default function Slot() {
               alt="抽獎"
               fill={true}
             />
-            {SlotMachine()}
+            <SlotMachine />
           </BannerLink>
         )
       }
