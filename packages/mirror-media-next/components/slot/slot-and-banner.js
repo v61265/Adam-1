@@ -17,19 +17,16 @@ const SlotContainer = styled.div`
 
 const Banner = styled.div`
   margin: 0 auto;
-  width: 100%;
-  max-width: 970px;
-  height: 250px;
-  position: relative;
-`
-
-const BannerLink = styled(Banner)`
   width: 300px;
   height: 250px;
-  padding-top: 0;
+  position: relative;
   ${({ theme }) => theme.breakpoint.xl} {
     width: 970px;
   }
+`
+
+const BannerLink = styled(Banner)`
+  padding-top: 0;
   &:hover {
     cursor: pointer;
   }
@@ -263,7 +260,9 @@ export default function Slot() {
       return (
         <Banner>
           <Image
-            src="https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/has-played.jpg"
+            src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/has-played${
+              isMobile ? '-mobile' : ''
+            }.jpg`}
             alt="明天再試"
             fill={true}
           />
@@ -287,7 +286,9 @@ export default function Slot() {
         return (
           <Banner>
             <Image
-              src="https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/has-played.jpg"
+              src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/has-played${
+                isMobile ? '-mobile' : ''
+              }.jpg`}
               alt="明天再試"
               fill={true}
             />
