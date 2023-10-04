@@ -292,7 +292,7 @@ export default function Slot() {
           />
         </BannerLink>
       )
-    } else if (winPrize === '50' || winPrize === 100) {
+    } else if (winPrize === '50' || winPrize === '100') {
       return (
         <BannerLink
           onMouseEnter={() => {
