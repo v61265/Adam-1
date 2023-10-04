@@ -11,6 +11,7 @@ import styled from 'styled-components'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import useWindowDimensions from '../hooks/use-window-dimensions'
+import Machine from '../components/slot/machine'
 
 const SlotContainer = styled.div`
   margin: 0 auto;
@@ -19,19 +20,30 @@ const SlotContainer = styled.div`
 
 const Banner = styled.div`
   margin: 0 auto;
-  width: 760px;
-  height: 250px;
+  width: 100%;
+  max-width: 970px;
+  height: 0;
+  padding-top: 25.77%;
   position: relative;
 `
 
 const BannerLink = styled(Banner)`
   width: 300px;
+  height: 250px;
+  padding-top: 0;
   ${({ theme }) => theme.breakpoint.xl} {
-    width: 760px;
+    width: 970px;
   }
   &:hover {
     cursor: pointer;
   }
+`
+
+const MachineContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% + 15px), -50%);
 `
 
 /**
@@ -47,6 +59,7 @@ export default function Slot({ headerData = {} }) {
   const { width } = useWindowDimensions()
   const isMobile = useMemo(() => width < 1200, [width])
   const [isHover, setIsHover] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
 
   const [status, setStatus] = useState({
     loading: true,
@@ -95,6 +108,7 @@ export default function Slot({ headerData = {} }) {
   }
 
   useEffect(() => {
+    setHasMounted(true)
     if (!isLoggedIn) return setStatus({ ...status, loading: false })
     // fetch data
     getSlotSheetDataByUserEmail(firebaseId)
@@ -111,7 +125,7 @@ export default function Slot({ headerData = {} }) {
   }, [winPrize])
 
   const slotComponent = useCallback(() => {
-    if (status.loading) return null
+    if (status.loading || !hasMounted) return null
     if (!firebaseId) {
       return (
         <BannerLink
@@ -148,6 +162,9 @@ export default function Slot({ headerData = {} }) {
             alt="抽獎"
             fill={true}
           />
+          <MachineContainer>
+            <Machine />
+          </MachineContainer>
         </BannerLink>
       )
     }
