@@ -300,7 +300,7 @@ export default function Slot() {
           />
         </BannerLink>
       )
-    } else if (!winPrize || isPlaying) {
+    } else if (!winPrize || !isPlaying) {
       return (
         <BannerLink>
           <Image
