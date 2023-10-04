@@ -19,9 +19,7 @@ const Banner = styled.div`
   margin: 0 auto;
   width: 100%;
   max-width: 970px;
-  height: 0;
-  padding-top: 25.77%;
-  max-height: 250px;
+  height: 250px;
   position: relative;
 `
 
@@ -113,6 +111,9 @@ export default function Slot() {
   })
   const [winPrize, setWinPrize] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const canPlay = useMemo(() => {
+    return firebaseId && winPrize && !status.hasPlayed
+  }, [firebaseId, winPrize, status])
 
   const getSlotSheetDataByUserEmail = async (userFirebaseId) => {
     const { data: sheetData } = await axios.post(
@@ -138,22 +139,32 @@ export default function Slot() {
 
   const handleClickSlot = async (e) => {
     e.preventDefault()
-    await rollAll()
     const randomValue = Math.random()
     if (randomValue < probabilities.prize100) {
-      setWinPrize(100)
+      setWinPrize('100')
+      await rollAll([6, 1, 1])
     } else if (randomValue < probabilities.prize50) {
-      setWinPrize(50)
+      setWinPrize('50')
+      await rollAll([9, 9, 9])
     } else {
+      await rollAll()
       setWinPrize('0')
     }
   }
 
-  const roll = (reel, offset = 0) => {
+  const roll = (reel, offset = 0, targetIndex) => {
     // Minimum of 2 + the reel offset rounds
-    const delta =
-      (offset + 2) * num_icons + Math.round(Math.random() * num_icons)
-
+    let delta =
+      targetIndex === 0 || targetIndex
+        ? (offset + 2) * num_icons + targetIndex
+        : (offset + 2) * num_icons + Math.round(Math.random() * num_icons)
+    while (
+      offset === 2 &&
+      (delta % num_icons === 1 || delta % num_icons === 9) &&
+      !targetIndex
+    ) {
+      delta = (offset + 2) * num_icons + Math.round(Math.random() * num_icons)
+    }
     // Return promise so we can wait for all reels to finish
     return new Promise((resolve, reject) => {
       const style = getComputedStyle(reel),
@@ -182,20 +193,21 @@ export default function Slot() {
         // Reset position, so that it doesn't get higher without limit
         reel.style.transition = `none`
         reel.style.backgroundPositionY = `${normTargetBackgroundPositionY}px`
+        // Check if we reached the target index
         // Resolve this promise
         resolve(delta % num_icons)
       }, (8 + 1 * delta) * time_per_icon + offset * 150)
     })
   }
 
-  async function rollAll() {
+  async function rollAll(targetArr) {
     if (isPlaying) return
     setIsPlaying(true)
     const reelsList = document.querySelectorAll('.slots > .reel')
 
     const deltas = await Promise
       // Activate each reel, must convert NodeList to Array for this with spread operator
-      .all([...reelsList].map((reel, i) => roll(reel, i)))
+      .all([...reelsList].map((reel, i) => roll(reel, i, targetArr?.[i])))
     setIsPlaying(false)
     return deltas
   }
@@ -245,7 +257,6 @@ export default function Slot() {
             alt="請登入"
             fill={true}
           />
-          {/* <SlotMachine /> */}
         </BannerLink>
       )
     } else if (status.hasPlayed) {
@@ -268,8 +279,6 @@ export default function Slot() {
             alt="抽獎"
             fill={true}
           />
-          <ReelsComponent />
-          <SlotImageComponent />
         </BannerLink>
       )
     }
@@ -282,8 +291,6 @@ export default function Slot() {
               alt="明天再試"
               fill={true}
             />
-            <ReelsComponent />
-            <SlotImageComponent />
           </Banner>
         )
       }
@@ -306,8 +313,6 @@ export default function Slot() {
               alt="抽獎"
               fill={true}
             />
-            <ReelsComponent />
-            <SlotImageComponent />
           </BannerLink>
         )
       }
@@ -316,5 +321,15 @@ export default function Slot() {
 
   if (ENV === 'prod' || ENV === 'staging') return null
 
-  return <SlotContainer onClick={rollAll}>{slotComponent()}</SlotContainer>
+  return (
+    <SlotContainer onClick={canPlay ? null : handleClickSlot}>
+      {slotComponent()}
+      {firebaseId && winPrize !== '0' && !status.hasPlayed && (
+        <>
+          <ReelsComponent />
+          <SlotImageComponent />
+        </>
+      )}
+    </SlotContainer>
+  )
 }
