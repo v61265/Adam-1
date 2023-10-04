@@ -201,12 +201,24 @@ export default function Slot() {
     if (isPlaying) return
     setIsPlaying(true)
     const reelsList = document.querySelectorAll('.slots > .reel')
-
     const deltas = await Promise
       // Activate each reel, must convert NodeList to Array for this with spread operator
       .all([...reelsList].map((reel, i) => roll(reel, i, targetArr?.[i])))
     setIsPlaying(false)
     return deltas
+  }
+
+  const handleClickPrizeLink = (e, winPrize) => {
+    e.preventDefault()
+    if (winPrize === '50') {
+      window.open(
+        'https://docs.google.com/forms/d/e/1FAIpQLScHj3eRJ66QqujNlkhDwyFmgIbQkie7a-yvRQPCX4_-1HukvA/viewform'
+      )
+    } else if (winPrize === '100') {
+      window.open(
+        'https://docs.google.com/forms/d/e/1FAIpQLSdxFsu_NCqFSnQDncuHP1xk3rsS-9kEw7CxyQH8E3VmdkZJmA/viewform'
+      )
+    }
   }
 
   useEffect(() => {
@@ -270,7 +282,7 @@ export default function Slot() {
       )
     } else if (!winPrize) {
       return (
-        <BannerLink onClick={handleClickSlot}>
+        <BannerLink>
           <Image
             src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/default-${
               isMobile ? 'mobile' : 'desktop'
@@ -281,6 +293,7 @@ export default function Slot() {
         </BannerLink>
       )
     }
+    console.log({ winPrize })
     switch (winPrize) {
       case '0': {
         return (
@@ -299,13 +312,13 @@ export default function Slot() {
       case '100': {
         return (
           <BannerLink
-            onClick={handleClickSlot}
             onMouseEnter={() => {
               setIsHover(true)
             }}
             onMouseLeave={() => {
               setIsHover(false)
             }}
+            onClick={(e) => handleClickPrizeLink(e, winPrize)}
           >
             <Image
               src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/win-${
