@@ -112,7 +112,7 @@ export default function Slot() {
     return firebaseId && winPrize && !status.hasPlayed
   }, [firebaseId, winPrize, status])
 
-  const getSlotSheetDataByUserEmail = async (userFirebaseId) => {
+  const getSlotSheetDataByUserId = async (userFirebaseId) => {
     const { data: sheetData } = await axios.post(
       `${window.location.origin}/api/slot-sheet`,
       { dispatch: 'LOAD_SHEET', userFirebaseId }
@@ -225,7 +225,7 @@ export default function Slot() {
     setHasMounted(true)
     if (!isLoggedIn) return setStatus({ ...status, loading: false })
     // fetch data
-    getSlotSheetDataByUserEmail(firebaseId)
+    getSlotSheetDataByUserId(firebaseId)
   }, [isLoggedIn])
 
   useEffect(() => {
@@ -292,43 +292,38 @@ export default function Slot() {
           />
         </BannerLink>
       )
-    }
-    switch (winPrize) {
-      case '0': {
-        return (
-          <Banner>
-            <Image
-              src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/has-played${
-                isMobile ? '-mobile' : ''
-              }.jpg`}
-              alt="明天再試"
-              fill={true}
-            />
-          </Banner>
-        )
-      }
-      case '50':
-      case '100': {
-        return (
-          <BannerLink
-            onMouseEnter={() => {
-              setIsHover(true)
-            }}
-            onMouseLeave={() => {
-              setIsHover(false)
-            }}
-            onClick={(e) => handleClickPrizeLink(e, winPrize)}
-          >
-            <Image
-              src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/win-${
-                isHover ? 'hover-' : ''
-              }${isMobile ? 'mobile' : 'desktop'}.gif`}
-              alt="抽獎"
-              fill={true}
-            />
-          </BannerLink>
-        )
-      }
+    } else if (winPrize === '50' || winPrize === 100) {
+      return (
+        <BannerLink
+          onMouseEnter={() => {
+            setIsHover(true)
+          }}
+          onMouseLeave={() => {
+            setIsHover(false)
+          }}
+          onClick={(e) => handleClickPrizeLink(e, winPrize)}
+        >
+          <Image
+            src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/win-${
+              isHover ? 'hover-' : ''
+            }${isMobile ? 'mobile' : 'desktop'}.gif`}
+            alt="抽獎"
+            fill={true}
+          />
+        </BannerLink>
+      )
+    } else {
+      return (
+        <Banner>
+          <Image
+            src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/has-played${
+              isMobile ? '-mobile' : ''
+            }.jpg`}
+            alt="明天再試"
+            fill={true}
+          />
+        </Banner>
+      )
     }
   }, [status, winPrize, isLoggedIn, router, width])
 
