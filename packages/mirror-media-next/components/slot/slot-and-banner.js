@@ -280,18 +280,6 @@ export default function Slot() {
           />
         </Banner>
       )
-    } else if (!winPrize || isPlaying) {
-      return (
-        <BannerLink>
-          <Image
-            src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/default-${
-              isMobile ? 'mobile' : 'desktop'
-            }.gif`}
-            alt="抽獎"
-            fill={true}
-          />
-        </BannerLink>
-      )
     } else if (winPrize === '50' || winPrize === '100') {
       return (
         <BannerLink
@@ -307,6 +295,18 @@ export default function Slot() {
             src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/win-${
               isHover ? 'hover-' : ''
             }${isMobile ? 'mobile' : 'desktop'}.gif`}
+            alt="抽獎"
+            fill={true}
+          />
+        </BannerLink>
+      )
+    } else if (!winPrize || isPlaying) {
+      return (
+        <BannerLink>
+          <Image
+            src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/default-${
+              isMobile ? 'mobile' : 'desktop'
+            }.gif`}
             alt="抽獎"
             fill={true}
           />
