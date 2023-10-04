@@ -178,12 +178,14 @@ function getSectionLabelFirst(sections) {
  * @param {PostData} props.postData
  * @param {PostContent} props.postContent
  * @param {any} props.headerData
+ * @param {string} [props.classNameForGTM]
  * @returns {JSX.Element}
  */
 export default function StoryPremiumStyle({
   postData,
   postContent,
   headerData,
+  classNameForGTM = '',
 }) {
   const { isLoggedIn, memberInfo } = useMembership()
   const { memberType } = memberInfo
@@ -273,7 +275,7 @@ export default function StoryPremiumStyle({
         )}
       </GPT_Placeholder>
 
-      <Main>
+      <Main className={classNameForGTM}>
         <article>
           <TitleAndInfoAndHero
             sectionLabelFirst={sectionLabelFirst}

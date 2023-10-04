@@ -450,13 +450,18 @@ const StyledGPTAd_PC_E2 = styled(GPTAd)`
 
 /**
  *
- * @param {{postData: PostData,postContent: PostContent, headerData: any}} param
+ * @param {Object} param
+ * @param {PostData} param.postData
+ * @param {PostContent} param.postContent
+ * @param {any} param.headerData
+ * @param {string} [param.classNameForGTM]
  * @returns {JSX.Element}
  */
 export default function StoryNormalStyle({
   postData,
   postContent,
   headerData,
+  classNameForGTM = '',
 }) {
   const {
     title = '',
@@ -596,7 +601,7 @@ export default function StoryNormalStyle({
         )}
       </GPT_Placeholder>
 
-      <Main>
+      <Main className={classNameForGTM}>
         <Article>
           <SectionAndDate>
             {/* hide section for advertised article but remain the same architecture*/}
