@@ -107,6 +107,7 @@ export default function Slot() {
   const icon_height = (70 / 171) * 178
   const time_per_icon = 200
   const { isLoggedIn, userEmail, firebaseId } = useMembership()
+  // const firebaseId = 'test-for-local'
   const router = useRouter()
   const { width } = useWindowDimensions()
   const isMobile = useMemo(() => width < 1200, [width])
@@ -155,13 +156,11 @@ export default function Slot() {
     const randomValue = Math.random()
     if (randomValue < probabilities.prize100) {
       setWinPrize('100')
-      await rollAll([6, 1, 1])
+      await rollAll([6, 1, 1], () => setWinPrize('50'))
     } else if (randomValue < probabilities.prize50) {
-      setWinPrize('50')
-      await rollAll([9, 9, 9])
+      await rollAll([9, 9, 9], () => setWinPrize('50'))
     } else {
-      await rollAll()
-      setWinPrize('0')
+      await rollAll([], () => setWinPrize('0'))
     }
   }
 
@@ -213,7 +212,7 @@ export default function Slot() {
     })
   }
 
-  async function rollAll(targetArr) {
+  async function rollAll(targetArr, cb) {
     if (isPlaying) return
     setIsPlaying(true)
     const reelsList = document.querySelectorAll('.slots > .reel')
@@ -221,6 +220,7 @@ export default function Slot() {
       // Activate each reel, must convert NodeList to Array for this with spread operator
       .all([...reelsList].map((reel, i) => roll(reel, i, targetArr?.[i])))
     setIsPlaying(false)
+    cb()
     return deltas
   }
 
@@ -317,14 +317,14 @@ export default function Slot() {
           <SlotImageComponent />
         </BannerLink>
       )
-    } else if (!winPrize || !isPlaying) {
+    } else if (winPrize !== '0' || isPlaying) {
       return (
         <BannerLink>
           <Image
             src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/default-${
               isMobile ? 'mobile' : 'desktop'
             }.gif`}
-            alt="抽獎"
+            alt="抽獎 banner"
             fill={true}
           />
         </BannerLink>
@@ -342,7 +342,9 @@ export default function Slot() {
         </Banner>
       )
     }
-  }, [status, winPrize, isLoggedIn, router, width, isHover])
+  }, [status, winPrize, isLoggedIn, router, width, isHover, isPlaying])
+
+  useEffect(() => console.log({ winPrize }), [winPrize])
 
   if (ENV === 'prod' || ENV === 'staging') return null
 
