@@ -37,7 +37,16 @@ const MachineContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(calc(-50% + 10px), calc(-50% + 42px)) scale(0.6);
+  ${({ hasPrize }) => {
+    return (
+      hasPrize &&
+      `
+      margin-top: -30px;
+    `
+    )
+  }}
   ${({ theme }) => theme.breakpoint.xl} {
+    margin-top: 0;
     transform: translate(calc(-50% + 15px), calc(-50% + 0px)) scale(1);
   }
 `
@@ -55,10 +64,6 @@ const SlotImage = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(calc(-50% + 10px), calc(-50% + 42px)) scale(0.6);
-  ${({ theme }) => theme.breakpoint.xl} {
-    transform: translate(calc(-50% + 15px), calc(-50% + 0px)) scale(1);
-  }
-
   ${({ isPlaying }) => {
     if (isPlaying)
       return `
@@ -79,6 +84,18 @@ const SlotImage = styled.div`
     animation: backgroundAnimation 3s infinite;
     `
   }}
+  ${({ hasPrize }) => {
+    return (
+      hasPrize &&
+      `
+      margin-top: -30px;
+    `
+    )
+  }}
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-top: 0;
+    transform: translate(calc(-50% + 15px), calc(-50% + 0px)) scale(1);
+  }
 `
 
 /**
@@ -94,7 +111,6 @@ export default function Slot() {
   const { width } = useWindowDimensions()
   const isMobile = useMemo(() => width < 1200, [width])
   const [isHover, setIsHover] = useState(false)
-  const [hasMounted, setHasMounted] = useState(false)
 
   const [status, setStatus] = useState({
     loading: true,
@@ -222,7 +238,6 @@ export default function Slot() {
   }
 
   useEffect(() => {
-    setHasMounted(true)
     if (!isLoggedIn) return setStatus({ ...status, loading: false })
     // fetch data
     getSlotSheetDataByUserId(firebaseId)
@@ -239,19 +254,22 @@ export default function Slot() {
   }, [winPrize])
 
   const ReelsComponent = useCallback(() => {
-    return (
-      <MachineContainer>
-        <Reels />
-      </MachineContainer>
-    )
+    return <Reels />
   }, [])
 
   const SlotImageComponent = useCallback(() => {
-    return <SlotImage isPlaying={isPlaying} />
-  }, [isPlaying])
+    return (
+      <SlotImage
+        isPlaying={isPlaying}
+        hasPrize={
+          ((winPrize === '50' || winPrize === '100') && !isPlaying) || true
+        }
+      />
+    )
+  }, [isPlaying, winPrize])
 
   const slotComponent = useCallback(() => {
-    if (status.loading || !hasMounted) return null
+    if (status.loading) return null
     if (!firebaseId) {
       return (
         <BannerLink
@@ -295,9 +313,10 @@ export default function Slot() {
             src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/win-${
               isHover ? 'hover-' : ''
             }${isMobile ? 'mobile' : 'desktop'}.gif`}
-            alt="抽獎"
+            alt="中獎！"
             fill={true}
           />
+          <SlotImageComponent />
         </BannerLink>
       )
     } else if (!winPrize || !isPlaying) {
@@ -325,11 +344,7 @@ export default function Slot() {
         </Banner>
       )
     }
-  }, [status, winPrize, isLoggedIn, router, width])
-
-  useEffect(() => {
-    console.log({ winPrize })
-  }, [winPrize])
+  }, [status, winPrize, isLoggedIn, router, width, isHover])
 
   if (ENV === 'prod' || ENV === 'staging') return null
 
@@ -342,6 +357,31 @@ export default function Slot() {
           <SlotImageComponent />
         </>
       )}
+      <BannerLink
+        onMouseEnter={() => {
+          setIsHover(true)
+        }}
+        onMouseLeave={() => {
+          setIsHover(false)
+        }}
+        onClick={(e) => handleClickPrizeLink(e, winPrize)}
+      >
+        <Image
+          src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/win-${
+            isHover ? 'hover-' : ''
+          }${isMobile ? 'mobile' : 'desktop'}.gif`}
+          alt="中獎！"
+          fill={true}
+        />
+        <MachineContainer
+          hasPrize={
+            ((winPrize === '50' || winPrize === '100') && !isPlaying) || true
+          }
+        >
+          <ReelsComponent />
+        </MachineContainer>
+        <SlotImageComponent />
+      </BannerLink>
     </SlotContainer>
   )
 }
