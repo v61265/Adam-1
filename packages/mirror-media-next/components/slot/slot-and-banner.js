@@ -296,7 +296,7 @@ export default function Slot() {
           />
         </Banner>
       )
-    } else if (winPrize === '50' || winPrize === '100') {
+    } else if ((winPrize === '50' || winPrize === '100') && !isPlaying) {
       return (
         <BannerLink
           onMouseEnter={() => {
@@ -317,7 +317,7 @@ export default function Slot() {
           <SlotImageComponent />
         </BannerLink>
       )
-    } else if (winPrize !== '0' || isPlaying) {
+    } else if (winPrize !== '0') {
       return (
         <BannerLink>
           <Image
