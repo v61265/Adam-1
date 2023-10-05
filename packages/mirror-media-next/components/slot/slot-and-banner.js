@@ -261,9 +261,7 @@ export default function Slot() {
     return (
       <SlotImage
         isPlaying={isPlaying}
-        hasPrize={
-          ((winPrize === '50' || winPrize === '100') && !isPlaying) || true
-        }
+        hasPrize={(winPrize === '50' || winPrize === '100') && !isPlaying}
       />
     )
   }, [isPlaying, winPrize])
@@ -374,9 +372,7 @@ export default function Slot() {
           fill={true}
         />
         <MachineContainer
-          hasPrize={
-            ((winPrize === '50' || winPrize === '100') && !isPlaying) || true
-          }
+          hasPrize={(winPrize === '50' || winPrize === '100') && !isPlaying}
         >
           <ReelsComponent />
         </MachineContainer>
