@@ -351,7 +351,11 @@ export default function Slot() {
       {slotComponent()}
       {firebaseId && !status.hasPlayed && (
         <>
-          <ReelsComponent />
+          <MachineContainer
+            hasPrize={(winPrize === '50' || winPrize === '100') && !isPlaying}
+          >
+            <ReelsComponent />
+          </MachineContainer>
           <SlotImageComponent />
         </>
       )}
