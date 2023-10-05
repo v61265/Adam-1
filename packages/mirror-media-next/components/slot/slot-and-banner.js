@@ -355,29 +355,6 @@ export default function Slot() {
           <SlotImageComponent />
         </>
       )}
-      <BannerLink
-        onMouseEnter={() => {
-          setIsHover(true)
-        }}
-        onMouseLeave={() => {
-          setIsHover(false)
-        }}
-        onClick={(e) => handleClickPrizeLink(e, winPrize)}
-      >
-        <Image
-          src={`https://storage.googleapis.com/statics.mirrormedia.mg/campaigns/slot2023/win-${
-            isHover ? 'hover-' : ''
-          }${isMobile ? 'mobile' : 'desktop'}.gif`}
-          alt="中獎！"
-          fill={true}
-        />
-        <MachineContainer
-          hasPrize={(winPrize === '50' || winPrize === '100') && !isPlaying}
-        >
-          <ReelsComponent />
-        </MachineContainer>
-        <SlotImageComponent />
-      </BannerLink>
     </SlotContainer>
   )
 }
