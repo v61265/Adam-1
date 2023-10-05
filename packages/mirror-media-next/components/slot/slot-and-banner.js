@@ -155,8 +155,7 @@ export default function Slot() {
     e.preventDefault()
     const randomValue = Math.random()
     if (randomValue < probabilities.prize100) {
-      setWinPrize('100')
-      await rollAll([6, 1, 1], () => setWinPrize('50'))
+      await rollAll([6, 1, 1], () => setWinPrize('100'))
     } else if (randomValue < probabilities.prize50) {
       await rollAll([9, 9, 9], () => setWinPrize('50'))
     } else {
