@@ -106,7 +106,8 @@ export default function Slot() {
   const num_icons = 12
   const icon_height = (70 / 171) * 178
   const time_per_icon = 200
-  const { isLoggedIn, userEmail, firebaseId } = useMembership()
+  const { isLoggedIn, userEmail, firebaseId, isLogInProcessFinished } =
+    useMembership()
   // const firebaseId = 'test-for-local'
   const router = useRouter()
   const { width } = useWindowDimensions()
@@ -153,6 +154,7 @@ export default function Slot() {
 
   const handleClickSlot = async (e) => {
     e.preventDefault()
+    if (!firebaseId || status.hasPlayed || !status.isLoggedIn) return
     const randomValue = Math.random()
     if (randomValue < probabilities.prize100) {
       await rollAll([6, 1, 1], () => setWinPrize('100'))
@@ -266,7 +268,7 @@ export default function Slot() {
   }, [isPlaying, winPrize])
 
   const slotComponent = useCallback(() => {
-    if (status.loading) return null
+    if (status.loading || !isLogInProcessFinished) return null
     if (!firebaseId) {
       return (
         <BannerLink
@@ -345,10 +347,11 @@ export default function Slot() {
 
   useEffect(() => console.log({ winPrize }), [winPrize])
 
-  if (ENV === 'prod' || ENV === 'staging') return null
+  if (ENV === 'prod' || ENV === 'staging' || !isLogInProcessFinished)
+    return null
 
   return (
-    <SlotContainer onClick={canPlay ? null : handleClickSlot}>
+    <SlotContainer onClick={canPlay ? null : (e) => handleClickSlot(e)}>
       {slotComponent()}
       {firebaseId && !status.hasPlayed && (
         <>
