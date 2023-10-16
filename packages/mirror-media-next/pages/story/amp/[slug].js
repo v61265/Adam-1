@@ -19,6 +19,7 @@ import {
   GCP_PROJECT_ID,
   ENV,
   GA_MEASUREMENT_ID,
+  SITE_URL,
 } from '../../../config/index.mjs'
 import styled from 'styled-components'
 import AdultOnlyWarning from '../../../components/story/shared/adult-only-warning'
@@ -29,7 +30,6 @@ import Taboola from '../../../components/amp/amp-ads/taboola-ad'
 import AmpGptAd from '../../../components/amp/amp-ads/amp-gpt-ad'
 import AmpGptStickyAd from '../../../components/amp/amp-ads/amp-gpt-sticky-ad'
 import { getAmpGptDataSlotSection } from '../../../utils/ad'
-import Head from 'next/head'
 
 export const config = { amp: true }
 
@@ -61,6 +61,7 @@ const AmpBody = styled.body`
 function StoryAmpPage({ postData }) {
   const {
     title = '',
+    slug = '',
     relateds = [],
     relatedsInInputOrder = [],
     isMember = false,
@@ -84,18 +85,20 @@ function StoryAmpPage({ postData }) {
     relatedsInInputOrder && relatedsInInputOrder.length
       ? relatedsInInputOrder
       : relateds
-
+  const nonAmpUrl = `https://${SITE_URL}/story/${slug}`
+  const ampGptStickyAdScript = (
+    <script
+      async
+      // eslint-disable-next-line react/no-unknown-property
+      custom-element="amp-sticky-ad"
+      src="https://cdn.ampproject.org/v0/amp-sticky-ad-1.0.js"
+    />
+  )
+  const canonicalLink = (
+    <link rel="canonical" href={nonAmpUrl} key="canonical"></link>
+  )
   return (
     <>
-      <Head>
-        {/* Add the script for amp-sticky-ad */}
-        <script
-          async
-          // eslint-disable-next-line react/no-unknown-property
-          custom-element="amp-sticky-ad"
-          src="https://cdn.ampproject.org/v0/amp-sticky-ad-1.0.js"
-        />
-      </Head>
       <Layout
         head={{
           title: `${title}`,
@@ -105,6 +108,12 @@ function StoryAmpPage({ postData }) {
           imageUrl:
             getResizedUrl(postData.og_image?.resized) ||
             getResizedUrl(postData.heroImage?.resized),
+          otherHead: (
+            <>
+              {ampGptStickyAdScript}
+              {canonicalLink}
+            </>
+          ),
         }}
         header={{ type: 'empty' }}
         footer={{ type: 'empty' }}
