@@ -284,12 +284,15 @@ export async function getServerSideProps({ res, req }) {
 
     const eventData =
       eventsData.find((event) =>
+        // since the events are ordered in `publishedDate` with desc order,
+        // find the first event whose period is on-going.
         isDateInsideDatesRange(new Date(), {
           startDate: event.startDate,
           endDate: event.endDate,
         })
       ) || {}
     // live youtube video link should be like https://www.youtube.com/watch?v={youtubeVideoId}
+    // ignore other deprecated format
     const liveYoutubeInfo = eventData.link?.includes('v=')
       ? {
           youtubeId: eventData.link.split('v=')[1],
