@@ -23,6 +23,24 @@ import { useRouter } from 'next/router'
  */
 
 /**
+ * Create canonical link based on router.asPath
+ * Since '/story' page and '/story/amp' page has special logic on creating canonical link,
+ * we decide not handle canonical link on these page.
+ * @param {string} routerAsPath
+ * @return {null | JSX.Element}
+ */
+const createCanonicalLink = (routerAsPath) => {
+  const isStoryPage = routerAsPath.startsWith('/story/')
+
+  if (isStoryPage) {
+    return null
+  }
+  const url = 'https://' + SITE_URL + routerAsPath
+
+  return <link rel="canonical" href={url} key="canonical" />
+}
+
+/**
  * @param {Object} props
  * @param {OGProperties} props.properties
  * @returns
@@ -98,6 +116,7 @@ const OpenGraph = ({ properties }) => {
  * @property {string} [title] - head title used to setup title other title related meta
  * @property {string} [description] - head description used to setup description related meta
  * @property {string} [imageUrl] - image url used to setup image related meta
+ * @property {React.ReactNode} [otherHead] - other head tag needed to add
  */
 
 /**
@@ -106,6 +125,7 @@ const OpenGraph = ({ properties }) => {
  */
 export default function CustomHead(props) {
   const router = useRouter()
+  const canonicalLink = createCanonicalLink(router.asPath)
   const siteInformation = {
     title: props.title ? `${props.title} - ${SITE_TITLE}` : SITE_TITLE,
     description:
@@ -136,6 +156,8 @@ export default function CustomHead(props) {
       />
       <OpenGraph properties={siteInformation} />
       <meta name="application-name" content={siteInformation.title} />
+      {canonicalLink}
+      {props.otherHead}
     </Head>
   )
 }
