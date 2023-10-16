@@ -161,7 +161,7 @@ export const post = gql`
     id
     slug
     title
-
+    state
     style
     isMember
     isAdult
