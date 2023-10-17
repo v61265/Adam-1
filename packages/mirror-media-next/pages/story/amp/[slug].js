@@ -1,3 +1,5 @@
+import Head from 'next/head'
+
 import errors from '@twreporter/errors'
 import client from '../../../apollo/apollo-client'
 import Layout from '../../../components/shared/layout'
@@ -30,6 +32,7 @@ import Taboola from '../../../components/amp/amp-ads/taboola-ad'
 import AmpGptAd from '../../../components/amp/amp-ads/amp-gpt-ad'
 import AmpGptStickyAd from '../../../components/amp/amp-ads/amp-gpt-sticky-ad'
 import { getAmpGptDataSlotSection } from '../../../utils/ad'
+import JsonLdsScript from '../../../components/story/shared/json-lds-script'
 
 export const config = { amp: true }
 
@@ -99,6 +102,14 @@ function StoryAmpPage({ postData }) {
   )
   return (
     <>
+      <Head>
+        {ampGptStickyAdScript}
+        {canonicalLink}
+      </Head>
+      <JsonLdsScript
+        postData={postData}
+        currentPage="/story/amp/"
+      ></JsonLdsScript>
       <Layout
         head={{
           title: `${title}`,
@@ -108,12 +119,6 @@ function StoryAmpPage({ postData }) {
           imageUrl:
             getResizedUrl(postData.og_image?.resized) ||
             getResizedUrl(postData.heroImage?.resized),
-          otherHead: (
-            <>
-              {ampGptStickyAdScript}
-              {canonicalLink}
-            </>
-          ),
         }}
         header={{ type: 'empty' }}
         footer={{ type: 'empty' }}

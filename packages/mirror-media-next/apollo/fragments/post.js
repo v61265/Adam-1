@@ -146,6 +146,7 @@ export const asideListingPost = gql`
  * @property {import('./tag').Tag[]} tags
  * @property {string} redirect - post redirect slug or external url
  * @property {HeroImage | null} og_image - og image of the post
+ * @property {string} og_description - og description of the post
  * @property {boolean} hiddenAdvertised - decide whether to display advertisements
  * @property {boolean} isAdvertised - the field called '廣告文案' in cms
  */
@@ -232,6 +233,7 @@ export const post = gql`
         w1600
       }
     }
+    og_description
     hiddenAdvertised
     isAdvertised
   }
