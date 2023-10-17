@@ -116,7 +116,6 @@ const OpenGraph = ({ properties }) => {
  * @property {string} [title] - head title used to setup title other title related meta
  * @property {string} [description] - head description used to setup description related meta
  * @property {string} [imageUrl] - image url used to setup image related meta
- * @property {React.ReactNode} [otherHead] - other head tag needed to add
  */
 
 /**
@@ -157,7 +156,6 @@ export default function CustomHead(props) {
       <OpenGraph properties={siteInformation} />
       <meta name="application-name" content={siteInformation.title} />
       {canonicalLink}
-      {props.otherHead}
     </Head>
   )
 }
