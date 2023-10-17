@@ -1,10 +1,11 @@
 //TODO: add component to add html head dynamically, not jus write head in every pag
 import React, { useState, useEffect } from 'react'
+import Head from 'next/head'
 import client from '../../apollo/apollo-client'
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
-import { GCP_PROJECT_ID, ENV, SITE_URL } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
 import WineWarning from '../../components/shared/wine-warning'
 import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 import { useMembership } from '../../context/membership'
@@ -25,6 +26,7 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 
+import CanonicalLink from '../../components/story/shared/canonical-link'
 import FullScreenAds from '../../components/ads/full-screen-ads'
 const { hasContentInRawContentBlock } = MirrorMedia
 
@@ -235,53 +237,42 @@ export default function Story({ postData, headerData, storyLayoutType }) {
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
-  /**
-   *
-   * @returns {React.ReactNode}
-   */
-  const createCanonicalLink = () => {
-    const nonAmpUrl = `https://${SITE_URL}/story/${slug}`
-    const ampUrl = `https://${SITE_URL}/story/amp/${slug}`
-    const shouldCreateAmpHtmlLink = state === 'published' && !isAdvertised
-    const canonicalLink = (
-      <>
-        <link rel="canonical" href={nonAmpUrl} />
-        {shouldCreateAmpHtmlLink && <link rel="amphtml" href={ampUrl} />}
-      </>
-    )
-    return canonicalLink
-  }
-
-  const canonicalLink = createCanonicalLink()
   return (
-    <Layout
-      head={{
-        title: `${title}`,
-        description:
-          convertDraftToText(postData.brief) ||
-          convertDraftToText(postData.content),
-        imageUrl:
-          getResizedUrl(postData.og_image?.resized) ||
-          getResizedUrl(postData.heroImage?.resized),
-        otherHead: canonicalLink,
-      }}
-      header={{ type: 'empty' }}
-      footer={{ type: 'empty' }}
-    >
-      <>
-        {!storyLayoutJsx && (
-          <Loading>
-            <Image src={Skeleton} alt="loading..."></Image>
-          </Loading>
-        )}
-        {storyLayoutJsx}
-        <WineWarning categories={categories} />
-        <AdultOnlyWarning isAdult={isAdult} />
-        {noCategoryOfWineSlug && (
-          <FullScreenAds hiddenAdvertised={hiddenAdvertised} />
-        )}
-      </>
-    </Layout>
+    <>
+      <Head>
+        <CanonicalLink
+          slug={slug}
+          shouldCreateAmpHtmlLink={state === 'published' && !isAdvertised}
+        ></CanonicalLink>
+      </Head>
+      <Layout
+        head={{
+          title: `${title}`,
+          description:
+            convertDraftToText(postData.brief) ||
+            convertDraftToText(postData.content),
+          imageUrl:
+            getResizedUrl(postData.og_image?.resized) ||
+            getResizedUrl(postData.heroImage?.resized),
+        }}
+        header={{ type: 'empty' }}
+        footer={{ type: 'empty' }}
+      >
+        <>
+          {!storyLayoutJsx && (
+            <Loading>
+              <Image src={Skeleton} alt="loading..."></Image>
+            </Loading>
+          )}
+          {storyLayoutJsx}
+          <WineWarning categories={categories} />
+          <AdultOnlyWarning isAdult={isAdult} />
+          {noCategoryOfWineSlug && (
+            <FullScreenAds hiddenAdvertised={hiddenAdvertised} />
+          )}
+        </>
+      </Layout>
+    </>
   )
 }
 

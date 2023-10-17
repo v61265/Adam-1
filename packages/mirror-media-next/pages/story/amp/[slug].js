@@ -1,3 +1,5 @@
+import Head from 'next/head'
+
 import errors from '@twreporter/errors'
 import client from '../../../apollo/apollo-client'
 import Layout from '../../../components/shared/layout'
@@ -99,6 +101,10 @@ function StoryAmpPage({ postData }) {
   )
   return (
     <>
+      <Head>
+        {ampGptStickyAdScript}
+        {canonicalLink}
+      </Head>
       <Layout
         head={{
           title: `${title}`,
@@ -108,12 +114,6 @@ function StoryAmpPage({ postData }) {
           imageUrl:
             getResizedUrl(postData.og_image?.resized) ||
             getResizedUrl(postData.heroImage?.resized),
-          otherHead: (
-            <>
-              {ampGptStickyAdScript}
-              {canonicalLink}
-            </>
-          ),
         }}
         header={{ type: 'empty' }}
         footer={{ type: 'empty' }}
