@@ -20,6 +20,7 @@ import { useRouter } from 'next/router'
  * @property {string} card
  * @property {string} fbAppId
  * @property {string} fbPageId
+ * @property {string} [storySlug]
  */
 
 /**
@@ -57,6 +58,7 @@ const OpenGraph = ({ properties }) => {
     card = 'summary_large_image',
     fbAppId,
     fbPageId,
+    storySlug,
   } = properties
 
   return (
@@ -71,6 +73,7 @@ const OpenGraph = ({ properties }) => {
         key="og:description"
       />
       <meta property="og:site_name" content={site_name} key="og:site_name" />
+      {storySlug && <meta property="dable:item_id" content={storySlug} />}
       {image && (
         <>
           <meta property="og:image" content={image.url} key="og:image" />
@@ -116,6 +119,7 @@ const OpenGraph = ({ properties }) => {
  * @property {string} [title] - head title used to setup title other title related meta
  * @property {string} [description] - head description used to setup description related meta
  * @property {string} [imageUrl] - image url used to setup image related meta
+ * @property {string} [storySlug]
  */
 
 /**
@@ -143,6 +147,7 @@ export default function CustomHead(props) {
     card: 'summary_large_image',
     fbAppId: FB_APP_ID,
     fbPageId: FB_PAGE_ID,
+    storySlug: props.storySlug || '',
   }
 
   return (

@@ -8,6 +8,7 @@ import ExternalNormalStyle from '../../components/external/external-normal-style
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
 import FullScreenAds from '../../components/ads/full-screen-ads'
+import { useRouter } from 'next/router'
 
 /**
  * @typedef {import('../../apollo/fragments/external').External} External
@@ -21,9 +22,15 @@ import FullScreenAds from '../../components/ads/full-screen-ads'
  * @returns {JSX.Element}
  */
 export default function External({ external, headerData }) {
+  const router = useRouter()
+  const { slug } = router.query
   return (
     <Layout
-      head={{ title: `${external?.title}`, imageUrl: external?.thumb }}
+      head={{
+        title: `${external?.title}`,
+        imageUrl: external?.thumb,
+        storySlug: Array.isArray(slug) ? slug?.[0] : slug,
+      }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
