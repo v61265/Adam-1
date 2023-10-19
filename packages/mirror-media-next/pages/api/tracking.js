@@ -1,7 +1,9 @@
 import { Logging } from '@google-cloud/logging'
+
 import {
   GCP_PROJECT_ID,
   GCP_STACKDRIVER_LOG_NAME,
+  GCP_LOGGING_FEATURE_TOGGLE,
 } from '../../config/index.mjs'
 const loggingClient = new Logging({
   projectId: GCP_PROJECT_ID,
@@ -35,7 +37,7 @@ const MOCK_QUERY = {
 
 export default function handler(req, res) {
   try {
-    res.send({ msg: 'Received.' })
+    res.send({ msg: 'Received in mm-next.' })
     const query = MOCK_QUERY
     const logName = req.query.logName || getDefaultLogName()
     const log = loggingClient.log(logName)
@@ -49,9 +51,10 @@ export default function handler(req, res) {
      *   return
      * }
      */
-
-    const entry = log.entry(metadata, query)
-    log.write(entry)
+    if (GCP_LOGGING_FEATURE_TOGGLE === 'on') {
+      const entry = log.entry(metadata, query)
+      log.write(entry)
+    }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(`[ERROR] Client info logging error occurred: ${error}.`)
