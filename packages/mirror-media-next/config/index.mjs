@@ -46,6 +46,9 @@ let GPT_MODE = ''
 // It is safe to expose the configuration of Firebase.
 // See: https://firebase.google.com/docs/projects/api-keys
 let FIREBASE_CONFIG = {}
+
+let GCP_STACKDRIVER_LOG_NAME = ''
+
 switch (ENV) {
   case 'prod':
     SITE_URL = 'www.mirrormedia.mg'
@@ -87,6 +90,7 @@ switch (ENV) {
       appId: '1:814835936704:web:ce5288f6d1c0f71828ec25',
       measurementId: 'G-2FDRC4S37L',
     }
+    GCP_STACKDRIVER_LOG_NAME = 'mirror-media-nuxt-user-behavior'
     break
 
   case 'staging':
@@ -131,6 +135,7 @@ switch (ENV) {
       messagingSenderId: '388524095772',
       appId: '1:388524095772:web:e3739160c042909827a2d9',
     }
+    GCP_STACKDRIVER_LOG_NAME = 'mirror-media-nuxt-user-behavior_staging'
     break
 
   case 'dev':
@@ -176,6 +181,8 @@ switch (ENV) {
       appId: '1:305253456270:web:21f9851dd09f60ebfbacdf',
       measurementId: 'G-EY5CYC602Z',
     }
+    GCP_STACKDRIVER_LOG_NAME = 'mirror-media-nuxt-user-behavior_dev'
+
     break
 
   default:
@@ -218,6 +225,7 @@ switch (ENV) {
       appId: '1:305253456270:web:21f9851dd09f60ebfbacdf',
       measurementId: 'G-EY5CYC602Z',
     }
+    GCP_STACKDRIVER_LOG_NAME = 'mirror-media-nuxt-user-behavior_local'
 }
 
 export {
@@ -255,4 +263,5 @@ export {
   GOOGLE_SHEETS_CLIENT_EMAIL,
   GOOGLE_SHEETS_CLIENT_ID,
   GOOGLE_SHEET_SLOT_ID,
+  GCP_STACKDRIVER_LOG_NAME,
 }
