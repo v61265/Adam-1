@@ -29,7 +29,6 @@ export default function Layout({ head, header, footer, children }) {
         title={head?.title}
         description={head?.description}
         imageUrl={head?.imageUrl}
-        storySlug={head?.storySlug}
       />
       <ShareHeader pageLayoutType={header.type} headerData={header.data} />
       {children}
