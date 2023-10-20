@@ -3,7 +3,28 @@ import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
 import dynamic from 'next/dynamic'
-
+import { sendLog } from '../utils/log/send-log'
+const MOCK_QUERY = {
+  browser: { name: 'Chrome', version: '118.0.0.0' },
+  'is-in-app-browser': false,
+  'user-agent':
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
+  'client-os': { name: 'macOS', version: '10.15.7' },
+  'curr-url': 'http://localhost:3000/',
+  datetime: '2023.10.19 17:11:06',
+  referrer: '',
+  'target-text': '',
+  'target-window-size': { width: 1905, height: 938 },
+  'client-id': 'mock-client-id',
+  'current-runtime-start': '2023.10.19 17:11:06',
+  'session-id': 'mock-session-id',
+  category: 'whole-site',
+  description: '',
+  'event-type': 'pageview',
+  'page-type': 'index',
+  'member-info-firebase': { userSignInInfo: {}, user: {} },
+  'member-info-israfel': { basicInfo: {} },
+}
 import {
   ENV,
   API_TIMEOUT,
@@ -136,6 +157,13 @@ export default function Home({
       }}
     >
       <IndexContainer>
+        <button
+          onClick={() => {
+            sendLog(MOCK_QUERY)
+          }}
+        >
+          sendlog
+        </button>
         <GPT_Placeholder>
           {shouldShowAd && <StyledGPTAd_HD pageKey="home" adKey="HD" />}
         </GPT_Placeholder>
@@ -186,6 +214,16 @@ export async function getServerSideProps({ res, req }) {
 
   const headers = req?.headers
   const traceHeader = headers?.['x-cloud-trace-context']
+  let ip = req.headers['x-real-ip']
+  if (!ip) {
+    const forwardedFor = req.headers['x-forwarded-for']
+    if (Array.isArray(forwardedFor)) {
+      ip = forwardedFor.at(0)
+    } else {
+      ip = forwardedFor?.split(',').at(0) ?? 'Unknown'
+    }
+  }
+  console.log(ip)
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
     const [trace] = traceHeader.split('/')
