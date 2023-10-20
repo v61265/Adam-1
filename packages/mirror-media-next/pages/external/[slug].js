@@ -9,6 +9,7 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import Layout from '../../components/shared/layout'
 import FullScreenAds from '../../components/ads/full-screen-ads'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 /**
  * @typedef {import('../../apollo/fragments/external').External} External
@@ -25,18 +26,25 @@ export default function External({ external, headerData }) {
   const router = useRouter()
   const { slug } = router.query
   return (
-    <Layout
-      head={{
-        title: `${external?.title}`,
-        imageUrl: external?.thumb,
-        storySlug: Array.isArray(slug) ? slug?.[0] : slug,
-      }}
-      header={{ type: 'default', data: headerData }}
-      footer={{ type: 'default' }}
-    >
-      <ExternalNormalStyle external={external} />
-      <FullScreenAds />
-    </Layout>
+    <>
+      <Head>
+        <meta
+          property="dable:item_id"
+          content={Array.isArray(slug) ? slug?.[0] : slug}
+        />
+      </Head>
+      <Layout
+        head={{
+          title: `${external?.title}`,
+          imageUrl: external?.thumb,
+        }}
+        header={{ type: 'default', data: headerData }}
+        footer={{ type: 'default' }}
+      >
+        <ExternalNormalStyle external={external} />
+        <FullScreenAds />
+      </Layout>
+    </>
   )
 }
 

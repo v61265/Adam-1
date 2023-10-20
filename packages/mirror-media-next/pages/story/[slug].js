@@ -244,6 +244,7 @@ export default function Story({ postData, headerData, storyLayoutType }) {
           slug={slug}
           shouldCreateAmpHtmlLink={state === 'published' && !isAdvertised}
         ></CanonicalLink>
+        <meta property="dable:item_id" content={slug} />
       </Head>
       <JsonLdsScript postData={postData} currentPage="/story/"></JsonLdsScript>
 
@@ -256,7 +257,6 @@ export default function Story({ postData, headerData, storyLayoutType }) {
           imageUrl:
             getResizedUrl(postData.og_image?.resized) ||
             getResizedUrl(postData.heroImage?.resized),
-          storySlug: slug,
         }}
         header={{ type: 'empty' }}
         footer={{ type: 'empty' }}
