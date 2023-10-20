@@ -31,6 +31,7 @@ export default function External({ external, headerData }) {
         <meta
           property="dable:item_id"
           content={Array.isArray(slug) ? slug?.[0] : slug}
+          key="dable:item_id"
         />
       </Head>
       <Layout
