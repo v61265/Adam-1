@@ -1,5 +1,5 @@
 import { Logging } from '@google-cloud/logging'
-
+import requestIp from 'request-ip'
 /**
  * @typedef {import('next').NextApiRequest} Req
  * @typedef {import('next').NextApiResponse} Res
@@ -52,7 +52,8 @@ export default function handler(req, res) {
     const logName = getDefaultLogName()
     const log = loggingClient.log(logName)
     const metadata = { resource: { type: 'global' } }
-    const clientIp = req?.socket?.remoteAddress || ''
+    const clientIp = requestIp.getClientIp(req)
+
     query.ip = clientIp
 
     /*
