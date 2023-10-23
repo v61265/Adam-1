@@ -8,6 +8,7 @@ import * as gtag from '../utils/gtag'
 import TagManager from 'react-gtm-module'
 import { GTM_ID } from '../config/index.mjs'
 import WholeSiteScript from '../components/whole-site-script'
+import UserBehaviorLogger from '../components/shared/user-behavior-logger'
 import Script from 'next/script'
 
 import { MembershipProvider } from '../context/membership'
@@ -35,6 +36,10 @@ function MyApp({ Component, pageProps }) {
             {/* some script may need member type to decide render or not,
            make sure the WholeSiteScript component is placed inside contextProvider or other provider  */}
             <WholeSiteScript />
+            {/* Since user behavior log need member info, make sure the
+            UserBehaviorLogger component is placed inside contextProvider or
+            other provider */}
+            <UserBehaviorLogger />
             <Component {...pageProps} />
           </ThemeProvider>
         </ApolloProvider>
