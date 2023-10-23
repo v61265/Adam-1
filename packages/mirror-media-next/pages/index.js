@@ -214,16 +214,7 @@ export async function getServerSideProps({ res, req }) {
 
   const headers = req?.headers
   const traceHeader = headers?.['x-cloud-trace-context']
-  let ip = req.headers['x-real-ip']
-  if (!ip) {
-    const forwardedFor = req.headers['x-forwarded-for']
-    if (Array.isArray(forwardedFor)) {
-      ip = forwardedFor.at(0)
-    } else {
-      ip = forwardedFor?.split(',').at(0) ?? 'Unknown'
-    }
-  }
-  console.log(ip)
+
   let globalLogFields = {}
   if (traceHeader && !Array.isArray(traceHeader)) {
     const [trace] = traceHeader.split('/')
