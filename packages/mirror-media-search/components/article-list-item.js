@@ -110,7 +110,7 @@ export default function ArticleListItem({ item, index, searchTerms }) {
     <ItemWrapper href={item.link} target="_blank" onClick={onClickHandler}>
       <ImageContainer>
         <Image
-          images={{ original: item.pagemap.cse_image[0].src }}
+          images={{ original: item.pagemap.cse_image?.[0]?.src }}
           alt={item.title}
           loadingImage="/images/loading.gif"
           defaultImage="/images/default-og-img.png"

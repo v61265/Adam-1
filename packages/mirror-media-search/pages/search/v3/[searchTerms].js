@@ -105,7 +105,7 @@ export default function Search({ searchResult }) {
           </CommaEnd>
         </SearchTitle>
       </SearchTitleWrapper>
-      <SearchedArticles searchResult={searchResult} />
+      {searchResult?.items && <SearchedArticles searchResult={searchResult} />}
     </SearchContainer>
   )
 }
