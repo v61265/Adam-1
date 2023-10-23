@@ -80,7 +80,7 @@ const CommaEnd = styled.span`
 `
 
 export default function Search({ searchResult }) {
-  const searchTerms = searchResult?.queries?.request[0].exactTerms ?? ''
+  const searchTerms = searchResult?.queries?.request?.[0]?.exactTerms ?? ''
 
   return (
     <SearchContainer>
