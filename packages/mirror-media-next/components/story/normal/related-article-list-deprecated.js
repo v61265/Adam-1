@@ -37,11 +37,10 @@ const Wrapper = styled.section`
   margin: 16px auto 0;
   h2 {
     font-size: 21px;
-    line-height: 150%;
-    margin: 0 auto 16px;
+    line-height: 31.5px;
+    margin: 0 auto 20px;
     font-weight: 600;
     text-align: center;
-    font-size: 21px;
   }
   ${({ theme }) => theme.breakpoint.md} {
     margin-top: 24px;
@@ -52,65 +51,45 @@ const Wrapper = styled.section`
 `
 
 const Article = styled.figure`
-  height: 92px;
-  font-size: 15px;
-  line-height: 1.3;
+  max-width: 280px;
+  font-size: 18px;
+  line-height: 1.5;
   color: black;
   font-weight: 400;
-  flex-direction: row-reverse;
-  justify-content: space-between;
-  align-items: center;
-  color: #808080;
-  background-color: #eeeeee;
-  gap: 16px;
+  .article-image {
+    height: 186.67px;
+  }
+
   margin: 0 auto;
   display: flex;
-  position: relative;
-  .article-image {
-    width: 100px;
-    min-width: 100px;
-    max-width: 100px;
-    height: 66px;
-    margin-right: 16px;
-  }
-  .article-title {
-    position: relative;
-    padding: 0 0 0 18px;
-  }
-  &::before {
-    position: absolute;
-    content: '';
-    width: 10px;
-    height: 100%;
-    background-color: #808080;
-    left: 0;
-    top: 0;
-  }
+  flex-direction: column;
+  gap: 12px;
   ${({ theme }) => theme.breakpoint.md} {
     max-width: 640px;
     height: 90px;
     flex-direction: row-reverse;
     justify-content: space-between;
-    align-items: start;
     color: #808080;
     background-color: #eeeeee;
     gap: 20px;
-    font-size: 18px;
     .article-image {
       width: 87px;
       min-width: 87px;
       max-width: 87px;
       height: 100%;
-      margin-right: 0;
     }
     .article-title {
       position: relative;
       padding: 16px 0 0 25.75px;
-      display: flex;
-      justify-content: center;
-    }
-    &::before {
-      width: 7.72px;
+      &::before {
+        position: absolute;
+        content: '';
+        width: 7.72px;
+        height: 100%;
+        background-color: #808080;
+        left: 0;
+        top: 0;
+      }
     }
   }
   ${({ theme }) => theme.breakpoint.xl} {
@@ -128,13 +107,14 @@ const Article = styled.figure`
 `
 
 const ArticleWrapper = styled.ul`
-  background: transparent;
-  padding: 0 10px;
+  background: #eeeeee;
+  padding: 48px 10px;
   display: flex;
   flex-direction: column;
   margin-bottom: 24px;
-  gap: 12px;
+  gap: 24px;
   ${({ theme }) => theme.breakpoint.md} {
+    background: transparent;
     padding: 0;
     gap: 20px;
   }
@@ -163,13 +143,9 @@ const StyledFigcaption = styled.figcaption`
   > a {
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* number of lines to show */
-    line-clamp: 3;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
     -webkit-box-orient: vertical;
-    ${({ theme }) => theme.breakpoint.md} {
-      -webkit-line-clamp: 2; /* number of lines to show */
-      line-clamp: 2;
-    }
   }
 `
 
@@ -180,7 +156,7 @@ const StyledFigcaption = styled.figcaption`
  * @param {boolean} [props.hiddenAdvertised] - CMS Posts「google廣告違規」
  * @returns {JSX.Element}
  */
-export default function RelatedArticleList({
+export default function RelatedArticleListDeprecated({
   relateds,
   hiddenAdvertised = false,
 }) {
