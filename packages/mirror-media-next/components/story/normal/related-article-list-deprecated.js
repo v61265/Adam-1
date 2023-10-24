@@ -50,7 +50,7 @@ const Wrapper = styled.section`
   }
 `
 
-const Article = styled.figure`
+const ArticleDeprecated = styled.figure`
   max-width: 280px;
   font-size: 18px;
   line-height: 1.5;
@@ -106,8 +106,7 @@ const Article = styled.figure`
   }
 `
 
-const ArticleWrapper = styled.ul`
-  background: #eeeeee;
+const ArticleWrapperDeprecated = styled.ul`
   padding: 48px 10px;
   display: flex;
   flex-direction: column;
@@ -166,10 +165,10 @@ export default function RelatedArticleListDeprecated({
   const shouldShowAd = useDisplayAd(hiddenAdvertised)
 
   const relatedsArticleJsx = relateds.length ? (
-    <ArticleWrapper>
+    <ArticleWrapperDeprecated>
       {relateds.map((related) => (
         <li key={related.id}>
-          <Article>
+          <ArticleDeprecated>
             <Link
               href={`/story/${related.slug}`}
               target="_blank"
@@ -198,17 +197,21 @@ export default function RelatedArticleListDeprecated({
                 {related.title}
               </Link>
             </StyledFigcaption>
-          </Article>
+          </ArticleDeprecated>
         </li>
       ))}
-    </ArticleWrapper>
+    </ArticleWrapperDeprecated>
   ) : null
 
   const advertisementJsx = shouldShowAd ? (
     <AdvertisementWrapper>
       {/* micro ad */}
       {MICRO_AD_UNITS.STORY[device].map((unit) => (
-        <StyledMicroAd key={unit.name} unitId={unit.id} microAdType="STORY" />
+        <StyledMicroAd
+          key={unit.name}
+          unitId={unit.id}
+          microAdType="STORY_DEPRECATED"
+        />
       ))}
       {/* pop-in ad */}
       <StyledPopInAdRelated />
