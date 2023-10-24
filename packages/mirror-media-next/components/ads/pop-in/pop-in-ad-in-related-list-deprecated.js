@@ -12,45 +12,39 @@ const StyledPopInAd = styled(PopInAd)`
   #_popIn_standard_mobile,
   #_popIn_standard_pc {
     ._popIn_recommend_article {
-      height: 92px;
+      margin: 0px auto;
+      flex-direction: column;
+      gap: 12px;
+      background: none;
+      max-width: 280px;
+      font-size: 18px;
+      line-height: 1.5;
       color: black;
       font-weight: 400;
-      flex-direction: row-reverse;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #eeeeee;
-      gap: 16px;
-      margin: 0 auto;
-      display: flex;
-      position: relative;
 
       ${({ theme }) => theme.breakpoint.md} {
+        flex-direction: row-reverse;
+        justify-content: space-between;
         gap: 20px;
         max-width: 640px;
         height: 90px;
         color: #808080;
         background-color: #eeeeee;
-        align-items: start;
-        gap: 20px;
-        font-size: 18px;
       }
     }
 
     ._popIn_recommend_art_img {
+      width: 100%;
       order: unset;
+      height: 186.67px;
+      position: relative;
       padding: 0px;
-      width: 100px;
-      min-width: 100px;
-      max-width: 100px;
-      height: 66px;
-      margin-right: 16px;
 
       ${({ theme }) => theme.breakpoint.md} {
         width: 87px;
-        min-width: 87px;
+        height: 90px;
         max-width: 87px;
-        height: 100%;
-        margin-right: 0;
+        max-height: 90px;
       }
 
       ${({ theme }) => theme.breakpoint.xl} {
@@ -61,6 +55,7 @@ const StyledPopInAd = styled(PopInAd)`
       a {
         width: 100%;
         height: 100%;
+        max-height: 186.67px;
 
         ${({ theme }) => theme.breakpoint.md} {
           max-height: 90px;
@@ -73,10 +68,10 @@ const StyledPopInAd = styled(PopInAd)`
         align-items: center;
         justify-content: center;
         font-style: normal;
-        font-weight: 500;
-        font-size: 14px;
+        font-weight: 600;
+        font-size: 18px;
         line-height: 1;
-        padding: 4px;
+        padding: 8px;
         background: #bcbcbc;
         color: #ffffff;
         position: absolute;
@@ -84,64 +79,44 @@ const StyledPopInAd = styled(PopInAd)`
         left: 0;
 
         ${({ theme }) => theme.breakpoint.md} {
+          font-weight: 600;
           font-size: 12px;
           padding: 4px;
           line-height: 14px;
-          font-weight: 300;
         }
       }
     }
 
     ._popIn_recommend_art_title {
       width: 100%;
+      padding: 0;
       margin: 0;
-      position: relative;
-      padding: 0 0 0 18px;
 
       ${({ theme }) => theme.breakpoint.md} {
-        padding: 0 0 0 25.75px;
-        height: 100%;
-        align-items: center;
+        padding: 0 20px 0 25.75px;
       }
 
       ${({ theme }) => theme.breakpoint.xl} {
         padding: 0 20px 0 40px;
       }
 
-      // title
       a {
-        width: 100%;
+        font-size: 18px;
+        line-height: 1.5;
+        color: black;
         font-weight: 400;
-        color: #808080 !important;
-        font-size: 15px;
-        line-height: 1.3;
-        overflow: hidden;
-        display: -webkit-box !important;
-        -webkit-line-clamp: 3; /* number of lines to show */
-        line-clamp: 3;
-        -webkit-box-orient: vertical;
-        white-space: wrap;
+        max-height: none;
 
         ${({ theme }) => theme.breakpoint.md} {
+          color: #808080;
+          padding: 0;
           margin: 0;
-          position: relative;
-          display: flex;
-          align-items: center;
-          -webkit-line-clamp: 2; /* number of lines to show */
-          line-clamp: 2;
-          font-size: 18px;
         }
       }
     }
 
     ._popIn_recommend_article::before {
-      position: absolute;
-      content: '';
-      width: 10px;
-      height: 100%;
-      background-color: #808080;
-      left: 0;
-      top: 0;
+      display: none;
 
       ${({ theme }) => theme.breakpoint.md} {
         display: block;
