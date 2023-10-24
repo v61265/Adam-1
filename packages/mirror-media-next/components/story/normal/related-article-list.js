@@ -91,7 +91,6 @@ const Article = styled.figure`
     height: 90px;
     flex-direction: row-reverse;
     justify-content: space-between;
-    align-items: start;
     color: #808080;
     background-color: #eeeeee;
     gap: 20px;
@@ -105,7 +104,7 @@ const Article = styled.figure`
     }
     .article-title {
       position: relative;
-      padding: 16px 0 0 25.75px;
+      padding: 0 0 0 25.75px;
       display: flex;
       justify-content: center;
     }
@@ -119,7 +118,7 @@ const Article = styled.figure`
       max-width: 135px;
     }
     .article-title {
-      padding: 16px 0 0 40px;
+      padding: 0 0 0 40px;
       &::before {
         width: 10px;
       }

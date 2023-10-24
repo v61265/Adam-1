@@ -17,7 +17,10 @@ const StyledMicroAd = dynamic(
 )
 
 const StyledPopInAdRelated = dynamic(
-  () => import('../../../components/ads/pop-in/pop-in-ad-in-related-list'),
+  () =>
+    import(
+      '../../../components/ads/pop-in/pop-in-ad-in-related-list-deprecated'
+    ),
   {
     ssr: false,
   }

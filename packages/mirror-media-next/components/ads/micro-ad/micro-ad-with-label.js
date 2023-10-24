@@ -486,11 +486,25 @@ const typeStory = css`
       background: none !important;
       position: relative;
       padding: 0 0 0 18px;
+      overflow: hidden;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 3; /* number of lines to show */
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
       ${({ theme }) => theme.breakpoint.md} {
         position: relative;
         display: flex;
         align-items: center;
-        padding: 16px 0 0 25.75px;
+        padding: 0 0 0 25.75px;
+        -webkit-line-clamp: 2; /* number of lines to show */
+        line-clamp: 2;
+        a {
+          display: block;
+          height: 90px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
       }
     }
 
@@ -558,7 +572,7 @@ const typeStory = css`
             bottom: 0;
             right: 103px;
             font-style: normal;
-            font-weight: 600;
+            font-weight: 300;
             font-size: 12px;
             line-height: 14px;
             padding: 4px;
