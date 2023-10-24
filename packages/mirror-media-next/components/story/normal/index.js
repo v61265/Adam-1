@@ -4,6 +4,7 @@
 import { useCallback } from 'react'
 
 import styled, { css } from 'styled-components'
+import { RELATED_POST_FEATURE_TOGGLE } from '../../../config/index.mjs'
 import Link from 'next/link'
 import axios from 'axios'
 import dynamic from 'next/dynamic'
@@ -15,6 +16,7 @@ import SocialNetworkService from '../../../components/story/normal/social-networ
 import SupportMirrorMediaBanner from '../shared/support-mirrormedia-banner'
 import MagazineInviteBanner from '../../../components/story/shared/magazine-invite-banner'
 import RelatedArticleList from '../../../components/story/normal/related-article-list'
+import RelatedArticleListDeprecated from '../normal/related-article-list-deprecated'
 import GPTFloatingAd from '../../../components/ads/gpt/gpt-floating-ad'
 import ArticleContent from './article-content'
 import HeroImageAndVideo from './hero-image-and-video'
@@ -644,10 +646,17 @@ export default function StoryNormalStyle({
           <SupportMirrorMediaBanner />
           <SocialNetworkServiceSmall />
 
-          <RelatedArticleList
-            relateds={relatedsWithOrdered}
-            hiddenAdvertised={hiddenAdvertised}
-          />
+          {RELATED_POST_FEATURE_TOGGLE === 'on' ? (
+            <RelatedArticleList
+              relateds={relatedsWithOrdered}
+              hiddenAdvertised={hiddenAdvertised}
+            />
+          ) : (
+            <RelatedArticleListDeprecated
+              relateds={relatedsWithOrdered}
+              hiddenAdvertised={hiddenAdvertised}
+            />
+          )}
 
           {shouldShowAd && (
             <StyledGPTAd_MB_AT3 pageKey={pageKeyForGptAd} adKey="MB_AT3" />
