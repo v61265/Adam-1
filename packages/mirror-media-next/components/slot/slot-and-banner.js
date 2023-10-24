@@ -115,7 +115,6 @@ export default function Slot() {
   const { width } = useWindowDimensions()
   const isMobile = useMemo(() => width < 1200, [width])
   const [isHover, setIsHover] = useState(false)
-  console.log({ isLogInProcessFinished })
 
   const [status, setStatus] = useState({
     loading: true,
@@ -353,7 +352,16 @@ export default function Slot() {
         </Banner>
       )
     }
-  }, [status, winPrize, isLoggedIn, router, width, isHover, isPlaying])
+  }, [
+    status,
+    winPrize,
+    isLoggedIn,
+    router,
+    width,
+    isHover,
+    isPlaying,
+    isLogInProcessFinished,
+  ])
 
   useEffect(() => console.log({ winPrize }), [winPrize])
 
