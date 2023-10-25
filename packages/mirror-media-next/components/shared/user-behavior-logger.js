@@ -76,7 +76,7 @@ export default function UserBehaviorLogger({ isMemberArticle = false }) {
       router.events.off('beforeHistoryChange', beforeHistoryChangeEvent)
     }
   }, [router, pathname, isLogInProcessFinished, userBehaviorLogInfoPayload])
-  //scroll event
+  //scroll-to-80% event
   useEffect(() => {
     let ignore = false
 
@@ -96,7 +96,7 @@ export default function UserBehaviorLogger({ isMemberArticle = false }) {
       const isScrollToBottom = detectIsScrollTo80Percent()
       if (isScrollToBottom) {
         const info = generateUserBehaviorLogInfo(
-          'scroll',
+          'scroll-to-80%',
           pathname,
           userBehaviorLogInfoPayload
         )
