@@ -54,7 +54,7 @@ export default function handler(req, res) {
     const metadata = { resource: { type: 'global' } }
     const clientIp = requestIp.getClientIp(req)
 
-    query.ip = clientIp
+    query.clientInfo.ip = clientIp
 
     /*
      * if (config.ENABLE_CLOUD_LOGGING === false) {

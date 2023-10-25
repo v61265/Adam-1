@@ -15,6 +15,7 @@ import {
 } from '../../apollo/query/posts'
 import StoryNormalStyle from '../../components/story/normal'
 import Layout from '../../components/shared/layout'
+import UserBehaviorLogger from '../../components/shared/user-behavior-logger'
 import {
   convertDraftToText,
   getResizedUrl,
@@ -262,6 +263,7 @@ export default function Story({ postData, headerData, storyLayoutType }) {
         footer={{ type: 'empty' }}
       >
         <>
+          <UserBehaviorLogger isMemberArticle={isMember} />
           {!storyLayoutJsx && (
             <Loading>
               <Image src={Skeleton} alt="loading..."></Image>
