@@ -425,7 +425,7 @@ const typeStory = css`
     align-items: center;
     color: #808080;
     background-color: #eeeeee;
-    gap: 16px;
+    gap: 12px;
     margin: 0 auto;
     display: flex;
     position: relative;

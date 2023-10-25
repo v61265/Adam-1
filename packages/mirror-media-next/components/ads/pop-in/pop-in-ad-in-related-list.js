@@ -19,7 +19,7 @@ const StyledPopInAd = styled(PopInAd)`
       justify-content: space-between;
       align-items: center;
       background-color: #eeeeee;
-      gap: 16px;
+      gap: 12px;
       margin: 0 auto;
       display: flex;
       position: relative;
@@ -97,6 +97,11 @@ const StyledPopInAd = styled(PopInAd)`
       margin: 0;
       position: relative;
       padding: 0 0 0 18px;
+      overflow: hidden;
+      display: -webkit-box !important;
+      -webkit-line-clamp: 3; /* number of lines to show */
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
 
       ${({ theme }) => theme.breakpoint.md} {
         padding: 0 0 0 25.75px;
@@ -110,6 +115,7 @@ const StyledPopInAd = styled(PopInAd)`
 
       // title
       a {
+        max-height: 100%;
         width: 100%;
         font-weight: 400;
         color: #808080 !important;
