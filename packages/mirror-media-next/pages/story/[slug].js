@@ -101,6 +101,7 @@ export default function Story({ postData, headerData, storyLayoutType }) {
     trimmedContent = null,
     hiddenAdvertised = false,
     isAdvertised = false,
+    sections,
   } = postData
   /**
    * The logic for rendering the article content:
@@ -238,6 +239,12 @@ export default function Story({ postData, headerData, storyLayoutType }) {
   const storyLayoutJsx = renderStoryLayout()
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
+
+  // use to set meta section:name, section:slug
+  const section = isMember
+    ? { name: '會員專區', slug: 'member' }
+    : sections?.[0]
+
   return (
     <>
       <Head>
@@ -246,9 +253,18 @@ export default function Story({ postData, headerData, storyLayoutType }) {
           shouldCreateAmpHtmlLink={state === 'published' && !isAdvertised}
         ></CanonicalLink>
         <meta property="dable:item_id" content={slug} key="dable:item_id" />
+        {section?.name && (
+          <meta name="section:name" content={section.name} key="section:name" />
+        )}
+        {section?.slug && (
+          <meta
+            name="section:slug"
+            content={section.slug}
+            key={'section:slug'}
+          />
+        )}
       </Head>
       <JsonLdsScript postData={postData} currentPage="/story/"></JsonLdsScript>
-
       <Layout
         head={{
           title: `${title}`,
@@ -262,20 +278,18 @@ export default function Story({ postData, headerData, storyLayoutType }) {
         header={{ type: 'empty' }}
         footer={{ type: 'empty' }}
       >
-        <>
-          <UserBehaviorLogger isMemberArticle={isMember} />
-          {!storyLayoutJsx && (
-            <Loading>
-              <Image src={Skeleton} alt="loading..."></Image>
-            </Loading>
-          )}
-          {storyLayoutJsx}
-          <WineWarning categories={categories} />
-          <AdultOnlyWarning isAdult={isAdult} />
-          {noCategoryOfWineSlug && (
-            <FullScreenAds hiddenAdvertised={hiddenAdvertised} />
-          )}
-        </>
+        <UserBehaviorLogger isMemberArticle={isMember} />
+        {!storyLayoutJsx && (
+          <Loading>
+            <Image src={Skeleton} alt="loading..."></Image>
+          </Loading>
+        )}
+        {storyLayoutJsx}
+        <WineWarning categories={categories} />
+        <AdultOnlyWarning isAdult={isAdult} />
+        {noCategoryOfWineSlug && (
+          <FullScreenAds hiddenAdvertised={hiddenAdvertised} />
+        )}
       </Layout>
     </>
   )
