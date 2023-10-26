@@ -1,9 +1,36 @@
 import Bowser from 'bowser'
 import { transformTimeDataIntoSlashFormat } from '../../index'
+
+/**
+ * @typedef {'pageview' | 'exit' | 'scroll-to-80%' | 'click'} EventType
+ * @typedef {import('next/router').NextRouter['pathname']} Pathname
+ *
+ * @typedef {import('../../../context/membership').MemberType} MemberType
+ *
+ * @typedef {Object} Payload
+ * @property {MemberType} memberType - type of member
+ * @property {string} userEmail - member email
+ * @property {string} firebaseId - member firebase id
+ * @property {boolean} isMemberArticle - whether is member article. It will only be `true` if it is on story page and is a member article.
+ */
+
+/**
+ * Generate information for user behavior log.
+ * Caution: Since this function have use Web API, such as `window.location.href`, `window.navigator.userAgent`,
+ * this function should be ONLY executed at client-side.
+ * @param {EventType} eventType
+ * @param {Pathname} pathname
+ * @param {Payload} payload
+ */
 const generateUserBehaviorLogInfo = (
   eventType,
   pathname = '',
-  payload = {}
+  payload = {
+    memberType: 'not-member',
+    userEmail: '',
+    firebaseId: '',
+    isMemberArticle: false,
+  }
 ) => {
   const {
     memberType = 'not-member',
@@ -86,15 +113,21 @@ function getWindowSizeInfo() {
     height: document.documentElement.clientHeight || document.body.clientHeight,
   }
 }
-function getFormattedPageType(pathname = '', isPremiumStory = false) {
+/**
+ *
+ * @param {Pathname} pathname
+ * @param {boolean} isMemberArticle
+ * @returns
+ */
+function getFormattedPageType(pathname = '', isMemberArticle = false) {
   switch (true) {
     case pathname.startsWith('/') && pathname.length === 1:
       return 'index'
 
-    case pathname.startsWith('/story/') && isPremiumStory:
+    case pathname.startsWith('/story/') && isMemberArticle:
       return 'premium-story'
 
-    case pathname.startsWith('/story/') && !isPremiumStory:
+    case pathname.startsWith('/story/') && !isMemberArticle:
       return 'story'
 
     case pathname.startsWith('/external/'):

@@ -44,6 +44,8 @@ function MyApp({ Component, pageProps }) {
             {/* Since user behavior log need member info, make sure the
             UserBehaviorLogger component is placed inside contextProvider or
             other provider */}
+            {/* Story page has its own UserBehaviorLogger.
+            In order to avoiding send log repeatedly, make sure not add UserBehaviorLogger components here when at story page. */}
             {!isStoryPage && <UserBehaviorLogger />}
             <Component {...pageProps} />
           </ThemeProvider>
