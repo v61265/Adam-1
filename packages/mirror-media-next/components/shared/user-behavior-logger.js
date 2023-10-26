@@ -38,8 +38,14 @@ import { generateUserBehaviorLogInfo } from '../../utils/log/user-behavior-log'
  * @param {boolean} [props.isMemberArticle = false] Whether is a member-only article. Optional, value only existed when this components used at story-page.
  */
 export default function UserBehaviorLogger({ isMemberArticle = false }) {
+  //Since `usePathname()` is recommend to use at Next.js 13 App route, we use `useRouter` to get pathname instead to prevent unexpected error.
   const router = useRouter()
-  const { pathname } = router
+  const { asPath } = router
+  const isStoryPage = asPath.startsWith('/story/')
+  /**
+   * Story page need specific pathname, such as `/story/20231026-this-is-an-story`, other page only need which page is, such as `/section/[slug]`.
+   */
+  const pathname = isStoryPage ? asPath?.split('?')?.[0] : router.pathname
 
   const {
     isLogInProcessFinished,
