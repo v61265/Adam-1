@@ -416,7 +416,7 @@ const typeStory = css`
   // Mobile: Micro AD container
   #compass-fit-widget-content {
     height: 92px;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.3;
     color: black;
     font-weight: 400;

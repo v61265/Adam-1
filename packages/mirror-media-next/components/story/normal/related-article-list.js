@@ -53,7 +53,7 @@ const Wrapper = styled.section`
 
 const Article = styled.figure`
   height: 92px;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.3;
   color: black;
   font-weight: 400;

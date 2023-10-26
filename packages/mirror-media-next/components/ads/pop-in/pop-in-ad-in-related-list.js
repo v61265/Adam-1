@@ -119,7 +119,7 @@ const StyledPopInAd = styled(PopInAd)`
         width: 100%;
         font-weight: 400;
         color: #808080 !important;
-        font-size: 15px;
+        font-size: 14px;
         line-height: 1.3;
         overflow: hidden;
         display: -webkit-box !important;
