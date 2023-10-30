@@ -247,7 +247,7 @@ const typeStoryDeprecated = css`
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
 
     ${({ theme }) => theme.breakpoint.md} {
       max-width: 640px;
@@ -415,8 +415,8 @@ const typeStory = css`
 
   // Mobile: Micro AD container
   #compass-fit-widget-content {
-    height: 92px;
-    font-size: 14px;
+    height: 74px;
+    font-size: 15px;
     line-height: 1.3;
     color: black;
     font-weight: 400;
@@ -425,7 +425,7 @@ const typeStory = css`
     align-items: center;
     color: #808080;
     background-color: #eeeeee;
-    gap: 12px;
+    gap: 8px;
     margin: 0 auto;
     display: flex;
     position: relative;
@@ -433,7 +433,7 @@ const typeStory = css`
     &::before {
       position: absolute;
       content: '';
-      width: 10px;
+      width: 8px;
       height: 100%;
       background-color: #808080;
       left: 0;
@@ -458,11 +458,10 @@ const typeStory = css`
 
     // Mobile: AD Image
     figure {
-      width: 100px;
-      min-width: 100px;
-      max-width: 100px;
-      height: 66px;
-      margin-right: 16px;
+      width: 112px;
+      min-width: 112px;
+      max-width: 112px;
+      height: 74px;
       position: relative;
 
       img {
