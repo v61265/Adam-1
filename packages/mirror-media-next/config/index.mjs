@@ -49,7 +49,6 @@ let GPT_MODE = ''
 let FIREBASE_CONFIG = {}
 
 let GCP_STACKDRIVER_LOG_NAME = ''
-let RELATED_POST_FEATURE_TOGGLE = 'off'
 
 switch (ENV) {
   case 'prod':
@@ -94,7 +93,6 @@ switch (ENV) {
       measurementId: 'G-2FDRC4S37L',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior'
-    RELATED_POST_FEATURE_TOGGLE = 'off'
     break
 
   case 'staging':
@@ -141,7 +139,6 @@ switch (ENV) {
       appId: '1:388524095772:web:e3739160c042909827a2d9',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_staging'
-    RELATED_POST_FEATURE_TOGGLE = 'off'
     break
 
   case 'dev':
@@ -189,7 +186,6 @@ switch (ENV) {
       measurementId: 'G-EY5CYC602Z',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_dev'
-    RELATED_POST_FEATURE_TOGGLE = 'on'
 
     break
 
@@ -235,7 +231,6 @@ switch (ENV) {
       measurementId: 'G-EY5CYC602Z',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_local'
-    RELATED_POST_FEATURE_TOGGLE = 'on'
 }
 
 export {
@@ -275,5 +270,4 @@ export {
   GOOGLE_SHEETS_CLIENT_ID,
   GOOGLE_SHEET_SLOT_ID,
   GCP_STACKDRIVER_LOG_NAME,
-  RELATED_POST_FEATURE_TOGGLE,
 }
