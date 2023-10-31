@@ -195,7 +195,7 @@ const Section = styled.div`
       display: block;
       position: absolute;
       content: '';
-      background-color: ${({ sectionSlug }) => sectionSlug && sectionColor};
+      background-color: ${sectionColor};
       left: -4px;
       top: 50%;
       transform: translateY(-50%);
