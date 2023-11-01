@@ -24,21 +24,27 @@ app.use(
     selfHandleResponse: true,
     onProxyRes: responseInterceptor(async (responseBuffer) => {
       const response = responseBuffer.toString('utf8') // convert buffer to string
+      const responseRemoveAmpProhibitAttributes = response.replace(
+        /contenteditable|spellcheck/g,
+        (match) => `data-${match}`
+      )
 
-      const dom = new JSDOM(response)
+      const dom = new JSDOM(responseRemoveAmpProhibitAttributes)
       const doc = dom.window.document
       const styleTags = doc.querySelectorAll('body style')
       const scriptTags = doc.querySelectorAll('body script')
 
       if (styleTags.length || scriptTags.length) {
-        const head = doc.querySelector('head')
+        let head = doc.querySelector('head')
+        if (!head) {
+          head = doc.createElement('head')
+          doc.documentElement.insertBefore(head, doc.body)
+        }
 
         // 找到 <head> 標籤
         styleTags?.forEach((styleTag) => {
-          // 移除每個 <style> 標籤
-          styleTag.remove()
-          // 將每個 <style> 標籤添加到 <head> 標籤中
           head.appendChild(styleTag)
+          styleTag.remove()
         })
         scriptTags?.forEach((scriptTag) => {
           scriptTag.remove()
@@ -49,10 +55,7 @@ app.use(
       const updatedResponse = dom.serialize()
 
       // manipulate html to remove all amp prohibit attributes
-      return updatedResponse.replace(
-        /contenteditable|spellcheck/g,
-        (match) => `data-${match}`
-      )
+      return Buffer.from(updatedResponse, 'utf8')
     }),
   })
 )
