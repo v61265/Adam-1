@@ -47,7 +47,7 @@ const HeaderTop = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 21px 15px 20px 8px;
-  max-width: 596px;
+  max-width: 672px;
   margin: 0 auto;
   height: 75px;
 
@@ -62,7 +62,7 @@ const HeaderTop = styled.div`
   }
 `
 const HeaderBottom = styled.div`
-  max-width: 596px;
+  max-width: 672px;
   margin: 0 auto;
   ${({ theme }) => theme.breakpoint.xl} {
     max-width: 1024px;
