@@ -1,7 +1,6 @@
 //REMINDER: DO NOT REMOVE className which has prefix `GTM-`, since it is used for collecting data of Google Analytics event.
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-// import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import {
   SUB_BRAND_LINKS,
@@ -19,12 +18,6 @@ import MobileSidebar from './mobile-sidebar'
 import Logo from './logo'
 import SubscribeMagazine from './subscribe-magazine'
 import NavTopics from './nav-topics'
-
-// import { useDisplayAd } from '../hooks/useDisplayAd'
-
-// const GPTAd = dynamic(() => import('../components/ads/gpt/gpt-ad'), {
-//   ssr: false,
-// })
 
 /**
  * @typedef {import('./nav-sections').HeadersDataSection} HeadersDataSection
@@ -149,34 +142,20 @@ const TopicsAndSubscribe = styled.section`
   display: flex;
 `
 
-// const StyledGPTAd = styled(GPTAd)`
-//   width: auto;
-//   height: auto;
-//   margin-right: auto;
-//   ${({ theme }) => theme.breakpoint.md} {
-//     order: -1;
-//     margin-right: 0;
-//   }
-//   ${({ theme }) => theme.breakpoint.xl} {
-//     margin-left: 20px;
-//     margin-right: auto;
-//     order: 0;
-//   }
-// `
-// const GPTAdPlaceHolder = styled.div`
-//   width: 95px;
-//   height: 50px;
-//   margin-right: auto;
-//   ${({ theme }) => theme.breakpoint.md} {
-//     order: -1;
-//     margin-right: 0;
-//   }
-//   ${({ theme }) => theme.breakpoint.xl} {
-//     margin-left: 20px;
-//     margin-right: auto;
-//     order: 0;
-//   }
-// `
+const GPTAdPlaceHolder = styled.div`
+  width: 95px;
+  height: 50px;
+  margin-right: auto;
+  ${({ theme }) => theme.breakpoint.md} {
+    order: -1;
+    margin-right: 0;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    margin-left: 20px;
+    margin-right: auto;
+    order: 0;
+  }
+`
 
 const formatSectionItem = (section) => {
   const sectionWithInsertedCategory = insertCategoryIntoCertainSection(section)
@@ -397,11 +376,8 @@ export default function Header({
         <a href="/" className="GTM-header-logo">
           <HeaderLogo />
         </a>
-        {/* {shouldShowAd ? (
-          <StyledGPTAd pageKey="global" adKey="RWD_LOGO" />
-        ) : (
-          <GPTAdPlaceHolder />
-        )} */}
+        {/* todo: replace this placeholder with GPTAd */}
+        <GPTAdPlaceHolder />
         <ActionWrapper>
           <SubBrandList subBrands={SUB_BRAND_LINKS} />
           <SearchBarDesktop
