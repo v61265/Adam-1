@@ -151,7 +151,7 @@ switch (ENV) {
 
     WEEKLY_API_SERVER_ORIGIN =
       'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
-    OLD_YOUTUBE_SERVER_ORIGIN = 'rest-service:8080'
+    OLD_YOUTUBE_SERVER_ORIGIN = 'tr-projects-rest:8080'
     PREVIEW_SERVER_ORIGIN = 'mirror-cms-preview-dev-ufaummkd5q-de.a.run.app'
     WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${OLD_YOUTUBE_SERVER_ORIGIN}/youtube`
     STATIC_FILE_DOMAIN = 'v3-statics-dev.mirrormedia.mg'
