@@ -22,6 +22,7 @@ let SITE_URL = ''
 let API_TIMEOUT = 5000
 let API_TIMEOUT_GRAPHQL = 5000
 let WEEKLY_API_SERVER_ORIGIN = ''
+let OLD_YOUTUBE_SERVER_ORIGIN = ''
 let PREVIEW_SERVER_ORIGIN = ''
 let WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = ''
 let STATIC_FILE_DOMAIN = ''
@@ -57,9 +58,10 @@ switch (ENV) {
     API_TIMEOUT_GRAPHQL = 4000
     WEEKLY_API_SERVER_ORIGIN =
       'adam-weekly-api-server-prod-ufaummkd5q-de.a.run.app'
+    OLD_YOUTUBE_SERVER_ORIGIN = 'tr-projects-rest:8080'
     PREVIEW_SERVER_ORIGIN = 'mirror-cms-preview-prod-ufaummkd5q-de.a.run.app'
     STATIC_FILE_DOMAIN = 'v3-statics.mirrormedia.mg'
-    WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${WEEKLY_API_SERVER_ORIGIN}/youtube`
+    WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${OLD_YOUTUBE_SERVER_ORIGIN}/youtube`
     URL_STATIC_PREMIUM_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_member.json`
     URL_STATIC_NORMAL_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_sections.json`
     URL_STATIC_TOPICS = `https://${STATIC_FILE_DOMAIN}/files/json/header_topics.json`
@@ -102,8 +104,9 @@ switch (ENV) {
 
     WEEKLY_API_SERVER_ORIGIN =
       'adam-weekly-api-server-staging-ufaummkd5q-de.a.run.app'
+    OLD_YOUTUBE_SERVER_ORIGIN = 'tr-projects-rest:8080'
     PREVIEW_SERVER_ORIGIN = 'mirror-cms-preview-staging-ufaummkd5q-de.a.run.app'
-    WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${WEEKLY_API_SERVER_ORIGIN}/youtube`
+    WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${OLD_YOUTUBE_SERVER_ORIGIN}/youtube`
     STATIC_FILE_DOMAIN = 'v3-statics-staging.mirrormedia.mg'
 
     URL_STATIC_PREMIUM_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_member.json`
@@ -148,8 +151,9 @@ switch (ENV) {
 
     WEEKLY_API_SERVER_ORIGIN =
       'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
+    OLD_YOUTUBE_SERVER_ORIGIN = 'rest-service:8080'
     PREVIEW_SERVER_ORIGIN = 'mirror-cms-preview-dev-ufaummkd5q-de.a.run.app'
-    WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${WEEKLY_API_SERVER_ORIGIN}/youtube`
+    WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${OLD_YOUTUBE_SERVER_ORIGIN}/youtube`
     STATIC_FILE_DOMAIN = 'v3-statics-dev.mirrormedia.mg'
     URL_STATIC_PREMIUM_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_member.json`
     URL_STATIC_NORMAL_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_sections.json`
@@ -196,7 +200,8 @@ switch (ENV) {
     PREVIEW_SERVER_ORIGIN = ''
     WEEKLY_API_SERVER_ORIGIN =
       'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
-    WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${WEEKLY_API_SERVER_ORIGIN}/youtube`
+    OLD_YOUTUBE_SERVER_ORIGIN = 'rest-service:8080'
+    WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${OLD_YOUTUBE_SERVER_ORIGIN}/youtube`
 
     NEWEBPAY_PAPERMAG_API_URL =
       process.env.NEWEBPAY_PAPERMAG_API_URL ||
