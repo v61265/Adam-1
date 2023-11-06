@@ -23,7 +23,7 @@
     "@svgr/webpack": "^6.3.1",
     "@twreporter/errors": "^1.1.2",
     "apollo-link-timeout": "^4.0.0",
-    "axios": "^1.2.0",
+    "axios": "^1.2.1",
     "body-scroll-lock": "3.1.5",
     "bowser": "^2.11.0",
     "cors": "^2.8.5",
