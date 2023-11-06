@@ -153,7 +153,7 @@ switch (ENV) {
       'adam-weekly-api-server-dev-ufaummkd5q-de.a.run.app'
     PREVIEW_SERVER_ORIGIN = 'mirror-cms-preview-dev-ufaummkd5q-de.a.run.app'
     // WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://${WEEKLY_API_SERVER_ORIGIN}/youtube`
-    WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `http://api-dev.mirrormedia.mg:8080/youtube`
+    WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `https://api.mirrormedia.mg/youtube`
     STATIC_FILE_DOMAIN = 'v3-statics-dev.mirrormedia.mg'
     URL_STATIC_PREMIUM_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_member.json`
     URL_STATIC_NORMAL_SECTIONS = `https://${STATIC_FILE_DOMAIN}/files/json/header_sections.json`
