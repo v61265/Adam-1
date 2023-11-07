@@ -109,6 +109,7 @@ const ItemBrief = styled.div`
  *
  * @typedef {Pick<import('../../../apollo/fragments/post').HeroImage ,'id' | 'resized' | 'resizedWebp'>} HeroImage
  *
+ * //TODO: using Pick to write typedef
  * @typedef {import('../../../apollo/fragments/post').Post & {
  *  id: string,
  *  slug: string,
@@ -147,7 +148,11 @@ export default function ListArticlesItem({ item }) {
         )}
       </ImageContainer>
       <ItemDetail>
-        <ItemTitle>{item.title}</ItemTitle>
+        <ItemTitle>
+          {/* `item.isFeatured` is for testing, should remove after testing is completed */}
+          {item.isFeatured ? 'featured' : 'normal'}
+          {item.title}
+        </ItemTitle>
         <ItemBrief>{item.brief?.blocks[0]?.text}</ItemBrief>
       </ItemDetail>
     </ItemWrapper>
