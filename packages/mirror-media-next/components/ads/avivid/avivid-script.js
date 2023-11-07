@@ -11,6 +11,7 @@ export default function AvividScript() {
   }
   return (
     <Script
+      async
       strategy="lazyOnload"
       id="likrNotification"
       dangerouslySetInnerHTML={{
