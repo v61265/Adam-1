@@ -5,7 +5,7 @@ import client from '../../apollo/apollo-client'
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
-import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
+import { GCP_PROJECT_ID, ENV, SITE_URL } from '../../config/index.mjs'
 import WineWarning from '../../components/shared/wine-warning'
 import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 import { useMembership } from '../../context/membership'
@@ -27,7 +27,6 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 
-import CanonicalLink from '../../components/story/shared/canonical-link'
 import JsonLdsScript from '../../components/story/shared/json-lds-script'
 import FullScreenAds from '../../components/ads/full-screen-ads'
 const { hasContentInRawContentBlock } = MirrorMedia
@@ -245,13 +244,15 @@ export default function Story({ postData, headerData, storyLayoutType }) {
     ? { name: '會員專區', slug: 'member' }
     : sections?.[0]
 
+  //information for canonical link
+  const nonAmpUrl = `https://${SITE_URL}/story/${slug}`
+  const ampUrl = `https://${SITE_URL}/story/amp/${slug}`
+  const shouldCreateAmpHtmlLink = state === 'published' && !isAdvertised
   return (
     <>
       <Head>
-        <CanonicalLink
-          slug={slug}
-          shouldCreateAmpHtmlLink={state === 'published' && !isAdvertised}
-        ></CanonicalLink>
+        <link rel="canonical" href={nonAmpUrl} />
+        {shouldCreateAmpHtmlLink && <link rel="amphtml" href={ampUrl} />}
         <meta property="dable:item_id" content={slug} key="dable:item_id" />
         <meta property="og:slug" content={slug} key="og:slug" />
         {section?.name && (
