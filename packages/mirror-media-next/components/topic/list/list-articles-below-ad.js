@@ -79,9 +79,6 @@ export default function ListArticlesBelowAd({
 
   return (
     <>
-      <div>下方文章區</div>
-      <div>下方文章共有 {postsCount} 篇</div>
-      <div>如果要計算下方文章目前顯示幾篇，請用command + f 搜尋</div>
       <InfiniteScrollList
         renderAmount={renderPageSize}
         fetchCount={Math.ceil(postsCount / fetchPageSize)}

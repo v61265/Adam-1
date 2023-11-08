@@ -66,8 +66,6 @@ export default function TopicListArticles({
     : totalPostsCount > featuredPostsCount
   return (
     <>
-      <div>全部文章共有 {totalPostsCount} 篇</div>
-
       <ListArticlesAboveAd
         posts={initialPosts}
         topicSlug={topicSlug}
