@@ -1,11 +1,9 @@
-import consts from './constants'
+import { statusCodes } from './constants'
 // @ts-ignore `@twreporter/errors` does not have tyepscript definition file yet
 import errors from '@twreporter/errors'
 import express from 'express'
 import middlewareCreator from './middlewares'
 import { createProxyMiddleware } from 'http-proxy-middleware'
-
-const statusCodes = consts.statusCodes
 
 /**
  *  This function creates a mini app.
