@@ -155,6 +155,7 @@ export function createApp({
     })
   )
 
+  // Deprecated API, don't use it anymore
   // mini app: GCS proxy
   app.use(
     createGcsProxy({
