@@ -29,7 +29,7 @@ import { createYoutubeProxy } from './youtube-proxy-mini-app'
  *  @param {string} opts.gcsProxyOrigin
  *  @param {string} opts.youtubeProxyOrigin
  *  @param {string[]|'*'} [opts.corsAllowOrigin=[]]
- *  @return {express.Application}
+ *  @returns {express.Application}
  */
 export function createApp({
   gcpProjectId,

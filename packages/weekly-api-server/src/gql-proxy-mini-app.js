@@ -14,20 +14,14 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
  *  @param {string} opts.jwtSecret
  *  @param {string} opts.proxyOrigin
  *  @param {'/content/graphql'|'/member/graphql'} opts.proxyPath
- *  @return {express.Router}
+ *  @returns {express.Router}
  */
-export function createGraphQLProxy({
-  jwtSecret,
-  proxyOrigin,
-  proxyPath,
-}) {
+export function createGraphQLProxy({ jwtSecret, proxyOrigin, proxyPath }) {
   // create express mini app
   const router = express.Router()
 
   // enable pre-flight request
-  router.options(
-    proxyPath,
-  )
+  router.options(proxyPath)
 
   const verifyAccessToken = middlewareCreator.verifyAccessToken({
     jwtSecret,
@@ -50,7 +44,6 @@ export function createGraphQLProxy({
       next()
     },
 
-
     // proxy request to API GraphQL endpoint
     createProxyMiddleware({
       target: proxyOrigin,
@@ -64,7 +57,10 @@ export function createGraphQLProxy({
         console.log(
           JSON.stringify({
             severity: 'DEBUG',
-            message: 'proxy to backed API origin server: ' + proxyOrigin + proxyReq.path,
+            message:
+              'proxy to backed API origin server: ' +
+              proxyOrigin +
+              proxyReq.path,
             ...res?.locals?.globalLogFields,
           })
         )
