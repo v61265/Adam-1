@@ -73,7 +73,7 @@ export default function AmpHero({
             controls
             layout="fill"
             poster={heroVideo?.heroImage?.resized?.original}
-            src={heroVideo.urlOriginal}
+            src={heroVideo.videoSrc}
             title={imageAlt}
           />
         </HeroWrapper>
