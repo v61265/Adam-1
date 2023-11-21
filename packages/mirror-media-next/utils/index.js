@@ -230,8 +230,8 @@ const getNumberWithCommas = (num) => {
 /**
  * Return sections that are in `active` state and sorted.
  *
- * @property {Sections} sections
- * @property {Sections} sectionsInInputOrder
+ * @param {Sections} sections
+ * @param {Sections} sectionsInInputOrder
  * @return {Sections}
  */
 const getActiveOrderSection = (sections, sectionsInInputOrder) => {
@@ -266,8 +266,8 @@ const getActiveOrderSection = (sections, sectionsInInputOrder) => {
 /**
  * Return categories that are in `active` state and sorted.
  *
- * @property {Categories} categories
- * @property {Categories} categoriesInInputOrder
+ * @param {Categories} categories
+ * @param {Categories} categoriesInInputOrder
  * @return {Categories}
  */
 const getActiveOrderCategory = (categories, categoriesInInputOrder) => {
