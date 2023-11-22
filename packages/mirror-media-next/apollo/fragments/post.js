@@ -100,6 +100,10 @@ export const asideListingPost = gql`
  */
 
 /**
+ * @typedef {Pick<import('./topic').Topic, "slug">} Topic
+ */
+
+/**
  * @typedef {Object} Related
  * @property {string} id - unique id
  * @property {string} slug - post slug
@@ -151,6 +155,7 @@ export const asideListingPost = gql`
  * @property {string} og_description - og description of the post
  * @property {boolean} hiddenAdvertised - decide whether to display advertisements
  * @property {boolean} isAdvertised - the field called '廣告文案' in cms
+ * @property {Topic | null} topics - which topic is belong to
  */
 
 export const post = gql`
@@ -242,6 +247,9 @@ export const post = gql`
     og_description
     hiddenAdvertised
     isAdvertised
+    topics {
+      slug
+    }
   }
 `
 
