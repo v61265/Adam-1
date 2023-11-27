@@ -1,11 +1,12 @@
-import axios from 'axios'
-import { useEffect, useState } from 'react'
+import errors from '@twreporter/errors'
 import styled from 'styled-components'
-import { HeaderSkeleton } from '../../components/header'
 import Layout from '../../components/shared/layout'
-import ShareHeader from '../../components/shared/share-header'
-import { API_TIMEOUT, URL_STATIC_PODCAST_LIST } from '../../config/index.mjs'
-import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { ENV, GCP_PROJECT_ID } from '../../config/index.mjs'
+import {
+  fetchHeaderDataInDefaultPageLayout,
+  fetchPodcastList,
+} from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 
 /**
  * @typedef {import('../../components/shared/share-header').HeaderData} HeaderData
@@ -31,88 +32,114 @@ const Title = styled.p`
     padding: 41px 0 12px;
   }
 `
+/**
+ * @param {Object} props
+ * @param {Object} props.headerData
+ * @returns {React.ReactElement}
+ */
 
-export default function Podcast() {
-  const [podcastList, setPodcastList] = useState([])
+export default function Podcast({ headerData, podcastListData }) {
+  console.log(podcastListData)
+  return (
+    <Layout
+      head={{ title: 'Podcasts' }}
+      header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
+    >
+      <PageWrapper>
+        <Title>Podcast</Title>
+      </PageWrapper>
+    </Layout>
+  )
+}
 
-  /** @type {[HeaderData,import('react').Dispatch<HeaderData>]} */
-  const [headerData, setHeaderData] = useState(null)
-  const [isHeaderDataLoaded, setIsHeaderDataLoaded] = useState(false)
+/**
+ * @type {import('next').GetServerSideProps}
+ */
+export async function getServerSideProps({ req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 600 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
 
-  useEffect(() => {
-    let ignore = false
+  const traceHeader = req.headers?.['x-cloud-trace-context']
+  let globalLogFields = {}
+  if (traceHeader && !Array.isArray(traceHeader)) {
+    const [trace] = traceHeader.split('/')
+    globalLogFields[
+      'logging.googleapis.com/trace'
+    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
+  }
 
-    const fetchPodcastList = async () => {
-      try {
-        const { data } = await axios({
-          method: 'get',
-          url: URL_STATIC_PODCAST_LIST,
-          timeout: API_TIMEOUT,
+  const responses = await Promise.allSettled([
+    fetchHeaderDataInDefaultPageLayout(),
+    fetchPodcastList(),
+  ])
+  console.log('Podcast List Data:', responses[1])
+  const handledResponses = responses.map((response, index) => {
+    if (response.status === 'fulfilled') {
+      return response.value
+    } else if (response.status === 'rejected') {
+      const statusCode = response.reason.response?.status
+
+      const annotatingError = errors.helpers.wrap(
+        response.reason,
+        'UnhandledError',
+        'Error occurs while getting podcast list data'
+      )
+
+      console.log(
+        JSON.stringify({
+          severity: 'ERROR',
+          message: errors.helpers.printAll(
+            annotatingError,
+            {
+              withStack: true,
+              withPayload: true,
+            },
+            0,
+            0
+          ),
+          ...globalLogFields,
         })
-
-        return data
-      } catch (err) {
-        console.log(
-          JSON.stringify({
-            severity: 'WARNING',
-            message: `Unable fetch podcast list in Podcast page`,
-          })
-        )
-        return []
+      )
+      if (index === 1) {
+        if (statusCode === 404) {
+          // leave undefined to be checked and redirect to 404
+          return
+        } else {
+          // fetch key data (posts) failed, redirect to 500
+          throw new Error('fetch podcast list failed')
+        }
       }
+      return
     }
-    fetchPodcastList().then((res) => {
-      if (!ignore) {
-        setPodcastList(res)
-      }
-    })
-    return () => {
-      ignore = true
-    }
-  }, [])
+  })
 
-  useEffect(() => {
-    /**
-     * @returns {Promise<HeaderData>}
-     */
-    const fetchHeaderData = async () => {
-      try {
-        const data = await fetchHeaderDataInDefaultPageLayout()
-
-        return data
-      } catch (err) {
-        console.log(
-          JSON.stringify({
-            severity: 'WARNING',
-            message: `Unable fetch header data in 404 page`,
-          })
-        )
-        return {
+  // handle header data
+  const headerData =
+    handledResponses[0] && 'sectionsData' in handledResponses[0]
+      ? handledResponses[0]
+      : {
           sectionsData: [],
           topicsData: [],
         }
-      }
-    }
-    fetchHeaderData().then((res) => {
-      setHeaderData(res)
-      setIsHeaderDataLoaded(true)
-    })
-  }, [])
+  const sectionsData = Array.isArray(headerData.sectionsData)
+    ? headerData.sectionsData
+    : []
+  const topicsData = Array.isArray(headerData.topicsData)
+    ? headerData.topicsData
+    : []
 
-  console.log(podcastList)
+  // Extracting podcast list data
+  const podcastListData =
+    responses[1].status === 'fulfilled' ? responses[1].value.data || [] : []
 
-  return (
-    <Layout header={{ type: 'empty' }} footer={{ type: 'empty' }}>
-      <>
-        {isHeaderDataLoaded ? (
-          <ShareHeader pageLayoutType="default" headerData={headerData} />
-        ) : (
-          <HeaderSkeleton />
-        )}
-        <PageWrapper>
-          <Title>Podcast</Title>
-        </PageWrapper>
-      </>
-    </Layout>
-  )
+  const props = {
+    headerData: { sectionsData, topicsData },
+    podcastListData: podcastListData,
+  }
+
+  return { props }
 }
