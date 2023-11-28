@@ -1,6 +1,8 @@
 import errors from '@twreporter/errors'
+import { useState } from 'react'
 import styled from 'styled-components'
 import Dropdown from '../../components/podcast/author-select-dropdown'
+import PodcastList from '../../components/podcast/podcast-list'
 import Layout from '../../components/shared/layout'
 import { ENV, GCP_PROJECT_ID } from '../../config/index.mjs'
 import {
@@ -80,6 +82,9 @@ const Title = styled.p`
  */
 
 export default function Podcast({ headerData, podcastListData }) {
+  const [selectedPodcasts, setSelectedPodcasts] = useState([])
+  const [selectedAuthor, setSelectedAuthor] = useState('')
+
   // Function to group podcasts by author
   function groupPodcastsByAuthor(podcasts) {
     return podcasts.reduce((grouped, podcast) => {
@@ -95,15 +100,18 @@ export default function Podcast({ headerData, podcastListData }) {
   // Get the grouped podcasts by author
   const groupedPodcasts = groupPodcastsByAuthor(podcastListData)
 
-  // Display podcasts for a selected author
+  // Display podcasts for a selected author or all podcasts
   function displayPodcastsByAuthor(selectedAuthor) {
-    const selectedPodcasts = groupedPodcasts[selectedAuthor]
-    if (selectedPodcasts) {
-      // Display or use the selectedPodcasts array for the selected author
-      console.log(`Podcasts for ${selectedAuthor}:`, selectedPodcasts)
-      // Perform rendering or actions with the selectedPodcasts array
+    setSelectedAuthor(selectedAuthor)
+    if (selectedAuthor === '') {
+      setSelectedPodcasts(podcastListData) // Set selectedPodcasts to entire list
     } else {
-      console.log(`No podcasts found for ${selectedAuthor}`)
+      const podcastsForAuthor = groupedPodcasts[selectedAuthor]
+      if (podcastsForAuthor) {
+        setSelectedPodcasts(podcastsForAuthor)
+      } else {
+        setSelectedPodcasts([]) // No podcasts found for selectedAuthor
+      }
     }
   }
 
@@ -134,6 +142,11 @@ export default function Podcast({ headerData, podcastListData }) {
             displayPodcastsByAuthor={displayPodcastsByAuthor}
           />
         </TitleSelectorWrapper>
+        <PodcastList
+          selectedPodcasts={selectedPodcasts}
+          allPodcasts={podcastListData}
+          selectedAuthor={selectedAuthor}
+        />
       </PageWrapper>
     </Layout>
   )
