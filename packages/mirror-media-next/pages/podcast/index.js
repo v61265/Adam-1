@@ -1,5 +1,6 @@
 import errors from '@twreporter/errors'
 import styled from 'styled-components'
+import Dropdown from '../../components/podcast/author-select-dropdown'
 import Layout from '../../components/shared/layout'
 import { ENV, GCP_PROJECT_ID } from '../../config/index.mjs'
 import {
@@ -12,24 +13,38 @@ import { setPageCache } from '../../utils/cache-setting'
  * @typedef {import('../../components/shared/share-header').HeaderData} HeaderData
  */
 
-const PageWrapper = styled.div`
+const PageWrapper = styled.main`
+  margin: auto;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    width: 672px;
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    width: 1024px;
+  }
+`
+
+const TitleSelectorWrapper = styled.div`
+  background-color: aqua;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 46px;
+  width: 100%;
+  justify-content: space-between;
 `
 
 const Title = styled.p`
-  font-style: normal;
+  color: #000;
+  font-size: 16px;
   font-weight: 500;
-  font-size: 20px;
-  color: #054f77;
-  padding: 28px 0 8px;
+  line-height: 115%;
+  letter-spacing: 0.5px;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    font-size: 20px;
+    font-weight: 600;
+  }
 
   ${({ theme }) => theme.breakpoint.xl} {
-    font-weight: 700;
     font-size: 28px;
-    padding: 41px 0 12px;
   }
 `
 
@@ -65,7 +80,46 @@ const Title = styled.p`
  */
 
 export default function Podcast({ headerData, podcastListData }) {
-  console.log(podcastListData)
+  // Function to group podcasts by author
+  function groupPodcastsByAuthor(podcasts) {
+    return podcasts.reduce((grouped, podcast) => {
+      const author = podcast.author
+      const podcastsForAuthor = grouped[author] || []
+      return {
+        ...grouped,
+        [author]: podcastsForAuthor.concat(podcast),
+      }
+    }, {})
+  }
+
+  // Get the grouped podcasts by author
+  const groupedPodcasts = groupPodcastsByAuthor(podcastListData)
+
+  // Display podcasts for a selected author
+  function displayPodcastsByAuthor(selectedAuthor) {
+    const selectedPodcasts = groupedPodcasts[selectedAuthor]
+    if (selectedPodcasts) {
+      // Display or use the selectedPodcasts array for the selected author
+      console.log(`Podcasts for ${selectedAuthor}:`, selectedPodcasts)
+      // Perform rendering or actions with the selectedPodcasts array
+    } else {
+      console.log(`No podcasts found for ${selectedAuthor}`)
+    }
+  }
+
+  const authors = [
+    '鏡週刊理財組',
+    '鏡週刊調查組',
+    '鏡週刊社會組',
+    '鏡週刊人物組',
+    '鏡週刊財經組',
+    '鏡週刊美食旅遊組',
+    '鏡週刊娛樂產業組',
+    '鏡週刊財經人物組',
+    '鏡車誌',
+    '鏡錶誌',
+  ]
+
   return (
     <Layout
       head={{ title: 'Podcasts' }}
@@ -73,7 +127,13 @@ export default function Podcast({ headerData, podcastListData }) {
       footer={{ type: 'default' }}
     >
       <PageWrapper>
-        <Title>Podcast</Title>
+        <TitleSelectorWrapper>
+          <Title>Podcast</Title>
+          <Dropdown
+            authors={authors}
+            displayPodcastsByAuthor={displayPodcastsByAuthor}
+          />
+        </TitleSelectorWrapper>
       </PageWrapper>
     </Layout>
   )
