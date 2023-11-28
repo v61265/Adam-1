@@ -32,9 +32,35 @@ const Title = styled.p`
     padding: 41px 0 12px;
   }
 `
+
 /**
- * @param {Object} props
- * @param {Object} props.headerData
+ * @typedef {Object} Enclosure
+ * @property {string} url
+ * @property {number} file_size
+ * @property {string} mime_type
+ */
+
+/**
+ * @typedef {Object} PodcastData
+ * @property {string} published
+ * @property {string} author
+ * @property {string} description
+ * @property {string} heroImage
+ * @property {Enclosure[]} enclosures
+ * @property {string} link
+ * @property {string} guid
+ * @property {string} title
+ * @property {string} duration
+ */
+
+/**
+ * @typedef {Object} Props
+ * @property {Object} headerData
+ * @property {PodcastData[]} podcastListData
+ */
+
+/**
+ * @param {Props} props
  * @returns {React.ReactElement}
  */
 
@@ -76,7 +102,7 @@ export async function getServerSideProps({ req, res }) {
     fetchHeaderDataInDefaultPageLayout(),
     fetchPodcastList(),
   ])
-  console.log('Podcast List Data:', responses[1])
+
   const handledResponses = responses.map((response, index) => {
     if (response.status === 'fulfilled') {
       return response.value
