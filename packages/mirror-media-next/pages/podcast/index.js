@@ -27,10 +27,14 @@ const PageWrapper = styled.main`
 `
 
 const TitleSelectorWrapper = styled.div`
-  background-color: aqua;
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
+  padding: 15px 16px;
+  ${({ theme }) => theme.breakpoint.md} {
+    padding: 20px 0;
+  }
 `
 
 const Title = styled.p`
