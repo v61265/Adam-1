@@ -103,11 +103,12 @@ export default function Podcast({ headerData, podcastListData }) {
 
   // Get the grouped podcasts by author
   const groupedPodcasts = groupPodcastsByAuthor(podcastListData)
+  const allAuthors = '全部'
 
   // Display podcasts for a selected author or all podcasts
   function displayPodcastsByAuthor(selectedAuthor) {
     setSelectedAuthor(selectedAuthor)
-    if (selectedAuthor === '') {
+    if (selectedAuthor === allAuthors) {
       setSelectedPodcasts(podcastListData) // Set selectedPodcasts to entire list
     } else {
       const podcastsForAuthor = groupedPodcasts[selectedAuthor]
@@ -120,6 +121,7 @@ export default function Podcast({ headerData, podcastListData }) {
   }
 
   const authors = [
+    allAuthors,
     '鏡週刊理財組',
     '鏡週刊調查組',
     '鏡週刊社會組',
