@@ -4,7 +4,11 @@ import styled from 'styled-components'
 import Dropdown from '../../components/podcast/author-select-dropdown'
 import PodcastList from '../../components/podcast/podcast-list'
 import Layout from '../../components/shared/layout'
-import { ENV, GCP_PROJECT_ID } from '../../config/index.mjs'
+import {
+  ACCESS_PODCAST_FEATURE_TOGGLE,
+  ENV,
+  GCP_PROJECT_ID,
+} from '../../config/index.mjs'
 import {
   fetchHeaderDataInDefaultPageLayout,
   fetchPodcastList,
@@ -175,6 +179,15 @@ export async function getServerSideProps({ req, res }) {
     globalLogFields[
       'logging.googleapis.com/trace'
     ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
+  }
+
+  if (ACCESS_PODCAST_FEATURE_TOGGLE !== 'on') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
   }
 
   const responses = await Promise.allSettled([
