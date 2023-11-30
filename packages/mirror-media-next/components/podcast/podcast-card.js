@@ -29,6 +29,38 @@ const ImageWrapper = styled.div`
   }
 `
 
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  ${ImageWrapper}:hover & {
+    opacity: 1;
+    cursor: pointer;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-image: url('/images-next/play-icon.svg');
+      background-size: cover;
+      width: 28px;
+      height: 28px;
+      opacity: 0.9;
+    }
+  }
+`
+
 const LoadingSpinner = styled.img`
   margin: auto;
 `
@@ -129,6 +161,7 @@ export default function PodcastCard({ podcast }) {
           onLoad={() => setIsLoading(false)}
           unoptimized={true}
         />
+        <Overlay />
       </ImageWrapper>
       <IntroSection>
         <Title>{podcast.title}</Title>
