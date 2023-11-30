@@ -27,19 +27,21 @@ const DropdownButton = styled.button`
   ::before {
     content: '';
     position: absolute;
-    top: 50%;
-    right: 4.8px;
-    transform: translateY(-50%);
-    width: 19.2px;
-    height: 19.2px;
-    background-image: url('/images-next/arrow-down.svg');
-    background-size: cover;
-    transition: transform 0.3s ease-in-out;
+
+    border: solid black;
+    border-radius: 1.5px;
+    border-width: 0 1.5px 1.5px 0;
+    display: inline-block;
+    transform: rotate(45deg);
+    top: 8px;
+    right: 8px;
+    width: 9px;
+    height: 9px;
 
     ${({
       // @ts-ignore
       isOpen,
-    }) => (isOpen ? 'transform: translateY(-50%) rotate(180deg);' : '')}
+    }) => (isOpen ? 'transform: rotate(-135deg); top:50% ' : '')}
   }
 
   ::after {
