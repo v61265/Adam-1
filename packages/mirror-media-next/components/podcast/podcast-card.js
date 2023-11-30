@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import Image from 'next/image'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -105,8 +106,11 @@ const PublishedTime = styled.p`
 `
 
 export default function PodcastCard({ podcast }) {
-  console.log(podcast)
   const [isLoading, setIsLoading] = useState(true)
+  const inputDate = podcast.published
+  const formattedDate = dayjs(inputDate, 'DD/MM/YYYY, HH:mm:ss').format(
+    'ddd, DD MMM YYYY HH:mm:ss'
+  )
   return (
     <CardContainer>
       <BlueBar />
@@ -136,7 +140,7 @@ export default function PodcastCard({ podcast }) {
       <AuthorSection>
         <AuthorTag>主持人</AuthorTag>
         <Author>{podcast.author}</Author>
-        <PublishedTime>{podcast.published}</PublishedTime>
+        <PublishedTime>{formattedDate}</PublishedTime>
       </AuthorSection>
     </CardContainer>
   )
