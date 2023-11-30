@@ -38,10 +38,12 @@ const DropdownButton = styled.button`
     width: 9px;
     height: 9px;
 
+    transition: transform 0.3s ease-in-out;
+
     ${({
       // @ts-ignore
       isOpen,
-    }) => (isOpen ? 'transform: rotate(-135deg); top:50% ' : '')}
+    }) => (isOpen ? 'transform: translateY(50%) rotate(-135deg); ' : '')}
   }
 
   ::after {
