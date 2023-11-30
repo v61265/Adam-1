@@ -38,12 +38,15 @@ const DropdownButton = styled.button`
     width: 9px;
     height: 9px;
 
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.2s ease-in-out;
 
-    ${({
-      // @ts-ignore
-      isOpen,
-    }) => (isOpen ? 'transform: translateY(50%) rotate(-135deg); ' : '')}
+    ${
+      /**
+       * @param {Object} param
+       * @param {boolean} param.isOpen
+       */ ({ isOpen }) =>
+        isOpen ? 'transform: translateY(50%) rotate(-135deg); ' : ''
+    }
   }
 
   ::after {
@@ -56,17 +59,11 @@ const DropdownButton = styled.button`
     height: 1px;
     background-color: transparent;
 
-    ${({
-      // @ts-ignore
-      isOpen,
-    }) => (isOpen ? 'background-color: #b8b8b8;' : '')}
+    ${({ isOpen }) => (isOpen ? 'background-color: #b8b8b8;' : '')}
   }
 
   /* Set top border to none and adjust border radius when isOpen is true */
-  ${({
-    // @ts-ignore
-    isOpen,
-  }) =>
+  ${({ isOpen }) =>
     isOpen
       ? `
       border-bottom: none;
@@ -144,11 +141,7 @@ export default function Dropdown({ authors, displayPodcastsByAuthor }) {
   }
   return (
     <CustomDropdownContainer ref={containerRef}>
-      <DropdownButton
-        // @ts-ignore
-        isOpen={isOpen}
-        onClick={toggleDropdown}
-      >
+      <DropdownButton isOpen={isOpen} onClick={toggleDropdown}>
         {selectedOption ? selectedOption : '全部'}
       </DropdownButton>
       {isOpen && (
