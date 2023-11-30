@@ -23,7 +23,7 @@ const PageWrapper = styled.main`
   margin: auto;
 
   ${({ theme }) => theme.breakpoint.md} {
-    width: 672px;
+    width: 516px;
   }
   ${({ theme }) => theme.breakpoint.xl} {
     width: 1024px;
@@ -146,7 +146,7 @@ export default function Podcast({ headerData, podcastListData }) {
     >
       <PageWrapper>
         <TitleSelectorWrapper>
-          <Title>Podcast</Title>
+          <Title>Podcasts</Title>
           <Dropdown
             authors={authors}
             displayPodcastsByAuthor={displayPodcastsByAuthor}
