@@ -22,8 +22,6 @@ export default function PodcastList({
   allPodcasts,
   selectedAuthor,
 }) {
-  console.log({ selectedPodcasts, allPodcasts })
-
   let podcastsToDisplay =
     selectedPodcasts.length > 0 ? selectedPodcasts : allPodcasts
 
@@ -39,8 +37,8 @@ export default function PodcastList({
         <p>There are no podcasts for the selected author, {selectedAuthor}.</p>
       ) : podcastsToDisplay.length > 0 ? (
         <CardsWrapper>
-          {podcastsToDisplay.map((podcast, index) => (
-            <PodcastCard key={index} podcast={podcast} />
+          {podcastsToDisplay.map((podcast) => (
+            <PodcastCard key={podcast.title} podcast={podcast} />
           ))}
         </CardsWrapper>
       ) : (
