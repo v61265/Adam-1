@@ -104,6 +104,8 @@ const Option = styled.li`
 
   &:hover {
     background-color: #f7f7f7;
+    text-decoration-line: underline;
+    text-underline-offset: 2.5px;
   }
 `
 
