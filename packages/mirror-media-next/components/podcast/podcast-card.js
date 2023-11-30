@@ -5,6 +5,7 @@ import styled from 'styled-components'
 const CardContainer = styled.li`
   width: 100%;
   background: #f4f5f6;
+  overflow: hidden;
 
   ${({ theme }) => theme.breakpoint.md} {
     height: 499px;
@@ -31,28 +32,112 @@ const LoadingSpinner = styled.img`
   margin: auto;
 `
 
+const IntroSection = styled.div`
+  background: #efefef;
+  padding: 12px 50px;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    padding: 12px;
+  }
+`
+const Title = styled.div`
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: #000;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: normal;
+  ${({ theme }) => theme.breakpoint.md} {
+    min-height: 75px;
+  }
+`
+const DurationIntroWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+`
+const Duration = styled.span`
+  color: #ffa011;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+`
+const Intro = styled.span`
+  color: #fff;
+  font-family: Roboto;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: normal;
+  border-radius: 4px;
+  background: #1d9fb8;
+  padding: 4px;
+`
+
+const AuthorSection = styled.div`
+  background: #f4f5f6;
+  padding: 12px 50px 8px 50px;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    padding: 30px 12px 6px 12px;
+  }
+`
+const AuthorTag = styled.p`
+  color: #000;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+`
+const Author = styled.p`
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+`
+const PublishedTime = styled.p`
+  color: #808080;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 8px;
+`
+
 export default function PodcastCard({ podcast }) {
+  console.log(podcast)
   const [isLoading, setIsLoading] = useState(true)
   return (
     <CardContainer>
       <BlueBar />
-      {/* Display the loading spinner or placeholder when isLoading is true */}
+      {/* Display the loading spinner when isLoading is true */}
       {isLoading && (
         <LoadingSpinner src="/images-next/loading.gif" alt="Loading" />
       )}
       <ImageWrapper>
         <Image
           priority
-          src={podcast?.heroImage || '/images-next/default-og-img.png'}
+          src={podcast.heroImage || '/images-next/default-og-img.png'}
           fill={true}
-          alt="Picture of the author"
+          alt={podcast.title}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           style={{ objectFit: 'cover' }}
           onLoad={() => setIsLoading(false)}
           unoptimized={true}
         />
       </ImageWrapper>
-      {podcast.title}
+      <IntroSection>
+        <Title>{podcast.title}</Title>
+        <DurationIntroWrapper>
+          <Duration>{podcast.duration}</Duration>
+          <Intro>節目介紹</Intro>
+        </DurationIntroWrapper>
+      </IntroSection>
+      <AuthorSection>
+        <AuthorTag>主持人</AuthorTag>
+        <Author>{podcast.author}</Author>
+        <PublishedTime>{podcast.published}</PublishedTime>
+      </AuthorSection>
     </CardContainer>
   )
 }
