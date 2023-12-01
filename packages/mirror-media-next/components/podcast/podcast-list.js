@@ -18,11 +18,7 @@ const CardsWrapper = styled.ul`
   }
 `
 
-const LoadMoreAnchor = styled.div`
-  width: 10px;
-  height: 10px;
-  background: red;
-`
+const LoadMoreAnchor = styled.div``
 
 const LoadingSpinner = styled.img`
   margin: auto;
@@ -48,8 +44,11 @@ export default function PodcastList({
     setIsLoading(true)
     // Simulating a time delay of 0.8 second (800ms)
     setTimeout(() => {
-      setVisiblePodcasts((prevVisible) => prevVisible + 12)
-      setIsLoading(false) // Set loading state to false after data is loaded
+      setVisiblePodcasts((prevVisible) => {
+        const newVisible = prevVisible + 12
+        setIsLoading(newVisible < podcastsToDisplay.length) // Stop showing LoadingSpinner if all podcasts have been displayed
+        return newVisible
+      })
     }, 800)
   }
 
@@ -96,8 +95,8 @@ export default function PodcastList({
             ))}
           </CardsWrapper>
           <LoadMoreAnchor ref={loadMoreAnchorRef} />
-          {/* Display the loading spinner when isLoading is true */}
-          {isLoading && (
+          {/* Display the loading spinner when isLoading is true and there are more podcasts to load */}
+          {isLoading && visiblePodcasts < podcastsToDisplay.length && (
             <LoadingSpinner src="/images-next/loading.gif" alt="Loading" />
           )}
         </>
