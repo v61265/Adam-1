@@ -120,7 +120,9 @@ export default function PodcastList({
           )}
         </>
       ) : (
-        <NoPodcastToShow>很抱歉，目前沒有 Podcasts 可以聆聽</NoPodcastToShow>
+        <NoPodcastToShow>
+          很抱歉，目前沒有 Podcasts 可以聆聽，請重新整理再試一次
+        </NoPodcastToShow>
       )}
     </div>
   )
