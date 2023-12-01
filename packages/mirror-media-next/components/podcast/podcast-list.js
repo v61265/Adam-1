@@ -24,6 +24,23 @@ const LoadingSpinner = styled.img`
   margin: auto;
 `
 
+const NoPodcastToShow = styled.div`
+  width: 100%;
+  height: 320px;
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    font-size: 18px;
+    height: 470px;
+  }
+`
+
 export default function PodcastList({
   selectedPodcasts,
   allPodcasts,
@@ -86,7 +103,9 @@ export default function PodcastList({
   return (
     <div>
       {noPodcastsForSelectedAuthor ? (
-        <p>There are no podcasts for the selected author, {selectedAuthor}.</p>
+        <NoPodcastToShow>
+          目前尚未有《{selectedAuthor}》的 Podcasts，請選擇其他作者
+        </NoPodcastToShow>
       ) : podcastsToDisplay.length > 0 ? (
         <>
           <CardsWrapper>
@@ -101,7 +120,7 @@ export default function PodcastList({
           )}
         </>
       ) : (
-        <p>There are no podcasts available.</p>
+        <NoPodcastToShow>很抱歉，目前沒有 Podcasts 可以聆聽</NoPodcastToShow>
       )}
     </div>
   )
