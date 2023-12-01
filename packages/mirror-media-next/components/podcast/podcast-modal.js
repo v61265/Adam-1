@@ -80,8 +80,14 @@ const PodcastModal = ({ podcast, onClose }) => {
 
     window.addEventListener('mousedown', handleClickOutside)
 
+    // Prevent scrolling on the body when the modal is open
+    document.body.style.overflow = 'hidden'
+
     return () => {
       window.removeEventListener('mousedown', handleClickOutside)
+
+      // Re-enable scrolling on the body when the modal is closed
+      document.body.style.overflow = 'auto'
     }
   }, [onClose])
 
