@@ -92,6 +92,7 @@ export default function PodcastList({
         observer.unobserve(anchorRefCurrent)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Check if there are no podcasts for the selected author

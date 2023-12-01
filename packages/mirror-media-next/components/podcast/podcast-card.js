@@ -2,11 +2,13 @@ import dayjs from 'dayjs'
 import Image from 'next/image'
 import { useState } from 'react'
 import styled from 'styled-components'
+import PodcastModal from './podcast-modal'
 
 const CardContainer = styled.li`
   width: 100%;
   background: #f4f5f6;
   overflow: hidden;
+  cursor: pointer;
 
   ${({ theme }) => theme.breakpoint.md} {
     height: 499px;
@@ -138,13 +140,22 @@ const PublishedTime = styled.p`
 `
 
 export default function PodcastCard({ podcast }) {
+  const [showModal, setShowModal] = useState(false)
+
+  const openModal = () => {
+    setShowModal(true)
+  }
+
+  const closeModal = () => {
+    setShowModal(false)
+  }
   const [isLoading, setIsLoading] = useState(true)
   const inputDate = podcast.published
   const formattedDate = dayjs(inputDate, 'DD/MM/YYYY, HH:mm:ss').format(
     'ddd, DD MMM YYYY HH:mm:ss'
   )
   return (
-    <CardContainer>
+    <CardContainer onClick={openModal}>
       <BlueBar />
       {/* Display the loading spinner when isLoading is true */}
       {isLoading && (
@@ -175,6 +186,9 @@ export default function PodcastCard({ podcast }) {
         <Author>{podcast.author}</Author>
         <PublishedTime>{formattedDate}</PublishedTime>
       </AuthorSection>
+
+      {/* Modal display logic */}
+      {showModal && <PodcastModal podcast={podcast} onClose={closeModal} />}
     </CardContainer>
   )
 }
