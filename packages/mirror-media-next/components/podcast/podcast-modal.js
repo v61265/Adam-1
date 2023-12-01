@@ -52,7 +52,19 @@ const CloseButton = styled.div`
   }
 `
 
+const Desc = styled.p`
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 180%;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    font-size: 18px;
+  }
+`
+
 const PodcastModal = ({ podcast, onClose }) => {
+  console.log(podcast.description)
   const modalRef = useRef(null)
 
   useEffect(() => {
@@ -73,12 +85,23 @@ const PodcastModal = ({ podcast, onClose }) => {
     }
   }, [onClose])
 
+  // Function to format the podcast description with line breaks
+  const formatDescriptionWithLineBreaks = (description) => {
+    return description.split('\n').map((paragraph, index) => (
+      <Desc key={index}>
+        {paragraph}
+        <br /> {/* Render a line break after each paragraph */}
+      </Desc>
+    ))
+  }
+
   return (
     <ModalWrapper>
       <ModalContent ref={modalRef} onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose} />
-        <h2>{podcast.title}</h2>
-        <p>Description: {podcast.description}</p>
+        <Desc>{podcast.title}</Desc>
+        <br />
+        <div>{formatDescriptionWithLineBreaks(podcast.description)}</div>
       </ModalContent>
     </ModalWrapper>
   )
