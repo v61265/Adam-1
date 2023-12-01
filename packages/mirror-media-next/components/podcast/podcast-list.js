@@ -37,6 +37,10 @@ export default function PodcastList({
   const [isLoading, setIsLoading] = useState(false)
   const loadMoreAnchorRef = useRef(null)
 
+  useEffect(() => {
+    setVisiblePodcasts(12) // Reset visiblePodcasts count when selectedAuthor changes
+  }, [selectedAuthor])
+
   let podcastsToDisplay =
     selectedPodcasts.length > 0 ? selectedPodcasts : allPodcasts
 
