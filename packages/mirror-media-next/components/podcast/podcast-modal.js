@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { Z_INDEX } from '../../constants'
 
@@ -52,10 +53,29 @@ const CloseButton = styled.div`
 `
 
 const PodcastModal = ({ podcast, onClose }) => {
-  console.log(podcast)
+  const modalRef = useRef(null)
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose()
+      }
+    }
+
+    const handleClickOutside = (event) => {
+      handleOutsideClick(event)
+    }
+
+    window.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      window.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [onClose])
+
   return (
-    <ModalWrapper onClick={onClose}>
-      <ModalContent onClick={(e) => e.stopPropagation()}>
+    <ModalWrapper>
+      <ModalContent ref={modalRef} onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={onClose} />
         <h2>{podcast.title}</h2>
         <p>Description: {podcast.description}</p>
