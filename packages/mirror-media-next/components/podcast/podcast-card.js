@@ -1,5 +1,5 @@
+import CustomImage from '@readr-media/react-image'
 import dayjs from 'dayjs'
-import Image from 'next/image'
 import { useState } from 'react'
 import styled from 'styled-components'
 import PodcastModal from './podcast-modal'
@@ -61,10 +61,6 @@ const Overlay = styled.div`
       opacity: 0.9;
     }
   }
-`
-
-const LoadingSpinner = styled.img`
-  margin: auto;
 `
 
 const IntroSection = styled.div`
@@ -149,28 +145,29 @@ export default function PodcastCard({ podcast }) {
   const closeModal = () => {
     setShowModal(false)
   }
-  const [isLoading, setIsLoading] = useState(true)
   const inputDate = podcast.published
   const formattedDate = dayjs(inputDate, 'DD/MM/YYYY, HH:mm:ss').format(
     'ddd, DD MMM YYYY HH:mm:ss'
   )
+
+  const customImageObject = {
+    original: podcast.heroImage,
+  }
+
   return (
     <CardContainer onClick={openModal}>
       <BlueBar />
-      {/* Display the loading spinner when isLoading is true */}
-      {isLoading && (
-        <LoadingSpinner src="/images-next/loading.gif" alt="Loading" />
-      )}
       <ImageWrapper>
-        <Image
-          priority
-          src={podcast.heroImage || '/images-next/default-og-img.png'}
-          fill={true}
-          alt={podcast.title}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          style={{ objectFit: 'cover' }}
-          onLoad={() => setIsLoading(false)}
-          unoptimized={true}
+        <CustomImage
+          loadingImage="/images-next/loading.gif"
+          defaultImage="/images-next/default-og-img.png"
+          images={customImageObject}
+          rwd={{
+            mobile: '284px',
+            tablet: '284px',
+            desktop: '323px',
+            default: '323px',
+          }}
         />
         <Overlay />
       </ImageWrapper>
