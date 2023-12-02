@@ -27,6 +27,13 @@ const ModalContent = styled.div`
   word-wrap: break-word;
   cursor: default;
 
+  a {
+    color: #1d9fb8;
+    :hover {
+      text-decoration: underline;
+    }
+  }
+
   ${({ theme }) => theme.breakpoint.md} {
     height: 499px;
     width: 244px;
@@ -64,7 +71,6 @@ const Desc = styled.p`
 `
 
 const PodcastModal = ({ podcast, onClose }) => {
-  console.log(podcast.description)
   const modalRef = useRef(null)
 
   useEffect(() => {
@@ -91,14 +97,31 @@ const PodcastModal = ({ podcast, onClose }) => {
     }
   }, [onClose])
 
-  // Function to format the podcast description with line breaks
+  // Function to format the podcast description with line breaks and wrap links in <a> tags
   const formatDescriptionWithLineBreaks = (description) => {
-    return description.split('\n').map((paragraph, index) => (
-      <Desc key={index}>
-        {paragraph}
-        <br /> {/* Render a line break after each paragraph */}
-      </Desc>
-    ))
+    const linkRegex = /(https?:\/\/\S+)(?=\s|$)/g // Regex pattern to match links
+
+    return description.split(linkRegex).map((segment, index) => {
+      if (segment.match(linkRegex)) {
+        return (
+          <a
+            key={index}
+            href={segment}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {segment}
+          </a>
+        )
+      } else {
+        return (
+          <Desc key={index}>
+            {segment}
+            <br /> {/* Render a line break after each paragraph */}
+          </Desc>
+        )
+      }
+    })
   }
 
   return (
