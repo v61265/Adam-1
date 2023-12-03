@@ -1,7 +1,7 @@
 import CustomImage from '@readr-media/react-image'
 import dayjs from 'dayjs'
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import PodcastModal from './podcast-modal'
 
 const CardContainer = styled.li`
@@ -30,6 +30,17 @@ const ImageWrapper = styled.div`
     height: 244px;
   }
 `
+const pulseAnimation = keyframes`
+  0% {
+    transform: scale(1) translate(-50%, -50%);
+  }
+  50% {
+    transform: scale(1.15) translate(-50%, -50%);
+  }
+  100% {
+    transform: scale(1) translate(-50%, -50%);
+  }
+`
 
 const Overlay = styled.div`
   position: absolute;
@@ -51,6 +62,7 @@ const Overlay = styled.div`
     &::before {
       content: '';
       position: absolute;
+      border-radius: 50%;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -59,6 +71,8 @@ const Overlay = styled.div`
       width: 28px;
       height: 28px;
       opacity: 0.9;
+      animation: ${pulseAnimation} 1.2s infinite;
+      box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.4); /* Halo effect */
     }
   }
 `
