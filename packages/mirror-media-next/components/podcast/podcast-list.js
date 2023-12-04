@@ -59,14 +59,14 @@ export default function PodcastList({
 
   const loadMore = () => {
     setIsLoading(true)
-    // Simulating a time delay of 0.8 second (800ms)
+    // Simulating a time delay of 0.5 second (500ms)
     setTimeout(() => {
       setVisiblePodcasts((prevVisible) => {
         const newVisible = prevVisible + 12
         setIsLoading(newVisible < podcastsToDisplay.length) // Stop showing LoadingSpinner if all podcasts have been displayed
         return newVisible
       })
-    }, 800)
+    }, 500)
   }
 
   useEffect(() => {
@@ -92,8 +92,7 @@ export default function PodcastList({
         observer.unobserve(anchorRefCurrent)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [loadMore])
 
   // Check if there are no podcasts for the selected author
   const noPodcastsForSelectedAuthor =
