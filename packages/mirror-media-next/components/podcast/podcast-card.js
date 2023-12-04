@@ -1,12 +1,14 @@
+import CustomImage from '@readr-media/react-image'
 import dayjs from 'dayjs'
-import Image from 'next/image'
 import { useState } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+import PodcastModal from './podcast-modal'
 
 const CardContainer = styled.li`
   width: 100%;
   background: #f4f5f6;
   overflow: hidden;
+  cursor: pointer;
 
   ${({ theme }) => theme.breakpoint.md} {
     height: 499px;
@@ -26,6 +28,17 @@ const ImageWrapper = styled.div`
   aspect-ratio: 1 / 1;
   ${({ theme }) => theme.breakpoint.md} {
     height: 244px;
+  }
+`
+const pulseAnimation = keyframes`
+  0% {
+    transform: scale(1) translate(-50%, -50%);
+  }
+  50% {
+    transform: scale(1.15) translate(-50%, -50%);
+  }
+  100% {
+    transform: scale(1) translate(-50%, -50%);
   }
 `
 
@@ -49,6 +62,7 @@ const Overlay = styled.div`
     &::before {
       content: '';
       position: absolute;
+      border-radius: 50%;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -57,12 +71,10 @@ const Overlay = styled.div`
       width: 28px;
       height: 28px;
       opacity: 0.9;
+      animation: ${pulseAnimation} 1.2s infinite;
+      box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.4); /* Halo effect */
     }
   }
-`
-
-const LoadingSpinner = styled.img`
-  margin: auto;
 `
 
 const IntroSection = styled.div`
@@ -138,28 +150,38 @@ const PublishedTime = styled.p`
 `
 
 export default function PodcastCard({ podcast }) {
-  const [isLoading, setIsLoading] = useState(true)
+  const [showModal, setShowModal] = useState(false)
+
+  const openModal = () => {
+    setShowModal(true)
+  }
+
+  const closeModal = () => {
+    setShowModal(false)
+  }
   const inputDate = podcast.published
   const formattedDate = dayjs(inputDate, 'DD/MM/YYYY, HH:mm:ss').format(
     'ddd, DD MMM YYYY HH:mm:ss'
   )
+
+  const customImageObject = {
+    original: podcast.heroImage,
+  }
+
   return (
-    <CardContainer>
+    <CardContainer onClick={openModal}>
       <BlueBar />
-      {/* Display the loading spinner when isLoading is true */}
-      {isLoading && (
-        <LoadingSpinner src="/images-next/loading.gif" alt="Loading" />
-      )}
       <ImageWrapper>
-        <Image
-          priority
-          src={podcast.heroImage || '/images-next/default-og-img.png'}
-          fill={true}
-          alt={podcast.title}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          style={{ objectFit: 'cover' }}
-          onLoad={() => setIsLoading(false)}
-          unoptimized={true}
+        <CustomImage
+          loadingImage="/images-next/loading.gif"
+          defaultImage="/images-next/default-og-img.png"
+          images={customImageObject}
+          rwd={{
+            mobile: '284px',
+            tablet: '284px',
+            desktop: '323px',
+            default: '323px',
+          }}
         />
         <Overlay />
       </ImageWrapper>
@@ -175,6 +197,9 @@ export default function PodcastCard({ podcast }) {
         <Author>{podcast.author}</Author>
         <PublishedTime>{formattedDate}</PublishedTime>
       </AuthorSection>
+
+      {/* Modal display logic */}
+      {showModal && <PodcastModal podcast={podcast} onClose={closeModal} />}
     </CardContainer>
   )
 }
