@@ -86,18 +86,33 @@ const PodcastModal = ({ podcast, onClose }) => {
 
     window.addEventListener('mousedown', handleClickOutside)
 
-    // Prevent scrolling on the body when the modal is open
+    // Prevent scrolling when the modal is open
     document.body.style.overflow = 'hidden'
+
+    // Prevent touch scroll on body (mobile devices)
+    document.body.addEventListener('touchmove', preventBodyScroll, {
+      passive: false,
+    })
 
     return () => {
       window.removeEventListener('mousedown', handleClickOutside)
 
       // Re-enable scrolling on the body when the modal is closed
       document.body.style.overflow = 'auto'
+
+      // Remove touch scroll prevention on body
+      document.body.removeEventListener('touchmove', preventBodyScroll)
     }
   }, [onClose])
 
-  // Function to format the podcast description with line breaks and wrap links in <a> tags
+  // Function to prevent touch scroll on body
+  const preventBodyScroll = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      event.preventDefault()
+    }
+  }
+
+  // Format the podcast description with line breaks and wrap links in <a> tags
   const formatDescriptionWithLineBreaks = (description) => {
     const linkRegex = /(https?:\/\/\S+)(?=\s|$)/g // Regex pattern to match links
 
