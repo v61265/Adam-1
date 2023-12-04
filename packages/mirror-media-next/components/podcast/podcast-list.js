@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import PodcastCard from './podcast-card'
 
@@ -57,17 +57,17 @@ export default function PodcastList({
   let podcastsToDisplay =
     selectedPodcasts.length > 0 ? selectedPodcasts : allPodcasts
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     setIsLoading(true)
     // Simulating a time delay of 0.5 second (500ms)
     setTimeout(() => {
       setVisiblePodcasts((prevVisible) => {
         const newVisible = prevVisible + 12
-        setIsLoading(newVisible < podcastsToDisplay.length) // Stop showing LoadingSpinner if all podcasts have been displayed
+        setIsLoading(newVisible < podcastsToDisplay.length)
         return newVisible
       })
     }, 500)
-  }
+  }, [podcastsToDisplay.length])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
