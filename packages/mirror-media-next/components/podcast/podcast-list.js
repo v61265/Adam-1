@@ -45,6 +45,7 @@ export default function PodcastList({
   selectedPodcasts,
   allPodcasts,
   selectedAuthor,
+  onPodcastSelect,
 }) {
   const [visiblePodcasts, setVisiblePodcasts] = useState(12)
   const [isLoading, setIsLoading] = useState(false)
@@ -110,7 +111,11 @@ export default function PodcastList({
         <>
           <CardsWrapper>
             {podcastsToDisplay.slice(0, visiblePodcasts).map((podcast) => (
-              <PodcastCard key={podcast.title} podcast={podcast} />
+              <PodcastCard
+                key={podcast.title}
+                podcast={podcast}
+                onPodcastSelect={onPodcastSelect}
+              />
             ))}
           </CardsWrapper>
           <LoadMoreAnchor ref={loadMoreAnchorRef} />
