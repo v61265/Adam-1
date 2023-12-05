@@ -149,11 +149,12 @@ const PublishedTime = styled.p`
   margin-top: 8px;
 `
 
-export default function PodcastCard({ podcast }) {
+export default function PodcastCard({ podcast, onPodcastSelect }) {
   const [showModal, setShowModal] = useState(false)
 
   const openModal = () => {
     setShowModal(true)
+    onPodcastSelect(podcast)
   }
 
   const closeModal = () => {

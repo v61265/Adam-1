@@ -5,7 +5,7 @@ import { Z_INDEX } from '../../constants'
 const ModalWrapper = styled.div`
   position: fixed;
   cursor: default;
-  top: 0;
+  top: -55px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -14,6 +14,10 @@ const ModalWrapper = styled.div`
   justify-content: center;
   align-items: center;
   z-index: ${Z_INDEX.header};
+
+  ${({ theme }) => theme.breakpoint.md} {
+    top: -48px;
+  }
 `
 
 const ModalContent = styled.div`
@@ -70,7 +74,7 @@ const Desc = styled.p`
   }
 `
 
-const PodcastModal = ({ podcast, onClose }) => {
+export default function PodcastModal({ podcast, onClose }) {
   const modalRef = useRef(null)
 
   useEffect(() => {
@@ -86,7 +90,7 @@ const PodcastModal = ({ podcast, onClose }) => {
 
     window.addEventListener('mousedown', handleClickOutside)
 
-    // Prevent scrolling when the modal is open
+    // Prevent scrolling on the body when the modal is open
     document.body.style.overflow = 'hidden'
 
     // Prevent touch scroll on body (mobile devices)
@@ -150,5 +154,3 @@ const PodcastModal = ({ podcast, onClose }) => {
     </ModalWrapper>
   )
 }
-
-export default PodcastModal
