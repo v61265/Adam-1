@@ -1,5 +1,14 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { Z_INDEX } from '../../constants'
+
+const marquee = keyframes`
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+`
 
 const PlayerWrapper = styled.div`
   position: fixed;
@@ -16,17 +25,29 @@ const PlayerWrapper = styled.div`
   align-items: center;
   z-index: ${Z_INDEX.header};
 
-  p {
-    color: #fff;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: normal;
-  }
-
   ${({ theme }) => theme.breakpoint.md} {
     height: 88px;
   }
+`
+
+const MarqueeContainer = styled.div`
+  overflow: hidden;
+  width: 278px;
+  ${({ theme }) => theme.breakpoint.md} {
+    width: 557px;
+  }
+`
+
+const MarqueeContent = styled.div`
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+
+  display: inline-block;
+  white-space: nowrap;
+  animation: ${marquee} 18s linear infinite;
 `
 
 export default function AudioPlayer({ listeningPodcast }) {
@@ -38,7 +59,9 @@ export default function AudioPlayer({ listeningPodcast }) {
     <PlayerWrapper>
       {listeningPodcast && (
         <>
-          <p>{listeningPodcast.title}</p>
+          <MarqueeContainer>
+            <MarqueeContent>{listeningPodcast.title}</MarqueeContent>
+          </MarqueeContainer>
           <audio controls key={resetPodcast}>
             <source
               src={listeningPodcast.enclosures[0].url}
