@@ -2,6 +2,22 @@ import { useEffect, useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Z_INDEX } from '../../constants'
 
+/**
+ * Calculate the percentage value for a gradient based on the provided value and maximum value.
+ * @param {object} options
+ * @param {number} options.value
+ * @param {number} options.max
+ * @returns {string} The calculated percentage value as a string.
+ */
+const calculateGradientPercentage = ({ value, max }) => {
+  /**
+   * @type {number}
+   */
+  const percentage = (value / max) * 100
+
+  return `${percentage}%`
+}
+
 const marquee = keyframes`
    0% {
     transform: translateX(100%);
@@ -87,8 +103,6 @@ const Controls = styled.div`
   align-items: center;
   justify-content: center;
 `
-const calculateGradientPercentage = ({ value, max }) =>
-  `${(value / max) * 100}%`
 
 const SeekSlider = styled.input`
   width: 100%;
@@ -113,12 +127,11 @@ const SeekSlider = styled.input`
       #1d9fb8 ${calculateGradientPercentage},
       #d9d9d9 0
     );
-    /* This creates a gradient that fills the track from the left side of the thumb to the start */
   }
 
   &::-webkit-slider-thumb {
     appearance: none;
-    width: 10px;
+    width: 2px;
     height: 4px;
     border-radius: 0 200px 200px 0;
     background-color: #1d9fb8;
@@ -154,17 +167,16 @@ export default function AudioPlayer({ listeningPodcast }) {
       setDuration(`${minutes}:${seconds < 10 ? '0' : ''}${seconds}`)
     }
 
-    // Update the max attribute of SeekSlider
-    const maxDuration = Math.floor(audio.duration)
+    // Reset the player states
     setCurrentTimeSeconds(0) // Reset current time
     setFormattedCurrentTime('0:00') // Reset formatted time
     setDuration('0:00') // Reset duration
     setSpeed(1) // Reset speed
-    setIsPlaying(false)
+    setIsPlaying(false) // reset is playing
     // Update the max attribute of SeekSlider to the new duration
     const seekSlider = document.querySelector('input[type="range"]')
     if (seekSlider) {
-      seekSlider.setAttribute('max', String(maxDuration))
+      seekSlider.setAttribute('max', String(updateDuration))
     }
 
     audio.addEventListener('timeupdate', updateTime)
