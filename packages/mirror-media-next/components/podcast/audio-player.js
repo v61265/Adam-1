@@ -87,10 +87,42 @@ const Controls = styled.div`
   align-items: center;
   justify-content: center;
 `
+const calculateGradientPercentage = ({ value, max }) =>
+  `${(value / max) * 100}%`
 
 const SeekSlider = styled.input`
   width: 100%;
+  height: 4px;
+  border-radius: 200px;
   margin: 0 10px;
+  cursor: pointer;
+
+  overflow: hidden;
+  display: block;
+  appearance: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(
+      to right,
+      #1d9fb8 ${calculateGradientPercentage},
+      #d9d9d9 0
+    );
+    /* This creates a gradient that fills the track from the left side of the thumb to the start */
+  }
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 10px;
+    height: 4px;
+    border-radius: 0 200px 200px 0;
+    background-color: #1d9fb8;
+  }
 `
 
 export default function AudioPlayer({ listeningPodcast }) {
@@ -122,25 +154,25 @@ export default function AudioPlayer({ listeningPodcast }) {
       setDuration(`${minutes}:${seconds < 10 ? '0' : ''}${seconds}`)
     }
 
+    // Update the max attribute of SeekSlider
+    const maxDuration = Math.floor(audio.duration)
+    setCurrentTimeSeconds(0) // Reset current time
+    setFormattedCurrentTime('0:00') // Reset formatted time
+    setDuration('0:00') // Reset duration
+    setSpeed(1) // Reset speed
+    setIsPlaying(false)
+    // Update the max attribute of SeekSlider to the new duration
+    const seekSlider = document.querySelector('input[type="range"]')
+    if (seekSlider) {
+      seekSlider.setAttribute('max', String(maxDuration))
+    }
+
     audio.addEventListener('timeupdate', updateTime)
-    audio.addEventListener('loadedmetadata', updateDuration) // Event to update duration
+    audio.addEventListener('loadedmetadata', updateDuration)
 
     return () => {
       audio.removeEventListener('timeupdate', updateTime)
       audio.removeEventListener('loadedmetadata', updateDuration)
-    }
-  }, [audioURL])
-
-  useEffect(() => {
-    // Reset play time and update duration when audio URL changes
-    const audio = audioRef.current
-    if (audio) {
-      audio.currentTime = 0
-      setCurrentTimeSeconds(0)
-      setFormattedCurrentTime('0:00')
-      setDuration('0:00')
-      setIsPlaying(false)
-      setSpeed(1)
     }
   }, [audioURL])
 
@@ -170,9 +202,9 @@ export default function AudioPlayer({ listeningPodcast }) {
 
   const onSeek = (e) => {
     const audio = audioRef.current
-    const newTime = parseInt(e.target.value, 10) // Convert string to number
+    const newTime = parseInt(e.target.value, 10)
     audio.currentTime = newTime
-    setCurrentTimeSeconds(newTime) // Update currentTime state with numeric value
+    setCurrentTimeSeconds(newTime)
   }
 
   return (
@@ -196,6 +228,7 @@ export default function AudioPlayer({ listeningPodcast }) {
                 step="1"
                 value={currentTimeSeconds}
                 onChange={onSeek}
+                max={audioRef.current && Math.floor(audioRef.current.duration)}
               />
               <button onClick={updateSpeed}>{speed}X</button>
             </Controls>
