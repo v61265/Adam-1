@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Z_INDEX } from '../../constants'
 
@@ -64,11 +65,115 @@ const MarqueeContent = styled.div`
     animation-play-state: paused; /* Pause the animation on hover */
   }
 `
+const AudioPlayerContainer = styled.div`
+  height: 52px;
+  width: 278px;
+  background-color: grey;
+
+  color: #fff;
+
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    width: 557px;
+  }
+`
+
+const Controls = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const SeekSlider = styled.input`
+  width: 100%;
+  margin: 0 10px;
+`
 
 export default function AudioPlayer({ listeningPodcast }) {
-  const resetPodcast = listeningPodcast
-    ? listeningPodcast.enclosures[0].url
-    : null
+  const audioURL = listeningPodcast.enclosures[0].url
+
+  const audioRef = useRef(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [speed, setSpeed] = useState(1)
+  const [duration, setDuration] = useState('0:00')
+  const [currentTimeSeconds, setCurrentTimeSeconds] = useState(0)
+  const [formattedCurrentTime, setFormattedCurrentTime] = useState('0:00')
+
+  useEffect(() => {
+    const audio = audioRef.current
+
+    const updateTime = () => {
+      const currentSeconds = Math.floor(audio.currentTime)
+      setCurrentTimeSeconds(currentSeconds)
+
+      const minutes = Math.floor(currentSeconds / 60)
+      const seconds = currentSeconds % 60
+      setFormattedCurrentTime(`${minutes}:${seconds < 10 ? '0' : ''}${seconds}`)
+    }
+
+    const updateDuration = () => {
+      const durationSeconds = Math.floor(audio.duration)
+      const minutes = Math.floor(durationSeconds / 60)
+      const seconds = durationSeconds % 60
+      setDuration(`${minutes}:${seconds < 10 ? '0' : ''}${seconds}`)
+    }
+
+    audio.addEventListener('timeupdate', updateTime)
+    audio.addEventListener('loadedmetadata', updateDuration) // Event to update duration
+
+    return () => {
+      audio.removeEventListener('timeupdate', updateTime)
+      audio.removeEventListener('loadedmetadata', updateDuration)
+    }
+  }, [audioURL])
+
+  useEffect(() => {
+    // Reset play time and update duration when audio URL changes
+    const audio = audioRef.current
+    if (audio) {
+      audio.currentTime = 0
+      setCurrentTimeSeconds(0)
+      setFormattedCurrentTime('0:00')
+      setDuration('0:00')
+      setIsPlaying(false)
+      setSpeed(1)
+    }
+  }, [audioURL])
+
+  const togglePlayPause = () => {
+    const audio = audioRef.current
+    if (isPlaying) {
+      audio.pause()
+    } else {
+      audio.play()
+    }
+    setIsPlaying(!isPlaying)
+  }
+
+  const updateSpeed = () => {
+    const audio = audioRef.current
+    if (speed === 1) {
+      audio.playbackRate = 1.5
+      setSpeed(1.5)
+    } else if (speed === 1.5) {
+      audio.playbackRate = 2
+      setSpeed(2)
+    } else {
+      audio.playbackRate = 1
+      setSpeed(1)
+    }
+  }
+
+  const onSeek = (e) => {
+    const audio = audioRef.current
+    const newTime = parseInt(e.target.value, 10) // Convert string to number
+    audio.currentTime = newTime
+    setCurrentTimeSeconds(newTime) // Update currentTime state with numeric value
+  }
 
   return (
     <PlayerWrapper>
@@ -77,13 +182,24 @@ export default function AudioPlayer({ listeningPodcast }) {
           <MarqueeContainer>
             <MarqueeContent>{listeningPodcast.title}</MarqueeContent>
           </MarqueeContainer>
-          <audio controls key={resetPodcast}>
-            <source
-              src={listeningPodcast.enclosures[0].url}
-              type="audio/mpeg"
-            />
-            Your browser does not support the audio element.
-          </audio>
+
+          <AudioPlayerContainer key={audioURL}>
+            <audio ref={audioRef} src={audioURL}></audio>
+            <Controls>
+              <button onClick={togglePlayPause}>
+                {isPlaying ? 'Pause' : 'Play'}
+              </button>
+              <span>{formattedCurrentTime}</span> / <span>{duration}</span>
+              <SeekSlider
+                type="range"
+                min="0"
+                step="1"
+                value={currentTimeSeconds}
+                onChange={onSeek}
+              />
+              <button onClick={updateSpeed}>{speed}X</button>
+            </Controls>
+          </AudioPlayerContainer>
         </>
       )}
     </PlayerWrapper>
