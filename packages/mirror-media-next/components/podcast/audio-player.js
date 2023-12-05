@@ -2,7 +2,7 @@ import styled, { keyframes } from 'styled-components'
 import { Z_INDEX } from '../../constants'
 
 const marquee = keyframes`
-  0% {
+   0% {
     transform: translateX(100%);
   }
   100% {
@@ -32,9 +32,12 @@ const PlayerWrapper = styled.div`
 
 const MarqueeContainer = styled.div`
   overflow: hidden;
+  position: relative;
   width: 278px;
+  height: 52px;
   ${({ theme }) => theme.breakpoint.md} {
     width: 557px;
+    height: 44px;
   }
 `
 
@@ -44,10 +47,22 @@ const MarqueeContent = styled.div`
   font-size: 14px;
   font-weight: 400;
   line-height: normal;
+  margin-top: 14px;
 
   display: inline-block;
   white-space: nowrap;
   animation: ${marquee} 18s linear infinite;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-top: 10px;
+  }
+
+  &:hover {
+    animation-play-state: paused; /* Pause the animation on hover */
+  }
 `
 
 export default function AudioPlayer({ listeningPodcast }) {
