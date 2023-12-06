@@ -31,6 +31,7 @@ const marquee = keyframes`
 `
 
 const PlayerWrapper = styled.div`
+  padding-top: 4px;
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -54,10 +55,10 @@ const MarqueeContainer = styled.div`
   overflow: hidden;
   position: relative;
   width: 278px;
-  height: 52px;
+  height: 44px;
   ${({ theme }) => theme.breakpoint.md} {
     width: 557px;
-    height: 44px;
+    height: 36px;
   }
 `
 
@@ -105,11 +106,23 @@ const Controls = styled.div`
   justify-content: center;
 `
 
+const SlidersWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 136px;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    width: 420px;
+  }
+`
+
 const SeekSlider = styled.input`
+  max-width: 100%;
   width: 100%;
   height: 4px;
   border-radius: 200px;
-  margin: 0 12px;
+  margin: 0 0 0 12px;
   cursor: pointer;
 
   overflow: hidden;
@@ -183,15 +196,22 @@ const VolumeControlContainer = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 22px;
-  padding: 8px;
+  padding: 8px 0px;
+  margin-left: 12px;
   ${
     /**
      * @param {Object} param
      * @param {boolean} param.showVolumeSlider
      */ ({ showVolumeSlider }) =>
-      showVolumeSlider && `background-color: #767676;`
+      showVolumeSlider && `background-color: #767676; padding: 8px;`
   }
   transition: background-color 0.3s ease;
+
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    display: flex;
+  }
 `
 const VolumeMutedButtonsContainer = styled.button`
   :focus {
@@ -277,11 +297,12 @@ export default function AudioPlayer({ listeningPodcast }) {
     }
 
     // Reset the player states
-    setCurrentTimeSeconds(0) // Reset current time
-    setFormattedCurrentTime('0:00') // Reset formatted time
-    setDuration('0:00') // Reset duration
-    setSpeed(1) // Reset speed
-    setIsPlaying(false) // reset is playing
+    setCurrentTimeSeconds(0)
+    setFormattedCurrentTime('0:00')
+    setDuration('0:00')
+    setSpeed(1)
+    setIsPlaying(false)
+    setShowVolumeSlider(false)
     // Update the max attribute of SeekSlider to the new duration
     const seekSlider = document.querySelector('input[type="range"]')
     if (seekSlider) {
@@ -380,47 +401,51 @@ export default function AudioPlayer({ listeningPodcast }) {
               )}
               <span>{formattedCurrentTime}</span>&nbsp;/&nbsp;
               <span>{duration}</span>
-              <SeekSlider
-                type="range"
-                min="0"
-                step="1"
-                value={currentTimeSeconds}
-                onChange={onSeek}
-                max={audioRef.current && Math.floor(audioRef.current.duration)}
-              />
-              <VolumeControlContainer showVolumeSlider={showVolumeSlider}>
-                <VolumeMutedButtonsContainer onClick={toggleVolumeSlider}>
-                  {/* Use isMuted state to toggle between volume and muted icons */}
-                  {isMuted ? (
-                    <Image
-                      width={17}
-                      height={17}
-                      src="/images-next/muted.svg"
-                      alt="Muted"
-                    />
-                  ) : (
-                    <Image
-                      width={22}
-                      height={22}
-                      src="/images-next/volume.svg"
-                      alt="Volume"
-                    />
-                  )}
-                </VolumeMutedButtonsContainer>
+              <SlidersWrapper>
+                <SeekSlider
+                  type="range"
+                  min="0"
+                  step="1"
+                  value={currentTimeSeconds}
+                  onChange={onSeek}
+                  max={
+                    audioRef.current && Math.floor(audioRef.current.duration)
+                  }
+                />
+                <VolumeControlContainer showVolumeSlider={showVolumeSlider}>
+                  <VolumeMutedButtonsContainer onClick={toggleVolumeSlider}>
+                    {/* Use isMuted state to toggle between volume and muted icons */}
+                    {isMuted ? (
+                      <Image
+                        width={17}
+                        height={17}
+                        src="/images-next/muted.svg"
+                        alt="Muted"
+                      />
+                    ) : (
+                      <Image
+                        width={22}
+                        height={22}
+                        src="/images-next/volume.svg"
+                        alt="Volume"
+                      />
+                    )}
+                  </VolumeMutedButtonsContainer>
 
-                {showVolumeSlider && (
-                  <VolumeSliderContainer>
-                    <VolumeSlider
-                      type="range"
-                      min="0"
-                      max="100"
-                      step="1"
-                      value={volume}
-                      onChange={handleVolumeChange}
-                    />
-                  </VolumeSliderContainer>
-                )}
-              </VolumeControlContainer>
+                  {showVolumeSlider && (
+                    <VolumeSliderContainer>
+                      <VolumeSlider
+                        type="range"
+                        min="0"
+                        max="100"
+                        step="1"
+                        value={volume}
+                        onChange={handleVolumeChange}
+                      />
+                    </VolumeSliderContainer>
+                  )}
+                </VolumeControlContainer>
+              </SlidersWrapper>
               <SpeedButton onClick={updateSpeed}>{speed}X</SpeedButton>
             </Controls>
           </AudioPlayerContainer>
