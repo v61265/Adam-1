@@ -85,7 +85,7 @@ const MarqueeContent = styled.div`
 const AudioPlayerContainer = styled.div`
   height: 52px;
   width: 278px;
-  background-color: grey;
+  /* background-color: grey; */
 
   color: #fff;
 
@@ -144,9 +144,12 @@ const PlayButton = styled.button`
     outline: 0;
   }
   cursor: pointer;
-  width: 22px;
-  height: 22px;
-  margin-right: 12px;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const PauseButton = styled.button`
@@ -154,12 +157,12 @@ const PauseButton = styled.button`
     outline: 0;
   }
   cursor: pointer;
-  width: 22px;
-  height: 22px;
+  width: 30px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 12px;
+  margin-right: 10px;
 `
 
 const SpeedButton = styled.button`
@@ -268,8 +271,8 @@ export default function AudioPlayer({ listeningPodcast }) {
               {isPlaying ? (
                 <PauseButton onClick={togglePlayPause}>
                   <Image
-                    width={8}
-                    height={12}
+                    width={10}
+                    height={20}
                     src="/images-next/pause.svg"
                     alt="Pause"
                   />
@@ -277,8 +280,8 @@ export default function AudioPlayer({ listeningPodcast }) {
               ) : (
                 <PlayButton onClick={togglePlayPause}>
                   <Image
-                    width={22}
-                    height={22}
+                    width={30}
+                    height={30}
                     src="/images-next/play.svg"
                     alt="Play"
                   />
