@@ -174,6 +174,41 @@ const SpeedButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 4px;
+`
+
+const VolumeControlContainer = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  background-color: #767676;
+  border-radius: 22px;
+  padding: 8px;
+`
+const VolumeMutedButtonsContainer = styled.button`
+  :focus {
+    outline: 0;
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+`
+
+const VolumeSliderContainer = styled.div`
+  width: 60px;
+  background: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+`
+
+const VolumeSlider = styled.input`
+  width: 100%;
 `
 
 export default function AudioPlayer({ listeningPodcast }) {
@@ -185,6 +220,10 @@ export default function AudioPlayer({ listeningPodcast }) {
   const [duration, setDuration] = useState('0:00')
   const [currentTimeSeconds, setCurrentTimeSeconds] = useState(0)
   const [formattedCurrentTime, setFormattedCurrentTime] = useState('0:00')
+
+  const [isMuted, setIsMuted] = useState(false)
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false)
+  const [volume, setVolume] = useState(100)
 
   useEffect(() => {
     const audio = audioRef.current
@@ -257,6 +296,26 @@ export default function AudioPlayer({ listeningPodcast }) {
     setCurrentTimeSeconds(newTime)
   }
 
+  // Control the volume of the audio
+  const handleVolumeChange = (e) => {
+    const newVolume = e.target.value
+    const audio = audioRef.current
+    audio.volume = newVolume / 100
+    setVolume(newVolume)
+    setIsMuted(newVolume === '0')
+
+    // Update the icon based on the volume level
+    if (newVolume === '0') {
+      setIsMuted(true)
+    } else {
+      setIsMuted(false)
+    }
+  }
+
+  const toggleVolumeSlider = () => {
+    setShowVolumeSlider(!showVolumeSlider)
+  }
+
   return (
     <PlayerWrapper>
       {listeningPodcast && (
@@ -297,6 +356,39 @@ export default function AudioPlayer({ listeningPodcast }) {
                 onChange={onSeek}
                 max={audioRef.current && Math.floor(audioRef.current.duration)}
               />
+              <VolumeControlContainer>
+                <VolumeMutedButtonsContainer onClick={toggleVolumeSlider}>
+                  {/* Use isMuted state to toggle between volume and muted icons */}
+                  {isMuted ? (
+                    <Image
+                      width={17}
+                      height={17}
+                      src="/images-next/muted.svg"
+                      alt="Muted"
+                    />
+                  ) : (
+                    <Image
+                      width={22}
+                      height={22}
+                      src="/images-next/volume.svg"
+                      alt="Volume"
+                    />
+                  )}
+                </VolumeMutedButtonsContainer>
+
+                {showVolumeSlider && (
+                  <VolumeSliderContainer>
+                    <VolumeSlider
+                      type="range"
+                      min="0"
+                      max="100"
+                      step="1"
+                      value={volume}
+                      onChange={handleVolumeChange}
+                    />
+                  </VolumeSliderContainer>
+                )}
+              </VolumeControlContainer>
               <SpeedButton onClick={updateSpeed}>{speed}X</SpeedButton>
             </Controls>
           </AudioPlayerContainer>
