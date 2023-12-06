@@ -124,9 +124,6 @@ const SeekSlider = styled.input`
   border-radius: 200px;
   margin: 0 0 0 12px;
   cursor: pointer;
-
-  overflow: hidden;
-  display: block;
   appearance: none;
 
   &:focus {
@@ -149,6 +146,15 @@ const SeekSlider = styled.input`
     height: 4px;
     border-radius: 0 200px 200px 0;
     background-color: #1d9fb8;
+  }
+
+  :hover&::-webkit-slider-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #1d9fb8;
+    margin-top: -3px;
+    transition: all 0.15s ease-in-out;
   }
 `
 
