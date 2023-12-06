@@ -19,6 +19,8 @@ const calculateGradientPercentage = ({ value, max }) => {
   return `${percentage}%`
 }
 
+const calculateVolumeGradientPercentage = (volume) => `${(volume / 100) * 100}%`
+
 const marquee = keyframes`
    0% {
     transform: translateX(100%);
@@ -85,8 +87,6 @@ const MarqueeContent = styled.div`
 const AudioPlayerContainer = styled.div`
   height: 52px;
   width: 278px;
-  /* background-color: grey; */
-
   color: #fff;
 
   font-family: Roboto;
@@ -182,9 +182,16 @@ const VolumeControlContainer = styled.div`
   flex-direction: row-reverse;
   justify-content: center;
   align-items: center;
-  background-color: #767676;
   border-radius: 22px;
   padding: 8px;
+  ${
+    /**
+     * @param {Object} param
+     * @param {boolean} param.showVolumeSlider
+     */ ({ showVolumeSlider }) =>
+      showVolumeSlider && `background-color: #767676;`
+  }
+  transition: background-color 0.3s ease;
 `
 const VolumeMutedButtonsContainer = styled.button`
   :focus {
@@ -200,7 +207,6 @@ const VolumeMutedButtonsContainer = styled.button`
 
 const VolumeSliderContainer = styled.div`
   width: 60px;
-  background: red;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -209,6 +215,32 @@ const VolumeSliderContainer = styled.div`
 
 const VolumeSlider = styled.input`
   width: 100%;
+  height: 4px;
+  border-radius: 200px;
+  cursor: pointer;
+  appearance: none;
+  /* Track */
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(
+      to right,
+      #fff ${(props) => calculateVolumeGradientPercentage(props.value)},
+      #000 0
+    );
+    border-radius: 200px;
+  }
+
+  /* Thumb */
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -4px;
+  }
 `
 
 export default function AudioPlayer({ listeningPodcast }) {
@@ -356,7 +388,7 @@ export default function AudioPlayer({ listeningPodcast }) {
                 onChange={onSeek}
                 max={audioRef.current && Math.floor(audioRef.current.duration)}
               />
-              <VolumeControlContainer>
+              <VolumeControlContainer showVolumeSlider={showVolumeSlider}>
                 <VolumeMutedButtonsContainer onClick={toggleVolumeSlider}>
                   {/* Use isMuted state to toggle between volume and muted icons */}
                   {isMuted ? (
