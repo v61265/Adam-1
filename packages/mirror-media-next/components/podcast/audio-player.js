@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Z_INDEX } from '../../constants'
@@ -108,7 +109,7 @@ const SeekSlider = styled.input`
   width: 100%;
   height: 4px;
   border-radius: 200px;
-  margin: 0 10px;
+  margin: 0 12px;
   cursor: pointer;
 
   overflow: hidden;
@@ -136,6 +137,40 @@ const SeekSlider = styled.input`
     border-radius: 0 200px 200px 0;
     background-color: #1d9fb8;
   }
+`
+
+const PlayButton = styled.button`
+  :focus {
+    outline: 0;
+  }
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  margin-right: 12px;
+`
+
+const PauseButton = styled.button`
+  :focus {
+    outline: 0;
+  }
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+`
+
+const SpeedButton = styled.button`
+  cursor: pointer;
+  :focus {
+    outline: 0;
+  }
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 export default function AudioPlayer({ listeningPodcast }) {
@@ -230,10 +265,27 @@ export default function AudioPlayer({ listeningPodcast }) {
           <AudioPlayerContainer key={audioURL}>
             <audio ref={audioRef} src={audioURL}></audio>
             <Controls>
-              <button onClick={togglePlayPause}>
-                {isPlaying ? 'Pause' : 'Play'}
-              </button>
-              <span>{formattedCurrentTime}</span> / <span>{duration}</span>
+              {isPlaying ? (
+                <PauseButton onClick={togglePlayPause}>
+                  <Image
+                    width={8}
+                    height={12}
+                    src="/images-next/pause.svg"
+                    alt="Pause"
+                  />
+                </PauseButton>
+              ) : (
+                <PlayButton onClick={togglePlayPause}>
+                  <Image
+                    width={22}
+                    height={22}
+                    src="/images-next/play.svg"
+                    alt="Play"
+                  />
+                </PlayButton>
+              )}
+              <span>{formattedCurrentTime}</span>&nbsp;/&nbsp;
+              <span>{duration}</span>
               <SeekSlider
                 type="range"
                 min="0"
@@ -242,7 +294,7 @@ export default function AudioPlayer({ listeningPodcast }) {
                 onChange={onSeek}
                 max={audioRef.current && Math.floor(audioRef.current.duration)}
               />
-              <button onClick={updateSpeed}>{speed}X</button>
+              <SpeedButton onClick={updateSpeed}>{speed}X</SpeedButton>
             </Controls>
           </AudioPlayerContainer>
         </>
