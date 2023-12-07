@@ -1,7 +1,7 @@
 import CustomImage from '@readr-media/react-image'
 import dayjs from 'dayjs'
 import { useState } from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import PodcastModal from './podcast-modal'
 
 const CardContainer = styled.li`
@@ -42,6 +42,10 @@ const pulseAnimation = keyframes`
   }
 `
 
+const pulseAnimationCss = css`
+  animation: ${pulseAnimation} 1.2s infinite;
+`
+
 const Overlay = styled.div`
   position: absolute;
   top: 0;
@@ -75,6 +79,31 @@ const Overlay = styled.div`
       box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.4); /* Halo effect */
     }
   }
+
+  ${({
+    // @ts-ignore
+    listeningPodcast,
+  }) =>
+    listeningPodcast &&
+    css`
+      opacity: 1;
+      cursor: pointer;
+      &::before {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-image: url('/images-next/play-icon.svg');
+        background-size: cover;
+        width: 28px;
+        height: 28px;
+        opacity: 0.9;
+        ${pulseAnimationCss};
+        box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.4);
+      }
+    `}
 `
 
 const IntroSection = styled.div`
@@ -149,7 +178,11 @@ const PublishedTime = styled.p`
   margin-top: 8px;
 `
 
-export default function PodcastCard({ podcast, onPodcastSelect }) {
+export default function PodcastCard({
+  podcast,
+  onPodcastSelect,
+  listeningPodcast,
+}) {
   const [showModal, setShowModal] = useState(false)
 
   const openModal = () => {
@@ -184,7 +217,12 @@ export default function PodcastCard({ podcast, onPodcastSelect }) {
             default: '323px',
           }}
         />
-        <Overlay />
+        <Overlay
+          // @ts-ignore
+          listeningPodcast={
+            listeningPodcast && listeningPodcast.guid === podcast.guid
+          }
+        />
       </ImageWrapper>
       <IntroSection>
         <Title>{podcast.title}</Title>
