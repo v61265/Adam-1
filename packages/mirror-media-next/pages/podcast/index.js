@@ -163,6 +163,7 @@ export default function Podcast({ headerData, podcastListData }) {
           allPodcasts={podcastListData}
           selectedAuthor={selectedAuthor}
           onPodcastSelect={handlePodcastSelect}
+          listeningPodcast={listeningPodcast}
         />
         {listeningPodcast && ( // Display AudioPlayer only if a podcast is selected
           <AudioPlayer listeningPodcast={listeningPodcast} />

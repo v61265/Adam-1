@@ -209,7 +209,7 @@ const VolumeControlContainer = styled.div`
      * @param {Object} param
      * @param {boolean} param.showVolumeSlider
      */ ({ showVolumeSlider }) =>
-      showVolumeSlider && `background-color: #767676; padding: 8px;`
+      showVolumeSlider && `background-color: #767676; padding: 8px 12px;`
   }
   transition: background-color 0.3s ease;
 

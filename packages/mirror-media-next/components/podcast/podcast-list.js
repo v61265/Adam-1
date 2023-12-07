@@ -46,6 +46,7 @@ export default function PodcastList({
   allPodcasts,
   selectedAuthor,
   onPodcastSelect,
+  listeningPodcast,
 }) {
   const [visiblePodcasts, setVisiblePodcasts] = useState(12)
   const [isLoading, setIsLoading] = useState(false)
@@ -115,6 +116,7 @@ export default function PodcastList({
                 key={podcast.title}
                 podcast={podcast}
                 onPodcastSelect={onPodcastSelect}
+                listeningPodcast={listeningPodcast}
               />
             ))}
           </CardsWrapper>
