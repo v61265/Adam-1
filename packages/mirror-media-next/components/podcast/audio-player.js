@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Z_INDEX } from '../../constants'
+import PlayPauseButton from './play-pause-button'
 
 /**
  * Calculate the percentage value for a gradient based on the provided value and maximum value.
@@ -165,32 +166,6 @@ const SeekSlider = styled.input`
     margin-top: -3px;
     transition: all 0.15s ease-in-out;
   }
-`
-
-const PlayButton = styled.button`
-  :focus {
-    outline: 0;
-  }
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const PauseButton = styled.button`
-  :focus {
-    outline: 0;
-  }
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 10px;
 `
 
 const SpeedButton = styled.button`
@@ -408,25 +383,10 @@ export default function AudioPlayer({ listeningPodcast }) {
           <AudioPlayerContainer key={audioURL}>
             <audio ref={audioRef} src={audioURL} autoPlay></audio>
             <Controls>
-              {isPlaying ? (
-                <PauseButton onClick={togglePlayPause}>
-                  <Image
-                    width={10}
-                    height={20}
-                    src="/images-next/pause.svg"
-                    alt="Pause"
-                  />
-                </PauseButton>
-              ) : (
-                <PlayButton onClick={togglePlayPause}>
-                  <Image
-                    width={30}
-                    height={30}
-                    src="/images-next/play.svg"
-                    alt="Play"
-                  />
-                </PlayButton>
-              )}
+              <PlayPauseButton
+                isPlaying={isPlaying}
+                togglePlayPause={togglePlayPause}
+              />
               <span>{formattedCurrentTime}</span>&nbsp;/&nbsp;
               <span>{duration}</span>
               <SlidersWrapper>
