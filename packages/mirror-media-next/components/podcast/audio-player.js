@@ -282,7 +282,7 @@ export default function AudioPlayer({ listeningPodcast }) {
   const audioURL = listeningPodcast.enclosures[0].url
 
   const audioRef = useRef(null)
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(true)
   const [speed, setSpeed] = useState(1)
   const [duration, setDuration] = useState('0:00')
   const [currentTimeSeconds, setCurrentTimeSeconds] = useState(0)
@@ -321,7 +321,7 @@ export default function AudioPlayer({ listeningPodcast }) {
     setFormattedCurrentTime('0:00')
     setDuration('0:00')
     setSpeed(1)
-    setIsPlaying(false)
+    setIsPlaying(true)
     setShowVolumeSlider(false)
     // Update the max attribute of SeekSlider to the new duration
     const seekSlider = document.querySelector('input[type="range"]')
@@ -406,7 +406,7 @@ export default function AudioPlayer({ listeningPodcast }) {
           )}
 
           <AudioPlayerContainer key={audioURL}>
-            <audio ref={audioRef} src={audioURL}></audio>
+            <audio ref={audioRef} src={audioURL} autoPlay></audio>
             <Controls>
               {isPlaying ? (
                 <PauseButton onClick={togglePlayPause}>
