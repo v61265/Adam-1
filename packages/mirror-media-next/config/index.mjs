@@ -34,7 +34,6 @@ let URL_STATIC_POST_EXTERNAL = ''
 let URL_STATIC_HEADER_HEADERS = ''
 let URL_STATIC_PODCAST_LIST = ''
 let DONATION_PAGE_URL = ''
-let GA_MEASUREMENT_ID = ''
 let GTM_ID = ''
 let SEARCH_URL = 'search-url/search'
 let URL_STATIC_POPULAR_NEWS = ''
@@ -79,7 +78,6 @@ switch (ENV) {
     ACCESS_PODCAST_FEATURE_TOGGLE = 'off'
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
-    GA_MEASUREMENT_ID = 'G-341XFN0675'
     GTM_ID = 'GTM-NCH86SP'
     SEARCH_URL = 'https://search.mirrormedia.mg'
 
@@ -130,7 +128,6 @@ switch (ENV) {
     ACCESS_PODCAST_FEATURE_TOGGLE = 'off'
 
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
-    GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
     GTM_ID = 'GTM-KVDZ27K'
     SEARCH_URL = 'https://search-staging.mirrormedia.mg'
 
@@ -173,7 +170,6 @@ switch (ENV) {
       'https://ccore.newebpay.com/MPG/mpg_gateway'
 
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
-    GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
     SEARCH_URL = 'https://search-dev.mirrormedia.mg'
 
@@ -228,7 +224,6 @@ switch (ENV) {
     URL_STATIC_PODCAST_LIST = `https://${STATIC_FILE_DOMAIN}/json/podcast_list.json`
 
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
-    GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
     SEARCH_URL = 'https://search-dev.mirrormedia.mg'
     GPT_MODE = 'dev'
@@ -254,7 +249,6 @@ export {
   DONATION_PAGE_URL,
   ENV,
   FIREBASE_CONFIG,
-  GA_MEASUREMENT_ID,
   GCP_LOGGING_FEATURE_TOGGLE,
   GCP_PROJECT_ID,
   GCP_STACKDRIVER_LOG_NAME,
