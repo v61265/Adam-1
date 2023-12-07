@@ -8,7 +8,7 @@ import { Z_INDEX } from '../../constants'
  * @param {object} options
  * @param {number} options.value
  * @param {number} options.max
- * @returns {string} The calculated percentage value as a string.
+ * @returns {string}
  */
 const calculateGradientPercentage = ({ value, max }) => {
   /**
@@ -85,6 +85,15 @@ const MarqueeContent = styled.div`
     animation-play-state: paused; /* Pause the animation on hover */
   }
 `
+
+const ErrorMessage = styled.div`
+  color: #ff0f00;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: normal;
+`
+
 const AudioPlayerContainer = styled.div`
   height: 52px;
   width: 278px;
@@ -282,9 +291,14 @@ export default function AudioPlayer({ listeningPodcast }) {
   const [isMuted, setIsMuted] = useState(false)
   const [showVolumeSlider, setShowVolumeSlider] = useState(false)
   const [volume, setVolume] = useState(100)
+  const [audioLoadError, setAudioLoadError] = useState(false)
 
   useEffect(() => {
     const audio = audioRef.current
+
+    const handleAudioError = () => {
+      setAudioLoadError(true)
+    }
 
     const updateTime = () => {
       const currentSeconds = Math.floor(audio.currentTime)
@@ -317,10 +331,12 @@ export default function AudioPlayer({ listeningPodcast }) {
 
     audio.addEventListener('timeupdate', updateTime)
     audio.addEventListener('loadedmetadata', updateDuration)
+    audio.addEventListener('error', handleAudioError)
 
     return () => {
       audio.removeEventListener('timeupdate', updateTime)
       audio.removeEventListener('loadedmetadata', updateDuration)
+      audio.removeEventListener('error', handleAudioError)
     }
   }, [audioURL])
 
@@ -379,9 +395,15 @@ export default function AudioPlayer({ listeningPodcast }) {
     <PlayerWrapper>
       {listeningPodcast && (
         <>
-          <MarqueeContainer>
-            <MarqueeContent>{listeningPodcast.title}</MarqueeContent>
-          </MarqueeContainer>
+          {audioLoadError ? (
+            <ErrorMessage>
+              這集節目暫時無法播放，請重新整理頁面或檢查您的網路環境
+            </ErrorMessage>
+          ) : (
+            <MarqueeContainer>
+              <MarqueeContent>{listeningPodcast.title}</MarqueeContent>
+            </MarqueeContainer>
+          )}
 
           <AudioPlayerContainer key={audioURL}>
             <audio ref={audioRef} src={audioURL}></audio>
