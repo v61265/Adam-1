@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import styled, { keyframes } from 'styled-components'
 import { Z_INDEX } from '../../constants'
+import PlayPauseButton from './play-pause-button'
 
 /**
  * Calculate the percentage value for a gradient based on the provided value and maximum value.
@@ -167,32 +168,6 @@ const SeekSlider = styled.input`
   }
 `
 
-const PlayButton = styled.button`
-  :focus {
-    outline: 0;
-  }
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const PauseButton = styled.button`
-  :focus {
-    outline: 0;
-  }
-  cursor: pointer;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 10px;
-`
-
 const SpeedButton = styled.button`
   cursor: pointer;
   :focus {
@@ -282,7 +257,7 @@ export default function AudioPlayer({ listeningPodcast }) {
   const audioURL = listeningPodcast.enclosures[0].url
 
   const audioRef = useRef(null)
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(true)
   const [speed, setSpeed] = useState(1)
   const [duration, setDuration] = useState('0:00')
   const [currentTimeSeconds, setCurrentTimeSeconds] = useState(0)
@@ -321,7 +296,7 @@ export default function AudioPlayer({ listeningPodcast }) {
     setFormattedCurrentTime('0:00')
     setDuration('0:00')
     setSpeed(1)
-    setIsPlaying(false)
+    setIsPlaying(true)
     setShowVolumeSlider(false)
     // Update the max attribute of SeekSlider to the new duration
     const seekSlider = document.querySelector('input[type="range"]')
@@ -406,27 +381,12 @@ export default function AudioPlayer({ listeningPodcast }) {
           )}
 
           <AudioPlayerContainer key={audioURL}>
-            <audio ref={audioRef} src={audioURL}></audio>
+            <audio ref={audioRef} src={audioURL} autoPlay></audio>
             <Controls>
-              {isPlaying ? (
-                <PauseButton onClick={togglePlayPause}>
-                  <Image
-                    width={10}
-                    height={20}
-                    src="/images-next/pause.svg"
-                    alt="Pause"
-                  />
-                </PauseButton>
-              ) : (
-                <PlayButton onClick={togglePlayPause}>
-                  <Image
-                    width={30}
-                    height={30}
-                    src="/images-next/play.svg"
-                    alt="Play"
-                  />
-                </PlayButton>
-              )}
+              <PlayPauseButton
+                isPlaying={isPlaying}
+                togglePlayPause={togglePlayPause}
+              />
               <span>{formattedCurrentTime}</span>&nbsp;/&nbsp;
               <span>{duration}</span>
               <SlidersWrapper>
