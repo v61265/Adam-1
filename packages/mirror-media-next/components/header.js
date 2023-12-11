@@ -459,8 +459,8 @@ export default function Header({
           {children}
           <TopicsAndSubscribe>
             <NavTopics topics={topics} />
-            <EntranceButton href="/podcast" width="94px">
-              Podcast
+            <EntranceButton href="/podcasts" width="98px">
+              Podcasts
             </EntranceButton>
             <EntranceButton href="/papermag" width="144px">
               訂閱紙本雜誌
