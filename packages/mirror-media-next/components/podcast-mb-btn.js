@@ -25,8 +25,8 @@ const PodcastButton = styled.button`
 export default function EnterPodcastBtn() {
   return (
     <PodcastButton>
-      <Link href="/podcast" target="_blank">
-        Podcast
+      <Link href="/podcasts" target="_blank">
+        Podcasts
       </Link>
     </PodcastButton>
   )
