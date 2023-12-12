@@ -188,14 +188,11 @@ const VolumeControlContainer = styled.div`
   border-radius: 22px;
   padding: 8px 0px;
   margin-left: 12px;
-  ${
-    /**
-     * @param {Object} param
-     * @param {boolean} param.showVolumeSlider
-     */ ({ showVolumeSlider }) =>
-      showVolumeSlider && `background-color: #767676; padding: 8px 12px;`
+  &:hover {
+    background-color: #767676;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
   }
-  transition: background-color 0.3s ease;
 
   display: none;
 
@@ -298,6 +295,7 @@ export default function AudioPlayer({ listeningPodcast }) {
     setSpeed(1)
     setIsPlaying(true)
     setShowVolumeSlider(false)
+    setIsMuted(false)
     // Update the max attribute of SeekSlider to the new duration
     const seekSlider = document.querySelector('input[type="range"]')
     if (seekSlider) {
@@ -346,7 +344,7 @@ export default function AudioPlayer({ listeningPodcast }) {
     setCurrentTimeSeconds(newTime)
   }
 
-  // Control the volume of the audio
+  // Control the volume of the audio by volume slider
   const handleVolumeChange = (e) => {
     const newVolume = e.target.value
     const audio = audioRef.current
@@ -362,8 +360,21 @@ export default function AudioPlayer({ listeningPodcast }) {
     }
   }
 
-  const toggleVolumeSlider = () => {
-    setShowVolumeSlider(!showVolumeSlider)
+  // Control the volume of the volume btn clicked
+  const handleVolumeClicked = () => {
+    const audio = audioRef.current
+    let newVolume = volume
+
+    if (isMuted) {
+      newVolume = 100
+      audio.volume = 1
+    } else {
+      newVolume = 0
+      audio.volume = 0
+    }
+
+    setIsMuted(!isMuted)
+    setVolume(newVolume)
   }
 
   return (
@@ -400,8 +411,11 @@ export default function AudioPlayer({ listeningPodcast }) {
                     audioRef.current && Math.floor(audioRef.current.duration)
                   }
                 />
-                <VolumeControlContainer showVolumeSlider={showVolumeSlider}>
-                  <VolumeMutedButtonsContainer onClick={toggleVolumeSlider}>
+                <VolumeControlContainer
+                  onMouseEnter={() => setShowVolumeSlider(true)}
+                  onMouseLeave={() => setShowVolumeSlider(false)}
+                >
+                  <VolumeMutedButtonsContainer onClick={handleVolumeClicked}>
                     {/* Use isMuted state to toggle between volume and muted icons */}
                     {isMuted ? (
                       <Image
