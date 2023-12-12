@@ -188,16 +188,14 @@ const VolumeControlContainer = styled.div`
   border-radius: 22px;
   padding: 8px 0px;
   margin-left: 12px;
-  &:hover {
-    background-color: #767676;
-    padding: 8px 12px;
-    transition: all 0.3s ease;
-  }
-
-  display: none;
 
   ${({ theme }) => theme.breakpoint.md} {
     display: flex;
+    &:hover {
+      background-color: #767676;
+      padding: 8px 12px;
+      transition: all 0.3s ease;
+    }
   }
 `
 const VolumeMutedButtonsContainer = styled.button`
@@ -218,6 +216,11 @@ const VolumeSliderContainer = styled.div`
   align-items: center;
   justify-content: center;
   margin-right: 8px;
+  display: none;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    display: flex;
+  }
 `
 
 const VolumeSlider = styled.input`
