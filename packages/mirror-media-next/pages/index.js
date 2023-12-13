@@ -143,7 +143,7 @@ export default function Home({
       }}
     >
       <IndexContainer>
-        <GPT_Placeholder showPlaceHolder={showPlaceholder}>
+        <GPT_Placeholder showPlaceHolder={shouldShowAd && showPlaceholder}>
           {shouldShowAd && (
             <StyledGPTAd_HD
               pageKey="home"
