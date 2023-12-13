@@ -14,6 +14,7 @@ const SubscribeMagazineButton = styled.button`
   font-size: 13px;
   font-weight: 600;
   line-height: 150%;
+  margin-right: 12px;
   &:focus {
     outline: none;
   }
