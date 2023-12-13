@@ -180,7 +180,10 @@ const LogoBtnWrapper = styled.div`
   flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
-  margin-right: 150px;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-right: 150px;
+  }
 
   ${({ theme }) => theme.breakpoint.xl} {
     flex-direction: row;
