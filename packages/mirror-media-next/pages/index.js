@@ -127,6 +127,7 @@ export default function Home({
   const shouldShowAd = useDisplayAd()
 
   const handleObSlotRenderEnded = (e) => {
+    console.log('end!', e)
     if (!e.isEmpty) {
       setShowPlaceHolder(false)
     }
