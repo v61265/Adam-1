@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
@@ -109,6 +109,7 @@ export default function Home({
   sectionsData = [],
   liveYoutubeInfo,
 }) {
+  const [showPlaceholder, setShowPlaceHolder] = useState(true)
   const editorChoice = editorChoicesData.map((item) => {
     const sectionSlug = getSectionSlugGql(item.sections, undefined)
     const sectionName = getSectionNameGql(item.sections, undefined)
@@ -125,6 +126,12 @@ export default function Home({
 
   const shouldShowAd = useDisplayAd()
 
+  const handleObSlotRenderEnded = (e) => {
+    if (!e.isEmpty) {
+      setShowPlaceHolder(false)
+    }
+  }
+
   return (
     <Layout
       header={{
@@ -136,8 +143,14 @@ export default function Home({
       }}
     >
       <IndexContainer>
-        <GPT_Placeholder>
-          {shouldShowAd && <StyledGPTAd_HD pageKey="home" adKey="HD" />}
+        <GPT_Placeholder showPlaceHolder={showPlaceholder}>
+          {shouldShowAd && (
+            <StyledGPTAd_HD
+              pageKey="home"
+              adKey="HD"
+              onSlotRenderEnded={handleObSlotRenderEnded}
+            />
+          )}
         </GPT_Placeholder>
         <GPT_TranslateContainer shouldTranslate={!shouldShowAd}>
           <>
