@@ -166,10 +166,7 @@ const GPTAdPlaceHolder = styled.div`
   width: 95px;
   height: 50px;
   margin-right: auto;
-  ${({ theme }) => theme.breakpoint.md} {
-    order: -1;
-    margin-right: 0;
-  }
+
   ${({ theme }) => theme.breakpoint.xl} {
     margin-left: 20px;
     margin-right: auto;
