@@ -21,7 +21,7 @@ import Layout from '../components/shared/layout'
 import { useDisplayAd } from '../hooks/useDisplayAd'
 import FullScreenAds from '../components/ads/full-screen-ads'
 import GPT_Placeholder from '../components/ads/gpt/gpt-placeholder'
-import GPT_TranslateContainer from '../components/ads/gpt/gpt-translate-container'
+// import GPT_TranslateContainer from '../components/ads/gpt/gpt-translate-container'
 import LiveYoutube from '../components/live-youtube'
 import { isDateInsideDatesRange } from '../utils/date'
 const GPTAd = dynamic(() => import('../components/ads/gpt/gpt-ad'), {
@@ -128,9 +128,7 @@ export default function Home({
 
   const handleObSlotRenderEnded = (e) => {
     console.log('end!', e)
-    if (!e.isEmpty) {
-      setShowPlaceHolder(false)
-    }
+    setShowPlaceHolder(e.isEmpty)
   }
 
   return (
@@ -153,15 +151,15 @@ export default function Home({
             />
           )}
         </GPT_Placeholder>
-        <GPT_TranslateContainer shouldTranslate={!shouldShowAd}>
-          <>
-            <EditorChoice editorChoice={editorChoice}></EditorChoice>
-            {shouldShowAd && <StyledGPTAd_PC_B1 pageKey="home" adKey="PC_B1" />}
-            {shouldShowAd && <StyledGPTAd_MB_L1 pageKey="home" adKey="MB_L1" />}
-            <LiveYoutube liveYoutubeInfo={liveYoutubeInfo} />
-            <LatestNews latestNewsData={latestNewsData} />
-          </>
-        </GPT_TranslateContainer>
+        {/* <GPT_TranslateContainer shouldTranslate={!shouldShowAd}> */}
+        <>
+          <EditorChoice editorChoice={editorChoice}></EditorChoice>
+          {shouldShowAd && <StyledGPTAd_PC_B1 pageKey="home" adKey="PC_B1" />}
+          {shouldShowAd && <StyledGPTAd_MB_L1 pageKey="home" adKey="MB_L1" />}
+          <LiveYoutube liveYoutubeInfo={liveYoutubeInfo} />
+          <LatestNews latestNewsData={latestNewsData} />
+        </>
+        {/* </GPT_TranslateContainer> */}
         <FullScreenAds />
       </IndexContainer>
     </Layout>
