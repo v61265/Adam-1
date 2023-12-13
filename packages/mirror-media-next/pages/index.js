@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
@@ -126,10 +126,10 @@ export default function Home({
 
   const shouldShowAd = useDisplayAd()
 
-  const handleObSlotRenderEnded = (e) => {
+  const handleObSlotRenderEnded = useCallback((e) => {
     console.log('end!', e)
     setShowPlaceHolder(e.isEmpty)
-  }
+  }, [])
 
   return (
     <Layout
