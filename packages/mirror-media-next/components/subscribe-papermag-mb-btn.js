@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import Link from 'next/link'
 const SubscribeMagazineButton = styled.button`
   display: block;
-  width: 68px;
+  width: 62px;
+  height: 50px;
   background-color: rgba(0, 0, 0, 1);
   color: white;
   text-align: center;
@@ -13,6 +14,9 @@ const SubscribeMagazineButton = styled.button`
   font-size: 13px;
   font-weight: 600;
   line-height: 150%;
+  &:focus {
+    outline: none;
+  }
 
   ${({ theme }) => theme.breakpoint.xl} {
     display: none;

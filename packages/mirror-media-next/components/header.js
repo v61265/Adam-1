@@ -10,6 +10,7 @@ import {
 } from '../constants'
 import { DEFAULT_NORMAL_SECTIONS_DATA } from '../constants/header'
 
+import SubscribeMagazineButton from '../components/subscribe-papermag-mb-btn'
 import { SEARCH_URL } from '../config/index.mjs'
 import EntranceButton from './entrance-button'
 import Logo from './logo'
@@ -154,11 +155,7 @@ const TopicsAndSubscribe = styled.section`
 const StyledGPTAd = styled(GPTAd)`
   width: auto;
   height: auto;
-  margin-right: auto;
-  ${({ theme }) => theme.breakpoint.md} {
-    order: -1;
-    margin-right: 0;
-  }
+
   ${({ theme }) => theme.breakpoint.xl} {
     margin-left: 20px;
     margin-right: auto;
@@ -178,6 +175,24 @@ const GPTAdPlaceHolder = styled.div`
     margin-right: auto;
     order: 0;
   }
+`
+
+const LogoBtnWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 140px;
+
+  ${({ theme }) => theme.breakpoint.xl} {
+    flex-direction: row;
+  }
+`
+
+const AdPaperMagBtnWrapper = styled.div`
+  display: flex;
+  gap: 12px;
 `
 
 const formatSectionItem = (section) => {
@@ -395,15 +410,26 @@ export default function Header({
   return (
     <HeaderWrapper>
       <HeaderTop>
-        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-        <a href="/" className="GTM-header-logo" aria-label="go-to-index-page">
-          <HeaderLogo />
-        </a>
-        {shouldShowAd ? (
-          <StyledGPTAd pageKey="global" adKey="RWD_LOGO" />
-        ) : (
-          <GPTAdPlaceHolder />
-        )}
+        <LogoBtnWrapper>
+          <>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a
+              href="/"
+              className="GTM-header-logo"
+              aria-label="go-to-index-page"
+            >
+              <HeaderLogo />
+            </a>
+          </>
+          <AdPaperMagBtnWrapper>
+            {shouldShowAd ? (
+              <StyledGPTAd pageKey="global" adKey="RWD_LOGO" />
+            ) : (
+              <GPTAdPlaceHolder />
+            )}
+            <SubscribeMagazineButton />
+          </AdPaperMagBtnWrapper>
+        </LogoBtnWrapper>
         <ActionWrapper>
           <SubBrandList subBrands={SUB_BRAND_LINKS} />
           <SearchBarDesktop
