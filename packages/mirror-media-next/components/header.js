@@ -183,7 +183,7 @@ const LogoBtnWrapper = styled.div`
   flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
-  margin-right: 140px;
+  margin-right: 150px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     flex-direction: row;
@@ -192,7 +192,6 @@ const LogoBtnWrapper = styled.div`
 
 const AdPaperMagBtnWrapper = styled.div`
   display: flex;
-  gap: 12px;
 `
 
 const formatSectionItem = (section) => {
@@ -422,12 +421,12 @@ export default function Header({
             </a>
           </>
           <AdPaperMagBtnWrapper>
+            <SubscribeMagazineButton />
             {shouldShowAd ? (
               <StyledGPTAd pageKey="global" adKey="RWD_LOGO" />
             ) : (
               <GPTAdPlaceHolder />
             )}
-            <SubscribeMagazineButton />
           </AdPaperMagBtnWrapper>
         </LogoBtnWrapper>
         <ActionWrapper>
