@@ -48,24 +48,6 @@ const ContainerDesktop = styled(Container)`
   }
 `
 
-const PlaceHolder = styled.p`
-  background: #f4f5f6;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 100vw;
-  height: 100%;
-  transform: translate(-50%, 0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #d2d2d2;
-  font-feature-settings: 'clig' off, 'liga' off;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: normal;
-`
-
 const DEFAULT_SIZES = {
   mobile: {
     width: '300px',
@@ -89,20 +71,10 @@ const DEFAULT_SIZES = {
  * @param {Object} props
  * @param {Rwd} [props.rwd]
  * @param {JSX.Element} props.children
- * @param {boolean} [props.showPlaceHolder]
  * @returns {JSX.Element}
  */
-export default function GPT_Placeholder({
-  rwd = DEFAULT_SIZES,
-  children,
-  showPlaceHolder,
-}) {
-  return (
-    <Container rwd={rwd}>
-      {showPlaceHolder && <PlaceHolder>廣告</PlaceHolder>}
-      {children}
-    </Container>
-  )
+export default function GPT_Placeholder({ rwd = DEFAULT_SIZES, children }) {
+  return <Container rwd={rwd}>{children}</Container>
 }
 /**
  *

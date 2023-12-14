@@ -109,7 +109,6 @@ export default function Home({
   sectionsData = [],
   liveYoutubeInfo,
 }) {
-  const [showPlaceholder, setShowPlaceHolder] = useState(true)
   const editorChoice = editorChoicesData.map((item) => {
     const sectionSlug = getSectionSlugGql(item.sections, undefined)
     const sectionName = getSectionNameGql(item.sections, undefined)
@@ -125,10 +124,10 @@ export default function Home({
   })
 
   const shouldShowAd = useDisplayAd()
+  const [isHDAdEmpty, setISHDAdEmpty] = useState(true)
 
   const handleObSlotRenderEnded = useCallback((e) => {
-    console.log('end!', e)
-    setShowPlaceHolder(e.isEmpty)
+    setISHDAdEmpty(e.isEmpty)
   }, [])
 
   return (
@@ -142,7 +141,7 @@ export default function Home({
       }}
     >
       <IndexContainer>
-        <GPT_Placeholder showPlaceHolder={shouldShowAd && showPlaceholder}>
+        <GPT_Placeholder>
           {shouldShowAd && (
             <StyledGPTAd_HD
               pageKey="home"
@@ -151,7 +150,7 @@ export default function Home({
             />
           )}
         </GPT_Placeholder>
-        <GPT_TranslateContainer shouldTranslate={!shouldShowAd}>
+        <GPT_TranslateContainer shouldTranslate={!shouldShowAd || isHDAdEmpty}>
           <>
             <EditorChoice editorChoice={editorChoice}></EditorChoice>
             {shouldShowAd && <StyledGPTAd_PC_B1 pageKey="home" adKey="PC_B1" />}
