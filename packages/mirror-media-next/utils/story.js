@@ -158,19 +158,19 @@ const getSlicedIndexAndUnstyledBlocksCount = (
 /**
  * Convert the UTC timestamp to GMT timestamp by adding 8 hours.
  *
- * @param {string} timeStampStr
+ * @param {string} utcTimeStamp
  * @return {string}
  */
-const changeUtcToGmtTimeStamp = (timeStampStr) => {
-  const inputDate = new Date(timeStampStr)
+const changeUtcToGmtTimeStamp = (utcTimeStamp) => {
+  const inputDate = new Date(utcTimeStamp)
   inputDate.setHours(inputDate.getHours() + 8)
-  const outputStr = inputDate.toISOString() // change to `YYYY-MM-DDTHH:mm:ss.sssZ` format
+  const gmtTimeStamp = inputDate.toISOString() //change to `YYYY-MM-DDTHH:mm:ss.sssZ` format
 
-  if (typeof outputStr !== 'string') {
-    return timeStampStr
+  if (typeof gmtTimeStamp !== 'string') {
+    return utcTimeStamp
   }
 
-  return outputStr
+  return gmtTimeStamp
 }
 
 export {
