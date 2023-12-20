@@ -36,6 +36,9 @@ const generateJsonLdsData = (postData, currentPage) => {
       ? sectionsInInputOrder
       : sections
 
+  console.log('GMT-publishedDate', changeUtcToGmtTimeStamp(publishedDate))
+  console.log('GMT-updatedAt', changeUtcToGmtTimeStamp(updatedAt))
+
   const hasWriter = writersWithOrdered && writersWithOrdered.length
   const hasSection = writersWithOrdered && sectionWithOrdered.length
   const authorName = hasWriter ? writersWithOrdered[0].name : '鏡週刊'
