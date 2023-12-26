@@ -13,16 +13,23 @@ import styled from 'styled-components'
  */
 
 const Container = styled.div`
+  height: 100px;
   ${
     /** @param {{rwd: Rwd, shouldTranslate: boolean}} props*/
     ({ shouldTranslate, rwd }) =>
-      shouldTranslate && `transform: translate(0, -${rwd.mobile.height})`
+      shouldTranslate &&
+      `
+      transform: translate(0, -${rwd.mobile.height});
+      `
   }
   ${({ theme }) => theme.breakpoint.md} {
     ${
       /** @param {{rwd: Rwd, shouldTranslate: boolean}} props*/
       ({ shouldTranslate, rwd }) =>
-        shouldTranslate && `transform: translate(0, -${rwd.tablet.height})`
+        shouldTranslate &&
+        `
+        transform: translate(0, -${rwd.tablet.height});
+        `
     }
   }
 
@@ -30,7 +37,10 @@ const Container = styled.div`
     ${
       /** @param {{rwd: Rwd, shouldTranslate: boolean}} props*/
       ({ shouldTranslate, rwd }) =>
-        shouldTranslate && `transform: translate(0, -${rwd.tablet.height})`
+        shouldTranslate &&
+        `
+        transform: translate(0, -${rwd.tablet.height});
+        `
     }
   }
 `
