@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 /**
@@ -75,8 +76,19 @@ export default function GPT_TranslateContainer({
   children,
   shouldTranslate,
 }) {
+  const containerRef = useRef(null)
+
+  useEffect(() => {
+    if (shouldTranslate && containerRef.current) {
+      const containerHeight = containerRef.current.clientHeight
+      const translationHeight = parseInt(rwd.mobile.height, 10)
+      containerRef.current.style.height = `${
+        containerHeight - translationHeight
+      }px`
+    }
+  }, [shouldTranslate, rwd.mobile.height])
   return (
-    <Container rwd={rwd} shouldTranslate={shouldTranslate}>
+    <Container rwd={rwd} shouldTranslate={shouldTranslate} ref={containerRef}>
       {children}
     </Container>
   )
