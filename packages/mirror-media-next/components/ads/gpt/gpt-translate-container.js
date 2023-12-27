@@ -91,7 +91,7 @@ export default function GPT_TranslateContainer({
         originalHeight - translationHeight
       }px`
     } else {
-      containerRef.current.style.height = `${originalHeight}px`
+      containerRef.current.style.height = `fit-content`
     }
   }, [shouldTranslate, rwd.mobile.height, originalHeight])
   return (
