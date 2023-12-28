@@ -112,6 +112,11 @@ const DonateSubscribeWrapper = styled.div`
     margin-left: 8px;
   }
 `
+
+const BriefWrapper = styled.div`
+  margin: 32px 0;
+`
+
 /**
  *
  * @param {Object} param
@@ -237,11 +242,13 @@ export default function StoryWideStyle({
               <SubscribeLink className="subscribe-btn GTM-subscribe-link-top" />
             </DonateSubscribeWrapper>
             <section className="content">
-              <ArticleBrief
-                sectionSlug="member"
-                brief={brief}
-                contentLayout="wide"
-              />
+              <BriefWrapper>
+                <ArticleBrief
+                  sectionSlug="member"
+                  brief={brief}
+                  contentLayout="wide"
+                />
+              </BriefWrapper>
               <DraftRenderBlock
                 rawContentBlock={postContent.data}
                 contentLayout="wide"
