@@ -21,6 +21,7 @@ import ButtonCopyLink from '../shared/button-copy-link'
 import ButtonSocialNetworkShare from '../shared/button-social-network-share'
 import Aside from '../shared/aside'
 import { getActiveOrderSection } from '../../../utils'
+import ArticleBrief from '../shared/brief'
 
 /**
  * @typedef {import('../../../apollo/fragments/post').Post} PostData
@@ -236,7 +237,11 @@ export default function StoryWideStyle({
               <SubscribeLink className="subscribe-btn GTM-subscribe-link-top" />
             </DonateSubscribeWrapper>
             <section className="content">
-              <DraftRenderBlock rawContentBlock={brief} contentLayout="wide" />
+              <ArticleBrief
+                sectionSlug="member"
+                brief={brief}
+                contentLayout="wide"
+              />
               <DraftRenderBlock
                 rawContentBlock={postContent.data}
                 contentLayout="wide"
