@@ -818,10 +818,10 @@ export default function StoryNormalStyle({
           {shouldShowAd && noCategoryOfWineSlug ? (
             <StickyGPTAd_MB_ST pageKey={pageKeyForGptAd} />
           ) : null}
-
-          <Footer footerType="default" />
         </>
       </GPT_TranslateContainer>
+
+      <Footer footerType="default" />
     </>
   )
 }
