@@ -141,7 +141,7 @@ export default function Home({
       }}
     >
       <IndexContainer>
-        <GPT_Placeholder>
+        <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
           {shouldShowAd && (
             <StyledGPTAd_HD
               pageKey="home"
@@ -150,15 +150,11 @@ export default function Home({
             />
           )}
         </GPT_Placeholder>
-        <GPT_TranslateContainer shouldTranslate={!shouldShowAd || isHDAdEmpty}>
-          <>
-            <EditorChoice editorChoice={editorChoice}></EditorChoice>
-            {shouldShowAd && <StyledGPTAd_PC_B1 pageKey="home" adKey="PC_B1" />}
-            {shouldShowAd && <StyledGPTAd_MB_L1 pageKey="home" adKey="MB_L1" />}
-            <LiveYoutube liveYoutubeInfo={liveYoutubeInfo} />
-            <LatestNews latestNewsData={latestNewsData} />
-          </>
-        </GPT_TranslateContainer>
+        <EditorChoice editorChoice={editorChoice}></EditorChoice>
+        {shouldShowAd && <StyledGPTAd_PC_B1 pageKey="home" adKey="PC_B1" />}
+        {shouldShowAd && <StyledGPTAd_MB_L1 pageKey="home" adKey="MB_L1" />}
+        <LiveYoutube liveYoutubeInfo={liveYoutubeInfo} />
+        <LatestNews latestNewsData={latestNewsData} />
         <FullScreenAds />
       </IndexContainer>
     </Layout>
