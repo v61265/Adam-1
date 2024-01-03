@@ -542,6 +542,7 @@ export default function ExternalNormalStyle({ external }) {
               updatedDate={updatedTaipeiTime}
               publishedDate={publishedTaipeiTime}
               credits={extend_byline}
+              partner={partner}
             />
           </InfoAndHero>
 
