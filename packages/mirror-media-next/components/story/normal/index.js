@@ -1,7 +1,7 @@
 //TODO: refactor jsx structure, make it more readable.
 //TODO: adjust function `handleFetchPopularNews` and `handleFetchPopularNews`, make it more reuseable in other pages.
 
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
@@ -490,6 +490,7 @@ export default function StoryNormalStyle({
   headerData,
   classNameForGTM = '',
 }) {
+  const [isHDAdEmpty, setISHDAdEmpty] = useState(true)
   const {
     title = '',
     subtitle = '',
@@ -629,6 +630,10 @@ export default function StoryNormalStyle({
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
+  const handleObSlotRenderEnded = useCallback((e) => {
+    setISHDAdEmpty(e.isEmpty)
+  }, [])
+
   return (
     <>
       <ShareHeader
@@ -639,12 +644,15 @@ export default function StoryNormalStyle({
         }}
       />
 
-      <GPT_Placeholder>
+      <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
         {shouldShowAd && (
-          <StyledGPTAd_HD pageKey={pageKeyForGptAd} adKey="HD" />
+          <StyledGPTAd_HD
+            pageKey={pageKeyForGptAd}
+            adKey="HD"
+            onSlotRenderEnded={handleObSlotRenderEnded}
+          />
         )}
       </GPT_Placeholder>
-
       <Main className={classNameForGTM}>
         <Article>
           <SectionAndDate>
@@ -798,7 +806,6 @@ export default function StoryNormalStyle({
       {shouldShowAd && noCategoryOfWineSlug ? (
         <StickyGPTAd_MB_ST pageKey={pageKeyForGptAd} />
       ) : null}
-
       <Footer footerType="default" />
     </>
   )
