@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import styled from 'styled-components'
 
 import Image from 'next/image'
@@ -93,12 +92,8 @@ const ExternalCredit = styled.div`
   gap: 0px 16px;
   justify-content: start;
   align-items: center;
-
-  .link {
-    color: ${
-      /** @param {{theme:Theme}} param */
-      ({ theme }) => theme.color.brandColor.darkBlue
-    };
+  a {
+    color: #0b4fa2;
   }
 `
 const ExternalCreditTitle = styled.div`
@@ -109,41 +104,17 @@ const ExternalCreditTitle = styled.div`
 `
 
 /**
- * @typedef {import('../../apollo/fragments/partner').Partner} Partner
- */
-
-/**
  * @param {Object} props
  * @param {string} props.updatedDate
  * @param {string} props.publishedDate
  * @param {string} props.credits
- * @param {Partner | null} props.partner
  * @returns {JSX.Element}
  */
-export default function ArticleInfo({
-  updatedDate,
-  publishedDate,
-  credits,
-  partner,
-}) {
+export default function ArticleInfo({ updatedDate, publishedDate, credits }) {
   const creditJsx = credits.length > 0 && (
     <ExternalCredit>
       <ExternalCreditTitle>鏡週刊</ExternalCreditTitle>
-      <div>
-        文｜
-        {partner?.slug ? (
-          <Link
-            className="link"
-            target="_blank"
-            rel="noreferrer noopenner"
-            href={`/externals/${partner?.slug}`}
-          >
-            {getCreditsHtml(credits)}
-          </Link>
-        ) : (
-          <>{getCreditsHtml(credits)}</>
-        )}
-      </div>
+      <p>文｜{getCreditsHtml(credits)} </p>
     </ExternalCredit>
   )
 
