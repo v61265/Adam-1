@@ -220,7 +220,9 @@ export default function TopicList({ topic, renderPageSize, slideshowImages }) {
     <>
       <Container customCss={style}>
         <Topic className="topic" backgroundUrl={backgroundUrl}>
-          <TopicLink href={topic?.heroUrl} target="_blank" />
+          {topic?.heroUrl && (
+            <TopicLink href={topic?.heroUrl} target="_blank" />
+          )}
           <TopicTitle className="topic-title" />
           <TopicLeading className="leading">
             {!!slideshowImages.length && (
