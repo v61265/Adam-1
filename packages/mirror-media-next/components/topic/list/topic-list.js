@@ -244,21 +244,45 @@ export default function TopicList({ topic, renderPageSize, slideshowImages }) {
                   modules={[Autoplay, Navigation]}
                 >
                   {slideshowImages.map((item) => (
-                    <SwiperSlide key={item.id}>
-                      <CustomImage
-                        images={item?.resized}
-                        imagesWebP={item?.resizedWebp}
-                        loadingImage={'/images-next/loading@4x.gif'}
-                        defaultImage={'/images-next/default-og-img.png'}
-                        rwd={{
-                          mobile: '450px',
-                          tablet: '850px',
-                          desktop: '850px',
-                          default: '850px',
-                        }}
-                        priority={true}
-                        alt={item.name}
-                      />
+                    <SwiperSlide key={item?.id}>
+                      {item?.topicKeywords &&
+                      item?.topicKeywords.startsWith('@-') ? (
+                        <Link
+                          href={item.topicKeywords.slice(2)}
+                          target="_blank"
+                          rel="noreferrer noopenner"
+                        >
+                          <CustomImage
+                            images={item?.resized}
+                            imagesWebP={item?.resizedWebp}
+                            loadingImage={'/images-next/loading@4x.gif'}
+                            defaultImage={'/images-next/default-og-img.png'}
+                            rwd={{
+                              mobile: '450px',
+                              tablet: '850px',
+                              desktop: '850px',
+                              default: '850px',
+                            }}
+                            priority={true}
+                            alt={item.name}
+                          />
+                        </Link>
+                      ) : (
+                        <CustomImage
+                          images={item?.resized}
+                          imagesWebP={item?.resizedWebp}
+                          loadingImage={'/images-next/loading@4x.gif'}
+                          defaultImage={'/images-next/default-og-img.png'}
+                          rwd={{
+                            mobile: '450px',
+                            tablet: '850px',
+                            desktop: '850px',
+                            default: '850px',
+                          }}
+                          priority={true}
+                          alt={item.name}
+                        />
+                      )}
                     </SwiperSlide>
                   ))}
                 </Swiper>
