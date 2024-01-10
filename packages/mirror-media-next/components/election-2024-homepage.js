@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
+import { ELECTION_2024 } from '../config/index.mjs'
 const Wrapper = styled.div`
   position: relative;
   padding-top: 20px;
@@ -21,11 +22,12 @@ export default function Election2024Homepage({ className = '' }) {
       setShouldShowIframe(true)
     }
   }, [])
+
   return (
     <>
       <Wrapper className={className}>
         {shouldShowIframe ? (
-          <iframe src="https://dev.mirrormedia.mg/projects/dev-election2024-homepage-0110-9/index.html"></iframe>
+          <iframe src={ELECTION_2024.url}></iframe>
         ) : (
           <Image
             style={{ margin: '0 auto' }}
@@ -37,13 +39,15 @@ export default function Election2024Homepage({ className = '' }) {
           ></Image>
         )}
       </Wrapper>
-      <button
-        onClick={() => {
-          setShouldShowIframe((pre) => !pre)
-        }}
-      >
-        測試切換
-      </button>
+      {ELECTION_2024.shouldShowToggleButton && (
+        <button
+          onClick={() => {
+            setShouldShowIframe((pre) => !pre)
+          }}
+        >
+          測試切換
+        </button>
+      )}
     </>
   )
 }
