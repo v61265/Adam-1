@@ -169,6 +169,14 @@ export default function SectionVideohub({
 }
 
 export async function getServerSideProps({ query, req, res }) {
+  const userAgent = req.headers['user-agent']
+  console.log(
+    JSON.stringify({
+      severity: 'DEBUG',
+      message: `[Youtube] open /section/videohub with agent ${userAgent}`,
+    })
+  )
+
   if (ENV === 'prod') {
     setPageCache(res, { cachePolicy: 'max-age', cacheTime: 900 }, req.url)
   } else {
