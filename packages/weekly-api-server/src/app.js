@@ -165,7 +165,7 @@ export function createApp({
   // We need to get session token before proxying requests to Member GQL.
   app.use(
     '/member/graphql',
-    middlewareCreator.createContentGQLSessionTokenMw({
+    middlewareCreator.createIsrafelSessionTokenMw({
       apiUrl: israfelProxyOrigin + '/api/graphql',
       headlessAccount: israfelHeadlessAccount,
     })
