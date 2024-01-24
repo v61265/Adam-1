@@ -9,6 +9,7 @@ const {
   GCS_ORIGIN,
   YOUTUBE_ORIGIN,
   SECRET_RESOURCE_ID,
+  RELEASE_BRANCH,
 } = process.env
 
 /**
@@ -60,6 +61,7 @@ const envVar = {
   secretResourceId:
     SECRET_RESOURCE_ID ||
     'projects/983956931553/secrets/dev-weekly-api-server/versions/1',
+  releaseBranch: RELEASE_BRANCH || 'prod',
 }
 
 export default envVar

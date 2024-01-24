@@ -21,8 +21,21 @@ async function start() {
   try {
     /** @type {Secret} */
     let jsonObj
+    if (envVar.releaseBranch === 'local') {
+      jsonObj = {
+        israfelHeadlessAccount: {
+          email: 'weekly-api-server@mirrormedia.mg',
+          password: 'get_password_from_israfel_cms',
+        },
+        contentGQLHeadlessAccount: {
+          email: 'weekly-api-server@mirrormedia.mg',
+          password: 'get_password_from_content_cms',
+        },
+      }
+    } else {
       const value = await secretManager.getSecretValue(envVar.secretResourceId)
       jsonObj = JSON.parse(value)
+    }
     israfelHeadlessAccount = jsonObj.israfelHeadlessAccount
     contentGQLHeadlessAccount = jsonObj.contentGQLHeadlessAccount
   } catch (err) {
