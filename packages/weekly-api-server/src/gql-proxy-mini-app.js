@@ -67,6 +67,8 @@ export function createGraphQLProxy({
 
         if (sessionTokenKey) {
           const sessionToken = res.locals[sessionTokenKey]
+          // remove Authorization header to prevent authenication fail on gql side
+          proxyReq.removeHeader('Authorization')
           proxyReq.setHeader('Cookie', `keystonejs-session=${sessionToken}`)
         }
 
