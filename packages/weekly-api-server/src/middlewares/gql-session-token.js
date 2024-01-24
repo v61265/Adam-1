@@ -78,8 +78,7 @@ mutation {
         )
         throw annotatingError
       }
-
-      const { sessionToken, code, message } = data
+      const { sessionToken, code, message } = data.authenticateuserWithPassword
 
       if (code) {
         const annotatingError = errors.helpers.wrap(
@@ -93,8 +92,8 @@ mutation {
       if (sessionToken) {
         this.sessionToken = sessionToken
         this.sessionTokenIssueTimestamp = Math.round(Date.now() / 1000)
-        return sessionToken
       }
+      return this.sessionToken
     } catch (axiosErr) {
       throw errors.helpers.wrap(
         errors.helpers.annotateAxiosError(axiosErr),
@@ -226,8 +225,8 @@ mutation {
       if (sessionToken) {
         this.sessionToken = sessionToken
         this.sessionTokenIssueTimestamp = Math.round(Date.now() / 1000)
-        return sessionToken
       }
+      return this.sessionToken
     } catch (axiosErr) {
       throw errors.helpers.wrap(
         errors.helpers.annotateAxiosError(axiosErr),
@@ -258,7 +257,6 @@ export function createContentGQLSessionTokenMw({
       const key = sessionTokenKey.member
       const sessionToken = await tokenManager.getSessionToken(email, password)
       res.locals[key] = sessionToken
-      console.log('sessionToken:', sessionToken)
     } catch (err) {
       const annotatingError = errors.helpers.wrap(
         err,
