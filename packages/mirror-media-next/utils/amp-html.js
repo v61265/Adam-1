@@ -67,7 +67,7 @@ export function transformHtmlIntoAmpHtml(html, currentPageUrl) {
 
           replaceEle = ampYoutube
           DomUtils.replaceElement(ele, replaceEle)
-          break
+          continue
         }
         // if not youtube iframe, let the following logic to handle
       }
