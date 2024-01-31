@@ -67,7 +67,7 @@ export function transformHtmlIntoAmpHtml(html, currentPageUrl) {
 
           replaceEle = ampYoutube
           DomUtils.replaceElement(ele, replaceEle)
-          break
+          continue
         }
         // if not youtube iframe, let the following logic to handle
       }
@@ -107,13 +107,6 @@ export function transformHtmlIntoAmpHtml(html, currentPageUrl) {
   for (const replacedTag of replacedTags) {
     for (const ele of CSSselect.selectAll(replacedTag, dom)) {
       let ampEle
-
-      // @ts-ignore
-      // Since all replacedTags should all have src, remove element if src is empty.
-      if (!ele.attribs?.src) {
-        DomUtils.removeElement(ele)
-        break
-      }
 
       if (replacedTag === 'img') {
         // reset the original image style and let it fills the parent's width
