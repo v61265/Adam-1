@@ -9,6 +9,7 @@ import { default as render } from 'dom-serializer'
  * Transform the html and make it amp valid version.
  * Since amp html has so many constraints, this function only handle the situations listed below:
  * 1. remove prohibited element and show hint to redirect to the non-amp page.
+ *    Exception: youtube iframe.
  * 2. replace html tag with 'amp-' (amp valid html tag).
  *
  * The listed situation may increase in the future according to the complexity of the html source. In other word, we will handle more situations when new problem occurs.
@@ -40,6 +41,37 @@ export function transformHtmlIntoAmpHtml(html, currentPageUrl) {
   // 1. remove prohibited element and show hint to redirect to the non-amp page.
   for (const prohibitedTag of prohibitedTags) {
     for (const ele of CSSselect.selectAll(prohibitedTag, dom)) {
+      let replaceEle
+      if (prohibitedTag === 'iframe') {
+        // @ts-ignore
+        const iframeSrc = ele.attribs?.src || ''
+        const matchYoutubeIframe = iframeSrc?.match(
+          /\/embed\/([a-zA-Z0-9_-]{11})/
+        )
+
+        // only youtube iframe will be rendered as amp-iframe
+        if (matchYoutubeIframe && matchYoutubeIframe[1]) {
+          const youtubeId = matchYoutubeIframe[1]
+          const ampYoutubeTemplate = `
+          <span class="amp-img-wrapper">
+            <amp-youtube data-videoid="${youtubeId}" layout="fill">
+              <amp-img
+                src="https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg"
+                placeholder
+                layout="fill"
+              />
+            </amp-youtube>
+          </span>
+        `
+          const ampYoutube = parseDocument(ampYoutubeTemplate)
+
+          replaceEle = ampYoutube
+          DomUtils.replaceElement(ele, replaceEle)
+          break
+        }
+        // if not youtube iframe, let the following logic to handle
+      }
+
       // create new element from parse html string
       const unsupportTemplate = `
       <a class='link-to-story' 
@@ -66,21 +98,95 @@ export function transformHtmlIntoAmpHtml(html, currentPageUrl) {
       </svg>
       </a>
       `
-      const unsupportEle = parseDocument(unsupportTemplate)
-      DomUtils.replaceElement(ele, unsupportEle)
+      replaceEle = parseDocument(unsupportTemplate)
+      DomUtils.replaceElement(ele, replaceEle)
     }
   }
 
   // 2. replace html tag with 'amp-' (amp valid html tag).
   for (const replacedTag of replacedTags) {
     for (const ele of CSSselect.selectAll(replacedTag, dom)) {
-      const ampEle = {
-        type: 'tag',
-        name: 'amp-' + replacedTag,
+      let ampEle
+
+      // @ts-ignore
+      // Since all replacedTags should all have src, remove element if src is empty.
+      if (!ele.attribs?.src) {
+        DomUtils.removeElement(ele)
+        break
+      }
+
+      if (replacedTag === 'img') {
+        // reset the original image style and let it fills the parent's width
+        const ampImgEle = {
+          type: 'tag',
+          name: 'amp-img',
+          attribs: {
+            // @ts-ignore
+            ...ele.attribs,
+            layout: 'fill',
+            style: '',
+          },
+          // @ts-ignore
+          children: ele.children,
+        }
+        ampImgEle.attribs.layout = 'fill'
+        ampImgEle.attribs.style = ''
+
+        // add .amp-img-wrapper class for the page side to decide the style
+        // use span incase the <img> tag sits inside a <p> tag
+        const ampImpParentTemplate = `
+        <span class="amp-img-wrapper">
+        </span>
+      `
+        const section = parseDocument(ampImpParentTemplate)
+        const sections = CSSselect.selectAll('span', section)
         // @ts-ignore
-        attribs: ele.attribs,
-        // @ts-ignore
-        children: ele.attribs,
+        sections[0].children.push(ampImgEle)
+
+        ampEle = section
+      } else if (replacedTag === 'video') {
+        const ampVideoEle = {
+          type: 'tag',
+          name: 'amp-video',
+          attribs: {
+            // @ts-ignore
+            ...ele.attribs,
+            style: '',
+            controls: 'controls',
+            autoplay: 'autoplay',
+            loop: 'loop',
+            layout: 'responsive',
+            width: '100vw',
+            height: '50vw',
+          },
+          // @ts-ignore
+          children: ele.children,
+        }
+        ampEle = ampVideoEle
+      } else if (replacedTag === 'audio') {
+        const ampAudioEle = {
+          type: 'tag',
+          name: 'amp-audio',
+          attribs: {
+            // @ts-ignore
+            ...ele.attribs,
+            style: '',
+            width: '50vw',
+            height: '54px',
+          },
+          // @ts-ignore
+          children: ele.children,
+        }
+        ampEle = ampAudioEle
+      } else {
+        ampEle = {
+          type: 'tag',
+          name: 'amp-' + replacedTag,
+          // @ts-ignore
+          attribs: ele.attribs,
+          // @ts-ignore
+          children: ele.children,
+        }
       }
 
       // replace tag with amp-{tag}
