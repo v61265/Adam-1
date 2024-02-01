@@ -20,6 +20,7 @@ import Taboola from '../../../components/amp/amp-ads/taboola-ad'
 import AmpMain from '../../../components/amp/external/amp-main'
 import { transformHtmlIntoAmpHtml } from '../../../utils/amp-html'
 import Script from 'next/script'
+import JsonLdsScripts from '../../../components/externals/shared/json-lds-scripts'
 
 export const config = { amp: true }
 
@@ -59,6 +60,7 @@ export default function External({ external }) {
         {ampGptStickyAdScript}
         {canonicalLink}
       </Head>
+      <JsonLdsScripts external={external} currentPage="/external/amp/" />
       <Layout
         head={{
           title,
