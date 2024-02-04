@@ -8,6 +8,7 @@ const NEWEBPAY_PAPERMAG_KEY =
   process.env.NEWEBPAY_PAPERMAG_KEY || 'newebpay-papermag-key'
 const NEWEBPAY_PAPERMAG_IV =
   process.env.NEWEBPAY_PAPERMAG_IV || 'newebpay-papermag-iv'
+const ISRAFEL_ORIGIN = process.env.ISRAFEL_ORIGIN || 'israfel-origin'
 
 // should be applied in preview mode
 const SITE_BASE_PATH = IS_PREVIEW_MODE ? '/preview-server' : ''
@@ -263,6 +264,7 @@ export {
   NEWEBPAY_PAPERMAG_API_URL,
   NEWEBPAY_PAPERMAG_IV,
   NEWEBPAY_PAPERMAG_KEY,
+  ISRAFEL_ORIGIN,
   PREVIEW_SERVER_ORIGIN,
   SEARCH_URL,
   SITE_BASE_PATH,
