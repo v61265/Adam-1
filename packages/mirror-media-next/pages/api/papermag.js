@@ -3,12 +3,12 @@ import NewebPay from '@mirrormedia/newebpay-node'
 import {
   NEWEBPAY_PAPERMAG_KEY,
   NEWEBPAY_PAPERMAG_IV,
-  ISRAFEL_ORIGIN,
+  // ISRAFEL_ORIGIN,
   SITE_URL,
   ENV,
 } from '../../config/index.mjs'
 
-const apiUrl = `${ISRAFEL_ORIGIN}/api/graphql`
+const apiUrl = `https://dev-israfel-gql.mirrormedia.mg/api/graphql`
 
 // TODO: Add JSDocs
 async function fireGqlRequest(query, variables, apiUrl) {
