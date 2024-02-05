@@ -71,9 +71,7 @@ switch (ENV) {
     URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION = `https://${STATIC_FILE_DOMAIN}/files/json/sections`
     URL_STATIC_PODCAST_LIST = `https://${STATIC_FILE_DOMAIN}/json/podcast_list.json`
 
-    NEWEBPAY_PAPERMAG_API_URL =
-      process.env.NEWEBPAY_PAPERMAG_API_URL ||
-      'https://core.newebpay.com/MPG/mpg_gateway'
+    NEWEBPAY_PAPERMAG_API_URL = 'https://core.newebpay.com/MPG/mpg_gateway'
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
     ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
     GCP_LOGGING_FEATURE_TOGGLE = 'on'
@@ -122,9 +120,7 @@ switch (ENV) {
     URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION = `https://${STATIC_FILE_DOMAIN}/files/json/sections`
     URL_STATIC_PODCAST_LIST = `https://v3-statics.mirrormedia.mg/json/podcast_list.json`
 
-    NEWEBPAY_PAPERMAG_API_URL =
-      process.env.NEWEBPAY_PAPERMAG_API_URL ||
-      'https://ccore.newebpay.com/MPG/mpg_gateway'
+    NEWEBPAY_PAPERMAG_API_URL = 'https://ccore.newebpay.com/MPG/mpg_gateway'
 
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
     ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
@@ -170,9 +166,7 @@ switch (ENV) {
     URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION = `https://${STATIC_FILE_DOMAIN}/files/json/sections`
     URL_STATIC_PODCAST_LIST = `https://${STATIC_FILE_DOMAIN}/json/podcast_list.json`
 
-    NEWEBPAY_PAPERMAG_API_URL =
-      process.env.NEWEBPAY_PAPERMAG_API_URL ||
-      'https://ccore.newebpay.com/MPG/mpg_gateway'
+    NEWEBPAY_PAPERMAG_API_URL = 'https://ccore.newebpay.com/MPG/mpg_gateway'
 
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
@@ -209,9 +203,7 @@ switch (ENV) {
     WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = `http://api-dev.mirrormedia.mg:8080/youtube`
     STATIC_FILE_DOMAIN = 'v3-statics-dev.mirrormedia.mg'
 
-    NEWEBPAY_PAPERMAG_API_URL =
-      process.env.NEWEBPAY_PAPERMAG_API_URL ||
-      'https://ccore.newebpay.com/MPG/mpg_gateway'
+    NEWEBPAY_PAPERMAG_API_URL = 'https://ccore.newebpay.com/MPG/mpg_gateway'
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'on'
     ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
     GCP_LOGGING_FEATURE_TOGGLE = 'on'
