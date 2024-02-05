@@ -73,7 +73,7 @@ export default function SubscribePaperMagForm({ plan }) {
     address: '',
   })
 
-  const [paymentPayload, setPaymentPlayload] = useState({
+  const [paymentPayload, setPaymentPayload] = useState({
     MerchantID: '',
     TradeInfo: '',
     TradeSha: '',
@@ -153,7 +153,7 @@ export default function SubscribePaperMagForm({ plan }) {
         comment: '', //約定事項
         merchandise: {
           connect: {
-            merchandiseName, //商品名稱
+            code: merchandiseName, //商品名稱
           },
         },
         promoteCode: promoteCodeStr, //使用優惠碼
@@ -174,7 +174,6 @@ export default function SubscribePaperMagForm({ plan }) {
         carrierNum: carrierNum, //載具編號（二聯式發票）
         buyerName: buyerName, //買受人名稱（三聯式發票）
         buyerUBN: buyerUBN, //買受人統一編號（三聯式發票）
-        returnUrl: `${window.location.origin}/papermag/return`,
       },
     }
 
@@ -187,7 +186,7 @@ export default function SubscribePaperMagForm({ plan }) {
       router.push(`/papermag/return?order-fail=true`)
     }
 
-    setPaymentPlayload(data.data)
+    setPaymentPayload(data.data)
     // 為了確保資料先填入 form 中而使用 setTimeout
     setTimeout(() => {
       const formDOM = document.forms.newebpay
