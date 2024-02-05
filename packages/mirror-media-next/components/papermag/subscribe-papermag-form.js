@@ -49,11 +49,12 @@ const RightWrapper = styled.div`
 `
 
 export default function SubscribePaperMagForm({ plan }) {
+  const router = useRouter()
+
   const [count, setCount] = useState(1)
   const [renewCouponApplied, setRenewCouponApplied] = useState(false)
   const [shouldCountFreight, setShouldCountFreight] = useState(false)
   const [loveCode, setLoveCode] = useState(null)
-  const router = useRouter()
 
   const [ordererValues, setOrdererValues] = useState({
     username: '',
@@ -85,6 +86,7 @@ export default function SubscribePaperMagForm({ plan }) {
 
   //show a warning message if the isAcceptedConditions is true but the receiptOption is null
   const [showWarning, setShowWarning] = useState(false)
+
   useEffect(() => {
     if (isAcceptedConditions && receiptOption === null) {
       setShowWarning(true)
@@ -97,7 +99,8 @@ export default function SubscribePaperMagForm({ plan }) {
   const [receiptData, setReceiptData] = useState({})
   const handleSubmit = async (event) => {
     event.preventDefault()
-    // Check for form validity
+
+    // TODO: Check form validity again
 
     // If everything is valid, proceed with submitting the form data
     // Make an API request or update the state here
@@ -109,25 +112,42 @@ export default function SubscribePaperMagForm({ plan }) {
 
     const requestBody = {
       data: {
-        desc: 'mock_desc',
-        comment: 'mock_comment',
+        desc: 'desc', //訂單描述 //name || itemDest
+        comment: '', //約定事項
+
+        //商品名稱
         merchandise: {
           connect: {
             code,
           },
         },
-        itemCount: count,
-        purchaseDatetime: new Date(),
-        purchaseName: ordererValues.username,
-        purchaseAddress: ordererValues.address,
-        purchaseEmail: ordererValues.email,
-        receiveName: recipientValues.username,
-        receiveAddress: recipientValues.address,
-        category: 'B2C',
-        purchaseMobile: ordererValues.cellphone,
-        receiveMobile: recipientValues.cellphone,
-        loveCode,
-        carrierType: receiptData,
+
+        itemCount: count, //商品數量
+        purchaseDatetime: new Date(), // 訂購時間
+
+        // 訂購者資訊
+        purchaseName: ordererValues.username, //購買者姓名
+        purchaseAddress: ordererValues.address, //購買者地址
+        purchaseEmail: ordererValues.email, //購買者信箱
+        purchaseMobile: ordererValues.cellphone, //購買者手機
+        purchasePhone: `${ordererValues.phone} ${ordererValues.phoneExt}`, //購買者電話
+
+        // 收件者資訊
+        receiveName: recipientValues.username, //收件者姓名
+        receiveAddress: recipientValues.address, //收件者地址
+        receiveMobile: recipientValues.cellphone, //收件者手機
+        receivePhone: `${recipientValues.phone} ${recipientValues.phoneExt}`, //收件者電話
+
+        //發票種類
+        category: receiptData.name === '三聯式發票' ? 'B2B' : 'B2C',
+
+        // 捐贈碼
+        loveCode: 2222, //parseInt(this.receiptData.donateOrganization),
+
+        //載具類別
+        carrierType: receiptData, // 2
+        carrierNum, //載具編號
+        promoteCode: loveCode, //使用優惠碼
         returnUrl: `${window.location.origin}/papermag/return`,
       },
     }
@@ -199,6 +219,7 @@ export default function SubscribePaperMagForm({ plan }) {
           />
         </RightWrapper>
       </Form>
+
       <NewebpayForm
         merchantId={paymentPayload.MerchantID}
         tradeInfo={paymentPayload.TradeInfo}
