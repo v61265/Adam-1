@@ -65,7 +65,8 @@ async function getPaymentDataOfMagazineOrders(gateWayPayload) {
 export default async function EncryptInfo(req, res) {
   const tradeInfo = req.body
   try {
-    const infoForNewebpay = await getPaymentDataOfMagazineOrders(tradeInfo.data)
+    const data = await getPaymentDataOfMagazineOrders(tradeInfo)
+    const infoForNewebpay = data.createNewebpayTradeInfoForMagazineOrder
 
     const newebpay = new NewebPay(NEWEBPAY_PAPERMAG_KEY, NEWEBPAY_PAPERMAG_IV)
     const encryptPostData = await newebpay.getEncryptedFormPostData(
