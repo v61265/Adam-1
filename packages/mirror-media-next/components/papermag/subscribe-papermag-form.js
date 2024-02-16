@@ -101,7 +101,7 @@ export default function SubscribePaperMagForm({ plan }) {
   const checkValidation = () => {
     let recipient = recipientValues //收件者資料
     if (sameAsOrderer) {
-      recipient = { ...ordererValues }
+      recipient = { ...ordererValues } //收件者同訂購人資訊
     }
 
     if (
@@ -178,7 +178,7 @@ export default function SubscribePaperMagForm({ plan }) {
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-    // Check form validity again, if invalid redirect to return page
+    // Check form validity again: if invalid, redirect to return fail page
     if (!checkValidation()) {
       router.push(`/papermag/return?order-fail=true`)
     }
