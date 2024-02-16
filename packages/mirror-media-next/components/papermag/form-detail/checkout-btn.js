@@ -43,7 +43,8 @@ const StyledCheckoutBtn = styled.button`
 
 export default function CheckoutBtn({ isAcceptedConditions, receiptOption }) {
   const [isLoading, setIsLoading] = useState(false)
-  const isButtonDisabled = !isAcceptedConditions || receiptOption === null
+  // const isButtonDisabled = !isAcceptedConditions || receiptOption === null
+  const isButtonDisabled = false
 
   const handleCheckout = () => {
     if (!isAcceptedConditions || receiptOption === null) {
