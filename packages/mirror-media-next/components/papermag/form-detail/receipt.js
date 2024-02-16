@@ -220,7 +220,7 @@ export default function Receipt({
                   value={barcodeValue}
                   onChange={handleBarcodeChange}
                   errorMessage="請輸入有效的手機條碼"
-                  required
+                  // required
                   pattern="/[0-9A-Z.\-+]{7}" //start with "/" followed by exactly 7 characters from 0-9 A-Z . - +
                   style={{ marginTop: '-16px' }}
                 />
@@ -233,7 +233,7 @@ export default function Receipt({
                   value={certificateValue}
                   onChange={handleCertificateChange}
                   errorMessage="請輸入有效的自然人憑證"
-                  required
+                  // required
                   pattern="[A-Z]{2}\d{14}" //2 uppercase English letters followed by 14 digits
                   style={{ marginTop: '-16px' }}
                 />
@@ -260,7 +260,7 @@ export default function Receipt({
                 value={entityNameValue}
                 onChange={handleEntityNameChange}
                 errorMessage="抬頭不可空白"
-                required
+                // required
                 style={{ marginTop: '-16px' }}
               />
               <FormInput
@@ -270,7 +270,7 @@ export default function Receipt({
                 value={taxIdNumberValue}
                 onChange={handleTaxIdNumberChange}
                 errorMessage="請輸入正確的統一編號"
-                required
+                // required
                 pattern="\d{8}" //8 numbers
                 style={{ marginTop: '-16px' }}
               />
