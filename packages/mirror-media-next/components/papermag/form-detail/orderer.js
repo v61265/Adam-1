@@ -65,7 +65,7 @@ export default function Orderer({ ordererValues, setOrdererValues }) {
           value={ordererValues.username}
           onChange={handleChange}
           errorMessage="訂購人姓名不可空白"
-          // required
+          required
         />
         <FormInput
           name="cellphone"
@@ -75,7 +75,7 @@ export default function Orderer({ ordererValues, setOrdererValues }) {
           value={ordererValues.cellphone}
           onChange={handleChange}
           errorMessage="請輸入有效的聯絡電話"
-          // required
+          required
           pattern="09[0-9]{8}" // Match "09" followed by exactly 8 more digits
         />
       </FormInputsWrapper>
@@ -107,7 +107,7 @@ export default function Orderer({ ordererValues, setOrdererValues }) {
         value={ordererValues.address}
         onChange={handleChange}
         errorMessage="地址不可空白"
-        // required
+        required
       />
       <FormInput
         name="email"
@@ -117,7 +117,7 @@ export default function Orderer({ ordererValues, setOrdererValues }) {
         value={ordererValues.email}
         onChange={handleChange}
         errorMessage="請輸入有效的 Email 地址"
-        // required
+        required
       />
     </Wrapper>
   )
