@@ -181,6 +181,7 @@ export default function SubscribePaperMagForm({ plan }) {
     // Check form validity again: if invalid, redirect to return fail page
     if (!checkValidation()) {
       router.push(`/papermag/return?order-fail=true`)
+      return
     }
 
     const {
