@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useAppSelector } from '../../hooks/useRedux'
+import { loginFormMode } from '../../slice/login-slice'
 import ContainerLoginFormInitial from './container-login-form-initial'
 import ContainerLoginFormRecoverPassword from './container-login-form-recover-password'
 import ContainerLoginFormRegisterWithEmailPassword from './container-login-form-register-with-email-password'
@@ -8,16 +9,11 @@ import ContainerLoginFormLoginWithPassword from './container-login-form-login-wi
  * @typedef {[T, React.Dispatch<React.SetStateAction<T>>]} UseState
  */
 
-/** @typedef {'initial' | 'recoverPassword' |  'register'  | 'login'}  State*/
-
 export default function ContainerLoginForm() {
-  /**
-   * @type {UseState<State>}
-   */
-  const [state, setState] = useState(/** @type {State}*/ ('initial'))
+  const formMode = useAppSelector(loginFormMode)
 
   const getJsx = () => {
-    switch (state) {
+    switch (formMode) {
       case 'initial':
         return <ContainerLoginFormInitial></ContainerLoginFormInitial>
       case 'register':
@@ -39,12 +35,6 @@ export default function ContainerLoginForm() {
     <div>
       ContainerLoginForm
       {jsx}
-      <button onClick={() => setState('initial')}>initial</button>
-      <button onClick={() => setState('register')}>register</button>
-      <button onClick={() => setState('login')}>login</button>
-      <button onClick={() => setState('recoverPassword')}>
-        recoverPassword
-      </button>
     </div>
   )
 }
