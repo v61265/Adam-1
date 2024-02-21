@@ -10,6 +10,7 @@ export default function UiMembershipInput({
   type = 'text',
   onChange = () => {},
   className = '',
+  value = '',
 }) {
   return (
     <Input
@@ -17,6 +18,7 @@ export default function UiMembershipInput({
       placeholder={placeholder}
       type={type}
       onChange={onChange}
+      value={value}
     ></Input>
   )
 }

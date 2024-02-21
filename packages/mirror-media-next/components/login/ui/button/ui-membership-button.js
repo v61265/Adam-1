@@ -1,13 +1,21 @@
 /**
  * @typedef {'primary' | 'secondary'} ButtonType
+ * @typedef {Function} HandleOnClick
  */
 
 /**
- * @param {React.PropsWithChildren<{buttonType: ButtonType}>} props
+ * @param {Object} props
+ * @param {ButtonType} props.buttonType
+ * @param {React.MouseEventHandler<HTMLButtonElement>} props.handleOnClick
+ * @param {React.ReactNode} props.children
  */
-export default function UiMembershipButton({ buttonType, children }) {
+export default function UiMembershipButton({
+  buttonType,
+  handleOnClick,
+  children,
+}) {
   return (
-    <button>
+    <button onClick={handleOnClick}>
       {buttonType}
       {children}
     </button>
