@@ -75,6 +75,15 @@ export const loginSlice = createSlice({
     ) => {
       state.shouldShowHint = action.payload
     },
+    resetLoginState: (state) => {
+      state.state = 'form'
+      state.status = 'idle'
+      state.prevAuthMethod = ''
+      state.shouldShowHint = false
+      state.email = ''
+      state.password = ''
+      state.loginFormMode = 'initial'
+    },
   },
 })
 
@@ -94,6 +103,7 @@ export const {
   changeLoginFormMode,
   changePrevAuthMethod,
   changeShouldShowHint,
+  resetLoginState,
 } = loginSlice.actions
 
 export default loginSlice.reducer
