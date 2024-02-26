@@ -1,15 +1,33 @@
-//TODO: add jsDoc
+import { createSlice } from '@reduxjs/toolkit'
+
+/**
+ * @template T
+ * @typedef {import('@reduxjs/toolkit').PayloadAction<T>} PayloadAction
+ */
 
 /**
  * @typedef {import('../store').AppThunk} AppThunk
- * @typedef { 'Google' | 'Facebook' | 'Apple' | 'email' } PrevAuthMethod
+ * @typedef {'form' | 'loginSuccess' | 'registerSuccess' | 'loginError' | 'registerError'} State
+ * @typedef { 'Google' | 'Facebook' | 'Apple' | 'email' | ''} PrevAuthMethod
+ * @typedef {boolean} ShouldShowHint
+ * @typedef {string} Email
+ * @typedef {string} Password
+ * @typedef {'initial' | 'register' |'login' | 'recoverPassword'} LoginFormMode
  */
 
-import { createSlice } from '@reduxjs/toolkit'
+/**
+ * @typedef {Object} InitialState
+ * @property {State} state
+ * @property {PrevAuthMethod} prevAuthMethod
+ * @property {ShouldShowHint} shouldShowHint
+ * @property {Email} email
+ * @property {Password} password
+ * @property {LoginFormMode} loginFormMode
+ */
 
+/**@type {InitialState} */
 const initialState = {
   state: 'form',
-
   prevAuthMethod: '',
   shouldShowHint: false,
   email: '',
@@ -32,20 +50,38 @@ const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    changeState: (state, action) => {
+    changeState: (
+      state,
+      /**
+       * @type {PayloadAction<State>}
+       */
+      action
+    ) => {
       state.state = action.payload
     },
-    setEmail: (state, action) => {
+    setEmail: (
+      state,
+      /**
+       * @type {PayloadAction<Email>}
+       */
+      action
+    ) => {
       state.email = action.payload
     },
-    setPassword: (state, action) => {
+    setPassword: (
+      state,
+      /**
+       * @type {PayloadAction<Password>}
+       */
+      action
+    ) => {
       state.password = action.payload
     },
 
     changeLoginFormMode: (
       state,
       /**
-       * @type {import('@reduxjs/toolkit').PayloadAction<'initial'| 'register' | 'login' | 'recoverPassword'>}
+       * @type {PayloadAction<LoginFormMode>}
        */
       action
     ) => {
@@ -57,7 +93,7 @@ const loginSlice = createSlice({
     changePrevAuthMethod: (
       state,
       /**
-       * @type {import('@reduxjs/toolkit').PayloadAction<PrevAuthMethod>}
+       * @type {PayloadAction<PrevAuthMethod>}
        */
       action
     ) => {
@@ -66,7 +102,7 @@ const loginSlice = createSlice({
     changeShouldShowHint: (
       state,
       /**
-       * @type {import('@reduxjs/toolkit').PayloadAction<Boolean>}
+       * @type {PayloadAction<ShouldShowHint>}
        */
       action
     ) => {
