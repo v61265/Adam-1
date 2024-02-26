@@ -8,7 +8,7 @@ import useClickOutside from '../hooks/useClickOutside'
 import Link from 'next/link'
 import { useMembership, logout } from '../context/membership'
 import { useAppDispatch } from '../hooks/useRedux'
-import { resetLoginState } from '../slice/login-slice'
+import { loginActions } from '../slice/login-slice'
 const MemberLoginButtonWrapper = styled.div`
   margin-left: 23px;
 
@@ -77,7 +77,7 @@ export default function MemberLoginButton() {
 
   const handleLogOut = () => {
     setShowSelectOptions(false)
-    dispatch(resetLoginState())
+    dispatch(loginActions.resetLoginState())
     logout()
   }
 

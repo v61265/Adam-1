@@ -9,7 +9,7 @@ import useClickOutside from '../hooks/useClickOutside'
 import { useRouter } from 'next/router'
 import { useMembership, logout } from '../context/membership'
 import { useAppDispatch } from '../hooks/useRedux'
-import { resetLoginState } from '../slice/login-slice'
+import { loginActions } from '../slice/login-slice'
 const MemberLoginButtonWrapper = styled.div`
   cursor: pointer;
 `
@@ -90,7 +90,7 @@ export default function PremiumMemberLoginButton({ className }) {
   const dispatch = useAppDispatch()
   const handleLogOut = () => {
     setShowSelectOptions(false)
-    dispatch(resetLoginState())
+    dispatch(loginActions.resetLoginState())
     logout()
   }
   const handleLogIn = () => {
