@@ -107,13 +107,8 @@ export default function Login() {
     if (!isLogInProcessFinished) {
       return
     }
-    let isDone = false
-    if (!isDone) {
-      handleFederatedRedirectResult()
-    }
-    return () => {
-      isDone = true
-    }
+
+    handleFederatedRedirectResult()
   }, [isLogInProcessFinished, dispatch, handleFederatedRedirectResult])
   // useRedirect()
 

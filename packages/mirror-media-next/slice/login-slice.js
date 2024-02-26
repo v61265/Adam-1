@@ -7,12 +7,9 @@
 
 import { createSlice } from '@reduxjs/toolkit'
 
-/**
- * @typedef {import('../context/membership').Membership['accessToken']} AccessToken
- */
 const initialState = {
   state: 'form',
-  status: 'idle',
+
   prevAuthMethod: '',
   shouldShowHint: false,
   email: '',
@@ -77,7 +74,6 @@ export const loginSlice = createSlice({
     },
     resetLoginState: (state) => {
       state.state = 'form'
-      state.status = 'idle'
       state.prevAuthMethod = ''
       state.shouldShowHint = false
       state.email = ''

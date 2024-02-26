@@ -127,7 +127,7 @@ const loginPageOnAuthStateChangeAction = async (
     const userUid = firebaseAuthUser.uid
     const isRegister = mode === 'register' || isNewUser
     // step 1: if it is a new user(register or first login by 3 party login), create it member is israfel
-    if (mode === 'register' || isNewUser) {
+    if (isRegister) {
       const userEmail = firebaseAuthUser.email
 
       await createMemberDataInIsrafel(accessToken, userEmail, userUid)
