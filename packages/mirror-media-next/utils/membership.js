@@ -66,6 +66,16 @@ const createMemberDataInIsrafel = async (accessToken, email, firebaseId) => {
     throw new Error(errorMessage)
   }
 }
+/**
+ * This function fetches basic member information in Israfel.
+ * This function would query information of certain member to check if they exist in Israfel.
+ * if the member data is found successfully, it is no need to return result, as the data is not needed
+ * for other purposes currently, such as store data in Redux.
+ * If we need to store it in the future, feel free to modify this function to return query result if needed.
+ * @async
+ * @param {string} firebaseUid
+ * @throws {Error} Throws an error if the GraphQL query fails or if certain member data is not found.
+ */
 const fetchBasicMemberInfoInIsrafel = async (firebaseUid) => {
   try {
     const result = await client.query({
@@ -79,7 +89,6 @@ const fetchBasicMemberInfoInIsrafel = async (firebaseUid) => {
     if (!memberData) {
       throw "GraphQL error: Can't find data in Israfel, please check if this member's data existed in Israfel"
     }
-    return memberData
   } catch (error) {
     throw new Error(error)
   }
