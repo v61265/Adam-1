@@ -50,7 +50,6 @@ export default function ContainerLoginFormLoginWithPassword() {
       const accessToken = await getAccessToken(idToken)
       const result = await loginPageOnAuthStateChangeAction(
         user,
-        'login',
         false,
         accessToken
       )

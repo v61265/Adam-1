@@ -52,7 +52,6 @@ export default function ContainerLoginFormRegisterWithEmailPassword() {
       const accessToken = await getAccessToken(idToken)
       const result = await loginPageOnAuthStateChangeAction(
         user,
-        'register',
         true,
         accessToken
       )

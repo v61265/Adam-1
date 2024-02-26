@@ -36,14 +36,14 @@ const errorHandler = async (error) => {
 }
 
 /**
- *
+ * This function would create member in Israfel.
  * @param {AccessToken} accessToken
  * @param {string} email
  * @param {string} firebaseId
  */
 const createMemberDataInIsrafel = async (accessToken, email, firebaseId) => {
   try {
-    const result = await client.mutate({
+    await client.mutate({
       mutation: createMember,
       context: {
         uri: '/member/graphql',
@@ -56,7 +56,6 @@ const createMemberDataInIsrafel = async (accessToken, email, firebaseId) => {
         email: email,
       },
     })
-    return result
   } catch (error) {
     const errorMessage =
       error.message.search('Unique constraint failed on the fields') !== -1
@@ -122,32 +121,38 @@ const getAccessToken = async (idToken) => {
     throw new Error(errorMessage)
   }
 }
-
+/**
+ *
+ * @param {import('firebase/auth').User} firebaseAuthUser
+ * @param {boolean} isNewUser
+ * @param {AccessToken} accessToken
+ * @returns
+ */
 const loginPageOnAuthStateChangeAction = async (
   firebaseAuthUser,
-  mode,
   isNewUser,
   accessToken = ''
 ) => {
   try {
     if (!accessToken) {
-      return
+      throw new Error(
+        "Error occurred at function `loginPageOnAuthStateChangeAction`: Required parameter 'accessToken' is missing."
+      )
     }
     const userUid = firebaseAuthUser.uid
-    const isRegister = mode === 'register' || isNewUser
-    // step 1: if it is a new user(register or first login by 3 party login), create it member is israfel
-    if (isRegister) {
+
+    /**
+     * If it is a new user(register by email/password or first login by 3 party login), create it member is Israfel
+     * If not, then query member basic info to check if certain member is existed in Israfel
+     */
+    if (isNewUser) {
       const userEmail = firebaseAuthUser.email
-
       await createMemberDataInIsrafel(accessToken, userEmail, userUid)
-    }
-
-    // step 2: fetch its data from israfel
-    if (userUid) {
+      return 'registerSuccess'
+    } else {
       await fetchBasicMemberInfoInIsrafel(userUid)
+      return 'loginSuccess'
     }
-    const result = isRegister ? 'registerSuccess' : 'loginSuccess'
-    return result
   } catch (error) {
     throw error
   }

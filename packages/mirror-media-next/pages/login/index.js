@@ -44,7 +44,6 @@ export default function Login() {
         const isNewUser = getAdditionalUserInfo(redirectResult).isNewUser
         const result = await loginPageOnAuthStateChangeAction(
           firebaseAuthUser,
-          'login',
           isNewUser,
           accessToken
         )
