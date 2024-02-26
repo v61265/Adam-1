@@ -1,12 +1,12 @@
 import UiMembershipInput from './ui/input/ui-membership-input'
 
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
-import { loginEmail, setEmail } from '../../slice/login-slice'
+import { loginEmail, loginActions } from '../../slice/login-slice'
 export default function UiMembershipInputEmailInvalidation({}) {
   const dispatch = useAppDispatch()
   const email = useAppSelector(loginEmail)
   const handleEmailOnChange = (e) => {
-    dispatch(setEmail(e.target.value))
+    dispatch(loginActions.setEmail(e.target.value))
   }
   return (
     <div>

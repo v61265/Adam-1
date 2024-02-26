@@ -2,12 +2,9 @@ import { useState } from 'react'
 import UiMembershipInput from './ui/input/ui-membership-input'
 import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
 import {
-  setPassword,
   loginPassword,
-  changeLoginFormMode,
-  clearPassword,
   loginEmail,
-  changeState,
+  loginActions,
 } from '../../slice/login-slice'
 import { auth } from '../../firebase'
 import {
@@ -26,7 +23,7 @@ export default function ContainerLoginFormLoginWithPassword() {
   const [shouldShowErrorHint, setShouldShowErrorHint] = useState(false)
   // const shouldShowErrorHint = useAppSelector(loginShouldShowErrorHint)
   const handlePasswordOnChange = (e) => {
-    dispatch(setPassword(e.target.value))
+    dispatch(loginActions.setPassword(e.target.value))
   }
   const [shouldRevealPassword, setShouldRevealPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -35,8 +32,8 @@ export default function ContainerLoginFormLoginWithPassword() {
   }
   //TODO: better name
   const handleGoBack = () => {
-    dispatch(changeLoginFormMode('initial'))
-    dispatch(clearPassword())
+    dispatch(loginActions.changeLoginFormMode('initial'))
+    dispatch(loginActions.clearPassword())
     setShouldShowErrorHint(false)
   }
   const handleSubmit = async () => {
@@ -57,7 +54,7 @@ export default function ContainerLoginFormLoginWithPassword() {
         false,
         accessToken
       )
-      dispatch(changeState(result))
+      dispatch(loginActions.changeState(result))
       setIsLoading(false)
     } catch (e) {
       setIsLoading(false)
@@ -66,7 +63,7 @@ export default function ContainerLoginFormLoginWithPassword() {
         setShouldShowErrorHint(true)
       } else {
         errorHandler(e)
-        dispatch(changeState('loginError'))
+        dispatch(loginActions.changeState('loginError'))
       }
     }
   }

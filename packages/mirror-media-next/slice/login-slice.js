@@ -28,7 +28,7 @@ const loginEmail = (state) => state.login.email
 const loginPassword = (state) => state.login.password
 const loginFormMode = (state) => state.login.loginFormMode
 
-export const loginSlice = createSlice({
+const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
@@ -91,15 +91,6 @@ export {
   loginPassword,
   loginFormMode,
 }
-export const {
-  changeState,
-  setEmail,
-  setPassword,
-  clearPassword,
-  changeLoginFormMode,
-  changePrevAuthMethod,
-  changeShouldShowHint,
-  resetLoginState,
-} = loginSlice.actions
+export const loginActions = loginSlice.actions
 
 export default loginSlice.reducer

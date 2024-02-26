@@ -7,11 +7,9 @@ import { useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
 import {
   loginEmail,
-  changeLoginFormMode,
-  changePrevAuthMethod,
-  changeShouldShowHint,
   loginPrevAuthMethod,
   loginShouldShowHint,
+  loginActions,
 } from '../../slice/login-slice'
 /**
  * @typedef {import('./container-membership-login-with-third-party').ThirdPartyName} ThirdPartyName
@@ -38,7 +36,7 @@ export default function ContainerLoginFormInitial() {
       const responseArray = await fetchSignInMethodsForEmail(auth, email)
 
       if (!responseArray.length) {
-        dispatch(changeLoginFormMode('register'))
+        dispatch(loginActions.changeLoginFormMode('register'))
         return
       }
 
@@ -66,20 +64,20 @@ export default function ContainerLoginFormInitial() {
         responseArray &&
         responseArray.find((signInMethod) => signInMethod === 'apple.com')
       if (isEmailExistWithEmailLinkSignInMethod) {
-        dispatch(changeLoginFormMode('recoverPassword'))
+        dispatch(loginActions.changeLoginFormMode('recoverPassword'))
       } else if (isEmailExistWithEmailPasswordSignInMethod) {
-        dispatch(changeLoginFormMode('login'))
-        dispatch(changePrevAuthMethod('email'))
-        dispatch(changeShouldShowHint(true))
+        dispatch(loginActions.changeLoginFormMode('login'))
+        dispatch(loginActions.changePrevAuthMethod('email'))
+        dispatch(loginActions.changeShouldShowHint(true))
       } else if (isEmailHasBeenUsedByGoogleAuth) {
-        dispatch(changePrevAuthMethod('Google'))
-        dispatch(changeShouldShowHint(true))
+        dispatch(loginActions.changePrevAuthMethod('Google'))
+        dispatch(loginActions.changeShouldShowHint(true))
       } else if (isEmailHasBeenUsedByFacebookAuth) {
-        dispatch(changePrevAuthMethod('Facebook'))
-        dispatch(changeShouldShowHint(true))
+        dispatch(loginActions.changePrevAuthMethod('Facebook'))
+        dispatch(loginActions.changeShouldShowHint(true))
       } else if (isEmailHasBeenUsedByAppleAuth) {
-        dispatch(changePrevAuthMethod('Apple'))
-        dispatch(changeShouldShowHint(true))
+        dispatch(loginActions.changePrevAuthMethod('Apple'))
+        dispatch(loginActions.changeShouldShowHint(true))
       }
 
       setIsLoading(false)

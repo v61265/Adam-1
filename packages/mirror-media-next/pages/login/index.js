@@ -3,12 +3,7 @@ import styled from 'styled-components'
 // import useRedirect from '../../hooks/use-redirect-when-logged-in'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
 import { useMembership } from '../../context/membership'
-import {
-  loginState,
-  changePrevAuthMethod,
-  changeShouldShowHint,
-  changeState,
-} from '../../slice/login-slice'
+import { loginState, loginActions } from '../../slice/login-slice'
 import {
   errorHandler,
   loginPageOnAuthStateChangeAction,
@@ -53,7 +48,7 @@ export default function Login() {
           isNewUser,
           accessToken
         )
-        dispatch(changeState(result))
+        dispatch(loginActions.changeState(result))
       } else if (!redirectResult?.user && isLoggedIn) {
         switch (state) {
           case 'form':
@@ -80,8 +75,8 @@ export default function Login() {
         const responseArray = await fetchSignInMethodsForEmail(auth, email)
         const prevAuthMethod = getPrevAuthMethod(responseArray?.[0])
 
-        dispatch(changePrevAuthMethod(prevAuthMethod))
-        dispatch(changeShouldShowHint(true))
+        dispatch(loginActions.changePrevAuthMethod(prevAuthMethod))
+        dispatch(loginActions.changeShouldShowHint(true))
         function getPrevAuthMethod(prevAuthMethod) {
           switch (prevAuthMethod) {
             case 'google.com':
@@ -98,7 +93,7 @@ export default function Login() {
         }
       } else {
         errorHandler(e)
-        dispatch(changeState('loginError'))
+        dispatch(loginActions.changeState('loginError'))
       }
     }
   }, [router, isLoggedIn, state, dispatch, accessToken])

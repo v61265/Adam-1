@@ -2,14 +2,10 @@ import { useState } from 'react'
 import UiMembershipInput from './ui/input/ui-membership-input'
 import UiMembershipButton from './ui/button/ui-membership-button'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
-import { changeState } from '../../slice/login-slice'
 import {
-  changeLoginFormMode,
   loginEmail,
   loginPassword,
-  setEmail,
-  setPassword,
-  clearPassword,
+  loginActions,
 } from '../../slice/login-slice'
 import {
   getAccessToken,
@@ -26,16 +22,16 @@ export default function ContainerLoginFormRegisterWithEmailPassword() {
   const email = useAppSelector(loginEmail)
   const password = useAppSelector(loginPassword)
   const handleEmailOnChange = (e) => {
-    dispatch(setEmail(e.target.value))
+    dispatch(loginActions.setEmail(e.target.value))
   }
   const handlePasswordOnChange = (e) => {
-    dispatch(setPassword(e.target.value))
+    dispatch(loginActions.setPassword(e.target.value))
   }
   //TODO: better name
   const handleGoBack = () => {
-    dispatch(changeLoginFormMode('initial'))
+    dispatch(loginActions.changeLoginFormMode('initial'))
     setIsDuplicateEmailMember(false)
-    dispatch(clearPassword())
+    dispatch(loginActions.clearPassword())
   }
   const handleSubmit = async () => {
     setIsLoading(true)
@@ -60,7 +56,7 @@ export default function ContainerLoginFormRegisterWithEmailPassword() {
         true,
         accessToken
       )
-      dispatch(changeState(result))
+      dispatch(loginActions.changeState(result))
       setIsLoading(false)
     } catch (e) {
       setIsLoading(false)
@@ -71,7 +67,7 @@ export default function ContainerLoginFormRegisterWithEmailPassword() {
         setIsDuplicateEmailMember(true)
       } else {
         errorHandler(e)
-        dispatch(changeState('registerError'))
+        dispatch(loginActions.changeState('registerError'))
       }
     }
   }
