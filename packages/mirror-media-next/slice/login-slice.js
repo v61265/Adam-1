@@ -7,6 +7,11 @@ import { createSlice } from '@reduxjs/toolkit'
 
 /**
  * @typedef {import('../store').AppThunk} AppThunk
+ * @typedef {import('../store').AppState } AppState
+ */
+
+/**
+ * Type for state
  * @typedef {'form' | 'loginSuccess' | 'registerSuccess' | 'loginError' | 'registerError'} State
  * @typedef { 'Google' | 'Facebook' | 'Apple' | 'email' | ''} PrevAuthMethod
  * @typedef {boolean} ShouldShowHint
@@ -39,12 +44,42 @@ const initialState = {
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 
-const loginState = (state) => state.login.state
-const loginPrevAuthMethod = (state) => state.login.prevAuthMethod
-const loginShouldShowHint = (state) => state.login.shouldShowHint
-const loginEmail = (state) => state.login.email
-const loginPassword = (state) => state.login.password
-const loginFormMode = (state) => state.login.loginFormMode
+const loginState = (
+  /**
+   * @type {AppState}
+   */
+  state
+) => state.login.state
+const loginPrevAuthMethod = (
+  /**
+   * @type {AppState}
+   */
+  state
+) => state.login.prevAuthMethod
+const loginShouldShowHint = (
+  /**
+   * @type {AppState}
+   */
+  state
+) => state.login.shouldShowHint
+const loginEmail = (
+  /**
+   * @type {AppState}
+   */
+  state
+) => state.login.email
+const loginPassword = (
+  /**
+   * @type {AppState}
+   */
+  state
+) => state.login.password
+const loginFormMode = (
+  /**
+   * @type {AppState}
+   */
+  state
+) => state.login.loginFormMode
 
 const loginSlice = createSlice({
   name: 'login',
