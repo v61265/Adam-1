@@ -17,6 +17,10 @@ import {
 } from 'firebase/auth'
 import { auth } from '../../firebase'
 import { FirebaseError } from 'firebase/app'
+import { setPageCache } from '../../utils/cache-setting'
+import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { LOGIN_PAGE_FEATURE_TOGGLE } from '../../config/index.mjs'
+
 /**
  * @typedef { 'form' | 'registerSuccess' | 'registerError' | 'loginError'} State
  *
@@ -130,4 +134,30 @@ export default function Login() {
       {jsx}
     </Wrapper>
   )
+}
+
+/**
+ * @type {import('next').GetServerSideProps}
+ */
+export async function getServerSideProps({ req, res }) {
+  setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+
+  const traceHeader = req.headers?.['x-cloud-trace-context']
+  let globalLogFields = {}
+  if (traceHeader && !Array.isArray(traceHeader)) {
+    const [trace] = traceHeader.split('/')
+    globalLogFields[
+      'logging.googleapis.com/trace'
+    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
+  }
+
+  if (LOGIN_PAGE_FEATURE_TOGGLE !== 'on') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+  return { props: {} }
 }
