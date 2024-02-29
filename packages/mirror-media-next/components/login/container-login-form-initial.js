@@ -35,11 +35,6 @@ export default function ContainerLoginFormInitial() {
     try {
       const responseArray = await fetchSignInMethodsForEmail(auth, email)
 
-      if (!responseArray.length) {
-        dispatch(loginActions.changeLoginFormMode('register'))
-        return
-      }
-
       /*
        * Hint, If email verify is active in the future,
        * responseArray would have multi value
@@ -78,6 +73,8 @@ export default function ContainerLoginFormInitial() {
       } else if (isEmailHasBeenUsedByAppleAuth) {
         dispatch(loginActions.changePrevAuthMethod('Apple'))
         dispatch(loginActions.changeShouldShowHint(true))
+      } else {
+        dispatch(loginActions.changeLoginFormMode('register'))
       }
 
       setIsLoading(false)
