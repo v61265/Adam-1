@@ -114,8 +114,6 @@ export default function Login() {
         return <>註冊成功</>
       case 'loginSuccess':
         return <>登入成功</>
-      case 'alreadyLoggedIn':
-        return <ContainerLoginForm></ContainerLoginForm>
       case 'registerError':
       case 'loginError':
         return <>登入註冊失敗</>
