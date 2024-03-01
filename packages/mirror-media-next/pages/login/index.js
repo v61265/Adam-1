@@ -44,6 +44,7 @@ export default function Login() {
   const handleFederatedRedirectResult = useCallback(async () => {
     try {
       const redirectResult = await getRedirectResult(auth)
+      dispatch(loginActions.changeIsFederatedRedirectResultLoading(false))
       if (redirectResult && redirectResult?.user) {
         const firebaseAuthUser = redirectResult.user
         const isNewUser = getAdditionalUserInfo(redirectResult).isNewUser
@@ -67,6 +68,7 @@ export default function Login() {
         }
       }
     } catch (e) {
+      dispatch(loginActions.changeIsFederatedRedirectResultLoading(false))
       if (
         e instanceof FirebaseError &&
         e.code === 'auth/account-exists-with-different-credential'
