@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
-// import useRedirect from '../../hooks/use-redirect-when-logged-in'
+
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
 import { useMembership } from '../../context/membership'
 import { loginState, loginActions } from '../../slice/login-slice'
@@ -9,6 +9,7 @@ import {
   loginPageOnAuthStateChangeAction,
 } from '../../utils/membership'
 import ContainerLoginForm from '../../components/login/container-login-form'
+import useRedirect from '../../hooks/use-redirect'
 import { useRouter } from 'next/router'
 import {
   getRedirectResult,
@@ -39,7 +40,7 @@ export default function Login() {
   const { accessToken, isLogInProcessFinished, isLoggedIn } = useMembership()
   const router = useRouter()
   const state = useAppSelector(loginState)
-
+  const { redirect } = useRedirect()
   const handleFederatedRedirectResult = useCallback(async () => {
     try {
       const redirectResult = await getRedirectResult(auth)
@@ -59,8 +60,7 @@ export default function Login() {
             return
           case 'loginSuccess':
           case 'registerSuccess':
-            //TODO: redirect to certain page which destination is store at localStorage, not just redirect to index page.
-            router.push('/')
+            redirect()
             return
           default:
             break
@@ -99,7 +99,7 @@ export default function Login() {
         dispatch(loginActions.changeState('loginError'))
       }
     }
-  }, [router, isLoggedIn, state, dispatch, accessToken])
+  }, [router, isLoggedIn, state, dispatch, accessToken, redirect])
 
   useEffect(() => {
     if (!isLogInProcessFinished) {
