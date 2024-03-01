@@ -31,13 +31,13 @@ const GPTAd = dynamic(() => import('../components/ads/gpt/gpt-ad'), {
 const GA_UTM_EDITOR_CHOICES = 'utm_source=mmweb&utm_medium=editorchoice'
 
 /**
- * @typedef {import('../components/shared/share-header').HeaderData['flashNewsData']} FlashNewsData
+ * @typedef {import('../components/header/share-header').HeaderData['flashNewsData']} FlashNewsData
  */
 /**
- * @typedef {import('../components/shared/share-header').HeaderData['sectionsData']} SectionsData
+ * @typedef {import('../components/header/share-header').HeaderData['sectionsData']} SectionsData
  */
 /**
- * @typedef {import('../components/shared/share-header').HeaderData['topicsData']} TopicsData
+ * @typedef {import('../components/header/share-header').HeaderData['topicsData']} TopicsData
  */
 
 /**
