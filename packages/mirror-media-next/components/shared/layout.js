@@ -1,12 +1,12 @@
-import ShareHeader from './share-header'
+import ShareHeader from '../header/share-header'
 import Footer from './footer'
 import CustomHead from './custom-head'
 import GDPRNotification from '../gdpr'
 
 /**
  * @typedef {Object} Header
- * @property {import('./share-header').HeaderType} type
- * @property {import('./share-header').HeaderData} [data]
+ * @property {import('../header/share-header').HeaderType} type
+ * @property {import('../header/share-header').HeaderData} [data]
  *
  * @typedef {import('./custom-head').HeadProps} Head
  *
@@ -29,6 +29,7 @@ export default function Layout({ head, header, footer, children }) {
         title={head?.title}
         description={head?.description}
         imageUrl={head?.imageUrl}
+        skipCanonical={head?.skipCanonical}
       />
       <ShareHeader pageLayoutType={header.type} headerData={header.data} />
       {children}
