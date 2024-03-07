@@ -1,25 +1,26 @@
 import { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { FirebaseError } from 'firebase/app'
-import {
-  fetchSignInMethodsForEmail,
-  getAdditionalUserInfo,
-  getRedirectResult,
-} from 'firebase/auth'
-import { useRouter } from 'next/router'
-import ContainerLoginForm from '../../components/login/container-login-form'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
-import { useMembership } from '../../context/membership'
-import { auth } from '../../firebase'
-import useRedirect from '../../hooks/use-redirect'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
-import { loginActions, loginState } from '../../slice/login-slice'
-import { setPageCache } from '../../utils/cache-setting'
+import { useMembership } from '../../context/membership'
+import { loginState, loginActions } from '../../slice/login-slice'
 import {
   errorHandler,
   loginPageOnAuthStateChangeAction,
 } from '../../utils/membership'
+import ContainerLoginForm from '../../components/login/container-login-form'
+import useRedirect from '../../hooks/use-redirect'
+import { useRouter } from 'next/router'
+import {
+  getRedirectResult,
+  getAdditionalUserInfo,
+  fetchSignInMethodsForEmail,
+} from 'firebase/auth'
+import { auth } from '../../firebase'
+import { FirebaseError } from 'firebase/app'
+import { setPageCache } from '../../utils/cache-setting'
+import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import { LOGIN_PAGE_FEATURE_TOGGLE } from '../../config/index.mjs'
 
 /**
  * @typedef { 'form' | 'registerSuccess' | 'registerError' | 'loginError'} State
@@ -152,12 +153,13 @@ export async function getServerSideProps({ req, res }) {
     ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
   }
 
-  return {
-    redirect: {
-      destination: '/',
-      permanent: false,
-    },
+  if (LOGIN_PAGE_FEATURE_TOGGLE !== 'on') {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
   }
-
   return { props: {} }
 }
