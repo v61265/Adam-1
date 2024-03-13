@@ -13,7 +13,7 @@ import Cors from 'cors'
  * @typedef {Object} GooglSheetParam
  * @property {string} id - google sheet id
  * @property {string} title - google sheet title
- * @property {object} row - google sheet row, different structure on different sheet
+ * @property {Object} row - google sheet row, different structure on different sheet
  */
 
 /**
