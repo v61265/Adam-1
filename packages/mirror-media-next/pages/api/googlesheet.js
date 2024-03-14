@@ -61,47 +61,19 @@ async function addRowToGoogleSheet(googleSheet) {
     let GOOGLE_SHEETS_PRIVATE_KEY = process.env.GOOGLE_SHEETS_PRIVATE_KEY
     const GOOGLE_SHEETS_CLIENT_EMAIL = process.env.GOOGLE_SHEETS_CLIENT_EMAIL
 
-    console.log(
-      'GOOGLE_SHEETS_PRIVATE_KEY',
-      JSON.stringify(GOOGLE_SHEETS_PRIVATE_KEY)
-    )
-    console.log('GOOGLE_SHEETS_CLIENT_EMAIL', GOOGLE_SHEETS_CLIENT_EMAIL)
-
+    // env variable in google cloud will turn \n into \\n, convert it back to \n
     GOOGLE_SHEETS_PRIVATE_KEY = GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n')
 
-    let doc
-    try {
-      const serviceAccountAuth = new JWT({
-        email: GOOGLE_SHEETS_CLIENT_EMAIL,
-        key: GOOGLE_SHEETS_PRIVATE_KEY,
-        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-      })
+    const serviceAccountAuth = new JWT({
+      email: GOOGLE_SHEETS_CLIENT_EMAIL,
+      key: GOOGLE_SHEETS_PRIVATE_KEY,
+      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+    })
 
-      doc = new GoogleSpreadsheet(id, serviceAccountAuth)
-    } catch (error) {
-      console.error('[Error] google sheet debug error', error)
-      throw error
-    }
-
-    try {
-      await doc.loadInfo()
-    } catch (error) {
-      console.error('[Error] await doc.loadInfo() failed')
-      throw error
-    }
-    let sheet
-    try {
-      sheet = doc.sheetsByTitle[title]
-    } catch (error) {
-      console.error('[Error] const sheet = doc.sheetsByTitle[title] failed')
-      throw error
-    }
-    try {
-      await sheet.addRow(row)
-    } catch (error) {
-      console.error('[Error] await sheet.addRow(row) failed')
-      throw error
-    }
+    const doc = new GoogleSpreadsheet(id, serviceAccountAuth)
+    await doc.loadInfo()
+    let sheet = doc.sheetsByTitle[title]
+    await sheet.addRow(row)
   } catch (e) {
     if (e.message.startsWith('without')) {
       throw errorWithStatus(e.message, 400)
