@@ -78,11 +78,25 @@ async function addRowToGoogleSheet(googleSheet) {
       throw error
     }
 
-    await doc.loadInfo()
-
-    const sheet = doc.sheetsByTitle[title]
-
-    await sheet.addRow(row)
+    try {
+      await doc.loadInfo()
+    } catch (error) {
+      console.error('[Error] await doc.loadInfo() failed')
+      throw error
+    }
+    let sheet
+    try {
+      sheet = doc.sheetsByTitle[title]
+    } catch (error) {
+      console.error('[Error] const sheet = doc.sheetsByTitle[title] failed')
+      throw error
+    }
+    try {
+      await sheet.addRow(row)
+    } catch (error) {
+      console.error('[Error] await sheet.addRow(row) failed')
+      throw error
+    }
   } catch (e) {
     if (e.message.startsWith('without')) {
       throw errorWithStatus(e.message, 400)
