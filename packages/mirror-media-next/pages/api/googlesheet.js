@@ -61,13 +61,22 @@ async function addRowToGoogleSheet(googleSheet) {
     const GOOGLE_SHEETS_PRIVATE_KEY = process.env.GOOGLE_SHEETS_PRIVATE_KEY
     const GOOGLE_SHEETS_CLIENT_EMAIL = process.env.GOOGLE_SHEETS_CLIENT_EMAIL
 
-    const serviceAccountAuth = new JWT({
-      email: GOOGLE_SHEETS_CLIENT_EMAIL,
-      key: GOOGLE_SHEETS_PRIVATE_KEY,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    })
+    console.log('GOOGLE_SHEETS_PRIVATE_KEY', GOOGLE_SHEETS_PRIVATE_KEY)
+    console.log('GOOGLE_SHEETS_CLIENT_EMAIL', GOOGLE_SHEETS_CLIENT_EMAIL)
 
-    const doc = new GoogleSpreadsheet(id, serviceAccountAuth)
+    let doc
+    try {
+      const serviceAccountAuth = new JWT({
+        email: GOOGLE_SHEETS_CLIENT_EMAIL,
+        key: GOOGLE_SHEETS_PRIVATE_KEY,
+        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+      })
+
+      doc = new GoogleSpreadsheet(id, serviceAccountAuth)
+    } catch (error) {
+      console.error('[Error] google sheet debug error', error)
+      throw error
+    }
 
     await doc.loadInfo()
 
