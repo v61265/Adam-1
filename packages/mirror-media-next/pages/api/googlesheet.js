@@ -58,11 +58,16 @@ async function addRowToGoogleSheet(googleSheet) {
       throw new Error('without new row data')
     }
 
-    const GOOGLE_SHEETS_PRIVATE_KEY = process.env.GOOGLE_SHEETS_PRIVATE_KEY
+    let GOOGLE_SHEETS_PRIVATE_KEY = process.env.GOOGLE_SHEETS_PRIVATE_KEY
     const GOOGLE_SHEETS_CLIENT_EMAIL = process.env.GOOGLE_SHEETS_CLIENT_EMAIL
 
-    console.log('GOOGLE_SHEETS_PRIVATE_KEY', GOOGLE_SHEETS_PRIVATE_KEY)
+    console.log(
+      'GOOGLE_SHEETS_PRIVATE_KEY',
+      JSON.stringify(GOOGLE_SHEETS_PRIVATE_KEY)
+    )
     console.log('GOOGLE_SHEETS_CLIENT_EMAIL', GOOGLE_SHEETS_CLIENT_EMAIL)
+
+    GOOGLE_SHEETS_PRIVATE_KEY = GOOGLE_SHEETS_PRIVATE_KEY.replace(/\\n/g, '\n')
 
     let doc
     try {
