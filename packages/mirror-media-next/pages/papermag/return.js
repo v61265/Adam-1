@@ -11,12 +11,14 @@ import NewebPay from '@mirrormedia/newebpay-node'
 import {
   NEWEBPAY_PAPERMAG_KEY,
   NEWEBPAY_PAPERMAG_IV,
+  ISRAFEL_ORIGIN,
 } from '../../config/index.mjs'
 import { parseBody } from 'next/dist/server/api-utils/node'
 
 import { getMerchandiseAndShippingFeeInfo } from '../../utils/papermag'
 
 import { ACCESS_PAPERMAG_FEATURE_TOGGLE } from '../../config/index.mjs'
+import axios from 'axios'
 
 const Wrapper = styled.main`
   min-height: 50vh;
@@ -153,39 +155,49 @@ export async function getServerSideProps({ query, req, res }) {
       decryptedTradeInfo.Result?.MerchantOrderNo ||
       JSON.parse(Object.keys(decryptedTradeInfo)[0]).Result.MerchantOrderNo
 
-    // TODO: fetch DB
-    const mockDate = '2023-09-01'
-    const result = {
+    // fetch order data from DB
+    const apiUrl = `${ISRAFEL_ORIGIN}/api/graphql`
+    const query = `query magazineOrder($orderNumber: String!) {
+      allMagazineOrders(where: { orderNumber: $orderNumber }) {
+        id
+        orderNumber
+        purchaseDatetime
+        merchandise {
+          name
+          code
+          price
+        }
+        itemCount
+        totalAmount
+        purchaseName
+        purchaseEmail
+        purchaseMobile
+        purchaseAddress
+        receiveName
+        receiveMobile
+        receiveAddress
+        createdAt
+        totalAmount
+        promoteCode
+      }
+    }`
+    const { data: result } = await axios({
+      url: apiUrl,
+      method: 'post',
       data: {
-        allMagazineOrders: [
-          {
-            id: '703',
-            orderNumber: MerchantOrderNo,
-            purchaseDatetime: mockDate,
-            merchandise: {
-              name: '鏡週刊紙本雜誌 52 期',
-              code: 'magazine_one_year',
-              price: 2880,
-            },
-            itemCount: 1,
-            totalAmount: 2800,
-            purchaseName: '購買者',
-            purchaseEmail: 'readr@gmail.com',
-            purchaseMobile: '0911111111',
-            purchaseAddress: '台南市新營區林口街119號6樓之5',
-            receiveName: '訂購者',
-            receiveMobile: '0911111111',
-            receiveAddress: '台南市新營區林口街119號6樓之5',
-            createdAt: mockDate,
-            promoteCode: 'MJ00012345',
-          },
-        ],
+        query,
+        variables: { orderNumber: MerchantOrderNo },
       },
-    }
+      headers: {
+        'content-type': 'application/json',
+        'Cache-Control': 'no-cache',
+      },
+    })
     if (result.errors) {
       throw new Error(result.errors)
     }
-    const decryptInfoData = result?.data?.allMagazineOrders[0]
+
+    const decryptInfoData = result?.data?.allMagazineOrders?.[0]
     if (!decryptInfoData) {
       return {
         props: { sectionsData, topicsData, orderStatus, orderData },
