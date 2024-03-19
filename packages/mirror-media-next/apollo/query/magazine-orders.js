@@ -16,7 +16,6 @@ const fetchAllMemberByOrderNo = gql`
       purchaseName
       purchaseEmail
       purchaseMobile
-      purchaseAddress
       receiveName
       receiveMobile
       receiveAddress

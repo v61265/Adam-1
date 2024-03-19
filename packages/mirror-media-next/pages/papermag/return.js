@@ -11,7 +11,6 @@ import NewebPay from '@mirrormedia/newebpay-node'
 import {
   NEWEBPAY_PAPERMAG_KEY,
   NEWEBPAY_PAPERMAG_IV,
-  ISRAFEL_ORIGIN,
 } from '../../config/index.mjs'
 import { parseBody } from 'next/dist/server/api-utils/node'
 
@@ -195,7 +194,6 @@ export async function getServerSideProps({ query, req, res }) {
       purchaseName: decryptInfoData.purchaseName,
       purchaseEmail: decryptInfoData.purchaseEmail,
       purchaseMobile: decryptInfoData.purchaseMobile,
-      purchaseAddress: decryptInfoData.purchaseAddress,
       receiveName: decryptInfoData.receiveName,
       receiveMobile: decryptInfoData.receiveMobile,
       receiveAddress: decryptInfoData.receiveAddress,
