@@ -18,7 +18,8 @@ import { parseBody } from 'next/dist/server/api-utils/node'
 import { getMerchandiseAndShippingFeeInfo } from '../../utils/papermag'
 
 import { ACCESS_PAPERMAG_FEATURE_TOGGLE } from '../../config/index.mjs'
-import axios from 'axios'
+import client from '../../apollo/apollo-client'
+import { fetchAllMemberByOrderNo } from '../../apollo/query/magazine-orders'
 
 const Wrapper = styled.main`
   min-height: 50vh;
@@ -155,49 +156,13 @@ export async function getServerSideProps({ query, req, res }) {
       decryptedTradeInfo.Result?.MerchantOrderNo ||
       JSON.parse(Object.keys(decryptedTradeInfo)[0]).Result.MerchantOrderNo
 
-    // fetch order data from DB
-    const apiUrl = `${ISRAFEL_ORIGIN}/api/graphql`
-    const query = `query magazineOrder($orderNumber: String!) {
-      allMagazineOrders(where: { orderNumber: $orderNumber }) {
-        id
-        orderNumber
-        purchaseDatetime
-        merchandise {
-          name
-          code
-          price
-        }
-        itemCount
-        totalAmount
-        purchaseName
-        purchaseEmail
-        purchaseMobile
-        purchaseAddress
-        receiveName
-        receiveMobile
-        receiveAddress
-        createdAt
-        totalAmount
-        promoteCode
-      }
-    }`
-    const { data: result } = await axios({
-      url: apiUrl,
-      method: 'post',
-      data: {
-        query,
-        variables: { orderNumber: MerchantOrderNo },
-      },
-      headers: {
-        'content-type': 'application/json',
-        'Cache-Control': 'no-cache',
-      },
+    const result = await client.query({
+      query: fetchAllMemberByOrderNo,
+      context: { uri: '/member/graphql' },
+      variables: { orderNumber: MerchantOrderNo },
     })
-    if (result.errors) {
-      throw new Error(result.errors)
-    }
 
-    const decryptInfoData = result?.data?.allMagazineOrders?.[0]
+    const decryptInfoData = result?.data?.magazineOrders?.[0]
     if (!decryptInfoData) {
       return {
         props: { sectionsData, topicsData, orderStatus, orderData },
