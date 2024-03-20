@@ -19,6 +19,7 @@ import { getMerchandiseAndShippingFeeInfo } from '../../utils/papermag'
 import { ACCESS_PAPERMAG_FEATURE_TOGGLE } from '../../config/index.mjs'
 import client from '../../apollo/apollo-client'
 import { fetchAllMemberByOrderNo } from '../../apollo/query/magazine-orders'
+import { transformTimeData } from '../../utils/index'
 
 const Wrapper = styled.main`
   min-height: 50vh;
@@ -188,7 +189,7 @@ export async function getServerSideProps({ query, req, res }) {
 
     orderData = {
       orderId: magazineOrderData.orderNumber,
-      date: magazineOrderData.createdAt,
+      date: transformTimeData(magazineOrderData.createdAt, 'dash'),
       discountCode: magazineOrderData.promoteCode,
       orderInfoPurchasedList,
       purchaseName: magazineOrderData.purchaseName,
