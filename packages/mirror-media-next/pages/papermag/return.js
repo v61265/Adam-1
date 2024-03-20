@@ -161,17 +161,17 @@ export async function getServerSideProps({ query, req, res }) {
       variables: { orderNumber: MerchantOrderNo },
     })
 
-    const decryptInfoData = result?.data?.magazineOrders?.[0]
-    if (!decryptInfoData) {
+    const magazineOrderData = result?.data?.magazineOrders?.[0]
+    if (!magazineOrderData) {
       return {
         props: { sectionsData, topicsData, orderStatus, orderData },
       }
     }
 
-    const { itemCount, promoteCode, totalAmount } = decryptInfoData
+    const { itemCount, promoteCode, totalAmount } = magazineOrderData
 
     const { name, shippingFee } = getMerchandiseAndShippingFeeInfo(
-      decryptInfoData?.merchandise?.code
+      magazineOrderData?.merchandise?.code
     )
 
     const discount = promoteCode ? 80 * itemCount : 0
@@ -187,16 +187,16 @@ export async function getServerSideProps({ query, req, res }) {
     }
 
     orderData = {
-      orderId: decryptInfoData.orderNumber,
-      date: decryptInfoData.createdAt,
-      discountCode: decryptInfoData.promoteCode,
+      orderId: magazineOrderData.orderNumber,
+      date: magazineOrderData.createdAt,
+      discountCode: magazineOrderData.promoteCode,
       orderInfoPurchasedList,
-      purchaseName: decryptInfoData.purchaseName,
-      purchaseEmail: decryptInfoData.purchaseEmail,
-      purchaseMobile: decryptInfoData.purchaseMobile,
-      receiveName: decryptInfoData.receiveName,
-      receiveMobile: decryptInfoData.receiveMobile,
-      receiveAddress: decryptInfoData.receiveAddress,
+      purchaseName: magazineOrderData.purchaseName,
+      purchaseEmail: magazineOrderData.purchaseEmail,
+      purchaseMobile: magazineOrderData.purchaseMobile,
+      receiveName: magazineOrderData.receiveName,
+      receiveMobile: magazineOrderData.receiveMobile,
+      receiveAddress: magazineOrderData.receiveAddress,
     }
     orderStatus = infoData.Status
   } catch (err) {
