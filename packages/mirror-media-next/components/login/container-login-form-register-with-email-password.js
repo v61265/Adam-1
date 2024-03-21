@@ -6,6 +6,7 @@ import {
   loginEmail,
   loginPassword,
   loginActions,
+  FormMode,
 } from '../../slice/login-slice'
 import {
   getAccessToken,
@@ -29,7 +30,7 @@ export default function ContainerLoginFormRegisterWithEmailPassword() {
   }
   //TODO: better name
   const handleGoBack = () => {
-    dispatch(loginActions.changeLoginFormMode('initial'))
+    dispatch(loginActions.changeLoginFormMode(FormMode.Start))
     setIsDuplicateEmailMember(false)
     dispatch(loginActions.clearPassword())
   }

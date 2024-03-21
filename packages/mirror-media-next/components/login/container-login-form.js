@@ -1,5 +1,5 @@
 import { useAppSelector } from '../../hooks/useRedux'
-import { loginFormMode } from '../../slice/login-slice'
+import { loginFormMode, FormMode } from '../../slice/login-slice'
 import ContainerLoginFormInitial from './container-login-form-initial'
 import ContainerLoginFormRecoverPassword from './container-login-form-recover-password'
 import ContainerLoginFormRegisterWithEmailPassword from './container-login-form-register-with-email-password'
@@ -14,17 +14,17 @@ export default function ContainerLoginForm() {
 
   const getJsx = () => {
     switch (formMode) {
-      case 'initial':
+      case FormMode.Start:
         return <ContainerLoginFormInitial></ContainerLoginFormInitial>
-      case 'register':
+      case FormMode.Registration:
         return (
           <ContainerLoginFormRegisterWithEmailPassword></ContainerLoginFormRegisterWithEmailPassword>
         )
-      case 'login':
+      case FormMode.Login:
         return (
           <ContainerLoginFormLoginWithPassword></ContainerLoginFormLoginWithPassword>
         )
-      case 'recoverPassword':
+      case FormMode.PasswordRecovery:
         return (
           <ContainerLoginFormRecoverPassword></ContainerLoginFormRecoverPassword>
         )

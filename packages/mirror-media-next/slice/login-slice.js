@@ -10,14 +10,34 @@ import { createSlice } from '@reduxjs/toolkit'
  * @typedef {import('../store').AppState } AppState
  */
 
+const Start = 'start'
+const Registration = 'registration'
+const Login = 'login'
+const PasswordRecovery = 'password-recovery'
+/**
+ * @typedef {Object} FormModeEnum
+ * @property {Start} Start
+ * @property {Registration} Registration
+ * @property {Login} Login
+ * @property {PasswordRecovery} PasswordRecovery
+ *
+ * @readonly
+ * @type {FormModeEnum}
+ */
+const FormMode = {
+  Start,
+  Registration,
+  Login,
+  PasswordRecovery,
+}
 /**
  * Type for state
- * @typedef {'form' | 'loginSuccess' | 'registerSuccess' | 'loginError' | 'registerError'} State
+ * @typedef {Form | LoginSuccess | LoginFail | RegisterSuccess | RegisterFail} FormStateList
+ * @typedef {Start | Registration | Login | PasswordRecovery} FormModeList
  * @typedef { 'Google' | 'Facebook' | 'Apple' | 'email' | ''} PrevAuthMethod
  * @typedef {boolean} ShouldShowHint
  * @typedef {string} Email
  * @typedef {string} Password
- * @typedef {'initial' | 'register' |'login' | 'recoverPassword'} LoginFormMode
  * @typedef {Boolean} IsFederatedRedirectResultLoading
  */
 
@@ -28,7 +48,7 @@ import { createSlice } from '@reduxjs/toolkit'
  * @property {ShouldShowHint} shouldShowHint
  * @property {Email} email
  * @property {Password} password
- * @property {LoginFormMode} loginFormMode
+ * @property {FormModeList} loginFormMode
  * @property {IsFederatedRedirectResultLoading} isFederatedRedirectResultLoading
  */
 
@@ -39,7 +59,7 @@ const initialState = {
   shouldShowHint: false,
   email: '',
   password: '',
-  loginFormMode: 'initial',
+  loginFormMode: FormMode.Start,
   isFederatedRedirectResultLoading: true,
 }
 
@@ -126,7 +146,7 @@ const loginSlice = createSlice({
     changeLoginFormMode: (
       state,
       /**
-       * @type {PayloadAction<LoginFormMode>}
+       * @type {PayloadAction<FormModeList>}
        */
       action
     ) => {
@@ -168,7 +188,7 @@ const loginSlice = createSlice({
       state.shouldShowHint = false
       state.email = ''
       state.password = ''
-      state.loginFormMode = 'initial'
+      state.loginFormMode = FormMode.Start
     },
   },
 })
@@ -181,6 +201,7 @@ export {
   loginPassword,
   loginFormMode,
   loginIsFederatedRedirectResultLoading,
+  FormMode,
 }
 export const loginActions = loginSlice.actions
 

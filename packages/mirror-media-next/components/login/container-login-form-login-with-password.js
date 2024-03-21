@@ -5,6 +5,7 @@ import {
   loginPassword,
   loginEmail,
   loginActions,
+  FormMode,
 } from '../../slice/login-slice'
 import { auth } from '../../firebase'
 import {
@@ -32,7 +33,7 @@ export default function ContainerLoginFormLoginWithPassword() {
   }
   //TODO: better name
   const handleGoBack = () => {
-    dispatch(loginActions.changeLoginFormMode('initial'))
+    dispatch(loginActions.changeLoginFormMode(FormMode.Start))
     dispatch(loginActions.clearPassword())
     setShouldShowErrorHint(false)
   }

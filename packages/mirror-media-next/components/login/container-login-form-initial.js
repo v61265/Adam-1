@@ -10,6 +10,7 @@ import {
   loginPrevAuthMethod,
   loginShouldShowHint,
   loginActions,
+  FormMode,
 } from '../../slice/login-slice'
 /**
  * @typedef {import('./container-membership-login-with-third-party').ThirdPartyName} ThirdPartyName
@@ -59,9 +60,9 @@ export default function ContainerLoginFormInitial() {
         responseArray &&
         responseArray.find((signInMethod) => signInMethod === 'apple.com')
       if (isEmailExistWithEmailLinkSignInMethod) {
-        dispatch(loginActions.changeLoginFormMode('recoverPassword'))
+        dispatch(loginActions.changeLoginFormMode(FormMode.PasswordRecovery))
       } else if (isEmailExistWithEmailPasswordSignInMethod) {
-        dispatch(loginActions.changeLoginFormMode('login'))
+        dispatch(loginActions.changeLoginFormMode(FormMode.Login))
         dispatch(loginActions.changePrevAuthMethod('email'))
         dispatch(loginActions.changeShouldShowHint(true))
       } else if (isEmailHasBeenUsedByGoogleAuth) {
@@ -74,7 +75,7 @@ export default function ContainerLoginFormInitial() {
         dispatch(loginActions.changePrevAuthMethod('Apple'))
         dispatch(loginActions.changeShouldShowHint(true))
       } else {
-        dispatch(loginActions.changeLoginFormMode('register'))
+        dispatch(loginActions.changeLoginFormMode(FormMode.Registration))
       }
 
       setIsLoading(false)
