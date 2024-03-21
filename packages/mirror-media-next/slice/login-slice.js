@@ -43,14 +43,28 @@ const FormState = /** @type {const} */ ({
   RegisterFail,
 })
 
+const Google = 'Google'
+const Facebook = 'Facebook'
+const Apple = 'Apple'
+const Email = 'email'
+const Default = ''
+/**
+ * @readonly
+ */
+const AuthMethod = /** @type {const} */ ({
+  Google,
+  Facebook,
+  Apple,
+  Email,
+  Default,
+})
+
 /**
  * Type for state
  * @typedef {Form | LoginSuccess | LoginFail | RegisterSuccess | RegisterFail} LoginFormState
  * @typedef {Start | Registration | Login | PasswordRecovery} LoginFormMode
- * @typedef { 'Google' | 'Facebook' | 'Apple' | 'email' | ''} PrevAuthMethod
+ * @typedef {Google | Facebook | Apple | Email | Default} PrevAuthMethod
  * @typedef {boolean} ShouldShowHint
- * @typedef {string} Email
- * @typedef {string} Password
  * @typedef {Boolean} IsFederatedRedirectResultLoading
  */
 
@@ -59,8 +73,8 @@ const FormState = /** @type {const} */ ({
  * @property {LoginFormState} state
  * @property {PrevAuthMethod} prevAuthMethod
  * @property {ShouldShowHint} shouldShowHint
- * @property {Email} email
- * @property {Password} password
+ * @property {string} email
+ * @property {string} password
  * @property {LoginFormMode} loginFormMode
  * @property {IsFederatedRedirectResultLoading} isFederatedRedirectResultLoading
  */
@@ -68,7 +82,7 @@ const FormState = /** @type {const} */ ({
 /**@type {InitialState} */
 const initialState = {
   state: FormState.Form,
-  prevAuthMethod: '',
+  prevAuthMethod: AuthMethod.Default,
   shouldShowHint: false,
   email: '',
   password: '',
@@ -140,7 +154,7 @@ const loginSlice = createSlice({
     setEmail: (
       state,
       /**
-       * @type {PayloadAction<Email>}
+       * @type {PayloadAction<string>}
        */
       action
     ) => {
@@ -149,7 +163,7 @@ const loginSlice = createSlice({
     setPassword: (
       state,
       /**
-       * @type {PayloadAction<Password>}
+       * @type {PayloadAction<string>}
        */
       action
     ) => {
@@ -197,7 +211,7 @@ const loginSlice = createSlice({
     },
     resetLoginState: (state) => {
       state.state = FormState.Form
-      state.prevAuthMethod = ''
+      state.prevAuthMethod = AuthMethod.Default
       state.shouldShowHint = false
       state.email = ''
       state.password = ''
@@ -216,6 +230,7 @@ export {
   loginIsFederatedRedirectResultLoading,
   FormMode,
   FormState,
+  AuthMethod,
 }
 export const loginActions = loginSlice.actions
 

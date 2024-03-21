@@ -11,6 +11,7 @@ import {
   loginShouldShowHint,
   loginActions,
   FormMode,
+  AuthMethod,
 } from '../../slice/login-slice'
 /**
  * @typedef {import('./container-membership-login-with-third-party').ThirdPartyName} ThirdPartyName
@@ -20,9 +21,9 @@ import {
  * @type { {name: ThirdPartyName}[]}
  */
 const THIRD_PARTY_LIST = [
-  { name: 'Google' },
-  { name: 'Facebook' },
-  { name: 'Apple' },
+  { name: AuthMethod.Google },
+  { name: AuthMethod.Facebook },
+  { name: AuthMethod.Apple },
 ]
 export default function ContainerLoginFormInitial() {
   const [isLoading, setIsLoading] = useState(false)
@@ -63,16 +64,16 @@ export default function ContainerLoginFormInitial() {
         dispatch(loginActions.changeLoginFormMode(FormMode.PasswordRecovery))
       } else if (isEmailExistWithEmailPasswordSignInMethod) {
         dispatch(loginActions.changeLoginFormMode(FormMode.Login))
-        dispatch(loginActions.changePrevAuthMethod('email'))
+        dispatch(loginActions.changePrevAuthMethod(AuthMethod.Email))
         dispatch(loginActions.changeShouldShowHint(true))
       } else if (isEmailHasBeenUsedByGoogleAuth) {
-        dispatch(loginActions.changePrevAuthMethod('Google'))
+        dispatch(loginActions.changePrevAuthMethod(AuthMethod.Google))
         dispatch(loginActions.changeShouldShowHint(true))
       } else if (isEmailHasBeenUsedByFacebookAuth) {
-        dispatch(loginActions.changePrevAuthMethod('Facebook'))
+        dispatch(loginActions.changePrevAuthMethod(AuthMethod.Facebook))
         dispatch(loginActions.changeShouldShowHint(true))
       } else if (isEmailHasBeenUsedByAppleAuth) {
-        dispatch(loginActions.changePrevAuthMethod('Apple'))
+        dispatch(loginActions.changePrevAuthMethod(AuthMethod.Apple))
         dispatch(loginActions.changeShouldShowHint(true))
       } else {
         dispatch(loginActions.changeLoginFormMode(FormMode.Registration))

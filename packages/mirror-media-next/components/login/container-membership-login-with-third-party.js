@@ -6,10 +6,18 @@ import {
   FacebookAuthProvider,
   signInWithRedirect,
 } from 'firebase/auth'
-/** @typedef {'Google' | 'Facebook' | 'Apple'} ThirdPartyName */
 
 import { useAppSelector } from '../../hooks/useRedux'
-import { loginIsFederatedRedirectResultLoading } from '../../slice/login-slice'
+import {
+  loginIsFederatedRedirectResultLoading,
+  AuthMethod,
+} from '../../slice/login-slice'
+
+// following comments is required since these variables are used by comments but not codes.
+/* eslint-disable-next-line no-unused-vars */
+const { Google, Facebook, Apple } = AuthMethod
+/** @typedef {Google | Facebook | Apple} ThirdPartyName */
+
 /**
  *
  * @param {React.ComponentProps<'button'> & {thirdPartyName: ThirdPartyName}} props
@@ -24,13 +32,13 @@ export default function ContainerMembershipLoginWithThirdParty({
   const provider = useMemo(() => {
     let provider = null
     switch (thirdPartyName) {
-      case 'Google':
+      case AuthMethod.Google:
         provider = new GoogleAuthProvider()
         break
-      case 'Facebook':
+      case AuthMethod.Facebook:
         provider = new FacebookAuthProvider()
         break
-      case 'Apple':
+      case AuthMethod.Apple:
         provider = new OAuthProvider('apple.com')
         break
     }
