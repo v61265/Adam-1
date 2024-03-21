@@ -15,21 +15,17 @@ const Registration = 'registration'
 const Login = 'login'
 const PasswordRecovery = 'password-recovery'
 /**
- * @typedef {Object} FormModeEnum
- * @property {Start} Start
- * @property {Registration} Registration
- * @property {Login} Login
- * @property {PasswordRecovery} PasswordRecovery
- *
  * @readonly
- * @type {FormModeEnum}
  */
-const FormMode = {
+const FormMode = /** @type {const} */ ({
   Start,
   Registration,
   Login,
   PasswordRecovery,
-}
+})
+
+// `@type {const} (...)` is equivalent to `as const` in TypeScript
+// ref: https://stackoverflow.com/a/64687300
 
 const Form = 'form'
 const LoginSuccess = 'login-success'
@@ -37,28 +33,20 @@ const LoginFail = 'login-fail'
 const RegisterSuccess = 'register-success'
 const RegisterFail = 'register-fail'
 /**
- * @typedef {Object} FormStateEnum
- * @property {Form} Form
- * @property {LoginSuccess} LoginSuccess
- * @property {LoginFail} LoginFail
- * @property {RegisterSuccess} RegisterSuccess
- * @property {RegisterFail} RegisterFail
- *
  * @readonly
- * @type {FormStateEnum}
  */
-const FormState = {
+const FormState = /** @type {const} */ ({
   Form,
   LoginSuccess,
   LoginFail,
   RegisterSuccess,
   RegisterFail,
-}
+})
 
 /**
  * Type for state
- * @typedef {Form | LoginSuccess | LoginFail | RegisterSuccess | RegisterFail} FormStateList
- * @typedef {Start | Registration | Login | PasswordRecovery} FormModeList
+ * @typedef {Form | LoginSuccess | LoginFail | RegisterSuccess | RegisterFail} LoginFormState
+ * @typedef {Start | Registration | Login | PasswordRecovery} LoginFormMode
  * @typedef { 'Google' | 'Facebook' | 'Apple' | 'email' | ''} PrevAuthMethod
  * @typedef {boolean} ShouldShowHint
  * @typedef {string} Email
@@ -68,12 +56,12 @@ const FormState = {
 
 /**
  * @typedef {Object} InitialState
- * @property {FormStateList} state
+ * @property {LoginFormState} state
  * @property {PrevAuthMethod} prevAuthMethod
  * @property {ShouldShowHint} shouldShowHint
  * @property {Email} email
  * @property {Password} password
- * @property {FormModeList} loginFormMode
+ * @property {LoginFormMode} loginFormMode
  * @property {IsFederatedRedirectResultLoading} isFederatedRedirectResultLoading
  */
 
@@ -143,7 +131,7 @@ const loginSlice = createSlice({
     changeState: (
       state,
       /**
-       * @type {PayloadAction<FormStateList>}
+       * @type {PayloadAction<LoginFormState>}
        */
       action
     ) => {
@@ -171,7 +159,7 @@ const loginSlice = createSlice({
     changeLoginFormMode: (
       state,
       /**
-       * @type {PayloadAction<FormModeList>}
+       * @type {PayloadAction<LoginFormMode>}
        */
       action
     ) => {
