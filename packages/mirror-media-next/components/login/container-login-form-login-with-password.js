@@ -6,6 +6,7 @@ import {
   loginEmail,
   loginActions,
   FormMode,
+  FormState,
 } from '../../slice/login-slice'
 import { auth } from '../../firebase'
 import {
@@ -63,7 +64,7 @@ export default function ContainerLoginFormLoginWithPassword() {
         setShouldShowErrorHint(true)
       } else {
         errorHandler(e)
-        dispatch(loginActions.changeState('loginError'))
+        dispatch(loginActions.changeState(FormState.LoginFail))
       }
     }
   }

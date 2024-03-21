@@ -7,6 +7,7 @@ import {
   loginPassword,
   loginActions,
   FormMode,
+  FormState,
 } from '../../slice/login-slice'
 import {
   getAccessToken,
@@ -67,7 +68,7 @@ export default function ContainerLoginFormRegisterWithEmailPassword() {
         setIsDuplicateEmailMember(true)
       } else {
         errorHandler(e)
-        dispatch(loginActions.changeState('registerError'))
+        dispatch(loginActions.changeState(FormState.RegisterFail))
       }
     }
   }

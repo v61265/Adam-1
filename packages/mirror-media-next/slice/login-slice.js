@@ -30,6 +30,31 @@ const FormMode = {
   Login,
   PasswordRecovery,
 }
+
+const Form = 'form'
+const LoginSuccess = 'login-success'
+const LoginFail = 'login-fail'
+const RegisterSuccess = 'register-success'
+const RegisterFail = 'register-fail'
+/**
+ * @typedef {Object} FormStateEnum
+ * @property {Form} Form
+ * @property {LoginSuccess} LoginSuccess
+ * @property {LoginFail} LoginFail
+ * @property {RegisterSuccess} RegisterSuccess
+ * @property {RegisterFail} RegisterFail
+ *
+ * @readonly
+ * @type {FormStateEnum}
+ */
+const FormState = {
+  Form,
+  LoginSuccess,
+  LoginFail,
+  RegisterSuccess,
+  RegisterFail,
+}
+
 /**
  * Type for state
  * @typedef {Form | LoginSuccess | LoginFail | RegisterSuccess | RegisterFail} FormStateList
@@ -43,7 +68,7 @@ const FormMode = {
 
 /**
  * @typedef {Object} InitialState
- * @property {State} state
+ * @property {FormStateList} state
  * @property {PrevAuthMethod} prevAuthMethod
  * @property {ShouldShowHint} shouldShowHint
  * @property {Email} email
@@ -54,7 +79,7 @@ const FormMode = {
 
 /**@type {InitialState} */
 const initialState = {
-  state: 'form',
+  state: FormState.Form,
   prevAuthMethod: '',
   shouldShowHint: false,
   email: '',
@@ -118,7 +143,7 @@ const loginSlice = createSlice({
     changeState: (
       state,
       /**
-       * @type {PayloadAction<State>}
+       * @type {PayloadAction<FormStateList>}
        */
       action
     ) => {
@@ -183,7 +208,7 @@ const loginSlice = createSlice({
       state.isFederatedRedirectResultLoading = action.payload
     },
     resetLoginState: (state) => {
-      state.state = 'form'
+      state.state = FormState.Form
       state.prevAuthMethod = ''
       state.shouldShowHint = false
       state.email = ''
@@ -202,6 +227,7 @@ export {
   loginFormMode,
   loginIsFederatedRedirectResultLoading,
   FormMode,
+  FormState,
 }
 export const loginActions = loginSlice.actions
 
