@@ -1,4 +1,4 @@
-import { IS_PRIZE_RIZED } from '../config'
+import { IS_PRIZE_RIZED } from '../config/index.mjs'
 
 const PRIZE_LIST = {
   yearly: 499,
