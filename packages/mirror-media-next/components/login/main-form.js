@@ -2,12 +2,19 @@ import styled, { css } from 'styled-components'
 import { useAppSelector } from '../../hooks/useRedux'
 import { loginFormMode, FormMode } from '../../slice/login-slice'
 import NextImage from 'next/image'
+import FormWrapper from '../shared/form-wrapper'
 import MainFormStart from './main-form-start'
 import MainFormRegistration from './main-form-registration'
 import MainFormLoginWithPassword from './main-form-login-with-password'
 import MobileBanner from '../../public/images-next/login/banner-mobile.png'
 import TabletBanner from '../../public/images-next/login/banner-tablet.png'
 import DesktopBanner from '../../public/images-next/login/banner-desktop.png'
+
+const Main = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const SharedBannerStyles = css`
   width: 100vw;
@@ -55,8 +62,6 @@ const Intro = styled.section`
 
   ${({ theme }) => theme.breakpoint.md} {
     width: 608px;
-    margin-left: auto;
-    margin-right: auto;
   }
 
   ${({ theme }) => theme.breakpoint.xxl} {
@@ -82,7 +87,7 @@ const Title = styled.h1`
 export default function MainForm() {
   const formMode = useAppSelector(loginFormMode)
 
-  const getFormByMode = () => {
+  const getFormContentByMode = () => {
     switch (formMode) {
       case FormMode.Start:
         return <MainFormStart></MainFormStart>
@@ -92,10 +97,10 @@ export default function MainForm() {
         return <MainFormLoginWithPassword></MainFormLoginWithPassword>
     }
   }
-  const jsx = getFormByMode()
+  const jsx = getFormContentByMode()
 
   return (
-    <main>
+    <Main>
       <StyledMobileBanner
         src={MobileBanner}
         alt="mobile banner"
@@ -116,7 +121,7 @@ export default function MainForm() {
         <br />
         <p>現在，請立即加入，成為我們的會員，體驗有質量、無干擾的新聞閱讀。</p>
       </Intro>
-      {jsx}
-    </main>
+      <FormWrapper>{jsx}</FormWrapper>
+    </Main>
   )
 }
