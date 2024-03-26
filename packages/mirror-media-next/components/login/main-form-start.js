@@ -1,5 +1,5 @@
 import { fetchSignInMethodsForEmail } from 'firebase/auth'
-import ContainerMembershipLoginWithThirdParty from './container-membership-login-with-third-party'
+import ContainerMembershipLoginWithThirdParty from './main-form-login-with-third-party'
 import UiMembershipInputEmailInvalidation from './ui-membership-input-email-invalidation'
 import UiMembershipButton from './ui/button/ui-membership-button'
 import { auth } from '../../firebase'
@@ -14,7 +14,7 @@ import {
   AuthMethod,
 } from '../../slice/login-slice'
 /**
- * @typedef {import('./container-membership-login-with-third-party').ThirdPartyName} ThirdPartyName
+ * @typedef {import('./main-form-login-with-third-party').ThirdPartyName} ThirdPartyName
  */
 
 /**
@@ -25,7 +25,7 @@ const THIRD_PARTY_LIST = [
   { name: AuthMethod.Facebook },
   { name: AuthMethod.Apple },
 ]
-export default function ContainerLoginFormInitial() {
+export default function MainFormStart() {
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useAppDispatch()
   const email = useAppSelector(loginEmail)

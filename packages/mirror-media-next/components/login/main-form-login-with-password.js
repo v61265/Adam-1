@@ -18,7 +18,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 
 import UiMembershipButton from './ui/button/ui-membership-button'
 import { FirebaseError } from 'firebase/app'
-export default function ContainerLoginFormLoginWithPassword() {
+export default function MainFormLoginWithPassword() {
   const dispatch = useAppDispatch()
   const password = useAppSelector(loginPassword)
   const email = useAppSelector(loginEmail)

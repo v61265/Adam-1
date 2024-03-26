@@ -23,9 +23,7 @@ const { Google, Facebook, Apple } = AuthMethod
  * @param {React.ComponentProps<'button'> & {thirdPartyName: ThirdPartyName}} props
  * @returns
  */
-export default function ContainerMembershipLoginWithThirdParty({
-  thirdPartyName,
-}) {
+export default function MainFormLoginWithThirdParty({ thirdPartyName }) {
   const isFederatedRedirectResultLoading = useAppSelector(
     loginIsFederatedRedirectResultLoading
   )

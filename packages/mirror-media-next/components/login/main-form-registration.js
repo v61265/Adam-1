@@ -17,7 +17,7 @@ import {
 import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
-export default function ContainerLoginFormRegisterWithEmailPassword() {
+export default function MainFormRegistration() {
   const dispatch = useAppDispatch()
   const [isLoading, setIsLoading] = useState(false)
   const [isDuplicateEmailMember, setIsDuplicateEmailMember] = useState(false)
