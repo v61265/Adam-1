@@ -13,7 +13,6 @@ import { createSlice } from '@reduxjs/toolkit'
 const Start = 'start'
 const Registration = 'registration'
 const Login = 'login'
-const PasswordRecovery = 'password-recovery'
 /**
  * @readonly
  */
@@ -21,7 +20,6 @@ const FormMode = /** @type {const} */ ({
   Start,
   Registration,
   Login,
-  PasswordRecovery,
 })
 
 // `@type {const} (...)` is equivalent to `as const` in TypeScript
@@ -62,7 +60,7 @@ const AuthMethod = /** @type {const} */ ({
 /**
  * Type for state
  * @typedef {Form | LoginSuccess | LoginFail | RegisterSuccess | RegisterFail} LoginFormState
- * @typedef {Start | Registration | Login | PasswordRecovery} LoginFormMode
+ * @typedef {Start | Registration | Login} LoginFormMode
  * @typedef {Google | Facebook | Apple | Email | Default} PrevAuthMethod
  * @typedef {boolean} ShouldShowHint
  * @typedef {Boolean} IsFederatedRedirectResultLoading

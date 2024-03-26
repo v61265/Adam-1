@@ -37,14 +37,6 @@ export default function ContainerLoginFormInitial() {
     try {
       const responseArray = await fetchSignInMethodsForEmail(auth, email)
 
-      /*
-       * Hint, If email verify is active in the future,
-       * responseArray would have multi value
-       */
-      const isEmailExistWithEmailLinkSignInMethod =
-        responseArray &&
-        responseArray.find((signInMethod) => signInMethod === 'emailLink')
-
       const isEmailExistWithEmailPasswordSignInMethod =
         responseArray &&
         responseArray.find((signInMethod) => signInMethod === 'password')
@@ -60,9 +52,7 @@ export default function ContainerLoginFormInitial() {
       const isEmailHasBeenUsedByAppleAuth =
         responseArray &&
         responseArray.find((signInMethod) => signInMethod === 'apple.com')
-      if (isEmailExistWithEmailLinkSignInMethod) {
-        dispatch(loginActions.changeLoginFormMode(FormMode.PasswordRecovery))
-      } else if (isEmailExistWithEmailPasswordSignInMethod) {
+      if (isEmailExistWithEmailPasswordSignInMethod) {
         dispatch(loginActions.changeLoginFormMode(FormMode.Login))
         dispatch(loginActions.changePrevAuthMethod(AuthMethod.Email))
         dispatch(loginActions.changeShouldShowHint(true))

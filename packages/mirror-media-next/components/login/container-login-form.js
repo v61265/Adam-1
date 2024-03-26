@@ -1,7 +1,6 @@
 import { useAppSelector } from '../../hooks/useRedux'
 import { loginFormMode, FormMode } from '../../slice/login-slice'
 import ContainerLoginFormInitial from './container-login-form-initial'
-import ContainerLoginFormRecoverPassword from './container-login-form-recover-password'
 import ContainerLoginFormRegisterWithEmailPassword from './container-login-form-register-with-email-password'
 import ContainerLoginFormLoginWithPassword from './container-login-form-login-with-password'
 /**
@@ -23,10 +22,6 @@ export default function ContainerLoginForm() {
       case FormMode.Login:
         return (
           <ContainerLoginFormLoginWithPassword></ContainerLoginFormLoginWithPassword>
-        )
-      case FormMode.PasswordRecovery:
-        return (
-          <ContainerLoginFormRecoverPassword></ContainerLoginFormRecoverPassword>
         )
     }
   }
