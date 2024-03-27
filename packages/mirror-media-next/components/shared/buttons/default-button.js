@@ -21,9 +21,9 @@ const Button = styled.button`
 
 /**
  * @param {Object} props
- * @param {React.ReactNode} props.children
- * @param {boolean} [props.isLoading]
- * @param {import('react').MouseEventHandler<HTMLButtonElement>} props.onClick
+ * @param {React.ReactNode} props.children - 按鈕顯示內容
+ * @param {boolean} [props.isLoading] - 控制按鈕是否顯示 Loading 效果
+ * @param {import('react').MouseEventHandler<HTMLButtonElement>} props.onClick - 處理按鈕 click 事件
  */
 export default function DefaultButton({
   children,

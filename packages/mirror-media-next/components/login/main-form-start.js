@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { fetchSignInMethodsForEmail } from 'firebase/auth'
 import ButtonLoginWithThirdParty from './button-login-with-third-party'
-import UiMembershipButton from './ui/button/ui-membership-button'
 import { auth } from '../../firebase'
 import { useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
@@ -14,6 +13,8 @@ import {
   AuthMethod,
 } from '../../slice/login-slice'
 import EmailInput from './email-input'
+import PrimaryButton from '../shared/buttons/primary-button'
+import { isValidEmail } from '../../utils'
 
 /**
  * @typedef {import('./button-login-with-third-party').ThirdPartyName} ThirdPartyName
@@ -80,8 +81,12 @@ export default function MainFormStart() {
   const prevAuthMethod = useAppSelector(loginPrevAuthMethod)
   const shouldShowHint = useAppSelector(loginShouldShowHint)
   const hint = `由於您曾以 ${prevAuthMethod} 帳號登入，請點擊上方「使用 ${prevAuthMethod} 帳號繼續」重試。`
+  const allowToContinue = isValidEmail(email)
+
   const handleOnClick = async () => {
+    if (!allowToContinue) return
     setIsLoading(true)
+
     try {
       const responseArray = await fetchSignInMethodsForEmail(auth, email)
 
@@ -100,6 +105,7 @@ export default function MainFormStart() {
       const isEmailHasBeenUsedByAppleAuth =
         responseArray &&
         responseArray.find((signInMethod) => signInMethod === 'apple.com')
+
       if (isEmailExistWithEmailPasswordSignInMethod) {
         dispatch(loginActions.changeLoginFormMode(FormMode.Login))
         dispatch(loginActions.changePrevAuthMethod(AuthMethod.Email))
@@ -116,10 +122,9 @@ export default function MainFormStart() {
       } else {
         dispatch(loginActions.changeLoginFormMode(FormMode.Registration))
       }
-
-      setIsLoading(false)
     } catch (e) {
-      console.log(e)
+      console.error(e)
+    } finally {
       setIsLoading(false)
     }
   }
@@ -140,10 +145,14 @@ export default function MainFormStart() {
       </Seperator>
       <ControlGroup>
         <EmailInput />
+        <PrimaryButton
+          isLoading={isLoading}
+          disabled={!allowToContinue}
+          onClick={handleOnClick}
+        >
+          下一步
+        </PrimaryButton>
       </ControlGroup>
-      <UiMembershipButton buttonType={'primary'} handleOnClick={handleOnClick}>
-        {isLoading ? '載入中...' : '下一步'}
-      </UiMembershipButton>
     </>
   )
 }
