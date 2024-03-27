@@ -43,6 +43,31 @@ const ThirdPartyButtonGroup = styled.div`
   }
 `
 
+const Seperator = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+
+  > span {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  &:before,
+  &:after {
+    content: '';
+    display: flex;
+    flex-grow: 1;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+`
+
 export default function MainFormStart() {
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useAppDispatch()
@@ -104,7 +129,9 @@ export default function MainFormStart() {
         ))}
         {shouldShowHint && <p>{hint}</p>}
       </ThirdPartyButtonGroup>
-      <p>或</p>
+      <Seperator>
+        <span>或</span>
+      </Seperator>
       <UiMembershipInputEmailInvalidation></UiMembershipInputEmailInvalidation>
       <UiMembershipButton buttonType={'primary'} handleOnClick={handleOnClick}>
         {isLoading ? '載入中...' : '下一步'}
