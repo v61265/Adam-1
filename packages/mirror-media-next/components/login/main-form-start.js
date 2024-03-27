@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { fetchSignInMethodsForEmail } from 'firebase/auth'
-import ButtonLoginWithThirdParty from './button-login-with-third-party'
 import { auth } from '../../firebase'
 import { useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
@@ -12,9 +11,11 @@ import {
   FormMode,
   AuthMethod,
 } from '../../slice/login-slice'
+import { isValidEmail } from '../../utils'
 import EmailInput from './email-input'
 import PrimaryButton from '../shared/buttons/primary-button'
-import { isValidEmail } from '../../utils'
+import ButtonLoginWithThirdParty from './button-login-with-third-party'
+import ReminderSection from './reminder-section'
 
 /**
  * @typedef {import('./button-login-with-third-party').ThirdPartyName} ThirdPartyName
@@ -152,6 +153,7 @@ export default function MainFormStart() {
         >
           下一步
         </PrimaryButton>
+        <ReminderSection />
       </ControlGroup>
     </>
   )
