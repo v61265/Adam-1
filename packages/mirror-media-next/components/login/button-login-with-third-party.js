@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import { useState, useMemo } from 'react'
 import { auth } from '../../firebase'
 import {
@@ -12,18 +13,38 @@ import {
   loginIsFederatedRedirectResultLoading,
   AuthMethod,
 } from '../../slice/login-slice'
+import DefaultButton from '../shared/buttons/default-button'
+import IconFacebook from '../../public/images-next/login/facebook.svg'
+import IconGoogle from '../../public/images-next/login/google.svg'
+import IconApple from '../../public/images-next/login/apple.svg'
 
 // following comments is required since these variables are used by comments but not codes.
 /* eslint-disable-next-line no-unused-vars */
 const { Google, Facebook, Apple } = AuthMethod
 /** @typedef {Google | Facebook | Apple} ThirdPartyName */
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 8px;
+
+  > svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  > p {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 150%;
+  }
+`
+
 /**
- *
  * @param {React.ComponentProps<'button'> & {thirdPartyName: ThirdPartyName}} props
- * @returns
  */
-export default function MainFormLoginWithThirdParty({ thirdPartyName }) {
+export default function ButtonLoginWithThirdParty({ thirdPartyName }) {
   const isFederatedRedirectResultLoading = useAppSelector(
     loginIsFederatedRedirectResultLoading
   )
@@ -44,6 +65,17 @@ export default function MainFormLoginWithThirdParty({ thirdPartyName }) {
     return provider
   }, [thirdPartyName])
 
+  const SvgIcon = useMemo(() => {
+    switch (thirdPartyName) {
+      case AuthMethod.Google:
+        return IconGoogle
+      case AuthMethod.Facebook:
+        return IconFacebook
+      case AuthMethod.Apple:
+        return IconApple
+    }
+  }, [thirdPartyName])
+
   const [isLoading, setIsLoading] = useState(false)
   const handleThirdPartyFirebaseLogin = async () => {
     setIsLoading(true)
@@ -51,12 +83,14 @@ export default function MainFormLoginWithThirdParty({ thirdPartyName }) {
   }
   const shouldShowLoadingIcon = isLoading || isFederatedRedirectResultLoading
   return (
-    <button onClick={handleThirdPartyFirebaseLogin}>
-      {shouldShowLoadingIcon ? (
-        <span>載入中...</span>
-      ) : (
-        <span>第三方{thirdPartyName}登入</span>
-      )}
-    </button>
+    <DefaultButton
+      isLoading={shouldShowLoadingIcon}
+      onClick={handleThirdPartyFirebaseLogin}
+    >
+      <Wrapper>
+        <SvgIcon />
+        <p>以 {thirdPartyName} 帳號繼續</p>
+      </Wrapper>
+    </DefaultButton>
   )
 }

@@ -1,5 +1,6 @@
+import styled from 'styled-components'
 import { fetchSignInMethodsForEmail } from 'firebase/auth'
-import ContainerMembershipLoginWithThirdParty from './main-form-login-with-third-party'
+import ButtonLoginWithThirdParty from './button-login-with-third-party'
 import UiMembershipInputEmailInvalidation from './ui-membership-input-email-invalidation'
 import UiMembershipButton from './ui/button/ui-membership-button'
 import { auth } from '../../firebase'
@@ -13,25 +14,42 @@ import {
   FormMode,
   AuthMethod,
 } from '../../slice/login-slice'
+
 /**
- * @typedef {import('./main-form-login-with-third-party').ThirdPartyName} ThirdPartyName
+ * @typedef {import('./button-login-with-third-party').ThirdPartyName} ThirdPartyName
  */
 
 /**
  * @type { {name: ThirdPartyName}[]}
  */
 const THIRD_PARTY_LIST = [
-  { name: AuthMethod.Google },
   { name: AuthMethod.Facebook },
+  { name: AuthMethod.Google },
   { name: AuthMethod.Apple },
 ]
+
+const ThirdPartyButtonGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  width: 100%;
+
+  > p {
+    color: #e51731;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+`
+
 export default function MainFormStart() {
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useAppDispatch()
   const email = useAppSelector(loginEmail)
   const prevAuthMethod = useAppSelector(loginPrevAuthMethod)
   const shouldShowHint = useAppSelector(loginShouldShowHint)
-  const hint = `由於您曾以 ${prevAuthMethod} 帳號登入，請點擊上方「使用${prevAuthMethod}帳號繼續」重試。`
+  const hint = `由於您曾以 ${prevAuthMethod} 帳號登入，請點擊上方「使用 ${prevAuthMethod} 帳號繼續」重試。`
   const handleOnClick = async () => {
     setIsLoading(true)
     try {
@@ -76,21 +94,21 @@ export default function MainFormStart() {
     }
   }
   return (
-    <div>
-      ContainerLoginFormInitial
-      <p>第三方登入</p>
-      {THIRD_PARTY_LIST.map((item) => (
-        <ContainerMembershipLoginWithThirdParty
-          key={item.name}
-          thirdPartyName={item.name}
-        />
-      ))}
-      {shouldShowHint && <p>{hint}</p>}
+    <>
+      <ThirdPartyButtonGroup>
+        {THIRD_PARTY_LIST.map((item) => (
+          <ButtonLoginWithThirdParty
+            key={item.name}
+            thirdPartyName={item.name}
+          />
+        ))}
+        {shouldShowHint && <p>{hint}</p>}
+      </ThirdPartyButtonGroup>
       <p>或</p>
       <UiMembershipInputEmailInvalidation></UiMembershipInputEmailInvalidation>
       <UiMembershipButton buttonType={'primary'} handleOnClick={handleOnClick}>
         {isLoading ? '載入中...' : '下一步'}
       </UiMembershipButton>
-    </div>
+    </>
   )
 }
