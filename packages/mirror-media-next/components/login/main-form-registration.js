@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { useState } from 'react'
-import UiMembershipInput from './ui/input/ui-membership-input'
 import UiMembershipButton from './ui/button/ui-membership-button'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
 import {
@@ -18,6 +17,8 @@ import {
 import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
+import EmailInput from './email-input'
+import RegistrationPasswordInput from './registration-password-input'
 
 const Title = styled.p`
   font-size: 24px;
@@ -25,18 +26,20 @@ const Title = styled.p`
   line-height: 150%;
   margin-bottom: 16px;
 `
+
+const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+`
+
 export default function MainFormRegistration() {
   const dispatch = useAppDispatch()
   const [isLoading, setIsLoading] = useState(false)
   const [isDuplicateEmailMember, setIsDuplicateEmailMember] = useState(false)
   const email = useAppSelector(loginEmail)
   const password = useAppSelector(loginPassword)
-  const handleEmailOnChange = (e) => {
-    dispatch(loginActions.setEmail(e.target.value))
-  }
-  const handlePasswordOnChange = (e) => {
-    dispatch(loginActions.setPassword(e.target.value))
-  }
+
   //TODO: better name
   const handleGoBack = () => {
     dispatch(loginActions.changeLoginFormMode(FormMode.Start))
@@ -80,23 +83,14 @@ export default function MainFormRegistration() {
       }
     }
   }
+
   return (
     <>
       <Title>Email 註冊</Title>
-      <UiMembershipInput
-        type="email"
-        value={email}
-        placeholder="name@example.com"
-        onChange={handleEmailOnChange}
-      ></UiMembershipInput>
-      <br></br>
-      <UiMembershipInput
-        type="password"
-        value={password}
-        onChange={handlePasswordOnChange}
-        placeholder="密碼大於六位數"
-      ></UiMembershipInput>
-      <br></br>
+      <InputGroup>
+        <EmailInput />
+        <RegistrationPasswordInput />
+      </InputGroup>
       {isDuplicateEmailMember && <p>這個 Email 已經註冊過囉</p>}
       <UiMembershipButton buttonType="primary" handleOnClick={handleSubmit}>
         <p>{isLoading ? '載入中' : '註冊'}</p>

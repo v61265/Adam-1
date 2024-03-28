@@ -310,6 +310,16 @@ const isValidEmail = (email) => {
   return regex.test(email)
 }
 
+/**
+ * Verify password input
+ *
+ * @param {string} password
+ * @returns {boolean}
+ */
+const isValidPassword = (password) => {
+  return typeof password === 'string' && password.length >= 6
+}
+
 export {
   transformTimeDataIntoDotFormat,
   transformTimeDataIntoSlashFormat,
@@ -325,4 +335,5 @@ export {
   getActiveOrderSection,
   getActiveOrderCategory,
   isValidEmail,
+  isValidPassword,
 }
