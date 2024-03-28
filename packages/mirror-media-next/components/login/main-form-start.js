@@ -8,7 +8,6 @@ import {
   loginPrevAuthMethod,
   loginShouldShowHint,
   loginActions,
-  FormMode,
   AuthMethod,
 } from '../../slice/login-slice'
 import { isValidEmail } from '../../utils'
@@ -91,37 +90,32 @@ export default function MainFormStart() {
     try {
       const responseArray = await fetchSignInMethodsForEmail(auth, email)
 
-      const isEmailExistWithEmailPasswordSignInMethod =
-        responseArray &&
-        responseArray.find((signInMethod) => signInMethod === 'password')
+      const isEmailExistWithEmailPasswordSignInMethod = responseArray.find(
+        (signInMethod) => signInMethod === 'password'
+      )
 
-      const isEmailHasBeenUsedByGoogleAuth =
-        responseArray &&
-        responseArray.find((signInMethod) => signInMethod === 'google.com')
+      const isEmailHasBeenUsedByGoogleAuth = responseArray.find(
+        (signInMethod) => signInMethod === 'google.com'
+      )
 
-      const isEmailHasBeenUsedByFacebookAuth =
-        responseArray &&
-        responseArray.find((signInMethod) => signInMethod === 'facebook.com')
+      const isEmailHasBeenUsedByFacebookAuth = responseArray.find(
+        (signInMethod) => signInMethod === 'facebook.com'
+      )
 
-      const isEmailHasBeenUsedByAppleAuth =
-        responseArray &&
-        responseArray.find((signInMethod) => signInMethod === 'apple.com')
+      const isEmailHasBeenUsedByAppleAuth = responseArray.find(
+        (signInMethod) => signInMethod === 'apple.com'
+      )
 
       if (isEmailExistWithEmailPasswordSignInMethod) {
-        dispatch(loginActions.changeLoginFormMode(FormMode.Login))
-        dispatch(loginActions.changePrevAuthMethod(AuthMethod.Email))
-        dispatch(loginActions.changeShouldShowHint(true))
+        dispatch(loginActions.goToLoginForm())
       } else if (isEmailHasBeenUsedByGoogleAuth) {
-        dispatch(loginActions.changePrevAuthMethod(AuthMethod.Google))
-        dispatch(loginActions.changeShouldShowHint(true))
+        dispatch(loginActions.setSignInWithGoogle())
       } else if (isEmailHasBeenUsedByFacebookAuth) {
-        dispatch(loginActions.changePrevAuthMethod(AuthMethod.Facebook))
-        dispatch(loginActions.changeShouldShowHint(true))
+        dispatch(loginActions.setSignInWithFacebook())
       } else if (isEmailHasBeenUsedByAppleAuth) {
-        dispatch(loginActions.changePrevAuthMethod(AuthMethod.Apple))
-        dispatch(loginActions.changeShouldShowHint(true))
+        dispatch(loginActions.setSignInWithApple())
       } else {
-        dispatch(loginActions.changeLoginFormMode(FormMode.Registration))
+        dispatch(loginActions.goToRegistrationForm())
       }
     } catch (e) {
       console.error(e)

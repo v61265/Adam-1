@@ -215,6 +215,26 @@ const loginSlice = createSlice({
       state.password = ''
       state.loginFormMode = FormMode.Start
     },
+    goToLoginForm: (state) => {
+      state.loginFormMode = FormMode.Login
+      state.prevAuthMethod = AuthMethod.Email
+      state.shouldShowHint = true
+    },
+    goToRegistrationForm: (state) => {
+      state.loginFormMode = FormMode.Registration
+    },
+    setSignInWithGoogle: (state) => {
+      state.prevAuthMethod = AuthMethod.Google
+      state.shouldShowHint = true
+    },
+    setSignInWithFacebook: (state) => {
+      state.prevAuthMethod = AuthMethod.Facebook
+      state.shouldShowHint = true
+    },
+    setSignInWithApple: (state) => {
+      state.prevAuthMethod = AuthMethod.Apple
+      state.shouldShowHint = true
+    },
   },
 })
 
