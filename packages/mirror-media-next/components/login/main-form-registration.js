@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import { useState } from 'react'
 import UiMembershipInput from './ui/input/ui-membership-input'
 import UiMembershipButton from './ui/button/ui-membership-button'
@@ -17,6 +18,13 @@ import {
 import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
+
+const Title = styled.p`
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 150%;
+  margin-bottom: 16px;
+`
 export default function MainFormRegistration() {
   const dispatch = useAppDispatch()
   const [isLoading, setIsLoading] = useState(false)
@@ -73,9 +81,8 @@ export default function MainFormRegistration() {
     }
   }
   return (
-    <div>
-      Email 註冊：
-      <br></br>
+    <>
+      <Title>Email 註冊</Title>
       <UiMembershipInput
         type="email"
         value={email}
@@ -98,6 +105,6 @@ export default function MainFormRegistration() {
       <UiMembershipButton buttonType="secondary" handleOnClick={handleGoBack}>
         <p>回上一步</p>
       </UiMembershipButton>
-    </div>
+    </>
   )
 }
