@@ -186,11 +186,9 @@ function Footer() {
       <li key={info.name} aria-label={info.name}>
         <CustomerServiceTitle>{info.title}</CustomerServiceTitle>
         {info.name === 'customer-service-email' ? (
-          <a>
-            <CustomerServiceDescription>
-              <a href={`mailto:${info.description}`}>{info.description}</a>
-            </CustomerServiceDescription>
-          </a>
+          <CustomerServiceDescription>
+            <a href={`mailto:${info.description}`}>{info.description}</a>
+          </CustomerServiceDescription>
         ) : (
           <CustomerServiceDescription>
             {info.description}
