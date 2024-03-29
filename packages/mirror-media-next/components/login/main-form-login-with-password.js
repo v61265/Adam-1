@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import UiMembershipInput from './ui/input/ui-membership-input'
 import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
 import {
   loginPassword,
@@ -16,28 +15,37 @@ import {
 } from '../../utils/membership'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import FormTitle from './form-title'
-
+import GenericPasswordInput from '../shared/inputs/generic-password-input'
 import UiMembershipButton from './ui/button/ui-membership-button'
 import { FirebaseError } from 'firebase/app'
+import { InputState } from '../../constants/component'
+
+// following comments is required since these variables are used by comments but not codes.
+/* eslint-disable-next-line no-unused-vars */
+const { Start, Invalid } = InputState
+
+/** @typedef {Start | Invalid } PasswordInputState */
+
 export default function MainFormLoginWithPassword() {
   const dispatch = useAppDispatch()
   const password = useAppSelector(loginPassword)
   const email = useAppSelector(loginEmail)
-  const [shouldShowErrorHint, setShouldShowErrorHint] = useState(false)
+
+  /** @type {[PasswordInputState, import('react').Dispatch<import('react').SetStateAction<PasswordInputState>>]} */
+  const [passwordInputState, setPasswordInputState] = useState(InputState.Start)
   // const shouldShowErrorHint = useAppSelector(loginShouldShowErrorHint)
+
+  /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
   const handlePasswordOnChange = (e) => {
     dispatch(loginActions.setPassword(e.target.value))
   }
-  const [shouldRevealPassword, setShouldRevealPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const handleRevealPasswordButtonClick = () => {
-    setShouldRevealPassword((pre) => !pre)
-  }
+
   //TODO: better name
   const handleGoBack = () => {
     dispatch(loginActions.changeLoginFormMode(FormMode.Start))
     dispatch(loginActions.clearPassword())
-    setShouldShowErrorHint(false)
+    setPasswordInputState(InputState.Start)
   }
   const handleSubmit = async () => {
     setIsLoading(true)
@@ -62,7 +70,7 @@ export default function MainFormLoginWithPassword() {
       setIsLoading(false)
 
       if (e instanceof FirebaseError && e.code === 'auth/wrong-password') {
-        setShouldShowErrorHint(true)
+        setPasswordInputState(InputState.Invalid)
       } else {
         errorHandler(e)
         dispatch(loginActions.changeState(FormState.LoginFail))
@@ -72,17 +80,13 @@ export default function MainFormLoginWithPassword() {
   return (
     <>
       <FormTitle>輸入密碼</FormTitle>
-      <br></br>
-      <UiMembershipInput
-        placeholder="密碼大於六位數"
+      <GenericPasswordInput
         value={password}
-        type={shouldRevealPassword ? 'text' : 'password'}
+        placeholder="密碼大於 N 位數"
+        invalidMessage="密碼錯誤，請重新再試"
+        state={passwordInputState}
         onChange={handlePasswordOnChange}
-      ></UiMembershipInput>
-      <br></br>
-      <button onClick={handleRevealPasswordButtonClick}>
-        {shouldRevealPassword ? '隱藏密碼' : '顯示密碼'}
-      </button>
+      />
       <br></br>
       <UiMembershipButton buttonType="primary" handleOnClick={handleSubmit}>
         <p>{isLoading ? '載入中' : '登入'}</p>
@@ -91,7 +95,6 @@ export default function MainFormLoginWithPassword() {
       <UiMembershipButton buttonType="secondary" handleOnClick={handleGoBack}>
         <p>回上一步</p>
       </UiMembershipButton>
-      {shouldShowErrorHint && <p>密碼錯誤，請重新嘗試</p>}
     </>
   )
 }

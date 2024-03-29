@@ -10,12 +10,14 @@ import { InputState } from '../../constants/component'
 /* eslint-disable-next-line no-unused-vars */
 const { Start, Incomplete, Valid } = InputState
 
+/** @typedef {Start | Incomplete | Valid } PasswordInputState */
+
 export default function RegistrationPasswordInput() {
   const hint = '密碼在 6 位數以上'
   const dispatch = useAppDispatch()
   const password = useAppSelector(loginPassword)
 
-  /** @type {[Start | Incomplete | Valid, import('react').Dispatch<import('react').SetStateAction<Start | Incomplete | Valid>>]} */
+  /** @type {[PasswordInputState, import('react').Dispatch<import('react').SetStateAction<PasswordInputState>>]} */
   const [state, setState] = useState(InputState.Start)
 
   /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
