@@ -11,24 +11,27 @@ import { isValidEmail } from '../../utils'
 const { Start, Invalid, Valid } = InputState
 
 export default function EmailInput() {
-  /** @type {[Start | Invalid | Valid, import('react').Dispatch<import('react').SetStateAction<Start | Invalid | Valid>>]} */
-  const [isValid, setIsValid] = useState(InputState.Start)
+  const getValidality = (/** @type {string} */ email) => {
+    if (email === '') {
+      return InputState.Start
+    } else {
+      if (isValidEmail(email)) {
+        return InputState.Valid
+      } else {
+        return InputState.Invalid
+      }
+    }
+  }
+
   const dispatch = useAppDispatch()
   const email = useAppSelector(loginEmail)
+  /** @type {[Start | Invalid | Valid, import('react').Dispatch<import('react').SetStateAction<Start | Invalid | Valid>>]} */
+  const [isValid, setIsValid] = useState(getValidality(email))
 
   /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
   const handleInputChange = (e) => {
     const inputValue = e.target.value
-
-    if (inputValue === '') {
-      setIsValid(InputState.Start)
-    } else {
-      if (isValidEmail(inputValue)) {
-        setIsValid(InputState.Valid)
-      } else {
-        setIsValid(InputState.Invalid)
-      }
-    }
+    setIsValid(getValidality(inputValue))
     dispatch(loginActions.setEmail(inputValue))
   }
 
