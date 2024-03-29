@@ -1,6 +1,5 @@
 //TODO: add component to add html head dynamically, not jus write head in every pag
 import React, { useState, useEffect } from 'react'
-import Script from 'next/script'
 
 import client from '../../apollo/apollo-client'
 import errors from '@twreporter/errors'
@@ -240,26 +239,8 @@ export default function Story({ postData, headerData, storyLayoutType }) {
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
-  useEffect(() => {
-    if (window.googletag) {
-      window.googletag.cmd.push(function () {
-        window.googletag.display('div-gpt-ad-1710755093650-0')
-      })
-    }
-  }, [])
-
   return (
     <>
-      <Script id="test-google-tag-ad">
-        {`
-            window.googletag = window.googletag || {cmd: []};
-            googletag.cmd.push(function() {
-              googletag.defineOutOfPageSlot('/40175602/test_mirror_pc_ros_out_ADBRO', 'div-gpt-ad-1710755093650-0').addService(googletag.pubads());
-              googletag.pubads().enableSingleRequest();
-              googletag.enableServices();
-            });
-          `}
-      </Script>
       <StoryHead postData={postData} />
       <JsonLdsScript postData={postData} currentPage="/story/"></JsonLdsScript>
       <Layout
@@ -288,7 +269,6 @@ export default function Story({ postData, headerData, storyLayoutType }) {
         {noCategoryOfWineSlug && (
           <FullScreenAds hiddenAdvertised={hiddenAdvertised} />
         )}
-        <div id="div-gpt-ad-1710755093650-0" />
       </Layout>
     </>
   )
