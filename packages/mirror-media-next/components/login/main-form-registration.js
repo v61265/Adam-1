@@ -1,12 +1,10 @@
 import styled from 'styled-components'
 import { useState } from 'react'
-import UiMembershipButton from './ui/button/ui-membership-button'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
 import {
   loginEmail,
   loginPassword,
   loginActions,
-  FormMode,
   FormState,
 } from '../../slice/login-slice'
 import {
@@ -19,6 +17,11 @@ import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
 import EmailInput from './email-input'
 import RegistrationPasswordInput from './registration-password-input'
+import CenteredHint from '../shared/cemtered-hint'
+import { InputState } from '../../constants/component'
+import PrimaryButton from '../shared/buttons/primary-button'
+import DefaultButton from '../shared/buttons/default-button'
+import { isValidEmail, isValidPassword } from '../../utils'
 
 const Title = styled.p`
   font-size: 24px;
@@ -33,19 +36,29 @@ const InputGroup = styled.div`
   row-gap: 16px;
 `
 
+const ControlGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+`
+
 export default function MainFormRegistration() {
   const dispatch = useAppDispatch()
   const [isLoading, setIsLoading] = useState(false)
   const [isDuplicateEmailMember, setIsDuplicateEmailMember] = useState(false)
   const email = useAppSelector(loginEmail)
   const password = useAppSelector(loginPassword)
+  const allowToSubmit = isValidEmail(email) && isValidPassword(password)
 
-  //TODO: better name
-  const handleGoBack = () => {
-    dispatch(loginActions.changeLoginFormMode(FormMode.Start))
+  /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
+  const handleBack = () => {
     setIsDuplicateEmailMember(false)
-    dispatch(loginActions.clearPassword())
+    dispatch(loginActions.goToStart())
   }
+
+  /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
   const handleSubmit = async () => {
     setIsLoading(true)
 
@@ -68,10 +81,9 @@ export default function MainFormRegistration() {
         true,
         accessToken
       )
+
       dispatch(loginActions.changeState(result))
-      setIsLoading(false)
     } catch (e) {
-      setIsLoading(false)
       if (
         e instanceof FirebaseError &&
         e?.code === 'auth/email-already-in-use'
@@ -81,6 +93,8 @@ export default function MainFormRegistration() {
         errorHandler(e)
         dispatch(loginActions.changeState(FormState.RegisterFail))
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -91,14 +105,21 @@ export default function MainFormRegistration() {
         <EmailInput />
         <RegistrationPasswordInput />
       </InputGroup>
-      {isDuplicateEmailMember && <p>這個 Email 已經註冊過囉</p>}
-      <UiMembershipButton buttonType="primary" handleOnClick={handleSubmit}>
-        <p>{isLoading ? '載入中' : '註冊'}</p>
-      </UiMembershipButton>
-      <br></br>
-      <UiMembershipButton buttonType="secondary" handleOnClick={handleGoBack}>
-        <p>回上一步</p>
-      </UiMembershipButton>
+      <ControlGroup>
+        {isDuplicateEmailMember && (
+          <CenteredHint $state={InputState.Invalid}>
+            這個 Email 已經註冊過囉
+          </CenteredHint>
+        )}
+        <PrimaryButton
+          isLoading={isLoading}
+          disabled={!allowToSubmit}
+          onClick={handleSubmit}
+        >
+          註冊會員
+        </PrimaryButton>
+        <DefaultButton onClick={handleBack}>回上一步</DefaultButton>
+      </ControlGroup>
     </>
   )
 }

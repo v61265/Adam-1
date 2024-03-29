@@ -215,6 +215,11 @@ const loginSlice = createSlice({
       state.password = ''
       state.loginFormMode = FormMode.Start
     },
+    goToStart: (state) => {
+      state.loginFormMode = FormMode.Start
+      state.password = ''
+      state.shouldShowHint = false
+    },
     goToLoginForm: (state) => {
       state.loginFormMode = FormMode.Login
       state.prevAuthMethod = AuthMethod.Email
