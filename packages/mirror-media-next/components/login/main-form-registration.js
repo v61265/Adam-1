@@ -22,6 +22,7 @@ import { InputState } from '../../constants/component'
 import PrimaryButton from '../shared/buttons/primary-button'
 import DefaultButton from '../shared/buttons/default-button'
 import { isValidEmail, isValidPassword } from '../../utils'
+import ReminderSection from './reminder-section'
 
 const Title = styled.p`
   font-size: 24px;
@@ -120,6 +121,7 @@ export default function MainFormRegistration() {
         </PrimaryButton>
         <DefaultButton onClick={handleBack}>回上一步</DefaultButton>
       </ControlGroup>
+      <ReminderSection />
     </>
   )
 }
