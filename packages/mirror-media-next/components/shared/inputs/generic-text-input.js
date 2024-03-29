@@ -1,14 +1,10 @@
 import styled, { css } from 'styled-components'
+import { InputState } from '../../../constants/component'
 import IconCheckPass from '../../../public/images-next/check-pass.svg'
 
-const Start = 'start'
-const Invalid = 'invalid'
-const Valid = 'valid'
-export const InputState = /** @type {const} */ ({
-  Start,
-  Invalid,
-  Valid,
-})
+// following comments is required since these variables are used by comments but not codes.
+/* eslint-disable-next-line no-unused-vars */
+const { Start, Invalid, Valid } = InputState
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,7 +12,6 @@ const Wrapper = styled.div`
   row-gap: 8px;
   width: 100%;
 `
-
 /**
  * @typedef {Object} InputProps
  * @property {boolean} $isInvalid

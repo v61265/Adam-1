@@ -3,13 +3,12 @@ import { useAppSelector } from '../../hooks/useRedux'
 import { useAppDispatch } from '../../hooks/useRedux'
 import { loginPassword, loginActions } from '../../slice/login-slice'
 import { isValidPassword } from '../../utils'
-import GenericPasswordInput, {
-  PasswordInputState,
-} from '../shared/inputs/generic-password-input'
+import GenericPasswordInput from '../shared/inputs/generic-password-input'
+import { InputState } from '../../constants/component'
 
 // following comments is required since these variables are used by comments but not codes.
 /* eslint-disable-next-line no-unused-vars */
-const { Start, Incomplete, Valid } = PasswordInputState
+const { Start, Incomplete, Valid } = InputState
 
 export default function RegistrationPasswordInput() {
   const hint = '密碼在 6 位數以上'
@@ -17,19 +16,19 @@ export default function RegistrationPasswordInput() {
   const password = useAppSelector(loginPassword)
 
   /** @type {[Start | Incomplete | Valid, import('react').Dispatch<import('react').SetStateAction<Start | Incomplete | Valid>>]} */
-  const [state, setState] = useState(PasswordInputState.Start)
+  const [state, setState] = useState(InputState.Start)
 
   /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
   const handleOnChange = (e) => {
     const inputValue = e.target.value
 
     if (inputValue === '') {
-      setState(PasswordInputState.Start)
+      setState(InputState.Start)
     } else {
       if (isValidPassword(inputValue)) {
-        setState(PasswordInputState.Valid)
+        setState(InputState.Valid)
       } else {
-        setState(PasswordInputState.Incomplete)
+        setState(InputState.Incomplete)
       }
     }
     dispatch(loginActions.setPassword(inputValue))

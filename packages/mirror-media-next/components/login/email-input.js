@@ -1,6 +1,5 @@
-import GenericTextInput, {
-  InputState,
-} from '../shared/inputs/generic-text-input'
+import GenericTextInput from '../shared/inputs/generic-text-input'
+import { InputState } from '../../constants/component'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
 import { loginEmail, loginActions } from '../../slice/login-slice'
@@ -9,6 +8,8 @@ import { isValidEmail } from '../../utils'
 // following comments is required since these variables are used by comments but not codes.
 /* eslint-disable-next-line no-unused-vars */
 const { Start, Invalid, Valid } = InputState
+
+/** @typedef {Start | Invalid | Valid} EmailInputState */
 
 /**
  * @param {Object} props
@@ -32,7 +33,7 @@ export default function EmailInput({ shouldShowHint = true }) {
 
   const dispatch = useAppDispatch()
   const email = useAppSelector(loginEmail)
-  /** @type {[Start | Invalid | Valid, import('react').Dispatch<import('react').SetStateAction<Start | Invalid | Valid>>]} */
+  /** @type {[EmailInputState, import('react').Dispatch<import('react').SetStateAction<EmailInputState>>]} */
   const [isValid, setIsValid] = useState(getValidality(email))
 
   /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */

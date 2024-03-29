@@ -1,20 +1,11 @@
 import styled, { css } from 'styled-components'
 import { useState } from 'react'
-import { InputState } from './generic-text-input'
+import { InputState } from '../../../constants/component'
 import IconCheckPass from '../../../public/images-next/check-pass.svg'
 import IconConceal from '../../../public/images-next/login/conceal.svg'
 import IconReveal from '../../../public/images-next/login/reveal.svg'
 
-const Incomplete = 'incomplete'
-const { Start, Invalid, Valid } = InputState
-export const PasswordInputState = /** @type {const} */ ({
-  Start,
-  Incomplete,
-  Invalid,
-  Valid,
-})
-
-/** @typedef {Start | Incomplete | Invalid | Valid} PasswordInputState */
+/** @typedef {import('../../../constants/component').InputStateEnum} PasswordInputState */
 
 const Wrapper = styled.div`
   display: flex;
@@ -81,22 +72,22 @@ const Toggle = styled.button`
 
 /**
  * @typedef {Object} MessageProps
- * @property {PasswordInputState} $state
+ * @property {} $state
  */
 
 /** @param {PasswordInputState} state */
 const getTextColorByState = (state) => {
   switch (state) {
-    case PasswordInputState.Start:
-    case PasswordInputState.Incomplete:
+    case InputState.Start:
+    case InputState.Incomplete:
       return css`
         color: rgba(0, 0, 0, 0.5);
       `
-    case PasswordInputState.Invalid:
+    case InputState.Invalid:
       return css`
         color: #e51731;
       `
-    case PasswordInputState.Valid:
+    case InputState.Valid:
       return css`
         color: #009045;
       `
@@ -142,17 +133,13 @@ export default function GenericPasswordInput({
 
   const getHint = () => {
     switch (state) {
-      case PasswordInputState.Invalid:
-        return (
-          <Message $state={PasswordInputState.Invalid}>
-            {invalidMessage}
-          </Message>
-        )
-      case PasswordInputState.Valid:
+      case InputState.Invalid:
+        return <Message $state={InputState.Invalid}>{invalidMessage}</Message>
+      case InputState.Valid:
         if (incompleteMessage || validMessage) {
           const message = validMessage ?? incompleteMessage
           return (
-            <Message $state={PasswordInputState.Valid}>
+            <Message $state={InputState.Valid}>
               <IconCheckPass />
               <span>{message}</span>
             </Message>
@@ -160,26 +147,21 @@ export default function GenericPasswordInput({
         } else {
           return
         }
-      case PasswordInputState.Incomplete:
+      case InputState.Incomplete:
         if (incompleteMessage || validMessage) {
           const message = incompleteMessage ?? validMessage
-          return (
-            <Message $state={PasswordInputState.Incomplete}>{message}</Message>
-          )
+          return <Message $state={InputState.Incomplete}>{message}</Message>
         } else {
           return
         }
-      case PasswordInputState.Start:
+      case InputState.Start:
         return
     }
   }
 
   return (
     <Wrapper>
-      <Group
-        $isInvalid={state === PasswordInputState.Invalid}
-        $isFocus={isFocus}
-      >
+      <Group $isInvalid={state === InputState.Invalid} $isFocus={isFocus}>
         <Input
           type={isConcealed ? 'password' : 'text'}
           value={value}
