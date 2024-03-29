@@ -95,6 +95,11 @@ const fetchBasicMemberInfoInIsrafel = async (firebaseUid) => {
   }
 }
 
+/**
+ * @param {string} idToken
+ * @throws {Error}
+ * @returns {Promise<string | undefined>}
+ */
 const getAccessToken = async (idToken) => {
   try {
     const res = await axios({
