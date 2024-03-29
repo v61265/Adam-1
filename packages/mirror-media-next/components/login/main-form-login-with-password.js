@@ -15,6 +15,7 @@ import {
   loginPageOnAuthStateChangeAction,
 } from '../../utils/membership'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import FormTitle from './form-title'
 
 import UiMembershipButton from './ui/button/ui-membership-button'
 import { FirebaseError } from 'firebase/app'
@@ -69,8 +70,8 @@ export default function MainFormLoginWithPassword() {
     }
   }
   return (
-    <div>
-      登入模式
+    <>
+      <FormTitle>輸入密碼</FormTitle>
       <br></br>
       <UiMembershipInput
         placeholder="密碼大於六位數"
@@ -91,6 +92,6 @@ export default function MainFormLoginWithPassword() {
         <p>回上一步</p>
       </UiMembershipButton>
       {shouldShowErrorHint && <p>密碼錯誤，請重新嘗試</p>}
-    </div>
+    </>
   )
 }

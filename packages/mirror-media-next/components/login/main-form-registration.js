@@ -24,13 +24,7 @@ import DefaultButton from '../shared/buttons/default-button'
 import { isValidEmail, isValidPassword } from '../../utils'
 import ReminderSection from './reminder-section'
 import { FirebaseAuthError } from '../../constants/firebase'
-
-const Title = styled.p`
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 150%;
-  margin-bottom: 16px;
-`
+import FormTitle from './form-title'
 
 const InputGroup = styled.div`
   display: flex;
@@ -102,7 +96,7 @@ export default function MainFormRegistration() {
 
   return (
     <>
-      <Title>Email 註冊</Title>
+      <FormTitle>Email 註冊</FormTitle>
       <InputGroup>
         <EmailInput />
         <RegistrationPasswordInput />
