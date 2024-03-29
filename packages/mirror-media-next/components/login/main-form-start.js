@@ -139,7 +139,7 @@ export default function MainFormStart() {
         <span>或</span>
       </Seperator>
       <ControlGroup>
-        <EmailInput />
+        <EmailInput shouldShowHint={false} />
         <PrimaryButton
           isLoading={isLoading}
           disabled={!allowToContinue}
