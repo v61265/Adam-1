@@ -15,7 +15,7 @@ import EmailInput from './email-input'
 import PrimaryButton from '../shared/buttons/primary-button'
 import ButtonLoginWithThirdParty from './button-login-with-third-party'
 import ReminderSection from './reminder-section'
-import Hint from '../shared/hint'
+import CenteredHint from '../shared/cemtered-hint'
 import { InputState } from '../../constants/component'
 
 /**
@@ -128,9 +128,7 @@ export default function MainFormStart() {
           />
         ))}
         {shouldShowHint && (
-          <Hint $state={InputState.Invalid} style={{ textAlign: 'center' }}>
-            {hint}
-          </Hint>
+          <CenteredHint $state={InputState.Invalid}>{hint}</CenteredHint>
         )}
       </ThirdPartyButtonGroup>
       <Seperator>
