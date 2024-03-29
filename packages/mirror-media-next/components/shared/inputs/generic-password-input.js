@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
 import { useState } from 'react'
 import { InputState } from '../../../constants/component'
+import Hint from '../hint'
 import IconCheckPass from '../../../public/images-next/check-pass.svg'
 import IconConceal from '../../../public/images-next/login/conceal.svg'
 import IconReveal from '../../../public/images-next/login/reveal.svg'
@@ -71,45 +72,6 @@ const Toggle = styled.button`
 `
 
 /**
- * @typedef {Object} MessageProps
- * @property {} $state
- */
-
-/** @param {PasswordInputState} state */
-const getTextColorByState = (state) => {
-  switch (state) {
-    case InputState.Start:
-    case InputState.Incomplete:
-      return css`
-        color: rgba(0, 0, 0, 0.5);
-      `
-    case InputState.Invalid:
-      return css`
-        color: #e51731;
-      `
-    case InputState.Valid:
-      return css`
-        color: #009045;
-      `
-  }
-}
-
-/** @type {import('styled-components').StyledComponent<"p", any, MessageProps, never>} */
-const Message = styled.p`
-  display: flex;
-  align-items: center;
-  column-gap: 4px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 150%;
-
-  ${
-    /** @param {MessageProps} props */
-    ({ $state }) => getTextColorByState($state)
-  }
-`
-
-/**
  * @param {Object} props
  * @param {string} props.value - input 數值
  * @param {PasswordInputState} props.state - input 狀態
@@ -134,15 +96,15 @@ export default function GenericPasswordInput({
   const getHint = () => {
     switch (state) {
       case InputState.Invalid:
-        return <Message $state={InputState.Invalid}>{invalidMessage}</Message>
+        return <Hint $state={InputState.Invalid}>{invalidMessage}</Hint>
       case InputState.Valid:
         if (incompleteMessage || validMessage) {
           const message = validMessage ?? incompleteMessage
           return (
-            <Message $state={InputState.Valid}>
+            <Hint $state={InputState.Valid}>
               <IconCheckPass />
               <span>{message}</span>
-            </Message>
+            </Hint>
           )
         } else {
           return
@@ -150,7 +112,7 @@ export default function GenericPasswordInput({
       case InputState.Incomplete:
         if (incompleteMessage || validMessage) {
           const message = incompleteMessage ?? validMessage
-          return <Message $state={InputState.Incomplete}>{message}</Message>
+          return <Hint $state={InputState.Incomplete}>{message}</Hint>
         } else {
           return
         }

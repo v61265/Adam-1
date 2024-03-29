@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
 import { InputState } from '../../../constants/component'
+import Hint from '../hint'
 import IconCheckPass from '../../../public/images-next/check-pass.svg'
 
 // following comments is required since these variables are used by comments but not codes.
@@ -52,33 +53,6 @@ const Input = styled.input`
 `
 
 /**
- * @typedef {Object} MessageProps
- * @property {boolean} $isValid
- */
-
-/** @type {import('styled-components').StyledComponent<"p", any, MessageProps, never>} */
-const Message = styled.p`
-  display: flex;
-  align-items: center;
-  column-gap: 4px;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 150%;
-
-  ${
-    /** @param {MessageProps} props */
-    ({ $isValid }) =>
-      $isValid
-        ? css`
-            color: #009045;
-          `
-        : css`
-            color: #e51731;
-          `
-  }
-`
-
-/**
  * @param {Object} props
  * @param {string} [props.value] - 顯示數值
  * @param {string} props.placeholder - placeholder 數值
@@ -111,13 +85,13 @@ export default function GenericTextInput({
         $isInvalid={isValid === InputState.Invalid}
       />
       {shouldShowValidMessage && (
-        <Message $isValid={true}>
+        <Hint $state={InputState.Valid}>
           <IconCheckPass />
           <span>{validMessage}</span>
-        </Message>
+        </Hint>
       )}
       {shouldShowErrorMessage && (
-        <Message $isValid={false}>{errorMessage}</Message>
+        <Hint $state={InputState.Invalid}>{errorMessage}</Hint>
       )}
     </Wrapper>
   )

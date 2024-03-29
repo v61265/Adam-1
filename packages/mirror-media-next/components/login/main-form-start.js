@@ -15,6 +15,8 @@ import EmailInput from './email-input'
 import PrimaryButton from '../shared/buttons/primary-button'
 import ButtonLoginWithThirdParty from './button-login-with-third-party'
 import ReminderSection from './reminder-section'
+import Hint from '../shared/hint'
+import { InputState } from '../../constants/component'
 
 /**
  * @typedef {import('./button-login-with-third-party').ThirdPartyName} ThirdPartyName
@@ -33,14 +35,6 @@ const ThirdPartyButtonGroup = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 12px;
-
-  > p {
-    color: #e51731;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 150%;
-  }
 `
 
 const Seperator = styled.div`
@@ -133,7 +127,11 @@ export default function MainFormStart() {
             thirdPartyName={item.name}
           />
         ))}
-        {shouldShowHint && <p>{hint}</p>}
+        {shouldShowHint && (
+          <Hint $state={InputState.Invalid} style={{ textAlign: 'center' }}>
+            {hint}
+          </Hint>
+        )}
       </ThirdPartyButtonGroup>
       <Seperator>
         <span>或</span>
