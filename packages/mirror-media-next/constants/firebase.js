@@ -7,4 +7,7 @@ export const FirebaseAuthError = /** @type {const} */ ({
   WEAK_PASSWORD: 'auth/weak-password',
   ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL:
     'auth/account-exists-with-different-credential',
+  USER_DISABLED: 'auth/user-disabled',
+  USER_NOT_FOUND: 'auth/user-not-found',
+  WRONG_PASSWORD: 'auth/wrong-password',
 })
