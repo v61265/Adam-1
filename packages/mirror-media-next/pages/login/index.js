@@ -25,6 +25,7 @@ import { FirebaseError } from 'firebase/app'
 import { setPageCache } from '../../utils/cache-setting'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import Layout from '../../components/shared/layout'
+import { FirebaseAuthError } from '../../constants/firebase'
 
 const Container = styled.div`
   background-color: #fff;
@@ -84,7 +85,7 @@ export default function Login() {
       dispatch(loginActions.changeIsFederatedRedirectResultLoading(false))
       if (
         e instanceof FirebaseError &&
-        e.code === 'auth/account-exists-with-different-credential'
+        e.code === FirebaseAuthError.ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL
       ) {
         const email =
           e?.customData?.email && typeof e?.customData?.email === 'string'

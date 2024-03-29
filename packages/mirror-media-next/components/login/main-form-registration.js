@@ -23,6 +23,7 @@ import PrimaryButton from '../shared/buttons/primary-button'
 import DefaultButton from '../shared/buttons/default-button'
 import { isValidEmail, isValidPassword } from '../../utils'
 import ReminderSection from './reminder-section'
+import { FirebaseAuthError } from '../../constants/firebase'
 
 const Title = styled.p`
   font-size: 24px;
@@ -87,7 +88,7 @@ export default function MainFormRegistration() {
     } catch (e) {
       if (
         e instanceof FirebaseError &&
-        e?.code === 'auth/email-already-in-use'
+        e?.code === FirebaseAuthError.EMAIL_ALREADY_IN_USE
       ) {
         setIsDuplicateEmailMember(true)
       } else {
