@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Link from 'next/link'
+import StyledLink from './styled-link'
 import { SERVICE_RULE_URL, PRIVACY_POLICY_URL } from '../../constants/url'
 
 const Reminder = styled.section`
@@ -7,15 +7,6 @@ const Reminder = styled.section`
   font-weight: 400;
   line-height: 21px;
   color: rgba(0, 0, 0, 0.5);
-`
-
-const StyledLink = styled(Link)`
-  color: #1d9fb8;
-
-  &:hover,
-  &:active {
-    border-bottom: 1px solid #1d9fb8;
-  }
 `
 
 export default function ReminderSection() {

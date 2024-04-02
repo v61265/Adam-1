@@ -216,16 +216,19 @@ const loginSlice = createSlice({
       state.loginFormMode = FormMode.Start
     },
     goToStart: (state) => {
+      state.state = FormState.Form
       state.loginFormMode = FormMode.Start
       state.password = ''
       state.shouldShowHint = false
     },
     goToLoginForm: (state) => {
+      state.state = FormState.Form
       state.loginFormMode = FormMode.Login
       state.prevAuthMethod = AuthMethod.Email
       state.shouldShowHint = true
     },
     goToRegistrationForm: (state) => {
+      state.state = FormState.Form
       state.loginFormMode = FormMode.Registration
     },
     setSignInWithGoogle: (state) => {
