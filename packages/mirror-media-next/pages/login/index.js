@@ -15,6 +15,7 @@ import {
 import MainForm from '../../components/login/main-form'
 import RegistrationSuccess from '../../components/login/registration-success'
 import RegistrationFailed from '../../components/login/registration-failed'
+import LoginFailed from '../../components/login/login-failed'
 import useRedirect from '../../hooks/use-redirect'
 import { useRouter } from 'next/router'
 import {
@@ -127,7 +128,7 @@ export default function Login() {
       case FormState.RegisterFail:
         return <RegistrationFailed />
       case FormState.LoginFail:
-        return <>登入註冊失敗</>
+        return <LoginFailed />
       default:
         return null
     }
