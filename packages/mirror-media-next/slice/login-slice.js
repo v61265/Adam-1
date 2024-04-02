@@ -68,23 +68,23 @@ const AuthMethod = /** @type {const} */ ({
 
 /**
  * @typedef {Object} InitialState
- * @property {LoginFormState} state
- * @property {PrevAuthMethod} prevAuthMethod
- * @property {ShouldShowHint} shouldShowHint
- * @property {string} email
- * @property {string} password
- * @property {LoginFormMode} loginFormMode
- * @property {IsFederatedRedirectResultLoading} isFederatedRedirectResultLoading
+ * @property {LoginFormState} state - 頁面狀態
+ * @property {LoginFormMode} loginFormMode - 頁面狀態為 Form 的情況下，對話框的狀態
+ * @property {PrevAuthMethod} prevAuthMethod - 先前登入所使用的方法
+ * @property {ShouldShowHint} shouldShowHint - 是否在 MainFormStart 顯示提示
+ * @property {string} email - 輸入的 E-mail
+ * @property {string} password - 輸入的密碼
+ * @property {IsFederatedRedirectResultLoading} isFederatedRedirectResultLoading - 第三方登入是否正在處理中
  */
 
 /**@type {InitialState} */
 const initialState = {
   state: FormState.Form,
+  loginFormMode: FormMode.Start,
   prevAuthMethod: AuthMethod.Default,
   shouldShowHint: false,
   email: '',
   password: '',
-  loginFormMode: FormMode.Start,
   isFederatedRedirectResultLoading: true,
 }
 
