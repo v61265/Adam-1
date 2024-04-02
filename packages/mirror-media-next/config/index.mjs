@@ -49,6 +49,8 @@ let FIREBASE_CONFIG = {}
 
 let GCP_STACKDRIVER_LOG_NAME = ''
 
+let IS_PRIZE_RIZED
+
 switch (ENV) {
   case 'prod':
     SITE_URL = 'www.mirrormedia.mg'
@@ -73,7 +75,7 @@ switch (ENV) {
 
     NEWEBPAY_PAPERMAG_API_URL = 'https://core.newebpay.com/MPG/mpg_gateway'
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
-    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
+    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
     GCP_LOGGING_FEATURE_TOGGLE = 'on'
     DRAFT_RENDERER_FEATURE_TOGGLE = 'on'
     LOGIN_PAGE_FEATURE_TOGGLE = 'off'
@@ -93,6 +95,7 @@ switch (ENV) {
       measurementId: 'G-2FDRC4S37L',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior'
+    IS_PRIZE_RIZED = true
 
     break
 
@@ -123,7 +126,7 @@ switch (ENV) {
     NEWEBPAY_PAPERMAG_API_URL = 'https://ccore.newebpay.com/MPG/mpg_gateway'
 
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
-    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
+    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
     GCP_LOGGING_FEATURE_TOGGLE = 'on'
     DRAFT_RENDERER_FEATURE_TOGGLE = 'on'
     LOGIN_PAGE_FEATURE_TOGGLE = 'off'
@@ -143,6 +146,7 @@ switch (ENV) {
       appId: '1:388524095772:web:e3739160c042909827a2d9',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_staging'
+    IS_PRIZE_RIZED = true
     break
 
   case 'dev':
@@ -191,6 +195,7 @@ switch (ENV) {
       measurementId: 'G-EY5CYC602Z',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_dev'
+    IS_PRIZE_RIZED = true
     break
 
   default:
@@ -238,6 +243,7 @@ switch (ENV) {
       measurementId: 'G-EY5CYC602Z',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_local'
+    IS_PRIZE_RIZED = true
 }
 
 export {
@@ -277,4 +283,5 @@ export {
   URL_STATIC_TOPICS,
   WEEKLY_API_SERVER_ORIGIN,
   WEEKLY_API_SERVER_YOUTUBE_ENDPOINT,
+  IS_PRIZE_RIZED,
 }
