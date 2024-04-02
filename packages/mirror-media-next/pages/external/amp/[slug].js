@@ -192,6 +192,17 @@ export async function getServerSideProps({ params, req, res, resolvedUrl }) {
       ? handledResponses[0]?.data?.externals[0] || {}
       : {}
 
+  if (!Object.keys(external).length) {
+    console.log(
+      JSON.stringify({
+        severity: 'WARNING',
+        message: `The external article which slug is '${slug}' does not exist, redirect to 404`,
+        globalLogFields,
+      })
+    )
+    return { notFound: true }
+  }
+
   // transform html into valid amp html, check transformHtmlIntoAmpHtml function for further detail.
   const html = external.content
   external.content = transformHtmlIntoAmpHtml(html, resolvedUrl)
