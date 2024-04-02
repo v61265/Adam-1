@@ -25,10 +25,12 @@ import { auth } from '../../firebase'
 import { FirebaseError } from 'firebase/app'
 import { setPageCache } from '../../utils/cache-setting'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
-import Layout from '../../components/shared/layout'
+import LayoutFull from '../../components/shared/LayoutFull'
 import { FirebaseAuthError } from '../../constants/firebase'
 
 const Container = styled.div`
+  flex-grow: 1;
+
   background-color: #fff;
   ${({ theme }) => theme.breakpoint.md} {
     background-color: #f2f2f2;
@@ -132,9 +134,9 @@ export default function Login() {
   const jsx = getBodyByState()
 
   return (
-    <Layout header={{ type: 'default' }} footer={{ type: 'default' }}>
+    <LayoutFull header={{ type: 'default' }} footer={{ type: 'default' }}>
       <Container>{jsx}</Container>
-    </Layout>
+    </LayoutFull>
   )
 }
 
