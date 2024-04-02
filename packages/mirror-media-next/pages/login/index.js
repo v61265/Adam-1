@@ -13,6 +13,7 @@ import {
   loginPageOnAuthStateChangeAction,
 } from '../../utils/membership'
 import MainForm from '../../components/login/main-form'
+import RegistrationSuccess from '../../components/login/registration-success'
 import useRedirect from '../../hooks/use-redirect'
 import { useRouter } from 'next/router'
 import {
@@ -115,9 +116,9 @@ export default function Login() {
   const getBodyByState = () => {
     switch (state) {
       case FormState.Form:
-        return <MainForm></MainForm>
+        return <MainForm />
       case FormState.RegisterSuccess:
-        return <>註冊成功</>
+        return <RegistrationSuccess />
       case FormState.LoginSuccess:
         return <>登入成功</>
       case FormState.RegisterFail:
