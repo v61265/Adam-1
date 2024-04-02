@@ -62,8 +62,6 @@ const AuthMethod = /** @type {const} */ ({
  * @typedef {Form | LoginSuccess | LoginFail | RegisterSuccess | RegisterFail} LoginFormState
  * @typedef {Start | Registration | Login} LoginFormMode
  * @typedef {Google | Facebook | Apple | Email | Default} PrevAuthMethod
- * @typedef {boolean} ShouldShowHint
- * @typedef {Boolean} IsFederatedRedirectResultLoading
  */
 
 /**
@@ -74,7 +72,7 @@ const AuthMethod = /** @type {const} */ ({
  * @property {boolean} shouldShowHintOfExitenceOfDifferentAuthMethod - 是否顯示已使用其他方式註冊的提示
  * @property {string} email - 輸入的 E-mail
  * @property {string} password - 輸入的密碼
- * @property {IsFederatedRedirectResultLoading} isFederatedRedirectResultLoading - 第三方登入是否正在處理中
+ * @property {boolean} isFederatedRedirectResultLoading - 第三方登入是否正在處理中
  */
 
 /**@type {InitialState} */
@@ -201,7 +199,7 @@ const loginSlice = createSlice({
     changeIsFederatedRedirectResultLoading: (
       state,
       /**
-       * @type {import('@reduxjs/toolkit').PayloadAction<IsFederatedRedirectResultLoading>}
+       * @type {import('@reduxjs/toolkit').PayloadAction<boolean>}
        */
       action
     ) => {
