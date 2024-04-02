@@ -18,6 +18,7 @@ import FormTitle from './form-title'
 import GenericPasswordInput from '../shared/inputs/generic-password-input'
 import PrimaryButton from '../shared/buttons/primary-button'
 import DefaultButton from '../shared/buttons/default-button'
+import TextButton from './text-button'
 import { FirebaseError } from 'firebase/app'
 import { InputState } from '../../constants/component'
 import { FirebaseAuthError } from '../../constants/firebase'
@@ -114,6 +115,7 @@ export default function MainFormLoginWithPassword() {
         </PrimaryButton>
         <DefaultButton onClick={handleBack}>回上一步</DefaultButton>
       </ControlGroup>
+      <TextButton href="/recover-password">忘記密碼？</TextButton>
     </>
   )
 }
