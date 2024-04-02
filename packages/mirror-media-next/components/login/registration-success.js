@@ -4,9 +4,7 @@ import FormWrapper from '../shared/form-wrapper'
 const Main = styled.main`
   display: flex;
   flex-direction: column;
-  ${({ theme }) => theme.breakpoint.md} {
-    align-items: center;
-  }
+  align-items: center;
 `
 
 const PrimayText = styled.p`

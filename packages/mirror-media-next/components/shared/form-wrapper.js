@@ -2,6 +2,8 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
+  min-width: 320px;
+  max-width: 596px; // prevent content from exceeding the boundaries of header
   background-color: #fff;
   padding: 40px 20px;
 
