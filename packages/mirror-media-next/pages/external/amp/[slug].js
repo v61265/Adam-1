@@ -56,7 +56,7 @@ export default function External({ external }) {
 
   // The property `partner` for external article may lost for some reasons, `showOnIndex` will be set to true to handle this case.
   const showOnIndex =
-    partner && partner.hasOwnProperty('showOnIndex')
+    partner && Object.prototype.hasOwnProperty.call(partner, 'showOnIndex')
       ? partner.showOnIndex
       : 'true'
   const gptAdSection = showOnIndex ? 'news' : 'life'
