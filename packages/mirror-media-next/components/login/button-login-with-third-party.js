@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import { auth } from '../../firebase'
 import {
   OAuthProvider,
@@ -8,9 +8,10 @@ import {
   signInWithRedirect,
 } from 'firebase/auth'
 
-import { useAppSelector } from '../../hooks/useRedux'
+import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
 import {
   loginIsFederatedRedirectResultLoading,
+  loginActions,
   AuthMethod,
 } from '../../slice/login-slice'
 import DefaultButton from '../shared/buttons/default-button'
@@ -45,6 +46,7 @@ const Wrapper = styled.div`
  * @param {React.ComponentProps<'button'> & {thirdPartyName: ThirdPartyName}} props
  */
 export default function ButtonLoginWithThirdParty({ thirdPartyName }) {
+  const dispatch = useAppDispatch()
   const isFederatedRedirectResultLoading = useAppSelector(
     loginIsFederatedRedirectResultLoading
   )
@@ -76,15 +78,14 @@ export default function ButtonLoginWithThirdParty({ thirdPartyName }) {
     }
   }, [thirdPartyName])
 
-  const [isLoading, setIsLoading] = useState(false)
   const handleThirdPartyFirebaseLogin = async () => {
-    setIsLoading(true)
+    dispatch(loginActions.changeIsFederatedRedirectResultLoading(true))
     await signInWithRedirect(auth, provider)
   }
-  const shouldShowLoadingIcon = isLoading || isFederatedRedirectResultLoading
+
   return (
     <DefaultButton
-      isLoading={shouldShowLoadingIcon}
+      isLoading={isFederatedRedirectResultLoading}
       onClick={handleThirdPartyFirebaseLogin}
     >
       <Wrapper>
