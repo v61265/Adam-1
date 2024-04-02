@@ -6,7 +6,7 @@ import { useAppSelector, useAppDispatch } from '../../hooks/useRedux'
 import {
   loginEmail,
   loginPrevAuthMethod,
-  loginShouldShowHint,
+  loginShouldShowHintOfExitenceOfDifferentAuthMethod,
   loginActions,
   AuthMethod,
 } from '../../slice/login-slice'
@@ -73,7 +73,9 @@ export default function MainFormStart() {
   const dispatch = useAppDispatch()
   const email = useAppSelector(loginEmail)
   const prevAuthMethod = useAppSelector(loginPrevAuthMethod)
-  const shouldShowHint = useAppSelector(loginShouldShowHint)
+  const shouldShowHintOfExitenceOfDifferentAuthMethod = useAppSelector(
+    loginShouldShowHintOfExitenceOfDifferentAuthMethod
+  )
   const hint = `由於您曾以 ${prevAuthMethod} 帳號登入，請點擊上方「使用 ${prevAuthMethod} 帳號繼續」重試。`
   const allowToContinue = isValidEmail(email)
 
@@ -127,7 +129,7 @@ export default function MainFormStart() {
             thirdPartyName={item.name}
           />
         ))}
-        {shouldShowHint && (
+        {shouldShowHintOfExitenceOfDifferentAuthMethod && (
           <CenteredHint $state={InputState.Invalid}>{hint}</CenteredHint>
         )}
       </ThirdPartyButtonGroup>

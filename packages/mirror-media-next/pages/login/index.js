@@ -100,7 +100,9 @@ export default function Login() {
         const prevAuthMethod = getPrevAuthMethod(responseArray?.[0])
 
         dispatch(loginActions.changePrevAuthMethod(prevAuthMethod))
-        dispatch(loginActions.changeShouldShowHint(true))
+        dispatch(
+          loginActions.changeShouldShowHintOfExitenceOfDifferentAuthMethod(true)
+        )
       } else {
         errorHandler(e)
         dispatch(loginActions.changeState(FormState.LoginFail))
