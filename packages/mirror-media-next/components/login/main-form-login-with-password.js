@@ -100,7 +100,7 @@ export default function MainFormLoginWithPassword() {
       <FormTitle>輸入密碼</FormTitle>
       <GenericPasswordInput
         value={password}
-        placeholder="密碼大於 N 位數"
+        placeholder="密碼大於 6 位數"
         invalidMessage="密碼錯誤，請重新再試"
         state={passwordInputState}
         onChange={handlePasswordOnChange}
