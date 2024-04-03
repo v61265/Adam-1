@@ -88,7 +88,16 @@ export default async function EncryptInfo(req, res) {
       data: encryptPostData,
     })
   } catch (e) {
-    console.log(e)
+    console.error(
+      JSON.stringify({
+        message: `papermag payload:`,
+        debugPayload: {
+          'req.body': req.body,
+          message: e.message,
+        },
+        'logging.googleapis.com/trace': `projects/mirrormedia-1470651750304/traces/papermag`,
+      })
+    )
     res.status(500).send({
       status: 'error',
       message: e.message,
