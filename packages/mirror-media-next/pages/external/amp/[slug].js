@@ -40,13 +40,7 @@ const AmpBody = styled.body`
  * @returns {JSX.Element}
  */
 export default function External({ external }) {
-  const {
-    slug,
-    title,
-    brief,
-    thumb,
-    partner: { showOnIndex },
-  } = external
+  const { slug, title, brief, thumb, partner } = external
   const ampGptStickyAdScript = (
     <Script
       async
@@ -60,6 +54,11 @@ export default function External({ external }) {
     <link rel="canonical" href={nonAmpUrl} key="canonical"></link>
   )
 
+  // The property `partner` for external article may lost for some reasons, `showOnIndex` will be set to true to handle this case.
+  const showOnIndex =
+    partner && Object.prototype.hasOwnProperty.call(partner, 'showOnIndex')
+      ? partner.showOnIndex
+      : 'true'
   const gptAdSection = showOnIndex ? 'news' : 'life'
 
   return (
@@ -192,6 +191,17 @@ export async function getServerSideProps({ params, req, res, resolvedUrl }) {
     handledResponses[0] && 'data' in handledResponses[0]
       ? handledResponses[0]?.data?.externals[0] || {}
       : {}
+
+  if (!Object.keys(external).length) {
+    console.log(
+      JSON.stringify({
+        severity: 'WARNING',
+        message: `The external article which slug is '${slug}' does not exist, redirect to 404`,
+        globalLogFields,
+      })
+    )
+    return { notFound: true }
+  }
 
   // transform html into valid amp html, check transformHtmlIntoAmpHtml function for further detail.
   const html = external.content

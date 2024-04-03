@@ -27,6 +27,7 @@ let ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
 let GCP_LOGGING_FEATURE_TOGGLE = 'off'
 let DRAFT_RENDERER_FEATURE_TOGGLE = 'off'
 let LOGIN_PAGE_FEATURE_TOGGLE = 'off'
+let TEST_GPT_AD_FEATURE_TOGGLE = 'off'
 let URL_STATIC_PREMIUM_SECTIONS = ''
 let URL_STATIC_NORMAL_SECTIONS = ''
 let URL_STATIC_TOPICS = ''
@@ -48,6 +49,8 @@ let GPT_MODE = ''
 let FIREBASE_CONFIG = {}
 
 let GCP_STACKDRIVER_LOG_NAME = ''
+
+let IS_PRIZE_RIZED
 
 switch (ENV) {
   case 'prod':
@@ -73,10 +76,11 @@ switch (ENV) {
 
     NEWEBPAY_PAPERMAG_API_URL = 'https://core.newebpay.com/MPG/mpg_gateway'
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
-    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
+    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
     GCP_LOGGING_FEATURE_TOGGLE = 'on'
     DRAFT_RENDERER_FEATURE_TOGGLE = 'on'
     LOGIN_PAGE_FEATURE_TOGGLE = 'off'
+    TEST_GPT_AD_FEATURE_TOGGLE = 'off'
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-341XFN0675'
     GTM_ID = 'GTM-NCH86SP'
@@ -93,6 +97,7 @@ switch (ENV) {
       measurementId: 'G-2FDRC4S37L',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior'
+    IS_PRIZE_RIZED = true
 
     break
 
@@ -123,11 +128,11 @@ switch (ENV) {
     NEWEBPAY_PAPERMAG_API_URL = 'https://ccore.newebpay.com/MPG/mpg_gateway'
 
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
-    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
+    ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
     GCP_LOGGING_FEATURE_TOGGLE = 'on'
     DRAFT_RENDERER_FEATURE_TOGGLE = 'on'
     LOGIN_PAGE_FEATURE_TOGGLE = 'off'
-
+    TEST_GPT_AD_FEATURE_TOGGLE = 'off'
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
     GTM_ID = 'GTM-KVDZ27K'
@@ -143,6 +148,7 @@ switch (ENV) {
       appId: '1:388524095772:web:e3739160c042909827a2d9',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_staging'
+    IS_PRIZE_RIZED = true
     break
 
   case 'dev':
@@ -179,6 +185,7 @@ switch (ENV) {
     GCP_LOGGING_FEATURE_TOGGLE = 'on'
     DRAFT_RENDERER_FEATURE_TOGGLE = 'on'
     LOGIN_PAGE_FEATURE_TOGGLE = 'on'
+    TEST_GPT_AD_FEATURE_TOGGLE = 'on'
     GPT_MODE = 'dev'
     FIREBASE_CONFIG = {
       apiKey: 'AIzaSyAavk46-8OQ4B2cv0TOqxOMjd5Fe4tIauc',
@@ -191,6 +198,7 @@ switch (ENV) {
       measurementId: 'G-EY5CYC602Z',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_dev'
+    IS_PRIZE_RIZED = true
     break
 
   default:
@@ -210,6 +218,7 @@ switch (ENV) {
     GCP_LOGGING_FEATURE_TOGGLE = 'on'
     DRAFT_RENDERER_FEATURE_TOGGLE = 'on'
     LOGIN_PAGE_FEATURE_TOGGLE = 'on'
+    TEST_GPT_AD_FEATURE_TOGGLE = 'on'
 
     URL_STATIC_PREMIUM_SECTIONS = `http://localhost:8080/json/header_member.json`
     URL_STATIC_NORMAL_SECTIONS = `http://localhost:8080/json/header_sections.json`
@@ -238,6 +247,7 @@ switch (ENV) {
       measurementId: 'G-EY5CYC602Z',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_local'
+    IS_PRIZE_RIZED = true
 }
 
 export {
@@ -245,6 +255,7 @@ export {
   ACCESS_SUBSCRIBE_FEATURE_TOGGLE,
   DRAFT_RENDERER_FEATURE_TOGGLE,
   LOGIN_PAGE_FEATURE_TOGGLE,
+  TEST_GPT_AD_FEATURE_TOGGLE,
   API_TIMEOUT,
   API_TIMEOUT_GRAPHQL,
   DONATION_PAGE_URL,
@@ -277,4 +288,5 @@ export {
   URL_STATIC_TOPICS,
   WEEKLY_API_SERVER_ORIGIN,
   WEEKLY_API_SERVER_YOUTUBE_ENDPOINT,
+  IS_PRIZE_RIZED,
 }
