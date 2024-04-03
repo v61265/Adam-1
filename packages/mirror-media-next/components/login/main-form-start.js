@@ -15,7 +15,7 @@ import EmailInput from './email-input'
 import PrimaryButton from '../shared/buttons/primary-button'
 import ButtonLoginWithThirdParty from './button-login-with-third-party'
 import ReminderSection from './reminder-section'
-import CenteredHint from '../shared/cemtered-hint'
+import CenteredHint from '../shared/centered-hint'
 import { InputState } from '../../constants/component'
 
 /**
