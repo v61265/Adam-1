@@ -22,9 +22,6 @@ const FormMode = /** @type {const} */ ({
   Login,
 })
 
-// `@type {const} (...)` is equivalent to `as const` in TypeScript
-// ref: https://stackoverflow.com/a/64687300
-
 const Form = 'form'
 const LoginSuccess = 'login-success'
 const LoginFail = 'login-fail'
