@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const AMOUNT_OF_DOTS = 3
-const ANIMATION_DELAY = 0.25 // in second
+const ANIMATION_DELAY = 0.15 // in second
 const ANIMATION_DURATION = ANIMATION_DELAY * AMOUNT_OF_DOTS
 
 const Wrapper = styled.div`
