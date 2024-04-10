@@ -110,7 +110,7 @@ export default function MemberLoginButton() {
     memberLoginButton = (
       <LoginButton>
         <Link
-          href={`/login?destination=${router.asPath || '/'}`}
+          href={`/login?destination=${router.pathname || '/'}`}
           className="GTM-header-login"
         >
           <span>登入</span>
