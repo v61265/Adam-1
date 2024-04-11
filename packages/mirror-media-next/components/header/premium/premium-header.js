@@ -228,7 +228,10 @@ export default function PremiumHeader({
   const sections = getSections()
 
   return (
-    <HeaderWrapper shouldSticky={shouldShowSubtitleNavigator}>
+    <HeaderWrapper
+      shouldSticky={shouldShowSubtitleNavigator}
+      className="header header-premium"
+    >
       <HeaderTop>
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/">

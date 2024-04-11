@@ -9,6 +9,12 @@ const Container = styled.div`
   flex-direction: column;
   width: 100vw;
   min-height: 100vh;
+
+  // TODO: fix <ShareHeader /> styles after layout switched to <LayoutFull />
+  // override <ShareHeader />
+  header.header {
+    margin: 0;
+  }
 `
 
 /**
@@ -39,8 +45,8 @@ export default function LayoutFull({ head, header, footer, children }) {
         imageUrl={head?.imageUrl}
         skipCanonical={head?.skipCanonical}
       />
-      <ShareHeader pageLayoutType={header.type} headerData={header.data} />
       <Container>
+        <ShareHeader pageLayoutType={header.type} headerData={header.data} />
         {children}
         <GDPRNotification />
         <Footer footerType={footer.type} />
