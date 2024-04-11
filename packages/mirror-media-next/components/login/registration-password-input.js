@@ -13,25 +13,29 @@ const { Start, Incomplete, Valid } = InputState
 /** @typedef {Start | Incomplete | Valid } PasswordInputState */
 
 export default function RegistrationPasswordInput() {
+  const getValidality = (/** @type {string} */ password) => {
+    if (password === '') {
+      return InputState.Start
+    } else {
+      if (isValidPassword(password)) {
+        return InputState.Valid
+      } else {
+        return InputState.Incomplete
+      }
+    }
+  }
+
   const dispatch = useAppDispatch()
   const password = useAppSelector(loginPassword)
 
   /** @type {[PasswordInputState, import('react').Dispatch<import('react').SetStateAction<PasswordInputState>>]} */
-  const [state, setState] = useState(InputState.Start)
+  const [state, setState] = useState(getValidality(password))
 
   /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
   const handleOnChange = (e) => {
     const inputValue = e.target.value
 
-    if (inputValue === '') {
-      setState(InputState.Start)
-    } else {
-      if (isValidPassword(inputValue)) {
-        setState(InputState.Valid)
-      } else {
-        setState(InputState.Incomplete)
-      }
-    }
+    setState(getValidality(inputValue))
     dispatch(loginActions.setPassword(inputValue))
   }
 
