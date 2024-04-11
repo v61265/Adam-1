@@ -27,7 +27,7 @@ import { auth } from '../../firebase'
 import { FirebaseError } from 'firebase/app'
 import { setPageCache } from '../../utils/cache-setting'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
-import LayoutFull from '../../components/shared/LayoutFull'
+import LayoutFull from '../../components/shared/layout-full'
 import { FirebaseAuthError } from '../../constants/firebase'
 
 const Container = styled.div`
