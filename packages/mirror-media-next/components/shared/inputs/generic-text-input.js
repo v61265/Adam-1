@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { InputState } from '../../../constants/component'
+import { InputState } from '../../../constants/form'
 import Hint from '../hint'
 import IconCheckPass from '../../../public/images-next/check-pass.svg'
 

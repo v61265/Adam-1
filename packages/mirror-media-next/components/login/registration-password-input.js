@@ -4,7 +4,7 @@ import { useAppDispatch } from '../../hooks/useRedux'
 import { loginPassword, loginActions } from '../../slice/login-slice'
 import { isValidPassword } from '../../utils'
 import GenericPasswordInput from '../shared/inputs/generic-password-input'
-import { InputState } from '../../constants/component'
+import { InputState } from '../../constants/form'
 
 // following comments is required since these variables are used by comments but not codes.
 /* eslint-disable-next-line no-unused-vars */

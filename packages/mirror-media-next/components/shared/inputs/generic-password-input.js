@@ -1,12 +1,12 @@
 import styled, { css } from 'styled-components'
 import { useState } from 'react'
-import { InputState } from '../../../constants/component'
+import { InputState } from '../../../constants/form'
 import Hint from '../hint'
 import IconCheckPass from '../../../public/images-next/check-pass.svg'
 import IconConceal from '../../../public/images-next/login/conceal.svg'
 import IconReveal from '../../../public/images-next/login/reveal.svg'
 
-/** @typedef {import('../../../constants/component').InputStateEnum} PasswordInputState */
+/** @typedef {import('../../../constants/form').InputStateEnum} PasswordInputState */
 
 const Wrapper = styled.div`
   display: flex;

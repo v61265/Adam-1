@@ -20,7 +20,7 @@ import PrimaryButton from '../shared/buttons/primary-button'
 import DefaultButton from '../shared/buttons/default-button'
 import TextButton from './text-button'
 import { FirebaseError } from 'firebase/app'
-import { InputState } from '../../constants/component'
+import { InputState } from '../../constants/form'
 import { FirebaseAuthError } from '../../constants/firebase'
 import { isValidEmail, isValidPassword } from '../../utils'
 

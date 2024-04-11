@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
-import { InputState } from '../../constants/component'
+import { InputState } from '../../constants/form'
 
-/** @typedef {import("../../constants/component").InputStateEnum} InputStateEnum */
+/** @typedef {import("../../constants/form").InputStateEnum} InputStateEnum */
 
 /**
  * @typedef {Object} HintProps

@@ -16,7 +16,7 @@ import PrimaryButton from '../shared/buttons/primary-button'
 import ButtonLoginWithThirdParty from './button-login-with-third-party'
 import ReminderSection from './reminder-section'
 import CenteredHint from '../shared/centered-hint'
-import { InputState } from '../../constants/component'
+import { InputState } from '../../constants/form'
 
 /**
  * @typedef {import('./button-login-with-third-party').ThirdPartyName} ThirdPartyName

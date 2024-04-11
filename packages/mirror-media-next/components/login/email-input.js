@@ -1,5 +1,5 @@
 import GenericTextInput from '../shared/inputs/generic-text-input'
-import { InputState } from '../../constants/component'
+import { InputState } from '../../constants/form'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
 import { loginEmail, loginActions } from '../../slice/login-slice'
