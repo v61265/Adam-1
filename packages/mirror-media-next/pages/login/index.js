@@ -43,7 +43,7 @@ export default function Login() {
   const dispatch = useAppDispatch()
   const { accessToken, isLogInProcessFinished, isLoggedIn } = useMembership()
   const router = useRouter()
-  const state = useAppSelector(loginState)
+  const loginFormState = useAppSelector(loginState)
   const { redirect } = useRedirect()
   const handleFederatedRedirectResult = useCallback(async () => {
     function getPrevAuthMethod(prevAuthMethod) {
@@ -74,7 +74,7 @@ export default function Login() {
         )
         dispatch(loginActions.changeState(result))
       } else if (!redirectResult?.user && isLoggedIn) {
-        switch (state) {
+        switch (loginFormState) {
           case FormState.Form:
             router.push('/section/member')
             return
@@ -108,7 +108,7 @@ export default function Login() {
         dispatch(loginActions.changeState(FormState.LoginFail))
       }
     }
-  }, [router, isLoggedIn, state, dispatch, accessToken, redirect])
+  }, [router, isLoggedIn, loginFormState, dispatch, accessToken, redirect])
 
   useEffect(() => {
     if (!isLogInProcessFinished) {
@@ -117,10 +117,9 @@ export default function Login() {
 
     handleFederatedRedirectResult()
   }, [isLogInProcessFinished, dispatch, handleFederatedRedirectResult])
-  // useRedirect()
 
   const getBodyByState = () => {
-    switch (state) {
+    switch (loginFormState) {
       case FormState.Form:
         return <MainForm />
       case FormState.RegisterSuccess:
