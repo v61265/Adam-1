@@ -13,7 +13,6 @@ const { Start, Incomplete, Valid } = InputState
 /** @typedef {Start | Incomplete | Valid } PasswordInputState */
 
 export default function RegistrationPasswordInput() {
-  const hint = '密碼在 6 位數以上'
   const dispatch = useAppDispatch()
   const password = useAppSelector(loginPassword)
 
@@ -40,7 +39,8 @@ export default function RegistrationPasswordInput() {
     <GenericPasswordInput
       value={password}
       placeholder="密碼須在 6 位數以上"
-      validMessage={hint}
+      validMessage="密碼在 6 位數以上"
+      incompleteMessage="密碼在 6 位數以上"
       state={state}
       onChange={handleOnChange}
     />

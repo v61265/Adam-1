@@ -96,26 +96,25 @@ export default function GenericPasswordInput({
   const getHint = () => {
     switch (state) {
       case InputState.Invalid:
-        return <Hint $state={InputState.Invalid}>{invalidMessage}</Hint>
+        if (invalidMessage) {
+          return <Hint $state={InputState.Invalid}>{invalidMessage}</Hint>
+        }
+        return
       case InputState.Valid:
-        if (incompleteMessage || validMessage) {
-          const message = validMessage ?? incompleteMessage
+        if (validMessage) {
           return (
             <Hint $state={InputState.Valid}>
               <IconCheckPass />
-              <span>{message}</span>
+              <span>{validMessage}</span>
             </Hint>
           )
-        } else {
-          return
         }
+        return
       case InputState.Incomplete:
-        if (incompleteMessage || validMessage) {
-          const message = incompleteMessage ?? validMessage
-          return <Hint $state={InputState.Incomplete}>{message}</Hint>
-        } else {
-          return
+        if (incompleteMessage) {
+          return <Hint $state={InputState.Incomplete}>{incompleteMessage}</Hint>
         }
+        return
       case InputState.Start:
         return
     }
