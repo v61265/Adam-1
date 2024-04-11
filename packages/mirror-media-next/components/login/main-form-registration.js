@@ -15,7 +15,7 @@ import {
 import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { FirebaseError } from 'firebase/app'
-import EmailInput from './email-input'
+import RegistartionEmailInput from './registration-email-input'
 import RegistrationPasswordInput from './registration-password-input'
 import CenteredHint from '../shared/centered-hint'
 import { InputState } from '../../constants/form'
@@ -98,7 +98,7 @@ export default function MainFormRegistration() {
     <>
       <FormTitle>Email 註冊</FormTitle>
       <InputGroup>
-        <EmailInput />
+        <RegistartionEmailInput />
         <RegistrationPasswordInput />
       </InputGroup>
       <ControlGroup>
