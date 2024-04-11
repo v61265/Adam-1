@@ -3,9 +3,7 @@ import { InputState } from '../../../constants/form'
 import Hint from '../hint'
 import IconCheckPass from '../../../public/images-next/check-pass.svg'
 
-// following comments is required since these variables are used by comments but not codes.
-/* eslint-disable-next-line no-unused-vars */
-const { Start, Invalid, Valid } = InputState
+/** @typedef {import('../../../constants/form').InputStateEnum} TextInputState */
 
 const Wrapper = styled.div`
   display: flex;
@@ -54,25 +52,51 @@ const Input = styled.input`
 
 /**
  * @param {Object} props
- * @param {string} [props.value] - 顯示數值
+ * @param {string} [props.value] - input 數值
+ * @param {TextInputState} props.state - input 狀態
  * @param {string} props.placeholder - placeholder 數值
- * @param {Start | Invalid | Valid} props.isValid - 數值是否正確
  * @param {boolean} [props.isDisabled] - 是否禁止修改
- * @param {string} [props.errorMessage] - 錯誤訊息
- * @param {string} [props.validMessage] - 正確訊息
+ * @param {string} [props.incompleteMessage] - 輸入未完成的提示
+ * @param {string} [props.invalidMessage] - 輸入錯誤的提示
+ * @param {string} [props.validMessage] - 輸入正確的提示
  * @param {import("react").ChangeEventHandler<HTMLInputElement>} props.onChange - 數值變動處理
  */
 export default function GenericTextInput({
   value,
   placeholder,
-  isValid,
+  state,
   isDisabled,
-  errorMessage,
+  incompleteMessage,
+  invalidMessage,
   validMessage,
   onChange,
 }) {
-  const shouldShowErrorMessage = isValid === InputState.Invalid && errorMessage
-  const shouldShowValidMessage = isValid === InputState.Valid && validMessage
+  const getHint = () => {
+    switch (state) {
+      case InputState.Invalid:
+        if (invalidMessage) {
+          return <Hint $state={InputState.Invalid}>{invalidMessage}</Hint>
+        }
+        return
+      case InputState.Valid:
+        if (validMessage) {
+          return (
+            <Hint $state={InputState.Valid}>
+              <IconCheckPass />
+              <span>{validMessage}</span>
+            </Hint>
+          )
+        }
+        return
+      case InputState.Incomplete:
+        if (incompleteMessage) {
+          return <Hint $state={InputState.Incomplete}>{incompleteMessage}</Hint>
+        }
+        return
+      case InputState.Start:
+        return
+    }
+  }
 
   return (
     <Wrapper>
@@ -82,17 +106,9 @@ export default function GenericTextInput({
         placeholder={placeholder}
         disabled={isDisabled}
         onChange={onChange}
-        $isInvalid={isValid === InputState.Invalid}
+        $isInvalid={state === InputState.Invalid}
       />
-      {shouldShowValidMessage && (
-        <Hint $state={InputState.Valid}>
-          <IconCheckPass />
-          <span>{validMessage}</span>
-        </Hint>
-      )}
-      {shouldShowErrorMessage && (
-        <Hint $state={InputState.Invalid}>{errorMessage}</Hint>
-      )}
+      {getHint()}
     </Wrapper>
   )
 }

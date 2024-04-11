@@ -16,7 +16,7 @@ const { Start, Invalid, Valid } = InputState
  * @param {boolean} [props.shouldShowHint=true] - 是否在顯示提示訊息
  */
 export default function EmailInput({ shouldShowHint = true }) {
-  const errorMessage = shouldShowHint ? '請輸入有效的 Email 地址' : ''
+  const invalidMessage = shouldShowHint ? '請輸入有效的 Email 地址' : ''
   const validMessage = shouldShowHint ? 'Email 格式正確' : ''
 
   const getValidality = (/** @type {string} */ email) => {
@@ -34,14 +34,14 @@ export default function EmailInput({ shouldShowHint = true }) {
   const dispatch = useAppDispatch()
   const email = useAppSelector(loginEmail)
   /** @type {[EmailInputState, import('react').Dispatch<import('react').SetStateAction<EmailInputState>>]} */
-  const [isValid, setIsValid] = useState(getValidality(email))
+  const [state, setState] = useState(getValidality(email))
 
   /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
   const handleInputChange = (e) => {
     const inputValue = e.target.value
 
     if (shouldShowHint) {
-      setIsValid(getValidality(inputValue))
+      setState(getValidality(inputValue))
     }
     dispatch(loginActions.setEmail(inputValue))
   }
@@ -49,10 +49,10 @@ export default function EmailInput({ shouldShowHint = true }) {
   return (
     <GenericTextInput
       placeholder="name@example.com"
-      errorMessage={errorMessage}
+      invalidMessage={invalidMessage}
       validMessage={validMessage}
       value={email}
-      isValid={isValid}
+      state={state}
       onChange={handleInputChange}
     />
   )
