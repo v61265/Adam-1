@@ -81,6 +81,27 @@ export default function MemberLoginButton() {
     logout()
   }
 
+  /**
+   * @returns {import('next/link').LinkProps['href']}
+   */
+  const getLoginHref = () => {
+    const destination = router.query.destination
+
+    if (destination) {
+      return {
+        pathname: '/login',
+        query: router.query,
+      }
+    } else {
+      return {
+        pathname: '/login',
+        query: {
+          destination: '/',
+        },
+      }
+    }
+  }
+
   let memberLoginButton
   if (isLoggedIn) {
     memberLoginButton = (
@@ -109,10 +130,7 @@ export default function MemberLoginButton() {
   } else {
     memberLoginButton = (
       <LoginButton>
-        <Link
-          href={`/login?destination=${router.pathname || '/'}`}
-          className="GTM-header-login"
-        >
+        <Link href={getLoginHref()} className="GTM-header-login">
           <span>登入</span>
         </Link>
       </LoginButton>
