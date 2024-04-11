@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components'
 import { useState } from 'react'
 import { InputState } from '../../../constants/form'
-import Hint from '../hint'
-import IconCheckPass from '../../../public/images-next/check-pass.svg'
+import getHint from '../../../utils/hint'
 import IconConceal from '../../../public/images-next/login/conceal.svg'
 import IconReveal from '../../../public/images-next/login/reveal.svg'
 
@@ -93,33 +92,6 @@ export default function GenericPasswordInput({
   const [isConcealed, setIsConealed] = useState(true)
   const [isFocus, setIsFocus] = useState(false)
 
-  const getHint = () => {
-    switch (state) {
-      case InputState.Invalid:
-        if (invalidMessage) {
-          return <Hint $state={InputState.Invalid}>{invalidMessage}</Hint>
-        }
-        return
-      case InputState.Valid:
-        if (validMessage) {
-          return (
-            <Hint $state={InputState.Valid}>
-              <IconCheckPass />
-              <span>{validMessage}</span>
-            </Hint>
-          )
-        }
-        return
-      case InputState.Incomplete:
-        if (incompleteMessage) {
-          return <Hint $state={InputState.Incomplete}>{incompleteMessage}</Hint>
-        }
-        return
-      case InputState.Start:
-        return
-    }
-  }
-
   return (
     <Wrapper>
       <Group $isInvalid={state === InputState.Invalid} $isFocus={isFocus}>
@@ -135,7 +107,11 @@ export default function GenericPasswordInput({
           {isConcealed ? <IconReveal /> : <IconConceal />}
         </Toggle>
       </Group>
-      {getHint()}
+      {getHint(state, {
+        incompleteMessage,
+        invalidMessage,
+        validMessage,
+      })}
     </Wrapper>
   )
 }

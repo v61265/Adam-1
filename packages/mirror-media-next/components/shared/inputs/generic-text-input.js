@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components'
 import { InputState } from '../../../constants/form'
-import Hint from '../hint'
-import IconCheckPass from '../../../public/images-next/check-pass.svg'
+import getHint from '../../../utils/hint'
 
 /** @typedef {import('../../../constants/form').InputStateEnum} TextInputState */
 
@@ -71,33 +70,6 @@ export default function GenericTextInput({
   validMessage,
   onChange,
 }) {
-  const getHint = () => {
-    switch (state) {
-      case InputState.Invalid:
-        if (invalidMessage) {
-          return <Hint $state={InputState.Invalid}>{invalidMessage}</Hint>
-        }
-        return
-      case InputState.Valid:
-        if (validMessage) {
-          return (
-            <Hint $state={InputState.Valid}>
-              <IconCheckPass />
-              <span>{validMessage}</span>
-            </Hint>
-          )
-        }
-        return
-      case InputState.Incomplete:
-        if (incompleteMessage) {
-          return <Hint $state={InputState.Incomplete}>{incompleteMessage}</Hint>
-        }
-        return
-      case InputState.Start:
-        return
-    }
-  }
-
   return (
     <Wrapper>
       <Input
@@ -108,7 +80,11 @@ export default function GenericTextInput({
         onChange={onChange}
         $isInvalid={state === InputState.Invalid}
       />
-      {getHint()}
+      {getHint(state, {
+        incompleteMessage,
+        invalidMessage,
+        validMessage,
+      })}
     </Wrapper>
   )
 }
