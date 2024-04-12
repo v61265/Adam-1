@@ -96,6 +96,7 @@ export default function MemberLoginButton() {
       return {
         pathname: '/login',
         query: {
+          ...router.query,
           destination: '/',
         },
       }
