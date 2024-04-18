@@ -5,4 +5,6 @@ const sendLog = (log, target = '/api/tracking') => {
   navigator.sendBeacon(target, blob)
 }
 
-export { sendLog }
+const sendErrorLog = (log) => sendLog(log, '/api/error-report')
+
+export { sendLog, sendErrorLog }
