@@ -41,7 +41,7 @@ const Container = styled.div`
 
 export default function Login() {
   const dispatch = useAppDispatch()
-  const { accessToken, isLogInProcessFinished } = useMembership()
+  const { accessToken, isLogInProcessFinished, userEmail } = useMembership()
   const loginFormState = useAppSelector(loginState)
   const { redirect } = useRedirect()
   const handleFederatedRedirectResult = async () => {
@@ -89,7 +89,7 @@ export default function Login() {
           loginActions.changeShouldShowHintOfExitenceOfDifferentAuthMethod(true)
         )
       } else {
-        errorHandler(e)
+        errorHandler(e, { userEmail })
         dispatch(loginActions.changeState(FormState.LoginFail))
       }
     } finally {
