@@ -80,7 +80,7 @@ export default function MainFormStart() {
   const allowToContinue = isValidEmail(email)
 
   const handleOnClick = async () => {
-    if (!allowToContinue) return
+    if (!allowToContinue || isLoading) return
     setIsLoading(true)
 
     try {

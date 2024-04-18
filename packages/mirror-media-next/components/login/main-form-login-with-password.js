@@ -64,6 +64,7 @@ export default function MainFormLoginWithPassword() {
 
   /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
   const handleSubmit = async () => {
+    if (isLoading) return
     setIsLoading(true)
 
     try {

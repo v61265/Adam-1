@@ -79,6 +79,7 @@ export default function ButtonLoginWithThirdParty({ thirdPartyName }) {
   }, [thirdPartyName])
 
   const handleThirdPartyFirebaseLogin = async () => {
+    if (isFederatedRedirectResultLoading) return
     dispatch(loginActions.changeIsFederatedRedirectResultLoading(true))
     await signInWithRedirect(auth, provider)
   }
