@@ -3,6 +3,7 @@ import { auth } from '../firebase'
 import { signOut } from '@firebase/auth'
 import axios from 'axios'
 import { WEEKLY_API_SERVER_ORIGIN, API_TIMEOUT } from '../config/index.mjs'
+import { errorHandler } from '../utils/membership'
 
 /**
  * @typedef {Object} MemberInfo
@@ -143,7 +144,7 @@ const MembershipProvider = ({ children }) => {
         const idToken = await user.getIdToken()
         return idToken
       } catch (err) {
-        console.warn(err)
+        errorHandler(err)
         return null
       }
     }
@@ -162,8 +163,7 @@ const MembershipProvider = ({ children }) => {
         const memberType = decodedJwtPayload.roles[0]
         return memberType
       } catch (e) {
-        //TODO: If unable to decode Jwt payload, it is needed to send error log to our GCP log viewer by using [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API).
-        console.warn(e)
+        errorHandler(e)
         return 'not-member'
       }
     }
@@ -240,12 +240,8 @@ const MembershipProvider = ({ children }) => {
               signOut(auth)
               break
             case 500:
-              // TODO: Send this error to our GCP log viewer by using [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API).
-
-              console.warn(error)
-              break
             default:
-              console.warn(error)
+              errorHandler(error)
               break
           }
         }
@@ -262,7 +258,7 @@ const MembershipProvider = ({ children }) => {
             })
           }
         } catch (err) {
-          console.error(err)
+          errorHandler(err)
         }
 
         /**
@@ -300,7 +296,7 @@ const handleFirebaseSignOut = async () => {
   try {
     await signOut(auth)
   } catch (error) {
-    console.warn(error)
+    errorHandler(error)
   }
 }
 export {
