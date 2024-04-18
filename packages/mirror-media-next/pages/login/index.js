@@ -28,6 +28,7 @@ import { setPageCache } from '../../utils/cache-setting'
 import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import LayoutFull from '../../components/shared/layout-full'
 import { FirebaseAuthError } from '../../constants/firebase'
+import redirectToDestinationWhileAuthed from '../../utils/redirect-to-destination-while-authed'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -132,16 +133,19 @@ export default function Login() {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req, res }) {
-  setPageCache(res, { cachePolicy: 'no-store' }, req.url)
-  const traceHeader = req.headers?.['x-cloud-trace-context']
-  let globalLogFields = {}
-  if (traceHeader && !Array.isArray(traceHeader)) {
-    const [trace] = traceHeader.split('/')
-    globalLogFields[
-      'logging.googleapis.com/trace'
-    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
-  }
+export const getServerSideProps = redirectToDestinationWhileAuthed()(
+  async ({ req, res }) => {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+    const traceHeader = req.headers?.['x-cloud-trace-context']
+    let globalLogFields = {}
+    if (traceHeader && !Array.isArray(traceHeader)) {
+      const [trace] = traceHeader.split('/')
+      globalLogFields[
+        'logging.googleapis.com/trace'
+      ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
+    }
 
-  return { props: {} }
-}
+    // cast any to prevent lint error
+    return { props: /** @type {any} */ ({}) }
+  }
+)
