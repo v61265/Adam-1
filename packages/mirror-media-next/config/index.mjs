@@ -1,4 +1,5 @@
 const GCP_PROJECT_ID = 'mirrormedia-1470651750304'
+const SESSION_COOKIE_NAME = 'member-session-cookie'
 
 // The following variables are from environment variables
 
@@ -9,6 +10,19 @@ const NEWEBPAY_PAPERMAG_KEY =
 const NEWEBPAY_PAPERMAG_IV =
   process.env.NEWEBPAY_PAPERMAG_IV || 'newebpay-papermag-iv'
 const ISRAFEL_ORIGIN = process.env.ISRAFEL_ORIGIN || 'israfel-origin'
+let FIREBASE_ADMIN_CREDENTIAL
+try {
+  const credential = process.env.FIREBASE_ADMIN_CREDENTIAL
+  FIREBASE_ADMIN_CREDENTIAL = JSON.parse(credential)
+} catch (err) {
+  console.error(
+    JSON.stringify({
+      severity: 'ERROR',
+      message: err.message,
+    })
+  )
+  FIREBASE_ADMIN_CREDENTIAL = {}
+}
 
 // should be applied in preview mode
 const SITE_BASE_PATH = IS_PREVIEW_MODE ? '/preview-server' : ''
@@ -261,6 +275,7 @@ export {
   DONATION_PAGE_URL,
   ENV,
   FIREBASE_CONFIG,
+  FIREBASE_ADMIN_CREDENTIAL,
   GA_MEASUREMENT_ID,
   GCP_LOGGING_FEATURE_TOGGLE,
   GCP_PROJECT_ID,
@@ -289,4 +304,5 @@ export {
   WEEKLY_API_SERVER_ORIGIN,
   WEEKLY_API_SERVER_YOUTUBE_ENDPOINT,
   IS_PRIZE_RIZED,
+  SESSION_COOKIE_NAME,
 }
