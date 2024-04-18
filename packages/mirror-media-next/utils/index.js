@@ -301,6 +301,28 @@ const getActiveOrderCategory = (categories, categoriesInInputOrder) => {
   }
 }
 
+/**
+ * Verify email input
+ *
+ * @param {string} email
+ * @returns {boolean}
+ */
+const isValidEmail = (email) => {
+  const regex =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+  return regex.test(email)
+}
+
+/**
+ * Verify password input
+ *
+ * @param {string} password
+ * @returns {boolean}
+ */
+const isValidPassword = (password) => {
+  return typeof password === 'string' && password.length >= 6
+}
+
 export {
   transformTimeDataIntoDotFormat,
   transformTimeDataIntoSlashFormat,
@@ -315,5 +337,7 @@ export {
   getNumberWithCommas,
   getActiveOrderSection,
   getActiveOrderCategory,
+  isValidEmail,
+  isValidPassword,
   transformTimeData,
 }

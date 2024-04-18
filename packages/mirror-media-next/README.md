@@ -5,8 +5,6 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 First, run the development server:
 
 ```bash
-npm run dev
-# or
 yarn dev
 ```
 
@@ -26,12 +24,6 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 ## Reminder
 
@@ -60,6 +52,13 @@ Ref: [ECMAScript Modules | Node.js](https://nodejs.org/docs/latest-v13.x/api/esm
 否則請勿隨意刪除該className，以避免無法正確蒐集數據等錯誤發生。
 
 該className僅用於協助Google Tag Manager蒐集數據，請勿使用該className切版。
+
+### 使用 JSDoc 寫出與 TypeScript 中 `as const` 等效的註解
+```
+/** @type {const} */ ([something]) 
+```
+ref: https://stackoverflow.com/a/64687300
+
 
 ## Environment Variables (環境變數)
 
