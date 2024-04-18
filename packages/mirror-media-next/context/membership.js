@@ -65,13 +65,13 @@ const membershipReducer = (membership, action) => {
   const { memberInfo } = membership
   const isLogInProcessFinished = true
   switch (action.type) {
-    case 'LOGIN':
+    case 'LOGIN': {
       const {
         memberInfo: { memberType = 'not-member' } = {},
         accessToken = '',
         userEmail = '',
         firebaseId = '',
-      } = action?.payload
+      } = action?.payload ?? {}
       return {
         isLoggedIn: true,
         accessToken: accessToken,
@@ -83,6 +83,7 @@ const membershipReducer = (membership, action) => {
         isLogInProcessFinished,
         firebaseId,
       }
+    }
     case 'LOGOUT':
       return {
         isLoggedIn: false,
@@ -166,6 +167,11 @@ const MembershipProvider = ({ children }) => {
         return 'not-member'
       }
     }
+
+    /**
+     * @typedef {import('firebase/auth').Auth} Auth
+     * @type {Parameters<Auth['onAuthStateChanged']>[0]}
+     */
     const handleFirebaseAuthStateChanged = async (user) => {
       if (user) {
         const idToken = await getIdToken(user)
@@ -183,6 +189,20 @@ const MembershipProvider = ({ children }) => {
          * @see https://github.com/mirror-media/Adam/blob/dev/packages/weekly-api-server/README.md
          */
         try {
+          /**
+           * apply session cookie
+           */
+          {
+            await axios({
+              method: 'post',
+              url: '/api/login',
+              timeout: API_TIMEOUT,
+              data: {
+                idToken,
+              },
+            })
+          }
+
           const res = await axios({
             method: 'post',
             url: `https://${WEEKLY_API_SERVER_ORIGIN}/access-token`,
@@ -230,6 +250,21 @@ const MembershipProvider = ({ children }) => {
           }
         }
       } else {
+        /**
+         * remove seesion cookie
+         */
+        try {
+          {
+            await axios({
+              method: 'post',
+              url: '/api/logout',
+              timeout: API_TIMEOUT,
+            })
+          }
+        } catch (err) {
+          console.error(err)
+        }
+
         /**
          * If user is not log in firebase, we should dispatch a "LOGOUT" action to clear access token.
          */
