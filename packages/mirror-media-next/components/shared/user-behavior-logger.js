@@ -40,9 +40,7 @@ import { generateUserBehaviorLogInfo } from '../../utils/log/user-behavior-log'
 export default function UserBehaviorLogger({ isMemberArticle = false }) {
   //Since `usePathname()` is recommend to use at Next.js 13 App route, we use `useRouter` to get pathname instead to prevent unexpected error.
   const router = useRouter()
-  const { asPath } = router
 
-  const pathname = asPath?.split('?')?.[0]
   const {
     isLogInProcessFinished,
     memberInfo: { memberType },
@@ -67,11 +65,10 @@ export default function UserBehaviorLogger({ isMemberArticle = false }) {
 
     const info = generateUserBehaviorLogInfo(
       'pageview',
-      pathname,
       userBehaviorLogInfoPayload
     )
     sendLog(info)
-  }, [pathname, isLogInProcessFinished, userBehaviorLogInfoPayload])
+  }, [isLogInProcessFinished, userBehaviorLogInfoPayload])
 
   //exit event
   useEffect(() => {
@@ -81,11 +78,7 @@ export default function UserBehaviorLogger({ isMemberArticle = false }) {
     if (!isLogInProcessFinished) {
       return
     }
-    const info = generateUserBehaviorLogInfo(
-      'exit',
-      pathname,
-      userBehaviorLogInfoPayload
-    )
+    const info = generateUserBehaviorLogInfo('exit', userBehaviorLogInfoPayload)
 
     const beforeUnloadEvent = () => {
       if (ignore) {
@@ -107,7 +100,7 @@ export default function UserBehaviorLogger({ isMemberArticle = false }) {
       window.removeEventListener('beforeunload', beforeUnloadEvent)
       router.events.off('beforeHistoryChange', beforeHistoryChangeEvent)
     }
-  }, [router, pathname, isLogInProcessFinished, userBehaviorLogInfoPayload])
+  }, [router, isLogInProcessFinished, userBehaviorLogInfoPayload])
 
   //scroll-to-80% event
   useEffect(() => {
@@ -130,7 +123,6 @@ export default function UserBehaviorLogger({ isMemberArticle = false }) {
       if (isScrollToBottom) {
         const info = generateUserBehaviorLogInfo(
           'scroll-to-80%',
-          pathname,
           userBehaviorLogInfoPayload
         )
         sendLog(info)
@@ -141,7 +133,7 @@ export default function UserBehaviorLogger({ isMemberArticle = false }) {
       ignore = true
       window.removeEventListener('scroll', debounce(scrollToBottomEvent, 500))
     }
-  }, [pathname, isLogInProcessFinished, userBehaviorLogInfoPayload])
+  }, [isLogInProcessFinished, userBehaviorLogInfoPayload])
 
   //click event
   useEffect(() => {
@@ -155,7 +147,6 @@ export default function UserBehaviorLogger({ isMemberArticle = false }) {
       }
       const info = generateUserBehaviorLogInfo(
         'click',
-        pathname,
         userBehaviorLogInfoPayload
       )
       sendLog(info)
@@ -165,7 +156,7 @@ export default function UserBehaviorLogger({ isMemberArticle = false }) {
       ignore = true
       window.removeEventListener('click', clickEvent)
     }
-  }, [isLogInProcessFinished, pathname, userBehaviorLogInfoPayload])
+  }, [isLogInProcessFinished, userBehaviorLogInfoPayload])
 
   return null
 }
