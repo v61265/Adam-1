@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useCallback, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
 import { useMembership } from '../../context/membership'
 import {
@@ -17,7 +17,6 @@ import RegistrationSuccess from '../../components/login/registration-success'
 import RegistrationFailed from '../../components/login/registration-failed'
 import LoginFailed from '../../components/login/login-failed'
 import useRedirect from '../../hooks/use-redirect'
-import { useRouter } from 'next/router'
 import {
   getRedirectResult,
   getAdditionalUserInfo,
@@ -41,11 +40,10 @@ const Container = styled.div`
 
 export default function Login() {
   const dispatch = useAppDispatch()
-  const { accessToken, isLogInProcessFinished, isLoggedIn } = useMembership()
-  const router = useRouter()
+  const { accessToken, isLogInProcessFinished } = useMembership()
   const loginFormState = useAppSelector(loginState)
   const { redirect } = useRedirect()
-  const handleFederatedRedirectResult = useCallback(async () => {
+  const handleFederatedRedirectResult = async () => {
     function getPrevAuthMethod(prevAuthMethod) {
       switch (prevAuthMethod) {
         case 'google.com':
@@ -63,31 +61,17 @@ export default function Login() {
 
     try {
       const redirectResult = await getRedirectResult(auth)
-      dispatch(loginActions.changeIsFederatedRedirectResultLoading(false))
       if (redirectResult && redirectResult?.user) {
         const firebaseAuthUser = redirectResult.user
         const isNewUser = getAdditionalUserInfo(redirectResult).isNewUser
-        const result = await loginPageOnAuthStateChangeAction(
+        await loginPageOnAuthStateChangeAction(
           firebaseAuthUser,
           isNewUser,
           accessToken
         )
-        dispatch(loginActions.changeState(result))
-      } else if (!redirectResult?.user && isLoggedIn) {
-        switch (loginFormState) {
-          case FormState.Form:
-            router.push('/section/member')
-            return
-          case FormState.LoginSuccess:
-          case FormState.RegisterSuccess:
-            redirect()
-            return
-          default:
-            break
-        }
+        redirect()
       }
     } catch (e) {
-      dispatch(loginActions.changeIsFederatedRedirectResultLoading(false))
       if (
         e instanceof FirebaseError &&
         e.code === FirebaseAuthError.ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL
@@ -107,16 +91,17 @@ export default function Login() {
         errorHandler(e)
         dispatch(loginActions.changeState(FormState.LoginFail))
       }
+    } finally {
+      dispatch(loginActions.changeIsFederatedRedirectResultLoading(false))
     }
-  }, [router, isLoggedIn, loginFormState, dispatch, accessToken, redirect])
-
+  }
   useEffect(() => {
     if (!isLogInProcessFinished) {
       return
     }
 
     handleFederatedRedirectResult()
-  }, [isLogInProcessFinished, dispatch, handleFederatedRedirectResult])
+  }, [isLogInProcessFinished])
 
   const getBodyByState = () => {
     switch (loginFormState) {
