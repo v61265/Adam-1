@@ -63,6 +63,7 @@ let GPT_MODE = ''
 let FIREBASE_CONFIG = {}
 
 let GCP_STACKDRIVER_LOG_NAME = ''
+let GCP_STACKDRIVER_ERROR_LOG_NAME = ''
 
 let IS_PRIZE_RIZED
 
@@ -111,6 +112,7 @@ switch (ENV) {
       measurementId: 'G-2FDRC4S37L',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior'
+    GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log'
     IS_PRIZE_RIZED = true
 
     break
@@ -162,6 +164,7 @@ switch (ENV) {
       appId: '1:388524095772:web:e3739160c042909827a2d9',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_staging'
+    GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_staging'
     IS_PRIZE_RIZED = true
     break
 
@@ -212,6 +215,7 @@ switch (ENV) {
       measurementId: 'G-EY5CYC602Z',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_dev'
+    GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_dev'
     IS_PRIZE_RIZED = true
     break
 
@@ -261,6 +265,7 @@ switch (ENV) {
       measurementId: 'G-EY5CYC602Z',
     }
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_local'
+    GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_local'
     IS_PRIZE_RIZED = true
 }
 
@@ -280,6 +285,7 @@ export {
   GCP_LOGGING_FEATURE_TOGGLE,
   GCP_PROJECT_ID,
   GCP_STACKDRIVER_LOG_NAME,
+  GCP_STACKDRIVER_ERROR_LOG_NAME,
   GPT_MODE,
   GTM_ID,
   IS_PREVIEW_MODE,
