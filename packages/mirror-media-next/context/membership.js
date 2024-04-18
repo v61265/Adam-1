@@ -3,7 +3,8 @@ import { auth } from '../firebase'
 import { signOut } from '@firebase/auth'
 import axios from 'axios'
 import { WEEKLY_API_SERVER_ORIGIN, API_TIMEOUT } from '../config/index.mjs'
-import { errorHandler } from '../utils/membership'
+import { generateErrorReportInfo } from '../utils/log/error-log'
+import { sendErrorLog } from '../utils/log/send-log'
 
 /**
  * @typedef {Object} MemberInfo
@@ -144,7 +145,12 @@ const MembershipProvider = ({ children }) => {
         const idToken = await user.getIdToken()
         return idToken
       } catch (err) {
-        errorHandler(err)
+        const errorLog = generateErrorReportInfo(err, {
+          userEmail: membership.userEmail,
+          firebaseId: membership.firebaseId,
+        })
+        sendErrorLog(errorLog)
+
         return null
       }
     }
@@ -163,7 +169,12 @@ const MembershipProvider = ({ children }) => {
         const memberType = decodedJwtPayload.roles[0]
         return memberType
       } catch (e) {
-        errorHandler(e)
+        const errorLog = generateErrorReportInfo(e, {
+          userEmail: membership.userEmail,
+          firebaseId: membership.firebaseId,
+        })
+        sendErrorLog(errorLog)
+
         return 'not-member'
       }
     }
@@ -240,9 +251,14 @@ const MembershipProvider = ({ children }) => {
               signOut(auth)
               break
             case 500:
-            default:
-              errorHandler(error)
+            default: {
+              const errorLog = generateErrorReportInfo(error, {
+                userEmail: user.email,
+                firebaseId: user.uid,
+              })
+              sendErrorLog(errorLog)
               break
+            }
           }
         }
       } else {
@@ -258,7 +274,11 @@ const MembershipProvider = ({ children }) => {
             })
           }
         } catch (err) {
-          errorHandler(err)
+          const errorLog = generateErrorReportInfo(err, {
+            userEmail: membership.userEmail,
+            firebaseId: membership.firebaseId,
+          })
+          sendErrorLog(errorLog)
         }
 
         /**
@@ -293,10 +313,16 @@ const useMembershipDispatch = () => {
 }
 
 const handleFirebaseSignOut = async () => {
+  const currentUser = auth.currentUser
+
   try {
     await signOut(auth)
   } catch (error) {
-    errorHandler(error)
+    const errorLog = generateErrorReportInfo(error, {
+      userEmail: currentUser?.email,
+      firebaseId: currentUser?.uid,
+    })
+    sendErrorLog(errorLog)
   }
 }
 export {
