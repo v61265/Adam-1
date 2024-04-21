@@ -33,14 +33,20 @@ import { URL, URLSearchParams } from 'node:url'
  * @template P
  * @template {ParsedUrlQuery} Q
  * @template {PreviewData} D
- * @typedef {(context: SSRPropsContext<Q, D>) => Promise<GetSSRResult<P>>} SSRPropsGetter
+ * @callback SSRPropsGetter
+ * @param {SSRPropsContext<Q, D>} context
+ * @returns {Promise<GetSSRResult<P>>}
  */
 
 /**
- * @template  {Dictionary} [P=Dictionary]
- * @template  {ParsedUrlQuery} [Q=ParsedUrlQuery]
- * @template  {PreviewData} [D=PreviewData]
- * @typedef {() => (propGetter?: SSRPropsGetter<P, Q, D>) => import('next').GetServerSideProps<P, Q, D>} RedirectToLoginWhileUnauthed
+ * @callback RedirectToLoginWhileUnauthed
+ * @returns {
+    <P extends Dictionary=Dictionary,
+     Q extends ParsedUrlQuery=ParsedUrlQuery,
+     D extends PreviewData=PreviewData>
+    (propGetter?: SSRPropsGetter<P, Q, D>)
+     => import('next').GetServerSideProps<P, Q, D>
+   }
  */
 
 /**
