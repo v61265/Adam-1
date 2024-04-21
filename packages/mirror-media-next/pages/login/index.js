@@ -145,7 +145,8 @@ export const getServerSideProps = redirectToDestinationWhileAuthed()(
       ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
     }
 
-    // cast any to prevent lint error
-    return { props: /** @type {any} */ ({}) }
+    return {
+      props: {},
+    }
   }
 )
