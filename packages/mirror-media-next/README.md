@@ -57,7 +57,7 @@ Ref: [ECMAScript Modules | Node.js](https://nodejs.org/docs/latest-v13.x/api/esm
 ```
 /** @type {const} */ ([something]) 
 ```
-ref: https://stackoverflow.com/a/64687300
+ref: https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#casts
 
 
 ## Environment Variables (環境變數)
@@ -67,3 +67,4 @@ ref: https://stackoverflow.com/a/64687300
 | PROXY_AMP           | 字串(布林) | 'false' | 是否為 proxy AMP 模式           |
 | PROXY_SERVER_PORT   | 字串(整數) | '3000'  | proxy server port               |
 | PROXIED_SERVER_PORT | 字串(整數) | '3001'  | 被 proxy 的 next.js server port |
+| FIREBASE_ADMIN_CREDENTIAL | 字串(JSON) | '' | Firebase 專案所屬服務帳號的密鑰資訊，參考：[Initialize the SDK in non-Google environments#To generate a private key file for your service account](https://firebase.google.com/docs/admin/setup#initialize_the_sdk_in_non-google_environments) |

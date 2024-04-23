@@ -56,6 +56,7 @@ export default function MainFormRegistration() {
 
   /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
   const handleSubmit = async () => {
+    if (isLoading) return
     setIsLoading(true)
 
     try {

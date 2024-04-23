@@ -3,6 +3,7 @@ import { auth } from '../firebase'
 import { signOut } from '@firebase/auth'
 import axios from 'axios'
 import { WEEKLY_API_SERVER_ORIGIN, API_TIMEOUT } from '../config/index.mjs'
+import { errorHandler } from '../utils/membership'
 
 /**
  * @typedef {Object} MemberInfo
@@ -65,13 +66,13 @@ const membershipReducer = (membership, action) => {
   const { memberInfo } = membership
   const isLogInProcessFinished = true
   switch (action.type) {
-    case 'LOGIN':
+    case 'LOGIN': {
       const {
         memberInfo: { memberType = 'not-member' } = {},
         accessToken = '',
         userEmail = '',
         firebaseId = '',
-      } = action?.payload
+      } = action?.payload ?? {}
       return {
         isLoggedIn: true,
         accessToken: accessToken,
@@ -83,6 +84,7 @@ const membershipReducer = (membership, action) => {
         isLogInProcessFinished,
         firebaseId,
       }
+    }
     case 'LOGOUT':
       return {
         isLoggedIn: false,
@@ -142,7 +144,7 @@ const MembershipProvider = ({ children }) => {
         const idToken = await user.getIdToken()
         return idToken
       } catch (err) {
-        console.warn(err)
+        errorHandler(err)
         return null
       }
     }
@@ -161,11 +163,15 @@ const MembershipProvider = ({ children }) => {
         const memberType = decodedJwtPayload.roles[0]
         return memberType
       } catch (e) {
-        //TODO: If unable to decode Jwt payload, it is needed to send error log to our GCP log viewer by using [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API).
-        console.warn(e)
+        errorHandler(e)
         return 'not-member'
       }
     }
+
+    /**
+     * @typedef {import('firebase/auth').Auth} Auth
+     * @type {Parameters<Auth['onAuthStateChanged']>[0]}
+     */
     const handleFirebaseAuthStateChanged = async (user) => {
       if (user) {
         const idToken = await getIdToken(user)
@@ -183,6 +189,20 @@ const MembershipProvider = ({ children }) => {
          * @see https://github.com/mirror-media/Adam/blob/dev/packages/weekly-api-server/README.md
          */
         try {
+          /**
+           * apply session cookie
+           */
+          {
+            await axios({
+              method: 'post',
+              url: '/api/login',
+              timeout: API_TIMEOUT,
+              data: {
+                idToken,
+              },
+            })
+          }
+
           const res = await axios({
             method: 'post',
             url: `https://${WEEKLY_API_SERVER_ORIGIN}/access-token`,
@@ -220,16 +240,27 @@ const MembershipProvider = ({ children }) => {
               signOut(auth)
               break
             case 500:
-              // TODO: Send this error to our GCP log viewer by using [Beacon API](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API).
-
-              console.warn(error)
-              break
             default:
-              console.warn(error)
+              errorHandler(error)
               break
           }
         }
       } else {
+        /**
+         * remove seesion cookie
+         */
+        try {
+          {
+            await axios({
+              method: 'post',
+              url: '/api/logout',
+              timeout: API_TIMEOUT,
+            })
+          }
+        } catch (err) {
+          errorHandler(err)
+        }
+
         /**
          * If user is not log in firebase, we should dispatch a "LOGOUT" action to clear access token.
          */
@@ -265,7 +296,7 @@ const handleFirebaseSignOut = async () => {
   try {
     await signOut(auth)
   } catch (error) {
-    console.warn(error)
+    errorHandler(error)
   }
 }
 export {

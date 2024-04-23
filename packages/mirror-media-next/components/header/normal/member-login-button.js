@@ -9,6 +9,8 @@ import Link from 'next/link'
 import { useMembership, logout } from '../../../context/membership'
 import { useAppDispatch } from '../../../hooks/useRedux'
 import { loginActions } from '../../../slice/login-slice'
+import { getLoginHref } from '../../../utils'
+
 const MemberLoginButtonWrapper = styled.div`
   margin-left: 23px;
 
@@ -81,28 +83,6 @@ export default function MemberLoginButton() {
     logout()
   }
 
-  /**
-   * @returns {import('next/link').LinkProps['href']}
-   */
-  const getLoginHref = () => {
-    const destination = router.query.destination
-
-    if (destination) {
-      return {
-        pathname: '/login',
-        query: router.query,
-      }
-    } else {
-      return {
-        pathname: '/login',
-        query: {
-          ...router.query,
-          destination: '/',
-        },
-      }
-    }
-  }
-
   let memberLoginButton
   if (isLoggedIn) {
     memberLoginButton = (
@@ -131,7 +111,7 @@ export default function MemberLoginButton() {
   } else {
     memberLoginButton = (
       <LoginButton>
-        <Link href={getLoginHref()} className="GTM-header-login">
+        <Link href={getLoginHref(router)} className="GTM-header-login">
           <span>登入</span>
         </Link>
       </LoginButton>

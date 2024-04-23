@@ -23,6 +23,7 @@ import { FirebaseError } from 'firebase/app'
 import { InputState } from '../../constants/form'
 import { FirebaseAuthError } from '../../constants/firebase'
 import { isValidEmail, isValidPassword } from '../../utils'
+import useRedirect from '../../hooks/use-redirect'
 
 // following comments is required since these variables are used by comments but not codes.
 /* eslint-disable-next-line no-unused-vars */
@@ -43,6 +44,7 @@ export default function MainFormLoginWithPassword() {
   const email = useAppSelector(loginEmail)
   const password = useAppSelector(loginPassword)
   const allowToSubmit = isValidEmail(email) && isValidPassword(password)
+  const { redirect } = useRedirect()
 
   /** @type {[PasswordInputState, import('react').Dispatch<import('react').SetStateAction<PasswordInputState>>]} */
   const [passwordInputState, setPasswordInputState] = useState(InputState.Start)
@@ -62,6 +64,7 @@ export default function MainFormLoginWithPassword() {
 
   /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
   const handleSubmit = async () => {
+    if (isLoading) return
     setIsLoading(true)
 
     try {
@@ -74,12 +77,9 @@ export default function MainFormLoginWithPassword() {
         throw new Error('Unexpected Error when getting firebase Id token.')
       }
       const accessToken = await getAccessToken(idToken)
-      const result = await loginPageOnAuthStateChangeAction(
-        user,
-        false,
-        accessToken
-      )
-      dispatch(loginActions.changeState(result))
+      await loginPageOnAuthStateChangeAction(user, false, accessToken)
+
+      redirect()
     } catch (e) {
       if (
         e instanceof FirebaseError &&

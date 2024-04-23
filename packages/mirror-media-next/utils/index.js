@@ -323,6 +323,54 @@ const isValidPassword = (password) => {
   return typeof password === 'string' && password.length >= 6
 }
 
+/**
+ * @param {import('next/router').NextRouter} router
+ * @returns {import('next/link').LinkProps['href']}
+ */
+const getLoginHref = (router) => {
+  const pathname = router.pathname
+
+  if (pathname === '/login') {
+    const queryParam = router.query
+    let destination = queryParam.destination
+
+    if (Array.isArray(destination)) {
+      destination = destination.join(',')
+    }
+
+    if (destination) {
+      return {
+        pathname: '/login',
+        query: {
+          ...queryParam,
+        },
+      }
+    } else {
+      return {
+        pathname: '/login',
+        query: {
+          destination: '/',
+          ...queryParam,
+        },
+      }
+    }
+  } else {
+    const urlObject = new URL(
+      router.asPath,
+      'https://www.google.com' /** sample base */
+    )
+    const searchParams = Object.fromEntries(urlObject.searchParams.entries())
+
+    return {
+      pathname: '/login',
+      query: {
+        destination: urlObject.pathname, // avoid dynamic route repreentaion, e.g., /story/[slug]
+        ...searchParams,
+      },
+    }
+  }
+}
+
 export {
   transformTimeDataIntoDotFormat,
   transformTimeDataIntoSlashFormat,
@@ -340,4 +388,5 @@ export {
   isValidEmail,
   isValidPassword,
   transformTimeData,
+  getLoginHref,
 }
