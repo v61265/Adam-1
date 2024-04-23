@@ -279,7 +279,7 @@ export default function Custom404() {
             <H1>404</H1>
             <Text>抱歉！找不到這個網址</Text>
           </MsgContainer>
-          <Title>熱門會員文章</Title>
+          <Title>熱門文章</Title>
           <Link href="/subscribe">
             <JoinMemberBtn>加入會員</JoinMemberBtn>
           </Link>
