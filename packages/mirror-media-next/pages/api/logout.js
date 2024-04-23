@@ -22,16 +22,19 @@ export default async function handler(req, res) {
       .json({ error: 'Method Not Allowed' })
   }
 
+  /** @type {string} */
+  let sessionCookie
+
   try {
     await runMiddleware(req, res, cors)
 
-    const sessionCookie = req.cookies[SESSION_COOKIE_NAME]
-    if (!sessionCookie) throw new Error('seesion cookie in required')
-
-    const decodedClaims = await getAdminAuth().verifySessionCookie(
-      sessionCookie
-    )
-    await getAdminAuth().revokeRefreshTokens(decodedClaims.sub)
+    sessionCookie = req.cookies[SESSION_COOKIE_NAME]
+    if (sessionCookie) {
+      const decodedClaims = await getAdminAuth().verifySessionCookie(
+        sessionCookie
+      )
+      await getAdminAuth().revokeRefreshTokens(decodedClaims.sub)
+    }
 
     return res
       .status(200)
@@ -52,6 +55,9 @@ export default async function handler(req, res) {
       JSON.stringify({
         severity: 'ERROR',
         message: err.message,
+        debugPayload: {
+          sessionCookie,
+        },
       })
     )
 
