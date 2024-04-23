@@ -47,6 +47,7 @@ let URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION = ''
 let GPT_MODE = ''
 // It is safe to expose the configuration of Firebase.
 // See: https://firebase.google.com/docs/projects/api-keys
+/** @type {import("firebase/app").FirebaseOptions} */
 let FIREBASE_CONFIG = {}
 
 let GCP_STACKDRIVER_LOG_NAME = ''
@@ -190,7 +191,7 @@ switch (ENV) {
     GPT_MODE = 'dev'
     FIREBASE_CONFIG = {
       apiKey: 'AIzaSyAavk46-8OQ4B2cv0TOqxOMjd5Fe4tIauc',
-      authDomain: 'mirrormediaapptest.firebaseapp.com',
+      authDomain: 'dev.mirrormedia.mg',
       databaseURL: 'https://mirrormediaapptest.firebaseio.com',
       projectId: 'mirrormediaapptest',
       storageBucket: 'mirrormediaapptest.appspot.com',
@@ -239,7 +240,7 @@ switch (ENV) {
     GPT_MODE = 'dev'
     FIREBASE_CONFIG = {
       apiKey: 'AIzaSyAavk46-8OQ4B2cv0TOqxOMjd5Fe4tIauc',
-      authDomain: 'mirrormediaapptest.firebaseapp.com',
+      authDomain: 'localhost:3000',
       databaseURL: 'https://mirrormediaapptest.firebaseio.com',
       projectId: 'mirrormediaapptest',
       storageBucket: 'mirrormediaapptest.appspot.com',
