@@ -10,19 +10,6 @@ const NEWEBPAY_PAPERMAG_KEY =
 const NEWEBPAY_PAPERMAG_IV =
   process.env.NEWEBPAY_PAPERMAG_IV || 'newebpay-papermag-iv'
 const ISRAFEL_ORIGIN = process.env.ISRAFEL_ORIGIN || 'israfel-origin'
-let FIREBASE_ADMIN_CREDENTIAL
-try {
-  const credential = process.env.FIREBASE_ADMIN_CREDENTIAL
-  FIREBASE_ADMIN_CREDENTIAL = JSON.parse(credential)
-} catch (err) {
-  console.error(
-    JSON.stringify({
-      severity: 'ERROR',
-      message: err.message,
-    })
-  )
-  FIREBASE_ADMIN_CREDENTIAL = {}
-}
 
 // should be applied in preview mode
 const SITE_BASE_PATH = IS_PREVIEW_MODE ? '/preview-server' : ''
@@ -275,7 +262,6 @@ export {
   DONATION_PAGE_URL,
   ENV,
   FIREBASE_CONFIG,
-  FIREBASE_ADMIN_CREDENTIAL,
   GA_MEASUREMENT_ID,
   GCP_LOGGING_FEATURE_TOGGLE,
   GCP_PROJECT_ID,
