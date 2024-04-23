@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     const decodedClaims = await auth.verifyIdToken(idToken, true)
 
     if (
-      decodedClaims.auth_time - new Date().getTime() / 1000 >
+      new Date().getTime() / 1000 - decodedClaims.auth_time >
       VALID_AUTH_PERIOD
     ) {
       // A user that was not recently signed in is trying to set a session cookie.
