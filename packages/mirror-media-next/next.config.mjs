@@ -58,6 +58,11 @@ const nextConfig = {
         source: '/story/:slug*/index.html',
         destination: '/story/:slug*',
       },
+      {
+        source: '/__/auth/:path*',
+        destination:
+          'https://mirrormediaapptest.firebaseapp.com/__/auth/:path*',
+      },
     ]
   },
 
