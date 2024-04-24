@@ -36,7 +36,7 @@ import { generateUserBehaviorLogInfo } from '../../utils/log/user-behavior-log'
  *
  * @param {Object} props
  * @param {boolean} [props.isMemberArticle = false] Whether is a member-only article. Optional, value only existed when this components used at story-page.
- * @param {string} props.writers - used only in story page
+ * @param {string} [props.writers] - used only in story page
  */
 export default function UserBehaviorLogger({
   isMemberArticle = false,
