@@ -1,58 +1,43 @@
-import axios from 'axios'
+import errors from '@twreporter/errors'
 import NewebPay from '@mirrormedia/newebpay-node'
 import {
   NEWEBPAY_PAPERMAG_KEY,
   NEWEBPAY_PAPERMAG_IV,
-  ISRAFEL_ORIGIN,
   SITE_URL,
   ENV,
 } from '../../config/index.mjs'
-
-const apiUrl = `${ISRAFEL_ORIGIN}/api/graphql`
+import client from '../../apollo/apollo-client'
+import { fetchPaymentDataOfPapermag } from '../../apollo/membership/mutation/magazine-order'
 
 // TODO: Add JSDocs
-async function fireGqlRequest(query, variables, apiUrl) {
-  const { data: result } = await axios({
-    url: apiUrl,
-    method: 'post',
-    data: {
-      query,
+async function fireGqlRequest(mutation, variables) {
+  let result = {}
+  try {
+    result = await client.mutate({
+      mutation: mutation,
+      context: {
+        uri: '/member/graphql',
+        headers: {
+          'content-type': 'application/json',
+          'Cache-Control': 'no-cache',
+        },
+      },
       variables,
-    },
-    headers: {
-      'content-type': 'application/json',
-      'Cache-Control': 'no-cache',
-    },
-  })
-  if (result.errors) {
-    throw new Error(result.errors)
+    })
+    if (result.errors) {
+      throw new Error(result.errors)
+    }
+  } catch (e) {
+    throw new Error(e)
   }
+
   return result
 }
 
 async function getPaymentDataOfMagazineOrders(gateWayPayload) {
-  const fetchPaymentDataOfPapermag = `mutation fetchPaymentDataOfPapermag(
-    $data: createNewebpayTradeInfoForMagazineOrderInput!
-  ) {
-    createNewebpayTradeInfoForMagazineOrder(data: $data) {
-      MerchantID
-      RespondType
-      TimeStamp
-      Version
-      MerchantOrderNo
-      Amt
-      ItemDesc
-      LoginType
-      Email
-      TradeLimit
-      NotifyURL
-    }
-  }
-  `
-  const { data } = await fireGqlRequest(
+  const { data = {} } = await fireGqlRequest(
     fetchPaymentDataOfPapermag,
-    gateWayPayload,
-    apiUrl
+    gateWayPayload
   )
   data.createNewebpayTradeInfoForMagazineOrder.ReturnURL =
     ENV === 'local'
@@ -67,20 +52,9 @@ export default async function EncryptInfo(req, res) {
   try {
     const data = await getPaymentDataOfMagazineOrders(tradeInfo)
     const infoForNewebpay = data.createNewebpayTradeInfoForMagazineOrder
-
     const newebpay = new NewebPay(NEWEBPAY_PAPERMAG_KEY, NEWEBPAY_PAPERMAG_IV)
     const encryptPostData = await newebpay.getEncryptedFormPostData(
       infoForNewebpay
-    )
-
-    console.log(
-      JSON.stringify({
-        message: `papermag payload:`,
-        debugPayload: {
-          'req.body': req.body,
-        },
-        'logging.googleapis.com/trace': `projects/mirrormedia-1470651750304/traces/papermag`,
-      })
     )
 
     res.send({
@@ -88,7 +62,35 @@ export default async function EncryptInfo(req, res) {
       data: encryptPostData,
     })
   } catch (e) {
-    console.log(e)
+    const annotatingError = errors.helpers.wrap(
+      e.message,
+      'UnhandledError',
+      'Error occurs while submit papermag'
+    )
+    console.log(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(
+          annotatingError,
+          {
+            withStack: true,
+            withPayload: true,
+          },
+          0,
+          0
+        ),
+      })
+    )
+    // console.error(
+    //   JSON.stringify({
+    //     message: `papermag payload:`,
+    //     debugPayload: {
+    //       'req.body': req.body,
+    //       error: e.message, // Print the whole error object
+    //     },
+    //     'logging.googleapis.com/trace': `projects/mirrormedia-1470651750304/traces/papermag`,
+    //   })
+    // )
     res.status(500).send({
       status: 'error',
       message: e.message,

@@ -17,6 +17,7 @@ import { transformTimeDataIntoSlashFormat } from '../../index'
  * @property {string} userEmail - member email
  * @property {string} firebaseId - member firebase id
  * @property {boolean} isMemberArticle - whether is member article. It will only be `true` if it is on story page and is a member article.
+ * @property {string} writers - story writer
  */
 
 /**
@@ -33,6 +34,7 @@ const generateUserBehaviorLogInfo = (
     userEmail: '',
     firebaseId: '',
     isMemberArticle: false,
+    writers: '',
   }
 ) => {
   const pathname = window.location.pathname
@@ -42,6 +44,7 @@ const generateUserBehaviorLogInfo = (
     userEmail = '',
     firebaseId = '',
     isMemberArticle = false,
+    writers,
   } = payload
   const userAgent = window?.navigator?.userAgent
   const triggerEvent = {
@@ -68,6 +71,7 @@ const generateUserBehaviorLogInfo = (
 
   if (pathname.startsWith('/story/')) {
     pageInfo['story-slug'] = pathname.split('/story/')?.[1] ?? ''
+    pageInfo['story-author'] = writers
   }
   return { triggerEvent, clientInfo, pageInfo }
 }

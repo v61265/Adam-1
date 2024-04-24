@@ -44,65 +44,69 @@ export default function Login() {
   const { accessToken, isLogInProcessFinished, userEmail } = useMembership()
   const loginFormState = useAppSelector(loginState)
   const { redirect } = useRedirect()
-  const handleFederatedRedirectResult = async () => {
-    function getPrevAuthMethod(prevAuthMethod) {
-      switch (prevAuthMethod) {
-        case 'google.com':
-          return AuthMethod.Google
-        case 'facebook.com':
-          return AuthMethod.Facebook
-        case 'apple.com':
-          return AuthMethod.Apple
-        case 'password':
-          return AuthMethod.Email
-        default:
-          return prevAuthMethod
-      }
-    }
 
-    try {
-      const redirectResult = await getRedirectResult(auth)
-      if (redirectResult && redirectResult?.user) {
-        const firebaseAuthUser = redirectResult.user
-        const isNewUser = getAdditionalUserInfo(redirectResult).isNewUser
-        await loginPageOnAuthStateChangeAction(
-          firebaseAuthUser,
-          isNewUser,
-          accessToken
-        )
-        redirect()
-      }
-    } catch (e) {
-      if (
-        e instanceof FirebaseError &&
-        e.code === FirebaseAuthError.ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL
-      ) {
-        const email =
-          e?.customData?.email && typeof e?.customData?.email === 'string'
-            ? e?.customData?.email
-            : ''
-        const responseArray = await fetchSignInMethodsForEmail(auth, email)
-        const prevAuthMethod = getPrevAuthMethod(responseArray?.[0])
-
-        dispatch(loginActions.changePrevAuthMethod(prevAuthMethod))
-        dispatch(
-          loginActions.changeShouldShowHintOfExitenceOfDifferentAuthMethod(true)
-        )
-      } else {
-        errorHandler(e, { userEmail })
-        dispatch(loginActions.changeState(FormState.LoginFail))
-      }
-    } finally {
-      dispatch(loginActions.changeIsFederatedRedirectResultLoading(false))
-    }
-  }
   useEffect(() => {
     if (!isLogInProcessFinished) {
       return
     }
 
+    const handleFederatedRedirectResult = async () => {
+      function getPrevAuthMethod(prevAuthMethod) {
+        switch (prevAuthMethod) {
+          case 'google.com':
+            return AuthMethod.Google
+          case 'facebook.com':
+            return AuthMethod.Facebook
+          case 'apple.com':
+            return AuthMethod.Apple
+          case 'password':
+            return AuthMethod.Email
+          default:
+            return prevAuthMethod
+        }
+      }
+
+      try {
+        const redirectResult = await getRedirectResult(auth)
+        if (redirectResult && redirectResult?.user) {
+          const firebaseAuthUser = redirectResult.user
+          const isNewUser = getAdditionalUserInfo(redirectResult).isNewUser
+          await loginPageOnAuthStateChangeAction(
+            firebaseAuthUser,
+            isNewUser,
+            accessToken
+          )
+          redirect()
+        }
+      } catch (e) {
+        if (
+          e instanceof FirebaseError &&
+          e.code === FirebaseAuthError.ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL
+        ) {
+          const email =
+            e?.customData?.email && typeof e?.customData?.email === 'string'
+              ? e?.customData?.email
+              : ''
+          const responseArray = await fetchSignInMethodsForEmail(auth, email)
+          const prevAuthMethod = getPrevAuthMethod(responseArray?.[0])
+
+          dispatch(loginActions.changePrevAuthMethod(prevAuthMethod))
+          dispatch(
+            loginActions.changeShouldShowHintOfExitenceOfDifferentAuthMethod(
+              true
+            )
+          )
+        } else {
+          errorHandler(e, { userEmail })
+          dispatch(loginActions.changeState(FormState.LoginFail))
+        }
+      } finally {
+        dispatch(loginActions.changeIsFederatedRedirectResultLoading(false))
+      }
+    }
+
     handleFederatedRedirectResult()
-  }, [isLogInProcessFinished])
+  }, [isLogInProcessFinished, accessToken, redirect, dispatch, userEmail])
 
   const getBodyByState = () => {
     switch (loginFormState) {
@@ -145,7 +149,8 @@ export const getServerSideProps = redirectToDestinationWhileAuthed()(
       ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
     }
 
-    // cast any to prevent lint error
-    return { props: /** @type {any} */ ({}) }
+    return {
+      props: {},
+    }
   }
 )

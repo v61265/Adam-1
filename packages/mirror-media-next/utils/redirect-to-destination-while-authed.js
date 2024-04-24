@@ -4,24 +4,67 @@ import { URLSearchParams } from 'node:url'
 
 /**
  * @typedef {import('querystring').ParsedUrlQuery} ParsedUrlQuery
+ * @typedef {import('next').Redirect} Redirect
  * @typedef {import('next').PreviewData} PreviewData
  */
 
 /**
- * @typedef {Record<string, any>} Dictionary
+ * @template [T=any]
+ * @typedef {Record<string, T>} Dictionary
+ */
+
+/**
+ * @template P
+ * @typedef {P} GetSSRProps
+ */
+
+/**
+ * @template P
+ * @typedef {{ redirect: Redirect } | { notFound: true } | { props: GetSSRProps<P> }} GetSSRResult
+ */
+
+/**
+ * @template {ParsedUrlQuery} [Q=ParsedUrlQuery]
+ * @template {PreviewData} [D=PreviewData]
+ * @typedef {import('next').GetServerSidePropsContext<Q, D>} SSRPropsContext
+ */
+
+/**
+ * @template P
+ * @template {ParsedUrlQuery} Q
+ * @template {PreviewData} D
+ * @callback SSRPropsGetter
+ * @param {SSRPropsContext<Q, D>} context
+ * @returns {Promise<GetSSRResult<P>>}
+ */
+
+/**
+ * @callback RedirectToDestinationWhileAuthed
+ * @returns {
+    <P extends Dictionary=Dictionary,
+     Q extends ParsedUrlQuery=ParsedUrlQuery,
+     D extends PreviewData=PreviewData>
+    (propGetter?: SSRPropsGetter<P, Q, D>)
+     => import('next').GetServerSideProps<P, Q, D>
+   }
  */
 
 /**
  * should be used on SSR page which redirects user to `destination` route if authed
  *
- * @template {Dictionary} P
- * @template {ParsedUrlQuery} Q
- * @template {PreviewData} D
- * @type {() => (propGetter?: import('next').GetServerSideProps<P, Q, D>) => import('next').GetServerSideProps<P, Q, D>}
- *
+ * @type {RedirectToDestinationWhileAuthed}
  */
 const redirectToDestinationWhileAuthed =
-  () => (getServerSidePropsFunc) => async (ctx) => {
+  () =>
+  /**
+   * @template {Dictionary} P
+   * @template {ParsedUrlQuery} Q
+   * @template {PreviewData} D
+   */
+  (
+    /** @type {import('next').GetServerSideProps<P, Q, D>} */ getServerSidePropsFunc
+  ) =>
+  async (/** @type {SSRPropsContext<Q, D>} */ ctx) => {
     const { req, query } = ctx
     const sessionCookie = req.cookies[SESSION_COOKIE_NAME] ?? ''
 
@@ -68,7 +111,7 @@ const redirectToDestinationWhileAuthed =
         )
       }
 
-      let props = /** @type {P | Promise<P>} */ ({}) // type cast in JSDoc, ref: https://stackoverflow.com/a/75459130
+      let props = /** @type {P | Promise<P>} */ ({})
       if (getServerSidePropsFunc) {
         const composedProps = await getServerSidePropsFunc(ctx)
 

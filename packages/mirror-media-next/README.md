@@ -57,7 +57,7 @@ Ref: [ECMAScript Modules | Node.js](https://nodejs.org/docs/latest-v13.x/api/esm
 ```
 /** @type {const} */ ([something]) 
 ```
-ref: https://stackoverflow.com/a/64687300
+ref: https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#casts
 
 
 ## Environment Variables (環境變數)
