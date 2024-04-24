@@ -87,7 +87,7 @@ export default function MainFormRegistration() {
       ) {
         setIsDuplicateEmailMember(true)
       } else {
-        errorHandler(e)
+        errorHandler(e, { userEmail: email })
         dispatch(loginActions.changeState(FormState.RegisterFail))
       }
     } finally {

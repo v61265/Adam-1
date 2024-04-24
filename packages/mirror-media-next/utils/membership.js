@@ -11,6 +11,8 @@ import { createMember } from '../apollo/membership/mutation/member'
 import axios from 'axios'
 import { API_TIMEOUT, WEEKLY_API_SERVER_ORIGIN } from '../config/index.mjs'
 import { FormState } from '../slice/login-slice'
+import { generateErrorReportInfo } from './log/error-log'
+import { sendErrorLog } from './log/send-log'
 
 /**
  * there are 3 error situation:
@@ -22,19 +24,27 @@ import { FormState } from '../slice/login-slice'
  * in situation3:
  * do nothing with the firebase auth object
  * @param {Error | import('firebase/app').FirebaseError} error
+ * @param {Parameters<generateErrorReportInfo>[1]} [payload]
  */
-const errorHandler = async (error) => {
+const errorHandler = async (error, payload) => {
+  const currentUser = auth.currentUser
   if (
     error?.message === "GraphQL error: Can't find data in Israfel" ||
     error?.message === "this member's email has been used in Israfel"
   ) {
-    const currentUser = auth.currentUser
-    currentUser.delete()
+    currentUser?.delete()
   }
-  console.error(error)
-  //TODO: send log
+
+  const errorLog = generateErrorReportInfo(
+    error,
+    payload ?? {
+      userEmail: currentUser.email,
+      firebaseId: currentUser.uid,
+    }
+  )
+  sendErrorLog(errorLog)
+
   await signOut(auth)
-  //TODO: firebase logout
 }
 
 /**

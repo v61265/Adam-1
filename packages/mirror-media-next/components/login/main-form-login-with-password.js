@@ -87,7 +87,9 @@ export default function MainFormLoginWithPassword() {
       ) {
         setPasswordInputState(InputState.Invalid)
       } else {
-        errorHandler(e)
+        errorHandler(e, {
+          userEmail: email,
+        })
         dispatch(loginActions.changeState(FormState.LoginFail))
       }
     } finally {

@@ -25,7 +25,6 @@ let WEEKLY_API_SERVER_YOUTUBE_ENDPOINT = ''
 let STATIC_FILE_DOMAIN = ''
 let ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
 let ACCESS_PAPERMAG_FEATURE_TOGGLE = 'off'
-let GCP_LOGGING_FEATURE_TOGGLE = 'off'
 let DRAFT_RENDERER_FEATURE_TOGGLE = 'off'
 let LOGIN_PAGE_FEATURE_TOGGLE = 'off'
 let TEST_GPT_AD_FEATURE_TOGGLE = 'off'
@@ -57,6 +56,7 @@ let FIREBASE_CONFIG = {}
 let FIREBASE_AUTH_DOMAIN
 
 let GCP_STACKDRIVER_LOG_NAME = ''
+let GCP_STACKDRIVER_ERROR_LOG_NAME = ''
 
 let IS_PRIZE_RIZED
 
@@ -85,7 +85,6 @@ switch (ENV) {
     NEWEBPAY_PAPERMAG_API_URL = 'https://core.newebpay.com/MPG/mpg_gateway'
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
     ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
-    GCP_LOGGING_FEATURE_TOGGLE = 'on'
     DRAFT_RENDERER_FEATURE_TOGGLE = 'on'
     LOGIN_PAGE_FEATURE_TOGGLE = 'off'
     TEST_GPT_AD_FEATURE_TOGGLE = 'off'
@@ -108,6 +107,7 @@ switch (ENV) {
     FIREBASE_AUTH_DOMAIN = 'mirror-weekly.firebaseapp.com'
 
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior'
+    GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log'
     IS_PRIZE_RIZED = true
 
     break
@@ -140,7 +140,6 @@ switch (ENV) {
 
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'off'
     ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
-    GCP_LOGGING_FEATURE_TOGGLE = 'on'
     DRAFT_RENDERER_FEATURE_TOGGLE = 'on'
     LOGIN_PAGE_FEATURE_TOGGLE = 'off'
     TEST_GPT_AD_FEATURE_TOGGLE = 'off'
@@ -162,6 +161,7 @@ switch (ENV) {
     FIREBASE_AUTH_DOMAIN = 'mirrormedia-staging.firebaseapp.com'
 
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_staging'
+    GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_staging'
     IS_PRIZE_RIZED = true
     break
 
@@ -196,7 +196,6 @@ switch (ENV) {
 
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'on'
     ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
-    GCP_LOGGING_FEATURE_TOGGLE = 'on'
     DRAFT_RENDERER_FEATURE_TOGGLE = 'on'
     LOGIN_PAGE_FEATURE_TOGGLE = 'on'
     TEST_GPT_AD_FEATURE_TOGGLE = 'on'
@@ -215,6 +214,7 @@ switch (ENV) {
     FIREBASE_AUTH_DOMAIN = 'mirrormediaapptest.firebaseapp.com'
 
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_dev'
+    GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_dev'
     IS_PRIZE_RIZED = true
     break
 
@@ -232,7 +232,6 @@ switch (ENV) {
     NEWEBPAY_PAPERMAG_API_URL = 'https://ccore.newebpay.com/MPG/mpg_gateway'
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'on'
     ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
-    GCP_LOGGING_FEATURE_TOGGLE = 'on'
     DRAFT_RENDERER_FEATURE_TOGGLE = 'on'
     LOGIN_PAGE_FEATURE_TOGGLE = 'on'
     TEST_GPT_AD_FEATURE_TOGGLE = 'on'
@@ -265,6 +264,7 @@ switch (ENV) {
     }
     FIREBASE_AUTH_DOMAIN = 'mirrormediaapptest.firebaseapp.com'
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_local'
+    GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_local'
     IS_PRIZE_RIZED = true
 }
 
@@ -281,9 +281,9 @@ export {
   FIREBASE_CONFIG,
   FIREBASE_AUTH_DOMAIN,
   GA_MEASUREMENT_ID,
-  GCP_LOGGING_FEATURE_TOGGLE,
   GCP_PROJECT_ID,
   GCP_STACKDRIVER_LOG_NAME,
+  GCP_STACKDRIVER_ERROR_LOG_NAME,
   GPT_MODE,
   GTM_ID,
   IS_PREVIEW_MODE,

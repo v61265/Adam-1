@@ -41,7 +41,7 @@ const Container = styled.div`
 
 export default function Login() {
   const dispatch = useAppDispatch()
-  const { accessToken, isLogInProcessFinished } = useMembership()
+  const { accessToken, isLogInProcessFinished, userEmail } = useMembership()
   const loginFormState = useAppSelector(loginState)
   const { redirect } = useRedirect()
 
@@ -97,7 +97,7 @@ export default function Login() {
             )
           )
         } else {
-          errorHandler(e)
+          errorHandler(e, { userEmail })
           dispatch(loginActions.changeState(FormState.LoginFail))
         }
       } finally {
@@ -106,7 +106,7 @@ export default function Login() {
     }
 
     handleFederatedRedirectResult()
-  }, [isLogInProcessFinished, accessToken, redirect, dispatch])
+  }, [isLogInProcessFinished, accessToken, redirect, dispatch, userEmail])
 
   const getBodyByState = () => {
     switch (loginFormState) {
