@@ -371,6 +371,18 @@ const getLoginHref = (router) => {
   }
 }
 
+const isServer = () => {
+  return typeof window === 'undefined' ? true : false
+}
+
+/**
+ * @param {string} functionName
+ * @returns
+ */
+const getClientSideOnlyError = (functionName) => {
+  return new Error(`Method ${functionName} is client-side only`)
+}
+
 export {
   transformTimeDataIntoDotFormat,
   transformTimeDataIntoSlashFormat,
@@ -389,4 +401,6 @@ export {
   isValidPassword,
   transformTimeData,
   getLoginHref,
+  isServer,
+  getClientSideOnlyError,
 }

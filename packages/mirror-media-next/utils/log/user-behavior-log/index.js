@@ -5,7 +5,11 @@ import {
   getWindowSizeInfo,
   getFormattedPageType,
 } from '../shared'
-import { transformTimeDataIntoSlashFormat } from '../../index'
+import {
+  getClientSideOnlyError,
+  isServer,
+  transformTimeDataIntoSlashFormat,
+} from '../../index'
 
 /**
  * @typedef {'pageview' | 'exit' | 'scroll-to-80%' | 'click'} EventType
@@ -26,6 +30,7 @@ import { transformTimeDataIntoSlashFormat } from '../../index'
  * this function should be ONLY executed at client-side.
  * @param {EventType} eventType
  * @param {Payload} payload
+ * @throws {Error}
  */
 const generateUserBehaviorLogInfo = (
   eventType,
@@ -37,6 +42,8 @@ const generateUserBehaviorLogInfo = (
     writers: '',
   }
 ) => {
+  if (isServer()) throw getClientSideOnlyError('generateUserBehaviorLogInfo')
+
   const pathname = window.location.pathname
 
   const {
@@ -46,7 +53,7 @@ const generateUserBehaviorLogInfo = (
     isMemberArticle = false,
     writers,
   } = payload
-  const userAgent = window?.navigator?.userAgent
+  const userAgent = window.navigator.userAgent
   const triggerEvent = {
     'event-type': eventType,
     datetime: transformTimeDataIntoSlashFormat(new Date().toISOString(), true),

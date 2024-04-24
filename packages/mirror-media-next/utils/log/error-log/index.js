@@ -5,7 +5,11 @@ import {
   getWindowSizeInfo,
   getFormattedPageType,
 } from '../shared'
-import { transformTimeDataIntoSlashFormat } from '../../index'
+import {
+  getClientSideOnlyError,
+  isServer,
+  transformTimeDataIntoSlashFormat,
+} from '../../index'
 
 /**
  *
@@ -24,6 +28,7 @@ import { transformTimeDataIntoSlashFormat } from '../../index'
  * this function should be ONLY executed at client-side.
  * @param {Error} error
  * @param {Payload} payload
+ * @throws {Error}
  */
 const generateErrorReportInfo = (
   error,
@@ -34,6 +39,8 @@ const generateErrorReportInfo = (
     isMemberArticle: false,
   }
 ) => {
+  if (isServer()) throw getClientSideOnlyError('generateErrorReportInfo')
+
   const pathname = window.location.pathname
   const {
     memberType = 'not-member',
@@ -41,7 +48,7 @@ const generateErrorReportInfo = (
     firebaseId = '',
     isMemberArticle = false,
   } = payload
-  const userAgent = window?.navigator?.userAgent
+  const userAgent = window.navigator.userAgent
   const errorLog = {
     error,
     datetime: transformTimeDataIntoSlashFormat(new Date().toISOString(), true),
