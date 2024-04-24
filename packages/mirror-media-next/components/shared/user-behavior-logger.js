@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import debounce from 'debounce'
-import { sendLog } from '../../utils/log/send-log'
+import { sendUserBehaviorLog } from '../../utils/log/send-log'
 import { useMembership } from '../../context/membership'
 
 import { generateUserBehaviorLogInfo } from '../../utils/log/user-behavior-log'
@@ -72,7 +72,7 @@ export default function UserBehaviorLogger({
       'pageview',
       userBehaviorLogInfoPayload
     )
-    sendLog(info)
+    sendUserBehaviorLog(info)
   }, [isLogInProcessFinished, userBehaviorLogInfoPayload])
 
   //exit event
@@ -90,13 +90,13 @@ export default function UserBehaviorLogger({
         return
       }
       hasBeforeUnloadEventTriggered = true
-      sendLog(info)
+      sendUserBehaviorLog(info)
     }
     const beforeHistoryChangeEvent = () => {
       if (ignore || hasBeforeUnloadEventTriggered) {
         return
       }
-      sendLog(info)
+      sendUserBehaviorLog(info)
     }
     window.addEventListener('beforeunload', beforeUnloadEvent)
     router.events.on('beforeHistoryChange', beforeHistoryChangeEvent)
@@ -130,7 +130,7 @@ export default function UserBehaviorLogger({
           'scroll-to-80%',
           userBehaviorLogInfoPayload
         )
-        sendLog(info)
+        sendUserBehaviorLog(info)
       }
     }
     window.addEventListener('scroll', debounce(scrollToBottomEvent, 500))
@@ -154,7 +154,7 @@ export default function UserBehaviorLogger({
         'click',
         userBehaviorLogInfoPayload
       )
-      sendLog(info)
+      sendUserBehaviorLog(info)
     }
     window.addEventListener('click', clickEvent)
     return () => {

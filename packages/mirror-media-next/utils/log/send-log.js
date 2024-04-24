@@ -7,4 +7,6 @@ const sendLog = (log, target = '/api/tracking') => {
 
 const sendErrorLog = (log) => sendLog(log, '/api/error-report')
 
-export { sendLog, sendErrorLog }
+const sendUserBehaviorLog = (log) => sendLog(log, '/api/tracking')
+
+export { sendLog, sendErrorLog, sendUserBehaviorLog }
