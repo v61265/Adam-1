@@ -113,7 +113,7 @@ switch (ENV) {
     break
 
   case 'staging':
-    SITE_URL = 'staging-next.mirrormedia.mg'
+    SITE_URL = 'staging.mirrormedia.mg'
     API_TIMEOUT = 1500
     API_TIMEOUT_GRAPHQL = 4000
 
@@ -153,7 +153,7 @@ switch (ENV) {
 
     FIREBASE_CONFIG = {
       apiKey: 'AIzaSyD-cFjoIjlEn7-dZtl3zw7OYCRPerl5URs',
-      authDomain: 'www-staging.mirrormedia.mg',
+      authDomain: 'staging.mirrormedia.mg',
       projectId: 'mirrormedia-staging',
       storageBucket: 'mirrormedia-staging.appspot.com',
       messagingSenderId: '388524095772',
@@ -166,7 +166,7 @@ switch (ENV) {
     break
 
   case 'dev':
-    SITE_URL = 'dev-next.mirrormedia.mg'
+    SITE_URL = 'dev.mirrormedia.mg'
     API_TIMEOUT = 5000
     API_TIMEOUT_GRAPHQL = 5000
 
