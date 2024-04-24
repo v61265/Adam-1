@@ -1,4 +1,5 @@
 const GCP_PROJECT_ID = 'mirrormedia-1470651750304'
+const SESSION_COOKIE_NAME = 'member-session-cookie'
 
 // The following variables are from environment variables
 
@@ -46,7 +47,14 @@ let URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION = ''
 let GPT_MODE = ''
 // It is safe to expose the configuration of Firebase.
 // See: https://firebase.google.com/docs/projects/api-keys
+/** @type {import("firebase/app").FirebaseOptions} */
 let FIREBASE_CONFIG = {}
+/**
+ * domain for handling SSO
+ *
+ * @type {string}
+ */
+let FIREBASE_AUTH_DOMAIN
 
 let GCP_STACKDRIVER_LOG_NAME = ''
 
@@ -87,6 +95,7 @@ switch (ENV) {
     SEARCH_URL = 'https://search.mirrormedia.mg'
 
     GPT_MODE = 'prod'
+
     FIREBASE_CONFIG = {
       apiKey: 'AIzaSyBZVaJXDbtc6O6Iy36OeYDG8Cd9pB2vq54',
       authDomain: 'www.mirrormedia.mg',
@@ -96,13 +105,15 @@ switch (ENV) {
       appId: '1:814835936704:web:ce5288f6d1c0f71828ec25',
       measurementId: 'G-2FDRC4S37L',
     }
+    FIREBASE_AUTH_DOMAIN = 'mirror-weekly.firebaseapp.com'
+
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior'
     IS_PRIZE_RIZED = true
 
     break
 
   case 'staging':
-    SITE_URL = 'staging-next.mirrormedia.mg'
+    SITE_URL = 'staging.mirrormedia.mg'
     API_TIMEOUT = 1500
     API_TIMEOUT_GRAPHQL = 4000
 
@@ -139,20 +150,23 @@ switch (ENV) {
     SEARCH_URL = 'https://search-staging.mirrormedia.mg'
 
     GPT_MODE = 'prod'
+
     FIREBASE_CONFIG = {
       apiKey: 'AIzaSyD-cFjoIjlEn7-dZtl3zw7OYCRPerl5URs',
-      authDomain: 'www-staging.mirrormedia.mg',
+      authDomain: 'staging.mirrormedia.mg',
       projectId: 'mirrormedia-staging',
       storageBucket: 'mirrormedia-staging.appspot.com',
       messagingSenderId: '388524095772',
       appId: '1:388524095772:web:e3739160c042909827a2d9',
     }
+    FIREBASE_AUTH_DOMAIN = 'mirrormedia-staging.firebaseapp.com'
+
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_staging'
     IS_PRIZE_RIZED = true
     break
 
   case 'dev':
-    SITE_URL = 'dev-next.mirrormedia.mg'
+    SITE_URL = 'dev.mirrormedia.mg'
     API_TIMEOUT = 5000
     API_TIMEOUT_GRAPHQL = 5000
 
@@ -187,9 +201,10 @@ switch (ENV) {
     LOGIN_PAGE_FEATURE_TOGGLE = 'on'
     TEST_GPT_AD_FEATURE_TOGGLE = 'on'
     GPT_MODE = 'dev'
+
     FIREBASE_CONFIG = {
       apiKey: 'AIzaSyAavk46-8OQ4B2cv0TOqxOMjd5Fe4tIauc',
-      authDomain: 'mirrormediaapptest.firebaseapp.com',
+      authDomain: 'dev.mirrormedia.mg',
       databaseURL: 'https://mirrormediaapptest.firebaseio.com',
       projectId: 'mirrormediaapptest',
       storageBucket: 'mirrormediaapptest.appspot.com',
@@ -197,6 +212,8 @@ switch (ENV) {
       appId: '1:305253456270:web:21f9851dd09f60ebfbacdf',
       measurementId: 'G-EY5CYC602Z',
     }
+    FIREBASE_AUTH_DOMAIN = 'mirrormediaapptest.firebaseapp.com'
+
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_dev'
     IS_PRIZE_RIZED = true
     break
@@ -246,6 +263,7 @@ switch (ENV) {
       appId: '1:305253456270:web:21f9851dd09f60ebfbacdf',
       measurementId: 'G-EY5CYC602Z',
     }
+    FIREBASE_AUTH_DOMAIN = 'mirrormediaapptest.firebaseapp.com'
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_local'
     IS_PRIZE_RIZED = true
 }
@@ -261,6 +279,7 @@ export {
   DONATION_PAGE_URL,
   ENV,
   FIREBASE_CONFIG,
+  FIREBASE_AUTH_DOMAIN,
   GA_MEASUREMENT_ID,
   GCP_LOGGING_FEATURE_TOGGLE,
   GCP_PROJECT_ID,
@@ -289,4 +308,5 @@ export {
   WEEKLY_API_SERVER_ORIGIN,
   WEEKLY_API_SERVER_YOUTUBE_ENDPOINT,
   IS_PRIZE_RIZED,
+  SESSION_COOKIE_NAME,
 }

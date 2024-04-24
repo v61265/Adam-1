@@ -8,6 +8,7 @@ import {
   loginPrevAuthMethod,
   loginShouldShowHintOfExitenceOfDifferentAuthMethod,
   loginActions,
+  loginIsFederatedRedirectResultLoading,
   AuthMethod,
 } from '../../slice/login-slice'
 import { isValidEmail } from '../../utils'
@@ -73,14 +74,18 @@ export default function MainFormStart() {
   const dispatch = useAppDispatch()
   const email = useAppSelector(loginEmail)
   const prevAuthMethod = useAppSelector(loginPrevAuthMethod)
+  const isFederatedRedirectResultLoading = useAppSelector(
+    loginIsFederatedRedirectResultLoading
+  )
   const shouldShowHintOfExitenceOfDifferentAuthMethod = useAppSelector(
     loginShouldShowHintOfExitenceOfDifferentAuthMethod
   )
   const hint = `由於您曾以 ${prevAuthMethod} 帳號登入，請點擊上方「使用 ${prevAuthMethod} 帳號繼續」重試。`
-  const allowToContinue = isValidEmail(email)
+  const allowToContinue =
+    isValidEmail(email) && isFederatedRedirectResultLoading === false
 
   const handleOnClick = async () => {
-    if (!allowToContinue) return
+    if (!allowToContinue || isLoading) return
     setIsLoading(true)
 
     try {

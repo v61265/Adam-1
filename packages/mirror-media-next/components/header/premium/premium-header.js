@@ -133,7 +133,7 @@ const DesktopPremiumMemberLoginButton = styled(PremiumMemberLoginButton)`
     flex-shrink: 0;
     align-items: center;
     text-decoration: none;
-    > span {
+    > a {
       display: inline-flex;
       padding: 5px 8px;
       background-color: #054f77;
