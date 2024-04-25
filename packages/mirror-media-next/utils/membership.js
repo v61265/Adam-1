@@ -13,6 +13,7 @@ import { API_TIMEOUT, WEEKLY_API_SERVER_ORIGIN } from '../config/index.mjs'
 import { FormState } from '../slice/login-slice'
 import { generateErrorReportInfo } from './log/error-log'
 import { sendErrorLog } from './log/send-log'
+import { SECOND } from '../constants/time-unit'
 
 /**
  * there are 3 error situation:
@@ -122,7 +123,7 @@ const getAccessTokenFromStorage = () => {
     const accessTokenData = JSON.parse(
       localStorage.getItem(ACCESS_TOKEN_STORE_KEY)
     )
-    const now = new Date().valueOf() / 1000
+    const now = new Date().valueOf() / SECOND
     if (accessTokenData.expires_in > now) {
       return accessTokenData.access_token
     }

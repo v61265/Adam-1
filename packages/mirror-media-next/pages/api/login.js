@@ -3,9 +3,10 @@ import { SESSION_COOKIE_NAME } from '../../config/index.mjs'
 import { runMiddleware } from '../../utils/api-route'
 import { getAdminAuth } from '../../firebase/admin'
 import cookie from 'cookie'
+import { DAY, MINUTE, SECOND } from '../../constants/time-unit'
 
-const VALID_AUTH_PERIOD = 60 * 5 // in second
-const SESSION_LIFETIME = 1000 * 60 * 60 * 24 * 1 // in millisecond
+const VALID_AUTH_PERIOD = MINUTE * 5
+const SESSION_LIFETIME = DAY * 1
 
 const cors = Cors({
   methods: ['POST'],
@@ -35,7 +36,7 @@ export default async function handler(req, res) {
     const decodedClaims = await auth.verifyIdToken(idToken, true)
 
     if (
-      new Date().getTime() / 1000 - decodedClaims.auth_time >
+      new Date().getTime() - decodedClaims.auth_time * SECOND >
       VALID_AUTH_PERIOD
     ) {
       // A user that was not recently signed in is trying to set a session cookie.
