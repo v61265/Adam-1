@@ -42,16 +42,14 @@ export default function RegistrationSuccess() {
   return (
     <Main>
       <FormWrapper>
-        <>
-          <PrimayText>
-            註冊成功！
-            <br />
-            歡迎加入鏡週刊
-          </PrimayText>
-          <SecondaryText>
-            將於 {REDIRECTION_DELAY} 秒後自動跳轉至首頁...
-          </SecondaryText>
-        </>
+        <PrimayText>
+          註冊成功！
+          <br />
+          歡迎加入鏡週刊
+        </PrimayText>
+        <SecondaryText>
+          將於 {REDIRECTION_DELAY} 秒後自動跳轉至首頁...
+        </SecondaryText>
       </FormWrapper>
     </Main>
   )
