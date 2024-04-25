@@ -117,14 +117,7 @@ export default function MainFormLoginWithPassword() {
         </PrimaryButton>
         <DefaultButton onClick={handleBack}>回上一步</DefaultButton>
       </ControlGroup>
-      <TextButton
-        href={{
-          pathname: 'recoverPassword',
-          query: {
-            email,
-          },
-        }}
-      >
+      <TextButton href={{ pathname: '/recover-password', query: { email } }}>
         忘記密碼？
       </TextButton>
     </>
