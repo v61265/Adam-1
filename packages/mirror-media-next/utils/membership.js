@@ -105,6 +105,33 @@ const fetchBasicMemberInfoInIsrafel = async (firebaseUid) => {
   }
 }
 
+const ACCESS_TOKEN_STORE_KEY = 'access-token'
+
+/**
+ * @typedef {import('../type/raw-data.typedef').AccessTokenData} AccessTokenData
+ */
+
+/**
+ * get access token data from localStorage
+ *
+ * @returns {string | undefined}
+ */
+const getAccessTokenFromStorage = () => {
+  try {
+    /** @type {AccessTokenData} */
+    const accessTokenData = JSON.parse(
+      localStorage.getItem(ACCESS_TOKEN_STORE_KEY)
+    )
+    const now = new Date().valueOf() / 1000
+    if (accessTokenData.expires_in > now) {
+      return accessTokenData.access_token
+    }
+  } catch (e) {
+    // ignore error
+  }
+  return undefined
+}
+
 /**
  * @param {string} idToken
  * @throws {Error}
@@ -112,6 +139,10 @@ const fetchBasicMemberInfoInIsrafel = async (firebaseUid) => {
  */
 const getAccessToken = async (idToken) => {
   try {
+    const accessToken = getAccessTokenFromStorage()
+
+    if (accessToken) return accessToken
+
     const res = await axios({
       method: 'post',
       url: `https://${WEEKLY_API_SERVER_ORIGIN}/access-token`,
@@ -120,8 +151,19 @@ const getAccessToken = async (idToken) => {
       },
       timeout: API_TIMEOUT,
     })
-    const accessToken = res?.data?.data['access_token'] //
-    return accessToken
+
+    /** @type {AccessTokenData | undefined} */
+    const accessTokenData = res.data.data
+
+    if (accessTokenData) {
+      localStorage.setItem(
+        ACCESS_TOKEN_STORE_KEY,
+        JSON.stringify(accessTokenData)
+      )
+      return accessTokenData.access_token
+    }
+
+    throw Error()
   } catch (error) {
     const statusCode = error?.response?.status
     let errorMessage = ''
