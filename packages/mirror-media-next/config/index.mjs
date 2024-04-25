@@ -48,6 +48,10 @@ let GPT_MODE = ''
 // See: https://firebase.google.com/docs/projects/api-keys
 /** @type {import("firebase/app").FirebaseOptions} */
 let FIREBASE_CONFIG = {}
+
+/** @type {import("firebase/auth").ActionCodeSettings} */
+let ACTION_CODE_SETTING
+
 /**
  * domain for handling SSO
  *
@@ -105,6 +109,17 @@ switch (ENV) {
       measurementId: 'G-2FDRC4S37L',
     }
     FIREBASE_AUTH_DOMAIN = 'mirror-weekly.firebaseapp.com'
+    ACTION_CODE_SETTING = {
+      url: '',
+      handleCodeInApp: true,
+      iOS: {
+        bundleId: 'com.mirrormedia.news',
+      },
+      android: {
+        packageName: 'com.mirrormedia.news',
+        installApp: false,
+      },
+    }
 
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior'
     GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log'
@@ -159,6 +174,17 @@ switch (ENV) {
       appId: '1:388524095772:web:e3739160c042909827a2d9',
     }
     FIREBASE_AUTH_DOMAIN = 'mirrormedia-staging.firebaseapp.com'
+    ACTION_CODE_SETTING = {
+      url: '',
+      handleCodeInApp: true,
+      iOS: {
+        bundleId: 'com.mirrormedia.news.dev',
+      },
+      android: {
+        packageName: 'com.mirrormedia.news.dev',
+        installApp: false,
+      },
+    }
 
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_staging'
     GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_staging'
@@ -212,6 +238,17 @@ switch (ENV) {
       measurementId: 'G-EY5CYC602Z',
     }
     FIREBASE_AUTH_DOMAIN = 'mirrormediaapptest.firebaseapp.com'
+    ACTION_CODE_SETTING = {
+      url: '',
+      handleCodeInApp: true,
+      iOS: {
+        bundleId: 'com.mirrormedia.news.dev',
+      },
+      android: {
+        packageName: 'com.mirrormedia.news.dev',
+        installApp: false,
+      },
+    }
 
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_dev'
     GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_dev'
@@ -252,6 +289,7 @@ switch (ENV) {
     GTM_ID = 'GTM-PBNLSMX'
     SEARCH_URL = 'https://search-dev.mirrormedia.mg'
     GPT_MODE = 'dev'
+
     FIREBASE_CONFIG = {
       apiKey: 'AIzaSyAavk46-8OQ4B2cv0TOqxOMjd5Fe4tIauc',
       authDomain: 'mirrormediaapptest.firebaseapp.com',
@@ -263,6 +301,18 @@ switch (ENV) {
       measurementId: 'G-EY5CYC602Z',
     }
     FIREBASE_AUTH_DOMAIN = 'mirrormediaapptest.firebaseapp.com'
+    ACTION_CODE_SETTING = {
+      url: '',
+      handleCodeInApp: true,
+      iOS: {
+        bundleId: 'com.mirrormedia.news.dev',
+      },
+      android: {
+        packageName: 'com.mirrormedia.news.dev',
+        installApp: false,
+      },
+    }
+
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_local'
     GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_local'
     IS_PRIZE_RIZED = true
@@ -280,6 +330,7 @@ export {
   ENV,
   FIREBASE_CONFIG,
   FIREBASE_AUTH_DOMAIN,
+  ACTION_CODE_SETTING,
   GA_MEASUREMENT_ID,
   GCP_PROJECT_ID,
   GCP_STACKDRIVER_LOG_NAME,
