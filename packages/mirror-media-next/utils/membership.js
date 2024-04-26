@@ -135,14 +135,17 @@ const getAccessTokenFromStorage = () => {
 
 /**
  * @param {string} idToken
+ * @param {boolean} [forceUpdate] - fetch from WAS instead of storage
  * @throws {Error}
  * @returns {Promise<string | undefined>}
  */
-const getAccessToken = async (idToken) => {
+const getAccessToken = async (idToken, forceUpdate = false) => {
   try {
-    const accessToken = getAccessTokenFromStorage()
+    if (!forceUpdate) {
+      const accessToken = getAccessTokenFromStorage()
 
-    if (accessToken) return accessToken
+      if (accessToken) return accessToken
+    }
 
     const res = await axios({
       method: 'post',
