@@ -134,6 +134,13 @@ const getAccessTokenFromStorage = () => {
 }
 
 /**
+ * remove access token data from localStorage
+ */
+const removeAccessTokenFromStorage = () => {
+  localStorage.removeItem(ACCESS_TOKEN_STORE_KEY)
+}
+
+/**
  * @param {string} idToken
  * @param {boolean} [forceUpdate] - fetch from WAS instead of storage
  * @throws {Error}
@@ -220,4 +227,9 @@ const loginPageOnAuthStateChangeAction = async (
   }
 }
 
-export { errorHandler, loginPageOnAuthStateChangeAction, getAccessToken }
+export {
+  errorHandler,
+  loginPageOnAuthStateChangeAction,
+  getAccessToken,
+  removeAccessTokenFromStorage,
+}

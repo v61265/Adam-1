@@ -5,7 +5,10 @@ import axios from 'axios'
 import { API_TIMEOUT } from '../config/index.mjs'
 import { generateErrorReportInfo } from '../utils/log/error-log'
 import { sendErrorLog } from '../utils/log/send-log'
-import { getAccessToken } from '../utils/membership'
+import {
+  getAccessToken,
+  removeAccessTokenFromStorage,
+} from '../utils/membership'
 
 /**
  * @typedef {Object} MemberInfo
@@ -277,6 +280,7 @@ const MembershipProvider = ({ children }) => {
          * If user is not log in firebase, we should dispatch a "LOGOUT" action to clear access token.
          */
         dispatch({ type: 'LOGOUT' })
+        removeAccessTokenFromStorage()
       }
     }
 
