@@ -85,7 +85,7 @@ const PrimaryButtonAndHint = styled.div`
  */
 export default function Login({ emailData }) {
   const COOLDOWN_STORAGE_KEY = 'recover-password-cooldown'
-  const AVOID_SPAM_COOLDOWN = SECOND * 300
+  const AVOID_SPAM_COOLDOWN = SECOND * 30
 
   const getValidality = (/** @type {string} */ email) => {
     if (email === '') {
@@ -117,8 +117,7 @@ export default function Login({ emailData }) {
   const handleSubmit = async () => {
     if (
       hintState === HINT_STATE.IN_PROGRESS ||
-      inputState !== InputState.Valid ||
-      avoidSpamCooldown > 0
+      inputState !== InputState.Valid
     ) {
       return
     }
@@ -159,13 +158,14 @@ export default function Login({ emailData }) {
     )
     const now = Date.now()
 
-    console.log(coolDownExpiredTime, now)
-
     if (Number.isNaN(coolDownExpiredTime)) return
 
     if (coolDownExpiredTime > now) {
       const cooldown = coolDownExpiredTime - now
       setAvoidSpanCooldown(cooldown)
+      setHintState(HINT_STATE.SUCCESS)
+    } else {
+      localStorage.removeItem(COOLDOWN_STORAGE_KEY)
     }
   }, [])
 
@@ -176,6 +176,7 @@ export default function Login({ emailData }) {
       else {
         setHintState(HINT_STATE.DEFAULT)
         clearInterval(timer)
+        localStorage.removeItem(COOLDOWN_STORAGE_KEY)
       }
     }, SECOND * 1)
 
