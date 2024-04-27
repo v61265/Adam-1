@@ -102,8 +102,9 @@ export default function Login({ emailData }) {
   const [email, setEmail] = useState(emailData)
   const [inputState, setInputState] = useState(getValidality(email))
   const [avoidSpamCooldown, setAvoidSpanCooldown] = useState(0)
-  /** @type {[HintState, import('react').Dispatch<import('react').SetStateAction<HintState>>]} */
-  const [hintState, setHintState] = useState(HINT_STATE.DEFAULT)
+  const [hintState, setHintState] = useState(
+    /** @type {HintState} */ (HINT_STATE.DEFAULT)
+  )
 
   /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
   const handleInputChange = (e) => {

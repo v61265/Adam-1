@@ -46,8 +46,9 @@ export default function MainFormLoginWithPassword() {
   const allowToSubmit = isValidEmail(email) && isValidPassword(password)
   const { redirect } = useRedirect()
 
-  /** @type {[PasswordInputState, import('react').Dispatch<import('react').SetStateAction<PasswordInputState>>]} */
-  const [passwordInputState, setPasswordInputState] = useState(InputState.Start)
+  const [passwordInputState, setPasswordInputState] = useState(
+    /** @type {PasswordInputState} */ (InputState.Start)
+  )
   // const shouldShowErrorHint = useAppSelector(loginShouldShowErrorHint)
 
   /** @type {import('react').ChangeEventHandler<HTMLInputElement>} */
