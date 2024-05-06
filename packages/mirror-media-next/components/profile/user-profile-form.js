@@ -94,6 +94,10 @@ const FormGroup = styled.div`
     ::placeholder {
       color: rgba(0, 0, 0, 0.3);
     }
+    &:active,
+    &:hover {
+      border: 1px solid rgba(0, 0, 0, 0.87);
+    }
   }
 `
 
@@ -128,6 +132,10 @@ const ItemsWrapper = styled.div`
     padding: 12px;
     ::placeholder {
       color: rgba(0, 0, 0, 0.3);
+    }
+    &:active,
+    &:hover {
+      border: 1px solid rgba(0, 0, 0, 0.87);
     }
   }
 
