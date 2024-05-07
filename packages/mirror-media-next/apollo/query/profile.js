@@ -3,16 +3,16 @@ import { gql } from '@apollo/client'
 /**
  * @typedef {Object} Member
  * @property {string} id
- * @property {string} firebaseId
- * @property {string} email
- * @property {string} name
- * @property {string} gender
- * @property {string} birthday
- * @property {string} phone
- * @property {string} country
- * @property {string} city
- * @property {string} district
- * @property {string} address
+ * @property {string | null} firebaseId
+ * @property {string | null} email
+ * @property {string | null} name
+ * @property {string | null} gender
+ * @property {string | null} birthday
+ * @property {string | null} phone
+ * @property {string | null} country
+ * @property {string | null} city
+ * @property {string | null} district
+ * @property {string | null} address
  */
 
 export const fetchMemberProfile = gql`
