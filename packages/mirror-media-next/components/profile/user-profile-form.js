@@ -6,16 +6,7 @@ import DropdownMenu from './dropdown-menu'
 import PrimaryButton from '../shared/buttons/primary-button'
 import DefaultButton from '../shared/buttons/default-button'
 
-const FormWrapper = styled.div`
-  ${({ theme }) => theme.breakpoint.md} {
-    width: 600px;
-    margin: auto;
-  }
-  ${({ theme }) => theme.breakpoint.xl} {
-    width: 680px;
-    margin: auto;
-  }
-`
+const FormWrapper = styled.div``
 
 const Title = styled.h1`
   font-size: 24px;
@@ -293,7 +284,6 @@ export default function UserProfileForm() {
               onSelect={handleCountrySelect}
             />
           </ItemsWrapper>
-
           <FlexRowBox>
             <ItemsWrapper>
               <SmallLabel htmlFor="city">縣市</SmallLabel>

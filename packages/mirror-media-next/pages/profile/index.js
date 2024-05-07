@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Layout from '../../components/shared/layout'
+import LayoutFull from '../../components/shared/layout-full'
 import UserProfileForm from '../../components/profile/user-profile-form'
 import UserDeletionForm from '../../components/profile/user-deletion-form'
 
@@ -8,11 +8,12 @@ const Page = styled.main`
   margin: auto;
 
   ${({ theme }) => theme.breakpoint.md} {
-    padding: 60px 84px;
+    width: 596px;
+    padding: 60px 0;
   }
 
   ${({ theme }) => theme.breakpoint.xl} {
-    padding: 60px 260px;
+    width: 680px;
   }
 `
 
@@ -25,7 +26,7 @@ const Page = styled.main`
 
 export default function page({ sectionsData = [], topicsData = [] }) {
   return (
-    <Layout
+    <LayoutFull
       head={{ title: `個人資料` }}
       header={{
         type: 'default',
@@ -37,6 +38,6 @@ export default function page({ sectionsData = [], topicsData = [] }) {
         <UserProfileForm />
         <UserDeletionForm />
       </Page>
-    </Layout>
+    </LayoutFull>
   )
 }

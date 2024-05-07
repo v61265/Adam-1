@@ -8,12 +8,7 @@ const UserDeletionFormWrapper = styled.div`
   padding-top: 40px;
 
   ${({ theme }) => theme.breakpoint.md} {
-    width: 600px;
     margin: 48px auto 0;
-  }
-
-  ${({ theme }) => theme.breakpoint.xl} {
-    width: 680px;
   }
 
   a {
