@@ -1,9 +1,10 @@
-// This component is for wrapping form in login, passord recovery and password modification pages
+// This component is for wrapping form in login and passord recovery pages
 import styled from 'styled-components'
 
-const Wrapper = styled.div`
+const FormWrapper = styled.div`
   min-width: 320px;
   max-width: 596px; // prevent content from exceeding the boundaries of header
+  width: 100%;
   background-color: #fff;
   padding: 40px 20px;
 
@@ -24,10 +25,4 @@ const Wrapper = styled.div`
   }
 `
 
-/**
- * @param {Object} props
- * @param {JSX.Element | JSX.Element[]} props.children
- */
-export default function FormWrapper({ children }) {
-  return <Wrapper>{children}</Wrapper>
-}
+export default FormWrapper

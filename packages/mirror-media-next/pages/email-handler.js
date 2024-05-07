@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { GCP_PROJECT_ID } from '../config/index.mjs'
 import { setPageCache } from '../utils/cache-setting'
 import LayoutFull from '../components/shared/layout-full'
+import BodyEmailVerification from '../components/email-handler/body-email-verification'
 
 const RESET_PASSWORD = 'resetPassword'
 const RECOVER_EMAIL = 'recoverEmail'
@@ -40,7 +41,7 @@ export default function EmailHandler({ mode }) {
       case MODE.RESET_PASSWORD:
         return <>This is reset password body</>
       case MODE.VERIFY_EMAIL:
-        return <>This is verify email body</>
+        return <BodyEmailVerification />
     }
   }
 
