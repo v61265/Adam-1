@@ -38,6 +38,7 @@ const SelectBox = styled.div`
 `
 
 const Ul = styled.ul`
+  display: ${(props) => (props.isOpen ? 'block' : 'none')};
   position: absolute;
   background-color: #fff;
   width: 100%;
@@ -104,18 +105,13 @@ export default function DropdownMenu({
         {selectedOption ? selectedOption : '請選擇'}
       </SelectBox>
 
-      {isOpen && (
-        <Ul>
-          {options.map((option) => (
-            <Li
-              key={option[keyField]}
-              onClick={() => handleClickOption(option)}
-            >
-              {option[value]}
-            </Li>
-          ))}
-        </Ul>
-      )}
+      <Ul isOpen={isOpen}>
+        {options.map((option) => (
+          <Li key={option[keyField]} onClick={() => handleClickOption(option)}>
+            {option[value]}
+          </Li>
+        ))}
+      </Ul>
     </DropdownMenuWrapper>
   )
 }
