@@ -19,6 +19,10 @@ const Title = styled.h1`
 `
 
 const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
   ${({ theme }) => theme.breakpoint.xl} {
     border: 1px solid #0000001a;
     border-radius: 2px;
@@ -27,8 +31,6 @@ const Form = styled.form`
 `
 
 const EmailWrapper = styled.div`
-  margin-bottom: 40px;
-
   h2 {
     font-size: 18px;
     font-weight: 500;
@@ -45,7 +47,6 @@ const EmailWrapper = styled.div`
 `
 
 const PasswordWrapper = styled.div`
-  margin-bottom: 40px;
   display: none;
 
   h2 {
@@ -65,6 +66,10 @@ const PasswordButtonWrapper = styled.div`
 `
 
 const FlexRowBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
   ${({ theme }) => theme.breakpoint.md} {
     display: flex;
     flex-direction: row;
@@ -75,7 +80,6 @@ const FlexRowBox = styled.div`
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 40px;
   width: 100%;
 
   input {
@@ -93,21 +97,11 @@ const FormGroup = styled.div`
 `
 
 const FormDetails = styled.div`
-  margin-bottom: 40px;
-
   h2 {
     font-size: 18px;
     font-weight: 500;
     line-height: 27px;
     margin-bottom: 16px;
-  }
-
-  > div {
-    margin-bottom: 24px;
-  }
-
-  div:last-child {
-    margin-bottom: 0;
   }
 `
 
@@ -115,7 +109,7 @@ const ItemsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 24px;
+  /* margin-bottom: 24px; */
 
   input {
     border: 1px solid rgba(0, 0, 0, 0.3);
@@ -133,6 +127,11 @@ const ItemsWrapper = styled.div`
   ${({ theme }) => theme.breakpoint.md} {
     margin-bottom: 0;
   }
+`
+const AddressWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `
 
 const LargeLabel = styled.label`
@@ -151,8 +150,6 @@ const SmallLabel = styled.label`
 `
 
 const ButtonWrapper = styled.div`
-  margin-bottom: 40px;
-
   ${({ theme }) => theme.breakpoint.md} {
     width: 132px;
     height: 48px;
@@ -273,46 +270,47 @@ export default function UserProfileForm() {
         </FormGroup>
         <FormDetails>
           <h2>地址</h2>
-
-          <ItemsWrapper>
-            <SmallLabel>國家</SmallLabel>
-            <DropdownMenu
-              options={countryOptions}
-              keyField="English"
-              value="Taiwan"
-              selectedOption={selectedCountry}
-              onSelect={handleCountrySelect}
-            />
-          </ItemsWrapper>
-          <FlexRowBox>
+          <AddressWrapper>
             <ItemsWrapper>
-              <SmallLabel htmlFor="city">縣市</SmallLabel>
+              <SmallLabel>國家</SmallLabel>
               <DropdownMenu
-                options={taiwanDisTrictOptions}
-                keyField="name"
-                value="name"
-                selectedOption={selectedCity}
-                onSelect={handleCitySelect}
-                disabled={selectedCountry !== '臺灣'}
+                options={countryOptions}
+                keyField="English"
+                value="Taiwan"
+                selectedOption={selectedCountry}
+                onSelect={handleCountrySelect}
               />
             </ItemsWrapper>
-            <ItemsWrapper>
-              <SmallLabel htmlFor="district">行政區</SmallLabel>
-              <DropdownMenu
-                options={districtData}
-                keyField="zip"
-                value="name"
-                selectedOption={selectedDistrict}
-                onSelect={setSelectedDistrict}
-                disabled={selectedCountry !== '臺灣' || selectedCity == ''}
-              />
-            </ItemsWrapper>
-          </FlexRowBox>
+            <FlexRowBox>
+              <ItemsWrapper>
+                <SmallLabel htmlFor="city">縣市</SmallLabel>
+                <DropdownMenu
+                  options={taiwanDisTrictOptions}
+                  keyField="name"
+                  value="name"
+                  selectedOption={selectedCity}
+                  onSelect={handleCitySelect}
+                  disabled={selectedCountry !== '臺灣'}
+                />
+              </ItemsWrapper>
+              <ItemsWrapper>
+                <SmallLabel htmlFor="district">行政區</SmallLabel>
+                <DropdownMenu
+                  options={districtData}
+                  keyField="zip"
+                  value="name"
+                  selectedOption={selectedDistrict}
+                  onSelect={setSelectedDistrict}
+                  disabled={selectedCountry !== '臺灣' || selectedCity == ''}
+                />
+              </ItemsWrapper>
+            </FlexRowBox>
 
-          <ItemsWrapper>
-            <SmallLabel htmlFor="address">詳細地址</SmallLabel>
-            <input id="address" placeholder="詳細地址" />
-          </ItemsWrapper>
+            <ItemsWrapper>
+              <SmallLabel htmlFor="address">詳細地址</SmallLabel>
+              <input id="address" placeholder="詳細地址" />
+            </ItemsWrapper>
+          </AddressWrapper>
         </FormDetails>
         <ButtonWrapper>
           <PrimaryButton isLoading={false}>儲存</PrimaryButton>
