@@ -19,18 +19,15 @@ const Page = styled.main`
 
 /**
  * @param {Object} props
- * @param {Object[]} props.sectionsData
- * @param {Object[]} props.topicsData
  * @returns {JSX.Element}
  */
 
-export default function page({ sectionsData = [], topicsData = [] }) {
+export default function page() {
   return (
     <LayoutFull
       head={{ title: `個人資料` }}
       header={{
         type: 'default',
-        data: { sectionsData: sectionsData, topicsData },
       }}
       footer={{ type: 'default' }}
     >
