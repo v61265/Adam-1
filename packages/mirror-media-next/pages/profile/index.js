@@ -18,7 +18,6 @@ const Page = styled.main`
 `
 
 /**
- * @param {Object} props
  * @returns {JSX.Element}
  */
 
