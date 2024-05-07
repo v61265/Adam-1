@@ -32,7 +32,10 @@ const SelectBox = styled.div`
     border: solid #054f77;
     border-width: 0 0 2px 2px;
     padding: 4px;
-    transform: translateY(-60%) rotate(-45deg);
+    transform: ${(props) =>
+      props.isOpen
+        ? 'translateY(-10%) rotate(135deg);'
+        : 'translateY(-60%) rotate(-45deg)'};
   }
 
   ::before {
