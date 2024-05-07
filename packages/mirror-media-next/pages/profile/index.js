@@ -21,7 +21,7 @@ const Page = styled.main`
  * @param {Object} props
  * @param {Object[]} props.sectionsData
  * @param {Object[]} props.topicsData
- * @return {JSX.Element}
+ * @returns {JSX.Element}
  */
 
 export default function page({ sectionsData = [], topicsData = [] }) {
