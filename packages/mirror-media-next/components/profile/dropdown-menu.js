@@ -5,6 +5,16 @@ const DropdownMenuWrapper = styled.div`
   position: relative;
 `
 
+/**
+ * @typedef {Object} SelectBoxProps
+ * @property {boolean} isOpen
+ * @property {boolean} isSelected
+ * @property {boolean} disabled
+ */
+
+/**
+ * @type {import('styled-components').StyledComponent<"div", any, SelectBoxProps, never>}
+ */
 const SelectBox = styled.div`
   position: relative;
   border: 1px solid ${(props) => (props.isOpen ? '#000000de' : '#0000004d')};
@@ -37,6 +47,14 @@ const SelectBox = styled.div`
   }
 `
 
+/**
+ * @typedef {Object} UlProps
+ * @property {boolean} isOpen
+ */
+
+/**
+ * @type {import('styled-components').StyledComponent<"ul", any, UlProps, never>}
+ */
 const Ul = styled.ul`
   display: ${(props) => (props.isOpen ? 'block' : 'none')};
   position: absolute;
