@@ -71,7 +71,6 @@ const Ul = styled.ul`
   overflow: hidden;
   max-height: 160px; // limit the visible items
   overflow-y: auto;
-  z-index: 100;
 `
 const Li = styled.li`
   padding: 8px 12px;
