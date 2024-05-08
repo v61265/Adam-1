@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import FormWrapper from '../shared/form-wrapper'
+import FormWrapper from './form-wrapper'
 import useRedirect from '../../hooks/use-redirect'
 import { useEffect } from 'react'
 import { SECOND } from '../../constants/time-unit'

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import FormWrapper from '../shared/form-wrapper'
+import FormWrapper from './form-wrapper'
 import StyledLink from './styled-link'
 import DefaultButton from '../shared/buttons/default-button'
 
