@@ -60,7 +60,10 @@ const Intro = styled.section`
     line-height: 150%;
   }
 
+  max-width: 596px;
+
   ${({ theme }) => theme.breakpoint.md} {
+    max-width: unset;
     width: 608px;
   }
 
