@@ -84,7 +84,7 @@ const Li = styled.li`
  * @param {object} props.options
  * @param {string} props.keyField
  * @param {string} props.value
- * @param {function(string):void} props.onSelect
+ * @param {(value: string) => void} props.onSelect
  * @param {string} props.selectedOption
  * @param {boolean} [props.disabled=false]
  * @returns {JSX.Element}
