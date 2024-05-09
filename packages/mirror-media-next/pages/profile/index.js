@@ -17,6 +17,16 @@ const Page = styled.main`
   }
 `
 
+const Title = styled.h1`
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 36px;
+  margin-bottom: 24px;
+  ${({ theme }) => theme.breakpoint.md} {
+    margin-bottom: 12px;
+  }
+`
+
 /**
  * @returns {JSX.Element}
  */
@@ -31,6 +41,7 @@ export default function page() {
       footer={{ type: 'default' }}
     >
       <Page>
+        <Title>個人資料</Title>
         <UserProfileForm />
         <UserDeletionForm />
       </Page>

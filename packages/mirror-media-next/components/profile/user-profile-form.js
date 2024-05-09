@@ -6,18 +6,6 @@ import DropdownMenu from './dropdown-menu'
 import PrimaryButton from '../shared/buttons/primary-button'
 import DefaultButton from '../shared/buttons/default-button'
 
-const FormWrapper = styled.div``
-
-const Title = styled.h1`
-  font-size: 24px;
-  font-weight: 500;
-  line-height: 36px;
-  margin-bottom: 24px;
-  ${({ theme }) => theme.breakpoint.xl} {
-    margin-bottom: 12px;
-  }
-`
-
 const Form = styled.form`
   display: flex;
   flex-direction: column;
@@ -205,8 +193,7 @@ export default function UserProfileForm() {
   }
 
   return (
-    <FormWrapper>
-      <Title>個人資料</Title>
+    <>
       <Form>
         <EmailWrapper>
           <h2>Email</h2>
@@ -314,6 +301,6 @@ export default function UserProfileForm() {
           <PrimaryButton isLoading={false}>儲存</PrimaryButton>
         </ButtonWrapper>
       </Form>
-    </FormWrapper>
+    </>
   )
 }
