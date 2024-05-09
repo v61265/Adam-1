@@ -47,17 +47,11 @@ const EmailWrapper = styled.div`
 `
 
 const PasswordWrapper = styled.div`
-  display: none;
-
   h2 {
     font-size: 18px;
     font-weight: 500;
     line-height: 27px;
     margin-bottom: 8px;
-  }
-
-  ${({ theme }) => theme.breakpoint.md} {
-    display: block;
   }
 `
 const PasswordButtonWrapper = styled.div`
