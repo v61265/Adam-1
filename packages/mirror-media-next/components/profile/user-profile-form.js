@@ -24,7 +24,7 @@ const Form = styled.form`
   gap: 40px;
 
   ${({ theme }) => theme.breakpoint.xl} {
-    border: 1px solid #0000001a;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 2px;
     padding: 40px;
   }
@@ -42,7 +42,7 @@ const EmailWrapper = styled.div`
     font-size: 18px;
     font-weight: 400;
     line-height: 27px;
-    color: #000000de;
+    color: rgba(0, 0, 0, 0.87);
   }
 `
 

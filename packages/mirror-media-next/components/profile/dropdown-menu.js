@@ -17,10 +17,13 @@ const DropdownMenuWrapper = styled.div`
  */
 const SelectBox = styled.div`
   position: relative;
-  border: 1px solid ${(props) => (props.isOpen ? '#000000de' : '#0000004d')};
-  border-bottom: ${(props) => (props.isOpen ? 'none' : '1px solid #0000004d')};
+  border: 1px solid
+    ${(props) => (props.isOpen ? 'rgba(0, 0, 0, 0.87)' : 'rgba(0, 0, 0, 0.3)')};
+  border-bottom: ${(props) =>
+    props.isOpen ? 'none' : '1px solid rgba(0, 0, 0, 0.3)'};
   border-radius: ${(props) => (props.isOpen ? '8px 8px 0 0' : '8px')};
-  color: ${(props) => (props.isSelected ? '#000000DE' : '#0000004d')};
+  color: ${(props) =>
+    props.isSelected ? 'rgba(0, 0, 0, 0.87)' : 'rgba(0, 0, 0, 0.3)'};
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   padding: 12px;
 
@@ -45,7 +48,7 @@ const SelectBox = styled.div`
     right: 12px;
     height: 1px;
     background-color: ${(props) =>
-      props.isOpen ? '#0000004d' : 'transparent'};
+      props.isOpen ? 'rgba(0, 0, 0, 0.3)' : 'transparent'};
   }
 `
 
@@ -63,7 +66,7 @@ const Ul = styled.ul`
   background-color: #fff;
   width: 100%;
   z-index: 100;
-  border: 1px solid #000000de;
+  border: 1px solid rgba(0, 0, 0, 0.87);
   border-top: none;
   border-bottom-right-radius: 8px;
   border-bottom-left-radius: 8px;
