@@ -2,9 +2,6 @@ import Link from 'next/link'
 import styled from 'styled-components'
 
 const UserDeletionFormWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   padding-top: 40px;
 
   ${({ theme }) => theme.breakpoint.md} {
