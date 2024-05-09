@@ -2,10 +2,10 @@ import Link from 'next/link'
 import styled from 'styled-components'
 
 const UserDeletionFormWrapper = styled.div`
-  padding-top: 40px;
+  margin-top: 80px;
 
   ${({ theme }) => theme.breakpoint.md} {
-    margin: 48px auto 0;
+    margin-top: 48px;
   }
 `
 const DeletionLink = styled(Link)`
