@@ -7,15 +7,15 @@ const UserDeletionFormWrapper = styled.div`
   ${({ theme }) => theme.breakpoint.md} {
     margin: 48px auto 0;
   }
-
-  a {
-    color: #e51731;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 27px;
-    text-decoration: underline;
-  }
 `
+const DeletionLink = styled(Link)`
+  color: #e51731;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  text-decoration: underline;
+`
+
 const DeletionPara = styled.p`
   margin-top: 12px;
   color: #00000080;
@@ -27,7 +27,7 @@ const DeletionPara = styled.p`
 export default function UserDeletionForm() {
   return (
     <UserDeletionFormWrapper>
-      <Link href={`/cancelMembership`}>刪除會員</Link>
+      <DeletionLink href={`/cancelMembership`}>刪除會員</DeletionLink>
       <DeletionPara>
         提醒您，若您有訂閱會員專區單篇文章，刪除帳號可能導致無法閱讀文章。
       </DeletionPara>
