@@ -21,7 +21,7 @@ const Title = styled.h1`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  row-gap: 40px;
 
   ${({ theme }) => theme.breakpoint.xl} {
     border: 1px solid rgba(0, 0, 0, 0.1);
