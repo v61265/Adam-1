@@ -101,7 +101,11 @@ const FormDetails = styled.div`
     font-size: 18px;
     font-weight: 500;
     line-height: 27px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
+
+    ${({ theme }) => theme.breakpoint.md} {
+      margin-bottom: 16px;
+    }
   }
 `
 
