@@ -18,7 +18,7 @@ const DeletionLink = styled(Link)`
 
 const DeletionPara = styled.p`
   margin-top: 12px;
-  color: #00000080;
+  color: rgba(0, 0, 0, 0.5);
   font-size: 18px;
   font-weight: 400;
   line-height: 27px;
