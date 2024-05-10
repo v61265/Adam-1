@@ -101,9 +101,14 @@ const Li = styled.li`
     background-color: #054f77;
   }
 `
+
+/**
+ * @typedef {import('../../type/profile.js').Option} Option
+ */
+
 /**
  * @param {Object} props
- * @param {object} props.options
+ * @param {Option[]} props.options
  * @param {string} props.keyField
  * @param {string} props.value
  * @param {(value: string) => void} props.onSelect

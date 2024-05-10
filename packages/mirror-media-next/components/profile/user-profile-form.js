@@ -142,12 +142,22 @@ const ButtonWrapper = styled.div`
   }
 `
 
+/**
+ * @typedef {import('../../type/profile.js').Option} Option
+ */
+
+/**
+ * @typedef {Option[]} GenderOptions
+ */
 const genderOptions = [
   { id: 1, name: '不透露' },
   { id: 2, name: '男' },
   { id: 3, name: '女' },
 ]
 
+/**
+ * @typedef {Option[]} MonthOptions
+ */
 const monthOptions = [
   { id: 1, name: '1' },
   { id: 2, name: '2' },
