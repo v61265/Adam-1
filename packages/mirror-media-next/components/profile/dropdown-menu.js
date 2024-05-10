@@ -18,13 +18,26 @@ const DropdownMenuWrapper = styled.div`
 const SelectBox = styled.div`
   position: relative;
   border: 1px solid
-    ${(props) => (props.isOpen ? 'rgba(0, 0, 0, 0.87)' : 'rgba(0, 0, 0, 0.3)')};
-  border-bottom: ${(props) =>
-    props.isOpen ? 'none' : '1px solid rgba(0, 0, 0, 0.3)'};
-  border-radius: ${(props) => (props.isOpen ? '8px 8px 0 0' : '8px')};
-  color: ${(props) =>
-    props.isSelected ? 'rgba(0, 0, 0, 0.87)' : 'rgba(0, 0, 0, 0.3)'};
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+    ${
+      /** @param {SelectBoxProps} props */
+      (props) => (props.isOpen ? 'rgba(0, 0, 0, 0.87)' : 'rgba(0, 0, 0, 0.3)')
+    };
+  border-bottom: ${
+    /** @param {SelectBoxProps} props */
+    (props) => (props.isOpen ? 'none' : '1px solid rgba(0, 0, 0, 0.3)')
+  };
+  border-radius: ${
+    /** @param {SelectBoxProps} props */
+    (props) => (props.isOpen ? '8px 8px 0 0' : '8px')
+  };
+  color: ${
+    /** @param {SelectBoxProps} props */
+    (props) => (props.isSelected ? 'rgba(0, 0, 0, 0.87)' : 'rgba(0, 0, 0, 0.3)')
+  };
+  cursor: ${
+    /** @param {SelectBoxProps} props */
+    (props) => (props.disabled ? 'not-allowed' : 'pointer')
+  };
   padding: 12px;
 
   ::after {
@@ -47,8 +60,10 @@ const SelectBox = styled.div`
     left: 12px;
     right: 12px;
     height: 1px;
-    background-color: ${(props) =>
-      props.isOpen ? 'rgba(0, 0, 0, 0.3)' : 'transparent'};
+    background-color: ${
+      /** @param {SelectBoxProps} props */
+      (props) => (props.isOpen ? 'rgba(0, 0, 0, 0.3)' : 'transparent')
+    };
   }
 `
 
@@ -61,7 +76,10 @@ const SelectBox = styled.div`
  * @type {import('styled-components').StyledComponent<"ul", any, UlProps, never>}
  */
 const Ul = styled.ul`
-  display: ${(props) => (props.isOpen ? 'block' : 'none')};
+  display: ${
+    /** @param {UlProps} props */
+    (props) => (props.isOpen ? 'block' : 'none')
+  };
   position: absolute;
   background-color: #fff;
   width: 100%;
