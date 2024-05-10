@@ -5,7 +5,7 @@ import UserDeletionForm from '../../components/profile/user-deletion-form'
 
 const Page = styled.main`
   padding: 40px 20px;
-  margin: auto;
+  margin: 0 auto;
 
   ${({ theme }) => theme.breakpoint.md} {
     width: 596px;
