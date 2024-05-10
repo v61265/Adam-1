@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import useClickOutside from '../../hooks/useClickOutside'
 
 const DropdownMenuWrapper = styled.div`
   position: relative;
@@ -120,6 +121,11 @@ export default function DropdownMenu({
   disabled = false,
 }) {
   const [isOpen, setIsOpen] = useState(false)
+  const dropdownRef = useRef(null)
+
+  useClickOutside(dropdownRef, () => {
+    setIsOpen(false)
+  })
 
   const toggleDropdown = () => {
     if (!disabled) {
@@ -135,7 +141,7 @@ export default function DropdownMenu({
   }
 
   return (
-    <DropdownMenuWrapper>
+    <DropdownMenuWrapper ref={dropdownRef}>
       <SelectBox
         isOpen={isOpen}
         isSelected={!!selectedOption}
