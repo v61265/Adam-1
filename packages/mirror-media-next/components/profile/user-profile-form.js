@@ -95,7 +95,6 @@ const ItemsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* margin-bottom: 24px; */
 
   input {
     border: 1px solid rgba(0, 0, 0, 0.3);
