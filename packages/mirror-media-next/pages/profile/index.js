@@ -9,7 +9,8 @@ const Page = styled.main`
   max-width: 596px;
 
   ${({ theme }) => theme.breakpoint.md} {
-    width: 596px;
+    width: 600px;
+    max-width: unset;
     padding: 60px 0;
   }
 
