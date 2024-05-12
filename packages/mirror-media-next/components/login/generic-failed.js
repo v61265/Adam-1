@@ -29,16 +29,17 @@ const SecondaryText = styled.p`
 
 /**
  * @param {Object} props
+ * @param {string} props.primaryText
  * @param {import('react').MouseEventHandler<HTMLButtonElement>} props.onBack
  */
-export default function GenericFailed({ onBack }) {
+export default function GenericFailed({ primaryText, onBack }) {
   return (
     <Main>
       <FormWrapper>
         <PrimaryText>
           抱歉，出了點狀況...
           <br />
-          請回上一頁重試
+          {primaryText}
         </PrimaryText>
         <SecondaryText>
           或是聯繫客服信箱{' '}

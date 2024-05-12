@@ -25,7 +25,7 @@ export default function PasswordChangeFail() {
   return (
     <LayoutFull header={{ type: 'default' }} footer={{ type: 'default' }}>
       <Container>
-        <GenericFailed onBack={onBack} />
+        <GenericFailed primaryText="請回上一頁重試" onBack={onBack} />
       </Container>
     </LayoutFull>
   )
