@@ -2,12 +2,15 @@ import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { auth } from '../../firebase'
+import { FirebaseError } from 'firebase/app'
 import { applyActionCode } from 'firebase/auth'
 import { useMembership } from '../../context/membership'
 import { generateErrorReportInfo } from '../../utils/log/error-log'
 import { sendErrorLog } from '../../utils/log/send-log'
 import FormWrapper from './form-wrapper'
 import PrimaryButton from '../shared/buttons/primary-button'
+import StyledLink from '../login/styled-link'
+import { FirebaseAuthError } from '../../constants/firebase'
 
 const DEFAULT = 'default'
 const SUCCESS = 'success'
@@ -28,13 +31,19 @@ const ContentBlock = styled.div`
   margin-bottom: 24px;
 `
 
+const FailedContentBlock = styled(ContentBlock)`
+  margin-bottom: 32px;
+`
+
 const PrimaryText = styled.p`
+  color: rgba(0, 0, 0, 0.87);
   font-size: 24px;
   font-weight: 500;
   line-height: 150%;
 `
 
 const SecondaryText = styled.p`
+  color: rgba(0, 0, 0, 0.5);
   font-size: 18px;
   font-weight: 400;
   line-height: 150%;
@@ -48,6 +57,7 @@ export default function BodyEmailVerification() {
   const [verificationState, setVerificationState] = useState(
     /** @type {VerficationState} */ (VERIFICATION_STATE.DEFAULT)
   )
+  const [errorType, setErrorType] = useState('')
   const router = useRouter()
   const actionCode = router.query.oobCode
 
@@ -64,6 +74,10 @@ export default function BodyEmailVerification() {
       .catch((err) => {
         setVerificationState(VERIFICATION_STATE.FAILED)
 
+        if (err instanceof FirebaseError) {
+          setErrorType(err.code)
+        }
+
         const errorReport = generateErrorReportInfo(err, {
           userEmail,
           firebaseId,
@@ -74,50 +88,130 @@ export default function BodyEmailVerification() {
       })
   }, [actionCode, userEmail, firebaseId, memberInfo])
 
-  const primaryTextWording = isLoggedIn
-    ? `${userEmail} 已驗證成功！`
-    : `已驗證成功！`
+  const getFailedContent = () => {
+    const SecondaryBlock = (
+      <>
+        <SecondaryText style={{ marginTop: '16px' }}>
+          或是聯繫客服信箱{' '}
+          <StyledLink href="mailto:mm-onlineservice@mirrormedia.mg">
+            mm-onlineservice@mirrormedia.mg
+          </StyledLink>{' '}
+          / 致電 (02)6633-3966 由專人為您服務。
+        </SecondaryText>
+      </>
+    )
 
-  const primaryButtonWording = isLoggedIn ? '繼續前往付款' : '重新登入'
+    /** @type {string | JSX.Element} */
+    let primaryTextWording
+    /** @type {string} */
+    let primaryButtonWording
+    /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
+    let onClick
 
-  const handleOnPrimaryButtonClicked = () => {
-    const destination = '/subscribe'
-
-    if (isLoggedIn) {
-      router.push({
-        pathname: destination,
-      })
-    } else {
-      router.push({
-        pathname: '/login',
-        query: {
-          destination,
-        },
-      })
+    switch (errorType) {
+      case FirebaseAuthError.USER_DISABLED:
+      case FirebaseAuthError.USER_NOT_FOUND:
+        primaryTextWording = (
+          <>
+            使用者不存在或帳號已停用
+            <br />
+            請重新註冊／登入帳號
+          </>
+        )
+        primaryButtonWording = '前往註冊會員'
+        onClick = () => {
+          router.push({
+            pathname: '/login',
+          })
+        }
+        break
+      case FirebaseAuthError.EXPIRED_ACTION_CODE:
+        primaryTextWording = '連結已過期，請重新驗證'
+        primaryButtonWording = '重新驗證信箱'
+        onClick = () => {
+          router.push({
+            pathname: '/email-verify',
+          })
+        }
+        break
+      case FirebaseAuthError.INVALID_ACTION_CODE:
+      default:
+        primaryTextWording = '連結無效，請重新驗證'
+        primaryButtonWording = '重新驗證信箱'
+        onClick = () => {
+          router.push({
+            pathname: '/email-verify',
+          })
+        }
+        break
     }
+
+    return (
+      <>
+        <FailedContentBlock>
+          <PrimaryText>{primaryTextWording}</PrimaryText>
+          {SecondaryBlock}
+        </FailedContentBlock>
+        <PrimaryButton onClick={onClick}>{primaryButtonWording}</PrimaryButton>
+      </>
+    )
   }
 
-  switch (verificationState) {
-    case VERIFICATION_STATE.DEFAULT:
-      return <></>
-    case VERIFICATION_STATE.SUCCESS:
-      return (
-        <Main>
-          <FormWrapper>
+  const getContent = () => {
+    switch (verificationState) {
+      case VERIFICATION_STATE.DEFAULT:
+        return null
+
+      case VERIFICATION_STATE.SUCCESS: {
+        const primaryTextWording = isLoggedIn
+          ? `${userEmail} 已驗證成功！`
+          : `已驗證成功！`
+
+        const primaryButtonWording = isLoggedIn ? '繼續前往付款' : '重新登入'
+
+        /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
+        const onClick = () => {
+          const destination = '/subscribe'
+
+          if (isLoggedIn) {
+            router.push({
+              pathname: destination,
+            })
+          } else {
+            router.push({
+              pathname: '/login',
+              query: {
+                destination,
+              },
+            })
+          }
+        }
+
+        return (
+          <>
             <ContentBlock>
               <PrimaryText>{primaryTextWording}</PrimaryText>
               {!isLoggedIn && (
                 <SecondaryText>請重新登入，繼續完成訂購流程</SecondaryText>
               )}
             </ContentBlock>
-            <PrimaryButton onClick={handleOnPrimaryButtonClicked}>
+            <PrimaryButton onClick={onClick}>
               {primaryButtonWording}
             </PrimaryButton>
-          </FormWrapper>
-        </Main>
-      )
-    case VERIFICATION_STATE.FAILED:
-      // TODO: add design
-      return <></>
+          </>
+        )
+      }
+
+      case VERIFICATION_STATE.FAILED:
+        return getFailedContent()
+    }
   }
+
+  const content = getContent()
+
+  return (
+    <Main>
+      <FormWrapper>{content}</FormWrapper>
+    </Main>
+  )
 }
