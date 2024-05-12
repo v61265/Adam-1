@@ -76,7 +76,7 @@ export default function BodyPasswordReset() {
       })
       sendErrorLog(errorReport)
 
-      router.replace('/password-change-failed')
+      router.replace('/password-change-fail')
     } finally {
       setIsProcessing(false)
     }
