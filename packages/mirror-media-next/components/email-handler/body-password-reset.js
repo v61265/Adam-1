@@ -25,6 +25,7 @@ const ContentBlock = styled.div`
 `
 
 const PrimaryText = styled.p`
+  color: rgba(0, 0, 0, 0.87);
   font-size: 24px;
   font-weight: 500;
   line-height: 150%;
@@ -68,7 +69,7 @@ export default function BodyPasswordReset() {
       email = await verifyPasswordResetCode(auth, actionCode)
       await confirmPasswordReset(auth, actionCode, password)
 
-      router.replace('/password-change-succeeded')
+      router.replace('/password-change-success')
     } catch (err) {
       const errorReport = generateErrorReportInfo(err, {
         userEmail: email,
