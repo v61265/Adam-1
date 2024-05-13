@@ -37,8 +37,9 @@ const Container = styled.div`
 
   ${({ theme }) => theme.breakpoint.xl} {
     min-width: ${({ rwd }) => rwd.desktop.width};
-    min-height: ${({ rwd, shouldTranslate }) =>
-      !shouldTranslate ? '0px' : rwd.desktop.height};
+    min-height: ${({ rwd, shouldTranslate }) => {
+      return !shouldTranslate ? rwd.desktop.height : '0px'
+    }};
     margin: ${({ rwd }) => rwd.desktop.margin};
   }
 `
