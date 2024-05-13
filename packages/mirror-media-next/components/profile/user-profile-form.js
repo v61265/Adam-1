@@ -5,6 +5,7 @@ import taiwanDisTrictOptions from 'constants/lib/taiwan-districts.json'
 import DropdownMenu from './dropdown-menu'
 import PrimaryButton from '../shared/buttons/primary-button'
 import DefaultButton from '../shared/buttons/default-button'
+import Link from 'next/link'
 
 const Form = styled.form`
   display: flex;
@@ -211,10 +212,12 @@ export default function UserProfileForm() {
         </EmailWrapper>
 
         <PasswordWrapper>
-          <h2>密碼</h2>
-          <PasswordButtonWrapper>
-            <DefaultButton>變更密碼</DefaultButton>
-          </PasswordButtonWrapper>
+          <h2>密碼</h2>{' '}
+          <Link href="/updatePassword">
+            <PasswordButtonWrapper>
+              <DefaultButton>變更密碼</DefaultButton>
+            </PasswordButtonWrapper>
+          </Link>
         </PasswordWrapper>
 
         <FlexRowBox>
