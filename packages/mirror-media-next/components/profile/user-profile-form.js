@@ -108,9 +108,10 @@ const FormDetails = styled.div`
 const ItemsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  flex: 1;
 
   input {
+    width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     padding: 12px;
