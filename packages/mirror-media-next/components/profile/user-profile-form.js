@@ -49,6 +49,18 @@ const PasswordButtonWrapper = styled.div`
   height: 48px;
 `
 
+const FlexRowContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  ${({ theme }) => theme.breakpoint.md} {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+`
+
 const FlexRowBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -212,7 +224,7 @@ export default function UserProfileForm() {
         </EmailWrapper>
 
         <PasswordWrapper>
-          <h2>密碼</h2>{' '}
+          <h2>密碼</h2>
           <Link href="/updatePassword">
             <PasswordButtonWrapper>
               <DefaultButton>變更密碼</DefaultButton>
@@ -220,7 +232,7 @@ export default function UserProfileForm() {
           </Link>
         </PasswordWrapper>
 
-        <FlexRowBox>
+        <FlexRowContainer>
           <FormGroup>
             <LargeLabel htmlFor="name">姓名</LargeLabel>
             <input id="name" placeholder="請輸入姓名" />
@@ -235,7 +247,7 @@ export default function UserProfileForm() {
               onSelect={setSelectedGender}
             />
           </FormGroup>
-        </FlexRowBox>
+        </FlexRowContainer>
 
         <FormDetails>
           <h2>生日</h2>
