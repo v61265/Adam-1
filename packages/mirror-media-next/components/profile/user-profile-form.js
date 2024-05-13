@@ -19,6 +19,7 @@ const Form = styled.form`
 `
 
 const EmailWrapper = styled.div`
+  word-wrap: break-word;
   h2 {
     font-size: 18px;
     font-weight: 500;
