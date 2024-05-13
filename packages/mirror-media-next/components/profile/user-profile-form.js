@@ -245,6 +245,7 @@ export default function UserProfileForm() {
               options={genderOptions}
               selectedOption={selectedGender}
               onSelect={setSelectedGender}
+              placeholder="請選擇"
             />
           </FormGroup>
         </FlexRowContainer>
@@ -265,6 +266,7 @@ export default function UserProfileForm() {
                 value="name"
                 selectedOption={selectedMonth}
                 onSelect={setSelectedMonth}
+                placeholder="月份"
               />
             </ItemsWrapper>
             <ItemsWrapper>
@@ -276,7 +278,7 @@ export default function UserProfileForm() {
 
         <FormGroup>
           <LargeLabel htmlFor="phone">電話</LargeLabel>
-          <input id="phone" placeholder="電話" />
+          <input id="phone" placeholder="請輸入電話" />
         </FormGroup>
         <FormDetails>
           <h2>地址</h2>
@@ -318,7 +320,10 @@ export default function UserProfileForm() {
 
             <ItemsWrapper>
               <SmallLabel htmlFor="address">詳細地址</SmallLabel>
-              <input id="address" placeholder="詳細地址" />
+              <input
+                id="address"
+                placeholder="請輸入街道、門號、巷弄、樓層等資訊"
+              />
             </ItemsWrapper>
           </AddressWrapper>
         </FormDetails>

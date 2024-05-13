@@ -114,6 +114,7 @@ const Li = styled.li`
  * @param {(value: string) => void} props.onSelect
  * @param {string} props.selectedOption
  * @param {boolean} [props.disabled=false]
+ * @param {string} props.placeholder
  * @returns {JSX.Element}
  */
 
@@ -124,6 +125,7 @@ export default function DropdownMenu({
   onSelect,
   selectedOption,
   disabled = false,
+  placeholder = '請選擇',
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -153,7 +155,7 @@ export default function DropdownMenu({
         disabled={disabled}
         onClick={toggleDropdown}
       >
-        {selectedOption ? selectedOption : '請選擇'}
+        {selectedOption ? selectedOption : placeholder}
       </SelectBox>
 
       <Ul isOpen={isOpen}>
