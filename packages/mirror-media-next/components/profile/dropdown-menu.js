@@ -114,7 +114,7 @@ const Li = styled.li`
  * @param {(value: string) => void} props.onSelect
  * @param {string} props.selectedOption
  * @param {boolean} [props.disabled=false]
- * @param {string} props.placeholder
+ * @param {string} [props.placeholder]
  * @returns {JSX.Element}
  */
 
