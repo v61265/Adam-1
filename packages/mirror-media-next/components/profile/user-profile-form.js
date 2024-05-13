@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import countryOptions from 'constants/lib/countries.json'
 import taiwanDisTrictOptions from 'constants/lib/taiwan-districts.json'
 import DropdownMenu from './dropdown-menu'
@@ -196,10 +196,18 @@ export default function UserProfileForm() {
   const [selectedGender, setSelectedGender] = useState('')
   const [selectedMonth, setSelectedMonth] = useState('')
   const [selectedCountry, setSelectedCountry] = useState('')
+  const [cityName, setCityName] = useState([])
   const [selectedCity, setSelectedCity] = useState('')
   const [districtData, setDistrictData] = useState([])
   const [selectedDistrict, setSelectedDistrict] = useState('')
   const router = useRouter()
+
+  useEffect(() => {
+    const filteredCityName = taiwanDisTrictOptions.map((data) => {
+      return { name: data.name }
+    })
+    setCityName(filteredCityName)
+  }, [])
 
   const handleCountrySelect = (country) => {
     setSelectedCountry(country)
@@ -303,7 +311,7 @@ export default function UserProfileForm() {
               <ItemsWrapper>
                 <SmallLabel htmlFor="city">縣市</SmallLabel>
                 <DropdownMenu
-                  options={taiwanDisTrictOptions}
+                  options={cityName}
                   keyField="name"
                   value="name"
                   selectedOption={selectedCity}
