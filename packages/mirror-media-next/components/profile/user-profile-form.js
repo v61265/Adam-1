@@ -5,7 +5,7 @@ import taiwanDisTrictOptions from 'constants/lib/taiwan-districts.json'
 import DropdownMenu from './dropdown-menu'
 import PrimaryButton from '../shared/buttons/primary-button'
 import DefaultButton from '../shared/buttons/default-button'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const Form = styled.form`
   display: flex;
@@ -199,6 +199,7 @@ export default function UserProfileForm() {
   const [selectedCity, setSelectedCity] = useState('')
   const [districtData, setDistrictData] = useState([])
   const [selectedDistrict, setSelectedDistrict] = useState('')
+  const router = useRouter()
 
   const handleCountrySelect = (country) => {
     setSelectedCountry(country)
@@ -216,6 +217,10 @@ export default function UserProfileForm() {
     setDistrictData(cityData.districts)
   }
 
+  const handleUpdatePasswordClick = () => {
+    router.push('/updatePassword')
+  }
+
   return (
     <>
       <Form>
@@ -226,11 +231,11 @@ export default function UserProfileForm() {
 
         <PasswordWrapper>
           <h2>密碼</h2>
-          <Link href="/updatePassword">
-            <PasswordButtonWrapper>
-              <DefaultButton>變更密碼</DefaultButton>
-            </PasswordButtonWrapper>
-          </Link>
+          <PasswordButtonWrapper>
+            <DefaultButton onClick={handleUpdatePasswordClick}>
+              變更密碼
+            </DefaultButton>
+          </PasswordButtonWrapper>
         </PasswordWrapper>
 
         <FlexRowContainer>
