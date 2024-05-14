@@ -24,24 +24,28 @@ const Container = styled.div`
      */
     ({ rwd }) => rwd.mobile.width
   };
-  min-height: ${({ rwd, shouldTranslate }) =>
-    shouldTranslate ? rwd.mobile.height : '0px'};
+  min-height: ${({ rwd }) => rwd.mobile.height};
   margin: ${({ rwd }) => rwd.mobile.margin};
 
   ${({ theme }) => theme.breakpoint.md} {
     min-width: ${({ rwd }) => rwd.tablet.width};
-    min-height: ${({ rwd, shouldTranslate }) =>
-      shouldTranslate ? rwd.tablet.height : '0px'};
+    min-height: ${({ rwd }) => rwd.tablet.height};
     margin: ${({ rwd }) => rwd.tablet.margin};
   }
 
   ${({ theme }) => theme.breakpoint.xl} {
     min-width: ${({ rwd }) => rwd.desktop.width};
-    min-height: ${({ rwd, shouldTranslate }) => {
-      return shouldTranslate ? rwd.desktop.height : '0px'
-    }};
+    min-height: ${({ rwd }) => rwd.desktop.height}};
     margin: ${({ rwd }) => rwd.desktop.margin};
   }
+
+  ${({ shouldTranslate }) => {
+    if (!shouldTranslate) {
+      return `
+      min-height: 0px;
+      `
+    }
+  }}
 `
 const ContainerMobileAndTablet = styled(Container)`
   display: block;
@@ -104,7 +108,7 @@ export default function GPT_Placeholder({
   }, [])
 
   return (
-    <Container rwd={rwd} shouldTranslate={shouldMinHeight}>
+    <Container rwd={rwd} shouldTranslate={!shouldMinHeight}>
       {children}
     </Container>
   )
