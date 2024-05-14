@@ -100,10 +100,11 @@ export default function GPT_Placeholder({
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    console.log({ isMounted })
     if (!isMounted) {
       setIsMounted(true)
     } else {
-      console.log(shouldShowAd)
+      console.log({ shouldShowAd })
       setShouldMinHeight(shouldShowAd)
     }
   }, [shouldShowAd])
