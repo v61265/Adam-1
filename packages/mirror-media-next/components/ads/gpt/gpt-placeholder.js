@@ -97,7 +97,7 @@ export default function GPT_Placeholder({
   }, [])
 
   return (
-    <Container rwd={rwd} shouldTranslate={isMounted && shouldShowAd}>
+    <Container rwd={rwd} shouldTranslate={!isMounted || shouldShowAd}>
       {children}
     </Container>
   )
