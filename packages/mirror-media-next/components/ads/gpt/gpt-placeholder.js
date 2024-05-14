@@ -101,7 +101,7 @@ export default function GPT_Placeholder({
   useEffect(() => {
     console.log(shouldShowAd)
     if (!shouldShowAd) setShouldMinHeight(false)
-  }, [shouldShowAd])
+  }, [])
 
   return (
     <Container rwd={rwd} shouldTranslate={shouldMinHeight}>
