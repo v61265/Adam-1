@@ -126,10 +126,6 @@ export default function Home({
   const shouldShowAd = useDisplayAd()
   const [isHDAdEmpty, setISHDAdEmpty] = useState(true)
 
-  useEffect(() => {
-    console.log({ shouldShowAd })
-  }, [shouldShowAd])
-
   const handleObSlotRenderEnded = useCallback((e) => {
     setISHDAdEmpty(e.isEmpty)
   }, [])
