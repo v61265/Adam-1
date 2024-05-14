@@ -108,7 +108,7 @@ const FormDetails = styled.div`
 const ItemsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 0;
 
   input {
     width: 100%;
