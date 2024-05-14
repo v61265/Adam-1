@@ -119,7 +119,7 @@ export default function Tag({ postsCount, posts, tag, headerData }) {
       footer={{ type: 'default' }}
     >
       <TagContainer>
-        <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
+        <GPT_Placeholder shouldShowAd={shouldShowAd} isHDAdEmpty={isHDAdEmpty}>
           {shouldShowAd && (
             <StyledGPTAd
               pageKey="other"

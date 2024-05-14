@@ -116,7 +116,7 @@ export default function WarmLife({
       footer={{ type: 'default' }}
     >
       <WarmLifeContainer>
-        <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
+        <GPT_Placeholder shouldShowAd={shouldShowAd} isHDAdEmpty={isHDAdEmpty}>
           {shouldShowAd && (
             <StyledGPTAd
               pageKey={WARMLIFE_GPT_SECTION_IDS}

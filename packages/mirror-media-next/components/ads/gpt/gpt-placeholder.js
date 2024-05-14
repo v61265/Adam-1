@@ -79,13 +79,15 @@ const DEFAULT_SIZES = {
  * @param {Object} props
  * @param {Rwd} [props.rwd]
  * @param {JSX.Element} props.children
- * @param {boolean} [props.shouldTranslate]
+ * @param {boolean} [props.shouldShowAd]
+ * @param {boolean} [props.isHDAdEmpty]
  * @returns {JSX.Element}
  */
 export default function GPT_Placeholder({
   rwd = DEFAULT_SIZES,
   children,
-  shouldTranslate = false,
+  isHDAdEmpty = false,
+  shouldShowAd = true,
 }) {
   const [isMounted, setIsMounted] = useState(false)
   useEffect(() => {
@@ -95,11 +97,17 @@ export default function GPT_Placeholder({
   }, [])
 
   useEffect(() => {
-    console.log({ shouldTranslate, isMounted })
-  }, [isMounted, shouldTranslate])
+    console.log(
+      { shouldShowAd, isHDAdEmpty, isMounted },
+      isHDAdEmpty && !isMounted && shouldShowAd
+    )
+  }, [isMounted, shouldShowAd, isHDAdEmpty])
 
   return (
-    <Container rwd={rwd} shouldTranslate={shouldTranslate && isMounted}>
+    <Container
+      rwd={rwd}
+      shouldTranslate={!isHDAdEmpty && isMounted && shouldShowAd}
+    >
       {children}
     </Container>
   )

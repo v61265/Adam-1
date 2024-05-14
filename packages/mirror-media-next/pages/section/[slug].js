@@ -120,7 +120,7 @@ export default function Section({ postsCount, posts, section, headerData }) {
       footer={{ type: 'default' }}
     >
       <SectionContainer>
-        <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
+        <GPT_Placeholder shouldShowAd={shouldShowAd} isHDAdEmpty={isHDAdEmpty}>
           {shouldShowAd && (
             <StyledGPTAd
               pageKey={getSectionGPTPageKey(section.slug)}

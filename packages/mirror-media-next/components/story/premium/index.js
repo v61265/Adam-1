@@ -277,7 +277,7 @@ export default function StoryPremiumStyle({
         }}
       />
 
-      <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
+      <GPT_Placeholder shouldShowAd={shouldShowAd} isHDAdEmpty={isHDAdEmpty}>
         {shouldShowAd && (
           <StyledGPTAd_HD
             pageKey={pageKeyForGptAd}

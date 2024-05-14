@@ -104,7 +104,7 @@ export default function Author({ postsCount, posts, author, headerData }) {
       footer={{ type: 'default' }}
     >
       <AuthorContainer>
-        <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
+        <GPT_Placeholder shouldShowAd={shouldShowAd} isHDAdEmpty={isHDAdEmpty}>
           {shouldShowAd && (
             <StyledGPTAd
               pageKey="other"

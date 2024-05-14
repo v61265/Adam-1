@@ -216,7 +216,7 @@ export default function Category({
       footer={{ type: 'default' }}
     >
       <CategoryContainer isPremium={isPremium}>
-        <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
+        <GPT_Placeholder shouldShowAd={shouldShowAd} isHDAdEmpty={isHDAdEmpty}>
           {shouldShowAd && (
             <StyledGPTAd
               pageKey={GptPageKey}

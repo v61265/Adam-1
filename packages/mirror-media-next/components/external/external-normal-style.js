@@ -511,7 +511,7 @@ export default function ExternalNormalStyle({ external }) {
 
   return (
     <>
-      <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
+      <GPT_Placeholder shouldShowAd={shouldShowAd} isHDAdEmpty={isHDAdEmpty}>
         {shouldShowAd && (
           <StyledGPTAd_HD
             pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
