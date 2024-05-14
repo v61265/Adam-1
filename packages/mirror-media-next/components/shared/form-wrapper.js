@@ -10,6 +10,8 @@ const FormWrapper = styled.div`
 
   ${({ theme }) => theme.breakpoint.md} {
     padding: 40px 40px;
+    margin-top: 48px;
+    margin-bottom: 48px;
     border-radius: 24px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.08),

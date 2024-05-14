@@ -28,6 +28,12 @@ const Main = styled.main`
   align-items: center;
 `
 
+const FailedFormWrapper = styled(FormWrapper)`
+  ${({ theme }) => theme.breakpoint.md} {
+    width: 423px;
+  }
+`
+
 const ContentBlock = styled.div`
   margin-bottom: 24px;
 `
@@ -55,16 +61,17 @@ const SecondaryText = styled.p`
 
 export default function BodyEmailVerification() {
   const { isLoggedIn, userEmail, firebaseId, memberInfo } = useMembership()
-  const [verificationState, setVerificationState] = useState(
-    /** @type {VerficationState} */ (VERIFICATION_STATE.DEFAULT)
-  )
   const [errorType, setErrorType] = useState('')
   const router = useRouter()
   const actionCode = getSearchParamFromApiKeyUrl(router.query, 'oobCode')
+  const [verificationState, setVerificationState] = useState(
+    !actionCode || Array.isArray(actionCode)
+      ? /** @type {VerficationState} */ (VERIFICATION_STATE.FAILED)
+      : /** @type {VerficationState} */ (VERIFICATION_STATE.DEFAULT)
+  )
 
   useEffect(() => {
     if (Array.isArray(actionCode)) {
-      setVerificationState(VERIFICATION_STATE.FAILED)
       return
     }
 
@@ -160,9 +167,6 @@ export default function BodyEmailVerification() {
 
   const getContent = () => {
     switch (verificationState) {
-      case VERIFICATION_STATE.DEFAULT:
-        return null
-
       case VERIFICATION_STATE.SUCCESS: {
         const primaryTextWording = isLoggedIn
           ? `${userEmail} 已驗證成功！`
@@ -203,16 +207,21 @@ export default function BodyEmailVerification() {
         )
       }
 
-      case VERIFICATION_STATE.FAILED:
-        return getFailedContent()
+      default:
+        return null
     }
   }
 
-  const content = getContent()
+  /** @type {string[]} */
+  const VALID_STATE = [VERIFICATION_STATE.DEFAULT, VERIFICATION_STATE.SUCCESS]
 
   return (
     <Main>
-      <FormWrapper>{content}</FormWrapper>
+      {VALID_STATE.includes(verificationState) ? (
+        <FormWrapper>{getContent()}</FormWrapper>
+      ) : (
+        <FailedFormWrapper>{getFailedContent()}</FailedFormWrapper>
+      )}
     </Main>
   )
 }
