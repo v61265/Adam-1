@@ -96,18 +96,8 @@ export default function GPT_Placeholder({
     setIsMounted(true)
   }, [])
 
-  useEffect(() => {
-    console.log(
-      { shouldShowAd, isHDAdEmpty, isMounted },
-      isHDAdEmpty && !isMounted && shouldShowAd
-    )
-  }, [isMounted, shouldShowAd, isHDAdEmpty])
-
   return (
-    <Container
-      rwd={rwd}
-      shouldTranslate={!isHDAdEmpty && isMounted && shouldShowAd}
-    >
+    <Container rwd={rwd} shouldTranslate={isMounted && shouldShowAd}>
       {children}
     </Container>
   )
