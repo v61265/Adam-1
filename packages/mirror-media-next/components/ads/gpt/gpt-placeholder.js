@@ -94,7 +94,9 @@ export default function GPT_Placeholder({
   return (
     <Container
       rwd={rwd}
-      shouldTranslate={shouldShowAd || !isLogInProcessFinished}
+      shouldTranslate={
+        (shouldShowAd && !isHDAdEmpty) || !isLogInProcessFinished
+      }
     >
       {children}
     </Container>
