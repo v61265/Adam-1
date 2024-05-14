@@ -11,6 +11,7 @@ import FormWrapper from './form-wrapper'
 import PrimaryButton from '../shared/buttons/primary-button'
 import StyledLink from '../login/styled-link'
 import { FirebaseAuthError } from '../../constants/firebase'
+import { getSearchParamFromApiKeyUrl } from '../../utils'
 
 const DEFAULT = 'default'
 const SUCCESS = 'success'
@@ -59,7 +60,7 @@ export default function BodyEmailVerification() {
   )
   const [errorType, setErrorType] = useState('')
   const router = useRouter()
-  const actionCode = router.query.oobCode
+  const actionCode = getSearchParamFromApiKeyUrl(router.query, 'oobCode')
 
   useEffect(() => {
     if (Array.isArray(actionCode)) {

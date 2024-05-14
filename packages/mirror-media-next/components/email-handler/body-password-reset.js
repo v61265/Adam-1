@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { auth } from '../../firebase'
 import { generateErrorReportInfo } from '../../utils/log/error-log'
 import { sendErrorLog } from '../../utils/log/send-log'
-import { isValidPassword } from '../../utils'
+import { getSearchParamFromApiKeyUrl, isValidPassword } from '../../utils'
 import { InputState } from '../../constants/form'
 import FormWrapper from '../login/form-wrapper'
 import GenericPasswordInput from '../shared/inputs/generic-password-input'
@@ -35,7 +35,7 @@ export default function BodyPasswordReset() {
   const [password, setPassword] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const router = useRouter()
-  const actionCode = router.query.oobCode
+  const actionCode = getSearchParamFromApiKeyUrl(router.query, 'oobCode')
 
   const getValidality = (/** @type {string} */ password) => {
     if (password === '') {

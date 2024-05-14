@@ -9,6 +9,7 @@ import { setPageCache } from '../utils/cache-setting'
 import LayoutFull from '../components/shared/layout-full'
 import BodyPasswordReset from '../components/email-handler/body-password-reset'
 import BodyEmailVerification from '../components/email-handler/body-email-verification'
+import { getSearchParamFromApiKeyUrl } from '../utils'
 
 const RESET_PASSWORD = 'resetPassword'
 const RECOVER_EMAIL = 'recoverEmail'
@@ -69,8 +70,13 @@ export const getServerSideProps = async ({ req, res, query }) => {
     ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
   }
 
-  const rawMode = query.mode
-  const mode = Array.isArray(rawMode) ? '' : rawMode
+  const mode = getSearchParamFromApiKeyUrl(query, 'mode')
+
+  if (Array.isArray(mode)) {
+    return {
+      notFound: true,
+    }
+  }
 
   if ([RESET_PASSWORD, VERIFY_EMAIL].includes(mode) === false) {
     return {
