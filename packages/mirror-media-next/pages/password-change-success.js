@@ -4,6 +4,7 @@ import { SECOND } from '../constants/time-unit'
 import LayoutFull from '../components/shared/layout-full'
 import FormWrapper from '../components/login/form-wrapper'
 import { useRouter } from 'next/router'
+import { logout } from '../context/membership'
 
 const REDIRECTION_DELAY = 3 // 秒
 
@@ -42,6 +43,8 @@ export default function PasswordChangeSuccess() {
   const router = useRouter()
 
   useEffect(() => {
+    logout()
+
     const task = setTimeout(
       () =>
         router.push({
