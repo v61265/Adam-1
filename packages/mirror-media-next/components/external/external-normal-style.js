@@ -501,7 +501,7 @@ export default function ExternalNormalStyle({ external }) {
     </DateUnderContent>
   ) : null
 
-  const shouldShowAd = useDisplayAd()
+  const { shouldShowAd, isLogInProcessFinished } = useDisplayAd()
 
   const [isHDAdEmpty, setISHDAdEmpty] = useState(true)
 
@@ -511,7 +511,11 @@ export default function ExternalNormalStyle({ external }) {
 
   return (
     <>
-      <GPT_Placeholder shouldShowAd={shouldShowAd} isHDAdEmpty={isHDAdEmpty}>
+      <GPT_Placeholder
+        shouldShowAd={shouldShowAd}
+        isHDAdEmpty={isHDAdEmpty}
+        isLogInProcessFinished={isLogInProcessFinished}
+      >
         {shouldShowAd && (
           <StyledGPTAd_HD
             pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}

@@ -626,7 +626,8 @@ export default function StoryNormalStyle({
   const publishedTaipeiTime = transformTimeDataIntoDotFormat(publishedDate)
   const updatedTaipeiTime = transformTimeDataIntoDotFormat(updatedAt)
 
-  const shouldShowAd = useDisplayAd(hiddenAdvertised)
+  const { shouldShowAd, isLogInProcessFinished } =
+    useDisplayAd(hiddenAdvertised)
   //If no wine category, then should show gpt ST ad, otherwise, then should not show gpt ST ad.
   const noCategoryOfWineSlug = getCategoryOfWineSlug(categories).length === 0
 
@@ -644,7 +645,11 @@ export default function StoryNormalStyle({
         }}
       />
 
-      <GPT_Placeholder shouldShowAd={shouldShowAd} isHDAdEmpty={isHDAdEmpty}>
+      <GPT_Placeholder
+        shouldShowAd={shouldShowAd}
+        isHDAdEmpty={isHDAdEmpty}
+        isLogInProcessFinished={isLogInProcessFinished}
+      >
         {shouldShowAd && (
           <StyledGPTAd_HD
             pageKey={pageKeyForGptAd}

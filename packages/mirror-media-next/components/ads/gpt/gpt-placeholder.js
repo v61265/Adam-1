@@ -81,6 +81,7 @@ const DEFAULT_SIZES = {
  * @param {JSX.Element} props.children
  * @param {boolean} [props.shouldShowAd]
  * @param {boolean} [props.isHDAdEmpty]
+ * @param {boolean} [props.isLogInProcessFinished]
  * @returns {JSX.Element}
  */
 export default function GPT_Placeholder({
@@ -88,30 +89,13 @@ export default function GPT_Placeholder({
   children,
   isHDAdEmpty = false,
   shouldShowAd = true,
+  isLogInProcessFinished = false,
 }) {
-  // const [isMounted, setIsMounted] = useState(false)
-  // useEffect(() => {
-  //   // 為了讓 mounted 前一律撐開
-  //   // 原因可參見該描述：https://app.asana.com/0/1181156545719626/1206976463067891/f
-  //   setIsMounted(true)
-  // }, [])
-
-  const [shouldMinHeight, setShouldMinHeight] = useState(true)
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setShouldMinHeight(shouldShowAd)
-    // console.log({ isMounted })
-    // if (!isMounted) {
-    //   setIsMounted(true)
-    // } else {
-    //   console.log({ shouldShowAd })
-    //   setShouldMinHeight(shouldShowAd)
-    // }
-  }, [shouldShowAd])
-
   return (
-    <Container rwd={rwd} shouldTranslate={shouldMinHeight}>
+    <Container
+      rwd={rwd}
+      shouldTranslate={shouldShowAd || !isLogInProcessFinished}
+    >
       {children}
     </Container>
   )
