@@ -96,6 +96,7 @@ export default function BodyPasswordReset() {
         </ContentBlock>
         <PrimaryButton
           onClick={handleOnPrimaryButtonClicked}
+          isLoading={isProcessing}
           disabled={validality !== InputState.Valid}
         >
           送出
