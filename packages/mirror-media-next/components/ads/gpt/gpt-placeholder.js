@@ -87,6 +87,7 @@ const DEFAULT_SIZES = {
 export default function GPT_Placeholder({
   rwd = DEFAULT_SIZES,
   children,
+  // 為了 cls 先暫時移除
   isHDAdEmpty = false,
   shouldShowAd = true,
   isLogInProcessFinished = false,
@@ -94,9 +95,7 @@ export default function GPT_Placeholder({
   return (
     <Container
       rwd={rwd}
-      shouldTranslate={
-        (shouldShowAd && !isHDAdEmpty) || !isLogInProcessFinished
-      }
+      shouldTranslate={shouldShowAd || !isLogInProcessFinished}
     >
       {children}
     </Container>
