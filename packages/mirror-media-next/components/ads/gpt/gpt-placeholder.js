@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 /**
@@ -53,6 +52,20 @@ const ContainerDesktop = styled(Container)`
   display: none;
   ${({ theme }) => theme.breakpoint.xl} {
     display: block;
+  }
+`
+
+const ContainerAside = styled.div`
+  position: relative;
+  ${({ theme }) => theme.breakpoint.xl} {
+    min-height: ${
+      /**
+       *
+       * @param {Object} props
+       * @param {boolean} [props.shouldTranslate]
+       */
+      ({ shouldTranslate }) => (shouldTranslate ? '300px' : '0px')
+    };
   }
 `
 
@@ -117,4 +130,28 @@ const GPT_Placeholder_Desktop = ({ rwd = DEFAULT_SIZES, children }) => {
   return <ContainerDesktop rwd={rwd}>{children}</ContainerDesktop>
 }
 
-export { GPT_Placeholder_MobileAndTablet, GPT_Placeholder_Desktop }
+/**
+ *
+ * @param {Object} props
+ * @param {JSX.Element} props.children
+ * @param {boolean} [props.shouldShowAd]
+ * @param {boolean} [props.isLogInProcessFinished]
+ * @returns
+ */
+const GPT_Placeholder_Aside = ({
+  children,
+  shouldShowAd = true,
+  isLogInProcessFinished = false,
+}) => {
+  return (
+    <ContainerAside shouldTranslate={shouldShowAd || !isLogInProcessFinished}>
+      {children}
+    </ContainerAside>
+  )
+}
+
+export {
+  GPT_Placeholder_MobileAndTablet,
+  GPT_Placeholder_Desktop,
+  GPT_Placeholder_Aside,
+}

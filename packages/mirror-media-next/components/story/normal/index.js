@@ -22,6 +22,7 @@ import Divider from '../shared/divider'
 import ShareHeader from '../../header/share-header'
 import Footer from '../../shared/footer'
 import GPTMbStAd from '../../ads/gpt/gpt-mb-st-ad'
+import { GPT_Placeholder_Aside } from '../../ads/gpt/gpt-placeholder'
 
 import {
   transformTimeDataIntoDotFormat,
@@ -755,9 +756,12 @@ export default function StoryNormalStyle({
           </StoryEndDesktop>
         </Article>
         <Aside>
-          {shouldShowAd && (
+          <GPT_Placeholder_Aside
+            shouldShowAd={shouldShowAd}
+            isLogInProcessFinished={isLogInProcessFinished}
+          >
             <StyledGPTAd_PC_R1 pageKey={pageKeyForGptAd} adKey="PC_R1" />
-          )}
+          </GPT_Placeholder_Aside>
           <AsideArticleList
             listType={'latestNews'}
             fetchArticle={handleFetchLatestNews}

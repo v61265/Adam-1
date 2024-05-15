@@ -38,6 +38,7 @@ import {
 import { useDisplayAd } from '../../hooks/useDisplayAd'
 import { Z_INDEX } from '../../constants/index'
 import { getPageKeyByPartnerShowOnIndex } from '../../utils/ad'
+import { GPT_Placeholder_Aside } from '../ads/gpt/gpt-placeholder'
 
 const DableAd = dynamic(() => import('../ads/dable/dable-ad'), {
   ssr: false,
@@ -623,12 +624,15 @@ export default function ExternalNormalStyle({ external }) {
           </StoryEndDesktop>
         </Article>
         <Aside>
-          {shouldShowAd && (
+          <GPT_Placeholder_Aside
+            shouldShowAd={shouldShowAd}
+            isLogInProcessFinished={isLogInProcessFinished}
+          >
             <StyledGPTAd_PC_R1
               pageKey={getPageKeyByPartnerShowOnIndex(partner?.showOnIndex)}
               adKey="PC_R1"
             />
-          )}
+          </GPT_Placeholder_Aside>
 
           <AsideArticleList
             listType={'latestNews'}
