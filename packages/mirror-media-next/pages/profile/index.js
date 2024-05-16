@@ -7,6 +7,10 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import client from '../../apollo/apollo-client'
 import { fetchMemberProfileByFirebaseId } from '../../apollo/query/profile'
+import { GCP_PROJECT_ID } from '../../config/index.mjs'
+import errors from '@twreporter/errors'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { setPageCache } from '../../utils/cache-setting'
 
 const Page = styled.main`
   padding: 40px 20px;
@@ -36,10 +40,13 @@ const Title = styled.h1`
 `
 
 /**
+ * @param {Object} props
+ * @param {Object[] } props.sectionsData
+ * @param {Object[]} props.topicsData
  * @returns {JSX.Element}
  */
 
-export default function Profile() {
+export default function Profile({ sectionsData = [], topicsData = [] }) {
   const router = useRouter()
 
   const { isLoggedIn, isLogInProcessFinished, accessToken, firebaseId } =
@@ -93,6 +100,7 @@ export default function Profile() {
       head={{ title: `個人資料` }}
       header={{
         type: 'default',
+        data: { sectionsData: sectionsData, topicsData },
       }}
       footer={{ type: 'default' }}
     >
@@ -103,4 +111,52 @@ export default function Profile() {
       </Page>
     </LayoutFull>
   )
+}
+
+/**
+ * @type {import('next').GetServerSideProps}
+ */
+export async function getServerSideProps({ req, res }) {
+  setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+
+  const traceHeader = req.headers?.['x-cloud-trace-context']
+  let globalLogFields = {}
+  if (traceHeader && !Array.isArray(traceHeader)) {
+    const [trace] = traceHeader.split('/')
+    globalLogFields[
+      'logging.googleapis.com/trace'
+    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
+  }
+
+  let sectionsData = []
+  let topicsData = []
+
+  try {
+    const headerData = await fetchHeaderDataInDefaultPageLayout()
+    if (Array.isArray(headerData.sectionsData)) {
+      sectionsData = headerData.sectionsData
+    }
+    if (Array.isArray(headerData.topicsData)) {
+      topicsData = headerData.topicsData
+    }
+  } catch (err) {
+    const annotatingAxiosError = errors.helpers.annotateAxiosError(err)
+    console.error(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(annotatingAxiosError, {
+          withStack: true,
+          withPayload: true,
+        }),
+        ...globalLogFields,
+      })
+    )
+  }
+
+  return {
+    props: {
+      sectionsData,
+      topicsData,
+    },
+  }
 }
