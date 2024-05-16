@@ -15,7 +15,7 @@ import { gql } from '@apollo/client'
  * @property {string | null} address
  */
 
-export const fetchMemberProfile = gql`
+export const fetchMemberProfileByFirebaseId = gql`
   query fetchMemberProfile($firebaseId: String!) {
     member(where: { firebaseId: $firebaseId }) {
       id
