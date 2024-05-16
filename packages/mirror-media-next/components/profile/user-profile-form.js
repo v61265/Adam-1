@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import countryOptions from 'constants/lib/countries.json'
 import taiwanDisTrictOptions from 'constants/lib/taiwan-districts.json'
 import DropdownMenu from './dropdown-menu'
@@ -29,6 +29,7 @@ const EmailWrapper = styled.div`
   }
 
   p {
+    min-height: 27px;
     font-size: 18px;
     font-weight: 400;
     line-height: 27px;
@@ -189,17 +190,77 @@ const monthOptions = [
 ]
 
 /**
+ * @param {number} timestamp
+ * @returns {{year: string, month: string, date: string}}
+ */
+const formatBirthday = (timestamp) => {
+  if (!timestamp) return { year: '', month: '', date: '' }
+
+  const dateObj = new Date(timestamp)
+  const year = dateObj.getFullYear().toString()
+  const month = (dateObj.getMonth() + 1).toString()
+  const date = dateObj.getDate().toString()
+
+  return { year, month, date }
+}
+
+/**
+ * @param {string} gender
+ * @returns {string}
+ */
+const formatGender = (gender) => {
+  switch (gender) {
+    case 'M':
+      return '男'
+    case 'F':
+      return '女'
+    case 'N/A':
+    default:
+      return '不透露'
+  }
+}
+
+/**
  * @returns {JSX.Element}
  */
-
-export default function UserProfileForm() {
+export default function UserProfileForm({ profile }) {
   const [selectedGender, setSelectedGender] = useState('')
   const [selectedMonth, setSelectedMonth] = useState('')
   const [selectedCountry, setSelectedCountry] = useState('')
   const [selectedCity, setSelectedCity] = useState('')
   const [districtData, setDistrictData] = useState([])
   const [selectedDistrict, setSelectedDistrict] = useState('')
+  const [genderName, setGenderName] = useState('')
+  const [birthdayDetails, setBirthdayDetails] = useState({
+    year: '',
+    month: '',
+    date: '',
+  })
+
   const router = useRouter()
+  const {
+    email,
+    name,
+    gender,
+    birthday,
+    phone,
+    country,
+    city,
+    district,
+    address,
+  } = profile
+
+  useEffect(() => {
+    if (birthday) {
+      const parsedBirthday = formatBirthday(birthday)
+      setBirthdayDetails(parsedBirthday)
+    }
+
+    if (gender) {
+      const parsedGender = formatGender(gender)
+      setGenderName(parsedGender)
+    }
+  }, [birthday, gender])
 
   const cityNames = useMemo(() => {
     return taiwanDisTrictOptions.map((data) => {
@@ -207,6 +268,9 @@ export default function UserProfileForm() {
     })
   }, [])
 
+  /**
+   * @param {string} country
+   */
   const handleCountrySelect = (country) => {
     setSelectedCountry(country)
     if (country !== '台灣') {
@@ -215,6 +279,9 @@ export default function UserProfileForm() {
     }
   }
 
+  /**
+   * @param {string} city
+   */
   const handleCitySelect = (city) => {
     setSelectedCity(city)
     const cityData = taiwanDisTrictOptions.find(function (el) {
@@ -232,7 +299,7 @@ export default function UserProfileForm() {
       <Form>
         <EmailWrapper>
           <h2>Email</h2>
-          <p>test email</p>
+          <p>{email}</p>
         </EmailWrapper>
 
         <PasswordWrapper>
@@ -247,11 +314,12 @@ export default function UserProfileForm() {
         <FlexRowContainer>
           <FormGroup>
             <LargeLabel htmlFor="name">姓名</LargeLabel>
-            <input id="name" placeholder="請輸入姓名" />
+            <input id="name" placeholder="請輸入姓名" defaultValue={name} />
           </FormGroup>
           <FormGroup>
             <LargeLabel>性別</LargeLabel>
             <DropdownMenu
+              defaultValue={genderName}
               keyField="id"
               value="name"
               options={genderOptions}
@@ -268,7 +336,11 @@ export default function UserProfileForm() {
           <FlexRowBox>
             <ItemsWrapper>
               <SmallLabel htmlFor="year">西元年</SmallLabel>
-              <input id="year" placeholder="西元年" />
+              <input
+                id="year"
+                placeholder="西元年"
+                defaultValue={birthdayDetails.year}
+              />
             </ItemsWrapper>
             <ItemsWrapper>
               <SmallLabel>月份</SmallLabel>
@@ -279,18 +351,23 @@ export default function UserProfileForm() {
                 selectedOption={selectedMonth}
                 onSelect={setSelectedMonth}
                 placeholder="月份"
+                defaultValue={birthdayDetails.month}
               />
             </ItemsWrapper>
             <ItemsWrapper>
               <SmallLabel htmlFor="date">日期</SmallLabel>
-              <input id="date" placeholder="日期" />
+              <input
+                id="date"
+                placeholder="日期"
+                defaultValue={birthdayDetails.date}
+              />
             </ItemsWrapper>
           </FlexRowBox>
         </FormDetails>
 
         <FormGroup>
           <LargeLabel htmlFor="phone">電話</LargeLabel>
-          <input id="phone" placeholder="請輸入電話" />
+          <input id="phone" placeholder="請輸入電話" defaultValue={phone} />
         </FormGroup>
         <FormDetails>
           <h2>地址</h2>
@@ -303,6 +380,7 @@ export default function UserProfileForm() {
                 value="Taiwan"
                 selectedOption={selectedCountry}
                 onSelect={handleCountrySelect}
+                defaultValue={country}
               />
             </ItemsWrapper>
             <FlexRowBox>
@@ -315,6 +393,7 @@ export default function UserProfileForm() {
                   selectedOption={selectedCity}
                   onSelect={handleCitySelect}
                   disabled={selectedCountry !== '臺灣'}
+                  defaultValue={city}
                 />
               </ItemsWrapper>
               <ItemsWrapper>
@@ -326,6 +405,7 @@ export default function UserProfileForm() {
                   selectedOption={selectedDistrict}
                   onSelect={setSelectedDistrict}
                   disabled={selectedCountry !== '臺灣' || selectedCity == ''}
+                  defaultValue={district}
                 />
               </ItemsWrapper>
             </FlexRowBox>
@@ -335,6 +415,7 @@ export default function UserProfileForm() {
               <input
                 id="address"
                 placeholder="請輸入街道、門號、巷弄、樓層等資訊"
+                defaultValue={address}
               />
             </ItemsWrapper>
           </AddressWrapper>
