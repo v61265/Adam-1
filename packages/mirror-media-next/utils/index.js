@@ -463,6 +463,57 @@ const handelAxiosResponse = (
   return dataHandler(undefined)
 }
 
+/**
+ * @template S
+ * @template {import('@apollo/client').ApolloQueryResult<S>} T
+ * @template {PromiseSettledResult<T>} U
+ * @template V
+ *
+ * @param {U} response
+ * @param {(value: T | undefined) => V} dataHandler
+ * @param {string} errorMessage
+ * @param {Record<string, any>} [traceObject]
+ */
+const handleGqlResponse = (
+  response,
+  dataHandler,
+  errorMessage,
+  traceObject
+) => {
+  if (response.status === 'fulfilled') {
+    return dataHandler(response.value)
+  } else if (response.status === 'rejected') {
+    const { graphQLErrors, clientErrors, networkError } = response.reason
+    const annotatingError = errors.helpers.wrap(
+      response.reason,
+      'UnhandledError',
+      errorMessage
+    )
+
+    console.error(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(
+          annotatingError,
+          {
+            withStack: true,
+            withPayload: true,
+          },
+          0,
+          0
+        ),
+        debugPayload: {
+          graphQLErrors,
+          clientErrors,
+          networkError,
+        },
+        ...(traceObject ?? {}),
+      })
+    )
+  }
+  return dataHandler(undefined)
+}
+
 export {
   transformTimeDataIntoDotFormat,
   transformTimeDataIntoSlashFormat,
@@ -486,4 +537,5 @@ export {
   getSearchParamFromApiKeyUrl,
   getLogTraceObject,
   handelAxiosResponse,
+  handleGqlResponse,
 }
