@@ -1,10 +1,18 @@
-import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 
 import SectionArticles from '../../components/shared/section-articles'
-import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
-import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { ENV } from '../../config/index.mjs'
+import {
+  fetchHeaderDataInDefaultPageLayout,
+  getSectionAndTopicFromDefaultHeaderData,
+  getPostsAndPostscountFromGqlData,
+} from '../../utils/api'
+import {
+  getLogTraceObject,
+  handelAxiosResponse,
+  handleGqlResponse,
+} from '../../utils'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
@@ -160,14 +168,7 @@ export async function getServerSideProps({ query, req, res }) {
   }
   const sectionSlug = Array.isArray(query.slug) ? query.slug[0] : query.slug
 
-  const traceHeader = req.headers?.['x-cloud-trace-context']
-  let globalLogFields = {}
-  if (traceHeader && !Array.isArray(traceHeader)) {
-    const [trace] = traceHeader.split('/')
-    globalLogFields[
-      'logging.googleapis.com/trace'
-    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
-  }
+  const globalLogFields = getLogTraceObject(req)
 
   const responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(),
@@ -175,66 +176,30 @@ export async function getServerSideProps({ query, req, res }) {
     fetchSectionBySectionSlug(sectionSlug),
   ])
 
-  const handledResponses = responses.map((response, index) => {
-    if (response.status === 'fulfilled') {
-      if ('data' in response.value) {
-        // handle gql requests
-        return response.value.data
-      }
-      return response.value
-    } else if (response.status === 'rejected') {
-      const { graphQLErrors, clientErrors, networkError } = response.reason
-      const annotatingError = errors.helpers.wrap(
-        response.reason,
-        'UnhandledError',
-        'Error occurs while getting section page data'
-      )
-
-      console.log(
-        JSON.stringify({
-          severity: 'ERROR',
-          message: errors.helpers.printAll(
-            annotatingError,
-            {
-              withStack: true,
-              withPayload: true,
-            },
-            0,
-            0
-          ),
-          debugPayload: {
-            graphQLErrors,
-            clientErrors,
-            networkError,
-          },
-          ...globalLogFields,
-        })
-      )
-      if (index === 1) {
-        // fetch key data (posts) failed, redirect to 500
-        throw new Error('fetch section posts failed')
-      }
-      return
-    }
-  })
-
   // handle header data
-  const headerData =
-    handledResponses[0] && 'sectionsData' in handledResponses[0]
-      ? handledResponses[0]
-      : {
-          sectionsData: [],
-          topicsData: [],
-        }
-  const sectionsData = Array.isArray(headerData.sectionsData)
-    ? headerData.sectionsData
-    : []
-  const topicsData = Array.isArray(headerData.topicsData)
-    ? headerData.topicsData
-    : []
+  const [sectionsData, topicsData] = handelAxiosResponse(
+    responses[0],
+    getSectionAndTopicFromDefaultHeaderData,
+    'Error occurs while getting header data in section page',
+    globalLogFields
+  )
 
   // handle fetch post data
-  if (handledResponses[1]?.posts?.length === 0) {
+  /**
+   * @template {Article} T
+   * @type {typeof getPostsAndPostscountFromGqlData<T>}
+   */
+  const dataHandler = getPostsAndPostscountFromGqlData
+
+  /** @type {[number, Article[]]} */
+  const [postsCount, posts] = handleGqlResponse(
+    responses[1],
+    dataHandler,
+    'Error occurs while getting posts in section page',
+    globalLogFields
+  )
+
+  if (posts.length === 0) {
     // fetchPost return empty array -> wrong authorId -> 404
     console.log(
       JSON.stringify({
@@ -245,14 +210,17 @@ export async function getServerSideProps({ query, req, res }) {
     )
     return { notFound: true }
   }
-  /** @type {number} postsCount */
-  const postsCount = handledResponses[1]?.postsCount || 0
-  /** @type {Article[]} */
-  const posts = handledResponses[1]?.posts || []
 
   // handle fetch section data
   /** @type {Section} */
-  const section = handledResponses[2]?.section || { slug: sectionSlug }
+  const section = handleGqlResponse(
+    responses[2],
+    (gqlData) => {
+      return gqlData?.data?.section || { slug: sectionSlug }
+    },
+    'Error occurs while getting section data in section page',
+    globalLogFields
+  )
 
   // handle section state, if `inactive` -> redirect to 404
   if (section.state !== 'active') {
