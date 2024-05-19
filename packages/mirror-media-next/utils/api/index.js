@@ -148,9 +148,27 @@ const getSectionAndTopicFromDefaultHeaderData = (headerData) => {
 
   return [sectionData, topicsData]
 }
+
+/**
+ * @param {Awaited<ReturnType<typeof fetchHeaderDataInPremiumPageLayout>> | undefined} headerData
+ * @returns {HeadersData}
+ */
+const getSectionFromPremiumHeaderData = (headerData) => {
+  /** @type {HeadersData} */
+  let sectionData = []
+
+  if (headerData) {
+    if (Array.isArray(headerData['sectionsData']))
+      sectionData = headerData['sectionsData']
+  }
+
+  return sectionData
+}
+
 export {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
   fetchPodcastList,
   getSectionAndTopicFromDefaultHeaderData,
+  getSectionFromPremiumHeaderData,
 }
