@@ -2,14 +2,9 @@
 import React, { useState, useEffect, useMemo } from 'react'
 
 import client from '../../apollo/apollo-client'
-import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
-import {
-  GCP_PROJECT_ID,
-  ENV,
-  TEST_GPT_AD_FEATURE_TOGGLE,
-} from '../../config/index.mjs'
+import { ENV, TEST_GPT_AD_FEATURE_TOGGLE } from '../../config/index.mjs'
 import WineWarning from '../../components/shared/wine-warning'
 import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
 import { useMembership } from '../../context/membership'
@@ -26,6 +21,9 @@ import {
   convertDraftToText,
   getResizedUrl,
   getCategoryOfWineSlug,
+  getLogTraceObject,
+  logAxiosError,
+  logGqlError,
 } from '../../utils'
 import { handleStoryPageRedirect } from '../../utils/story'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
@@ -303,14 +301,8 @@ export async function getServerSideProps({ params, req, res }) {
   }
 
   const { slug } = params
-  const traceHeader = req.headers?.['x-cloud-trace-context']
-  let globalLogFields = {}
-  if (traceHeader && !Array.isArray(traceHeader)) {
-    const [trace] = traceHeader.split('/')
-    globalLogFields[
-      'logging.googleapis.com/trace'
-    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
-  }
+  const globalLogFields = getLogTraceObject(req)
+
   try {
     const result = await client.query({
       query: fetchPostBySlug,
@@ -375,21 +367,10 @@ export async function getServerSideProps({ params, req, res }) {
         headerData = await fetchHeaderDataInDefaultPageLayout()
       } catch (err) {
         headerData = { sectionsData: [], topicsData: [] }
-        const errorMessage = errors.helpers.printAll(
+        logAxiosError(
           err,
-          {
-            withStack: true,
-            withPayload: false,
-          },
-          0,
-          0
-        )
-        console.log(
-          JSON.stringify({
-            severity: 'ERROR',
-            message: errorMessage,
-            ...globalLogFields,
-          })
+          'Error occurs while getting header data in story page',
+          globalLogFields
         )
       }
     } else if (shouldFetchPremiumHeaderData) {
@@ -397,21 +378,10 @@ export async function getServerSideProps({ params, req, res }) {
         headerData = await fetchHeaderDataInPremiumPageLayout()
       } catch (err) {
         headerData = { sectionsData: [] }
-        const errorMessage = errors.helpers.printAll(
+        logAxiosError(
           err,
-          {
-            withStack: true,
-            withPayload: false,
-          },
-          0,
-          0
-        )
-        console.log(
-          JSON.stringify({
-            severity: 'ERROR',
-            message: errorMessage,
-            ...globalLogFields,
-          })
+          'Error occurs while getting premium header data in story page',
+          globalLogFields
         )
       }
     }
@@ -424,34 +394,11 @@ export async function getServerSideProps({ params, req, res }) {
       },
     }
   } catch (err) {
-    const { graphQLErrors, clientErrors, networkError } = err
-    const annotatingError = errors.helpers.wrap(
+    logGqlError(
       err,
-      'UnhandledError',
-      'Error occurs while getting story page data'
+      'Error occurs while getting data in story page',
+      globalLogFields
     )
-
-    const errorMessage = errors.helpers.printAll(
-      annotatingError,
-      {
-        withStack: true,
-        withPayload: true,
-      },
-      0,
-      0
-    )
-    console.log(
-      JSON.stringify({
-        severity: 'ERROR',
-        message: errorMessage,
-        debugPayload: {
-          graphQLErrors,
-          clientErrors,
-          networkError,
-        },
-        ...globalLogFields,
-      })
-    )
-    throw new Error(errorMessage)
+    throw new Error('Error occurs while getting data in story page')
   }
 }
