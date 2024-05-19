@@ -182,7 +182,7 @@ export async function getServerSideProps({ query, req, res }) {
       return gqlData?.data
     },
     'Error occurs while getting author data in author page',
-    req
+    globalLogFields
   )
 
   if (!authorData) {
@@ -214,7 +214,7 @@ export async function getServerSideProps({ query, req, res }) {
     responses[2],
     dataHandler,
     'Error occurs while getting post data in author page',
-    req
+    globalLogFields
   )
 
   const props = {

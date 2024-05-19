@@ -1,12 +1,14 @@
-import errors from '@twreporter/errors'
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 
 import CategoryArticles from '../../components/category/category-articles'
-import { GCP_PROJECT_ID, ENV } from '../../config/index.mjs'
+import { ENV } from '../../config/index.mjs'
 import {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
+  getPostsAndPostscountFromGqlData,
+  getSectionAndTopicFromDefaultHeaderData,
+  getSectionFromPremiumHeaderData,
 } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
@@ -17,7 +19,13 @@ import {
   fetchPremiumPostsByCategorySlug,
 } from '../../utils/api/category'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
-import { getCategoryOfWineSlug } from '../../utils'
+import {
+  getCategoryOfWineSlug,
+  getLogTraceObject,
+  handelAxiosResponse,
+  handleGqlResponse,
+  logGqlError,
+} from '../../utils'
 import { getSectionGPTPageKey } from '../../utils/ad'
 import WineWarning from '../../components/shared/wine-warning'
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
@@ -265,14 +273,7 @@ export async function getServerSideProps({ query, req, res }) {
   }
   const categorySlug = Array.isArray(query.slug) ? query.slug[0] : query.slug
 
-  const traceHeader = req.headers?.['x-cloud-trace-context']
-  let globalLogFields = {}
-  if (traceHeader && !Array.isArray(traceHeader)) {
-    const [trace] = traceHeader.split('/')
-    globalLogFields[
-      'logging.googleapis.com/trace'
-    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
-  }
+  const globalLogFields = getLogTraceObject(req)
 
   // default category, if request failed fallback to isMemberOnly = false
   /** @type {Category} */
@@ -288,31 +289,10 @@ export async function getServerSideProps({ query, req, res }) {
     const { data } = await fetchCategoryByCategorySlug(categorySlug)
     category = data.category || category
   } catch (error) {
-    const { graphQLErrors, clientErrors, networkError } = error
-    const annotatingError = errors.helpers.wrap(
+    logGqlError(
       error,
-      'UnhandledError',
-      'Error occurs while getting category page data'
-    )
-    console.log(
-      JSON.stringify({
-        severity: 'ERROR',
-        message: errors.helpers.printAll(
-          annotatingError,
-          {
-            withStack: true,
-            withPayload: true,
-          },
-          0,
-          0
-        ),
-        debugPayload: {
-          graphQLErrors,
-          clientErrors,
-          networkError,
-        },
-        ...globalLogFields,
-      })
+      'Error occurs while getting category data in category page',
+      globalLogFields
     )
   }
 
@@ -330,85 +310,74 @@ export async function getServerSideProps({ query, req, res }) {
 
   const isPremium = category.isMemberOnly
 
-  const responses = await Promise.allSettled(
-    isPremium
-      ? [
-          fetchHeaderDataInPremiumPageLayout(),
-          fetchPremiumPostsByCategorySlug(
-            categorySlug,
-            RENDER_PAGE_SIZE * 2,
-            0
-          ),
-        ]
-      : [
-          fetchHeaderDataInDefaultPageLayout(),
-          fetchPostsByCategorySlug(categorySlug, RENDER_PAGE_SIZE * 2, 0),
-        ]
-  )
-
-  const handledResponses = responses.map((response, index) => {
-    if (response.status === 'fulfilled') {
-      if ('data' in response.value) {
-        // handle gql response
-        return response.value.data
-      }
-      return response.value
-    } else if (response.status === 'rejected') {
-      const { graphQLErrors, clientErrors, networkError } = response.reason
-      const annotatingError = errors.helpers.wrap(
-        response.reason,
-        'UnhandledError',
-        'Error occurs while getting category page data'
-      )
-
-      console.log(
-        JSON.stringify({
-          severity: 'ERROR',
-          message: errors.helpers.printAll(
-            annotatingError,
-            {
-              withStack: true,
-              withPayload: true,
-            },
-            0,
-            0
-          ),
-          debugPayload: {
-            graphQLErrors,
-            clientErrors,
-            networkError,
-          },
-          ...globalLogFields,
-        })
-      )
-
-      if (index === 1) {
-        // fetch key data (posts) failed, redirect to 500
-        throw new Error('fetch category posts failed')
-      }
-      return
-    }
-  })
-
-  // handle header data
+  /** @type {import('../../utils/api').HeadersData} */
   let sectionsData = []
+  /** @type {import('../../utils/api').Topics} */
   let topicsData = []
-  const headerData = handledResponses[0]
+
+  /** @type {number} */
+  let postsCount = 0
+  /** @type {Article[]} */
+  let posts = []
+
   if (isPremium) {
-    if (Array.isArray(headerData.sectionsData)) {
-      sectionsData = headerData.sectionsData
-    }
+    const responses = await Promise.allSettled([
+      fetchHeaderDataInPremiumPageLayout(),
+      fetchPremiumPostsByCategorySlug(categorySlug, RENDER_PAGE_SIZE * 2, 0),
+    ])
+
+    // handle header data
+    sectionsData = handelAxiosResponse(
+      responses[0],
+      getSectionFromPremiumHeaderData,
+      'Error occurs while getting premium header data in category page',
+      globalLogFields
+    )
+
+    // handle fetch post data
+    /**
+     * @template {import('../../apollo/fragments/post').ListingPost} T
+     * @type {typeof getPostsAndPostscountFromGqlData<T>}
+     */
+    const dataHandler = getPostsAndPostscountFromGqlData
+
+    ;[postsCount, posts] = handleGqlResponse(
+      responses[1],
+      dataHandler,
+      'Error occurs while getting premium post data in category page',
+      globalLogFields
+    )
   } else {
-    if (Array.isArray(headerData.sectionsData)) {
-      sectionsData = headerData.sectionsData
-    }
-    if (Array.isArray(headerData.topicsData)) {
-      topicsData = headerData.topicsData
-    }
+    const responses = await Promise.allSettled([
+      fetchHeaderDataInDefaultPageLayout(),
+      fetchPostsByCategorySlug(categorySlug, RENDER_PAGE_SIZE * 2, 0),
+    ])
+
+    // handle header data
+    ;[sectionsData, topicsData] = handelAxiosResponse(
+      responses[0],
+      getSectionAndTopicFromDefaultHeaderData,
+      'Error occurs while getting header data in category page',
+      globalLogFields
+    )
+
+    // handle fetch post data
+    /**
+     * @template {import('../../apollo/fragments/post').ListingPost} T
+     * @type {typeof getPostsAndPostscountFromGqlData<T>}
+     */
+    const dataHandler = getPostsAndPostscountFromGqlData
+
+    ;[postsCount, posts] = handleGqlResponse(
+      responses[1],
+      dataHandler,
+      'Error occurs while getting post data in category page',
+      globalLogFields
+    )
   }
 
   // handle fetch post data
-  if (handledResponses[1]?.posts?.length === 0) {
+  if (posts.length === 0) {
     // fetchPost return empty array -> wrong authorId -> 404
     console.log(
       JSON.stringify({
@@ -419,10 +388,6 @@ export async function getServerSideProps({ query, req, res }) {
     )
     return { notFound: true }
   }
-  /** @type {number} postsCount */
-  const postsCount = handledResponses[1]?.postsCount || 0
-  /** @type {Article[]} */
-  const posts = handledResponses[1]?.posts || []
 
   const props = {
     postsCount,
