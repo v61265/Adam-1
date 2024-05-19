@@ -1,13 +1,13 @@
-import errors from '@twreporter/errors'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import styled from 'styled-components'
 
 import client from '../../../apollo/apollo-client'
-import { GCP_PROJECT_ID } from '../../../config/index.mjs'
 import { setPageCache } from '../../../utils/cache-setting'
 import { fetchWeeklys } from '../../../apollo/query/magazines'
 import Layout from '../../../components/shared/layout'
+import { getLogTraceObject, handleGqlResponse } from '../../../utils'
+import redirectToLoginWhileUnauthed from '../../../utils/redirect-to-login-while-unauthed'
 
 const Page = styled.div`
   padding: 0;
@@ -58,64 +58,33 @@ export default function BookBIssuePublish({ weeklys }) {
 /**
  * @type {import('next').GetServerSideProps}
  */
-export async function getServerSideProps({ req, res }) {
-  setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+export const getServerSideProps = redirectToLoginWhileUnauthed()(
+  async ({ req, res }) => {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
 
-  const traceHeader = req.headers?.['x-cloud-trace-context']
-  let globalLogFields = {}
-  if (traceHeader && !Array.isArray(traceHeader)) {
-    const [trace] = traceHeader.split('/')
-    globalLogFields[
-      'logging.googleapis.com/trace'
-    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
-  }
+    const globalLogFields = getLogTraceObject(req)
 
-  const responses = await Promise.allSettled([
-    client.query({
-      query: fetchWeeklys,
-    }),
-  ])
+    const responses = await Promise.allSettled([
+      client.query({
+        query: fetchWeeklys,
+      }),
+    ])
 
-  const handledResponses = responses.map((response) => {
-    if (response.status === 'fulfilled') {
-      return response.value.data
-    } else if (response.status === 'rejected') {
-      const { graphQLErrors, clientErrors, networkError } = response.reason
-      const annotatingError = errors.helpers.wrap(
-        response.reason,
-        'UnhandledError',
-        'Error occurs while getting magazine issue page data'
-      )
+    const weeklys = handleGqlResponse(
+      responses[0],
+      (
+        /** @type {import('@apollo/client').ApolloQueryResult<any> | undefined} */ gqlData
+      ) => {
+        return gqlData?.data?.magazines || []
+      },
+      'Error occurs while getting data in magazine page',
+      globalLogFields
+    )
 
-      console.log(
-        JSON.stringify({
-          severity: 'ERROR',
-          message: errors.helpers.printAll(
-            annotatingError,
-            {
-              withStack: true,
-              withPayload: true,
-            },
-            0,
-            0
-          ),
-          debugPayload: {
-            graphQLErrors,
-            clientErrors,
-            networkError,
-          },
-          ...globalLogFields,
-        })
-      )
-      return
+    return {
+      props: {
+        weeklys,
+      },
     }
-  })
-
-  const weeklys = handledResponses[0]?.magazines || []
-
-  return {
-    props: {
-      weeklys,
-    },
   }
-}
+)
