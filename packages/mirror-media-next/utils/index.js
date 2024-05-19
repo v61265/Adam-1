@@ -415,14 +415,46 @@ const getLogTraceObject = (req) => {
 }
 
 /**
+ * @param {Error | import('axios').AxiosError} axiosErrors
+ * @param {string} errorMessage
+ * @param {Record<string, any> | undefined} traceObject
+ */
+const logAxiosError = (axiosErrors, errorMessage, traceObject) => {
+  const annotatingError = errors.helpers.wrap(
+    axiosErrors,
+    'UnhandledError',
+    errorMessage
+  )
+
+  console.error(
+    JSON.stringify({
+      severity: 'ERROR',
+      message: errors.helpers.printAll(
+        annotatingError,
+        {
+          withStack: true,
+          withPayload: true,
+        },
+        0,
+        0
+      ),
+      debugPayload: {
+        axiosErrors,
+      },
+      ...(traceObject ?? {}),
+    })
+  )
+}
+
+/**
  * @template {import('axios').AxiosResponse['data']} T
  * @template {PromiseSettledResult<T>} U
  * @template V
  *
  * @param {U} response
  * @param {(value: T | undefined) => V} dataHandler
- * @param {string} errorMessage
- * @param {Record<string, any>} [traceObject]
+ * @param {Parameters<typeof logAxiosError>[1]} errorMessage
+ * @param {Parameters<typeof logAxiosError>[2]} [traceObject]
  */
 const handelAxiosResponse = (
   response,
@@ -433,35 +465,17 @@ const handelAxiosResponse = (
   if (response.status === 'fulfilled') {
     return dataHandler(response.value)
   } else if (response.status === 'rejected') {
-    const axiosErrors = response.reason
-
-    const annotatingError = errors.helpers.wrap(
-      axiosErrors,
-      'UnhandledError',
-      errorMessage
-    )
-
-    console.error(
-      JSON.stringify({
-        severity: 'ERROR',
-        message: errors.helpers.printAll(
-          annotatingError,
-          {
-            withStack: true,
-            withPayload: true,
-          },
-          0,
-          0
-        ),
-        debugPayload: {
-          axiosErrors,
-        },
-        ...(traceObject ?? {}),
-      })
-    )
+    logAxiosError(response.reason, errorMessage, traceObject)
   }
   return dataHandler(undefined)
 }
+
+/**
+ * @param {Error | import('@apollo/client/errors').GraphQLErrors} error
+ * @param {string} errorMessage
+ * @param {Record<string, any> | undefined} traceObject
+ */
+// const logGqlError = (error, errorMessage, traceObject) => {}
 
 /**
  * @template S
@@ -472,7 +486,7 @@ const handelAxiosResponse = (
  * @param {U} response
  * @param {(value: T | undefined) => V} dataHandler
  * @param {string} errorMessage
- * @param {Record<string, any>} [traceObject]
+ * @param {Record<string, any> | undefined} [traceObject]
  */
 const handleGqlResponse = (
   response,
@@ -538,4 +552,5 @@ export {
   getLogTraceObject,
   handelAxiosResponse,
   handleGqlResponse,
+  logAxiosError,
 }
