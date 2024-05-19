@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import errors from '@twreporter/errors'
 import { GCP_PROJECT_ID } from '../config/index.mjs'
 
 /**
@@ -413,6 +414,55 @@ const getLogTraceObject = (req) => {
   return globalLogFields
 }
 
+/**
+ * @template {import('axios').AxiosResponse['data']} T
+ * @template {PromiseSettledResult<T>} U
+ * @template V
+ *
+ * @param {U} response
+ * @param {(value: T | undefined) => V} dataHandler
+ * @param {string} errorMessage
+ * @param {Record<string, any>} [traceObject]
+ */
+const handelAxiosResponse = (
+  response,
+  dataHandler,
+  errorMessage,
+  traceObject
+) => {
+  if (response.status === 'fulfilled') {
+    return dataHandler(response.value)
+  } else if (response.status === 'rejected') {
+    const axiosErrors = response.reason
+
+    const annotatingError = errors.helpers.wrap(
+      axiosErrors,
+      'UnhandledError',
+      errorMessage
+    )
+
+    console.error(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(
+          annotatingError,
+          {
+            withStack: true,
+            withPayload: true,
+          },
+          0,
+          0
+        ),
+        debugPayload: {
+          axiosErrors,
+        },
+        ...(traceObject ?? {}),
+      })
+    )
+  }
+  return dataHandler(undefined)
+}
+
 export {
   transformTimeDataIntoDotFormat,
   transformTimeDataIntoSlashFormat,
@@ -435,4 +485,5 @@ export {
   getClientSideOnlyError,
   getSearchParamFromApiKeyUrl,
   getLogTraceObject,
+  handelAxiosResponse,
 }
