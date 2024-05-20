@@ -2,6 +2,13 @@ import styled from 'styled-components'
 import LayoutFull from '../components/shared/layout-full'
 import GenericFailed from '../components/login/generic-failed'
 import { useRouter } from 'next/router'
+import { setPageCache } from '../utils/cache-setting'
+import { ENV } from '../config/index.mjs'
+import { getLogTraceObject, handelAxiosResponse } from '../utils'
+import {
+  fetchHeaderDataInDefaultPageLayout,
+  getSectionAndTopicFromDefaultHeaderData,
+} from '../utils/api'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -12,7 +19,17 @@ const Container = styled.div`
   }
 `
 
-export default function PasswordChangeFail() {
+/**
+ * @typedef {Object} PageProps
+ * @property {Object} headerData
+ * @property {import('../utils/api').HeadersData} headerData.sectionsData
+ * @property {import('../utils/api').Topics} headerData.topicsData
+ */
+
+/**
+ * @param {PageProps} props
+ */
+export default function PasswordChangeFail({ headerData }) {
   const router = useRouter()
 
   /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
@@ -23,10 +40,44 @@ export default function PasswordChangeFail() {
   }
 
   return (
-    <LayoutFull header={{ type: 'default' }} footer={{ type: 'default' }}>
+    <LayoutFull
+      header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
+    >
       <Container>
         <GenericFailed primaryText="請回上一頁重試" onBack={onBack} />
       </Container>
     </LayoutFull>
   )
+}
+
+/**
+ * @type {import('next').GetServerSideProps<PageProps>}
+ */
+export async function getServerSideProps({ req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 900 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
+
+  const globalLogFields = getLogTraceObject(req)
+
+  const responses = await Promise.allSettled([
+    fetchHeaderDataInDefaultPageLayout(),
+  ])
+
+  // handle header data
+  const [sectionsData, topicsData] = handelAxiosResponse(
+    responses[0],
+    getSectionAndTopicFromDefaultHeaderData,
+    'Error occurs while getting header data in password change failed page',
+    globalLogFields
+  )
+
+  return {
+    props: {
+      headerData: { sectionsData, topicsData },
+    },
+  }
 }
