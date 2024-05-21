@@ -87,6 +87,13 @@ const Title = styled.h1`
   }
 `
 
+const CustomFormWrapper = styled(FormWrapper)`
+  ${({ theme }) => theme.breakpoint.xxl} {
+    margin-top: 60px;
+    margin-bottom: 60px;
+  }
+`
+
 export default function MainForm() {
   const formMode = useAppSelector(loginFormMode)
 
@@ -124,7 +131,7 @@ export default function MainForm() {
         <br />
         <p>現在，請立即加入，成為我們的會員，體驗有質量、無干擾的新聞閱讀。</p>
       </Intro>
-      <FormWrapper>{jsx}</FormWrapper>
+      <CustomFormWrapper>{jsx}</CustomFormWrapper>
     </Main>
   )
 }
