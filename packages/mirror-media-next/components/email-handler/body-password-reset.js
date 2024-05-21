@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { auth } from '../../firebase'
 import { generateErrorReportInfo } from '../../utils/log/error-log'
 import { sendErrorLog } from '../../utils/log/send-log'
@@ -34,8 +34,10 @@ const PrimaryText = styled.p`
 export default function BodyPasswordReset() {
   const [password, setPassword] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
+  const [isInitialized, setIsInitialized] = useState(false)
   const router = useRouter()
   const actionCode = getSearchParamFromApiKeyUrl(router.query, 'oobCode')
+  const email = useRef('')
 
   const getValidality = (/** @type {string} */ password) => {
     if (password === '') {
@@ -61,18 +63,15 @@ export default function BodyPasswordReset() {
 
     setIsProcessing(true)
 
-    /** @type {string} */
-    let email
     try {
       if (Array.isArray(actionCode)) throw new Error('Invalid action code')
 
-      email = await verifyPasswordResetCode(auth, actionCode)
       await confirmPasswordReset(auth, actionCode, password)
 
       router.replace('/password-change-success')
     } catch (err) {
       const errorReport = generateErrorReportInfo(err, {
-        userEmail: email,
+        userEmail: email.current,
       })
       sendErrorLog(errorReport)
 
@@ -82,25 +81,53 @@ export default function BodyPasswordReset() {
     }
   }
 
+  useEffect(() => {
+    if (isInitialized) return
+
+    const checkUrlInfo = async () => {
+      try {
+        if (Array.isArray(actionCode)) throw new Error('Invalid action code')
+
+        email.current = await verifyPasswordResetCode(auth, actionCode)
+
+        setIsInitialized(true)
+      } catch (err) {
+        const errorReport = generateErrorReportInfo(err, {
+          userEmail: email.current,
+        })
+        sendErrorLog(errorReport)
+
+        router.replace('/password-change-fail')
+      }
+    }
+
+    checkUrlInfo()
+  }, [actionCode, isInitialized, router])
+
   return (
     <Main>
       <FormWrapper>
-        <ContentBlock>
-          <PrimaryText>請輸入新的密碼</PrimaryText>
-          <GenericPasswordInput
-            placeholder="密碼大於 6 位數"
-            state={validality}
-            value={password}
-            onChange={handleOnInputChange}
-          />
-        </ContentBlock>
-        <PrimaryButton
-          onClick={handleOnPrimaryButtonClicked}
-          isLoading={isProcessing}
-          disabled={validality !== InputState.Valid}
-        >
-          送出
-        </PrimaryButton>
+        {isInitialized ? (
+          <>
+            <ContentBlock>
+              <PrimaryText>請輸入新的密碼</PrimaryText>
+              <GenericPasswordInput
+                placeholder="密碼大於 6 位數"
+                state={validality}
+                value={password}
+                onChange={handleOnInputChange}
+              />
+            </ContentBlock>
+            <PrimaryButton
+              onClick={handleOnPrimaryButtonClicked}
+              isLoading={isProcessing}
+              disabled={validality !== InputState.Valid}
+            >
+              送出
+            </PrimaryButton>
+          </>
+        ) : null}
+        {/* TODO: add loading effect (should discuss with designer and PM) */}
       </FormWrapper>
     </Main>
   )

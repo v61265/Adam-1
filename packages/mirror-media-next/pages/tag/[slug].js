@@ -114,7 +114,7 @@ const RENDER_PAGE_SIZE = 12
  */
 export default function Tag({ postsCount, posts, tag, headerData }) {
   const tagName = tag?.name || ''
-  const shouldShowAd = useDisplayAd()
+  const { shouldShowAd, isLogInProcessFinished } = useDisplayAd()
   const [isHDAdEmpty, setISHDAdEmpty] = useState(true)
   const handleObSlotRenderEnded = useCallback((e) => {
     setISHDAdEmpty(e.isEmpty)
@@ -127,7 +127,11 @@ export default function Tag({ postsCount, posts, tag, headerData }) {
       footer={{ type: 'default' }}
     >
       <TagContainer>
-        <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
+        <GPT_Placeholder
+          shouldShowAd={shouldShowAd}
+          isHDAdEmpty={isHDAdEmpty}
+          isLogInProcessFinished={isLogInProcessFinished}
+        >
           {shouldShowAd && (
             <StyledGPTAd
               pageKey="other"

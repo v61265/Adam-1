@@ -105,7 +105,7 @@ export default function WarmLife({
   warmLifeDataCount,
   headerData,
 }) {
-  const shouldShowAd = useDisplayAd()
+  const { shouldShowAd, isLogInProcessFinished } = useDisplayAd()
   const WARMLIFE_GPT_SECTION_IDS = getPageKeyByPartnerShowOnIndex(
     warmLifeData?.[0]?.partner?.showOnIndex
   )
@@ -121,7 +121,11 @@ export default function WarmLife({
       footer={{ type: 'default' }}
     >
       <WarmLifeContainer>
-        <GPT_Placeholder shouldTranslate={!shouldShowAd || isHDAdEmpty}>
+        <GPT_Placeholder
+          shouldShowAd={shouldShowAd}
+          isHDAdEmpty={isHDAdEmpty}
+          isLogInProcessFinished={isLogInProcessFinished}
+        >
           {shouldShowAd && (
             <StyledGPTAd
               pageKey={WARMLIFE_GPT_SECTION_IDS}

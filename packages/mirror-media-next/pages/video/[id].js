@@ -126,7 +126,7 @@ const GPT_PLACEHOLDER_SIZES = {
  * @returns
  */
 export default function Video({ video, latestVideos, headerData }) {
-  const shouldShowAd = useDisplayAd()
+  const { shouldShowAd } = useDisplayAd()
 
   return (
     <>
