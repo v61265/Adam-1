@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 import { useAppSelector } from '../../hooks/useRedux'
 import { loginFormMode, FormMode } from '../../slice/login-slice'
 import NextImage from 'next/image'
-import FormWrapper from '../shared/form-wrapper'
+import FormWrapper from './form-wrapper'
 import MainFormStart from './main-form-start'
 import MainFormRegistration from './main-form-registration'
 import MainFormLoginWithPassword from './main-form-login-with-password'
@@ -60,7 +60,10 @@ const Intro = styled.section`
     line-height: 150%;
   }
 
+  max-width: 596px;
+
   ${({ theme }) => theme.breakpoint.md} {
+    max-width: unset;
     width: 608px;
   }
 

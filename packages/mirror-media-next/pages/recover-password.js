@@ -4,7 +4,7 @@ import { setPageCache } from '../utils/cache-setting'
 import { GCP_PROJECT_ID, ACTION_CODE_SETTING } from '../config/index.mjs'
 import { InputState } from '../constants/form'
 import LayoutFull from '../components/shared/layout-full'
-import FormWrapper from '../components/shared/form-wrapper'
+import FormWrapper from '../components/login/form-wrapper'
 import GenericTextInput from '../components/shared/inputs/generic-text-input'
 import PrimaryButton from '../components/shared/buttons/primary-button'
 import TextButton from '../components/login/text-button'
@@ -51,7 +51,7 @@ const TextGroup = styled.div`
   row-gap: 16px;
 `
 
-const PrimayText = styled.p`
+const PrimaryText = styled.p`
   color: rgba(0, 0, 0, 0.87);
   font-size: 24px;
   font-style: normal;
@@ -192,7 +192,7 @@ export default function Login({ emailData }) {
         <Main>
           <FormWrapper>
             <TextGroup>
-              <PrimayText>如果您忘記/尚未設定密碼</PrimayText>
+              <PrimaryText>如果您忘記/尚未設定密碼</PrimaryText>
               <SecondaryText>
                 請輸入您註冊時使用的 Email 信箱。我們會發送一封 Email
                 到這個地址，裡面附有重設/設定密碼的連結。
