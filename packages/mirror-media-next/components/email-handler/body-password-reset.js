@@ -127,6 +127,7 @@ export default function BodyPasswordReset() {
             </PrimaryButton>
           </>
         ) : null}
+        {/* TODO: add loading effect (should discuss with designer and PM) */}
       </FormWrapper>
     </Main>
   )
