@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import useClickOutside from '../../hooks/useClickOutside'
 
 const DropdownMenuWrapper = styled.div`
@@ -115,7 +115,6 @@ const Li = styled.li`
  * @param {string} props.selectedOption
  * @param {boolean} [props.disabled=false]
  * @param {string} [props.placeholder]
- * @param {string} props.defaultValue
  * @returns {JSX.Element}
  */
 
@@ -127,16 +126,9 @@ export default function DropdownMenu({
   selectedOption,
   disabled = false,
   placeholder = '請選擇',
-  defaultValue,
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef(null)
-
-  useEffect(() => {
-    if (defaultValue) {
-      onSelect(defaultValue)
-    }
-  }, [defaultValue])
 
   useClickOutside(dropdownRef, () => {
     setIsOpen(false)

@@ -205,19 +205,12 @@ const formatBirthday = (timestamp) => {
 }
 
 /**
- * @param {string} gender
- * @returns {string}
+ * @type {{ F: string, M: string, 'N/A': string }}
  */
-const formatGender = (gender) => {
-  switch (gender) {
-    case 'M':
-      return '男'
-    case 'F':
-      return '女'
-    case 'N/A':
-    default:
-      return '不透露'
-  }
+const genderMap = {
+  F: '女',
+  M: '男',
+  'N/A': '不透露',
 }
 
 /**
@@ -230,12 +223,6 @@ export default function UserProfileForm({ profile }) {
   const [selectedCity, setSelectedCity] = useState('')
   const [districtData, setDistrictData] = useState([])
   const [selectedDistrict, setSelectedDistrict] = useState('')
-  const [genderName, setGenderName] = useState('')
-  const [birthdayDetails, setBirthdayDetails] = useState({
-    year: '',
-    month: '',
-    date: '',
-  })
 
   const router = useRouter()
   const {
@@ -251,16 +238,12 @@ export default function UserProfileForm({ profile }) {
   } = profile
 
   useEffect(() => {
-    if (birthday) {
-      const parsedBirthday = formatBirthday(birthday)
-      setBirthdayDetails(parsedBirthday)
-    }
-
-    if (gender) {
-      const parsedGender = formatGender(gender)
-      setGenderName(parsedGender)
-    }
-  }, [birthday, gender])
+    setSelectedMonth(formatBirthday(birthday).month)
+    setSelectedCity(city)
+    setSelectedCountry(country)
+    setSelectedDistrict(district)
+    setSelectedGender(genderMap[gender])
+  }, [city, country, district, gender, birthday])
 
   const cityNames = useMemo(() => {
     return taiwanDisTrictOptions.map((data) => {
@@ -319,7 +302,6 @@ export default function UserProfileForm({ profile }) {
           <FormGroup>
             <LargeLabel>性別</LargeLabel>
             <DropdownMenu
-              defaultValue={genderName}
               keyField="id"
               value="name"
               options={genderOptions}
@@ -339,7 +321,7 @@ export default function UserProfileForm({ profile }) {
               <input
                 id="year"
                 placeholder="西元年"
-                defaultValue={birthdayDetails.year}
+                defaultValue={formatBirthday(birthday).year}
               />
             </ItemsWrapper>
             <ItemsWrapper>
@@ -351,7 +333,6 @@ export default function UserProfileForm({ profile }) {
                 selectedOption={selectedMonth}
                 onSelect={setSelectedMonth}
                 placeholder="月份"
-                defaultValue={birthdayDetails.month}
               />
             </ItemsWrapper>
             <ItemsWrapper>
@@ -359,7 +340,7 @@ export default function UserProfileForm({ profile }) {
               <input
                 id="date"
                 placeholder="日期"
-                defaultValue={birthdayDetails.date}
+                defaultValue={formatBirthday(birthday).date}
               />
             </ItemsWrapper>
           </FlexRowBox>
@@ -380,7 +361,6 @@ export default function UserProfileForm({ profile }) {
                 value="Taiwan"
                 selectedOption={selectedCountry}
                 onSelect={handleCountrySelect}
-                defaultValue={country}
               />
             </ItemsWrapper>
             <FlexRowBox>
@@ -393,7 +373,6 @@ export default function UserProfileForm({ profile }) {
                   selectedOption={selectedCity}
                   onSelect={handleCitySelect}
                   disabled={selectedCountry !== '臺灣'}
-                  defaultValue={city}
                 />
               </ItemsWrapper>
               <ItemsWrapper>
@@ -405,7 +384,6 @@ export default function UserProfileForm({ profile }) {
                   selectedOption={selectedDistrict}
                   onSelect={setSelectedDistrict}
                   disabled={selectedCountry !== '臺灣' || selectedCity == ''}
-                  defaultValue={district}
                 />
               </ItemsWrapper>
             </FlexRowBox>
