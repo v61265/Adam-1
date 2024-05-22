@@ -383,6 +383,20 @@ const getClientSideOnlyError = (functionName) => {
   return new Error(`Method ${functionName} is client-side only`)
 }
 
+/**
+ * @param {import('querystring').ParsedUrlQuery} query
+ * @param {string} key
+ * @returns {string | string[] | undefined}
+ */
+const getSearchParamFromApiKeyUrl = (query, key) => {
+  if (key in query) {
+    return query[key]
+  }
+
+  const apiKeyUrl = Object.keys(query).find((key) => key.includes('apiKey'))
+  return new URLSearchParams(apiKeyUrl).get(key)
+}
+
 export {
   transformTimeDataIntoDotFormat,
   transformTimeDataIntoSlashFormat,
@@ -403,4 +417,5 @@ export {
   getLoginHref,
   isServer,
   getClientSideOnlyError,
+  getSearchParamFromApiKeyUrl,
 }
