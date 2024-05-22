@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic'
 import {
   GCP_PROJECT_ID,
   ENV,
-  TEST_GPT_AD_FEATURE_TOGGLE,
+  // TEST_GPT_AD_FEATURE_TOGGLE,
 } from '../../config/index.mjs'
 import WineWarning from '../../components/shared/wine-warning'
 import AdultOnlyWarning from '../../components/story/shared/adult-only-warning'
@@ -46,7 +46,7 @@ const StoryPremiumStyle = dynamic(() =>
 )
 import Image from 'next/image'
 import Skeleton from '../../public/images-next/skeleton.png'
-import DevGptAd from '../../components/story/dev-gpt-ad'
+// import DevGptAd from '../../components/story/dev-gpt-ad'
 
 /**
  * @typedef {import('../../components/story/normal').PostData} PostData
@@ -286,7 +286,7 @@ export default function Story({ postData, headerData, storyLayoutType }) {
         {noCategoryOfWineSlug && (
           <FullScreenAds hiddenAdvertised={hiddenAdvertised} />
         )}
-        {TEST_GPT_AD_FEATURE_TOGGLE === 'on' && <DevGptAd />}
+        {/* {TEST_GPT_AD_FEATURE_TOGGLE === 'on' && <DevGptAd />} */}
       </Layout>
     </>
   )

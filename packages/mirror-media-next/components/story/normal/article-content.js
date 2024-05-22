@@ -69,7 +69,8 @@ export default function ArticleContent({
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
       />
-
+      123
+      {shouldShowAd && <StyledGPTAd pageKey="global" adKey="MB_ADBRO" />}
       {unstyledBlocksCount > 1 && (
         <>
           {shouldShowAd && (
@@ -86,7 +87,6 @@ export default function ArticleContent({
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
       />
-
       {unstyledBlocksCount > 5 && (
         <>
           {shouldShowAd && (
@@ -110,6 +110,7 @@ export default function ArticleContent({
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
       />
+      {shouldShowAd && <StyledGPTAd pageKey="global" adKey="PC_ADBRO" />}
 
       {unstyledBlocksCount > 3 && (
         <>
