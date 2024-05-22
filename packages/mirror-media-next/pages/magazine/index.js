@@ -22,6 +22,7 @@ import {
   handleGqlResponse,
 } from '../../utils'
 import redirectToLoginWhileUnauthed from '../../utils/redirect-to-login-while-unauthed'
+import useMembershipRequired from '../../hooks/use-membership-required'
 
 const Section = styled.div`
   padding: 48px 0;
@@ -68,6 +69,7 @@ const Title = styled.h2`
  * @param {PageProps} props
  */
 export default function Magazine({ sectionsData = [] }) {
+  useMembershipRequired()
   const [specials, setSpecials] = useState([])
   const [weeklys, setWeeklys] = useState([])
 
