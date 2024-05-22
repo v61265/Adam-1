@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { SITE_URL } from '../../../config/index.mjs'
 import { getActiveOrderCategory, getActiveOrderSection } from '../../../utils'
+import Script from 'next/script'
 /**
  * @typedef {Object} Section
  * @property {string} slug
@@ -158,6 +159,20 @@ export default function StoryHead({ postData }) {
       {tagsNameStr !== '' && (
         <meta name="news_keywords" content={tagsNameStr} key="news_keywords" />
       )}
+      <Script
+        id="test-google-tag-ad"
+        dangerouslySetInnerHTML={{
+          __html: `
+              window.googletag = window.googletag || {cmd: []};
+              googletag.cmd.push(function() {
+                googletag.defineOutOfPageSlot('/40175602/test_mirror_m_ros_out_ADBRO', 'div-gpt-ad-1710755205915-0').addService(googletag.pubads());
+                googletag.defineOutOfPageSlot('/40175602/test_mirror_pc_ros_out_ADBRO', 'div-gpt-ad-1710755093650-0').addService(googletag.pubads());
+                googletag.pubads().enableSingleRequest();
+                googletag.enableServices();
+              });
+            `,
+        }}
+      />
     </Head>
   )
 }

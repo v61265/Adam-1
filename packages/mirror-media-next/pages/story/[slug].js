@@ -46,7 +46,7 @@ const StoryPremiumStyle = dynamic(() =>
 )
 import Image from 'next/image'
 import Skeleton from '../../public/images-next/skeleton.png'
-// import DevGptAd from '../../components/story/dev-gpt-ad'
+import DevGptAd from '../../components/story/dev-gpt-ad'
 
 /**
  * @typedef {import('../../components/story/normal').PostData} PostData

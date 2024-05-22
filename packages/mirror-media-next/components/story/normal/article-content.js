@@ -69,8 +69,12 @@ export default function ArticleContent({
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
       />
-      123
-      {shouldShowAd && <StyledGPTAd pageKey="global" adKey="MB_ADBRO" />}
+
+      {shouldShowAd && windowDimensions.width > 1200 ? (
+        <div id="div-gpt-ad-1710755205915-0" />
+      ) : (
+        <div id="div-gpt-ad-1710755093650-0" />
+      )}
       {unstyledBlocksCount > 1 && (
         <>
           {shouldShowAd && (
