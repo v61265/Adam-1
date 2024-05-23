@@ -6,7 +6,8 @@ import client from '../../../apollo/apollo-client'
 import { setPageCache } from '../../../utils/cache-setting'
 import { fetchWeeklys } from '../../../apollo/query/magazines'
 import Layout from '../../../components/shared/layout'
-import { getLogTraceObject, handleGqlResponse } from '../../../utils'
+import { getLogTraceObject } from '../../../utils'
+import { handleGqlResponse } from '../../../utils/response-handle'
 import redirectToLoginWhileUnauthed from '../../../utils/redirect-to-login-while-unauthed'
 
 const Page = styled.div`

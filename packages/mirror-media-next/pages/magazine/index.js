@@ -16,8 +16,11 @@ import MagazineWeeklys from '../../components/magazine/magazine-weeklys'
 import MagazineFeatures from '../../components/magazine/magazine-featured-weeklys'
 import Layout from '../../components/shared/layout'
 import JoinPremiumMember from '../../components/magazine/ui-join-premium-member'
-import { getLogTraceObject, handleGqlResponse } from '../../utils'
-import { handleAxiosResponse } from '../../utils/response-handle'
+import { getLogTraceObject } from '../../utils'
+import {
+  handleAxiosResponse,
+  handleGqlResponse,
+} from '../../utils/response-handle'
 import redirectToLoginWhileUnauthed from '../../utils/redirect-to-login-while-unauthed'
 import useMembershipRequired from '../../hooks/use-membership-required'
 

@@ -20,9 +20,11 @@ import {
   getSectionSlugGql,
   getArticleHref,
   getLogTraceObject,
-  handleGqlResponse,
 } from '../utils'
-import { handleAxiosResponse } from '../utils/response-handle'
+import {
+  handleAxiosResponse,
+  handleGqlResponse,
+} from '../utils/response-handle'
 import { setPageCache } from '../utils/cache-setting'
 import EditorChoice from '../components/index/editor-choice'
 import LatestNews from '../components/index/latest-news'

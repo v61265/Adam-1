@@ -15,7 +15,8 @@ import AmpMain from '../../../components/amp/external/amp-main'
 import { transformHtmlIntoAmpHtml } from '../../../utils/amp-html'
 import Script from 'next/script'
 import JsonLdsScripts from '../../../components/externals/shared/json-lds-scripts'
-import { getLogTraceObject, handleGqlResponse } from '../../../utils'
+import { getLogTraceObject } from '../../../utils'
+import { handleGqlResponse } from '../../../utils/response-handle'
 
 export const config = { amp: true }
 

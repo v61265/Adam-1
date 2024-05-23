@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { GCP_PROJECT_ID } from '../config/index.mjs'
-import { logGqlError } from './log/shared'
 
 /**
  * @typedef {import('../apollo/fragments/section').Section[]} Sections
@@ -416,31 +415,6 @@ const getLogTraceObject = (req) => {
   return globalLogFields
 }
 
-/**
- * @template S
- * @template {import('@apollo/client').ApolloQueryResult<S>} T
- * @template {PromiseSettledResult<T>} U
- * @template V
- *
- * @param {U} response
- * @param {(value: T | undefined) => V} dataHandler
- * @param {Parameters<typeof logGqlError>[1]} errorMessage
- * @param {Parameters<typeof logGqlError>[2]} [traceObject]
- */
-const handleGqlResponse = (
-  response,
-  dataHandler,
-  errorMessage,
-  traceObject
-) => {
-  if (response.status === 'fulfilled') {
-    return dataHandler(response.value)
-  } else if (response.status === 'rejected') {
-    logGqlError(response.reason, errorMessage, traceObject)
-  }
-  return dataHandler(undefined)
-}
-
 export {
   transformTimeDataIntoDotFormat,
   transformTimeDataIntoSlashFormat,
@@ -463,5 +437,4 @@ export {
   getClientSideOnlyError,
   getSearchParamFromApiKeyUrl,
   getLogTraceObject,
-  handleGqlResponse,
 }

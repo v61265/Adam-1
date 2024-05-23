@@ -24,8 +24,11 @@ import {
   GPT_Placeholder_Desktop,
   GPT_Placeholder_MobileAndTablet,
 } from '../../components/ads/gpt/gpt-placeholder.js'
-import { getLogTraceObject, handleGqlResponse } from '../../utils/index.js'
-import { handleAxiosResponse } from '../../utils/response-handle.js'
+import { getLogTraceObject } from '../../utils/index.js'
+import {
+  handleAxiosResponse,
+  handleGqlResponse,
+} from '../../utils/response-handle.js'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,

@@ -1,4 +1,4 @@
-import { logAxiosError } from './log/shared'
+import { logAxiosError, logGqlError } from './log/shared'
 
 /**
  * @template {import('axios').AxiosResponse['data']} T
@@ -24,4 +24,29 @@ const handleAxiosResponse = (
   return dataHandler(undefined)
 }
 
-export { handleAxiosResponse }
+/**
+ * @template S
+ * @template {import('@apollo/client').ApolloQueryResult<S>} T
+ * @template {PromiseSettledResult<T>} U
+ * @template V
+ *
+ * @param {U} response
+ * @param {(value: T | undefined) => V} dataHandler
+ * @param {Parameters<typeof logGqlError>[1]} errorMessage
+ * @param {Parameters<typeof logGqlError>[2]} [traceObject]
+ */
+const handleGqlResponse = (
+  response,
+  dataHandler,
+  errorMessage,
+  traceObject
+) => {
+  if (response.status === 'fulfilled') {
+    return dataHandler(response.value)
+  } else if (response.status === 'rejected') {
+    logGqlError(response.reason, errorMessage, traceObject)
+  }
+  return dataHandler(undefined)
+}
+
+export { handleAxiosResponse, handleGqlResponse }

@@ -8,8 +8,11 @@ import {
   getSectionAndTopicFromDefaultHeaderData,
   getPostsAndPostscountFromGqlData,
 } from '../../utils/api'
-import { getLogTraceObject, handleGqlResponse } from '../../utils'
-import { handleAxiosResponse } from '../../utils/response-handle'
+import { getLogTraceObject } from '../../utils'
+import {
+  handleAxiosResponse,
+  handleGqlResponse,
+} from '../../utils/response-handle'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'

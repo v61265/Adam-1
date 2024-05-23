@@ -21,8 +21,11 @@ import FullScreenAds from '../../components/ads/full-screen-ads'
 import GPTMbStAd from '../../components/ads/gpt/gpt-mb-st-ad'
 import GPT_Placeholder from '../../components/ads/gpt/gpt-placeholder'
 import { useCallback, useState } from 'react'
-import { getLogTraceObject, handleGqlResponse } from '../../utils'
-import { handleAxiosResponse } from '../../utils/response-handle'
+import { getLogTraceObject } from '../../utils'
+import {
+  handleAxiosResponse,
+  handleGqlResponse,
+} from '../../utils/response-handle'
 import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/api'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {

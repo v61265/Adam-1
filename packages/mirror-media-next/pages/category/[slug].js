@@ -19,12 +19,11 @@ import {
   fetchPremiumPostsByCategorySlug,
 } from '../../utils/api/category'
 import { useDisplayAd } from '../../hooks/useDisplayAd'
+import { getCategoryOfWineSlug, getLogTraceObject } from '../../utils'
 import {
-  getCategoryOfWineSlug,
-  getLogTraceObject,
+  handleAxiosResponse,
   handleGqlResponse,
-} from '../../utils'
-import { handleAxiosResponse } from '../../utils/response-handle'
+} from '../../utils/response-handle'
 import { getSectionGPTPageKey } from '../../utils/ad'
 import WineWarning from '../../components/shared/wine-warning'
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {

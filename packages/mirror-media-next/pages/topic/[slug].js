@@ -16,9 +16,11 @@ import {
   getLogTraceObject,
   getResizedUrl,
   sortArrayWithOtherArrayId,
-  handleGqlResponse,
 } from '../../utils/index'
-import { handleAxiosResponse } from '../../utils/response-handle'
+import {
+  handleAxiosResponse,
+  handleGqlResponse,
+} from '../../utils/response-handle'
 import { fetchTopicByTopicSlug } from '../../utils/api/topic'
 import { logGqlError } from '../../utils/log/shared'
 

@@ -10,8 +10,11 @@ import FullScreenAds from '../../components/ads/full-screen-ads'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import JsonLdsScripts from '../../components/externals/shared/json-lds-scripts'
-import { getLogTraceObject, handleGqlResponse } from '../../utils'
-import { handleAxiosResponse } from '../../utils/response-handle'
+import { getLogTraceObject } from '../../utils'
+import {
+  handleAxiosResponse,
+  handleGqlResponse,
+} from '../../utils/response-handle'
 import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/api'
 
 /**

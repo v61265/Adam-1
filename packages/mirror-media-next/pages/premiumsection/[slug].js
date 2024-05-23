@@ -3,8 +3,11 @@ import dynamic from 'next/dynamic'
 
 import SectionArticles from '../../components/shared/section-articles'
 import { ENV } from '../../config/index.mjs'
-import { getLogTraceObject, handleGqlResponse } from '../../utils'
-import { handleAxiosResponse } from '../../utils/response-handle'
+import { getLogTraceObject } from '../../utils'
+import {
+  handleAxiosResponse,
+  handleGqlResponse,
+} from '../../utils/response-handle'
 import {
   fetchHeaderDataInPremiumPageLayout,
   getPostsAndPostscountFromGqlData,
