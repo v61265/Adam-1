@@ -3,11 +3,11 @@ import dynamic from 'next/dynamic'
 
 import AuthorArticles from '../../components/author/author-articles'
 import { ENV } from '../../config/index.mjs'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import {
-  fetchHeaderDataInDefaultPageLayout,
+  getSectionAndTopicFromDefaultHeaderData,
   getPostsAndPostscountFromGqlData,
-} from '../../utils/api'
-import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
+} from '../../utils/data-process'
 import { setPageCache } from '../../utils/cache-setting'
 
 import Layout from '../../components/shared/layout'

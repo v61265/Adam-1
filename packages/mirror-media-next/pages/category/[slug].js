@@ -6,11 +6,11 @@ import { ENV } from '../../config/index.mjs'
 import {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
-  getPostsAndPostscountFromGqlData,
 } from '../../utils/api'
 import {
   getSectionAndTopicFromDefaultHeaderData,
   getSectionFromPremiumHeaderData,
+  getPostsAndPostscountFromGqlData,
 } from '../../utils/data-process'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'

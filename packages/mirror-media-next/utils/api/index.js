@@ -129,25 +129,8 @@ const fetchHeaderDataInPremiumPageLayout = async () => {
   }
 }
 
-/**
- * @template T
- * @param {import('@apollo/client').ApolloQueryResult<any> | undefined} gqlData
- * @returns {[number, T[]]}
- */
-const getPostsAndPostscountFromGqlData = (gqlData) => {
-  if (!gqlData) {
-    return [0, []]
-  }
-
-  const data = gqlData.data
-  const postsCount = data?.postsCount || 0
-  const posts = data?.posts || []
-  return [postsCount, posts]
-}
-
 export {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
   fetchPodcastList,
-  getPostsAndPostscountFromGqlData,
 }

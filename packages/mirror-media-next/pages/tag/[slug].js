@@ -3,11 +3,11 @@ import dynamic from 'next/dynamic'
 
 import TagArticles from '../../components/tag/tag-articles'
 import { ENV } from '../../config/index.mjs'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import {
-  fetchHeaderDataInDefaultPageLayout,
+  getSectionAndTopicFromDefaultHeaderData,
   getPostsAndPostscountFromGqlData,
-} from '../../utils/api'
-import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
+} from '../../utils/data-process'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
 import { fetchPostsByTagSlug, fetchTagByTagSlug } from '../../utils/api/tag'

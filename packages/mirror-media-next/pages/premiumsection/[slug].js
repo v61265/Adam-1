@@ -8,11 +8,11 @@ import {
   handleAxiosResponse,
   handleGqlResponse,
 } from '../../utils/response-handle'
+import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
 import {
-  fetchHeaderDataInPremiumPageLayout,
+  getSectionFromPremiumHeaderData,
   getPostsAndPostscountFromGqlData,
-} from '../../utils/api'
-import { getSectionFromPremiumHeaderData } from '../../utils/data-process'
+} from '../../utils/data-process'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import {
