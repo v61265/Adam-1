@@ -296,7 +296,7 @@ export async function getServerSideProps({ query, req, res }) {
   } catch (error) {
     logGqlError(
       error,
-      'Error occurs while getting category data in category page',
+      `Error occurs while getting category data in category page (${categorySlug})`,
       globalLogFields
     )
   }
@@ -335,7 +335,7 @@ export async function getServerSideProps({ query, req, res }) {
     sectionsData = handleAxiosResponse(
       responses[0],
       getSectionFromPremiumHeaderData,
-      'Error occurs while getting premium header data in category page',
+      `Error occurs while getting premium header data in category page (categorySlug: ${categorySlug})`,
       globalLogFields
     )
 
@@ -349,7 +349,7 @@ export async function getServerSideProps({ query, req, res }) {
     ;[postsCount, posts] = handleGqlResponse(
       responses[1],
       dataHandler,
-      'Error occurs while getting premium post data in category page',
+      `Error occurs while getting premium post data in category page (categorySlug: ${categorySlug})`,
       globalLogFields
     )
   } else {
@@ -362,7 +362,7 @@ export async function getServerSideProps({ query, req, res }) {
     ;[sectionsData, topicsData] = handleAxiosResponse(
       responses[0],
       getSectionAndTopicFromDefaultHeaderData,
-      'Error occurs while getting header data in category page',
+      `Error occurs while getting header data in category page (categorySlug: ${categorySlug})`,
       globalLogFields
     )
 
@@ -376,7 +376,7 @@ export async function getServerSideProps({ query, req, res }) {
     ;[postsCount, posts] = handleGqlResponse(
       responses[1],
       dataHandler,
-      'Error occurs while getting post data in category page',
+      `Error occurs while getting post data in category page (categorySlug: ${categorySlug})`,
       globalLogFields
     )
   }

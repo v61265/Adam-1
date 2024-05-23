@@ -175,7 +175,7 @@ export async function getServerSideProps({ query, req, res }) {
   const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
-    'Error occurs while getting header data in author page',
+    `Error occurs while getting header data in author page (authorId: ${authorId})`,
     globalLogFields
   )
 
@@ -185,7 +185,7 @@ export async function getServerSideProps({ query, req, res }) {
     (gqlData) => {
       return gqlData?.data
     },
-    'Error occurs while getting author data in author page',
+    `Error occurs while getting author data in author page (authorId: ${authorId})`,
     globalLogFields
   )
 
@@ -217,7 +217,7 @@ export async function getServerSideProps({ query, req, res }) {
   const [postsCount, posts] = handleGqlResponse(
     responses[2],
     dataHandler,
-    'Error occurs while getting post data in author page',
+    `Error occurs while getting post data in author page (authorId: ${authorId})`,
     globalLogFields
   )
 

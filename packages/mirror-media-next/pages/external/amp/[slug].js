@@ -151,7 +151,7 @@ export async function getServerSideProps({ params, req, res, resolvedUrl }) {
         return gqlData.data?.externals[0] || {}
       }
     },
-    'Error occurs while getting data in external post amp page',
+    `Error occurs while getting data in external post amp page (slug: ${slug})`,
     globalLogFields
   )
 

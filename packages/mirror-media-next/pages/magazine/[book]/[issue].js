@@ -60,10 +60,11 @@ export default function BookBIssuePublish({ weeklys }) {
  * @type {import('next').GetServerSideProps}
  */
 export const getServerSideProps = redirectToLoginWhileUnauthed()(
-  async ({ req, res }) => {
+  async ({ params, req, res }) => {
     setPageCache(res, { cachePolicy: 'no-store' }, req.url)
 
     const globalLogFields = getLogTraceObject(req)
+    const { issue } = params
 
     const responses = await Promise.allSettled([
       client.query({
@@ -78,7 +79,7 @@ export const getServerSideProps = redirectToLoginWhileUnauthed()(
       ) => {
         return gqlData?.data?.magazines || []
       },
-      'Error occurs while getting data in magazine page',
+      `Error occurs while getting data in magazine page (issue: ${issue})`,
       globalLogFields
     )
 

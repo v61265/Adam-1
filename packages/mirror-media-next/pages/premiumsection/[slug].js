@@ -199,7 +199,7 @@ export async function getServerSideProps({ query, req, res }) {
   const sectionsData = handleAxiosResponse(
     responses[0],
     getSectionFromPremiumHeaderData,
-    'Error occurs while getting premium header data in premiumsection page',
+    `Error occurs while getting premium header data in premiumsection page (sectionSlug: ${sectionSlug})`,
     globalLogFields
   )
 
@@ -214,7 +214,7 @@ export async function getServerSideProps({ query, req, res }) {
   const [postsCount, posts] = handleGqlResponse(
     responses[1],
     dataHandler,
-    'Error occurs while getting posts in premiumsection page',
+    `Error occurs while getting posts in premiumsection page (sectionSlug: ${sectionSlug})`,
     globalLogFields
   )
 
@@ -236,7 +236,7 @@ export async function getServerSideProps({ query, req, res }) {
     (gqlData) => {
       return gqlData?.data?.section || { slug: sectionSlug }
     },
-    'Error occurs while getting sectoin data in premiumsection page',
+    `Error occurs while getting sectoin data in premiumsection page (sectionSlug: ${sectionSlug})`,
     globalLogFields
   )
 

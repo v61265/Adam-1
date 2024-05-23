@@ -184,7 +184,7 @@ export async function getServerSideProps({ query, req, res }) {
   const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
-    'Error occurs while getting header data in tag page',
+    `Error occurs while getting header data in tag page (tagSlug: ${tagSlug})`,
     globalLogFields
   )
 
@@ -195,7 +195,7 @@ export async function getServerSideProps({ query, req, res }) {
     (gqlData) => {
       return gqlData?.data?.tag
     },
-    'Error occurs while getting tag data in tag page',
+    `Error occurs while getting tag data in tag page (tagSlug: ${tagSlug})`,
     globalLogFields
   )
 
@@ -214,7 +214,7 @@ export async function getServerSideProps({ query, req, res }) {
   const [postsCount, posts] = handleGqlResponse(
     responses[2],
     getPostsAndPostscountFromGqlData,
-    'Error occurs while getting post data in tag page',
+    `Error occurs while getting post data in tag page (tagSlug: ${tagSlug})`,
     globalLogFields
   )
 

@@ -131,7 +131,7 @@ export async function getServerSideProps({ query, req, res }) {
   const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
-    'Error occurs while getting header data in topic page',
+    `Error occurs while getting header data in topic page (topicSlug: ${topicSlug})`,
     globalLogFields
   )
 
@@ -142,7 +142,7 @@ export async function getServerSideProps({ query, req, res }) {
     (gqlData) => {
       return gqlData?.data?.topics || []
     },
-    'Error occurs while getting topics in topic page',
+    `Error occurs while getting topics in topic page (topicSlug: ${topicSlug})`,
     globalLogFields
   )
 

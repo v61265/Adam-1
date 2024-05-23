@@ -252,10 +252,12 @@ export async function getServerSideProps({ params, req, res }) {
   } catch (err) {
     logGqlError(
       err,
-      'Error occurs while getting data in story amp page',
+      `Error occurs while getting data in story amp page (slug: ${slug})`,
       globalLogFields
     )
-    throw new Error('Error occurs while getting data in story amp page')
+    throw new Error(
+      `Error occurs while getting data in story amp page (slug: ${slug})`
+    )
   }
 }
 

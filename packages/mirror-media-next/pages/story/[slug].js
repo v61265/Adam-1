@@ -368,7 +368,7 @@ export async function getServerSideProps({ params, req, res }) {
         headerData = { sectionsData: [], topicsData: [] }
         logAxiosError(
           err,
-          'Error occurs while getting header data in story page',
+          `Error occurs while getting header data in story page (slug: ${slug})`,
           globalLogFields
         )
       }
@@ -379,7 +379,7 @@ export async function getServerSideProps({ params, req, res }) {
         headerData = { sectionsData: [] }
         logAxiosError(
           err,
-          'Error occurs while getting premium header data in story page',
+          `Error occurs while getting premium header data in story page (slug: ${slug})`,
           globalLogFields
         )
       }
@@ -395,9 +395,11 @@ export async function getServerSideProps({ params, req, res }) {
   } catch (err) {
     logGqlError(
       err,
-      'Error occurs while getting data in story page',
+      `Error occurs while getting data in story page (slug: ${slug})`,
       globalLogFields
     )
-    throw new Error('Error occurs while getting data in story page')
+    throw new Error(
+      `Error occurs while getting data in story page (slug: ${slug})`
+    )
   }
 }

@@ -174,7 +174,7 @@ export async function getServerSideProps({ query, req, res }) {
   const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
-    'Error occurs while getting header data in video category page',
+    `Error occurs while getting header data in video category page (videoCategorySlug: ${videoCategorySlug})`,
     globalLogFields
   )
 
@@ -199,7 +199,7 @@ export async function getServerSideProps({ query, req, res }) {
 
       return [[], '']
     },
-    'Error occurs while getting playlist data in video category page',
+    `Error occurs while getting playlist data in video category page (videoCategorySlug: ${videoCategorySlug})`,
     globalLogFields
   )
 
@@ -208,7 +208,7 @@ export async function getServerSideProps({ query, req, res }) {
     (gqlData) => {
       return gqlData?.data?.category || { slug: videoCategorySlug }
     },
-    'Error occurs while getting category data in video category page',
+    `Error occurs while getting category data in video category page (videoCategorySlug: ${videoCategorySlug})`,
     globalLogFields
   )
 

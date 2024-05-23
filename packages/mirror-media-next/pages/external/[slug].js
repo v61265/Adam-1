@@ -89,7 +89,7 @@ export async function getServerSideProps({ params, req, res }) {
   const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
-    'Error occurs while getting header data in external post page',
+    `Error occurs while getting header data in external post page (slug: ${slug})`,
     globalLogFields
   )
 
@@ -103,7 +103,7 @@ export async function getServerSideProps({ params, req, res }) {
         return gqlData.data?.externals[0] || {}
       }
     },
-    'Error occurs while getting data in external post page',
+    `Error occurs while getting data in external post page (slug: ${slug})`,
     globalLogFields
   )
 

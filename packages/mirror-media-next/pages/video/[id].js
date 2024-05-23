@@ -209,7 +209,7 @@ export async function getServerSideProps({ query, req, res }) {
   const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
-    'Error occurs while getting header data in video page',
+    `Error occurs while getting header data in video page (videoId: ${videoId})`,
     globalLogFields
   )
 
@@ -221,7 +221,7 @@ export async function getServerSideProps({ query, req, res }) {
     ) => {
       return axiosData ? axiosData.data?.items : []
     },
-    'Error occurs while getting video data in video page',
+    `Error occurs while getting video data in video page (videoId: ${videoId})`,
     globalLogFields
   )
 
@@ -254,7 +254,7 @@ export async function getServerSideProps({ query, req, res }) {
   } catch (error) {
     logAxiosError(
       error,
-      `Error occurs while getting latest videos of channel (${channelId}) in video page`,
+      `Error occurs while getting latest videos of channel (${channelId}) in video page (videoId: ${videoId})`,
       globalLogFields
     )
   }

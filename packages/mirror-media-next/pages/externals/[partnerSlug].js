@@ -198,7 +198,7 @@ export async function getServerSideProps({ params, req, res }) {
   const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
-    'Error occurs while getting header data in externals partner page',
+    `Error occurs while getting header data in externals partner page (partnerSlug: ${partnerSlug})`,
     globalLogFields
   )
 
@@ -210,7 +210,7 @@ export async function getServerSideProps({ params, req, res }) {
     ) => {
       return gqlData?.data?.externals || []
     },
-    'Error occurs while getting external posts in externals partner page',
+    `Error occurs while getting external posts in externals partner page (partnerSlug: ${partnerSlug})`,
     globalLogFields
   )
 
@@ -222,7 +222,7 @@ export async function getServerSideProps({ params, req, res }) {
     ) => {
       return gqlData?.data?.externalsCount || 0
     },
-    'Error occurs while getting externalsCount in externals partner page',
+    `Error occurs while getting externalsCount in externals partner page (partnerSlug: ${partnerSlug})`,
     globalLogFields
   )
 
@@ -232,7 +232,7 @@ export async function getServerSideProps({ params, req, res }) {
     (gqlData) => {
       return gqlData?.data?.partners?.[0] ?? {}
     },
-    'Error occurs while getting partners data in externals partner page',
+    `Error occurs while getting partners data in externals partner page (partnerSlug: ${partnerSlug})`,
     globalLogFields
   )
 
