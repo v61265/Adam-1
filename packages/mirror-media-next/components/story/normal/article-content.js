@@ -70,6 +70,11 @@ export default function ArticleContent({
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
       />
 
+      {shouldShowAd && windowDimensions.width > 1200 ? (
+        <div id="div-gpt-ad-1710755205915-0" />
+      ) : (
+        <div id="div-gpt-ad-1710755093650-0" />
+      )}
       {unstyledBlocksCount > 1 && (
         <>
           {shouldShowAd && (
@@ -86,7 +91,6 @@ export default function ArticleContent({
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
       />
-
       {unstyledBlocksCount > 5 && (
         <>
           {shouldShowAd && (
@@ -110,6 +114,7 @@ export default function ArticleContent({
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
       />
+      {shouldShowAd && <StyledGPTAd pageKey="global" adKey="PC_ADBRO" />}
 
       {unstyledBlocksCount > 3 && (
         <>
