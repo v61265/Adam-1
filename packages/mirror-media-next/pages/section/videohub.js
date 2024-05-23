@@ -28,11 +28,8 @@ import {
   GPT_Placeholder_Desktop,
   GPT_Placeholder_MobileAndTablet,
 } from '../../components/ads/gpt/gpt-placeholder'
-import {
-  getLogTraceObject,
-  handelAxiosResponse,
-  handleGqlResponse,
-} from '../../utils'
+import { getLogTraceObject, handleGqlResponse } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/api/index.js'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
@@ -197,7 +194,7 @@ export async function getServerSideProps({ req, res }) {
   ])
 
   // handle header data
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in section/videohub page',
@@ -209,7 +206,7 @@ export async function getServerSideProps({ req, res }) {
    * 1. get fetch statistics for 50 videos to get the most viewed video (熱門影片)
    * 2. slice the first 4 videos for the front-end to render (最新影片)
    */
-  const [latestVideos, latest50VideoIds] = handelAxiosResponse(
+  const [latestVideos, latest50VideoIds] = handleAxiosResponse(
     responses[1],
     (
       /** @type {Awaited<ReturnType<typeof fetchYoutubeLatestVideos>>} */ axiosData
@@ -251,7 +248,7 @@ export async function getServerSideProps({ req, res }) {
     ),
   ])
 
-  const highestViewCountVideo = handelAxiosResponse(
+  const highestViewCountVideo = handleAxiosResponse(
     playlistResponses[0],
     (
       /** @type {Awaited<ReturnType<typeof fetchYoutubeVideosWithStatistics>>} */ axiosData
@@ -279,7 +276,7 @@ export async function getServerSideProps({ req, res }) {
     let items
 
     if (response) {
-      items = handelAxiosResponse(
+      items = handleAxiosResponse(
         response,
         (
           /** @type {Awaited<ReturnType<typeof fetchYoutubePlaylistByChannelId>>} */ axiosData

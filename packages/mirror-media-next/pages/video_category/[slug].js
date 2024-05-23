@@ -24,11 +24,8 @@ import {
   GPT_Placeholder_Desktop,
   GPT_Placeholder_MobileAndTablet,
 } from '../../components/ads/gpt/gpt-placeholder.js'
-import {
-  getLogTraceObject,
-  handelAxiosResponse,
-  handleGqlResponse,
-} from '../../utils/index.js'
+import { getLogTraceObject, handleGqlResponse } from '../../utils/index.js'
+import { handleAxiosResponse } from '../../utils/response-handle.js'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -173,7 +170,7 @@ export async function getServerSideProps({ query, req, res }) {
   ])
 
   // handle header data
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in video category page',
@@ -181,7 +178,7 @@ export async function getServerSideProps({ query, req, res }) {
   )
 
   // handle fetch videos and get nextPageToken for infinite scroll
-  const [videos, ytNextPageToken] = handelAxiosResponse(
+  const [videos, ytNextPageToken] = handleAxiosResponse(
     responses[1],
     (
       /** @type {Awaited<ReturnType<typeof fetchYoutubePlaylistByPlaylistId>>} */ axiosData

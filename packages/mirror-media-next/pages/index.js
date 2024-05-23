@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
@@ -20,9 +20,9 @@ import {
   getSectionSlugGql,
   getArticleHref,
   getLogTraceObject,
-  handelAxiosResponse,
   handleGqlResponse,
 } from '../utils'
+import { handleAxiosResponse } from '../utils/response-handle'
 import { setPageCache } from '../utils/cache-setting'
 import EditorChoice from '../components/index/editor-choice'
 import LatestNews from '../components/index/latest-news'
@@ -245,7 +245,7 @@ export async function getServerSideProps({ res, req }) {
       fetchModEventsInDesc(),
     ])
 
-    flashNewsData = handelAxiosResponse(
+    flashNewsData = handleAxiosResponse(
       responses[0],
       (/** @type {AxiosResponse} */ axiosData) => {
         return axiosData?.data?.posts ?? []
@@ -255,7 +255,7 @@ export async function getServerSideProps({ res, req }) {
     )
 
     // handle header data
-    ;[sectionsData, topicsData] = handelAxiosResponse(
+    ;[sectionsData, topicsData] = handleAxiosResponse(
       responses[1],
       getSectionAndTopicFromDefaultHeaderData,
       'Error occurs while getting header data in index page',

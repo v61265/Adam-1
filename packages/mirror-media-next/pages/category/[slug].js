@@ -22,9 +22,9 @@ import { useDisplayAd } from '../../hooks/useDisplayAd'
 import {
   getCategoryOfWineSlug,
   getLogTraceObject,
-  handelAxiosResponse,
   handleGqlResponse,
 } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 import { getSectionGPTPageKey } from '../../utils/ad'
 import WineWarning from '../../components/shared/wine-warning'
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
@@ -331,7 +331,7 @@ export async function getServerSideProps({ query, req, res }) {
     ])
 
     // handle header data
-    sectionsData = handelAxiosResponse(
+    sectionsData = handleAxiosResponse(
       responses[0],
       getSectionFromPremiumHeaderData,
       'Error occurs while getting premium header data in category page',
@@ -358,7 +358,7 @@ export async function getServerSideProps({ query, req, res }) {
     ])
 
     // handle header data
-    ;[sectionsData, topicsData] = handelAxiosResponse(
+    ;[sectionsData, topicsData] = handleAxiosResponse(
       responses[0],
       getSectionAndTopicFromDefaultHeaderData,
       'Error occurs while getting header data in category page',

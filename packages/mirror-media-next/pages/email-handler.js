@@ -12,11 +12,8 @@ import {
   fetchHeaderDataInDefaultPageLayout,
   getSectionAndTopicFromDefaultHeaderData,
 } from '../utils/api'
-import {
-  getLogTraceObject,
-  getSearchParamFromApiKeyUrl,
-  handelAxiosResponse,
-} from '../utils'
+import { getLogTraceObject, getSearchParamFromApiKeyUrl } from '../utils'
+import { handleAxiosResponse } from '../utils/response-handle'
 
 const RESET_PASSWORD = 'resetPassword'
 const RECOVER_EMAIL = 'recoverEmail'
@@ -96,7 +93,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
   ])
 
   // handle header data
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in email-handler',

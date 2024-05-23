@@ -10,11 +10,8 @@ import FullScreenAds from '../../components/ads/full-screen-ads'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import JsonLdsScripts from '../../components/externals/shared/json-lds-scripts'
-import {
-  getLogTraceObject,
-  handelAxiosResponse,
-  handleGqlResponse,
-} from '../../utils'
+import { getLogTraceObject, handleGqlResponse } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/api'
 
 /**
@@ -86,7 +83,7 @@ export async function getServerSideProps({ params, req, res }) {
   ])
 
   // handle header data
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in external post page',

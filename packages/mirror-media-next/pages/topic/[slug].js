@@ -16,9 +16,9 @@ import {
   getLogTraceObject,
   getResizedUrl,
   sortArrayWithOtherArrayId,
-  handelAxiosResponse,
   handleGqlResponse,
 } from '../../utils/index'
+import { handleAxiosResponse } from '../../utils/response-handle'
 import { fetchTopicByTopicSlug } from '../../utils/api/topic'
 import { logGqlError } from '../../utils/log/shared'
 
@@ -128,7 +128,7 @@ export async function getServerSideProps({ query, req, res }) {
   ])
 
   // handle header data
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in topic page',

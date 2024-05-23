@@ -3,11 +3,8 @@ import dynamic from 'next/dynamic'
 
 import SectionArticles from '../../components/shared/section-articles'
 import { ENV } from '../../config/index.mjs'
-import {
-  getLogTraceObject,
-  handelAxiosResponse,
-  handleGqlResponse,
-} from '../../utils'
+import { getLogTraceObject, handleGqlResponse } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 import {
   fetchHeaderDataInPremiumPageLayout,
   getPostsAndPostscountFromGqlData,
@@ -196,7 +193,7 @@ export async function getServerSideProps({ query, req, res }) {
   ])
 
   // handle header data
-  const sectionsData = handelAxiosResponse(
+  const sectionsData = handleAxiosResponse(
     responses[0],
     getSectionFromPremiumHeaderData,
     'Error occurs while getting premium header data in premiumsection page',

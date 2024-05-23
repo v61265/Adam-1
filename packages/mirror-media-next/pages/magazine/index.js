@@ -16,11 +16,8 @@ import MagazineWeeklys from '../../components/magazine/magazine-weeklys'
 import MagazineFeatures from '../../components/magazine/magazine-featured-weeklys'
 import Layout from '../../components/shared/layout'
 import JoinPremiumMember from '../../components/magazine/ui-join-premium-member'
-import {
-  getLogTraceObject,
-  handelAxiosResponse,
-  handleGqlResponse,
-} from '../../utils'
+import { getLogTraceObject, handleGqlResponse } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 import redirectToLoginWhileUnauthed from '../../utils/redirect-to-login-while-unauthed'
 import useMembershipRequired from '../../hooks/use-membership-required'
 
@@ -204,7 +201,7 @@ export const getServerSideProps = redirectToLoginWhileUnauthed()(
       fetchHeaderDataInPremiumPageLayout(),
     ])
 
-    const sectionsData = handelAxiosResponse(
+    const sectionsData = handleAxiosResponse(
       responses[0],
       getSectionFromPremiumHeaderData,
       'Error occurs while getting premium header data in magazine list page',

@@ -29,7 +29,8 @@ import {
   GPT_Placeholder_MobileAndTablet,
 } from '../../components/ads/gpt/gpt-placeholder'
 import Head from 'next/head'
-import { getLogTraceObject, handelAxiosResponse } from '../../utils'
+import { getLogTraceObject } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 import { logAxiosError } from '../../utils/log/shared'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
@@ -207,7 +208,7 @@ export async function getServerSideProps({ query, req, res }) {
   ])
 
   // handle header data
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in video page',
@@ -215,7 +216,7 @@ export async function getServerSideProps({ query, req, res }) {
   )
 
   // handle fetch video data
-  const videos = handelAxiosResponse(
+  const videos = handleAxiosResponse(
     responses[1],
     (
       /** @type {Awaited<ReturnType<typeof fetchYoutubeVideoByVideoId>>} */ axiosData

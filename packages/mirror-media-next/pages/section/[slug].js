@@ -8,11 +8,8 @@ import {
   getSectionAndTopicFromDefaultHeaderData,
   getPostsAndPostscountFromGqlData,
 } from '../../utils/api'
-import {
-  getLogTraceObject,
-  handelAxiosResponse,
-  handleGqlResponse,
-} from '../../utils'
+import { getLogTraceObject, handleGqlResponse } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
@@ -181,7 +178,7 @@ export async function getServerSideProps({ query, req, res }) {
   ])
 
   // handle header data
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in section page',

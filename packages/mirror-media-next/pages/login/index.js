@@ -31,7 +31,8 @@ import {
   fetchHeaderDataInDefaultPageLayout,
   getSectionAndTopicFromDefaultHeaderData,
 } from '../../utils/api'
-import { getLogTraceObject, handelAxiosResponse } from '../../utils'
+import { getLogTraceObject } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 import redirectToDestinationWhileAuthed from '../../utils/redirect-to-destination-while-authed'
 
 const Container = styled.div`
@@ -165,7 +166,7 @@ export const getServerSideProps = redirectToDestinationWhileAuthed()(
     ])
 
     // handle header data
-    const [sectionsData, topicsData] = handelAxiosResponse(
+    const [sectionsData, topicsData] = handleAxiosResponse(
       responses[0],
       getSectionAndTopicFromDefaultHeaderData,
       'Error occurs while getting header data in login page',

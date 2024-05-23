@@ -21,11 +21,8 @@ import { getMerchandiseAndShippingFeeInfo } from '../../utils/papermag'
 import { ACCESS_PAPERMAG_FEATURE_TOGGLE } from '../../config/index.mjs'
 import client from '../../apollo/apollo-client'
 import { fetchAllMemberByOrderNo } from '../../apollo/query/magazine-orders'
-import {
-  transformTimeData,
-  handelAxiosResponse,
-  getLogTraceObject,
-} from '../../utils/index'
+import { transformTimeData, getLogTraceObject } from '../../utils/index'
+import { handleAxiosResponse } from '../../utils/response-handle'
 
 const Wrapper = styled.main`
   min-height: 50vh;
@@ -100,7 +97,7 @@ export async function getServerSideProps({ query, req, res }) {
     fetchHeaderDataInDefaultPageLayout(),
   ])
 
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in papermag/return page',

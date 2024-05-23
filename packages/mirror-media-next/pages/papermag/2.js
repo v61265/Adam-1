@@ -3,7 +3,8 @@ import {
   fetchHeaderDataInDefaultPageLayout,
   getSectionAndTopicFromDefaultHeaderData,
 } from '../../utils/api'
-import { getLogTraceObject, handelAxiosResponse } from '../../utils'
+import { getLogTraceObject } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import Steps from '../../components/subscribe-steps'
@@ -68,7 +69,7 @@ export async function getServerSideProps({ req, res }) {
     fetchHeaderDataInDefaultPageLayout(),
   ])
 
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in papermag/2 page',

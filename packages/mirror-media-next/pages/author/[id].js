@@ -24,11 +24,8 @@ import FullScreenAds from '../../components/ads/full-screen-ads'
 import GPTMbStAd from '../../components/ads/gpt/gpt-mb-st-ad'
 import GPT_Placeholder from '../../components/ads/gpt/gpt-placeholder'
 import { useCallback, useState } from 'react'
-import {
-  getLogTraceObject,
-  handelAxiosResponse,
-  handleGqlResponse,
-} from '../../utils'
+import { getLogTraceObject, handleGqlResponse } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 
 const AuthorContainer = styled.main`
   width: 320px;
@@ -172,7 +169,7 @@ export async function getServerSideProps({ query, req, res }) {
   ])
 
   //handle header data
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in author page',

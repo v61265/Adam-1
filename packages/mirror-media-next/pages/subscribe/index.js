@@ -15,7 +15,8 @@ import PlanForBasicMember from '../../components/subscribe/plan-basic-member'
 import PlanForMonthlyMember from '../../components/subscribe/plan-monthly-member'
 import PlanForYearlyMember from '../../components/subscribe/plan-yearly-member'
 import { ACCESS_SUBSCRIBE_FEATURE_TOGGLE } from '../../config/index.mjs'
-import { getLogTraceObject, handelAxiosResponse } from '../../utils'
+import { getLogTraceObject } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
 
 const Page = styled.main`
   min-height: 70vh;
@@ -123,7 +124,7 @@ export async function getServerSideProps({ req, res }) {
     fetchHeaderDataInDefaultPageLayout(),
   ])
 
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in subscribe page',

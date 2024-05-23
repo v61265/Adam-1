@@ -4,7 +4,8 @@ import GenericFailed from '../components/login/generic-failed'
 import { useRouter } from 'next/router'
 import { setPageCache } from '../utils/cache-setting'
 import { ENV } from '../config/index.mjs'
-import { getLogTraceObject, handelAxiosResponse } from '../utils'
+import { getLogTraceObject } from '../utils'
+import { handleAxiosResponse } from '../utils/response-handle'
 import {
   fetchHeaderDataInDefaultPageLayout,
   getSectionAndTopicFromDefaultHeaderData,
@@ -68,7 +69,7 @@ export async function getServerSideProps({ req, res }) {
   ])
 
   // handle header data
-  const [sectionsData, topicsData] = handelAxiosResponse(
+  const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
     'Error occurs while getting header data in password change failed page',
