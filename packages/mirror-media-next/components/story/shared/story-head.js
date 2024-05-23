@@ -159,7 +159,7 @@ export default function StoryHead({ postData }) {
       {tagsNameStr !== '' && (
         <meta name="news_keywords" content={tagsNameStr} key="news_keywords" />
       )}
-      <Script
+      {/* <Script
         id="test-google-tag-ad"
         dangerouslySetInnerHTML={{
           __html: `
@@ -172,7 +172,7 @@ export default function StoryHead({ postData }) {
               });
             `,
         }}
-      />
+      /> */}
     </Head>
   )
 }
