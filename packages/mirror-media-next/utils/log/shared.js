@@ -1,4 +1,5 @@
 import Bowser from 'bowser'
+import errors from '@twreporter/errors'
 
 function getBrowserInfo(userAgent = '') {
   if (!userAgent) {
@@ -90,10 +91,43 @@ function getFormattedPageType(pathname = '', isMemberArticle = false) {
   }
 }
 
+/**
+ * @param {Error | import('axios').AxiosError} axiosErrors
+ * @param {string} errorMessage
+ * @param {Record<string, any> | undefined} traceObject
+ */
+const logAxiosError = (axiosErrors, errorMessage, traceObject) => {
+  const annotatingError = errors.helpers.wrap(
+    axiosErrors,
+    'UnhandledError',
+    errorMessage
+  )
+
+  console.error(
+    JSON.stringify({
+      severity: 'ERROR',
+      message: errors.helpers.printAll(
+        annotatingError,
+        {
+          withStack: true,
+          withPayload: true,
+        },
+        0,
+        0
+      ),
+      debugPayload: {
+        axiosErrors,
+      },
+      ...(traceObject ?? {}),
+    })
+  )
+}
+
 export {
   getBrowserInfo,
   getDeviceInfo,
   detectIsInApp,
   getWindowSizeInfo,
   getFormattedPageType,
+  logAxiosError,
 }

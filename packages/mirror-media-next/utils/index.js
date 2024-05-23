@@ -3,6 +3,7 @@ import utc from 'dayjs/plugin/utc'
 import errors from '@twreporter/errors'
 import { GCP_PROJECT_ID } from '../config/index.mjs'
 import { ApolloError } from '@apollo/client'
+import { logAxiosError } from './log/shared'
 
 /**
  * @typedef {import('../apollo/fragments/section').Section[]} Sections
@@ -418,38 +419,6 @@ const getLogTraceObject = (req) => {
 }
 
 /**
- * @param {Error | import('axios').AxiosError} axiosErrors
- * @param {string} errorMessage
- * @param {Record<string, any> | undefined} traceObject
- */
-const logAxiosError = (axiosErrors, errorMessage, traceObject) => {
-  const annotatingError = errors.helpers.wrap(
-    axiosErrors,
-    'UnhandledError',
-    errorMessage
-  )
-
-  console.error(
-    JSON.stringify({
-      severity: 'ERROR',
-      message: errors.helpers.printAll(
-        annotatingError,
-        {
-          withStack: true,
-          withPayload: true,
-        },
-        0,
-        0
-      ),
-      debugPayload: {
-        axiosErrors,
-      },
-      ...(traceObject ?? {}),
-    })
-  )
-}
-
-/**
  * @template {import('axios').AxiosResponse['data']} T
  * @template {PromiseSettledResult<T>} U
  * @template V
@@ -578,6 +547,5 @@ export {
   getLogTraceObject,
   handelAxiosResponse,
   handleGqlResponse,
-  logAxiosError,
   logGqlError,
 }

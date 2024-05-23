@@ -29,11 +29,8 @@ import {
   GPT_Placeholder_MobileAndTablet,
 } from '../../components/ads/gpt/gpt-placeholder'
 import Head from 'next/head'
-import {
-  getLogTraceObject,
-  handelAxiosResponse,
-  logAxiosError,
-} from '../../utils'
+import { getLogTraceObject, handelAxiosResponse } from '../../utils'
+import { logAxiosError } from '../../utils/log/shared'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,
