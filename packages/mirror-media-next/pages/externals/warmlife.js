@@ -23,7 +23,7 @@ import {
   handleAxiosResponse,
   handleGqlResponse,
 } from '../../utils/response-handle'
-import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 
 const GPTAd = dynamic(() => import('../../components/ads/gpt/gpt-ad'), {
   ssr: false,

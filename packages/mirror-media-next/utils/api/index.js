@@ -130,26 +130,6 @@ const fetchHeaderDataInPremiumPageLayout = async () => {
 }
 
 /**
- * @param {Awaited<ReturnType<typeof fetchHeaderDataInDefaultPageLayout>> | undefined} headerData
- * @returns {[HeadersData, Topics]}
- */
-const getSectionAndTopicFromDefaultHeaderData = (headerData) => {
-  /** @type {HeadersData} */
-  let sectionData = []
-  /** @type {Topics} */
-  let topicsData = []
-
-  if (headerData) {
-    if (Array.isArray(headerData['sectionsData']))
-      sectionData = headerData['sectionsData']
-    if (Array.isArray(headerData['topicsData']))
-      topicsData = headerData['topicsData']
-  }
-
-  return [sectionData, topicsData]
-}
-
-/**
  * @param {Awaited<ReturnType<typeof fetchHeaderDataInPremiumPageLayout>> | undefined} headerData
  * @returns {HeadersData}
  */
@@ -185,7 +165,6 @@ export {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
   fetchPodcastList,
-  getSectionAndTopicFromDefaultHeaderData,
   getSectionFromPremiumHeaderData,
   getPostsAndPostscountFromGqlData,
 }

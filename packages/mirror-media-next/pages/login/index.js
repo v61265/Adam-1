@@ -27,10 +27,8 @@ import { FirebaseError } from 'firebase/app'
 import { setPageCache } from '../../utils/cache-setting'
 import LayoutFull from '../../components/shared/layout-full'
 import { FirebaseAuthError } from '../../constants/firebase'
-import {
-  fetchHeaderDataInDefaultPageLayout,
-  getSectionAndTopicFromDefaultHeaderData,
-} from '../../utils/api'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 import { getLogTraceObject } from '../../utils'
 import { handleAxiosResponse } from '../../utils/response-handle'
 import redirectToDestinationWhileAuthed from '../../utils/redirect-to-destination-while-authed'

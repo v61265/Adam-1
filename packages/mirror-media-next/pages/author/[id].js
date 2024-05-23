@@ -6,8 +6,8 @@ import { ENV } from '../../config/index.mjs'
 import {
   fetchHeaderDataInDefaultPageLayout,
   getPostsAndPostscountFromGqlData,
-  getSectionAndTopicFromDefaultHeaderData,
 } from '../../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 import { setPageCache } from '../../utils/cache-setting'
 
 import Layout from '../../components/shared/layout'

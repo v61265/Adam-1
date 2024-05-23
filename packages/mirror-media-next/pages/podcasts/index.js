@@ -8,8 +8,8 @@ import { ENV } from '../../config/index.mjs'
 import {
   fetchHeaderDataInDefaultPageLayout,
   fetchPodcastList,
-  getSectionAndTopicFromDefaultHeaderData,
 } from '../../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 import { setPageCache } from '../../utils/cache-setting'
 import { getLogTraceObject } from '../../utils'
 import { handleAxiosResponse } from '../../utils/response-handle'

@@ -4,10 +4,8 @@ import { ENV } from '../../config/index.mjs'
 import CategoryVideos from '../../components/video_category/category-videos.js'
 import { VIDEOHUB_CATEGORIES_PLAYLIST_MAPPING } from '../../constants/index.js'
 import styled from 'styled-components'
-import {
-  fetchHeaderDataInDefaultPageLayout,
-  getSectionAndTopicFromDefaultHeaderData,
-} from '../../utils/api/index.js'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api/index.js'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 import { simplifyYoutubePlaylistVideo } from '../../utils/youtube.js'
 import { setPageCache } from '../../utils/cache-setting.js'
 import LeadingVideo from '../../components/shared/leading-video.js'

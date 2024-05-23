@@ -9,10 +9,8 @@ import { setPageCache } from '../utils/cache-setting'
 import { ENV } from '../config/index.mjs'
 import { getLogTraceObject } from '../utils'
 import { handleAxiosResponse } from '../utils/response-handle'
-import {
-  fetchHeaderDataInDefaultPageLayout,
-  getSectionAndTopicFromDefaultHeaderData,
-} from '../utils/api'
+import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../utils/data-process'
 
 const REDIRECTION_DELAY = 3 // 秒
 

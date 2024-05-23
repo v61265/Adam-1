@@ -1,8 +1,6 @@
 import styled from 'styled-components'
-import {
-  fetchHeaderDataInDefaultPageLayout,
-  getSectionAndTopicFromDefaultHeaderData,
-} from '../../utils/api'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 import { getLogTraceObject } from '../../utils'
 import { handleAxiosResponse } from '../../utils/response-handle'
 import { setPageCache } from '../../utils/cache-setting'

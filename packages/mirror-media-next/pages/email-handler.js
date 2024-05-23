@@ -8,10 +8,8 @@ import { setPageCache } from '../utils/cache-setting'
 import LayoutFull from '../components/shared/layout-full'
 import BodyPasswordReset from '../components/email-handler/body-password-reset'
 import BodyEmailVerification from '../components/email-handler/body-email-verification'
-import {
-  fetchHeaderDataInDefaultPageLayout,
-  getSectionAndTopicFromDefaultHeaderData,
-} from '../utils/api'
+import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../utils/data-process'
 import { getLogTraceObject, getSearchParamFromApiKeyUrl } from '../utils'
 import { handleAxiosResponse } from '../utils/response-handle'
 

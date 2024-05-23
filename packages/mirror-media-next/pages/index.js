@@ -11,10 +11,8 @@ import {
 } from '../config/index.mjs'
 
 import { fetchModEventsInDesc } from '../utils/api/event'
-import {
-  fetchHeaderDataInDefaultPageLayout,
-  getSectionAndTopicFromDefaultHeaderData,
-} from '../utils/api'
+import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../utils/data-process'
 import {
   getSectionNameGql,
   getSectionSlugGql,

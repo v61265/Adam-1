@@ -3,10 +3,8 @@ import dynamic from 'next/dynamic'
 
 import SectionTopics from '../../components/section/topic/section-topics'
 import { ENV } from '../../config/index.mjs'
-import {
-  fetchHeaderDataInDefaultPageLayout,
-  getSectionAndTopicFromDefaultHeaderData,
-} from '../../utils/api'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 import { getLogTraceObject } from '../../utils'
 import {
   handleAxiosResponse,

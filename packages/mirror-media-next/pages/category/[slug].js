@@ -7,9 +7,9 @@ import {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
   getPostsAndPostscountFromGqlData,
-  getSectionAndTopicFromDefaultHeaderData,
   getSectionFromPremiumHeaderData,
 } from '../../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'

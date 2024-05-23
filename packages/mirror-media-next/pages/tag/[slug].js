@@ -6,8 +6,8 @@ import { ENV } from '../../config/index.mjs'
 import {
   fetchHeaderDataInDefaultPageLayout,
   getPostsAndPostscountFromGqlData,
-  getSectionAndTopicFromDefaultHeaderData,
 } from '../../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 import Layout from '../../components/shared/layout'
 import { Z_INDEX } from '../../constants/index'
 import { fetchPostsByTagSlug, fetchTagByTagSlug } from '../../utils/api/tag'

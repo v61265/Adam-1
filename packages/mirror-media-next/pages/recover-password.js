@@ -19,10 +19,8 @@ import { sendErrorLog } from '../utils/log/send-log'
 import { SECOND } from '../constants/time-unit'
 import Hints, { HINT_STATE } from '../components/recover-password/hints'
 import { FirebaseAuthError } from '../constants/firebase'
-import {
-  fetchHeaderDataInDefaultPageLayout,
-  getSectionAndTopicFromDefaultHeaderData,
-} from '../utils/api'
+import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../utils/data-process'
 
 // following comments is required since these variables are used by comments but not codes.
 /* eslint-disable-next-line no-unused-vars */

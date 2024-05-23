@@ -1,10 +1,8 @@
 import styled from 'styled-components'
 import dynamic from 'next/dynamic'
 
-import {
-  fetchHeaderDataInDefaultPageLayout,
-  getSectionAndTopicFromDefaultHeaderData,
-} from '../../utils/api'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 import { ENV } from '../../config/index.mjs'
 import {
   simplifyYoutubeSearchedVideo,
