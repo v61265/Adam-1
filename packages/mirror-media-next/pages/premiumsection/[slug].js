@@ -11,8 +11,8 @@ import {
 import {
   fetchHeaderDataInPremiumPageLayout,
   getPostsAndPostscountFromGqlData,
-  getSectionFromPremiumHeaderData,
 } from '../../utils/api'
+import { getSectionFromPremiumHeaderData } from '../../utils/data-process'
 import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import {

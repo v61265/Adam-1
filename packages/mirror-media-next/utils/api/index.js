@@ -130,22 +130,6 @@ const fetchHeaderDataInPremiumPageLayout = async () => {
 }
 
 /**
- * @param {Awaited<ReturnType<typeof fetchHeaderDataInPremiumPageLayout>> | undefined} headerData
- * @returns {HeadersData}
- */
-const getSectionFromPremiumHeaderData = (headerData) => {
-  /** @type {HeadersData} */
-  let sectionData = []
-
-  if (headerData) {
-    if (Array.isArray(headerData['sectionsData']))
-      sectionData = headerData['sectionsData']
-  }
-
-  return sectionData
-}
-
-/**
  * @template T
  * @param {import('@apollo/client').ApolloQueryResult<any> | undefined} gqlData
  * @returns {[number, T[]]}
@@ -165,6 +149,5 @@ export {
   fetchHeaderDataInDefaultPageLayout,
   fetchHeaderDataInPremiumPageLayout,
   fetchPodcastList,
-  getSectionFromPremiumHeaderData,
   getPostsAndPostscountFromGqlData,
 }

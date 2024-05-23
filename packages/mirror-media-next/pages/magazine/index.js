@@ -3,10 +3,8 @@ import styled from 'styled-components'
 
 import client from '../../apollo/apollo-client'
 import { fetchSpecials, fetchWeeklys } from '../../apollo/query/magazines'
-import {
-  fetchHeaderDataInPremiumPageLayout,
-  getSectionFromPremiumHeaderData,
-} from '../../utils/api'
+import { fetchHeaderDataInPremiumPageLayout } from '../../utils/api'
+import { getSectionFromPremiumHeaderData } from '../../utils/data-process'
 import { useMembership } from '../../context/membership'
 import { setPageCache } from '../../utils/cache-setting'
 

@@ -1,5 +1,6 @@
 /**
  * @typedef {import('./api/index').fetchHeaderDataInDefaultPageLayout} fetchHeaderDataInDefaultPageLayout
+ * @typedef {import('./api/index').fetchHeaderDataInPremiumPageLayout} fetchHeaderDataInPremiumPageLayout
  * @typedef {import('./api/index').HeadersData} HeadersData
  * @typedef {import('./api/index').Topics} Topics
  */
@@ -24,4 +25,23 @@ const getSectionAndTopicFromDefaultHeaderData = (headerData) => {
   return [sectionData, topicsData]
 }
 
-export { getSectionAndTopicFromDefaultHeaderData }
+/**
+ * @param {Awaited<ReturnType<fetchHeaderDataInPremiumPageLayout>> | undefined} headerData
+ * @returns {HeadersData}
+ */
+const getSectionFromPremiumHeaderData = (headerData) => {
+  /** @type {HeadersData} */
+  let sectionData = []
+
+  if (headerData) {
+    if (Array.isArray(headerData['sectionsData']))
+      sectionData = headerData['sectionsData']
+  }
+
+  return sectionData
+}
+
+export {
+  getSectionAndTopicFromDefaultHeaderData,
+  getSectionFromPremiumHeaderData,
+}
