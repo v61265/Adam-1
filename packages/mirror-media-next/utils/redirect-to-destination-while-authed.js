@@ -1,40 +1,39 @@
-import { getAdminAuth } from '../firebase/admin'
 import { URLSearchParams } from 'node:url'
+import withUserSSR from './with-user-ssr'
 
 /**
  * @typedef {import('querystring').ParsedUrlQuery} ParsedUrlQuery
  * @typedef {import('next').Redirect} Redirect
  * @typedef {import('next').PreviewData} PreviewData
+ * @typedef {import('firebase-admin/auth').DecodedIdToken} DecodedIdToken
  */
 
 /**
  * @template [T=any]
- * @typedef {Record<string, T>} Dictionary
+ * @typedef {import('./with-user-ssr').Dictionary} Dictionary
  */
 
 /**
  * @template P
- * @typedef {P} GetSSRProps
+ * @typedef {import('./with-user-ssr').GetSSRProps<P>} GetSSRProps
  */
 
 /**
  * @template P
- * @typedef {{ redirect: Redirect } | { notFound: true } | { props: GetSSRProps<P> }} GetSSRResult
+ * @typedef {import('./with-user-ssr').GetSSRResult<P>} GetSSRResult
  */
 
 /**
  * @template {ParsedUrlQuery} [Q=ParsedUrlQuery]
  * @template {PreviewData} [D=PreviewData]
- * @typedef {import('next').GetServerSidePropsContext<Q, D>} SSRPropsContext
+ * @typedef {import('next').GetServerSidePropsContext<Q, D> & { user?: DecodedIdToken}} SSRPropsContext
  */
 
 /**
  * @template P
  * @template {ParsedUrlQuery} Q
  * @template {PreviewData} D
- * @callback SSRPropsGetter
- * @param {SSRPropsContext<Q, D>} context
- * @returns {Promise<GetSSRResult<P>>}
+ * @typedef {import('./with-user-ssr').SSRPropsGetter<P, Q, D>} SSRPropsGetter
  */
 
 /**
@@ -63,76 +62,56 @@ const redirectToDestinationWhileAuthed =
   (
     /** @type {import('next').GetServerSideProps<P, Q, D>} */ getServerSidePropsFunc
   ) =>
-  async (/** @type {SSRPropsContext<Q, D>} */ ctx) => {
-    const { req, query } = ctx
-    const authToken = req.headers.authorization?.split(' ')[1]
+    withUserSSR()(async (/** @type {SSRPropsContext<Q, D>} */ ctx) => {
+      const { query, user } = ctx
 
-    try {
-      await getAdminAuth().verifyIdToken(authToken, true)
+      if (user) {
+        /** @type {string} */
+        let destination = '/premiumsection/member'
 
-      /**
-       * user with valid id token
-       */
-      /** @type {string} */
-      let destination = '/premiumsection/member'
+        if ('destination' in query) {
+          const dest = query.destination
+          destination = Array.isArray(dest) ? dest.join(',') : dest
+        }
 
-      if ('destination' in query) {
-        const dest = query.destination
-        destination = Array.isArray(dest) ? dest.join(',') : dest
-      }
+        const searchParamsObject = new URLSearchParams(query)
+        searchParamsObject.delete('destination')
+        const searchParams = searchParamsObject.toString()
 
-      const searchParamsObject = new URLSearchParams(query)
-      searchParamsObject.delete('destination')
-      const searchParams = searchParamsObject.toString()
+        if (searchParams) {
+          destination = `${destination}?${searchParams}`
+        }
 
-      if (searchParams) {
-        destination = `${destination}?${searchParams}`
-      }
+        return {
+          redirect: {
+            statusCode: 307,
+            destination,
+          },
+        }
+      } else {
+        let props = /** @type {P} */ ({})
+        if (getServerSidePropsFunc) {
+          const composedProps = await getServerSidePropsFunc(ctx)
 
-      return {
-        redirect: {
-          statusCode: 307,
-          destination,
-        },
-      }
-    } catch (err) {
-      /**
-       * user without valid id token or other errors
-       */
+          if (composedProps) {
+            if ('props' in composedProps) {
+              props = await composedProps.props
 
-      if (!('codePrefix' in err) || err.codePrefix !== 'auth') {
-        // error which is not FirebaseAuthError
-        console.error(
-          JSON.stringify({
-            severity: 'ERROR',
-            message: err.message,
-          })
-        )
-      }
-
-      let props = /** @type {P | Promise<P>} */ ({})
-      if (getServerSidePropsFunc) {
-        const composedProps = await getServerSidePropsFunc(ctx)
-
-        if (composedProps) {
-          if ('props' in composedProps) {
-            props = composedProps.props
-
-            return {
-              ...composedProps,
-              props,
+              return {
+                ...composedProps,
+                props,
+              }
+            }
+            if ('notFound' in composedProps || 'redirect' in composedProps) {
+              return { ...composedProps }
             }
           }
-          if ('notFound' in composedProps || 'redirect' in composedProps) {
-            return { ...composedProps }
-          }
+        }
+
+        return {
+          props,
         }
       }
-
-      return {
-        props,
-      }
-    }
-  }
+    })
 
 export default redirectToDestinationWhileAuthed
