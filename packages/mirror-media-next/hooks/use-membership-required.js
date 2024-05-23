@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { useMembership } from '../context/membership'
 import { useRouter } from 'next/router'
+import { getLoginHref } from '../utils'
 
 /**
  * @callback MembershipValidator
@@ -25,12 +26,8 @@ export default function useMembershipRequired(validator) {
 
   useEffect(() => {
     if (isLogInProcessFinished && (!isLoggedIn || !isValidMember)) {
-      router.push({
-        pathname: '/login',
-        query: {
-          destination: '/magazine',
-        },
-      })
+      const redirectionTarget = getLoginHref(router)
+      router.push(redirectionTarget)
     }
   }, [router, isLogInProcessFinished, isLoggedIn, isValidMember])
 }
