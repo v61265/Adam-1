@@ -22,9 +22,8 @@ import {
   getResizedUrl,
   getCategoryOfWineSlug,
   getLogTraceObject,
-  logGqlError,
 } from '../../utils'
-import { logAxiosError } from '../../utils/log/shared'
+import { logAxiosError, logGqlError } from '../../utils/log/shared'
 import { handleStoryPageRedirect } from '../../utils/story'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'

@@ -1,9 +1,7 @@
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
-import errors from '@twreporter/errors'
 import { GCP_PROJECT_ID } from '../config/index.mjs'
-import { ApolloError } from '@apollo/client'
-import { logAxiosError } from './log/shared'
+import { logAxiosError, logGqlError } from './log/shared'
 
 /**
  * @typedef {import('../apollo/fragments/section').Section[]} Sections
@@ -443,62 +441,6 @@ const handelAxiosResponse = (
 }
 
 /**
- * @param {Error | import('@apollo/client/errors').ApolloError} gqlErrors
- * @param {string} errorMessage
- * @param {Record<string, any> | undefined} traceObject
- */
-const logGqlError = (gqlErrors, errorMessage, traceObject) => {
-  const annotatingError = errors.helpers.wrap(
-    gqlErrors,
-    'UnhandledError',
-    errorMessage
-  )
-
-  if (gqlErrors instanceof ApolloError) {
-    const { graphQLErrors, clientErrors, networkError } = gqlErrors
-    console.error(
-      JSON.stringify({
-        severity: 'ERROR',
-        message: errors.helpers.printAll(
-          annotatingError,
-          {
-            withStack: true,
-            withPayload: true,
-          },
-          0,
-          0
-        ),
-        debugPayload: {
-          graphQLErrors,
-          clientErrors,
-          networkError,
-        },
-        ...(traceObject ?? {}),
-      })
-    )
-  } else {
-    console.error(
-      JSON.stringify({
-        severity: 'ERROR',
-        message: errors.helpers.printAll(
-          annotatingError,
-          {
-            withStack: true,
-            withPayload: true,
-          },
-          0,
-          0
-        ),
-        debugPayload: {
-          gqlErrors,
-        },
-        ...(traceObject ?? {}),
-      })
-    )
-  }
-}
-
-/**
  * @template S
  * @template {import('@apollo/client').ApolloQueryResult<S>} T
  * @template {PromiseSettledResult<T>} U
@@ -547,5 +489,4 @@ export {
   getLogTraceObject,
   handelAxiosResponse,
   handleGqlResponse,
-  logGqlError,
 }

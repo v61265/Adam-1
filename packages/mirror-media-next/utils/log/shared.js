@@ -1,5 +1,6 @@
 import Bowser from 'bowser'
 import errors from '@twreporter/errors'
+import { ApolloError } from '@apollo/client'
 
 function getBrowserInfo(userAgent = '') {
   if (!userAgent) {
@@ -123,6 +124,62 @@ const logAxiosError = (axiosErrors, errorMessage, traceObject) => {
   )
 }
 
+/**
+ * @param {Error | import('@apollo/client/errors').ApolloError} gqlErrors
+ * @param {string} errorMessage
+ * @param {Record<string, any> | undefined} traceObject
+ */
+const logGqlError = (gqlErrors, errorMessage, traceObject) => {
+  const annotatingError = errors.helpers.wrap(
+    gqlErrors,
+    'UnhandledError',
+    errorMessage
+  )
+
+  if (gqlErrors instanceof ApolloError) {
+    const { graphQLErrors, clientErrors, networkError } = gqlErrors
+    console.error(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(
+          annotatingError,
+          {
+            withStack: true,
+            withPayload: true,
+          },
+          0,
+          0
+        ),
+        debugPayload: {
+          graphQLErrors,
+          clientErrors,
+          networkError,
+        },
+        ...(traceObject ?? {}),
+      })
+    )
+  } else {
+    console.error(
+      JSON.stringify({
+        severity: 'ERROR',
+        message: errors.helpers.printAll(
+          annotatingError,
+          {
+            withStack: true,
+            withPayload: true,
+          },
+          0,
+          0
+        ),
+        debugPayload: {
+          gqlErrors,
+        },
+        ...(traceObject ?? {}),
+      })
+    )
+  }
+}
+
 export {
   getBrowserInfo,
   getDeviceInfo,
@@ -130,4 +187,5 @@ export {
   getWindowSizeInfo,
   getFormattedPageType,
   logAxiosError,
+  logGqlError,
 }

@@ -24,7 +24,6 @@ import {
   getLogTraceObject,
   handelAxiosResponse,
   handleGqlResponse,
-  logGqlError,
 } from '../../utils'
 import { getSectionGPTPageKey } from '../../utils/ad'
 import WineWarning from '../../components/shared/wine-warning'
@@ -35,6 +34,7 @@ import FullScreenAds from '../../components/ads/full-screen-ads'
 import GPTMbStAd from '../../components/ads/gpt/gpt-mb-st-ad'
 import GPT_Placeholder from '../../components/ads/gpt/gpt-placeholder'
 import { useCallback, useState } from 'react'
+import { logGqlError } from '../../utils/log/shared'
 
 /**
  * @typedef {import('../../type/theme').Theme} Theme

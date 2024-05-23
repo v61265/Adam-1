@@ -18,9 +18,9 @@ import {
   sortArrayWithOtherArrayId,
   handelAxiosResponse,
   handleGqlResponse,
-  logGqlError,
 } from '../../utils/index'
 import { fetchTopicByTopicSlug } from '../../utils/api/topic'
+import { logGqlError } from '../../utils/log/shared'
 
 const RENDER_PAGE_SIZE = 12
 const WINE_TOPICS_SLUG = [

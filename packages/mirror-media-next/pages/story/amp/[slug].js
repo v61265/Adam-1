@@ -12,7 +12,6 @@ import {
   getResizedUrl,
   getActiveOrderSection,
   getLogTraceObject,
-  logGqlError,
 } from '../../../utils'
 
 import { handleStoryPageRedirect } from '../../../utils/story'
@@ -29,6 +28,7 @@ import AmpGptAd from '../../../components/amp/amp-ads/amp-gpt-ad'
 import AmpGptStickyAd from '../../../components/amp/amp-ads/amp-gpt-sticky-ad'
 import { getAmpGptDataSlotSection } from '../../../utils/ad'
 import JsonLdsScript from '../../../components/story/shared/json-lds-script'
+import { logGqlError } from '../../../utils/log/shared'
 
 export const config = { amp: true }
 
