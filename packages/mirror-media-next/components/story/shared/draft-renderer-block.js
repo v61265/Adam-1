@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import { useState, useEffect } from 'react'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 import { DRAFT_RENDERER_FEATURE_TOGGLE } from '../../../config/index.mjs'
@@ -30,11 +31,13 @@ const { DraftRenderer, hasContentInRawContentBlock, removeEmptyContentBlock } =
  * @param {WrapperFunction} [props.wrapper]
  * - The function to wrap all blocks, you can use it to put all blocks in a jsx element.
  * - Optional, default value is `(children) => <>{children}</>`.
+ * @param {ReactNode} [props.firstImageAdComponent]
  * @returns  {JSX.Element}
  */
 export default function DraftRenderBlock({
   rawContentBlock = { blocks: [], entityMap: {} },
   contentLayout = 'normal',
+  firstImageAdComponent,
   wrapper = (children) => <>{children}</>,
 }) {
   const isAmp = contentLayout === 'amp'
@@ -43,8 +46,12 @@ export default function DraftRenderBlock({
   const jsx = isAmp
     ? AmpRenderBlock(rawContentBlock, contentLayout)
     : DRAFT_RENDERER_FEATURE_TOGGLE === 'on'
-    ? NormalSSRRenderBlock(rawContentBlock, contentLayout)
-    : NormalRenderBlock(rawContentBlock, contentLayout)
+    ? NormalSSRRenderBlock(
+        rawContentBlock,
+        contentLayout,
+        firstImageAdComponent
+      )
+    : NormalRenderBlock(rawContentBlock, contentLayout, firstImageAdComponent)
 
   return <>{shouldRenderDraft && wrapper(jsx)}</>
 }
@@ -52,9 +59,14 @@ export default function DraftRenderBlock({
  *
  * @param {RawContentBlock} rawContentBlock
  * @param {ContentLayout} contentLayout
+ * @param {ReactNode} [firstImageAdComponent]
  * @returns {JSX.Element}
  */
-function NormalSSRRenderBlock(rawContentBlock, contentLayout) {
+function NormalSSRRenderBlock(
+  rawContentBlock,
+  contentLayout,
+  firstImageAdComponent
+) {
   const shouldRenderDraft = hasContentInRawContentBlock(rawContentBlock)
   let draftJsx = null
 
@@ -65,6 +77,7 @@ function NormalSSRRenderBlock(rawContentBlock, contentLayout) {
       <DraftRenderer
         rawContentBlock={contentWithRemovedEmptyBlock}
         contentLayout={contentLayout}
+        firstImageAdComponent={firstImageAdComponent}
       />
     )
   }
@@ -75,9 +88,14 @@ function NormalSSRRenderBlock(rawContentBlock, contentLayout) {
  *
  * @param {RawContentBlock} rawContentBlock
  * @param {ContentLayout} contentLayout
+ * @param {ReactNode} [firstImageAdComponent]
  * @returns {JSX.Element}
  */
-function NormalRenderBlock(rawContentBlock, contentLayout) {
+function NormalRenderBlock(
+  rawContentBlock,
+  contentLayout,
+  firstImageAdComponent
+) {
   const shouldRenderDraft = hasContentInRawContentBlock(rawContentBlock)
   const [draftRenderBlockJsx, setDraftRenderBlockJsx] = useState(null)
 
@@ -93,6 +111,7 @@ function NormalRenderBlock(rawContentBlock, contentLayout) {
         <DraftRenderer
           rawContentBlock={contentWithRemovedEmptyBlock}
           contentLayout={contentLayout}
+          firstImageAdComponent={firstImageAdComponent}
         />
       )
       setDraftRenderBlockJsx(jsx)
