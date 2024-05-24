@@ -18,6 +18,10 @@ const DropdownMenuWrapper = styled.div`
  */
 const SelectBox = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  line-height: 150%;
   height: 48px;
   border: 1px solid
     ${
