@@ -6,12 +6,12 @@ import { useMembership } from '../../context/membership'
 import { useEffect, useState } from 'react'
 import client from '../../apollo/apollo-client'
 import { fetchMemberProfileByFirebaseId } from '../../apollo/profile/query/fetch-member-profile'
-import { GCP_PROJECT_ID } from '../../config/index.mjs'
 import errors from '@twreporter/errors'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import useMembershipRequired from '../../hooks/use-membership-required'
 import redirectToLoginWhileUnauthed from '../../utils/redirect-to-login-while-unauthed'
+import { getLogTraceObject } from '../../utils'
 
 const Page = styled.main`
   padding: 40px 20px;
@@ -110,14 +110,7 @@ export const getServerSideProps = redirectToLoginWhileUnauthed()(
   async ({ req, res }) => {
     setPageCache(res, { cachePolicy: 'no-store' }, req.url)
 
-    const traceHeader = req.headers?.['x-cloud-trace-context']
-    let globalLogFields = {}
-    if (traceHeader && !Array.isArray(traceHeader)) {
-      const [trace] = traceHeader.split('/')
-      globalLogFields[
-        'logging.googleapis.com/trace'
-      ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
-    }
+    const globalLogFields = getLogTraceObject(req)
 
     let sectionsData = []
     let topicsData = []
