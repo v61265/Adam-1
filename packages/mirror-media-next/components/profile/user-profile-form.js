@@ -6,6 +6,11 @@ import DropdownMenu from './dropdown-menu'
 import PrimaryButton from '../shared/buttons/primary-button'
 import DefaultButton from '../shared/buttons/default-button'
 import { useRouter } from 'next/router'
+import client from '../../apollo/apollo-client'
+import { updateMember } from '../../apollo/profile/mutation/update-member-profile'
+import { useMembership } from '../../context/membership'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 
 const Form = styled.form`
   display: flex;
@@ -80,6 +85,9 @@ const FormGroup = styled.div`
   width: 100%;
 
   input {
+    height: 48px;
+    font-size: 18px;
+    line-height: 150%;
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     padding: 12px;
@@ -113,6 +121,9 @@ const ItemsWrapper = styled.div`
 
   input {
     width: 100%;
+    font-size: 18px;
+    line-height: 150%;
+    height: 48px;
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     padding: 12px;
@@ -205,6 +216,19 @@ const formatBirthday = (timestamp) => {
 }
 
 /**
+ * @param {string} year
+ * @param {string} month
+ * @param {string} date
+ * @returns {string}
+ */
+const dateFormatter = (year, month, date) => {
+  dayjs.extend(utc)
+  const dateString = `${year}-${month}-${date}`
+  const utcDate = dayjs(dateString).utc().format()
+  return utcDate
+}
+
+/**
  * @type {{ F: string, M: string, 'N/A': string }}
  */
 const genderMap = {
@@ -223,9 +247,15 @@ export default function UserProfileForm({ profile }) {
   const [selectedCity, setSelectedCity] = useState('')
   const [districtData, setDistrictData] = useState([])
   const [selectedDistrict, setSelectedDistrict] = useState('')
+  const [yearValue, setYearValue] = useState('')
+  const [dateValue, setDateValue] = useState('')
+  const [nameValue, setNameValue] = useState('')
+  const [addressValue, setAddressValue] = useState('')
+  const [phoneValue, setPhoneValue] = useState('')
 
   const router = useRouter()
   const {
+    id,
     email,
     name,
     gender,
@@ -236,14 +266,20 @@ export default function UserProfileForm({ profile }) {
     district,
     address,
   } = profile
+  const { accessToken } = useMembership()
 
   useEffect(() => {
     setSelectedMonth(formatBirthday(birthday).month)
     setSelectedCity(city)
+    setPhoneValue(phone)
+    setNameValue(name)
     setSelectedCountry(country)
     setSelectedDistrict(district)
     setSelectedGender(genderMap[gender])
-  }, [city, country, district, gender, birthday])
+    setYearValue(formatBirthday(birthday).year)
+    setDateValue(formatBirthday(birthday).date)
+    setAddressValue(address)
+  }, [city, country, district, gender, birthday, address, phone, name])
 
   const cityNames = useMemo(() => {
     return taiwanDisTrictOptions.map((data) => {
@@ -277,6 +313,33 @@ export default function UserProfileForm({ profile }) {
     router.push('/updatePassword')
   }
 
+  const handleUpdateProfile = async () => {
+    try {
+      await client.mutate({
+        mutation: updateMember,
+        context: {
+          uri: '/member/graphql',
+          headers: {
+            authorization: accessToken ? `Bearer ${accessToken}` : '',
+          },
+        },
+        variables: {
+          id: id,
+          name: nameValue,
+          gender: 'F',
+          birthday: dateFormatter(yearValue, selectedMonth, dateValue),
+          phone: phoneValue,
+          country: selectedCountry,
+          city: selectedCity,
+          district: selectedDistrict,
+          address: addressValue,
+        },
+      })
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
   return (
     <>
       <Form>
@@ -297,7 +360,12 @@ export default function UserProfileForm({ profile }) {
         <FlexRowContainer>
           <FormGroup>
             <LargeLabel htmlFor="name">姓名</LargeLabel>
-            <input id="name" placeholder="請輸入姓名" defaultValue={name} />
+            <input
+              id="name"
+              placeholder="請輸入姓名"
+              value={nameValue}
+              onChange={(e) => setNameValue(e.target.value)}
+            />
           </FormGroup>
           <FormGroup>
             <LargeLabel>性別</LargeLabel>
@@ -321,7 +389,8 @@ export default function UserProfileForm({ profile }) {
               <input
                 id="year"
                 placeholder="西元年"
-                defaultValue={formatBirthday(birthday).year}
+                value={yearValue}
+                onChange={(e) => setYearValue(e.target.value)}
               />
             </ItemsWrapper>
             <ItemsWrapper>
@@ -340,7 +409,8 @@ export default function UserProfileForm({ profile }) {
               <input
                 id="date"
                 placeholder="日期"
-                defaultValue={formatBirthday(birthday).date}
+                value={dateValue}
+                onChange={(e) => setDateValue(e.target.value)}
               />
             </ItemsWrapper>
           </FlexRowBox>
@@ -348,7 +418,13 @@ export default function UserProfileForm({ profile }) {
 
         <FormGroup>
           <LargeLabel htmlFor="phone">電話</LargeLabel>
-          <input id="phone" placeholder="請輸入電話" defaultValue={phone} />
+          <input
+            id="phone"
+            type="tel"
+            placeholder="請輸入電話"
+            value={phoneValue}
+            onChange={(e) => setPhoneValue(e.target.value)}
+          />
         </FormGroup>
         <FormDetails>
           <h2>地址</h2>
@@ -393,13 +469,16 @@ export default function UserProfileForm({ profile }) {
               <input
                 id="address"
                 placeholder="請輸入街道、門號、巷弄、樓層等資訊"
-                defaultValue={address}
+                value={addressValue}
+                onChange={(e) => setAddressValue(e.target.value)}
               />
             </ItemsWrapper>
           </AddressWrapper>
         </FormDetails>
         <ButtonWrapper>
-          <PrimaryButton isLoading={false}>儲存</PrimaryButton>
+          <PrimaryButton isLoading={false} onClick={handleUpdateProfile}>
+            儲存
+          </PrimaryButton>
         </ButtonWrapper>
       </Form>
     </>
