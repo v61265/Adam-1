@@ -88,6 +88,7 @@ const Ul = styled.ul`
   };
   position: absolute;
   background-color: #fff;
+  font-size: 18px;
   width: 100%;
   z-index: 100;
   border: 1px solid rgba(0, 0, 0, 0.87);
@@ -95,7 +96,7 @@ const Ul = styled.ul`
   border-bottom-right-radius: 8px;
   border-bottom-left-radius: 8px;
   overflow: hidden;
-  max-height: 160px; // limit the visible items
+  max-height: 172px; // limit the visible items
   overflow-y: auto;
 `
 const Li = styled.li`
