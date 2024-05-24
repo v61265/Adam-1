@@ -18,6 +18,7 @@ const DropdownMenuWrapper = styled.div`
  */
 const SelectBox = styled.div`
   position: relative;
+  height: 48px;
   border: 1px solid
     ${
       /** @param {SelectBoxProps} props */
