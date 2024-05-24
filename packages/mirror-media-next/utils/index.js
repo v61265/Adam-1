@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { GCP_PROJECT_ID } from '../config/index.mjs'
 
 /**
  * @typedef {import('../apollo/fragments/section').Section[]} Sections
@@ -140,8 +141,10 @@ const transformTimeDataIntoSlashFormat = (time, includeTime = true) => {
 //TODO: add more specific type in param `arrayNeedToSort` and `arraySortReference`
 /**
  * Sorts an array of objects based on the order of ids in another array of objects.
- * @param {Object[]} arrayNeedToSort
- * @param {Object[]} arraySortReference
+ * @template {{ id: any }} T
+ * @template {{ id: any }} S
+ * @param {T[]} arrayNeedToSort
+ * @param {S[]} arraySortReference
  */
 const sortArrayWithOtherArrayId = (arrayNeedToSort, arraySortReference) => {
   const sortedArray = arrayNeedToSort.slice().sort((a, b) => {
@@ -397,6 +400,21 @@ const getSearchParamFromApiKeyUrl = (query, key) => {
   return new URLSearchParams(apiKeyUrl).get(key)
 }
 
+/**
+ * @param {import('http').IncomingMessage} req
+ */
+const getLogTraceObject = (req) => {
+  const traceHeader = req?.headers?.['x-cloud-trace-context']
+  let globalLogFields = {}
+  if (traceHeader && !Array.isArray(traceHeader)) {
+    const [trace] = traceHeader.split('/')
+    globalLogFields[
+      'logging.googleapis.com/trace'
+    ] = `projects/${GCP_PROJECT_ID}/traces/${trace}`
+  }
+  return globalLogFields
+}
+
 export {
   transformTimeDataIntoDotFormat,
   transformTimeDataIntoSlashFormat,
@@ -418,4 +436,5 @@ export {
   isServer,
   getClientSideOnlyError,
   getSearchParamFromApiKeyUrl,
+  getLogTraceObject,
 }
