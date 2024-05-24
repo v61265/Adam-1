@@ -5,6 +5,12 @@ import LayoutFull from '../components/shared/layout-full'
 import FormWrapper from '../components/login/form-wrapper'
 import { useRouter } from 'next/router'
 import { logout } from '../context/membership'
+import { setPageCache } from '../utils/cache-setting'
+import { ENV } from '../config/index.mjs'
+import { getLogTraceObject } from '../utils'
+import { handleAxiosResponse } from '../utils/response-handle'
+import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../utils/data-process'
 
 const REDIRECTION_DELAY = 3 // 秒
 
@@ -39,7 +45,17 @@ const SecondaryText = styled.p`
   margin-top: 32px;
 `
 
-export default function PasswordChangeSuccess() {
+/**
+ * @typedef {Object} PageProps
+ * @property {Object} headerData
+ * @property {import('../utils/api').HeadersData} headerData.sectionsData
+ * @property {import('../utils/api').Topics} headerData.topicsData
+ */
+
+/**
+ * @param {PageProps} props
+ */
+export default function PasswordChangeSuccess({ headerData }) {
   const router = useRouter()
 
   useEffect(() => {
@@ -59,7 +75,10 @@ export default function PasswordChangeSuccess() {
   }, [router])
 
   return (
-    <LayoutFull header={{ type: 'default' }} footer={{ type: 'default' }}>
+    <LayoutFull
+      header={{ type: 'default', data: headerData }}
+      footer={{ type: 'default' }}
+    >
       <Container>
         <Main>
           <FormWrapper>
@@ -76,4 +95,35 @@ export default function PasswordChangeSuccess() {
       </Container>
     </LayoutFull>
   )
+}
+
+/**
+ * @type {import('next').GetServerSideProps<PageProps>}
+ */
+export async function getServerSideProps({ req, res }) {
+  if (ENV === 'prod') {
+    setPageCache(res, { cachePolicy: 'max-age', cacheTime: 900 }, req.url)
+  } else {
+    setPageCache(res, { cachePolicy: 'no-store' }, req.url)
+  }
+
+  const globalLogFields = getLogTraceObject(req)
+
+  const responses = await Promise.allSettled([
+    fetchHeaderDataInDefaultPageLayout(),
+  ])
+
+  // handle header data
+  const [sectionsData, topicsData] = handleAxiosResponse(
+    responses[0],
+    getSectionAndTopicFromDefaultHeaderData,
+    'Error occurs while getting header data in password change success page',
+    globalLogFields
+  )
+
+  return {
+    props: {
+      headerData: { sectionsData, topicsData },
+    },
+  }
 }
