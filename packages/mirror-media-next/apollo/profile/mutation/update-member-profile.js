@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
-export const updateMemberProfile = gql`
-  mutation updateMemberProfile(
+export const updateMember = gql`
+  mutation updateMember(
     $id: ID!
     $address: String
     $country: String
@@ -13,25 +13,26 @@ export const updateMemberProfile = gql`
     $phone: String
   ) {
     updatemember(
-      id: $id
+      where: { id: $id }
       data: {
-        address: $address
-        country: $country
-        city: $city
-        district: $district
-        birthday: $birthday
-        gender: $gender
-        name: $name
         phone: $phone
+        gender: $gender
+        birthday: $birthday
+        name: $name
+        address: $address
+        city: $city
+        country: $country
+        district: $district
       }
     ) {
-      address
-      country
-      city
-      district
-      birthday
-      gender
       phone
+      gender
+      birthday
+      name
+      address
+      city
+      country
+      district
     }
   }
 `
