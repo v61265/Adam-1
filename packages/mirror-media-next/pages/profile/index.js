@@ -6,12 +6,13 @@ import { useMembership } from '../../context/membership'
 import { useEffect, useState } from 'react'
 import client from '../../apollo/apollo-client'
 import { fetchMemberProfileByFirebaseId } from '../../apollo/profile/query/fetch-member-profile'
-import errors from '@twreporter/errors'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import useMembershipRequired from '../../hooks/use-membership-required'
 import redirectToLoginWhileUnauthed from '../../utils/redirect-to-login-while-unauthed'
 import { getLogTraceObject } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 
 const Page = styled.main`
   padding: 40px 20px;
@@ -42,12 +43,10 @@ const Title = styled.h1`
 
 /**
  * @param {Object} props
- * @param {Object[] } props.sectionsData
- * @param {Object[]} props.topicsData
  * @returns {JSX.Element}
  */
 
-export default function Profile({ sectionsData = [], topicsData = [] }) {
+export default function Profile({ headerData }) {
   useMembershipRequired()
   const { accessToken, firebaseId } = useMembership()
 
@@ -90,7 +89,7 @@ export default function Profile({ sectionsData = [], topicsData = [] }) {
       head={{ title: `個人資料` }}
       header={{
         type: 'default',
-        data: { sectionsData: sectionsData, topicsData },
+        data: headerData,
       }}
       footer={{ type: 'default' }}
     >
@@ -112,35 +111,21 @@ export const getServerSideProps = redirectToLoginWhileUnauthed()(
 
     const globalLogFields = getLogTraceObject(req)
 
-    let sectionsData = []
-    let topicsData = []
+    const responses = await Promise.allSettled([
+      fetchHeaderDataInDefaultPageLayout(),
+    ])
 
-    try {
-      const headerData = await fetchHeaderDataInDefaultPageLayout()
-      if (Array.isArray(headerData.sectionsData)) {
-        sectionsData = headerData.sectionsData
-      }
-      if (Array.isArray(headerData.topicsData)) {
-        topicsData = headerData.topicsData
-      }
-    } catch (err) {
-      const annotatingAxiosError = errors.helpers.annotateAxiosError(err)
-      console.error(
-        JSON.stringify({
-          severity: 'ERROR',
-          message: errors.helpers.printAll(annotatingAxiosError, {
-            withStack: true,
-            withPayload: true,
-          }),
-          ...globalLogFields,
-        })
-      )
-    }
+    // handle header data
+    const [sectionsData, topicsData] = handleAxiosResponse(
+      responses[0],
+      getSectionAndTopicFromDefaultHeaderData,
+      'Error occurs while getting header data in profile page',
+      globalLogFields
+    )
 
     return {
       props: {
-        sectionsData,
-        topicsData,
+        headerData: { sectionsData, topicsData },
       },
     }
   }
