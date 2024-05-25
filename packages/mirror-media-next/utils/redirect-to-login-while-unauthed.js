@@ -1,5 +1,5 @@
-import { URL, URLSearchParams } from 'node:url'
 import withUserSSR from './with-user-ssr'
+import { getLoginUrl } from './server-side-only'
 
 /**
  * @typedef {import('querystring').ParsedUrlQuery} ParsedUrlQuery
@@ -89,13 +89,7 @@ const redirectToLoginWhileUnauthed =
           props,
         }
       } else {
-        const searchParamsObject = new URLSearchParams(query)
-        searchParamsObject.set(
-          'destination',
-          new URL(resolvedUrl, 'https://www.google.com').pathname
-        )
-        const searchParams = searchParamsObject.toString()
-        const destination = `/login?${searchParams}`
+        const destination = getLoginUrl(resolvedUrl, query)
 
         return {
           redirect: {
