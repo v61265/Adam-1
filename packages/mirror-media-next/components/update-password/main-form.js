@@ -97,7 +97,10 @@ export default function MainForm() {
     } catch (e) {
       const errorReport = generateErrorReportInfo(e, { userEmail: email })
       sendErrorLog(errorReport)
-      router.push('/password-change-fail')
+      router.push({
+        pathname: '/password-change-fail',
+        query: { from: router.pathname },
+      })
     }
     setIsLoading(false)
   }

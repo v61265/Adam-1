@@ -9,6 +9,11 @@ import { handleAxiosResponse } from '../utils/response-handle'
 import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
 import { getSectionAndTopicFromDefaultHeaderData } from '../utils/data-process'
 
+const FROM_TYPE = /** @type {const} */ ({
+  RECOVER_PASSWORD: '/recover-password',
+  UPDATE_PASSWORD: '/update-password',
+})
+
 const Container = styled.div`
   flex-grow: 1;
 
@@ -30,12 +35,25 @@ const Container = styled.div`
  */
 export default function PasswordChangeFail({ headerData }) {
   const router = useRouter()
+  const fromData = router.query?.from
+  const from = Array.isArray(fromData) ? fromData.join('') : fromData
 
   /** @type {import('react').MouseEventHandler<HTMLButtonElement>} */
   const onBack = () => {
-    router.replace({
-      pathname: '/recover-password',
-    })
+    switch (from) {
+      case FROM_TYPE.RECOVER_PASSWORD:
+        router.replace({
+          pathname: FROM_TYPE.RECOVER_PASSWORD,
+        })
+        break
+      case FROM_TYPE.UPDATE_PASSWORD:
+        router.push({
+          pathname: FROM_TYPE.UPDATE_PASSWORD,
+        })
+        break
+      default:
+        break
+    }
   }
 
   return (
