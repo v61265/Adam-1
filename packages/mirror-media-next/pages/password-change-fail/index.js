@@ -1,13 +1,13 @@
 import styled from 'styled-components'
-import LayoutFull from '../components/shared/layout-full'
-import GenericFailed from '../components/login/generic-failed'
+import LayoutFull from '../../components/shared/layout-full'
+import GenericFailed from '../../components/login/generic-failed'
 import { useRouter } from 'next/router'
-import { setPageCache } from '../utils/cache-setting'
-import { ENV } from '../config/index.mjs'
-import { getLogTraceObject } from '../utils'
-import { handleAxiosResponse } from '../utils/response-handle'
-import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
-import { getSectionAndTopicFromDefaultHeaderData } from '../utils/data-process'
+import { setPageCache } from '../../utils/cache-setting'
+import { ENV } from '../../config/index.mjs'
+import { getLogTraceObject } from '../../utils'
+import { handleAxiosResponse } from '../../utils/response-handle'
+import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
+import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 
 const FROM_TYPE = /** @type {const} */ ({
   RECOVER_PASSWORD: '/recover-password',
@@ -26,8 +26,8 @@ const Container = styled.div`
 /**
  * @typedef {Object} PageProps
  * @property {Object} headerData
- * @property {import('../utils/api').HeadersData} headerData.sectionsData
- * @property {import('../utils/api').Topics} headerData.topicsData
+ * @property {import('../../utils/api').HeadersData} headerData.sectionsData
+ * @property {import('../../utils/api').Topics} headerData.topicsData
  */
 
 /**
