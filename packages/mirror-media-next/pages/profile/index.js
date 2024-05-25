@@ -42,7 +42,14 @@ const Title = styled.h1`
 `
 
 /**
- * @param {Object} props
+ * @typedef {Object} PageProps
+ * @property {Object} headerData
+ * @property {import('../../utils/api').HeadersData} headerData.sectionsData
+ * @property {import('../../utils/api').Topics} headerData.topicsData
+ */
+
+/**
+ * @param {PageProps} props
  * @returns {JSX.Element}
  */
 
