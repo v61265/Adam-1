@@ -263,42 +263,37 @@ export default function UserProfileForm({ profile, onSaved }) {
   const [nameValue, setNameValue] = useState('')
   const [addressValue, setAddressValue] = useState('')
   const [phoneValue, setPhoneValue] = useState('')
-  const [idValue, setIdValue] = useState('')
-  const [emailValue, setEmailValue] = useState('')
-
   const router = useRouter()
 
   const { accessToken } = useMembership()
 
+  let id, email, name, gender, birthday, phone, country, city, district, address
+  if (profile) {
+    ;({
+      id,
+      email,
+      name,
+      gender,
+      birthday,
+      phone,
+      country,
+      city,
+      district,
+      address,
+    } = profile)
+  }
   useEffect(() => {
-    if (profile) {
-      const {
-        id,
-        email,
-        name,
-        gender,
-        birthday,
-        phone,
-        country,
-        city,
-        district,
-        address,
-      } = profile
-
-      setSelectedMonth(formatBirthday(birthday).month)
-      setSelectedCity(city)
-      setPhoneValue(phone)
-      setNameValue(name)
-      setSelectedCountry(country)
-      setSelectedDistrict(district)
-      setSelectedGender(genderMap[gender])
-      setYearValue(formatBirthday(birthday).year)
-      setDateValue(formatBirthday(birthday).date)
-      setAddressValue(address)
-      setIdValue(id)
-      setEmailValue(email)
-    }
-  }, [profile])
+    setSelectedMonth(formatBirthday(birthday).month)
+    setSelectedCity(city)
+    setPhoneValue(phone)
+    setNameValue(name)
+    setSelectedCountry(country)
+    setSelectedDistrict(district)
+    setSelectedGender(genderMap[gender])
+    setYearValue(formatBirthday(birthday).year)
+    setDateValue(formatBirthday(birthday).date)
+    setAddressValue(address)
+  }, [birthday, city, phone, name, country, district, gender, address])
 
   const cityNames = useMemo(() => {
     return taiwanDisTrictOptions.map((data) => {
@@ -343,7 +338,7 @@ export default function UserProfileForm({ profile, onSaved }) {
           },
         },
         variables: {
-          id: idValue,
+          id: id,
           name: nameValue,
           gender: getGenderKey(selectedGender),
           birthday: dateFormatter(yearValue, selectedMonth, dateValue),
@@ -366,7 +361,7 @@ export default function UserProfileForm({ profile, onSaved }) {
       <Form>
         <EmailWrapper>
           <h2>Email</h2>
-          <p>{emailValue}</p>
+          <p>{email}</p>
         </EmailWrapper>
 
         <PasswordWrapper>
