@@ -229,12 +229,16 @@ const dateFormatter = (year, month, date) => {
 }
 
 /**
- * @type {{ F: string, M: string, 'N/A': string }}
+ * @type {{ F: string, M: string, 'NA': string }}
  */
 const genderMap = {
   F: '女',
   M: '男',
-  'N/A': '不透露',
+  NA: '不透露',
+}
+
+const getGenderKey = (/** @type {String} */ value) => {
+  return Object.keys(genderMap).find((key) => genderMap[key] === value)
 }
 
 /**
@@ -341,7 +345,7 @@ export default function UserProfileForm({ profile, onSaved }) {
         variables: {
           id: idValue,
           name: nameValue,
-          gender: 'F',
+          gender: getGenderKey(selectedGender),
           birthday: dateFormatter(yearValue, selectedMonth, dateValue),
           phone: phoneValue,
           country: selectedCountry,
