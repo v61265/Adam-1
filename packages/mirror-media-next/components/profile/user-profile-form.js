@@ -201,7 +201,7 @@ const monthOptions = [
 ]
 
 /**
- * @param {number} timestamp
+ * @param {string} timestamp
  * @returns {{year: string, month: string, date: string}}
  */
 const formatBirthday = (timestamp) => {
@@ -238,6 +238,13 @@ const genderMap = {
 }
 
 /**
+ * @typedef {import('../../type/profile.js').Member} Member
+ */
+
+/**
+ * @param {Object} props
+ * @param {Member} props.profile
+ * @param {(value: string) => void} props.onSaved
  * @returns {JSX.Element}
  */
 export default function UserProfileForm({ profile, onSaved }) {
@@ -254,6 +261,7 @@ export default function UserProfileForm({ profile, onSaved }) {
   const [phoneValue, setPhoneValue] = useState('')
 
   const router = useRouter()
+
   const {
     id,
     email,
@@ -266,6 +274,7 @@ export default function UserProfileForm({ profile, onSaved }) {
     district,
     address,
   } = profile
+
   const { accessToken } = useMembership()
 
   useEffect(() => {

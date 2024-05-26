@@ -59,10 +59,10 @@ export default function Profile({ headerData }) {
   useMembershipRequired()
   const { accessToken, firebaseId } = useMembership()
 
-  const [profile, setProfile] = useState({})
+  const [profile, setProfile] = useState(null)
   const [isSaved, setIsSaved] = useState('normal')
 
-  const handleSaved = (status) => {
+  const handleSaved = (/** @type {string} */ status) => {
     setIsSaved(status)
   }
 
@@ -85,10 +85,10 @@ export default function Profile({ headerData }) {
          */
 
         /**
-         * @type {Member | null}
+         * @type {Member | {} | null}
          */
         const memberProfileInfo = response?.data?.member ?? null
-        setProfile(memberProfileInfo)
+        if (memberProfileInfo) setProfile(memberProfileInfo)
       } catch (error) {
         console.error(error)
       }
