@@ -85,10 +85,10 @@ export default function Profile({ headerData }) {
          */
 
         /**
-         * @type {Member | {} | null}
+         * @type {Member | null}
          */
-        const memberProfileInfo = response?.data?.member ?? null
-        if (memberProfileInfo) setProfile(memberProfileInfo)
+        const memberProfileInfo = response?.data?.member
+        setProfile(memberProfileInfo)
       } catch (error) {
         console.error(error)
       }
