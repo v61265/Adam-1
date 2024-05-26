@@ -60,10 +60,10 @@ export default function Profile({ headerData }) {
   const { accessToken, firebaseId } = useMembership()
 
   const [profile, setProfile] = useState(null)
-  const [isSaved, setIsSaved] = useState('normal')
+  const [savedStatus, setSavedStatus] = useState('normal')
 
   const handleSaved = (/** @type {string} */ status) => {
-    setIsSaved(status)
+    setSavedStatus(status)
   }
 
   useEffect(() => {
@@ -107,15 +107,15 @@ export default function Profile({ headerData }) {
       }}
       footer={{ type: 'default' }}
     >
-      {isSaved === 'normal' && (
+      {savedStatus === 'normal' && (
         <Page>
           <Title>個人資料</Title>
           <UserProfileForm profile={profile} onSaved={handleSaved} />
           <UserDeletionForm />
         </Page>
       )}
-      {isSaved === 'success' && <SaveSuccess />}
-      {isSaved === 'error' && <SaveFailed />}
+      {savedStatus === 'success' && <SaveSuccess />}
+      {savedStatus === 'error' && <SaveFailed />}
     </LayoutFull>
   )
 }
