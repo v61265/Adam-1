@@ -66,6 +66,10 @@ export default function Profile({ headerData }) {
     setSavedStatus(status)
   }
 
+  const resetStatus = () => {
+    setSavedStatus('normal')
+  }
+
   useEffect(() => {
     const fetchMemberProfile = async () => {
       try {
@@ -115,7 +119,7 @@ export default function Profile({ headerData }) {
         </Page>
       )}
       {savedStatus === 'success' && <SaveSuccess />}
-      {savedStatus === 'error' && <SaveFailed />}
+      {savedStatus === 'error' && <SaveFailed onReset={resetStatus} />}
     </LayoutFull>
   )
 }

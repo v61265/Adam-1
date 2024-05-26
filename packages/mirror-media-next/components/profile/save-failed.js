@@ -1,7 +1,6 @@
 import FormWrapper from './form-wrapper'
 import styled from 'styled-components'
 import DefaultButton from '../shared/buttons/default-button'
-import { useRouter } from 'next/router'
 
 const Main = styled.main`
   display: flex;
@@ -25,18 +24,13 @@ const SecondaryText = styled.p`
   margin-bottom: 32px;
 `
 
-export default function SaveFailed() {
-  const router = useRouter()
-  const handleBack = () => {
-    router.push('/profile')
-  }
-
+export default function SaveFailed({ onReset }) {
   return (
     <Main>
       <FormWrapper>
         <PrimaryText>儲存失敗</PrimaryText>
         <SecondaryText>請稍候再操作</SecondaryText>
-        <DefaultButton onClick={handleBack}>回上一步</DefaultButton>
+        <DefaultButton onClick={onReset}>回上一步</DefaultButton>
       </FormWrapper>
     </Main>
   )
