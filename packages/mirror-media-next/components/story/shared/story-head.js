@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { SITE_URL } from '../../../config/index.mjs'
 import { getActiveOrderCategory, getActiveOrderSection } from '../../../utils'
-import Script from 'next/script'
+// import Script from 'next/script'
 /**
  * @typedef {Object} Section
  * @property {string} slug
@@ -169,6 +169,7 @@ export default function StoryHead({ postData }) {
           />
         )}
       </Head>
+      {/*
       <Script
         id="test-google-tag-ad"
         dangerouslySetInnerHTML={{
@@ -183,6 +184,7 @@ export default function StoryHead({ postData }) {
         `,
         }}
       />
+      */}
     </>
   )
 }

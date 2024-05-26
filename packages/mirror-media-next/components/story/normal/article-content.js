@@ -3,10 +3,12 @@ import DraftRenderBlock from '../shared/draft-renderer-block'
 import {
   copyAndSliceDraftBlock,
   getSlicedIndexAndUnstyledBlocksCount,
+  modifyFirstImageEntity,
 } from '../../../utils/story'
 import dynamic from 'next/dynamic'
 import useWindowDimensions from '../../../hooks/use-window-dimensions'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
+import { useMemo } from 'react'
 
 const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
   ssr: false,
@@ -57,24 +59,38 @@ export default function ArticleContent({
 }) {
   const { shouldShowAd } = useDisplayAd(hiddenAdvertised)
   const windowDimensions = useWindowDimensions()
+  const contentMarkedFirstImage = modifyFirstImageEntity(content)
 
   const { slicedIndex, unstyledBlocksCount } =
-    getSlicedIndexAndUnstyledBlocksCount(content)
+    getSlicedIndexAndUnstyledBlocksCount(contentMarkedFirstImage)
+
+  const firstImageAdComponent = useMemo(() => {
+    return shouldShowAd && windowDimensions.width > 1200 ? (
+      <StyledGPTAd pageKey="global" adKey="PC_ADBRO" />
+    ) : (
+      <StyledGPTAd pageKey="global" adKey="MB_ADBRO" />
+    )
+  }, [windowDimensions, shouldShowAd])
 
   //The GPT advertisement for the `mobile` version includes `AT1` & `AT2`
   const MB_contentJsx = (
     <Wrapper>
       <DraftRenderBlock
-        rawContentBlock={copyAndSliceDraftBlock(content, 0, slicedIndex.mb[0])}
+        rawContentBlock={copyAndSliceDraftBlock(
+          contentMarkedFirstImage,
+          0,
+          slicedIndex.mb[0]
+        )}
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
+        firstImageAdComponent={firstImageAdComponent}
       />
-
+      {/* 
       {shouldShowAd && windowDimensions.width > 1200 ? (
         <div id="div-gpt-ad-1710755205915-0" />
       ) : (
         <div id="div-gpt-ad-1710755093650-0" />
-      )}
+      )} */}
       {unstyledBlocksCount > 1 && (
         <>
           {shouldShowAd && (
@@ -84,12 +100,13 @@ export default function ArticleContent({
       )}
       <DraftRenderBlock
         rawContentBlock={copyAndSliceDraftBlock(
-          content,
+          contentMarkedFirstImage,
           slicedIndex.mb[0],
           slicedIndex.mb[1]
         )}
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
+        firstImageAdComponent={firstImageAdComponent}
       />
       {unstyledBlocksCount > 5 && (
         <>
@@ -99,9 +116,13 @@ export default function ArticleContent({
         </>
       )}
       <DraftRenderBlock
-        rawContentBlock={copyAndSliceDraftBlock(content, slicedIndex.mb[1])}
+        rawContentBlock={copyAndSliceDraftBlock(
+          contentMarkedFirstImage,
+          slicedIndex.mb[1]
+        )}
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
+        firstImageAdComponent={firstImageAdComponent}
       />
     </Wrapper>
   )
@@ -113,8 +134,8 @@ export default function ArticleContent({
         rawContentBlock={copyAndSliceDraftBlock(content, 0, slicedIndex.pc[0])}
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
+        firstImageAdComponent={firstImageAdComponent}
       />
-      {shouldShowAd && <StyledGPTAd pageKey="global" adKey="PC_ADBRO" />}
 
       {unstyledBlocksCount > 3 && (
         <>
@@ -127,6 +148,7 @@ export default function ArticleContent({
         rawContentBlock={copyAndSliceDraftBlock(content, slicedIndex.pc[0])}
         contentLayout="normal"
         wrapper={(children) => <ContentContainer>{children}</ContentContainer>}
+        firstImageAdComponent={firstImageAdComponent}
       />
     </Wrapper>
   )
