@@ -13,6 +13,8 @@ import redirectToLoginWhileUnauthed from '../../utils/redirect-to-login-while-un
 import { getLogTraceObject } from '../../utils'
 import { handleAxiosResponse } from '../../utils/response-handle'
 import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
+import SaveSuccess from '../../components/profile/save-success'
+import SaveFailed from '../../components/profile/save-failed'
 
 const Page = styled.main`
   padding: 40px 20px;
@@ -58,6 +60,11 @@ export default function Profile({ headerData }) {
   const { accessToken, firebaseId } = useMembership()
 
   const [profile, setProfile] = useState({})
+  const [isSaved, setIsSaved] = useState('normal')
+
+  const handleSaved = (status) => {
+    setIsSaved(status)
+  }
 
   useEffect(() => {
     const fetchMemberProfile = async () => {
@@ -100,11 +107,15 @@ export default function Profile({ headerData }) {
       }}
       footer={{ type: 'default' }}
     >
-      <Page>
-        <Title>個人資料</Title>
-        <UserProfileForm profile={profile} />
-        <UserDeletionForm />
-      </Page>
+      {isSaved === 'normal' && (
+        <Page>
+          <Title>個人資料</Title>
+          <UserProfileForm profile={profile} onSaved={handleSaved} />
+          <UserDeletionForm />
+        </Page>
+      )}
+      {isSaved === 'success' && <SaveSuccess />}
+      {isSaved === 'error' && <SaveFailed />}
     </LayoutFull>
   )
 }

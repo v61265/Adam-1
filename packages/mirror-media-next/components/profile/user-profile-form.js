@@ -240,7 +240,7 @@ const genderMap = {
 /**
  * @returns {JSX.Element}
  */
-export default function UserProfileForm({ profile }) {
+export default function UserProfileForm({ profile, onSaved }) {
   const [selectedGender, setSelectedGender] = useState('')
   const [selectedMonth, setSelectedMonth] = useState('')
   const [selectedCountry, setSelectedCountry] = useState('')
@@ -335,7 +335,9 @@ export default function UserProfileForm({ profile }) {
           address: addressValue,
         },
       })
+      onSaved('success')
     } catch (error) {
+      onSaved('error')
       throw new Error(error)
     }
   }
