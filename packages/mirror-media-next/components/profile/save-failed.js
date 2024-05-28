@@ -15,7 +15,7 @@ const PrimaryText = styled.p`
   font-style: normal;
 `
 const SecondaryText = styled.p`
-  color: rgba(0, 0, 0, 0, 5);
+  color: rgba(0, 0, 0, 0.5);
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
