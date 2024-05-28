@@ -44,7 +44,7 @@ export default function SaveSuccess() {
       <FormWrapper>
         <PrimayText>儲存成功</PrimayText>
         <SecondaryText>
-          將於 {REDIRECTION_DELAY} 秒後自動跳轉至首頁...
+          將於 {REDIRECTION_DELAY} 秒後導回個人資料頁...
         </SecondaryText>
       </FormWrapper>
     </Main>
