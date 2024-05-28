@@ -5,7 +5,7 @@ import UserDeletionForm from '../../components/profile/user-deletion-form'
 import { useMembership } from '../../context/membership'
 import { useEffect, useState } from 'react'
 import client from '../../apollo/apollo-client'
-import { fetchMemberProfileByFirebaseId } from '../../apollo/profile/query/fetch-member-profile'
+import { fetchMemberProfile } from '../../apollo/membership/query/member'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import useMembershipRequired from '../../hooks/use-membership-required'
@@ -71,10 +71,10 @@ export default function Profile({ headerData }) {
   }
 
   useEffect(() => {
-    const fetchMemberProfile = async () => {
+    const getMemberProfile = async () => {
       try {
         const response = await client.query({
-          query: fetchMemberProfileByFirebaseId,
+          query: fetchMemberProfile,
           variables: { firebaseId: firebaseId },
           context: {
             uri: '/member/graphql',
@@ -98,7 +98,7 @@ export default function Profile({ headerData }) {
       }
     }
     if (firebaseId && accessToken) {
-      fetchMemberProfile()
+      getMemberProfile()
     }
   }, [firebaseId, accessToken])
 
