@@ -118,7 +118,7 @@ export default function Profile({ headerData }) {
           <UserDeletionForm />
         </Page>
       )}
-      {savedStatus === 'success' && <SaveSuccess />}
+      {savedStatus === 'success' && <SaveSuccess onReset={resetStatus} />}
       {savedStatus === 'error' && <SaveFailed onReset={resetStatus} />}
     </LayoutFull>
   )

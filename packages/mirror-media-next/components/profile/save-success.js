@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import FormWrapper from './form-wrapper'
-import useRedirect from '../../hooks/use-redirect'
 import { useEffect } from 'react'
 import { SECOND } from '../../constants/time-unit'
 
@@ -28,11 +27,9 @@ const SecondaryText = styled.p`
   margin-top: 16px;
 `
 
-export default function SaveSuccess() {
-  const { redirect } = useRedirect()
-
+export default function SaveSuccess({ onReset }) {
   useEffect(() => {
-    const task = setTimeout(() => redirect(), SECOND * REDIRECTION_DELAY)
+    const task = setTimeout(() => onReset(), SECOND * REDIRECTION_DELAY)
 
     return () => {
       clearTimeout(task)
