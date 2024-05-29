@@ -73,14 +73,23 @@ export const getServerSideProps = withUserSSR()(
 
     const globalLogFields = getLogTraceObject(req)
 
-    const signInProvider = user?.firebase?.sign_in_provider
-    if (signInProvider !== 'password') {
+    if (!user) {
       const destination = getLoginUrl(resolvedUrl, query)
 
       return {
         redirect: {
           statusCode: 307,
           destination,
+        },
+      }
+    }
+
+    const signInProvider = user.firebase?.sign_in_provider
+    if (signInProvider !== 'password') {
+      return {
+        redirect: {
+          statusCode: 307,
+          destination: '/profile',
         },
       }
     }
