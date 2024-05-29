@@ -12,7 +12,7 @@ import { handleAxiosResponse } from '../utils/response-handle'
 import { fetchHeaderDataInDefaultPageLayout } from '../utils/api'
 import { getSectionAndTopicFromDefaultHeaderData } from '../utils/data-process'
 
-const REDIRECTION_DELAY = 3 // 秒
+const REDIRECTION_DELAY = 5 // 秒
 
 const Container = styled.div`
   flex-grow: 1;
