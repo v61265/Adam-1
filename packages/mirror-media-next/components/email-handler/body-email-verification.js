@@ -47,6 +47,7 @@ const PrimaryText = styled.p`
   font-size: 24px;
   font-weight: 500;
   line-height: 150%;
+  word-break: break-all;
 `
 
 const SecondaryText = styled.p`
