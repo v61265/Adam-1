@@ -3,7 +3,7 @@ import SaveStausWrapper from './save-status-wrapper'
 import { useEffect } from 'react'
 import { SECOND } from '../../constants/time-unit'
 
-const REDIRECTION_DELAY = 3
+const REDIRECTION_DELAY = 5
 
 const Main = styled.main`
   display: flex;
