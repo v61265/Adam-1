@@ -24,6 +24,10 @@ const SecondaryText = styled.p`
   margin-bottom: 32px;
 `
 
+/**
+ * @param {Object} props
+ * @param {() => void} props.onReset
+ */
 export default function SaveFailed({ onReset }) {
   return (
     <Main>

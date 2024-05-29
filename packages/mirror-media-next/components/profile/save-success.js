@@ -27,6 +27,11 @@ const SecondaryText = styled.p`
   margin-top: 16px;
 `
 
+/**
+ * @param {Object} props
+ * @param {() => void} props.onReset
+ * @returns {JSX.Element}
+ */
 export default function SaveSuccess({ onReset }) {
   useEffect(() => {
     const task = setTimeout(() => onReset(), SECOND * REDIRECTION_DELAY)
