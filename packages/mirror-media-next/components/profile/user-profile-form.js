@@ -14,6 +14,7 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { generateErrorReportInfo } from '../../utils/log/error-log'
 import { sendErrorLog } from '../../utils/log/send-log'
+import { MODE } from '../../pages/profile'
 
 const Form = styled.form`
   display: flex;
@@ -378,9 +379,9 @@ export default function UserProfileForm({ onSaved }) {
           address: userAddress,
         },
       })
-      onSaved('success')
+      onSaved(MODE.SUCCESS)
     } catch (error) {
-      onSaved('error')
+      onSaved(MODE.FAIL)
       const errorReport = generateErrorReportInfo(error, {
         userEmail: emailRef.current,
       })

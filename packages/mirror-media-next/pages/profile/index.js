@@ -13,6 +13,16 @@ import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-proces
 import SaveSuccess from '../../components/profile/save-success'
 import SaveFailed from '../../components/profile/save-failed'
 
+const FORM = 'form'
+const SUCCESS = 'success'
+const FAIL = 'fail'
+
+export const MODE = /** @type {const} */ ({
+  FORM,
+  SUCCESS,
+  FAIL,
+})
+
 const Page = styled.main`
   padding: 40px 20px;
   margin: 0 auto;
@@ -53,14 +63,20 @@ const Title = styled.h1`
  */
 export default function Profile({ headerData }) {
   useMembershipRequired()
-  const [savedStatus, setSavedStatus] = useState('normal')
+  /**
+   * @type {[string, React.Dispatch<React.SetStateAction<string>>]}
+   */
+  const [savedStatus, setSavedStatus] = useState(MODE.FORM)
 
-  const handleSaved = (/** @type {string} */ status) => {
+  /**
+   * @param {SUCCESS | FAIL} status
+   */
+  const handleSaved = (status) => {
     setSavedStatus(status)
   }
 
   const resetStatus = () => {
-    setSavedStatus('normal')
+    setSavedStatus(MODE.FORM)
   }
 
   return (
@@ -72,15 +88,15 @@ export default function Profile({ headerData }) {
       }}
       footer={{ type: 'default' }}
     >
-      {savedStatus === 'normal' && (
+      {savedStatus === MODE.FORM && (
         <Page>
           <Title>個人資料</Title>
           <UserProfileForm onSaved={handleSaved} />
           <UserDeletionForm />
         </Page>
       )}
-      {savedStatus === 'success' && <SaveSuccess onReset={resetStatus} />}
-      {savedStatus === 'error' && <SaveFailed onReset={resetStatus} />}
+      {savedStatus == MODE.SUCCESS && <SaveSuccess onReset={resetStatus} />}
+      {savedStatus === MODE.FAIL && <SaveFailed onReset={resetStatus} />}
     </LayoutFull>
   )
 }
