@@ -1,5 +1,5 @@
 import withUserSSR from './with-user-ssr'
-import { getLoginUrl } from './server-side-only'
+import { getLoginUrl } from './index'
 
 /**
  * @typedef {import('querystring').ParsedUrlQuery} ParsedUrlQuery

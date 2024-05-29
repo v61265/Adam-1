@@ -1,4 +1,4 @@
-import { getAdminAuth } from '../firebase/admin'
+import { getAdminAuth } from '../../firebase/admin'
 
 /**
  * @typedef {import('querystring').ParsedUrlQuery} ParsedUrlQuery
