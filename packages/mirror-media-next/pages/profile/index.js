@@ -40,6 +40,14 @@ const Page = styled.main`
   }
 `
 
+const Container = styled.div`
+  flex-grow: 1;
+  background-color: #fff;
+  ${({ theme }) => theme.breakpoint.md} {
+    background-color: #f2f2f2;
+  }
+`
+
 const Title = styled.h1`
   font-size: 24px;
   font-weight: 500;
@@ -95,8 +103,17 @@ export default function Profile({ headerData }) {
           <UserDeletionForm />
         </Page>
       )}
-      {savedStatus == MODE.SUCCESS && <SaveSuccess onReset={resetStatus} />}
-      {savedStatus === MODE.FAIL && <SaveFailed onReset={resetStatus} />}
+
+      {savedStatus == MODE.SUCCESS && (
+        <Container>
+          <SaveSuccess onReset={resetStatus} />
+        </Container>
+      )}
+      {savedStatus === MODE.FAIL && (
+        <Container>
+          <SaveFailed onReset={resetStatus} />
+        </Container>
+      )}
     </LayoutFull>
   )
 }

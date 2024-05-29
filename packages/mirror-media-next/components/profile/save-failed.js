@@ -1,4 +1,4 @@
-import FormWrapper from './form-wrapper'
+import SaveStausWrapper from './save-status-wrapper'
 import styled from 'styled-components'
 import DefaultButton from '../shared/buttons/default-button'
 
@@ -31,11 +31,11 @@ const SecondaryText = styled.p`
 export default function SaveFailed({ onReset }) {
   return (
     <Main>
-      <FormWrapper>
+      <SaveStausWrapper>
         <PrimaryText>儲存失敗</PrimaryText>
         <SecondaryText>請稍候再操作</SecondaryText>
-        <DefaultButton onClick={onReset}>回上一步</DefaultButton>
-      </FormWrapper>
+        <DefaultButton onClick={onReset}>回個人資料頁</DefaultButton>
+      </SaveStausWrapper>
     </Main>
   )
 }

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import FormWrapper from './form-wrapper'
+import SaveStausWrapper from './save-status-wrapper'
 import { useEffect } from 'react'
 import { SECOND } from '../../constants/time-unit'
 
@@ -43,12 +43,12 @@ export default function SaveSuccess({ onReset }) {
 
   return (
     <Main>
-      <FormWrapper>
+      <SaveStausWrapper>
         <PrimayText>儲存成功</PrimayText>
         <SecondaryText>
           將於 {REDIRECTION_DELAY} 秒後導回個人資料頁...
         </SecondaryText>
-      </FormWrapper>
+      </SaveStausWrapper>
     </Main>
   )
 }
