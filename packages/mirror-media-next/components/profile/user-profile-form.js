@@ -442,9 +442,9 @@ export default function UserProfileForm({ onSaved }) {
               />
             </ItemsWrapper>
             <ItemsWrapper>
-              <SmallLabel htmlFor="date">日期</SmallLabel>
+              <SmallLabel htmlFor="day">日期</SmallLabel>
               <input
-                id="date"
+                id="day"
                 placeholder="日期"
                 value={userDay}
                 onChange={(e) => setUserDay(e.target.value)}
