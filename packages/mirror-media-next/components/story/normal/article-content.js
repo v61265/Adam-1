@@ -65,11 +65,14 @@ export default function ArticleContent({
     getSlicedIndexAndUnstyledBlocksCount(contentMarkedFirstImage)
 
   const firstImageAdComponent = useMemo(() => {
-    return shouldShowAd && windowDimensions.width > 1200 ? (
-      <StyledGPTAd pageKey="global" adKey="PC_ADBRO" />
-    ) : (
-      <StyledGPTAd pageKey="global" adKey="MB_ADBRO" />
+    return (
+      <img src="https://newaddiscover.com/wp-content/uploads/2021/09/%E7%99%BC%E7%8F%BE%E5%BB%A3%E5%91%8A%EF%BC%BF%E7%94%A2%E5%93%81-03.png" />
     )
+    // return shouldShowAd && windowDimensions.width > 1200 ? (
+    // ) : (
+    //   // <StyledGPTAd pageKey="global" adKey="PC_ADBRO" />
+    //   <StyledGPTAd pageKey="global" adKey="MB_ADBRO" />
+    // )
   }, [windowDimensions, shouldShowAd])
 
   //The GPT advertisement for the `mobile` version includes `AT1` & `AT2`
