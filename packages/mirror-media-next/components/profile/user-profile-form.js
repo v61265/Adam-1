@@ -12,6 +12,8 @@ import { useMembership } from '../../context/membership'
 import { fetchMemberProfile } from '../../apollo/membership/query/member'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { generateErrorReportInfo } from '../../utils/log/error-log'
+import { sendErrorLog } from '../../utils/log/send-log'
 
 const Form = styled.form`
   display: flex;
@@ -308,7 +310,10 @@ export default function UserProfileForm({ onSaved }) {
         setUserDistrict(district)
         setUserAddress(address)
       } catch (error) {
-        console.error(error)
+        const errorReport = generateErrorReportInfo(error, {
+          firebaseId: firebaseId,
+        })
+        sendErrorLog(errorReport)
       }
     }
     if (firebaseId && accessToken) {
@@ -373,7 +378,10 @@ export default function UserProfileForm({ onSaved }) {
       onSaved('success')
     } catch (error) {
       onSaved('error')
-      throw new Error(error)
+      const errorReport = generateErrorReportInfo(error, {
+        userEmail: emailRef.current,
+      })
+      sendErrorLog(errorReport)
     }
   }
 
