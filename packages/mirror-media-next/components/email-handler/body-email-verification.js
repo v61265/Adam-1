@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { auth } from '../../firebase'
 import { FirebaseError } from 'firebase/app'
 import { applyActionCode } from 'firebase/auth'
@@ -60,6 +60,7 @@ const SecondaryText = styled.p`
 /** @typedef {DEFAULT | SUCCESS | FAILED} VerficationState */
 
 export default function BodyEmailVerification() {
+  const isProcessing = useRef(false)
   const { isLoggedIn, userEmail, firebaseId, memberInfo } = useMembership()
   const [errorType, setErrorType] = useState('')
   const router = useRouter()
@@ -71,9 +72,11 @@ export default function BodyEmailVerification() {
   )
 
   useEffect(() => {
-    if (Array.isArray(actionCode)) {
+    if (Array.isArray(actionCode) || isProcessing.current) {
       return
     }
+
+    isProcessing.current = true
 
     applyActionCode(auth, actionCode)
       .then(() => {
