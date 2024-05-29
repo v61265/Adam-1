@@ -2,10 +2,7 @@ import styled from 'styled-components'
 import LayoutFull from '../../components/shared/layout-full'
 import UserProfileForm from '../../components/profile/user-profile-form'
 import UserDeletionForm from '../../components/profile/user-deletion-form'
-import { useMembership } from '../../context/membership'
-import { useEffect, useState } from 'react'
-import client from '../../apollo/apollo-client'
-import { fetchMemberProfile } from '../../apollo/membership/query/member'
+import { useState } from 'react'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import useMembershipRequired from '../../hooks/use-membership-required'
@@ -54,12 +51,8 @@ const Title = styled.h1`
  * @param {PageProps} props
  * @returns {JSX.Element}
  */
-
 export default function Profile({ headerData }) {
   useMembershipRequired()
-  const { accessToken, firebaseId } = useMembership()
-
-  const [profile, setProfile] = useState(null)
   const [savedStatus, setSavedStatus] = useState('normal')
 
   const handleSaved = (/** @type {string} */ status) => {
@@ -69,38 +62,6 @@ export default function Profile({ headerData }) {
   const resetStatus = () => {
     setSavedStatus('normal')
   }
-
-  useEffect(() => {
-    const getMemberProfile = async () => {
-      try {
-        const response = await client.query({
-          query: fetchMemberProfile,
-          variables: { firebaseId: firebaseId },
-          context: {
-            uri: '/member/graphql',
-            header: {
-              authorization: accessToken ? `Bearer ${accessToken}` : '',
-            },
-          },
-        })
-
-        /**
-         * @typedef {import('../../type/profile.js').Member} Member
-         */
-
-        /**
-         * @type {Member | null}
-         */
-        const memberProfileInfo = response?.data?.member
-        setProfile(memberProfileInfo)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    if (firebaseId && accessToken) {
-      getMemberProfile()
-    }
-  }, [firebaseId, accessToken])
 
   return (
     <LayoutFull
@@ -114,7 +75,7 @@ export default function Profile({ headerData }) {
       {savedStatus === 'normal' && (
         <Page>
           <Title>個人資料</Title>
-          <UserProfileForm profile={profile} onSaved={handleSaved} />
+          <UserProfileForm onSaved={handleSaved} />
           <UserDeletionForm />
         </Page>
       )}

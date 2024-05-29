@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useRef } from 'react'
 import countryOptions from 'constants/lib/countries.json'
 import taiwanDisTrictOptions from 'constants/lib/taiwan-districts.json'
 import DropdownMenu from './dropdown-menu'
@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import client from '../../apollo/apollo-client'
 import { updateMember } from '../../apollo/membership/mutation/member'
 import { useMembership } from '../../context/membership'
+import { fetchMemberProfile } from '../../apollo/membership/query/member'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 
@@ -202,28 +203,28 @@ const monthOptions = [
 
 /**
  * @param {string} timestamp
- * @returns {{year: string, month: string, date: string}}
+ * @returns {{year: string, month: string, day: string}}
  */
 const formatBirthday = (timestamp) => {
-  if (!timestamp) return { year: '', month: '', date: '' }
+  if (!timestamp) return { year: '', month: '', day: '' }
 
   const dateObj = new Date(timestamp)
   const year = dateObj.getFullYear().toString()
   const month = (dateObj.getMonth() + 1).toString()
-  const date = dateObj.getDate().toString()
+  const day = dateObj.getDate().toString()
 
-  return { year, month, date }
+  return { year, month, day }
 }
 
 /**
  * @param {string} year
  * @param {string} month
- * @param {string} date
+ * @param {string} day
  * @returns {string}
  */
-const dateFormatter = (year, month, date) => {
+const dateFormatter = (year, month, day) => {
   dayjs.extend(utc)
-  const dateString = `${year}-${month}-${date}`
+  const dateString = `${year}-${month}-${day}`
   const utcDate = dayjs(dateString).utc().format()
   return utcDate
 }
@@ -247,53 +248,73 @@ const getGenderKey = (/** @type {String} */ value) => {
 
 /**
  * @param {Object} props
- * @param {Member | null} props.profile
  * @param {(value: string) => void} props.onSaved
  * @returns {JSX.Element}
  */
-export default function UserProfileForm({ profile, onSaved }) {
-  const [selectedGender, setSelectedGender] = useState('')
-  const [selectedMonth, setSelectedMonth] = useState('')
-  const [selectedCountry, setSelectedCountry] = useState('')
-  const [selectedCity, setSelectedCity] = useState('')
+export default function UserProfileForm({ onSaved }) {
+  const [userName, setUserName] = useState('')
+  const [userGender, setUserGender] = useState('')
+  const [userYear, setUserYear] = useState('')
+  const [userMonth, setUserMonth] = useState('')
+  const [userDay, setUserDay] = useState('')
+  const [userPhone, setUserPhone] = useState('')
+  const [userCountry, setUserCountry] = useState('')
+  const [userCity, setUserCity] = useState('')
+  const [userDistrict, setUserDistrict] = useState('')
+  const [userAddress, setUserAddress] = useState('')
   const [districtData, setDistrictData] = useState([])
-  const [selectedDistrict, setSelectedDistrict] = useState('')
-  const [yearValue, setYearValue] = useState('')
-  const [dateValue, setDateValue] = useState('')
-  const [nameValue, setNameValue] = useState('')
-  const [addressValue, setAddressValue] = useState('')
-  const [phoneValue, setPhoneValue] = useState('')
+  const idRef = useRef('')
+  const emailRef = useRef('')
+
   const router = useRouter()
+  const { accessToken, firebaseId } = useMembership()
 
-  const { accessToken } = useMembership()
-
-  let id, email, name, gender, birthday, phone, country, city, district, address
-  if (profile) {
-    ;({
-      id,
-      email,
-      name,
-      gender,
-      birthday,
-      phone,
-      country,
-      city,
-      district,
-      address,
-    } = profile)
-  }
   useEffect(() => {
-    setSelectedMonth(formatBirthday(birthday).month)
-    setSelectedCity(city)
-    setPhoneValue(phone)
-    setNameValue(name)
-    setSelectedCountry(country)
-    setSelectedDistrict(district)
-    setSelectedGender(genderMap[gender])
-    setYearValue(formatBirthday(birthday).year)
-    setDateValue(formatBirthday(birthday).date)
-    setAddressValue(address)
-  }, [birthday, city, phone, name, country, district, gender, address])
+    const getMemberProfile = async () => {
+      try {
+        const response = await client.query({
+          query: fetchMemberProfile,
+          variables: { firebaseId: firebaseId },
+          context: {
+            uri: '/member/graphql',
+            header: {
+              authorization: accessToken,
+            },
+          },
+        })
+        const profile = response?.data?.member
+        const {
+          id,
+          email,
+          name,
+          gender,
+          birthday,
+          phone,
+          country,
+          city,
+          district,
+          address,
+        } = profile
+        idRef.current = id
+        emailRef.current = email
+        setUserName(name)
+        setUserGender(genderMap[gender])
+        setUserYear(formatBirthday(birthday).year)
+        setUserMonth(formatBirthday(birthday).month)
+        setUserDay(formatBirthday(birthday).day)
+        setUserPhone(phone)
+        setUserCountry(country)
+        setUserCity(city)
+        setUserDistrict(district)
+        setUserAddress(address)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    if (firebaseId && accessToken) {
+      getMemberProfile()
+    }
+  }, [firebaseId, accessToken])
 
   const cityNames = useMemo(() => {
     return taiwanDisTrictOptions.map((data) => {
@@ -305,10 +326,10 @@ export default function UserProfileForm({ profile, onSaved }) {
    * @param {string} country
    */
   const handleCountrySelect = (country) => {
-    setSelectedCountry(country)
+    setUserCountry(country)
     if (country !== '台灣') {
-      setSelectedCity('')
-      setSelectedDistrict('')
+      setUserCity('')
+      setUserDistrict('')
     }
   }
 
@@ -316,7 +337,7 @@ export default function UserProfileForm({ profile, onSaved }) {
    * @param {string} city
    */
   const handleCitySelect = (city) => {
-    setSelectedCity(city)
+    setUserCity(city)
     const cityData = taiwanDisTrictOptions.find(function (el) {
       return el.name === city
     })
@@ -338,15 +359,15 @@ export default function UserProfileForm({ profile, onSaved }) {
           },
         },
         variables: {
-          id: id,
-          name: nameValue,
-          gender: getGenderKey(selectedGender),
-          birthday: dateFormatter(yearValue, selectedMonth, dateValue),
-          phone: phoneValue,
-          country: selectedCountry,
-          city: selectedCity,
-          district: selectedDistrict,
-          address: addressValue,
+          id: idRef.current,
+          name: userName,
+          gender: getGenderKey(userGender),
+          birthday: dateFormatter(userYear, userMonth, userDay),
+          phone: userPhone,
+          country: userCountry,
+          city: userCity,
+          district: userDistrict,
+          address: userAddress,
         },
       })
       onSaved('success')
@@ -361,7 +382,7 @@ export default function UserProfileForm({ profile, onSaved }) {
       <Form>
         <EmailWrapper>
           <h2>Email</h2>
-          <p>{email}</p>
+          <p>{emailRef.current}</p>
         </EmailWrapper>
 
         <PasswordWrapper>
@@ -379,8 +400,8 @@ export default function UserProfileForm({ profile, onSaved }) {
             <input
               id="name"
               placeholder="請輸入姓名"
-              value={nameValue}
-              onChange={(e) => setNameValue(e.target.value)}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
             />
           </FormGroup>
           <FormGroup>
@@ -389,8 +410,8 @@ export default function UserProfileForm({ profile, onSaved }) {
               keyField="id"
               value="name"
               options={genderOptions}
-              selectedOption={selectedGender}
-              onSelect={setSelectedGender}
+              selectedOption={userGender}
+              onSelect={setUserGender}
               placeholder="請選擇"
             />
           </FormGroup>
@@ -405,8 +426,8 @@ export default function UserProfileForm({ profile, onSaved }) {
               <input
                 id="year"
                 placeholder="西元年"
-                value={yearValue}
-                onChange={(e) => setYearValue(e.target.value)}
+                value={userYear}
+                onChange={(e) => setUserYear(e.target.value)}
               />
             </ItemsWrapper>
             <ItemsWrapper>
@@ -415,8 +436,8 @@ export default function UserProfileForm({ profile, onSaved }) {
                 options={monthOptions}
                 keyField="id"
                 value="name"
-                selectedOption={selectedMonth}
-                onSelect={setSelectedMonth}
+                selectedOption={userMonth}
+                onSelect={setUserMonth}
                 placeholder="月份"
               />
             </ItemsWrapper>
@@ -425,8 +446,8 @@ export default function UserProfileForm({ profile, onSaved }) {
               <input
                 id="date"
                 placeholder="日期"
-                value={dateValue}
-                onChange={(e) => setDateValue(e.target.value)}
+                value={userDay}
+                onChange={(e) => setUserDay(e.target.value)}
               />
             </ItemsWrapper>
           </FlexRowBox>
@@ -438,8 +459,8 @@ export default function UserProfileForm({ profile, onSaved }) {
             id="phone"
             type="tel"
             placeholder="請輸入電話"
-            value={phoneValue}
-            onChange={(e) => setPhoneValue(e.target.value)}
+            value={userPhone}
+            onChange={(e) => setUserPhone(e.target.value)}
           />
         </FormGroup>
         <FormDetails>
@@ -451,7 +472,7 @@ export default function UserProfileForm({ profile, onSaved }) {
                 options={countryOptions}
                 keyField="English"
                 value="Taiwan"
-                selectedOption={selectedCountry}
+                selectedOption={userCountry}
                 onSelect={handleCountrySelect}
               />
             </ItemsWrapper>
@@ -462,9 +483,9 @@ export default function UserProfileForm({ profile, onSaved }) {
                   options={cityNames}
                   keyField="name"
                   value="name"
-                  selectedOption={selectedCity}
+                  selectedOption={userCity}
                   onSelect={handleCitySelect}
-                  disabled={selectedCountry !== '臺灣'}
+                  disabled={userCountry !== '臺灣'}
                 />
               </ItemsWrapper>
               <ItemsWrapper>
@@ -473,9 +494,9 @@ export default function UserProfileForm({ profile, onSaved }) {
                   options={districtData}
                   keyField="zip"
                   value="name"
-                  selectedOption={selectedDistrict}
-                  onSelect={setSelectedDistrict}
-                  disabled={selectedCountry !== '臺灣' || selectedCity == ''}
+                  selectedOption={userDistrict}
+                  onSelect={setUserDistrict}
+                  disabled={userCountry !== '臺灣' || userCity == ''}
                 />
               </ItemsWrapper>
             </FlexRowBox>
@@ -485,8 +506,8 @@ export default function UserProfileForm({ profile, onSaved }) {
               <input
                 id="address"
                 placeholder="請輸入街道、門號、巷弄、樓層等資訊"
-                value={addressValue}
-                onChange={(e) => setAddressValue(e.target.value)}
+                value={userAddress}
+                onChange={(e) => setUserAddress(e.target.value)}
               />
             </ItemsWrapper>
           </AddressWrapper>
