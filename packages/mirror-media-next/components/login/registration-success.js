@@ -4,7 +4,7 @@ import useRedirect from '../../hooks/use-redirect'
 import { useEffect } from 'react'
 import { SECOND } from '../../constants/time-unit'
 
-const REDIRECTION_DELAY = 3 // 秒，Nuxt 2.0 時期的設定
+const REDIRECTION_DELAY = 5
 
 const Main = styled.main`
   display: flex;
