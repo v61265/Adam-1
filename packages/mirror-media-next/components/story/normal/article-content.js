@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic'
 import useWindowDimensions from '../../../hooks/use-window-dimensions'
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
 import { useMemo } from 'react'
-import { ENV } from '~/config'
+import { ENV } from '../../../config/index.mjs'
 
 const GPTAd = dynamic(() => import('../../../components/ads/gpt/gpt-ad'), {
   ssr: false,
