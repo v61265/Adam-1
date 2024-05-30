@@ -327,7 +327,7 @@ export default function UserProfileForm({ onSaved, signInProvider }) {
     if (firebaseId && accessToken) {
       getMemberProfile()
     }
-  }, [firebaseId, accessToken, memberType, userEmail])
+  }, [firebaseId, accessToken, memberType, userEmail, router])
 
   const cityNames = useMemo(() => {
     return taiwanDisTrictOptions.map((data) => {
