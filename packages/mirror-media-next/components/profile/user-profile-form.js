@@ -269,10 +269,10 @@ export default function UserProfileForm({ onSaved }) {
   const [userAddress, setUserAddress] = useState('')
   const [districtData, setDistrictData] = useState([])
   const idRef = useRef('')
-  const emailRef = useRef('')
 
   const router = useRouter()
-  const { accessToken, firebaseId } = useMembership()
+  const { accessToken, firebaseId, userEmail, memberInfo } = useMembership()
+  const { memberType } = memberInfo
 
   useEffect(() => {
     const getMemberProfile = async () => {
@@ -293,7 +293,6 @@ export default function UserProfileForm({ onSaved }) {
         const profile = response?.data?.member
         const {
           id,
-          email,
           name,
           gender,
           birthday,
@@ -304,7 +303,6 @@ export default function UserProfileForm({ onSaved }) {
           address,
         } = profile
         idRef.current = id
-        emailRef.current = email
         setUserName(name)
         setUserGender(genderMap[gender])
         setUserYear(formatBirthday(birthday).year)
@@ -317,7 +315,9 @@ export default function UserProfileForm({ onSaved }) {
         setUserAddress(address)
       } catch (error) {
         const errorReport = generateErrorReportInfo(error, {
+          userEmail: userEmail,
           firebaseId: firebaseId,
+          memberType: memberType,
         })
         sendErrorLog(errorReport)
       }
@@ -325,7 +325,7 @@ export default function UserProfileForm({ onSaved }) {
     if (firebaseId && accessToken) {
       getMemberProfile()
     }
-  }, [firebaseId, accessToken])
+  }, [firebaseId, accessToken, memberType, userEmail])
 
   const cityNames = useMemo(() => {
     return taiwanDisTrictOptions.map((data) => {
@@ -384,7 +384,9 @@ export default function UserProfileForm({ onSaved }) {
       onSaved(MODE.SUCCESS)
     } catch (error) {
       const errorReport = generateErrorReportInfo(error, {
-        userEmail: emailRef.current,
+        userEmail: userEmail,
+        firebaseId: firebaseId,
+        memberType: memberType,
       })
       sendErrorLog(errorReport)
       onSaved(MODE.FAIL)
@@ -396,7 +398,7 @@ export default function UserProfileForm({ onSaved }) {
       <Form>
         <EmailWrapper>
           <h2>Email</h2>
-          <p>{emailRef.current}</p>
+          <p>{userEmail}</p>
         </EmailWrapper>
 
         <PasswordWrapper>
