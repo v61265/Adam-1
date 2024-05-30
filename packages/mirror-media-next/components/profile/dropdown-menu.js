@@ -62,7 +62,7 @@ const SelectBox = styled.div`
   ::before {
     content: '';
     position: absolute;
-    bottom: 4px;
+    bottom: 0px;
     left: 12px;
     right: 12px;
     height: 1px;
