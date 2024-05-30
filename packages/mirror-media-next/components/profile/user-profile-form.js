@@ -321,6 +321,7 @@ export default function UserProfileForm({ onSaved, signInProvider }) {
           memberType: memberType,
         })
         sendErrorLog(errorReport)
+        router.push('/500')
       }
     }
     if (firebaseId && accessToken) {
