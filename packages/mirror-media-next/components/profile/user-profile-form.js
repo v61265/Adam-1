@@ -354,7 +354,7 @@ export default function UserProfileForm({ onSaved }) {
   }
 
   const handleUpdatePasswordClick = () => {
-    router.push('/updatePassword')
+    router.push('/update-password')
   }
 
   const handleUpdateProfile = async () => {
