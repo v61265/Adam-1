@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import { useState, useEffect } from 'react'
 import { MirrorMedia } from '@mirrormedia/lilith-draft-renderer'
 import { DRAFT_RENDERER_FEATURE_TOGGLE } from '../../../config/index.mjs'
