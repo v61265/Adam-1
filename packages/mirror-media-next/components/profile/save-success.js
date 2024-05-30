@@ -39,7 +39,7 @@ export default function SaveSuccess({ onReset }) {
     return () => {
       clearTimeout(task)
     }
-  }, [])
+  }, [onReset])
 
   return (
     <Main>
