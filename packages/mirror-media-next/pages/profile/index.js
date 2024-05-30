@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { setPageCache } from '../../utils/cache-setting'
 import useMembershipRequired from '../../hooks/use-membership-required'
-import redirectToLoginWhileUnauthed from '../../utils/redirect-to-login-while-unauthed'
+import redirectToLoginWhileUnauthed from '../../utils/server-side-only/redirect-to-login-while-unauthed'
 import { getLogTraceObject } from '../../utils'
 import { handleAxiosResponse } from '../../utils/response-handle'
 import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
@@ -63,13 +63,14 @@ const Title = styled.h1`
  * @property {Object} headerData
  * @property {import('../../utils/api').HeadersData} headerData.sectionsData
  * @property {import('../../utils/api').Topics} headerData.topicsData
+ * @property {string} signInProvider
  */
 
 /**
  * @param {PageProps} props
  * @returns {JSX.Element}
  */
-export default function Profile({ headerData }) {
+export default function Profile({ headerData, signInProvider }) {
   useMembershipRequired()
   /**
    * @type {[string, React.Dispatch<React.SetStateAction<string>>]}
@@ -99,7 +100,10 @@ export default function Profile({ headerData }) {
       {savedStatus === MODE.FORM && (
         <Page>
           <Title>個人資料</Title>
-          <UserProfileForm onSaved={handleSaved} />
+          <UserProfileForm
+            onSaved={handleSaved}
+            signInProvider={signInProvider}
+          />
           <UserDeletionForm />
         </Page>
       )}
@@ -122,10 +126,12 @@ export default function Profile({ headerData }) {
  * @type {import('next').GetServerSideProps}
  */
 export const getServerSideProps = redirectToLoginWhileUnauthed()(
-  async ({ req, res }) => {
+  async ({ req, res, user }) => {
     setPageCache(res, { cachePolicy: 'no-store' }, req.url)
 
     const globalLogFields = getLogTraceObject(req)
+
+    const signInProvider = user.firebase?.sign_in_provider
 
     const responses = await Promise.allSettled([
       fetchHeaderDataInDefaultPageLayout(),
@@ -141,6 +147,7 @@ export const getServerSideProps = redirectToLoginWhileUnauthed()(
 
     return {
       props: {
+        signInProvider: signInProvider,
         headerData: { sectionsData, topicsData },
       },
     }

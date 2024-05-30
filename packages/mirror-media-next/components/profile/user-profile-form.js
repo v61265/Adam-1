@@ -254,9 +254,10 @@ const getGenderKey = (/** @type {String} */ value) => {
 /**
  * @param {Object} props
  * @param {(value: string) => void} props.onSaved
+ * @param {string} props.signInProvider
  * @returns {JSX.Element}
  */
-export default function UserProfileForm({ onSaved }) {
+export default function UserProfileForm({ onSaved, signInProvider }) {
   const [userName, setUserName] = useState('')
   const [userGender, setUserGender] = useState('')
   const [userYear, setUserYear] = useState('')
@@ -401,14 +402,16 @@ export default function UserProfileForm({ onSaved }) {
           <p>{userEmail}</p>
         </EmailWrapper>
 
-        <PasswordWrapper>
-          <h2>密碼</h2>
-          <PasswordButtonWrapper>
-            <DefaultButton onClick={handleUpdatePasswordClick}>
-              變更密碼
-            </DefaultButton>
-          </PasswordButtonWrapper>
-        </PasswordWrapper>
+        {signInProvider == 'password' && (
+          <PasswordWrapper>
+            <h2>密碼</h2>
+            <PasswordButtonWrapper>
+              <DefaultButton onClick={handleUpdatePasswordClick}>
+                變更密碼
+              </DefaultButton>
+            </PasswordButtonWrapper>
+          </PasswordWrapper>
+        )}
 
         <FlexRowContainer>
           <FormGroup>
