@@ -381,11 +381,11 @@ export default function UserProfileForm({ onSaved }) {
       })
       onSaved(MODE.SUCCESS)
     } catch (error) {
-      onSaved(MODE.FAIL)
       const errorReport = generateErrorReportInfo(error, {
         userEmail: emailRef.current,
       })
       sendErrorLog(errorReport)
+      onSaved(MODE.FAIL)
     }
   }
 
