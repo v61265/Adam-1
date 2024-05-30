@@ -4,12 +4,11 @@ import { getLogTraceObject } from '../../utils'
 import { handleAxiosResponse } from '../../utils/response-handle'
 import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
-import withUserSSR from '../../utils/server-side-only/with-user-ssr'
-import { getLoginUrl } from '../../utils/server-side-only'
 import useMembershipRequired from '../../hooks/use-membership-required'
 import LayoutFull from '../../components/shared/layout-full'
 import FormWrapper from '../../components/login/form-wrapper'
 import MainForm from '../../components/update-password/main-form'
+import redirectToLoginWhileUnauthed from '../../utils/server-side-only/redirect-to-login-while-unauthed'
 
 const Container = styled.div`
   flex-grow: 1;
@@ -67,22 +66,11 @@ export default function UpdatePassword({ headerData }) {
 /**
  * @type {import('next').GetServerSideProps<PageProps>}
  */
-export const getServerSideProps = withUserSSR()(
-  async ({ req, res, query, user, resolvedUrl }) => {
+export const getServerSideProps = redirectToLoginWhileUnauthed()(
+  async ({ req, res, user }) => {
     setPageCache(res, { cachePolicy: 'no-store' }, req.url)
 
     const globalLogFields = getLogTraceObject(req)
-
-    if (!user) {
-      const destination = getLoginUrl(resolvedUrl, query)
-
-      return {
-        redirect: {
-          statusCode: 307,
-          destination,
-        },
-      }
-    }
 
     const signInProvider = user.firebase?.sign_in_provider
     if (signInProvider !== 'password') {
