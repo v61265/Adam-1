@@ -532,7 +532,11 @@ export default function UserProfileForm({ onSaved, signInProvider }) {
           </AddressWrapper>
         </FormDetails>
         <ButtonWrapper>
-          <PrimaryButton isLoading={false} onClick={handleUpdateProfile}>
+          <PrimaryButton
+            isLoading={false}
+            onClick={handleUpdateProfile}
+            disabled={accessToken === null}
+          >
             儲存
           </PrimaryButton>
         </ButtonWrapper>
