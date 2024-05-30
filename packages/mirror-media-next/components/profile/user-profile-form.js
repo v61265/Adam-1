@@ -286,7 +286,7 @@ export default function UserProfileForm({ onSaved }) {
           },
         })
         /**
-         * @type {Member}
+         * @type {Member | undefined}
          */
         const profile = response?.data?.member
         const {
