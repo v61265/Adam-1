@@ -6,6 +6,7 @@ const FormWrapper = styled(Wrapper)`
 
   ${({ theme }) => theme.breakpoint.md} {
     width: 423px;
+    padding: 40px 40px;
   }
 `
 
