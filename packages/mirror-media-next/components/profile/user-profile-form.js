@@ -536,7 +536,7 @@ export default function UserProfileForm({ onSaved, signInProvider }) {
           <PrimaryButton
             isLoading={false}
             onClick={handleUpdateProfile}
-            disabled={accessToken === null}
+            disabled={!accessToken}
           >
             儲存
           </PrimaryButton>
