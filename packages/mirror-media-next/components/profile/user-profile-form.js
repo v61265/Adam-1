@@ -311,7 +311,7 @@ export default function UserProfileForm({ onSaved, signInProvider }) {
         setUserDay(formatBirthday(birthday).day)
         setUserPhone(phone)
         setUserCountry(country)
-        setUserCity(city)
+        handleCitySelect(city)
         setUserDistrict(district)
         setUserAddress(address)
       } catch (error) {
