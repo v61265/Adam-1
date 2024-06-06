@@ -357,7 +357,9 @@ export default function UserProfileForm({ onSaved, signInProvider }) {
     const cityData = taiwanDisTrictOptions.find(function (el) {
       return el.name === city
     })
-    setDistrictData(cityData.districts)
+    if (cityData) {
+      setDistrictData(cityData.districts)
+    }
   }
 
   const handleUpdatePasswordClick = () => {
