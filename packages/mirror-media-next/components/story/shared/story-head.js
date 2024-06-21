@@ -101,12 +101,13 @@ export default function StoryHead({ postData }) {
     publishedDate,
   } = generateMetaData(postData)
   const { width } = useWindowDimensions()
-  const isMobile = width < 1200
+
   const adBroScripFragment = useMemo(() => {
+    const isMobile = width < 1200
     return isMobile
       ? `googletag.defineOutOfPageSlot('/40175602/test_mirror_m_ros_out_ADBRO', 'div-gpt-ad-1710755205915-0').addService(googletag.pubads());`
       : `googletag.defineOutOfPageSlot('/40175602/test_mirror_pc_ros_out_ADBRO', 'div-gpt-ad-1710755093650-0').addService(googletag.pubads());`
-  }, [isMobile])
+  }, [width])
 
   return (
     <>
