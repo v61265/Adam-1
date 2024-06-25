@@ -66,9 +66,21 @@ export default function ArticleContent({
 
   const firstImageAdComponent = useMemo(() => {
     return shouldShowAd && windowDimensions.width < 1200 ? (
-      <div id="div-gpt-ad-1710755205915-0" />
+      <div id="div-gpt-ad-1719287275291-0">
+        <script>
+          {googletag.cmd.push(function () {
+            googletag.display('div-gpt-ad-1719287275291-0')
+          })}
+        </script>
+      </div>
     ) : (
-      <div id="div-gpt-ad-1710755093650-0" />
+      <div id="div-gpt-ad-1719287528685-0">
+        <script>
+          {googletag.cmd.push(function () {
+            googletag.display('div-gpt-ad-1719287528685-0')
+          })}
+        </script>
+      </div>
     )
 
     // return shouldShowAd && windowDimensions.width > 1200 ? (
