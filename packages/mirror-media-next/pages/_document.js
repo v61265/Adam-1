@@ -83,9 +83,8 @@ export default class MyDocument extends Document {
 
           <NextScript />
           {/* Script for google publisher ad  */}
-          <Script
+          <script
             async
-            strategy="beforeInteractive"
             src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"
           />
           <Script strategy="beforeInteractive" id="gpt-setup">

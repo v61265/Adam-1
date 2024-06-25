@@ -11,10 +11,7 @@ export default function GPTScript() {
           as="script"
         />
       </Head>
-      <Script
-        async
-        src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"
-      />
+
       <Script id="gpt-setup">
         {`
         window.googletag = window.googletag || {cmd: []};
