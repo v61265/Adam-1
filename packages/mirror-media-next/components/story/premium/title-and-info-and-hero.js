@@ -65,7 +65,7 @@ const Label = styled.div`
   width: fit-content;
   font-weight: 400;
   display: flex;
-  margin: 28px 0;
+  margin: 28px auto;
   ${({ theme }) => theme.breakpoint.md} {
     margin: 24px auto;
   }
