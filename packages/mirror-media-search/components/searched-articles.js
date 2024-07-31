@@ -21,7 +21,7 @@ const Loading = styled.div`
 
 export default function SearchedArticles({ searchResult }) {
   const { items: initialArticles, queries } = searchResult
-  const searchTerms = queries.request[0].exactTerms
+  const searchTerms = queries?.request[0].exactTerms
   async function fetchPostsFromPage(page) {
     gtag.sendGAEvent(`search-${searchTerms}-loadmore-${page}`)
     try {
@@ -30,7 +30,8 @@ export default function SearchedArticles({ searchResult }) {
         url: '/api/search',
         params: {
           exactTerms: searchTerms,
-          start: (page - 1) * 10 + 1,
+          start: (page - 1) * 20 + 1,
+          takeAmount: 20,
         },
         timeout: API_TIMEOUT,
       })
@@ -52,7 +53,7 @@ export default function SearchedArticles({ searchResult }) {
     <InfiniteScrollList
       initialList={initialArticles}
       renderAmount={initialArticles.length}
-      fetchCount={10}
+      fetchCount={20}
       fetchListInPage={fetchPostsFromPage}
       loader={loader}
     >

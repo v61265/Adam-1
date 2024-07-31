@@ -40,37 +40,73 @@ export async function getSearchResult(query) {
       stripUnknown: true,
     })
 
-    const queryParams = {
-      key: PROGRAMABLE_SEARCH_API_KEY,
-      cx: PROGRAMABLE_SEARCH_ENGINE_ID,
-      exactTerms: params.exactTerms,
-      start: params.start,
-      num: params.take,
-      sort: ' ,date:s',
-    }
+    const takeAmount = params.takeAmount || query.takeAmount || 10
+    const exactTerms = params.exactTerms || query.exactTerms || 10
+    let startIndex = params.start || query.start || 1
 
-    const prefix = 'PROGRAMABLE_SEARCH'
-    const redisKey = `${prefix}_${queryParams.exactTerms}_${queryParams.start}_${queryParams.num}`
-    const searchResultCache = await readRedis.get(redisKey)
+    let combinedResponse
 
-    if (searchResultCache) {
-      console.log(
-        JSON.stringify({
-          severity: 'DEBUG',
-          message: `Get search result from redis cache with key ${redisKey}`,
+    const allItems = []
+
+    while (allItems.length < takeAmount) {
+      const queryParams = {
+        key: PROGRAMABLE_SEARCH_API_KEY,
+        cx: PROGRAMABLE_SEARCH_ENGINE_ID,
+        exactTerms: exactTerms,
+        start: startIndex,
+        num: Math.min(takeAmount - allItems.length, 10), // 每次最多取 10 個
+        sort: ' ,date:s',
+      }
+
+      const prefix = 'PROGRAMABLE_SEARCH'
+      const redisKey = `${prefix}_${exactTerms}_${startIndex}_${Math.min(
+        takeAmount - allItems.length,
+        10
+      )}`
+      const searchResultCache = await readRedis.get(redisKey)
+
+      if (searchResultCache) {
+        console.log(
+          JSON.stringify({
+            severity: 'DEBUG',
+            message: `Get search result from redis cache with key ${redisKey}`,
+          })
+        )
+        if (!combinedResponse) {
+          combinedResponse = JSON.parse(searchResultCache)
+        } else if (JSON.parse(searchResultCache).items) {
+          allItems.push(...JSON.parse(searchResultCache).items)
+        }
+      } else {
+        const { data } = await axios({
+          method: 'get',
+          url: `${URL_PROGRAMABLE_SEARCH}`,
+          params: queryParams,
+          timeout: API_TIMEOUT,
         })
-      )
-      return { data: JSON.parse(searchResultCache) }
-    } else {
-      const response = await axios({
-        method: 'get',
-        url: `${URL_PROGRAMABLE_SEARCH}`,
-        params: queryParams,
-        timeout: API_TIMEOUT,
-      })
-      writeRedis.set(redisKey, JSON.stringify(response.data), 'EX', REDIS_EX)
-      return response
+        writeRedis.set(redisKey, JSON.stringify(data), 'EX', REDIS_EX)
+        if (!combinedResponse) {
+          combinedResponse = data
+        } else if (data.items) {
+          allItems.push(...data.items)
+        }
+        if (
+          allItems.length >= takeAmount ||
+          data.queries.nextPage === undefined
+        ) {
+          break
+        }
+      }
+
+      // 更新開始索引，搜尋下一批結果
+      startIndex += 10
     }
+
+    if (combinedResponse) {
+      combinedResponse.items = allItems
+    }
+
+    return { data: combinedResponse }
   } catch (error) {
     console.log(JSON.stringify({ severity: 'ERROR', message: error.stack }))
     return error.message
