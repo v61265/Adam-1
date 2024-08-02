@@ -1,12 +1,14 @@
 import styled from 'styled-components'
 import axios from 'axios'
 
-import InfiniteScrollList from './infinite-scroll-list'
+// import InfiniteScrollList from './infinite-scroll-list'
 import Image from 'next/legacy/image'
 import LoadingPage from '../public/images/loading_page.gif'
 import ArticleList from './article-list'
 import { API_TIMEOUT } from '../config'
 import gtag from '../utils/programmable-search/gtag'
+
+import InfiniteScrollList from '@readr-media/react-infinite-scroll-list'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -52,9 +54,10 @@ export default function SearchedArticles({ searchResult }) {
   return (
     <InfiniteScrollList
       initialList={initialArticles}
-      renderAmount={initialArticles.length}
-      fetchCount={20}
+      pageSize={12}
+      amountOfElements={searchResult.searchInformation.totalResults}
       fetchListInPage={fetchPostsFromPage}
+      isAutoFetch={true}
       loader={loader}
     >
       {(renderList) => (
