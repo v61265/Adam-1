@@ -108,6 +108,7 @@ const StyledGPTAd_MB_L1 = styled(GPTAd)`
  * @param {ArticlesRawData} [props.latestNewsData=[]]
  * @param {Object[] } props.sectionsData
  * @param {LiveYoutubeInfo} props.liveYoutubeInfo
+ * @param {'a' | 'b'} props.ABConst
  * @returns {React.ReactElement}
  */
 export default function Home({
@@ -117,7 +118,9 @@ export default function Home({
   latestNewsData = [],
   sectionsData = [],
   liveYoutubeInfo,
+  ABConst,
 }) {
+  console.log('test of ab test, now it is:', ABConst)
   const editorChoice = editorChoicesData.map((item) => {
     const sectionSlug = getSectionSlugGql(item.sections, undefined)
     const sectionName = getSectionNameGql(item.sections, undefined)
@@ -149,7 +152,7 @@ export default function Home({
         type: 'default',
       }}
     >
-      <IndexContainer>
+      <IndexContainer className={`GTM-ab-test-${ABConst}`}>
         <GPT_Placeholder
           shouldShowAd={shouldShowAd}
           isHDAdEmpty={isHDAdEmpty}
@@ -220,6 +223,8 @@ export async function getServerSideProps({ res, req }) {
   let editorChoicesData = []
   let latestNewsData = []
   let eventsData = []
+
+  const ABConst = Math.random() < 0.5 ? 'a' : 'b'
 
   try {
     const postResponse = await axios({
@@ -297,6 +302,7 @@ export async function getServerSideProps({ res, req }) {
         latestNewsData,
         sectionsData,
         liveYoutubeInfo,
+        ABConst,
       },
     }
   } catch (err) {
