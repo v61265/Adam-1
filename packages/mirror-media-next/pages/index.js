@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import errors from '@twreporter/errors'
@@ -148,20 +148,34 @@ export default function Home({
   }, [])
 
   // test for ab-test
-  const buttonARef = useRef(null)
-  const buttonBRef = useRef(null)
-  useEffect(() => {
-    console.log({ ABConst })
-    switch (ABConst) {
-      case 'a':
-        buttonARef.current.click()
-        break
-      case 'b':
-        buttonBRef.current.click()
-        break
-      default:
-        return
+  const sendPageviewEvent = (eventLabel) => {
+    if (window && window.dataLayer) {
+      window.dataLayer.push({
+        event: 'pageview',
+        page: {
+          title: document.title,
+          url: window.location.pathname,
+          eventLabel: eventLabel,
+        },
+      })
+    } else {
+      console.error('GTM dataLayer is not defined')
     }
+  }
+
+  useEffect(() => {
+    const tagManagerArgs = {
+      dataLayer: {
+        event: 'pageview',
+        page: {
+          title: document.title,
+          url: window.location.pathname,
+          eventLabel: ABConst === 'a' ? 'A' : 'B',
+        },
+      },
+    }
+
+    TagManager.dataLayer(tagManagerArgs)
   }, [])
 
   return (
@@ -174,10 +188,6 @@ export default function Home({
         type: 'default',
       }}
     >
-      <GTMPageView>
-        <div className="GTM-homepage-view-a" ref={buttonARef} />
-        <div className="GTM-homepage-view-b" ref={buttonBRef} />
-      </GTMPageView>
       <IndexContainer className={`GTM-ab-test-${ABConst}`}>
         <GPT_Placeholder
           shouldShowAd={shouldShowAd}
