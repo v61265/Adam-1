@@ -8,6 +8,7 @@ import {
   API_TIMEOUT,
   URL_STATIC_POST_FLASH_NEWS,
   URL_STATIC_POST_EXTERNAL,
+  URL_STATIC_POPULAR_NEWS,
 } from '../config/index.mjs'
 
 import { fetchModEventsInDesc } from '../utils/api/event'
@@ -18,6 +19,7 @@ import {
   getSectionSlugGql,
   getArticleHref,
   getLogTraceObject,
+  getActiveOrderSection,
 } from '../utils'
 import {
   handleAxiosResponse,
@@ -26,6 +28,7 @@ import {
 import { setPageCache } from '../utils/cache-setting'
 import EditorChoice from '../components/index/editor-choice'
 import LatestNews from '../components/index/latest-news'
+import PopularNews from '../components/index/popular-news'
 import Layout from '../components/shared/layout'
 import { useDisplayAd } from '../hooks/useDisplayAd'
 import FullScreenAds from '../components/ads/full-screen-ads'
@@ -114,6 +117,7 @@ const GTMPageView = styled.form`
  * @param {Object[] } props.sectionsData
  * @param {LiveYoutubeInfo} props.liveYoutubeInfo
  * @param {'a' | 'b'} props.ABConst
+ * @param {Object[]} props.popularData
  * @returns {React.ReactElement}
  */
 export default function Home({
@@ -124,6 +128,7 @@ export default function Home({
   sectionsData = [],
   liveYoutubeInfo,
   ABConst,
+  popularData,
 }) {
   console.log('test of ab test, now it is:', ABConst)
   const editorChoice = editorChoicesData.map((item) => {
@@ -147,22 +152,6 @@ export default function Home({
     setISHDAdEmpty(e.isEmpty)
   }, [])
 
-  // test for ab-test
-  const sendPageviewEvent = (eventLabel) => {
-    if (window && window.dataLayer) {
-      window.dataLayer.push({
-        event: 'pageview',
-        page: {
-          title: document.title,
-          url: window.location.pathname,
-          eventLabel: eventLabel,
-        },
-      })
-    } else {
-      console.error('GTM dataLayer is not defined')
-    }
-  }
-
   useEffect(() => {
     const tagManagerArgs = {
       dataLayer: {
@@ -174,7 +163,6 @@ export default function Home({
         },
       },
     }
-
     TagManager.dataLayer(tagManagerArgs)
   }, [])
 
@@ -206,6 +194,7 @@ export default function Home({
         <EditorChoice editorChoice={editorChoice}></EditorChoice>
         {shouldShowAd && <StyledGPTAd_PC_B1 pageKey="home" adKey="PC_B1" />}
         {shouldShowAd && <StyledGPTAd_MB_L1 pageKey="home" adKey="MB_L1" />}
+        {!!popularData.length && <PopularNews popularData={popularData} />}
         <LiveYoutube liveYoutubeInfo={liveYoutubeInfo} />
         <LatestNews latestNewsData={latestNewsData} />
         <FullScreenAds />
@@ -239,6 +228,20 @@ export default function Home({
 /** @typedef {import('axios').AxiosResponse<PostRes>} AxiosPostResponse */
 
 /**
+ * @typedef {Object} PopularPost
+ * @property {string} id
+ * @property {Array} sections
+ * @property {Array} sectionsInInputOrder
+ * @property {string} title
+ * @property {string} slug
+ * @property {string} content
+ * @property {string} publishedDate
+ * @property {string} updatedAt
+ */
+
+/** @typedef {import('axios').AxiosResponse<PopularPost[]>} AxiosPopularPostResponse */
+
+/**
  * @type {import('next').GetServerSideProps}
  */
 export async function getServerSideProps({ res, req }) {
@@ -259,6 +262,7 @@ export async function getServerSideProps({ res, req }) {
   let editorChoicesData = []
   let latestNewsData = []
   let eventsData = []
+  let popularData = []
 
   const ABConst = Math.random() < 0.5 ? 'a' : 'b'
 
@@ -284,6 +288,11 @@ export async function getServerSideProps({ res, req }) {
       }),
       fetchHeaderDataInDefaultPageLayout(),
       fetchModEventsInDesc(),
+      axios({
+        method: 'get',
+        url: URL_STATIC_POPULAR_NEWS,
+        timeout: API_TIMEOUT,
+      }),
     ])
 
     flashNewsData = handleAxiosResponse(
@@ -309,6 +318,30 @@ export async function getServerSideProps({ res, req }) {
         return gqlData?.data?.events || []
       },
       'Error occurs while getting event data in index page',
+      globalLogFields
+    )
+
+    popularData = handleAxiosResponse(
+      responses[3],
+      /**
+       * @param {AxiosPopularPostResponse | undefined} axiosData
+       * @returns {Array}
+       */
+      (axiosData) => {
+        if (axiosData) {
+          return axiosData.data
+            .map((post) => {
+              const sectionsWithOrdered = getActiveOrderSection(
+                post.sections,
+                post.sectionsInInputOrder
+              )
+              return { sectionsWithOrdered, ...post }
+            })
+            .slice(0, 6)
+        }
+        return axiosData.data || []
+      },
+      'Error occurs while getting popular data in index page',
       globalLogFields
     )
 
@@ -339,6 +372,7 @@ export async function getServerSideProps({ res, req }) {
         sectionsData,
         liveYoutubeInfo,
         ABConst,
+        popularData,
       },
     }
   } catch (err) {
