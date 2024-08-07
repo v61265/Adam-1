@@ -83,8 +83,6 @@ const Title = styled.div`
  * @returns {React.ReactElement}
  */
 export default function PopularNewsItem({ itemData }) {
-  console.log(itemData)
-
   const firstSection =
     itemData.sectionsWithOrdered?.[0] || itemData.sections?.[0]
 

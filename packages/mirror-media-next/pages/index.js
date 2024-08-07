@@ -159,7 +159,7 @@ export default function Home({
         page: {
           title: document.title,
           url: window.location.pathname,
-          eventLabel: ABConst === 'a' ? 'A' : 'B',
+          eventLabel: ABConst === 'b' ? 'B' : 'A',
         },
       },
     }
@@ -194,7 +194,9 @@ export default function Home({
         <EditorChoice editorChoice={editorChoice}></EditorChoice>
         {shouldShowAd && <StyledGPTAd_PC_B1 pageKey="home" adKey="PC_B1" />}
         {shouldShowAd && <StyledGPTAd_MB_L1 pageKey="home" adKey="MB_L1" />}
-        {!!popularData.length && <PopularNews popularData={popularData} />}
+        {!!popularData.length && ABConst === 'b' && (
+          <PopularNews popularData={popularData} />
+        )}
         <LiveYoutube liveYoutubeInfo={liveYoutubeInfo} />
         <LatestNews latestNewsData={latestNewsData} />
         <FullScreenAds />
