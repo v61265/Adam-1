@@ -12,6 +12,9 @@ const ItemWrapper = styled.article`
   width: 100dvw;
   :hover {
     cursor: pointer;
+    h3 {
+      text-decoration: underline;
+    }
   }
   ${({ theme }) => theme.breakpoint.md} {
     width: 100%;
@@ -60,7 +63,6 @@ const Title = styled.div`
   font-family: 'Noto Sans TC';
   font-size: 18px;
   font-style: normal;
-  font-weight: 300;
   line-height: 150%;
   padding: 16px 12px 0 12px;
   h3 {
