@@ -89,7 +89,12 @@ export default function PopularNewsItem({ itemData }) {
     itemData.sectionsWithOrdered?.[0] || itemData.sections?.[0]
 
   return (
-    <Link href={`/story/${itemData.slug}`} target="_blank" rel="noreferrer">
+    <Link
+      href={`/story/${itemData.slug}`}
+      target="_blank"
+      rel="noreferrer"
+      className="GTM-homepage-popular-list"
+    >
       <ItemWrapper>
         <ImageContainer>
           <CustomImage
