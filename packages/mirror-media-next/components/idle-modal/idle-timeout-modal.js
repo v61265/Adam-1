@@ -130,32 +130,32 @@ const IdleTimeoutModal = () => {
     handleClose()
   })
 
-  // useEffect(() => {
-  //   let timeout
+  useEffect(() => {
+    let timeout
 
-  //   const handleActivity = () => {
-  //     clearTimeout(timeout)
-  //     timeout = setTimeout(() => setIsIdle(true), idleTimeout)
-  //   }
+    const handleActivity = () => {
+      clearTimeout(timeout)
+      timeout = setTimeout(() => setIsIdle(true), idleTimeout)
+    }
 
-  //   // Set timeout on component mount
-  //   timeout = setTimeout(() => setIsIdle(true), idleTimeout)
+    // Set timeout on component mount
+    timeout = setTimeout(() => setIsIdle(true), idleTimeout)
 
-  //   // Add event listeners to reset the timer on user activity
-  //   window.addEventListener('mousemove', handleActivity)
-  //   window.addEventListener('keypress', handleActivity)
-  //   window.addEventListener('scroll', handleActivity)
-  //   window.addEventListener('click', handleActivity)
+    // Add event listeners to reset the timer on user activity
+    window.addEventListener('mousemove', handleActivity)
+    window.addEventListener('keypress', handleActivity)
+    window.addEventListener('scroll', handleActivity)
+    window.addEventListener('click', handleActivity)
 
-  //   // Clean up event listeners and timeout on component unmount
-  //   return () => {
-  //     clearTimeout(timeout)
-  //     window.removeEventListener('mousemove', handleActivity)
-  //     window.removeEventListener('keypress', handleActivity)
-  //     window.removeEventListener('scroll', handleActivity)
-  //     window.removeEventListener('click', handleActivity)
-  //   }
-  // }, [idleTimeout])
+    // Clean up event listeners and timeout on component unmount
+    return () => {
+      clearTimeout(timeout)
+      window.removeEventListener('mousemove', handleActivity)
+      window.removeEventListener('keypress', handleActivity)
+      window.removeEventListener('scroll', handleActivity)
+      window.removeEventListener('click', handleActivity)
+    }
+  }, [idleTimeout])
 
   useEffect(() => {
     if (popularNews.length) return

@@ -7,6 +7,9 @@ import styled from 'styled-components'
 
 const LinkWrapper = styled.a`
   display: flex;
+  img {
+    min-width: 106px;
+  }
 `
 
 const FigureCaption = styled.div`
