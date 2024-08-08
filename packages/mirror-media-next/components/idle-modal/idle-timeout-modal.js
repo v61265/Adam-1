@@ -119,7 +119,7 @@ const InfoTitle = styled.span`
  * This modal appears after the user has been idle for a specified amount of time.
  */
 const IdleTimeoutModal = () => {
-  const [isIdle, setIsIdle] = useState(true)
+  const [isIdle, setIsIdle] = useState(false)
   /**
    * @type {[ArticleDataContainSectionsWithOrdered[], React.Dispatch<ArticleDataContainSectionsWithOrdered[]>]}
    */

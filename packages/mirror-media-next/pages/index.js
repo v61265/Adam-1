@@ -103,10 +103,6 @@ const StyledGPTAd_MB_L1 = styled(GPTAd)`
   }
 `
 
-const GTMPageView = styled.form`
-  display: none;
-`
-
 /**
  *
  * @param {Object} props
