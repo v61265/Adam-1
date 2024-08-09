@@ -124,7 +124,7 @@ const IdleTimeoutModal = () => {
    * @type {[ArticleDataContainSectionsWithOrdered[], React.Dispatch<ArticleDataContainSectionsWithOrdered[]>]}
    */
   const [popularNews, setPopularNews] = useState([])
-  const idleTimeout = 1 * 1000 // 2 minutes in milliseconds
+  const idleTimeout = 2 * 60 * 1000 // 2 minutes in milliseconds
   const modalRef = useRef(null)
   useClickOutside(modalRef, () => {
     handleClose()
