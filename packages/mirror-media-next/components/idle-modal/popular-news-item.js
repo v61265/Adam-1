@@ -8,7 +8,7 @@ import styled from 'styled-components'
 const LinkWrapper = styled.a`
   display: flex;
   img {
-    min-width: 106px;
+    min-width: 160px;
   }
 `
 
@@ -68,7 +68,6 @@ const Title = styled.h3`
  * @returns {JSX.Element}
  */
 export default function PopularNewsItem({ item }) {
-  console.log('hihi')
   const firstSection = item.sectionsWithOrdered?.[0] || item.sections?.[0]
   return (
     <LinkWrapper

@@ -124,7 +124,7 @@ const IdleTimeoutModal = () => {
    * @type {[ArticleDataContainSectionsWithOrdered[], React.Dispatch<ArticleDataContainSectionsWithOrdered[]>]}
    */
   const [popularNews, setPopularNews] = useState([])
-  const idleTimeout = 2 * 60 * 1000 // 2 minutes in milliseconds
+  const idleTimeout = 1 * 1000 // 2 minutes in milliseconds
   const modalRef = useRef(null)
   useClickOutside(modalRef, () => {
     handleClose()
@@ -178,7 +178,6 @@ const IdleTimeoutModal = () => {
               return { sectionsWithOrdered, ...post }
             })
             .slice(0, 6)
-          console.log({ data })
           setPopularNews(data)
         }
       })
@@ -196,7 +195,7 @@ const IdleTimeoutModal = () => {
       <Background>
         <ModalWrapper ref={modalRef}>
           <Image
-            src="/images-next/close-black.svg"
+            src="/images-next/close-modal.svg"
             alt="mirrormedia"
             width={40}
             height={40}
