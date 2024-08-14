@@ -190,7 +190,7 @@ export default function Home({
         <EditorChoice editorChoice={editorChoice}></EditorChoice>
         {shouldShowAd && <StyledGPTAd_PC_B1 pageKey="home" adKey="PC_B1" />}
         {shouldShowAd && <StyledGPTAd_MB_L1 pageKey="home" adKey="MB_L1" />}
-        {ABConst === 'b' && <PopularNews popularData={[]} />}
+        {ABConst === 'b' && <PopularNews popularData={popularData} />}
         <LiveYoutube liveYoutubeInfo={liveYoutubeInfo} />
         <LatestNews latestNewsData={latestNewsData} />
         <FullScreenAds />
@@ -284,7 +284,7 @@ export async function getServerSideProps({ res, req }) {
       }),
       fetchHeaderDataInDefaultPageLayout(),
       fetchModEventsInDesc(),
-      ABConst
+      ABConst === 'b'
         ? axios({
             method: 'get',
             url: URL_STATIC_POPULAR_NEWS,
