@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import axios from 'axios'
 
-// import InfiniteScrollList from './infinite-scroll-list'
 import Image from 'next/legacy/image'
 import LoadingPage from '../public/images/loading_page.gif'
 import ArticleList from './article-list'
@@ -22,9 +21,15 @@ const Loading = styled.div`
 `
 
 export default function SearchedArticles({ searchResult }) {
-  const { items: initialArticles, queries } = searchResult
+  const {
+    items: initialArticles,
+    queries,
+    searchInformation = {},
+  } = searchResult
+  const { totalResults = 0 } = searchInformation
   const searchTerms = queries?.request[0].exactTerms
   async function fetchPostsFromPage(page) {
+    if ((page - 1) * 20 + 1 > 100) return []
     gtag.sendGAEvent(`search-${searchTerms}-loadmore-${page}`)
     try {
       const { data } = await axios({
@@ -33,16 +38,15 @@ export default function SearchedArticles({ searchResult }) {
         params: {
           exactTerms: searchTerms,
           start: (page - 1) * 20 + 1,
-          takeAmount: 20,
+          takeAmount: Math.min(20, totalResults - (page - 1) * 20),
         },
         timeout: API_TIMEOUT,
       })
-
-      return data.items
+      return data.items ?? []
     } catch (error) {
       console.error(error)
+      return []
     }
-    return
   }
 
   const loader = (
@@ -55,14 +59,14 @@ export default function SearchedArticles({ searchResult }) {
     <InfiniteScrollList
       initialList={initialArticles}
       pageSize={12}
-      amountOfElements={searchResult.searchInformation.totalResults}
+      amountOfElements={Math.min(totalResults, 100)}
       fetchListInPage={fetchPostsFromPage}
       isAutoFetch={true}
       loader={loader}
     >
-      {(renderList) => (
-        <ArticleList renderList={renderList} searchTerms={searchTerms} />
-      )}
+      {(renderList) => {
+        return <ArticleList renderList={renderList} searchTerms={searchTerms} />
+      }}
     </InfiniteScrollList>
   )
 }

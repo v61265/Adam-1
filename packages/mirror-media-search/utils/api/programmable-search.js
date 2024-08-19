@@ -48,7 +48,7 @@ export async function getSearchResult(query) {
 
     const allItems = []
 
-    while (allItems.length < takeAmount) {
+    while (allItems.length < takeAmount && startIndex <= 99) {
       const queryParams = {
         key: PROGRAMABLE_SEARCH_API_KEY,
         cx: PROGRAMABLE_SEARCH_ENGINE_ID,
@@ -78,21 +78,29 @@ export async function getSearchResult(query) {
           allItems.push(...JSON.parse(searchResultCache).items)
         }
       } else {
-        const { data } = await axios({
-          method: 'get',
-          url: `${URL_PROGRAMABLE_SEARCH}`,
-          params: queryParams,
-          timeout: API_TIMEOUT,
-        })
-        writeRedis.set(redisKey, JSON.stringify(data), 'EX', REDIS_EX)
+        let resData = {}
+        try {
+          const response = await axios({
+            method: 'get',
+            url: `${URL_PROGRAMABLE_SEARCH}`,
+            params: queryParams,
+            timeout: API_TIMEOUT,
+          })
+          resData = response?.data
+        } catch (e) {
+          console.log(e)
+          continue
+        }
+        writeRedis.set(redisKey, JSON.stringify(resData), 'EX', REDIS_EX)
         if (!combinedResponse) {
-          combinedResponse = data
-        } else if (data.items) {
-          allItems.push(...data.items)
+          combinedResponse = resData
+        }
+        if (resData.items) {
+          allItems.push(...resData.items)
         }
         if (
           allItems.length >= takeAmount ||
-          data.queries.nextPage === undefined
+          resData.queries.nextPage === undefined
         ) {
           break
         }
