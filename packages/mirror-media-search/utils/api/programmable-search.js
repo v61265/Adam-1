@@ -40,29 +40,29 @@ export async function getSearchResult(query) {
       stripUnknown: true,
     })
 
-    const takeAmount = params.takeAmount || query.takeAmount || 10
+    const takeAmount = parseInt(params.takeAmount || query.takeAmount || 10)
     const exactTerms = params.exactTerms || query.exactTerms || 10
-    let startIndex = params.start || query.start || 1
+    let startIndex = params.startFrom || query.startFrom || 1
+
+    let adjustedStart = Math.floor(startIndex / 10) * 10 + 1
+    const originAdjustedStart = adjustedStart
 
     let combinedResponse
 
     const allItems = []
 
-    while (allItems.length < takeAmount && startIndex <= 99) {
+    while (allItems.length < takeAmount && adjustedStart <= 100) {
       const queryParams = {
         key: PROGRAMABLE_SEARCH_API_KEY,
         cx: PROGRAMABLE_SEARCH_ENGINE_ID,
         exactTerms: exactTerms,
-        start: startIndex,
-        num: Math.min(takeAmount - allItems.length, 10), // 每次最多取 10 個
+        start: adjustedStart,
+        num: 10, // 每次最多取 10 個
         sort: ' ,date:s',
       }
 
-      const prefix = 'PROGRAMABLE_SEARCH'
-      const redisKey = `${prefix}_${exactTerms}_${startIndex}_${Math.min(
-        takeAmount - allItems.length,
-        10
-      )}`
+      const prefix = 'PROGRAMABLE_SEARCH-3.1'
+      const redisKey = `${prefix}_${exactTerms}_${adjustedStart}_10}`
       const searchResultCache = await readRedis.get(redisKey)
 
       if (searchResultCache) {
@@ -74,7 +74,8 @@ export async function getSearchResult(query) {
         )
         if (!combinedResponse) {
           combinedResponse = JSON.parse(searchResultCache)
-        } else if (JSON.parse(searchResultCache).items) {
+        }
+        if (JSON.parse(searchResultCache).items) {
           allItems.push(...JSON.parse(searchResultCache).items)
         }
       } else {
@@ -87,8 +88,10 @@ export async function getSearchResult(query) {
             timeout: API_TIMEOUT,
           })
           resData = response?.data
-        } catch (e) {
-          console.log(e)
+        } catch (error) {
+          console.log(
+            JSON.stringify({ severity: 'ERROR', message: error.stack })
+          )
           continue
         }
         writeRedis.set(redisKey, JSON.stringify(resData), 'EX', REDIS_EX)
@@ -107,14 +110,18 @@ export async function getSearchResult(query) {
       }
 
       // 更新開始索引，搜尋下一批結果
-      startIndex += 10
+      adjustedStart += 10
     }
 
+    const sliceStartIndex = Math.max(0, startIndex - originAdjustedStart)
+    const sliceEndIndex = sliceStartIndex + takeAmount
     if (combinedResponse) {
-      combinedResponse.items = allItems
+      combinedResponse.items = allItems?.slice(sliceStartIndex, sliceEndIndex)
     }
 
-    return { data: combinedResponse }
+    return {
+      data: combinedResponse,
+    }
   } catch (error) {
     console.log(JSON.stringify({ severity: 'ERROR', message: error.stack }))
     return error.message

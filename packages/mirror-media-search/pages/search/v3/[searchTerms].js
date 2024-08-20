@@ -134,8 +134,8 @@ export async function getServerSideProps({ params }) {
       }),
       getSearchResult({
         exactTerms: searchTerms,
-        start: 1,
-        takeAmount: 20,
+        startFrom: 1,
+        takeAmount: 12,
       }),
     ])
 

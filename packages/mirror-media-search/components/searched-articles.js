@@ -29,16 +29,16 @@ export default function SearchedArticles({ searchResult }) {
   const { totalResults = 0 } = searchInformation
   const searchTerms = queries?.request[0].exactTerms
   async function fetchPostsFromPage(page) {
-    if ((page - 1) * 20 + 1 > 100) return []
     gtag.sendGAEvent(`search-${searchTerms}-loadmore-${page}`)
     try {
+      let startIndex = (page - 1) * 12 + 1
       const { data } = await axios({
         method: 'get',
         url: '/api/search',
         params: {
           exactTerms: searchTerms,
-          start: (page - 1) * 20 + 1,
-          takeAmount: Math.min(20, totalResults - (page - 1) * 20),
+          startFrom: startIndex,
+          takeAmount: Math.min(12, totalResults - (page - 1) * 12),
         },
         timeout: API_TIMEOUT,
       })
