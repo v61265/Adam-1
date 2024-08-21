@@ -106,7 +106,7 @@ export async function getSearchResult(query) {
 
         if (
           allItems.length >= takeAmount ||
-          resData.queries.nextPage === undefined
+          resData?.queries?.nextPage === undefined
         ) {
           break
         }
