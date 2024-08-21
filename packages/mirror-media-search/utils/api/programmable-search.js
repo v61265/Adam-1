@@ -21,16 +21,11 @@ const writeRedis = new Redis({ host: WRITE_REDIS_HOST, password: REDIS_AUTH })
 
 const searchQuerySchema = object({
   exactTerms: string().required(),
-  start: number()
-    .optional()
-    .integer()
-    .positive()
-    .max(PROGRAMABLE_SEARCH_LIMIT_START),
-  take: number()
+  startFrom: number().optional().integer().positive(),
+  takeAmount: number()
     .optional()
     .integer()
     .default(PROGRAMABLE_SEARCH_NUM)
-    .max(PROGRAMABLE_SEARCH_NUM)
     .min(1),
 })
 
@@ -40,20 +35,25 @@ export async function getSearchResult(query) {
       stripUnknown: true,
     })
 
-    const takeAmount = parseInt(params.takeAmount || PROGRAMABLE_SEARCH_NUM)
+    const takeAmount = params.takeAmount || PROGRAMABLE_SEARCH_NUM
     const exactTerms = params.exactTerms || ''
     let startIndex = params.startFrom || 1
 
     let adjustedStart =
       Math.floor(startIndex / PROGRAMABLE_SEARCH_NUM) * PROGRAMABLE_SEARCH_NUM +
       1
+    const fetchAmount =
+      (Math.floor((startIndex + takeAmount - 1) / PROGRAMABLE_SEARCH_NUM) -
+        Math.floor((startIndex - 1) / PROGRAMABLE_SEARCH_NUM) +
+        1) *
+      10
     const originAdjustedStart = adjustedStart
 
     let combinedResponse
 
     const allItems = []
 
-    while (allItems.length < takeAmount && adjustedStart <= 100) {
+    while (allItems.length < fetchAmount && adjustedStart <= 100) {
       const queryParams = {
         key: PROGRAMABLE_SEARCH_API_KEY,
         cx: PROGRAMABLE_SEARCH_ENGINE_ID,
@@ -104,10 +104,7 @@ export async function getSearchResult(query) {
           )
         }
 
-        if (
-          allItems.length >= takeAmount ||
-          resData?.queries?.nextPage === undefined
-        ) {
+        if (resData?.queries?.nextPage === undefined) {
           break
         }
       }
