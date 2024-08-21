@@ -40,11 +40,13 @@ export async function getSearchResult(query) {
       stripUnknown: true,
     })
 
-    const takeAmount = parseInt(params.takeAmount || query.takeAmount || 10)
-    const exactTerms = params.exactTerms || query.exactTerms || 10
-    let startIndex = params.startFrom || query.startFrom || 1
+    const takeAmount = parseInt(params.takeAmount || PROGRAMABLE_SEARCH_NUM)
+    const exactTerms = params.exactTerms || ''
+    let startIndex = params.startFrom || 1
 
-    let adjustedStart = Math.floor(startIndex / 10) * 10 + 1
+    let adjustedStart =
+      Math.floor(startIndex / PROGRAMABLE_SEARCH_NUM) * PROGRAMABLE_SEARCH_NUM +
+      1
     const originAdjustedStart = adjustedStart
 
     let combinedResponse
@@ -57,12 +59,12 @@ export async function getSearchResult(query) {
         cx: PROGRAMABLE_SEARCH_ENGINE_ID,
         exactTerms: exactTerms,
         start: adjustedStart,
-        num: 10, // 每次最多取 10 個
+        num: PROGRAMABLE_SEARCH_NUM,
         sort: ' ,date:s',
       }
 
       const prefix = 'PROGRAMABLE_SEARCH-3.1'
-      const redisKey = `${prefix}_${exactTerms}_${adjustedStart}_10}`
+      const redisKey = `${prefix}_${exactTerms}_${adjustedStart}_${PROGRAMABLE_SEARCH_NUM}}`
       const searchResultCache = await readRedis.get(redisKey)
 
       if (searchResultCache) {
@@ -72,11 +74,12 @@ export async function getSearchResult(query) {
             message: `Get search result from redis cache with key ${redisKey}`,
           })
         )
+        const cachedResponse = JSON.parse(searchResultCache)
         if (!combinedResponse) {
-          combinedResponse = JSON.parse(searchResultCache)
+          combinedResponse = cachedResponse
         }
-        if (JSON.parse(searchResultCache).items) {
-          allItems.push(...JSON.parse(searchResultCache).items)
+        if (cachedResponse?.items) {
+          allItems.push(...cachedResponse.items)
         }
       } else {
         let resData = {}
@@ -88,19 +91,19 @@ export async function getSearchResult(query) {
             timeout: API_TIMEOUT,
           })
           resData = response?.data
+          writeRedis.set(redisKey, JSON.stringify(resData), 'EX', REDIS_EX)
+          if (!combinedResponse) {
+            combinedResponse = resData
+          }
+          if (resData.items) {
+            allItems.push(...resData.items)
+          }
         } catch (error) {
           console.log(
             JSON.stringify({ severity: 'ERROR', message: error.stack })
           )
-          continue
         }
-        writeRedis.set(redisKey, JSON.stringify(resData), 'EX', REDIS_EX)
-        if (!combinedResponse) {
-          combinedResponse = resData
-        }
-        if (resData.items) {
-          allItems.push(...resData.items)
-        }
+
         if (
           allItems.length >= takeAmount ||
           resData.queries.nextPage === undefined
@@ -113,7 +116,7 @@ export async function getSearchResult(query) {
       adjustedStart += 10
     }
 
-    const sliceStartIndex = Math.max(0, startIndex - originAdjustedStart)
+    const sliceStartIndex = startIndex - originAdjustedStart
     const sliceEndIndex = sliceStartIndex + takeAmount
     if (combinedResponse) {
       combinedResponse.items = allItems?.slice(sliceStartIndex, sliceEndIndex)

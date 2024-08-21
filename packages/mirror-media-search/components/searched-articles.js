@@ -8,6 +8,7 @@ import { API_TIMEOUT } from '../config'
 import gtag from '../utils/programmable-search/gtag'
 
 import InfiniteScrollList from '@readr-media/react-infinite-scroll-list'
+import { PROGRAMABLE_SEARCH_PER_PAGE } from '../utils/programmable-search/const'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -31,14 +32,17 @@ export default function SearchedArticles({ searchResult }) {
   async function fetchPostsFromPage(page) {
     gtag.sendGAEvent(`search-${searchTerms}-loadmore-${page}`)
     try {
-      let startIndex = (page - 1) * 12 + 1
+      let startIndex = (page - 1) * PROGRAMABLE_SEARCH_PER_PAGE + 1
       const { data } = await axios({
         method: 'get',
         url: '/api/search',
         params: {
           exactTerms: searchTerms,
           startFrom: startIndex,
-          takeAmount: Math.min(12, totalResults - (page - 1) * 12),
+          takeAmount: Math.min(
+            PROGRAMABLE_SEARCH_PER_PAGE,
+            totalResults - (page - 1) * PROGRAMABLE_SEARCH_PER_PAGE
+          ),
         },
         timeout: API_TIMEOUT,
       })
@@ -58,15 +62,15 @@ export default function SearchedArticles({ searchResult }) {
   return (
     <InfiniteScrollList
       initialList={initialArticles}
-      pageSize={12}
+      pageSize={PROGRAMABLE_SEARCH_PER_PAGE}
       amountOfElements={Math.min(totalResults, 100)}
       fetchListInPage={fetchPostsFromPage}
       isAutoFetch={true}
       loader={loader}
     >
-      {(renderList) => {
-        return <ArticleList renderList={renderList} searchTerms={searchTerms} />
-      }}
+      {(renderList) => (
+        <ArticleList renderList={renderList} searchTerms={searchTerms} />
+      )}
     </InfiniteScrollList>
   )
 }

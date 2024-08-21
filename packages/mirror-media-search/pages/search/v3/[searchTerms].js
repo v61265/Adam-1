@@ -14,6 +14,7 @@ import {
 } from '../../../config'
 import { getSearchResult } from '../../../utils/api/programmable-search'
 import SearchedArticles from '../../../components/searched-articles'
+import { PROGRAMABLE_SEARCH_PER_PAGE } from '../../../utils/programmable-search/const'
 
 const SearchContainer = styled.main`
   width: 320px;
@@ -135,7 +136,7 @@ export async function getServerSideProps({ params }) {
       getSearchResult({
         exactTerms: searchTerms,
         startFrom: 1,
-        takeAmount: 12,
+        takeAmount: PROGRAMABLE_SEARCH_PER_PAGE,
       }),
     ])
 
