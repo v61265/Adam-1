@@ -11,17 +11,14 @@ import {
   READ_REDIS_HOST,
   WRITE_REDIS_HOST,
 } from '../../config'
-import {
-  PROGRAMABLE_SEARCH_LIMIT_START,
-  PROGRAMABLE_SEARCH_NUM,
-} from '../programmable-search/const'
+import { PROGRAMABLE_SEARCH_NUM } from '../programmable-search/const'
 
 const readRedis = new Redis({ host: READ_REDIS_HOST, password: REDIS_AUTH })
 const writeRedis = new Redis({ host: WRITE_REDIS_HOST, password: REDIS_AUTH })
 
 const searchQuerySchema = object({
   exactTerms: string().required(),
-  startFrom: number().optional().integer().positive(),
+  startFrom: number().optional().integer().positive().max(100).min(1),
   takeAmount: number()
     .optional()
     .integer()
