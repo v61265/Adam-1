@@ -37,13 +37,16 @@ export async function getSearchResult(query) {
     let startIndex = params.startFrom || 1
 
     let adjustedStart =
-      Math.floor(startIndex / PROGRAMABLE_SEARCH_NUM) * PROGRAMABLE_SEARCH_NUM +
+      Math.floor((startIndex - 1) / PROGRAMABLE_SEARCH_NUM) *
+        PROGRAMABLE_SEARCH_NUM +
       1
-    const fetchAmount =
-      (Math.floor((startIndex + takeAmount - 1) / PROGRAMABLE_SEARCH_NUM) -
-        Math.floor((startIndex - 1) / PROGRAMABLE_SEARCH_NUM) +
-        1) *
-      10
+
+    const endIndex =
+      Math.ceil((startIndex + takeAmount - 1) / PROGRAMABLE_SEARCH_NUM) *
+      PROGRAMABLE_SEARCH_NUM
+
+    const fetchAmount = endIndex - adjustedStart + 1
+
     const originAdjustedStart = adjustedStart
 
     let combinedResponse
