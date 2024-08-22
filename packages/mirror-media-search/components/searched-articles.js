@@ -39,10 +39,7 @@ export default function SearchedArticles({ searchResult }) {
         params: {
           exactTerms: searchTerms,
           startFrom: startIndex,
-          takeAmount: Math.min(
-            PROGRAMABLE_SEARCH_PER_PAGE,
-            totalResults - (page - 1) * PROGRAMABLE_SEARCH_PER_PAGE
-          ),
+          takeAmount: PROGRAMABLE_SEARCH_PER_PAGE,
         },
         timeout: API_TIMEOUT,
       })

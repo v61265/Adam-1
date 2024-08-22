@@ -110,7 +110,7 @@ export async function getSearchResult(query) {
       }
 
       // 更新開始索引，搜尋下一批結果
-      adjustedStart += 10
+      adjustedStart += PROGRAMABLE_SEARCH_NUM
     }
 
     const sliceStartIndex = startIndex - originAdjustedStart
