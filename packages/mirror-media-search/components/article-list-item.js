@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import Image from '@readr-media/react-image'
 import gtag from '../utils/programmable-search/gtag'
 import { useEffect, useState } from 'react'
+import { transformTimeData } from '../utils/programmable-search/date'
 
 const ItemWrapper = styled.a`
   display: block;
@@ -91,7 +92,19 @@ const ItemBrief = styled.div`
   }
 `
 
+const DateInfo = styled.div`
+  color: #9cb7c6;
+  font-family: 'PingFang TC';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 14px;
+  margin-top: 8px;
+`
+
 export default function ArticleListItem({ item, index, searchTerms }) {
+  const publishedTime = item?.pagemap?.metatags?.[0]?.['article:published_time']
+  const date = transformTimeData(publishedTime, 'dot')
   const [articleSection, setArticleSection] = useState({
     name: item?.pagemap?.metatags?.[0]?.['section:name'],
     slug: item?.pagemap?.metatags?.[0]?.['section:slug'],
@@ -146,6 +159,7 @@ export default function ArticleListItem({ item, index, searchTerms }) {
       </ImageContainer>
       <ItemDetail>
         <ItemTitle>{item?.title}</ItemTitle>
+        {date && <DateInfo>{date}</DateInfo>}
         <ItemBrief>
           {item?.pagemap?.metatags?.[0]?.['og:description'] ?? ''}
         </ItemBrief>
