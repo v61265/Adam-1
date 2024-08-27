@@ -76,18 +76,24 @@ const ItemTitle = styled.div`
 const ItemBrief = styled.div`
   font-size: 16px;
   color: #979797;
-  margin-top: 20px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  ${({ date }) => {
+    return `margin-top: ${date ? '8px' : '20px'};`
+  }}
 
   ${({ theme }) => theme.breakpoint.md} {
-    margin-top: 16px;
+    ${({ date }) => {
+      return `margin-top: ${date ? '8px' : '16px'};`
+    }}
   }
 
   ${({ theme }) => theme.breakpoint.xl} {
-    margin-top: 20px;
+    ${({ date }) => {
+      return `margin-top: ${date ? '8px' : '20px'};`
+    }}
     -webkit-line-clamp: 4;
   }
 `
@@ -160,7 +166,7 @@ export default function ArticleListItem({ item, index, searchTerms }) {
       <ItemDetail>
         <ItemTitle>{item?.title}</ItemTitle>
         {date && <DateInfo>{date}</DateInfo>}
-        <ItemBrief>
+        <ItemBrief date={date}>
           {item?.pagemap?.metatags?.[0]?.['og:description'] ?? ''}
         </ItemBrief>
       </ItemDetail>

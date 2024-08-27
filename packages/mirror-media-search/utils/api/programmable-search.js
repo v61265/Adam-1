@@ -60,7 +60,8 @@ export async function getSearchResult(query) {
         exactTerms: exactTerms,
         start: adjustedStart,
         num: PROGRAMABLE_SEARCH_NUM,
-        sort: ' ,date:s',
+        // sort: ' ,date:s',
+        sort: 'date',
       }
 
       const prefix = 'PROGRAMABLE_SEARCH-3.1'
