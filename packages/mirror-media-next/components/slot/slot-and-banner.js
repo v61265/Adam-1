@@ -129,7 +129,7 @@ export default function Slot() {
   const [winPrize, setWinPrize] = useState(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const canPlay = useMemo(() => {
-    return firebaseId && !winPrize && !status.hasPlayed
+    return firebaseId
   }, [firebaseId, winPrize, status])
 
   const imagesToPreload = [
@@ -163,7 +163,7 @@ export default function Slot() {
 
   const handleClickSlot = async (e) => {
     e.preventDefault()
-    if (!firebaseId || status.hasPlayed || !status.isLoggedIn) return
+    if (!firebaseId || !status.isLoggedIn || !canPlay) return
     const randomValue = Math.random()
     if (randomValue < probabilities.prize100) {
       await rollAll([6, 1, 1], () => setWinPrize('100'))
@@ -235,6 +235,7 @@ export default function Slot() {
   }
 
   const handleClickPrizeLink = (e, winPrize) => {
+    console.log('hi')
     e.preventDefault()
     if (winPrize === '50') {
       window.open(
@@ -369,9 +370,9 @@ export default function Slot() {
     return null
 
   return (
-    <SlotContainer onClick={canPlay ? null : (e) => handleClickSlot(e)}>
+    <SlotContainer onClick={(e) => handleClickSlot(e)}>
       {slotComponent()}
-      <div style={{}}>
+      <div>
         {imagesToPreload.map((imageUrl, index) => (
           <Image key={index} src={imageUrl} alt="" width={1} height={1} />
         ))}
