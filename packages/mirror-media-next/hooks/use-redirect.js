@@ -9,6 +9,7 @@ import { useCallback } from 'react'
  */
 const getDestination = (router) => {
   const destination = router?.query?.destination
+
   if (!destination) {
     return {
       pathname: defaultDestination,
@@ -29,10 +30,7 @@ const getDestination = (router) => {
     destinationString = destination === '/' ? defaultDestination : destination
   }
 
-  return {
-    pathname: destinationString,
-    query: queryParam,
-  }
+  return destinationString
 }
 
 export default function useRedirect() {
