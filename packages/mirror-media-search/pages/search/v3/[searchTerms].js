@@ -136,7 +136,7 @@ export async function getServerSideProps({ params }) {
       getSearchResult({
         exactTerms: searchTerms,
         startFrom: 1,
-        takeAmount: PROGRAMABLE_SEARCH_PER_PAGE * 3,
+        takeAmount: 100,
       }),
     ])
 
