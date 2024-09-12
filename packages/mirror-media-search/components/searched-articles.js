@@ -22,15 +22,27 @@ const Loading = styled.div`
 `
 
 export default function SearchedArticles({ searchResult }) {
-  const {
-    items: initialArticles,
-    queries,
-    searchInformation = {},
-  } = searchResult
-  const { totalResults = 0 } = searchInformation
+  const { items: initialArticles, queries } = searchResult
   const searchTerms = queries?.request[0].exactTerms
   async function fetchPostsFromPage(page) {
     gtag.sendGAEvent(`search-${searchTerms}-loadmore-${page}`)
+    try {
+      let startIndex = (page - 1) * PROGRAMABLE_SEARCH_PER_PAGE + 1
+      const { data } = await axios({
+        method: 'get',
+        url: '/api/search',
+        params: {
+          exactTerms: searchTerms,
+          startFrom: startIndex,
+          takeAmount: PROGRAMABLE_SEARCH_PER_PAGE,
+        },
+        timeout: API_TIMEOUT,
+      })
+      return data.items ?? []
+    } catch (error) {
+      console.error(error)
+      return []
+    }
   }
 
   const loader = (
@@ -43,7 +55,6 @@ export default function SearchedArticles({ searchResult }) {
     <InfiniteScrollList
       initialList={initialArticles}
       pageSize={PROGRAMABLE_SEARCH_PER_PAGE}
-      amountOfElements={Math.min(totalResults, 100)}
       fetchListInPage={fetchPostsFromPage}
       isAutoFetch={true}
       loader={loader}
