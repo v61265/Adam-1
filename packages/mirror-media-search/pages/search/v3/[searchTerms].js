@@ -136,30 +136,16 @@ export async function getServerSideProps({ params }) {
       getSearchResult({
         exactTerms: searchTerms,
         startFrom: 1,
-        takeAmount: 100,
+        takeAmount: PROGRAMABLE_SEARCH_PER_PAGE,
       }),
     ])
 
     const sectionsData = responses[0].value?.data?.headers || []
     const topicsData = responses[1].value?.data?.topics || []
-    const searchResult = responses[2].value?.data
-    const sortedResult = {
-      ...searchResult,
-      items:
-        searchResult?.items?.sort((a, b) => {
-          const dateA = new Date(
-            a?.pagemap?.metatags?.[0]?.['article:published_time']
-          )
-          const dateB = new Date(
-            b?.pagemap?.metatags?.[0]?.['article:published_time']
-          )
-          return dateB - dateA
-        }) || [],
-    }
 
     const props = {
       headerData: { sectionsData, topicsData },
-      searchResult: sortedResult,
+      searchResult: responses[2].value?.data || {},
       redirectUrl: URL_MIRROR_MEDIA_V3,
     }
 
