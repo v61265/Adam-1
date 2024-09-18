@@ -20,17 +20,6 @@ const writeRedis = new Redis({ host: WRITE_REDIS_HOST, password: REDIS_AUTH })
 
 const searchQuerySchema = object({
   exactTerms: string().required(),
-  startFrom: number()
-    .optional()
-    .integer()
-    .positive()
-    .max(MAX_SEARCH_AMOUNT)
-    .min(1),
-  takeAmount: number()
-    .optional()
-    .integer()
-    .default(PROGRAMABLE_SEARCH_NUM)
-    .min(1),
 })
 
 export async function getSearchResultAllAndSorted(query) {

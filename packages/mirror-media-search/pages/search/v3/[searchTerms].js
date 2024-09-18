@@ -14,7 +14,7 @@ import {
 } from '../../../config'
 import SearchedArticles from '../../../components/searched-articles'
 import { PROGRAMABLE_SEARCH_PER_PAGE } from '../../../utils/programmable-search/const'
-import { getSearchResultAllAndSorted } from '../../../utils/api/programmable-search-all-sorted'
+import { getSearchResultAllAndSorted } from '../../../utils/api/programmable-search-all-sorted.js'
 
 const SearchContainer = styled.main`
   width: 320px;

@@ -22,11 +22,8 @@ const Loading = styled.div`
 `
 
 export default function SearchedArticles({ searchResult }) {
-  const {
-    items: { items },
-    queries,
-  } = searchResult
-  const initialArticles = items.slice(0, PROGRAMABLE_SEARCH_PER_PAGE)
+  const { items, queries } = searchResult
+  const initialArticles = items?.slice(0, PROGRAMABLE_SEARCH_PER_PAGE) || []
   const searchTerms = queries?.request[0].exactTerms
   async function fetchPostsFromPage(page) {
     gtag.sendGAEvent(`search-${searchTerms}-loadmore-${page}`)
