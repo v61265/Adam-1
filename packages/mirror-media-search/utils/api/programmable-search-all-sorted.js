@@ -53,12 +53,7 @@ export async function getSearchResultAllAndSorted(query) {
         })
       )
       const cachedResponse = JSON.parse(searchResultCache)
-      return {
-        data: {
-          ...cachedResponse,
-          items: cachedResponse,
-        },
-      }
+      return cachedResponse
     }
 
     let combinedResponse
@@ -114,8 +109,6 @@ export async function getSearchResultAllAndSorted(query) {
       )
       return dateB - dateA
     })
-
-    console.log(combinedResponse.items.length)
 
     writeRedis.set(redisKey, JSON.stringify(combinedResponse), 'EX', REDIS_EX)
 
