@@ -22,27 +22,18 @@ const Loading = styled.div`
 `
 
 export default function SearchedArticles({ searchResult }) {
-  const { items: initialArticles, queries } = searchResult
+  const {
+    items: { items },
+    queries,
+  } = searchResult
+  const initialArticles = items.slice(0, PROGRAMABLE_SEARCH_PER_PAGE)
   const searchTerms = queries?.request[0].exactTerms
   async function fetchPostsFromPage(page) {
     gtag.sendGAEvent(`search-${searchTerms}-loadmore-${page}`)
-    try {
-      let startIndex = (page - 1) * PROGRAMABLE_SEARCH_PER_PAGE + 1
-      const { data } = await axios({
-        method: 'get',
-        url: '/api/search',
-        params: {
-          exactTerms: searchTerms,
-          startFrom: startIndex,
-          takeAmount: PROGRAMABLE_SEARCH_PER_PAGE,
-        },
-        timeout: API_TIMEOUT,
-      })
-      return data.items ?? []
-    } catch (error) {
-      console.error(error)
-      return []
-    }
+    return items.slice(
+      PROGRAMABLE_SEARCH_PER_PAGE * (page - 1),
+      PROGRAMABLE_SEARCH_PER_PAGE * page
+    )
   }
 
   const loader = (
