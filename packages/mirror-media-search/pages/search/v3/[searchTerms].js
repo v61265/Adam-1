@@ -12,9 +12,9 @@ import {
   URL_STATIC_HEADER_HEADERS,
   URL_STATIC_TOPICS,
 } from '../../../config'
-import { getSearchResult } from '../../../utils/api/programmable-search'
 import SearchedArticles from '../../../components/searched-articles'
 import { PROGRAMABLE_SEARCH_PER_PAGE } from '../../../utils/programmable-search/const'
+import { getSearchResultAllAndSorted } from '../../../utils/api/programmable-search-all-sorted'
 
 const SearchContainer = styled.main`
   width: 320px;
@@ -133,7 +133,7 @@ export async function getServerSideProps({ params }) {
         url: URL_STATIC_TOPICS,
         timeout: API_TIMEOUT,
       }),
-      getSearchResult({
+      getSearchResultAllAndSorted({
         exactTerms: searchTerms,
         startFrom: 1,
         takeAmount: PROGRAMABLE_SEARCH_PER_PAGE,
