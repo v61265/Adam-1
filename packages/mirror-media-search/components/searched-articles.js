@@ -25,8 +25,13 @@ export default function SearchedArticles({ searchResult }) {
   const { items, queries } = searchResult
   const initialArticles = items?.slice(0, PROGRAMABLE_SEARCH_PER_PAGE) || []
   const searchTerms = queries?.request[0].exactTerms
+
   async function fetchPostsFromPage(page) {
     gtag.sendGAEvent(`search-${searchTerms}-loadmore-${page}`)
+
+    // 延迟 0.5 秒
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
     return items.slice(
       PROGRAMABLE_SEARCH_PER_PAGE * (page - 1),
       PROGRAMABLE_SEARCH_PER_PAGE * page
