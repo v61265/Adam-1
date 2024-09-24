@@ -22,7 +22,7 @@ export function detectMobileOs() {
 export function isInAppBrowser() {
   const userAgent = navigator.userAgent
   // source1: https://gist.github.com/fostyfost/0591c79f4cd7ca26e5941a53fd4bf1a4
-  // source2:
+  // source2: https://gist.github.com/monkianer/c163651c86897d744f10
   const rules = [
     // If it says it's a webview, let's go with that.
     'WebView',
