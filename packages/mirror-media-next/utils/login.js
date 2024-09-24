@@ -17,15 +17,29 @@ export function detectMobileOs() {
 
 /**
  * Client-only,
- * From [mirror-media-nuxt](https://github.com/mirror-media/mirror-media-nuxt/blob/5a1b4d0b832260064670b83f353d6c251993837b/plugins/user-behavior-log/util/is-in-app-browser.js#L1)
  * @returns boolean
  */
 export function isInAppBrowser() {
   const userAgent = navigator.userAgent
+  // source1: https://gist.github.com/fostyfost/0591c79f4cd7ca26e5941a53fd4bf1a4
+  // source2:
   const rules = [
+    // If it says it's a webview, let's go with that.
     'WebView',
-    '(iPhone|iPod|iPad)(?!.*Safari/)',
-    'Android.*(wv|.0.0.0)',
+    // iOS webview will be the same as safari but missing "Safari".
+    '(iPhone|iPod|iPad)(?!.*Safari)',
+    // https://developer.chrome.com/docs/multidevice/user-agent/#webview_user_agent
+    'Android.*Version/[0-9].[0-9]',
+    // Also, we should save the wv detected for Lollipop.
+    // Android Lollipop and Above: webview will be the same as native,
+    // but it will contain "wv".
+    'Android.*wv',
+    // Old chrome android webview agent
+    'Linux; U; Android',
+    // Facebook app in-app browser
+    'FBAV',
+    // Line app in-app browser
+    'Line',
   ]
   const regex = new RegExp(`(${rules.join('|')})`, 'ig')
   return Boolean(userAgent.match(regex))
