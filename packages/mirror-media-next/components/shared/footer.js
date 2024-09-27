@@ -113,6 +113,7 @@ const CustomerServiceList = styled.ul`
   ${({ theme }) => theme.breakpoint.xl} {
     flex-direction: row;
     gap: 15px;
+    justify-content: center;
   }
 `
 
@@ -142,7 +143,6 @@ const CustomerServiceDescription = styled.span`
 const YoutubeTos = styled.div`
   color: #036;
   margin: 0 auto;
-  margin-top: 11px;
   text-align: center;
   font-size: 12px;
   line-height: 130%;
@@ -150,9 +150,19 @@ const YoutubeTos = styled.div`
   a {
     color: #1d9fb8;
   }
+
   ${({ theme }) => theme.breakpoint.md} {
     font-size: 12px;
-    line-height: 28px;
+    line-height: 150%;
+    transform: translate(-136.5px, 0);
+    width: 593px;
+    .mobileOnly {
+      display: none;
+    }
+  }
+  ${({ theme }) => theme.breakpoint.xl} {
+    transform: translate(0, 0);
+    width: 100%;
   }
 `
 
@@ -235,8 +245,7 @@ function Footer() {
         >
           YouTube API 服務
         </a>
-        ，<br className="" />
-        詳見{' '}
+        ， 詳見 <br className="mobileOnly" />
         <a href="https://www.youtube.com/t/terms" target="_blank">
           YouTube 服務條款
         </a>
