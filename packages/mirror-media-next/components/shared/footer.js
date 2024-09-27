@@ -139,6 +139,23 @@ const CustomerServiceDescription = styled.span`
   }
 `
 
+const YoutubeTos = styled.div`
+  color: #036;
+  margin: 0 auto;
+  margin-top: 11px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 130%;
+  letter-spacing: 0.5px;
+  a {
+    color: #1d9fb8;
+  }
+  ${({ theme }) => theme.breakpoint.md} {
+    font-size: 12px;
+    line-height: 28px;
+  }
+`
+
 function Footer() {
   const desktopPromotionLinks = PROMOTION_LISTS.map((item) => {
     return (
@@ -210,6 +227,26 @@ function Footer() {
       </MobilePromotionLists>
       <MediaLists>{socialMediaLinks}</MediaLists>
       <CustomerServiceList>{customerServices}</CustomerServiceList>
+      <YoutubeTos>
+        本網頁使用{' '}
+        <a
+          href="https://developers.google.com/youtube/terms/developer-policies?hl=zh-tw#definition-youtube-api-services"
+          target="_blank"
+        >
+          YouTube API 服務
+        </a>
+        ，<br className="" />
+        詳見{' '}
+        <a href="https://www.youtube.com/t/terms" target="_blank">
+          YouTube 服務條款
+        </a>
+        、{' '}
+        <a href="https://policies.google.com/privacy" target="_blank">
+          Google 隱私權與條款
+        </a>
+        <br />
+        瀏覽此頁面即代表您同意上述授權條款及細則
+      </YoutubeTos>
     </FooterWrapper>
   )
 }
