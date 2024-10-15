@@ -151,7 +151,6 @@ export default function ArticleListItem({ item, index, searchTerms }) {
     <ItemWrapper href={item?.link} target="_blank" onClick={onClickHandler}>
       <ImageContainer>
         <Image
-          // FIXME
           images={{ original: item?.pagemap?.metatags?.[0]?.['og:image'] }}
           alt={item?.title}
           loadingImage="/images/loading.gif"
