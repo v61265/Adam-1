@@ -334,10 +334,10 @@ const isValidPassword = (password) => {
  */
 const isCompanyEmail = (email) => {
   const validSuffixes = [
-    'mnews.com.tw',
-    'mnews.tw',
-    'mirrormedia.mg',
-    'mirrorfiction.com',
+    '@mnews.com.tw',
+    '@mnews.tw',
+    '@mirrormedia.mg',
+    '@mirrorfiction.com',
   ]
   return validSuffixes.some((suffix) => email.endsWith(suffix))
 }
