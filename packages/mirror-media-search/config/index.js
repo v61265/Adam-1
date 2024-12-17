@@ -20,10 +20,6 @@ const READ_REDIS_HOST = process.env.READ_REDIS_HOST || 'get read redis url'
 const WRITE_REDIS_HOST = process.env.WRITE_REDIS_HOST || 'get write redis url'
 const REDIS_AUTH = process.env.REDIS_AUTH || 'find redis password'
 const REDIS_EX = parseInt(process.env.REDIS_EX) || 60
-const PROGRAMABLE_SEARCH_ENGINE_ID =
-  process.env.PROGRAMABLE_SEARCH_ENGINE_ID || 'SEARCH_ENGINE_ID'
-const PROGRAMABLE_SEARCH_API_KEY =
-  process.env.PROGRAMABLE_SEARCH_API_KEY || 'API_KEY'
 
 // The following variables are given values according to different `ENV`
 let API_TIMEOUT = 3000
@@ -75,8 +71,8 @@ export {
   WRITE_REDIS_HOST,
   REDIS_AUTH,
   REDIS_EX,
-  PROGRAMABLE_SEARCH_ENGINE_ID,
-  PROGRAMABLE_SEARCH_API_KEY,
+  // PROGRAMABLE_SEARCH_ENGINE_ID,
+  // PROGRAMABLE_SEARCH_API_KEY,
   CORS_ORIGINS,
   GA_MEASUREMENT_ID,
   GTM_ID,
