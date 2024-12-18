@@ -5,6 +5,7 @@ import DefaultButton from '../shared/buttons/default-button'
 import StyledLink from './styled-link'
 import { detectMobileOs } from '../../utils/login'
 import { useEffect, useRef, useState } from 'react'
+import useClipboard from '../../hooks/use-clipboard'
 
 const Main = styled.main`
   display: flex;
@@ -34,6 +35,7 @@ export default function WebviewHint() {
   const [appLink, setAppLink] = useState('')
   const fullURL = useRef('')
   const intentURL = useRef('')
+  const { write, getPopup } = useClipboard()
 
   useEffect(() => {
     fullURL.current = window.location.href
@@ -63,23 +65,34 @@ export default function WebviewHint() {
     window.location.href = intentURL.current
   }
 
+  const popupJsx = getPopup('已複製網址')
+
   return (
-    <Main>
-      <FormWrapper>
-        <Hint>
-          請複製網址至瀏覽器繼續登入，或至
-          <StyledLink href={appLink} target="_blank" rel="noreferrer">
-            我們的App
-          </StyledLink>
-          進行瀏覽。
-        </Hint>
-        <ControlGroup>
-          <PrimaryButton onClick={openInExternalBrowser}>
-            以外部瀏覽器開啟
-          </PrimaryButton>
-          <DefaultButton onClick={() => {}}>複製此網址</DefaultButton>
-        </ControlGroup>
-      </FormWrapper>
-    </Main>
+    <>
+      {popupJsx}
+      <Main>
+        <FormWrapper>
+          <Hint>
+            請複製網址至瀏覽器繼續登入，或至
+            <StyledLink href={appLink} target="_blank" rel="noreferrer">
+              我們的App
+            </StyledLink>
+            進行瀏覽。
+          </Hint>
+          <ControlGroup>
+            <PrimaryButton onClick={openInExternalBrowser}>
+              以外部瀏覽器開啟
+            </PrimaryButton>
+            <DefaultButton
+              onClick={() => {
+                write(fullURL.current)
+              }}
+            >
+              複製此網址
+            </DefaultButton>
+          </ControlGroup>
+        </FormWrapper>
+      </Main>
+    </>
   )
 }
