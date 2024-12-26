@@ -153,8 +153,11 @@ export default function LiveAndCoverstoryYoutube({
       {liveYoutubeId && (
         <LiveVideoContainer>
           {name && <Title>{name}</Title>}
-          <LiveVideoWrapper className="GTM-live-yt-b">
-            <YoutubeIframe videoId={liveYoutubeId} />
+          <LiveVideoWrapper>
+            <YoutubeIframe
+              videoId={liveYoutubeId}
+              gtmClassName="GTM-live-yt-b"
+            />
           </LiveVideoWrapper>
         </LiveVideoContainer>
       )}
