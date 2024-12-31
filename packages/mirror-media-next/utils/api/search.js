@@ -12,14 +12,17 @@ const {
   URL_SEARCH = '',
   REDIS_EX,
   REDIS_AUTH = '',
-  READ_REDIS_HOST = '',
-  WRITE_REDIS_HOST = '',
+  REDIS_HOST = '',
+  REDIS_DB = '0',
 } = process.env
 
 const MAX_SEARCH_AMOUNT = 100
 
-const readRedis = new Redis({ host: READ_REDIS_HOST, password: REDIS_AUTH })
-const writeRedis = new Redis({ host: WRITE_REDIS_HOST, password: REDIS_AUTH })
+const redisInstance = new Redis({
+  host: REDIS_HOST,
+  password: REDIS_AUTH,
+  db: Number(REDIS_DB),
+})
 
 const searchQuerySchema = z.object({
   query: z.string().min(1),
@@ -106,7 +109,7 @@ export async function getSearchResult(opts) {
   let documents = []
   let documentCount = documents.length
 
-  const searchResultFromCache = await readRedis.get(redisKey)
+  const searchResultFromCache = await redisInstance.get(redisKey)
 
   if (searchResultFromCache) {
     console.log(
@@ -168,7 +171,7 @@ export async function getSearchResult(opts) {
       })
     }
 
-    writeRedis.set(
+    redisInstance.set(
       redisKey,
       JSON.stringify(documents),
       'EX',
