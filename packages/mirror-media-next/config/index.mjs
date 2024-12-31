@@ -8,13 +8,12 @@ const NEWEBPAY_PAPERMAG_KEY =
   process.env.NEWEBPAY_PAPERMAG_KEY || 'newebpay-papermag-key'
 const NEWEBPAY_PAPERMAG_IV =
   process.env.NEWEBPAY_PAPERMAG_IV || 'newebpay-papermag-iv'
-const ISRAFEL_ORIGIN = process.env.ISRAFEL_ORIGIN || 'israfel-origin'
-const GOOGLE_SHEETS_PRIVATE_KEY = process.env.GOOGLE_SHEETS_PRIVATE_KEY
+const GOOGLE_SHEETS_PRIVATE_KEY = (
+  process.env.GOOGLE_SHEETS_PRIVATE_KEY ?? ''
+).replace(/\\n/g, '\n')
 const GOOGLE_SHEETS_CLIENT_EMAIL = process.env.GOOGLE_SHEETS_CLIENT_EMAIL
 const GOOGLE_SHEETS_CLIENT_ID = process.env.GOOGLE_SHEETS_CLIENT_ID
 const GOOGLE_SHEET_SLOT_ID = process.env.GOOGLE_SHEET_SLOT_ID
-const PRIVATE_KEY = process.env.PRIVATE_KEY
-const PRIVATE_KEY_ID = process.env.PRIVATE_KEY_ID
 
 // should be applied in preview mode
 const SITE_BASE_PATH = IS_PREVIEW_MODE ? '/preview-server' : ''
@@ -319,7 +318,6 @@ export {
   NEWEBPAY_PAPERMAG_API_URL,
   NEWEBPAY_PAPERMAG_IV,
   NEWEBPAY_PAPERMAG_KEY,
-  ISRAFEL_ORIGIN,
   PREVIEW_SERVER_ORIGIN,
   SEARCH_URL,
   SITE_BASE_PATH,
@@ -338,6 +336,4 @@ export {
   WEEKLY_API_SERVER_YOUTUBE_ENDPOINT,
   IS_PRIZE_RIZED,
   COURSE_URL,
-  PRIVATE_KEY,
-  PRIVATE_KEY_ID,
 }
