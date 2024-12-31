@@ -11,9 +11,10 @@ import { SEARCH_NUM } from '../../constants/search'
 const {
   URL_SEARCH = '',
   REDIS_EX,
-  REDIS_AUTH = '',
+  REDIS_AUTH,
   REDIS_HOST = '',
   REDIS_DB = '0',
+  REDIS_CONNECTION_TIMEOUT,
 } = process.env
 
 const MAX_SEARCH_AMOUNT = 100
@@ -22,6 +23,8 @@ const redisInstance = new Redis({
   host: REDIS_HOST,
   password: REDIS_AUTH,
   db: Number(REDIS_DB),
+  lazyConnect: true,
+  connectTimeout: Number(REDIS_CONNECTION_TIMEOUT) || 10000,
 })
 
 const searchQuerySchema = z.object({
