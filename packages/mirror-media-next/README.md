@@ -81,7 +81,8 @@ ref: https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html#cas
 | 變數名稱 | 資料型態 | 初始值 | 變數說明 |
 | ------ | ------ | ------ | ------ |
 | URL_SEARCH | 字串 | `''` | SearchLite API 的網址 |
-| REDIS_AUTH | 字串 | `''` | Redis 認證密碼 |
+| REDIS_AUTH | 字串 | `undefined` | Redis 認證密碼 |
 | REDIS_HOST | 字串 | `''` | Redis 位址資訊 |
 | REDIS_DB | 字串（數字） | `0` | Redis DB 資訊 |
 | REDIS_EX | 字串(整數) | `3600` | redis 資料有效期長度 (秒) |
+| REDIS_CONNECTION_TIMEOUT | 字串（整數） | `10000` | redis 連結 timeout 時間（微秒）|
