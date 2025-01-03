@@ -1,4 +1,3 @@
-import axios from 'axios'
 import styled from 'styled-components'
 import Image from 'next/legacy/image'
 import SearchedArticles from '../../components/search/searched-articles'
@@ -9,6 +8,7 @@ import { fetchHeaderDataInDefaultPageLayout } from '../../utils/api'
 import { handleAxiosResponse } from '../../utils/response-handle'
 import { getSectionAndTopicFromDefaultHeaderData } from '../../utils/data-process'
 import Layout from '../../components/shared/layout'
+import { getSearchResult } from '../../utils/api/search'
 
 const SearchContainer = styled.main`
   width: 320px;
@@ -77,11 +77,10 @@ const CommaEnd = styled.span`
 `
 
 export default function Search({ searchResult, headerData }) {
-  const searchTerms = searchResult?.queries?.request?.[0]?.exactTerms ?? ''
+  const searchTerms = searchResult?.searchTerms ?? ''
 
   return (
     <Layout
-      head={{ title: `精選專區` }}
       header={{ type: 'default', data: headerData }}
       footer={{ type: 'default' }}
     >
@@ -127,19 +126,28 @@ export async function getServerSideProps({ req, res, params }) {
 
   const responses = await Promise.allSettled([
     fetchHeaderDataInDefaultPageLayout(),
-    axios.get(`/api/search?query=${searchTerms}`),
+    getSearchResult({ query: searchTerms, take: 100 }),
   ])
 
   // handle header data
   const [sectionsData, topicsData] = handleAxiosResponse(
     responses[0],
     getSectionAndTopicFromDefaultHeaderData,
-    'Error occurs while getting header data in section/topic page',
+    'Error occurs while getting header data in search page',
     globalLogFields
   )
 
+  const searchData = handleAxiosResponse(
+    responses[1],
+    (data) => data?.data || [],
+    'Error occurs while getting header data in search page',
+    globalLogFields
+  )
+
+  console.log(123, searchData.length)
+
   const props = {
-    searchResult: {},
+    searchResult: { searchTerms, items: searchData },
     headerData: { sectionsData, topicsData },
   }
 

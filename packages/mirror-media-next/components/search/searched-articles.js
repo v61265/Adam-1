@@ -38,9 +38,8 @@ const ListEnd = styled.h5`
 
 export default function SearchedArticles({ searchResult }) {
   const [isEnd, setIsEnd] = useState(false)
-  const { items, queries } = searchResult
+  const { items } = searchResult
   const initialArticles = items?.slice(0, SEARCH_PER_PAGE) || []
-  const searchTerms = queries?.request[0].exactTerms
 
   useEffect(() => {
     if (SEARCH_PER_PAGE >= items.length) {
@@ -76,9 +75,7 @@ export default function SearchedArticles({ searchResult }) {
         loader={loader}
       >
         {(renderList) => {
-          return (
-            <ArticleList renderList={renderList} searchTerms={searchTerms} />
-          )
+          return <ArticleList renderList={renderList} />
         }}
       </InfiniteScrollList>
       {isEnd && <ListEnd>已顯示完近期相關新聞</ListEnd>}

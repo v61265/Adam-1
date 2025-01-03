@@ -32,8 +32,7 @@ const ItemSection = styled.div`
   background-color: ${
     /**
      * @param {Object} props
-     * @param {String } props.sectionSlug
-     * @param {Theme} [props.theme]
+     * @param {String} props.sectionSlug
      */
     ({ sectionSlug, theme }) =>
       sectionSlug && theme.color.sectionsColor[sectionSlug]
@@ -80,9 +79,15 @@ const ItemBrief = styled.div`
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  ${({ date }) => {
-    return `margin-top: ${date ? '8px' : '20px'};`
-  }}
+  ${
+    /**
+     * @param {Object} props
+     * @param {String} props.date - The date to determine the margin-top style.
+     */
+    ({ date }) => {
+      return `margin-top: ${date ? '8px' : '20px'};`
+    }
+  }
 
   ${({ theme }) => theme.breakpoint.md} {
     ${({ date }) => {
@@ -108,9 +113,26 @@ const DateInfo = styled.div`
   margin-top: 8px;
 `
 
-export default function ArticleListItem({ item, index, searchTerms }) {
-  const publishedTime = item?.pagemap?.metatags?.[0]?.['article:published_time']
-  const date = transformTimeData(publishedTime, 'dot')
+export default function ArticleListItem({ item, index }) {
+  const order = [
+    'first',
+    'second',
+    'third',
+    'fourth',
+    'fifth',
+    'sixth',
+    'seventh',
+    'eighth',
+    'ninth',
+  ]
+  const { derivedStructData = {}, structData = {} } = item
+  const renderedItem = {
+    name: derivedStructData.title,
+    description: derivedStructData.snippets?.[0]?.snippet,
+    link: derivedStructData.link,
+    image: structData?.['page-image']?.[0],
+    publishedTime: transformTimeData(structData.datePublished, 'dot'),
+  }
   const [articleSection, setArticleSection] = useState({
     name: item?.pagemap?.metatags?.[0]?.['section:name'],
     slug: item?.pagemap?.metatags?.[0]?.['section:slug'],
@@ -132,27 +154,16 @@ export default function ArticleListItem({ item, index, searchTerms }) {
     }
   }, [item?.link])
 
-  // const onClickHandler = () => {
-  //   if (index > 8) return
-  //   const order = [
-  //     'first',
-  //     'second',
-  //     'third',
-  //     'fourth',
-  //     'fifth',
-  //     'sixth',
-  //     'seventh',
-  //     'eighth',
-  //     'ninth',
-  //   ][index]
-  //   gtag.sendGAEvent(`search-${searchTerms}-click-${order}-post`)
-  // }
   return (
-    <ItemWrapper href={item?.link} target="_blank" onClick={onClickHandler}>
+    <ItemWrapper
+      href={renderedItem?.link}
+      target="_blank"
+      className={index > 8 ? order[index] : ''}
+    >
       <ImageContainer>
         <Image
-          images={{ original: item?.pagemap?.metatags?.[0]?.['og:image'] }}
-          alt={item?.title}
+          images={{ original: renderedItem.image }}
+          alt={renderedItem.name}
           loadingImage="/images/loading.gif"
           defaultImage="/images/default-og-img.png"
         />
@@ -163,10 +174,12 @@ export default function ArticleListItem({ item, index, searchTerms }) {
         )}
       </ImageContainer>
       <ItemDetail>
-        <ItemTitle>{item?.title}</ItemTitle>
-        {date && <DateInfo>{date}</DateInfo>}
-        <ItemBrief date={date}>
-          {item?.pagemap?.metatags?.[0]?.['og:description'] ?? ''}
+        <ItemTitle>{renderedItem.name}</ItemTitle>
+        {renderedItem.publishedTime && (
+          <DateInfo>{renderedItem.publishedTime}</DateInfo>
+        )}
+        <ItemBrief date={renderedItem.publishedTime}>
+          {renderedItem.description ?? ''}
         </ItemBrief>
       </ItemDetail>
     </ItemWrapper>

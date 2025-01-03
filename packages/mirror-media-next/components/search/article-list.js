@@ -17,7 +17,7 @@ const ItemContainer = styled.div`
   }
 `
 
-export default function ArticleList({ renderList, searchTerms }) {
+export default function ArticleList({ renderList }) {
   return (
     <ItemContainer>
       {renderList.map((item, index) => (
@@ -25,7 +25,6 @@ export default function ArticleList({ renderList, searchTerms }) {
           key={item?.title + index || index}
           item={item}
           index={index}
-          searchTerms={searchTerms}
         />
       ))}
     </ItemContainer>
