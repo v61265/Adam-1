@@ -9,7 +9,6 @@ import Logo from '../normal/logo'
 import PremiumMobileSidebar from './premium-mobile-sidebar'
 import PremiumNavSections from './premium-nav-sections'
 import PremiumMemberLoginButton from './premium-member-login-button'
-import { SEARCH_URL } from '../../../config/index.mjs'
 
 /**
  * @typedef {import('./premium-mobile-sidebar').H2AndH3Block} H2AndH3Block
@@ -222,7 +221,7 @@ export default function PremiumHeader({
       .replace(/\s+/g, ',')
 
     if (trimedSearchTerms === '') return setSearchTerms('')
-    location.assign(`${SEARCH_URL}/search/${trimedSearchTerms}`)
+    location.assign(`/search/${trimedSearchTerms}`)
   }
 
   const sections = getSections()

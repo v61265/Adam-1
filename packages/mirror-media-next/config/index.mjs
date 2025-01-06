@@ -42,7 +42,6 @@ let URL_STATIC_PODCAST_LIST = ''
 let DONATION_PAGE_URL = ''
 let GA_MEASUREMENT_ID = ''
 let GTM_ID = ''
-let SEARCH_URL = 'search-url/search'
 let URL_STATIC_POPULAR_NEWS = ''
 let URL_STATIC_404_POPULAR_NEWS = ''
 let NEWEBPAY_PAPERMAG_API_URL = ''
@@ -96,7 +95,6 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-341XFN0675'
     GTM_ID = 'GTM-NCH86SP'
-    SEARCH_URL = 'https://search.mirrormedia.mg'
 
     GPT_MODE = 'prod'
 
@@ -155,7 +153,6 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.oen.tw/'
     GA_MEASUREMENT_ID = 'G-32D7P3MJ8B'
     GTM_ID = 'GTM-KVDZ27K'
-    SEARCH_URL = 'https://search-staging.mirrormedia.mg'
 
     GPT_MODE = 'prod'
 
@@ -207,7 +204,6 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
-    SEARCH_URL = 'https://search-dev.mirrormedia.mg'
 
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'on'
     ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
@@ -269,7 +265,6 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
-    SEARCH_URL = 'https://search-dev.mirrormedia.mg'
     GPT_MODE = 'dev'
     FIREBASE_AUTH_DOMAIN = 'mirrormediaapptest.firebaseapp.com'
     ACTION_CODE_SETTING = {
@@ -319,7 +314,6 @@ export {
   NEWEBPAY_PAPERMAG_IV,
   NEWEBPAY_PAPERMAG_KEY,
   PREVIEW_SERVER_ORIGIN,
-  SEARCH_URL,
   SITE_BASE_PATH,
   SITE_URL,
   URL_STATIC_404_POPULAR_NEWS,

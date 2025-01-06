@@ -89,7 +89,7 @@ export default function Search({ searchResult, headerData }) {
           <SearchTitle>
             <CommaStart>
               <Image
-                src="/images/double-comma-start.svg"
+                src="/images-next/double-comma-start.svg"
                 alt="double comma start"
                 width={8}
                 height={6.6}
@@ -98,7 +98,7 @@ export default function Search({ searchResult, headerData }) {
             {searchTerms}
             <CommaEnd>
               <Image
-                src="/images/double-comma-end.svg"
+                src="/images-next/double-comma-end.svg"
                 alt="double comma end"
                 width={8}
                 height={6.6}

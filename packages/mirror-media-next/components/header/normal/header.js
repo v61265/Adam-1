@@ -11,7 +11,6 @@ import {
 import { DEFAULT_NORMAL_SECTIONS_DATA } from '../../../constants/header'
 
 import SubscribeMagazineButton from './subscribe-papermag-mb-btn'
-import { SEARCH_URL } from '../../../config/index.mjs'
 import EntranceButton from './entrance-button'
 import Logo from './logo'
 import MemberLoginButton from './member-login-button'
@@ -402,7 +401,7 @@ export default function Header({
       .replace(/\s+/g, ',')
 
     if (trimedSearchTerms === '') return setSearchTerms('')
-    location.assign(`${SEARCH_URL}/search/${trimedSearchTerms}`)
+    location.assign(`/search/${trimedSearchTerms}`)
   }
 
   const { shouldShowAd } = useDisplayAd()
