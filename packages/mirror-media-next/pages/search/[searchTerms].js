@@ -76,6 +76,54 @@ const CommaEnd = styled.span`
   }
 `
 
+/**
+ * @typedef {Object} StructData
+ * @property {string[]} [author]
+ * @property {string[]} [datePublished]
+ * @property {string[]} [dateModified]
+ * @property {string[]} [page-type]
+ * @property {string[]} [page-slug]
+ * @property {string[]} [page-image]
+ */
+
+/**
+ * @typedef {Object} DerivedStructData
+ * @property {string} title
+ * @property {string} link
+ * @property {string} displayLink
+ * @property {string} htmlTitle
+ */
+
+/**
+ * @typedef {Object} Document
+ * @property {string} id
+ * @property {StructData} structData
+ * @property {DerivedStructData} derivedStructData
+ */
+
+/**
+ * @typedef {Object} Item
+ * @property {string} id
+ * @property {Document} document
+ */
+
+/**
+ * @typedef {Object} SearchResult
+ * @property {string} searchTerms
+ * @property {Item[]} items
+ */
+
+/**
+ * @typedef {Object} Props
+ * @property {Object} headerData
+ * @property {SearchResult} searchResult
+ */
+
+/**
+ * @param {Props} props
+ * @returns {React.ReactElement}
+ */
+
 export default function Search({ searchResult, headerData }) {
   const searchTerms = searchResult?.searchTerms ?? ''
 
@@ -139,8 +187,9 @@ export async function getServerSideProps({ req, res, params }) {
 
   const searchData = handleAxiosResponse(
     responses[1],
-    (data) => data?.data || [],
-    'Error occurs while getting header data in search page',
+    (/** @type {Awaited<ReturnType<typeof getSearchResult>>} */ data) =>
+      data?.data || [],
+    'Error occurs while getting search data in search page',
     globalLogFields
   )
 
