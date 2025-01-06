@@ -144,8 +144,6 @@ export async function getServerSideProps({ req, res, params }) {
     globalLogFields
   )
 
-  console.log(123, searchData.length)
-
   const props = {
     searchResult: { searchTerms, items: searchData },
     headerData: { sectionsData, topicsData },
