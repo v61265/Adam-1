@@ -7,7 +7,8 @@ import ArticleList from './article-list'
 
 import InfiniteScrollList from '@readr-media/react-infinite-scroll-list'
 import { SEARCH_PER_PAGE } from '../../constants/search'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { SECOND } from '../../constants/time-unit'
 
 const Loading = styled.div`
   margin: 20px auto 0;
@@ -37,20 +38,14 @@ const ListEnd = styled.h5`
 `
 
 export default function SearchedArticles({ searchResult }) {
-  const [isEnd, setIsEnd] = useState(false)
   const { items } = searchResult
+  const [isEnd, setIsEnd] = useState(SEARCH_PER_PAGE >= items.length)
   const initialArticles = items?.slice(0, SEARCH_PER_PAGE) || []
-
-  useEffect(() => {
-    if (SEARCH_PER_PAGE >= items.length) {
-      setIsEnd(true)
-    }
-  }, [])
 
   async function fetchPostsFromPage(page) {
     // gtag.sendGAEvent(`search-${searchTerms}-loadmore-${page}`)
 
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, SECOND))
 
     if (SEARCH_PER_PAGE * page >= items.length) {
       setIsEnd(true)

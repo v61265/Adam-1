@@ -126,11 +126,14 @@ export default function ArticleListItem({ item, index }) {
     'ninth',
   ]
   const { derivedStructData = {}, structData = {} } = item
+  const removeBoldTags = (text) => {
+    return text.replace(/<\/?b>/g, '')
+  }
   const renderedItem = {
-    name: derivedStructData.title,
-    description: derivedStructData.snippets?.[0]?.snippet,
+    title: derivedStructData.title,
+    description: removeBoldTags(derivedStructData.snippets?.[0]?.snippet),
     link: derivedStructData.link,
-    image: structData?.['page-image']?.[0],
+    image: structData['page-image']?.[0],
     publishedTime: transformTimeData(structData.datePublished, 'dot'),
   }
   const [articleSection, setArticleSection] = useState({
@@ -174,7 +177,7 @@ export default function ArticleListItem({ item, index }) {
         )}
       </ImageContainer>
       <ItemDetail>
-        <ItemTitle>{renderedItem.name}</ItemTitle>
+        <ItemTitle>{renderedItem.title}</ItemTitle>
         {renderedItem.publishedTime && (
           <DateInfo>{renderedItem.publishedTime}</DateInfo>
         )}
