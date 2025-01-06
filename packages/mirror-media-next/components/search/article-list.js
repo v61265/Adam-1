@@ -17,12 +17,16 @@ const ItemContainer = styled.div`
   }
 `
 
+/**
+ * @param {Object} props
+ * @param {import('../../utils/api/search').Document[]} props.renderList
+ */
 export default function ArticleList({ renderList }) {
   return (
     <ItemContainer>
       {renderList.map((item, index) => (
         <ArticleListItem
-          key={item?.title + index || index}
+          key={item?.id + index || index}
           item={item}
           index={index}
         />

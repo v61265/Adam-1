@@ -77,50 +77,19 @@ const CommaEnd = styled.span`
 `
 
 /**
- * @typedef {Object} StructData
- * @property {string[]} [author]
- * @property {string[]} [datePublished]
- * @property {string[]} [dateModified]
- * @property {string[]} [page-type]
- * @property {string[]} [page-slug]
- * @property {string[]} [page-image]
- */
-
-/**
- * @typedef {Object} DerivedStructData
- * @property {string} title
- * @property {string} link
- * @property {string} displayLink
- * @property {string} htmlTitle
- */
-
-/**
- * @typedef {Object} Document
- * @property {string} id
- * @property {StructData} structData
- * @property {DerivedStructData} derivedStructData
- */
-
-/**
- * @typedef {Object} Item
- * @property {string} id
- * @property {Document} document
- */
-
-/**
  * @typedef {Object} SearchResult
  * @property {string} searchTerms
- * @property {Item[]} items
+ * @property {import('../../utils/api/search').Document[]} items
  */
 
 /**
- * @typedef {Object} Props
+ * @typedef {Object} SearchProps
  * @property {Object} headerData
  * @property {SearchResult} searchResult
  */
 
 /**
- * @param {Props} props
+ * @param {SearchProps} props
  * @returns {React.ReactElement}
  */
 

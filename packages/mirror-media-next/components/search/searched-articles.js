@@ -37,6 +37,10 @@ const ListEnd = styled.h5`
   }
 `
 
+/**
+ * @param {Object} props
+ * @param {import('../../pages/search/[searchTerms]').SearchResult} props.searchResult
+ */
 export default function SearchedArticles({ searchResult }) {
   const { items } = searchResult
   const [isEnd, setIsEnd] = useState(SEARCH_PER_PAGE >= items.length)

@@ -44,11 +44,18 @@ const searchQuerySchema = z.object({
  */
 
 /**
+ * @typedef {Object} SnippetData
+ * @property {string} snippet - The text snippet containing information or a message.
+ * @property {string} snippet_status - The status of the snippet, indicating success or failure.
+ */
+
+/**
  * @typedef {Object} DerivedStructData
  * @property {string} title
  * @property {string} link
  * @property {string} displayLink
  * @property {string} htmlTitle
+ * @property {SnippetData[]} snippets
  */
 
 /**

@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import Image from '@readr-media/react-image'
 // import gtag from '../utils/programmable-search/gtag'
-import { useEffect, useState } from 'react'
 import { transformTimeData } from '../../utils'
 
 const ItemWrapper = styled.a`
@@ -21,30 +20,30 @@ const ImageContainer = styled.div`
   }
 `
 
-const ItemSection = styled.div`
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  padding: 8px;
-  color: white;
-  font-size: 16px;
-  font-weight: 300;
-  background-color: ${
-    /**
-     * @param {Object} props
-     * @param {String} props.sectionSlug
-     */
-    ({ sectionSlug, theme }) =>
-      sectionSlug && theme.color.sectionsColor[sectionSlug]
-        ? theme.color.sectionsColor[sectionSlug]
-        : theme.color.brandColor.lightBlue
-  };
-  ${({ theme }) => theme.breakpoint.md} {
-    font-size: 18px;
-    font-weight: 600;
-    padding: 4px 20px;
-  }
-`
+// const ItemSection = styled.div`
+//   position: absolute;
+//   left: 0;
+//   bottom: 0;
+//   padding: 8px;
+//   color: white;
+//   font-size: 16px;
+//   font-weight: 300;
+//   background-color: ${
+//     /**
+//      * @param {Object} props
+//      * @param {String} props.sectionSlug
+//      */
+//     ({ sectionSlug, theme }) =>
+//       sectionSlug && theme.color.sectionsColor[sectionSlug]
+//         ? theme.color.sectionsColor[sectionSlug]
+//         : theme.color.brandColor.lightBlue
+//   };
+//   ${({ theme }) => theme.breakpoint.md} {
+//     font-size: 18px;
+//     font-weight: 600;
+//     padding: 4px 20px;
+//   }
+// `
 
 const ItemDetail = styled.div`
   margin: 20px 20px 36px 20px;
@@ -113,6 +112,11 @@ const DateInfo = styled.div`
   margin-top: 8px;
 `
 
+/**
+ * @param {Object} props
+ * @param {number} props.index
+ * @param {import('../../utils/api/search').Document} props.item
+ */
 export default function ArticleListItem({ item, index }) {
   const order = [
     'first',
@@ -125,37 +129,37 @@ export default function ArticleListItem({ item, index }) {
     'eighth',
     'ninth',
   ]
-  const { derivedStructData = {}, structData = {} } = item
+  const { derivedStructData, structData } = item
   const removeBoldTags = (text) => {
     return text.replace(/<\/?b>/g, '')
   }
   const renderedItem = {
-    title: derivedStructData.title,
-    description: removeBoldTags(derivedStructData.snippets?.[0]?.snippet),
-    link: derivedStructData.link,
-    image: structData['page-image']?.[0],
-    publishedTime: transformTimeData(structData.datePublished, 'dot'),
+    title: derivedStructData?.title ?? '',
+    description: removeBoldTags(derivedStructData?.snippets?.[0]?.snippet),
+    link: derivedStructData?.link ?? '',
+    image: structData?.['page-image']?.[0] ?? null,
+    publishedTime: transformTimeData(structData.datePublished[0], 'dot'),
   }
-  const [articleSection, setArticleSection] = useState({
-    name: item?.pagemap?.metatags?.[0]?.['section:name'],
-    slug: item?.pagemap?.metatags?.[0]?.['section:slug'],
-  })
-  useEffect(() => {
-    if (item?.link) {
-      const urlObject = new URL(item?.link)
-      if (urlObject.pathname.startsWith('/campaigns/')) {
-        setArticleSection({
-          name: '活動網站',
-          slug: 'campaign',
-        })
-      } else if (urlObject.pathname.startsWith('/projects/')) {
-        setArticleSection({
-          name: '專題',
-          slug: 'project',
-        })
-      }
-    }
-  }, [item?.link])
+  // const [articleSection, setArticleSection] = useState({
+  //   name: item?.pagemap?.metatags?.[0]?.['section:name'],
+  //   slug: item?.pagemap?.metatags?.[0]?.['section:slug'],
+  // })
+  // useEffect(() => {
+  //   if (item?.link) {
+  //     const urlObject = new URL(item?.link)
+  //     if (urlObject.pathname.startsWith('/campaigns/')) {
+  //       setArticleSection({
+  //         name: '活動網站',
+  //         slug: 'campaign',
+  //       })
+  //     } else if (urlObject.pathname.startsWith('/projects/')) {
+  //       setArticleSection({
+  //         name: '專題',
+  //         slug: 'project',
+  //       })
+  //     }
+  //   }
+  // }, [item?.link])
 
   return (
     <ItemWrapper
@@ -170,11 +174,11 @@ export default function ArticleListItem({ item, index }) {
           loadingImage="/images-next/loading.gif"
           defaultImage="/images-next/default-og-img.png"
         />
-        {articleSection.name && (
+        {/* {articleSection.name && (
           <ItemSection sectionSlug={articleSection.slug}>
             {articleSection.name}
           </ItemSection>
-        )}
+        )} */}
       </ImageContainer>
       <ItemDetail>
         <ItemTitle>{renderedItem.title}</ItemTitle>
