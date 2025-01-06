@@ -2,6 +2,20 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  async redirects() {
+    return [
+      {
+        source: '/search/:searchTerms',
+        destination: `https://www.mirrormedia.mg/search/:searchTerms`,
+        permanent: true,
+      },
+      {
+        source: '/search/v3/:searchTerms',
+        destination: `https://www.mirrormedia.mg/search/:searchTerms`,
+        permanent: true,
+      },
+    ]
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
