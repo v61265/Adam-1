@@ -5,13 +5,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/search/:searchTerms',
-        destination: `https://www.mirrormedia.mg/search/:searchTerms`,
-        permanent: true,
-      },
-      {
         source: '/search/v3/:searchTerms',
-        destination: `https://www.mirrormedia.mg/search/:searchTerms`,
+        destination: `/search/:searchTerms`,
         permanent: true,
       },
     ]

@@ -138,7 +138,7 @@ export default function ArticleListItem({ item, index }) {
     description: removeBoldTags(derivedStructData?.snippets?.[0]?.snippet),
     link: derivedStructData?.link ?? '',
     image: structData?.['page-image']?.[0] ?? null,
-    publishedTime: transformTimeData(structData.datePublished[0], 'dot'),
+    publishedTime: transformTimeData(structData?.datePublished?.[0], 'dot'),
   }
   // const [articleSection, setArticleSection] = useState({
   //   name: item?.pagemap?.metatags?.[0]?.['section:name'],
@@ -170,7 +170,7 @@ export default function ArticleListItem({ item, index }) {
       <ImageContainer>
         <Image
           images={{ original: renderedItem.image }}
-          alt={renderedItem.name}
+          alt={renderedItem.title}
           loadingImage="/images-next/loading.gif"
           defaultImage="/images-next/default-og-img.png"
         />

@@ -24,6 +24,7 @@ import SubBrandList from './sub-brand-list'
 import LinkToCourse from './link-to-course'
 
 import { useDisplayAd } from '../../../hooks/useDisplayAd'
+import { SEARCH_URL } from '../../../config/index.mjs'
 
 const GPTAd = dynamic(() => import('../../ads/gpt/gpt-ad'), {
   ssr: false,
@@ -401,7 +402,7 @@ export default function Header({
       .replace(/\s+/g, ',')
 
     if (trimedSearchTerms === '') return setSearchTerms('')
-    location.assign(`/search/${trimedSearchTerms}`)
+    location.assign(`${SEARCH_URL}/search/v3/${trimedSearchTerms}`)
   }
 
   const { shouldShowAd } = useDisplayAd()

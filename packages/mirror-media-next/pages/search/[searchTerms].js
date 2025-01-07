@@ -84,7 +84,7 @@ const CommaEnd = styled.span`
 
 /**
  * @typedef {Object} SearchProps
- * @property {Object} headerData
+ * @property {import('../../components/header/share-header').HeaderData} headerData
  * @property {SearchResult} searchResult
  */
 
