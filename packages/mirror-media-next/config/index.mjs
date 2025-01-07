@@ -42,13 +42,13 @@ let URL_STATIC_PODCAST_LIST = ''
 let DONATION_PAGE_URL = ''
 let GA_MEASUREMENT_ID = ''
 let GTM_ID = ''
-let SEARCH_URL = 'search-url/search'
 let URL_STATIC_POPULAR_NEWS = ''
 let URL_STATIC_404_POPULAR_NEWS = ''
 let NEWEBPAY_PAPERMAG_API_URL = ''
 let URL_STATIC_LATEST_NEWS_IN_CERTAIN_SECTION = ''
 let GPT_MODE = ''
 let COURSE_URL = ''
+let SEARCH_URL = 'search-url/search'
 
 /** @type {import("firebase/auth").ActionCodeSettings} */
 let ACTION_CODE_SETTING
@@ -207,7 +207,6 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
-    SEARCH_URL = 'https://search-dev.mirrormedia.mg'
 
     ACCESS_SUBSCRIBE_FEATURE_TOGGLE = 'on'
     ACCESS_PAPERMAG_FEATURE_TOGGLE = 'on'
@@ -232,6 +231,7 @@ switch (ENV) {
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_dev'
     GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_dev'
     IS_PRIZE_RIZED = true
+    SEARCH_URL = 'https://search-dev.mirrormedia.mg'
 
     COURSE_URL = 'https://dev-course.mirrormedia.mg'
 
@@ -269,7 +269,6 @@ switch (ENV) {
     DONATION_PAGE_URL = 'https://mirrormedia.testing.oen.tw/'
     GA_MEASUREMENT_ID = 'G-36HYH6NF6P'
     GTM_ID = 'GTM-PBNLSMX'
-    SEARCH_URL = 'https://search-dev.mirrormedia.mg'
     GPT_MODE = 'dev'
     FIREBASE_AUTH_DOMAIN = 'mirrormediaapptest.firebaseapp.com'
     ACTION_CODE_SETTING = {
@@ -283,6 +282,7 @@ switch (ENV) {
         installApp: false,
       },
     }
+    SEARCH_URL = 'https://search-dev.mirrormedia.mg'
 
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_local'
     GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_local'
@@ -319,7 +319,6 @@ export {
   NEWEBPAY_PAPERMAG_IV,
   NEWEBPAY_PAPERMAG_KEY,
   PREVIEW_SERVER_ORIGIN,
-  SEARCH_URL,
   SITE_BASE_PATH,
   SITE_URL,
   URL_STATIC_404_POPULAR_NEWS,
@@ -336,4 +335,5 @@ export {
   WEEKLY_API_SERVER_YOUTUBE_ENDPOINT,
   IS_PRIZE_RIZED,
   COURSE_URL,
+  SEARCH_URL,
 }
