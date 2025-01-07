@@ -175,7 +175,6 @@ switch (ENV) {
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_staging'
     GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_staging'
     IS_PRIZE_RIZED = true
-    SEARCH_URL = 'https://search-dev.mirrormedia.mg'
 
     COURSE_URL = 'https://course.mirrormedia.mg'
 
@@ -232,6 +231,7 @@ switch (ENV) {
     GCP_STACKDRIVER_LOG_NAME = 'mirror-media-next-user-behavior_dev'
     GCP_STACKDRIVER_ERROR_LOG_NAME = 'mirror-media-next-error-log_dev'
     IS_PRIZE_RIZED = true
+    SEARCH_URL = 'https://search-dev.mirrormedia.mg'
 
     COURSE_URL = 'https://dev-course.mirrormedia.mg'
 
