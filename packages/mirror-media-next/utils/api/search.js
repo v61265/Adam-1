@@ -138,7 +138,7 @@ export async function getSearchResult(opts) {
         /** @see https://cloud.google.com/generative-ai-app-builder/docs/reference/rest/v1/projects.locations.collections.engines.servingConfigs/searchLite */
         const requestBody = {
           query: query,
-          pageSize: 100,
+          pageSize: 50,
           pageToken: nextPageToken,
           contentSearchSpec: {
             snippetSpec: { returnSnippet: true },
