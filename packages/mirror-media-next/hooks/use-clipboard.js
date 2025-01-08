@@ -16,7 +16,7 @@ const Popup = styled.div`
   margin: 0 auto;
   padding: 4px 12px;
   border-radius: 40px;
-  z-index: ${Z_INDEX.coverHeader}
+  z-index: ${Z_INDEX.coverHeader};
   transition: all 0.3s ease-in;
   visibility: ${
     /**
