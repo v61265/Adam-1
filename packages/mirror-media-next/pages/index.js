@@ -341,7 +341,7 @@ export async function getServerSideProps({ res, req }) {
           return simplifyYoutubePlaylistVideo(filteredItems).slice(0, 3)
         }
       },
-      `Error occurs while getting playlist data in homepage (channeld: ${channelId})`,
+      `Error occurs while getting playlist data in homepage (channelId: ${channelId})`,
       globalLogFields
     )
 
