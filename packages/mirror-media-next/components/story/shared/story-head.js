@@ -136,11 +136,6 @@ export default function StoryHead({ postData }) {
         )}
         {section?.slug && (
           <>
-            <meta
-              property="section:slug"
-              content={section.slug}
-              key={'section:slug'}
-            />
             <meta name="section-slug" content={section.slug} />
           </>
         )}
