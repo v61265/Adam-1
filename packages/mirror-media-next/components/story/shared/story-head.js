@@ -36,7 +36,6 @@ const generateMetaData = (postData) => {
     writers = [],
     writersInInputOrder = [],
     topics = null,
-    brief,
   } = postData
 
   const robots = isAdult ? 'noindex' : 'index'
@@ -62,8 +61,6 @@ const generateMetaData = (postData) => {
       ? writersInInputOrder
       : writers
   const hasWriter = writersWithOrdered && writersWithOrdered.length
-  const trimmedBriefText =
-    brief?.blocks?.filter((block) => block.text)?.[0]?.text || ''
 
   const authorName = hasWriter ? writersWithOrdered?.[0].name : '鏡週刊'
   return {
@@ -78,7 +75,6 @@ const generateMetaData = (postData) => {
     topicSlug,
     authorName,
     publishedDate,
-    trimmedBriefText,
   }
 }
 
@@ -101,7 +97,6 @@ export default function StoryHead({ postData }) {
     topicSlug,
     authorName,
     publishedDate,
-    trimmedBriefText,
   } = generateMetaData(postData)
 
   return (
@@ -114,16 +109,6 @@ export default function StoryHead({ postData }) {
         )}
         <meta property="dable:item_id" content={slug} key="dable:item_id" />
         <meta property="og:slug" content={slug} key="og:slug" />
-        {trimmedBriefText && (
-          <>
-            <meta
-              property="article:description"
-              content={trimmedBriefText}
-              key="article:description"
-            />
-            <meta name="article-description" content={trimmedBriefText} />
-          </>
-        )}
         {section?.name && (
           <>
             <meta
