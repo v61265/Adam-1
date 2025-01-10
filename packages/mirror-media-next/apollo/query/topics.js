@@ -35,6 +35,7 @@ const fetchTopic = gql`
         skip: $postsSkip
       ) {
         ...topicPost
+        isFeatured
       }
     }
   }
