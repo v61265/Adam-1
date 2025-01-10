@@ -28,6 +28,14 @@ const fetchTopic = gql`
   ) {
     topics(where: $topicFilter) {
       ...topic
+      posts(
+        where: $postsFilter
+        orderBy: $postsOrderBy
+        take: $postsTake
+        skip: $postsSkip
+      ) {
+        ...topicPost
+      }
     }
   }
 `

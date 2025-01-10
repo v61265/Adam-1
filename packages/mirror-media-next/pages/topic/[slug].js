@@ -181,17 +181,18 @@ export async function getServerSideProps({ query, req, res }) {
    * might need to optimize to load more on client side in next phase
    */
   if (topic.type === 'group' && topic.postsCount > RENDER_PAGE_SIZE) {
-    let posts = topic.posts
+    let posts = topic.posts || []
     while (posts.length < topic.postsCount) {
       /** @type {typeof posts} */
-      let moreTopicPosts
+      let moreTopicPosts = []
       try {
         const topicData = await fetchTopicByTopicSlug(
           topicSlug,
           RENDER_PAGE_SIZE * 2,
           posts.length
         )
-        moreTopicPosts = topicData.data.topics?.[0].posts || []
+        if (!topicData.data.topics?.[0]?.posts) break
+        moreTopicPosts = topicData.data.topics?.[0]?.posts
       } catch (error) {
         logGqlError(
           error,
