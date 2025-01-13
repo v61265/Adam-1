@@ -139,7 +139,6 @@ export default function ArticleListItem({ item, index }) {
     sectionName: structData?.['section-name'] ?? '',
     sectionSlug: structData?.['section-slug'] ?? '',
   }
-  console.log({ renderedItem })
 
   const urlObject = new URL(renderedItem?.link)
   if (urlObject?.pathname.startsWith('/campaigns/')) {
