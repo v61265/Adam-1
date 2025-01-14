@@ -67,15 +67,6 @@ export const topic = gql`
     style
     postsCount(where: $postsFilter)
     featuredPostsCount: postsCount(where: $featuredPostsCountFilter)
-    posts(
-      where: $postsFilter
-      orderBy: $postsOrderBy
-      take: $postsTake
-      skip: $postsSkip
-    ) {
-      ...topicPost
-      isFeatured
-    }
     tags {
       ...tag
     }
