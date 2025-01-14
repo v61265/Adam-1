@@ -191,8 +191,8 @@ export async function getServerSideProps({ query, req, res }) {
           RENDER_PAGE_SIZE * 2,
           posts.length
         )
-        if (!Array.isArray(topicData.data.topics?.[0]?.posts)) break
-        moreTopicPosts = topicData.data.topics?.[0]?.posts
+        if (!Array.isArray(topicData.data.topics[0].posts)) break
+        moreTopicPosts = topicData.data.topics[0].posts
       } catch (error) {
         logGqlError(
           error,
