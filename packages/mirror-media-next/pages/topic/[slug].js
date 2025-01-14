@@ -181,7 +181,7 @@ export async function getServerSideProps({ query, req, res }) {
    * might need to optimize to load more on client side in next phase
    */
   if (topic.type === 'group' && topic.postsCount > RENDER_PAGE_SIZE) {
-    let posts = topic.posts || []
+    let posts = topic.posts
     while (posts.length < topic.postsCount) {
       /** @type {typeof posts} */
       let moreTopicPosts = []
