@@ -17,11 +17,16 @@ const Hr = styled.hr`
     margin-bottom: 48px;
   }
 `
+
 /**
- * @param {Object} props
- * @param {Object[] } props.sectionsData
- * @param {Object[]} props.topicsData
- * @return {JSX.Element}
+ * @typedef PageProps
+ * @property {import('../../utils/api').HeadersData} sectionsData
+ * @property {import('../../utils/api').Topics} topicsData
+ */
+
+/**
+ * @param {PageProps} props
+ * @returns {React.ReactNode}
  */
 function OneYearSubscription({ sectionsData = [], topicsData = [] }) {
   return (
@@ -45,7 +50,7 @@ function OneYearSubscription({ sectionsData = [], topicsData = [] }) {
 export default OneYearSubscription
 
 /**
- * @type {import('next').GetServerSideProps}
+ * @type {import('next').GetServerSideProps<PageProps>}
  */
 export async function getServerSideProps({ req, res }) {
   setPageCache(res, { cachePolicy: 'no-store' }, req.url)

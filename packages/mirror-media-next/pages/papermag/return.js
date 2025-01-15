@@ -37,12 +37,16 @@ const Wrapper = styled.main`
 `
 
 /**
- * @param {Object} props
- * @param {Object[] } props.sectionsData
- * @param {Object[]} props.topicsData
- * @param {string} props.orderStatus
- * @param {Object} props.orderData
- * @return {JSX.Element}
+ * @typedef PageProps
+ * @property {import('../../utils/api').HeadersData} sectionsData
+ * @property {import('../../utils/api').Topics} topicsData
+ * @property {string} orderStatus
+ * @property {Object} orderData
+ */
+
+/**
+ * @param {PageProps} props
+ * @returns {React.ReactNode}
  */
 export default function Return({
   sectionsData = [],
@@ -73,7 +77,7 @@ export default function Return({
 }
 
 /**
- * @type {import('next').GetServerSideProps}
+ * @type {import('next').GetServerSideProps<PageProps>}
  */
 export async function getServerSideProps({ query, req, res }) {
   setPageCache(res, { cachePolicy: 'no-store' }, req.url)
