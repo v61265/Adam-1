@@ -16,7 +16,6 @@ import { parseBody } from 'next/dist/server/api-utils/node'
 
 import { getMerchandiseAndShippingFeeInfo } from '../../utils/papermag'
 
-import { ACCESS_PAPERMAG_FEATURE_TOGGLE } from '../../config/index.mjs'
 import client from '../../apollo/apollo-client'
 import { fetchAllMemberByOrderNo } from '../../apollo/query/magazine-orders'
 import { transformTimeData, getLogTraceObject } from '../../utils/index'
@@ -80,15 +79,6 @@ export async function getServerSideProps({ query, req, res }) {
   setPageCache(res, { cachePolicy: 'no-store' }, req.url)
 
   const globalLogFields = getLogTraceObject(req)
-
-  if (ACCESS_PAPERMAG_FEATURE_TOGGLE !== 'on') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
 
   // Fetch header data
   const responses = await Promise.allSettled([

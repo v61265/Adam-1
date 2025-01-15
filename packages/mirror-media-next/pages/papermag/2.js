@@ -7,7 +7,6 @@ import { setPageCache } from '../../utils/cache-setting'
 import Layout from '../../components/shared/layout'
 import Steps from '../../components/subscribe-steps'
 import SubscribePaperMagForm from '../../components/papermag/subscribe-papermag-form'
-import { ACCESS_PAPERMAG_FEATURE_TOGGLE } from '../../config/index.mjs'
 
 const Page = styled.main`
   min-height: 65vh;
@@ -50,15 +49,6 @@ export default TwoYearsSubscription
  */
 export async function getServerSideProps({ req, res }) {
   setPageCache(res, { cachePolicy: 'no-store' }, req.url)
-
-  if (ACCESS_PAPERMAG_FEATURE_TOGGLE !== 'on') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
 
   const globalLogFields = getLogTraceObject(req)
 

@@ -14,7 +14,6 @@ import Layout from '../../components/shared/layout'
 import Steps from '../../components/subscribe-steps'
 import PlanSection from '../../components/papermag/plan-selection'
 import Notice from '../../components/papermag/notice'
-import { ACCESS_PAPERMAG_FEATURE_TOGGLE } from '../../config/index.mjs'
 import { ANNOUCEMENT_SCOPE } from '../../constants/announcement'
 
 const Page = styled.main`
@@ -126,15 +125,6 @@ export default PaperMag
  */
 export async function getServerSideProps({ req, res }) {
   setPageCache(res, { cachePolicy: 'no-store' }, req.url)
-
-  if (ACCESS_PAPERMAG_FEATURE_TOGGLE !== 'on') {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    }
-  }
 
   const globalLogFields = getLogTraceObject(req)
 
