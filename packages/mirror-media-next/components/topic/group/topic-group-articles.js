@@ -76,7 +76,7 @@ export default function TopicGroupArticles({ tag, posts }) {
       <GroupTitle>{tag.name}</GroupTitle>
       <GroupArticles className="groupArticles">
         {posts.map((item) => (
-          <GroupArticlesItem key={item.id + item.slug} item={item} />
+          <GroupArticlesItem key={item.id} item={item} />
         ))}
       </GroupArticles>
     </Container>
