@@ -127,9 +127,9 @@ export default function TopicGroup({ topic }) {
           target={topic?.heroUrl ? '_blank' : null}
         />
         <TopicGroups className="groupList">
-          {tags.map((tag, index) => (
+          {tags.map((tag) => (
             <TopicGroupArticles
-              key={tag.id + tag.name + index}
+              key={tag.id}
               tag={tag}
               // @ts-ignore
               posts={posts.filter((post) =>
