@@ -113,14 +113,9 @@ const StyledGPTAd = styled(GPTAd)`
 export default function TopicGroup({ topic }) {
   const { style, posts, tags, dfp } = topic
   const { shouldShowAd } = useDisplayAd()
-  const postIdSet = new Set(posts.map((post) => post.id))
-  const uniqPosts = Array.from(postIdSet).map((id) =>
-    posts.find((post) => post.id === id)
-  )
   const backgroundUrl = parseUrl(topic.style)
     ? ''
     : topic.og_image?.resized?.original || topic.heroImage?.resized?.original
-
   return (
     <>
       <Container customCss={style} className="topicContainer">
@@ -132,12 +127,12 @@ export default function TopicGroup({ topic }) {
           target={topic?.heroUrl ? '_blank' : null}
         />
         <TopicGroups className="groupList">
-          {tags.map((tag) => (
+          {tags.map((tag, index) => (
             <TopicGroupArticles
-              key={tag.id}
+              key={tag.id + tag.name + index}
               tag={tag}
               // @ts-ignore
-              posts={uniqPosts.filter((post) =>
+              posts={posts.filter((post) =>
                 post.tags.some((postTag) => postTag.id === tag.id)
               )}
             />
